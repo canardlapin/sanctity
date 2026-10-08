@@ -1,0 +1,57 @@
+package sanctity.http
+
+import io.circe.Json
+import sanctity.kernel.*
+
+/** Explicit disclosure boundary. No generic encoders for internal releases, activities or blob references. */
+private[http] object PublicJson:
+  private def text(s: String): Json = Json.fromString(s)
+  private def opt[A](a: Option[A])(f: A => Json): Json = a.fold(Json.Null)(f)
+  def ref(r: ReleaseRef): Json = Json.obj("dataset" -> text(r.dataset.render), "release" -> text(r.release.render))
+  def finding(f: Finding): Json = Json.obj("code" -> text(f.code), "severity" -> text(f.severity.toString),
+    "path" -> opt(f.path)(p => text(p.value)), "message" -> text(f.message))
+  def assessment(a: Assessment): Json = Json.obj("id" -> text(a.id.value.value), "policy" -> text(a.policy),
+    "admissible" -> Json.fromBoolean(a.admissible), "findings" -> Json.arr(a.findings.map(finding)*))
+  def entry(e: Entry): Json = e match
+    case Entry.Directory(p) => Json.obj("path" -> text(p.value), "kind" -> text("directory"))
+    case Entry.File(p, _, b) => Json.obj("path" -> text(p.value), "kind" -> text("file"), "size" -> Json.fromLong(b.size))
+  def relationship(r: ScientificRelationship): Json = Json.obj("from" -> text(r.from.value), "kind" -> text(r.kind),
+    "to" -> Json.arr(r.to.map(p => text(p.value))*), "label" -> opt(r.label)(text),
+    "evidence" -> Json.arr(r.evidence.map(e => Json.obj("artifact" -> text(e.artifact.value),
+      "document" -> text(e.document.value), "field" -> text(e.field)))*))
+  def release(r: Release): Json = Json.obj(
+    "ref" -> ref(r.ref), "parent" -> opt(r.parent)(p => text(p.render)), "manifest" -> text(r.manifest.id.value.value),
+    "interpretation" -> text(r.interpretation.id.value.value), "profile" -> text(r.interpretation.profile.name),
+    "coverage" -> text(r.interpretation.profile.coverage), "assessment" -> assessment(r.assessment),
+    "acceptedAt" -> text(r.acceptedAt.toString), "entries" -> Json.arr(r.manifest.entries.map(entry)*),
+    "relationships" -> opt(r.interpretation.relationships)(g => Json.obj("version" -> text(g.version),
+      "links" -> Json.arr(g.relationships.map(relationship)*))))
+  def candidate(c: Candidate): Json = Json.obj("id" -> text(c.id.render), "dataset" -> text(c.dataset.render),
+    "base" -> opt(c.base)(r => text(r.render)), "generation" -> Json.fromLong(c.generation),
+    "manifest" -> text(c.manifest.id.value.value), "interpretation" -> text(c.interpretation.id.value.value),
+    "assessment" -> assessment(c.assessment))
+  def value(v: MetadataValue): Json = v match
+    case MetadataValue.Text(v) => text(v)
+    case MetadataValue.Number(v) => Json.fromBigDecimal(v)
+    case MetadataValue.Flag(v) => Json.fromBoolean(v)
+    case MetadataValue.Null => Json.Null
+    case MetadataValue.Array(vs) => Json.arr(vs.map(value)*)
+    case MetadataValue.Record(vs) => Json.obj(vs.toVector.sortBy(_._1).map((k, v) => k -> value(v))*)
+  def field(f: EffectiveField): Json = Json.obj("value" -> value(f.value), "origin" -> text(f.origin.value),
+    "history" -> Json.arr(f.history.map(c => Json.obj("source" -> text(c.source.value), "value" -> value(c.value)))*))
+  def metadata(m: ArtifactMetadata): Json = Json.obj("path" -> text(m.path.value),
+    "fields" -> Json.obj(m.fields.toVector.sortBy(_._1).map((k, v) => k -> field(v))*),
+    "sources" -> Json.arr(m.sources.map(p => text(p.value))*))
+  def preview(p: Preview): Json = Json.obj("candidate" -> candidate(p.candidate),
+    "contentChanges" -> Json.arr(p.contentChanges.map(d => Json.obj("path" -> text(d.path.value),
+      "before" -> opt(d.before)(entry), "after" -> opt(d.after)(entry)))*),
+    "metadataChanges" -> Json.arr(p.metadataChanges.map(d => Json.obj("path" -> text(d.path.value),
+      "fields" -> Json.arr(d.fields.map(f => Json.obj("name" -> text(f.name),
+        "before" -> opt(f.before)(field), "after" -> opt(f.after)(field)))*)))*),
+    "relationshipChanges" -> Json.arr(p.relationshipChanges.map(d => Json.obj("path" -> text(d.path.value),
+      "before" -> Json.arr(d.before.map(relationship)*), "after" -> Json.arr(d.after.map(relationship)*)))*))
+  def receipt(r: AcceptanceReceipt): Json = Json.obj("ref" -> ref(r.release), "candidate" -> text(r.candidate.render),
+    "key" -> text(r.key.value), "acceptedAt" -> text(r.at.toString))
+  def grant(g: Grant): Json = Json.obj("id" -> text(g.id.render), "dataset" -> text(g.dataset.render),
+    "recipient" -> text(g.recipient.render), "release" -> opt(g.release)(r => text(r.render)),
+    "actions" -> Json.arr(g.actions.toVector.map(_.toString).sorted.map(text)*))
