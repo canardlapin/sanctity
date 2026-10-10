@@ -84,3 +84,65 @@ final class PersistenceSuite extends FunSuite:
     assert(JsonCodecs.decode[Interpretation](encoded.replace("test-relations-v1", "test-relations-v2")).isLeft)
     assert(JsonCodecs.decode[Interpretation](encoded.replace("\"group\"", "\"different\"")).isLeft)
   }
+
+  test("typed companion evidence round trips and rejects tampered selection rules and hierarchy") {
+    val target = path("sub-01/a.nii")
+    val root = path("events.tsv")
+    val local = path("sub-01/events.tsv")
+    val artifacts = interpretation.artifacts ++ Vector(root, local).map(p => ArtifactMetadata(p, Map.empty, Vector.empty, None))
+    val evidence = RelationshipEvidence.CompanionSelection(target, local, "events-selection-v1", None,
+      Map("sub" -> "01"), Vector(root, local))
+    val relation = ScientificRelationship(target, "bids.task-events", Vector(local), None, Vector(evidence))
+    val graph = right(RelationshipGraph.from("companions-v1", Vector(relation), artifacts, 2))
+    val current = right(Interpretation.from(manifest.id, profile, artifacts, relationships = Some(graph)))
+    val encoded = JsonCodecs.encode(current)
+    val decoded = right(JsonCodecs.decode[Interpretation](encoded))
+    assertEquals(decoded.id, current.id)
+    assertEquals(decoded.relationships.get.evidenceVersion, 2)
+    assertEquals(decoded.relationships.get.relationships, Vector(relation))
+    assert(JsonCodecs.decode[Interpretation](encoded.replace("events-selection-v1", "events-selection-v2")).isLeft)
+    assert(JsonCodecs.decode[Interpretation](encoded.replace("\"evidenceVersion\":2", "\"evidenceVersion\":1")).isLeft)
+    assert(JsonCodecs.decode[Interpretation](encoded.replace("\"evidenceVersion\":2", "\"evidenceVersion\":3")).isLeft)
+  }
+
+  test("legacy field-only graph envelopes remain v3 when evidenceVersion is absent") {
+    val target = path("sub-01/a.nii")
+    val relation = ScientificRelationship(target, "test.self", Vector(target), None,
+      Vector(RelationshipEvidence(target, path("metadata.json"), "Value")))
+    val graph = right(RelationshipGraph.from("legacy-v1", Vector(relation), interpretation.artifacts))
+    val legacy = right(Interpretation.from(manifest.id, profile, interpretation.artifacts, relationships = Some(graph)))
+    val encoded = JsonCodecs.encode(legacy).replace("\"evidenceVersion\":1,", "")
+    assert(!encoded.contains("evidenceVersion"))
+    val decoded = right(JsonCodecs.decode[Interpretation](encoded))
+    assertEquals(decoded.id, legacy.id)
+    assertEquals(decoded.relationships.get.evidenceVersion, 1)
+    val modern = right(RelationshipGraph.from("legacy-v1", Vector(relation), interpretation.artifacts, 2))
+    assertNotEquals(right(Interpretation.from(manifest.id, profile, interpretation.artifacts, relationships = Some(modern))).id, legacy.id)
+  }
+
+  test("content checks round trip exact inputs and observations and reject tampered evidence") {
+    val file = manifest.files.head
+    val check = right(ContentCheck.from("dwi-test-v1", file.path, Vector(CheckInput("image", file.path, file.blob)),
+      Map("volumeCount" -> MetadataValue.Number(2)), Vector(Finding("Mismatch", Severity.Error, Some(file.path), "wrong count"))))
+    val assessment = Assessment.from(interpretation, "policy", Vector.empty, Vector(check))
+    val encoded = JsonCodecs.encode(assessment)
+    val restored = right(JsonCodecs.assessment(encoded, interpretation))
+    assertEquals(restored.id, assessment.id)
+    assertEquals(restored.checks.head.inputs, check.inputs)
+    assertEquals(restored.checks.head.facts, check.facts)
+    assertEquals(restored.errors, check.findings)
+    assert(JsonCodecs.assessment(encoded.replace("dwi-test-v1", "dwi-test-v2"), interpretation).isLeft)
+    assert(JsonCodecs.assessment(encoded.replace("\"role\":\"image\"", "\"role\":\"other\""), interpretation).isLeft)
+  }
+
+  test("historical assessments without a checks property retain their original identity") {
+    val original = Assessment.from(interpretation, "historical", Vector(Finding("Old", Severity.Warning, None, "old finding")))
+    val json = io.circe.jawn.parse(JsonCodecs.encode(original)).toOption.get
+    val legacy = json.mapObject(_.mapValues(value =>
+      value.asObject.fold(value)(fields => io.circe.Json.fromJsonObject(fields.remove("checks")))))
+    assert(!legacy.noSpaces.contains("checks"))
+    val restored = right(JsonCodecs.assessment(legacy.noSpaces, interpretation))
+    assertEquals(restored.id, original.id)
+    assertEquals(restored.findings, original.findings)
+    assertEquals(restored.checks, Vector.empty)
+  }

@@ -17,7 +17,7 @@ final class MriViewCompiler extends ViewCompiler:
   def plan(source: Release, selection: FrozenSelection, profile: DisclosureProfile): Either[Problem, ProjectionPlan] =
     val linkedTargets = source.interpretation.relationships.toVector.flatMap(_.relationships.map(_.from)).toSet
     for
-      _ <- Either.cond(source.interpretation.relationships.exists(_.version == bids4s.BidsFieldmapResolver.Version), (),
+      _ <- Either.cond(source.interpretation.relationships.exists(_.version == BidsInterpreter.RelationshipVersion), (),
         Problem.Unsupported("view requires an interpretation with the current explicit relationship profile"))
       _ <- Either.cond(selection.releases == Vector(source.ref) && selection.hits.nonEmpty, (),
         Problem.Unsupported("MRI view needs a nonempty selection from exactly one release"))
@@ -59,7 +59,7 @@ final class MriViewCompiler extends ViewCompiler:
       generated = targets.map(_._2) ++ Vector(participantPath -> table,
         descriptionPath -> (printer.print(Json.obj("Name" -> Json.fromString("Authorized scientific view"),
           "BIDSVersion" -> Json.fromString("1.10.0"), "DatasetType" -> Json.fromString("raw"))) + "\n"))
-      evidence = ProjectionEvidence(source.ref, selection.id, profile.id, "sanctity-mri-view-v2", generated.map(_._1))
+      evidence = ProjectionEvidence(source.ref, selection.id, profile.id, "sanctity-mri-view-v3", generated.map(_._1))
     yield ProjectionPlan(targets.map(_._1), generated, evidence)
 
   private def encode(value: MetadataValue): Json = value match

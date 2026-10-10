@@ -53,3 +53,42 @@ final class RelationshipSuite extends FunSuite:
     assertEquals(Impact.between(before, after), Vector.empty)
     assertEquals(RelationshipImpact.between(before, after).map(_.path), Vector(a))
   }
+
+  test("companion evidence is versioned and validates selection scope and hierarchy") {
+    val target = path("sub-01/func/sub-01_task-rest_bold.nii")
+    val inherited = path("task-rest_events.tsv")
+    val selected = path("sub-01/func/sub-01_task-rest_events.tsv")
+    val metas = Vector(target, inherited, selected).map(p => ArtifactMetadata(p, Map.empty, Vector.empty, None))
+    val evidence = new RelationshipEvidence.CompanionSelection(target, selected, "events-v1", None,
+      Map("task" -> "rest", "sub" -> "01"), Vector(inherited, selected))
+    val relation = ScientificRelationship(target, "bids.task-events", Vector(selected), None, Vector(evidence))
+    def graph(e: RelationshipEvidence, encoding: Int = 2) = RelationshipGraph.from("companions", Vector(relation.copy(evidence = Vector(e))), metas, encoding)
+    val valid = right(graph(evidence))
+    assertEquals(valid.evidenceVersion, 2)
+    assert(graph(evidence, 1).isLeft)
+    assert(graph(evidence.copy(applicable = Vector(selected, inherited))).isLeft)
+    assert(graph(evidence.copy(document = inherited)).isLeft)
+    assert(graph(evidence.copy(datasetRoot = Some(path("other")))).isLeft)
+    assert(graph(evidence.copy(applicable = Vector(path("missing.tsv"), selected))).isLeft)
+    assert(RelationshipGraph.from("companions", Vector(relation), metas, 3).isLeft)
+    val current = right(Interpretation.from(content, profile, metas, relationships = Some(valid)))
+    val closure = right(current.relationshipClosure(Vector(target)))
+    assertEquals(closure.artifacts.toSet, Set(target, selected))
+    assert(!closure.artifacts.contains(inherited))
+    val reordered = evidence.copy(matchedEntities = Map("sub" -> "01", "task" -> "rest"))
+    val same = right(Interpretation.from(content, profile, metas.reverse, relationships = Some(right(graph(reordered)))))
+    assertEquals(current.id, same.id)
+    val altered = right(Interpretation.from(content, profile, metas, relationships = Some(right(graph(evidence.copy(rule = "events-v2"))))))
+    assertNotEquals(current.id, altered.id)
+  }
+
+  test("direct dependency content changes appear even when the relationship itself is unchanged") {
+    val i = interpreted(Some(right(RelationshipGraph.from("v1", Vector(link(a, Vector(b))), artifacts))))
+    val impact = RelationshipImpact.between(i, i, Set(b, c))
+    assertEquals(impact, Vector(RelationshipDelta(a, i.relationships.get.relationships, i.relationships.get.relationships, Vector(b))))
+  }
+
+  test("the recorded pre-companion v3 identity remains byte-for-byte stable") {
+    val legacy = interpreted(Some(right(RelationshipGraph.from("v1", Vector(link(a, Vector(b))), artifacts))))
+    assertEquals(legacy.id.value.value, "c6386cfcb97deca5363e6425e81806d2cade4f18e5ed7510f26780c0a0e82b1d")
+  }

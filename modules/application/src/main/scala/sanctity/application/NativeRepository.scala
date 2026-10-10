@@ -45,11 +45,21 @@ final class NativeRepository[F[_]](
     }
 
   def correctMetadata(ctx: AccessContext, base: ReleaseRef, path: RelPath, text: String, reason: String): F[Either[Problem, Preview]] =
+    correctDocument(ctx, base, path, text, reason, path.fileName.endsWith(".json"))
+
+  /** Bounded authored companion edit; scientific selection is reassessed through ordinary admission. */
+  def correctCompanion(ctx: AccessContext, base: ReleaseRef, path: RelPath, text: String, reason: String): F[Either[Problem, Preview]] =
+    val name = path.fileName
+    val supported = Vector("dwi.bval", "dwi.bvec", "events.tsv").exists(s => name == s || name.endsWith("_" + s))
+    correctDocument(ctx, base, path, text, reason, supported)
+
+  private def correctDocument(ctx: AccessContext, base: ReleaseRef, path: RelPath, text: String, reason: String,
+      supported: Boolean): F[Either[Problem, Preview]] =
     Checked.attempt {
       for
         _ <- catalog.check(ctx, base.dataset, Action.Propose).flatMap(Checked.lift[F, Unit])
         release <- catalog.release(ctx, base).flatMap(Checked.lift[F, Release])
-        _ <- Checked.lift[F, Unit](Either.cond(path.fileName.endsWith(".json"), (), Problem.Unsupported("this slice edits JSON metadata only")))
+        _ <- Checked.lift[F, Unit](Either.cond(supported, (), Problem.Unsupported("unsupported authored metadata or companion document")))
         _ <- Checked.lift[F, Unit](Either.cond(reason.trim.nonEmpty, (), Problem.Unsupported("a correction reason is required")))
         bytes = text.getBytes(StandardCharsets.UTF_8)
         _ <- Checked.lift[F, Unit](Either.cond(bytes.length <= maxEditBytes, (), Problem.LimitExceeded("metadata edit exceeds 4 MiB")))
@@ -125,5 +135,5 @@ final class NativeRepository[F[_]](
       empty <- Checked.lift[F, Manifest](Manifest.from(Vector.empty))
       changes = before.fold(empty)(_.manifest).diff(candidate.manifest)
       impact = before.fold(Vector.empty[ArtifactImpact])(r => Impact.between(r.interpretation, candidate.interpretation))
-      relationships = before.fold(Vector.empty[RelationshipDelta])(r => RelationshipImpact.between(r.interpretation, candidate.interpretation))
+      relationships = before.fold(Vector.empty[RelationshipDelta])(r => RelationshipImpact.between(r.interpretation, candidate.interpretation, changes.map(_.path).toSet))
     yield Preview(candidate, changes, impact, relationships)

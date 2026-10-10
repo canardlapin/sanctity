@@ -1,8 +1,8 @@
 # bids4s integration status
 
-Updated 7 October 2026.
+Updated 10 October 2026.
 
-Sanctity uses the sibling checkout at `../bids4s`, whose canonical repository is [canardlapin/bids4s](https://github.com/canardlapin/bids4s). The inspected base commit is `ed67e0e1578e752fe95c41387eff3458b3bb59db`. The metadata and relationship improvements are committed locally as `6308ed506d3a8b1f86fc022a9eeeec94ad35dd4b`; this is the companion revision for Sanctity's initial commit, not a published dependency version.
+Sanctity uses the sibling checkout at `../bids4s`, whose canonical repository is [canardlapin/bids4s](https://github.com/canardlapin/bids4s). The inspected base commit is `ed67e0e1578e752fe95c41387eff3458b3bb59db`. The metadata and relationship improvements are committed and pushed as `6308ed506d3a8b1f86fc022a9eeeec94ad35dd4b`; this is the companion revision for Sanctity's initial commit, not a published dependency version. The companion-selection and DWI-consistency additions are committed locally as `980a18663066d92b0f7b3aac092d3a43424748bf`; that commit has not been pushed.
 
 The project owner has authorized refining, upgrading, and optimizing this library as Sanctity's requirements reveal reusable BIDS needs. Its repository guidance requires a pure portable domain, JVM-only effectful adapters, checked public failures, deterministic diagnostics, and JVM plus Scala.js verification.
 
@@ -48,7 +48,7 @@ Sanctity's `bids` module depends directly on `ProjectRef(../bids4s, coreJVM)`. T
 
 The adapter preserves authored bytes separately, then parses bounded metadata using Circe/Jawn with duplicate keys disabled and strict UTF-8 decoding. It rejects numeric values that would lose decimal meaning when converted to the current bids4s JSON representation. JSON syntax, profile support and inheritance findings remain visible on prepared candidates; errors prevent acceptance.
 
-The consumer profile supports one raw dataset. It rejects nested/derivative compositions explicitly while preserving their staged bytes; it does not claim that the library is incapable of their interpretation. The current `native-reference-v2` profile adds explicit NIfTI fieldmap declarations. Full conformance, image/gradient/event consistency, implicit companions and scientific qualification remain outside this profile.
+The consumer profile supports one raw dataset. It rejects nested/derivative compositions explicitly while preserving their staged bytes; it does not claim that the library is incapable of their interpretation. The current `native-reference-v4` profile includes explicit NIfTI fieldmap declarations, inherited DWI gradient/BOLD event selection, and bounded DWI gradient/header consistency. Full conformance, event content, implicit companions and scientific qualification remain outside this profile.
 
 No additional bids4s source changes were needed for the native lifecycle integration. The previously recorded JVM/Scala.js evidence applies to the library; Sanctity has its own kernel and filesystem integration test gate (`sbt check`).
 
@@ -58,11 +58,11 @@ No additional bids4s source changes were needed for the native lifecycle integra
 | --- | --- | --- |
 | Explicit schema/registry context | Several parsing/classification paths still use the built-in registry | Audit and design a consistent context in WP-02/WP-04 |
 | Full inherited-metadata conformance | Regression coverage improved; complete placement rules and oracle coverage remain partial | Expand specification fixtures and differential cases |
-| Associations and companions | Explicit B0 groups and IntendedFor links now resolve with typed evidence/findings; implicit fieldmap, nearest-file, bval/bvec and events remain open | Extend bounded profiles and independent scientific fixtures |
+| Associations and companions | Explicit fieldmap groups and inherited DWI/event companions resolve with typed evidence/findings; implicit fieldmap companions, stimulus references and broader modalities remain open | Extend bounded profiles and independent scientific fixtures |
 | Inventory/streaming scale | The existing project/manifest still holds an inventory vector | Sanctity streams durable inventories; qualify smaller reusable semantic operations upstream |
 | Authored-byte preservation | The JSON model retains parsed values, including Double numbers | Sanctity stores exact original bytes; never reconstruct full export from parsed JSON |
 | Complete scientific indexing | The library has no repository transaction/index lifecycle | Keep authoritative persisted interpretation in Sanctity |
-| Publication and version pin | Companion changes are committed locally at the revision above; the build still uses the sibling checkout | Pin a reviewed revision/artifact before reproducible CI consumes them |
+| Publication and version pin | The first relationship pass is pushed at the revision above; the companion and DWI checks are committed locally at `980a18663066d92b0f7b3aac092d3a43424748bf` | Pin a reviewed revision/artifact before reproducible CI consumes them |
 
 The upstream parity ledger remains partial. Passing these regression tests is evidence for these cases, not a blanket BIDS-conformance or PyBIDS-parity claim.
 
@@ -74,4 +74,20 @@ Seventeen portable tests cover multi-member and multiple groups, participant sco
 
 Sanctity persists this evidence in a versioned relationship graph within interpretation identity. Canonical v1/v2 records remain readable without a graph; new records use v3 and explicitly identify their relationship profile. Correction previews include affected relationship groups, and subset planning refuses undeclared coverage or omitted cross-session fieldmaps.
 
-This is declaration semantics and repository consistency. Implicit phase/magnitude companions, DWI gradients, task events, image geometry and full processing-bundle qualification remain work for later scientific profiles. The [scientific-core plan](scientific-core.md) is the immediate roadmap.
+This is declaration semantics and repository consistency. That pass covered explicit declarations. The following pass adds gradient/event selection; implicit phase/magnitude companions, image geometry and full processing-bundle qualification remain later work. The [scientific-core plan](scientific-core.md) is the immediate roadmap.
+
+## Companion-selection pass
+
+The portable `BidsCompanionResolver` indexes candidates by directory and role. It explains selected DWI gradients and BOLD events using the complete applicable hierarchy and matched entities. Checked inventories accept inherited non-JSON companion filenames. The existing JSON inheritance resolver and permissive/checked/strict loading contracts are retained.
+
+Fifteen portable cases cover inheritance, independent gradient extensions, ambiguity, participant/session/task isolation, multi-echo events, numeric run equivalence, nested/derivative boundaries, sibling exclusion, typed absence/unsupported outcomes, scan budgets and deterministic inventory order. The downstream first-contact module exercises the public API.
+
+Sanctity maps this into typed companion-selection evidence, canonical interpretation v4 and the `native-reference-v3` profile while retaining historical v1/v2/v3 identities. No gradient values, event rows or image-header consistency are assessed in this slice. See [scientific contracts and lifecycle proof](scientific-core.md).
+
+Companion-pass verification: `sbt compileAll testAll 'docs/mdoc'` passed 143 JVM tests, 124 Scala.js tests, both downstream first-contact builds and 11 executable documentation files. Sanctity's complete PostgreSQL runner passed 123 tests plus crash/retry and coordinated restore; evidence is recorded in the [implementation plan](implementation-plan.md#verification-record).
+
+## DWI consistency pass
+
+Portable `BValues`, `BVectors`, `NiftiHeaderFacts` and `DwiConsistency` APIs now separate checked numeric/header interpretation from storage and decompression. Both first-contact targets exercise the public boundary. Sanctity supplies bounded prefix reads, explicit numeric-policy observations, exact input binding and durable assessment checks; it never reconstructs authored gradients from parsed Doubles. See [scope, limits and evidence](scientific-core.md#implemented-slice-dwi-content-consistency). The new companion and content APIs are committed locally at `980a18663066d92b0f7b3aac092d3a43424748bf`, pending upstream publication/review.
+
+DWI-pass verification: the complete upstream build passed 159 JVM tests, 140 Scala.js tests, both first-contact builds and 11 executable documentation files. Sanctity passed 145 tests (85 ordinary plus 60 PostgreSQL), crash/retry and coordinated restore. Evidence: `target/postgres-check.s4c672/`.

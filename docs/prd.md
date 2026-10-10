@@ -1,7 +1,7 @@
 # Sanctity product requirements document
 
 Version 0.1 — draft for implementation planning\
-Updated 7 October 2026\
+Updated 10 October 2026\
 Product owner, technical lead, scientific lead, and operator: to be assigned
 
 Sanctity is a BIDS-native neuroimaging repository built around exact scientific states, explainable transformations, and explicit authority. Its first product is a dependable Scala core that a laboratory can use to ingest, curate, query, share a bounded selection, and recover a scoped MRI collection.
@@ -93,7 +93,7 @@ Proposed pilot qualification:
 | Supplied task events | Yes | Required for supported tasks | Import supplied data; do not invent events |
 | SBRef | Yes | Required | Required after qualification |
 | One fieldmap family | Yes | Required | Reverse phase-encoding EPI is the proposed default |
-| DWI | Yes | Native indexing/relationships within declared coverage | Deferred unless explicitly traded into scope |
+| DWI | Yes | Native indexing, relationships and gradient/header checks within declared coverage | Deferred unless explicitly traded into scope |
 | Multi-echo, quantitative MRI, other modalities | Safe retained content | Declared coverage only | Separate qualification |
 
 P0 must record actual scanner/protocol examples, selected BIDS schema, source formats, fieldmap rules, deidentification/disclosure requirements, and a scientific reviewer. Missing acquisition facts remain findings. dcm2niix explicitly documents that information absent from its source headers cannot be recovered by the converter. [Converter documentation](https://github.com/rordenlab/dcm2niix/blob/master/BIDS/README.md).
@@ -207,6 +207,7 @@ BIDS metadata applicability and precedence can span a dataset hierarchy. Sanctit
 | S-05 | A | Freeze exact releases and resolved membership for saved selections; bind pagination to that universe. Report changed authority rather than silently reducing a supposedly complete result. | PROOF-05; PROOF-12 |
 | S-06 | A | Distinguish absent, invalid, and typed values while retaining lexical form. Unsupported query operators fail explicitly; operational live views include observation context. | AT-05 |
 | S-07 | A | Separate physical index generations from scientific interpretation. Reindexing proves equivalence or requires a new interpretation; required indexes become visible with the release. | PROOF-03; PROOF-06 |
+| S-08 | A | Version content checks against exact input paths/digests/sizes; preserve observed facts separately from authored metadata. Failed checks prevent acceptance without changing historical evidence. Bounded DWI count/value/header checks are implemented; event and broader modality checks remain open. | [DWI lifecycle proof](scientific-core.md#implemented-slice-dwi-content-consistency) |
 
 ### Views and materialization
 
@@ -379,10 +380,10 @@ The product owner owns outcomes/scope, the technical lead owns architecture and 
 
 The baseline now includes bounded implementations of the four requested build-out areas: correlated scientific queries and frozen selections; MRI disclosure views accepted through the common lifecycle; durable import/delivery leases and coordinated recovery; and initial DICOM/XNAT adapters. Action-specific dataset and fixed-release grants establish their authority boundary.
 
-The current acceptance evidence is 108 passing Sanctity tests, 128 bids4s JVM tests and 109 Scala.js tests, compiled library documentation, independent-process/crash recovery, a real catalog/blob restore that preserves a later revocation, a real pinned dcm2niix synthetic conversion with an independent voxel/world-coordinate check, XNAT API/export agreement including loopback HTTP, and authenticated repository HTTP curation/sharing/revocation with private operator credential-file handling. [Run instructions](../README.md) and [implementation evidence](implementation-plan.md) state the exact profiles and limitations.
+The current acceptance evidence is 145 passing Sanctity tests, 159 bids4s JVM tests and 140 Scala.js tests, compiled library documentation, independent-process/crash recovery, a real catalog/blob restore that preserves a later revocation, a real pinned dcm2niix synthetic conversion with an independent voxel/world-coordinate check, XNAT API/export agreement including loopback HTTP, and authenticated repository HTTP curation/sharing/revocation with private operator credential-file handling. [Run instructions](../README.md) and [implementation evidence](implementation-plan.md) state the exact profiles and limitations.
 
 The [authenticated HTTP profile](http-api.md) now exposes exact releases, metadata, corrections, acceptance, grants, frozen selections and file delivery. Its opaque API credentials authenticate stable principals; this does not complete institutional login or membership requirements. Recovery invalidates all restored credentials, and operators provision fresh ones after authority reconciliation. E-03 is partially implemented; remote ingestion, view preparation and operational/evidence interfaces remain open.
 
-The immediate engineering priority is now the [scientific core](scientific-core.md). Explicit B0 fieldmap groups and IntendedFor relationships are recorded with field-origin evidence, versioned interpretation identity, bounded closure and correction impact. Missing references block new acceptance; old interpretation identities remain stable. MRI subset planning refuses to drop declared inputs from other sessions. Companion-file resolution and image/table consistency follow; institutional-login expansion is deferred.
+The immediate engineering priority is now the [scientific core](scientific-core.md). Explicit B0 fieldmap groups and IntendedFor relationships are recorded with field-origin evidence, versioned interpretation identity, bounded closure and correction impact. Missing references block new acceptance; old interpretation identities remain stable. MRI subset planning refuses to drop declared inputs from other sessions. Inherited DWI gradient and BOLD event companions now participate in typed, versioned evidence and correction previews. New interpretations preserve earlier identities through explicit encoding versions. DWI gradient/header consistency now records immutable check evidence, blocks mismatched corrections and preserves historical assessments. Task-event content is next; institutional-login expansion is deferred.
 
 This advances portions of K-07/K-08, S-02/S-03/S-04/S-05/S-06, V-01/V-03/V-04/V-05, A-02/A-03/A-05, I-01/I-02/I-04/I-05/I-06/I-07, and O-01/O-02/O-04. It does not mark those broad requirements or the production gates complete. Institutional identity/membership/delegation, broader HTTP workflows, general association closure, representative scientific qualification, full migration reconciliation, withdrawal, metrics and performance qualification remain open. Actual pilot data, acceptance owners, deployment and staffing remain explicit inputs.

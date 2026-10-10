@@ -225,3 +225,19 @@ New semantic profile `native-reference-v2` assesses these declarations. Its rela
 Closure follows the recorded vocabulary and includes authored metadata dependencies. It does not promise all implicit companions or a qualified analysis bundle. The subset compiler now requires current recorded relationship coverage and blocks omitted declared inputs, including a fieldmap linked from another session. This fixes an omission in the old proximity-based guard.
 
 The next scientific slices are companion resolution, image/table consistency, and complete subset profiles with explicit reference rewriting. See [scope and proof](scientific-core.md).
+
+## Companion selection and historical evidence compatibility
+
+The 10 October scientific slice adds inherited gradient and event selection. BIDS semantics remain upstream in a portable directory/role index; Sanctity owns admission, correction, historical identity and persistence. The resolver's candidate list explains both selection and override without copying or merging file contents.
+
+Relationship evidence now distinguishes metadata-field declarations from companion-selection rules. The latter records a selected path, dataset root, rule identity, matched entities and applicable hierarchy. It does not manufacture a JSON origin for a filename-based relationship. Evidence encoding 2 uses interpretation identity v4. Existing field-only v3 graphs retain their original canonical tokens and decoding; v1/v2 records remain unchanged. A fixed v3 identity regression guards this boundary.
+
+DWI gradients are a paired dependency group. Missing gradients and ambiguity block the current admission profile; absent non-rest BOLD events are a warning. Companion content consistency and stimulus references remain explicitly unassessed. Adding a local events table changes only applicable consumers; changing selected table bytes appears as a direct dependency change even if link endpoints stay equal. Historical releases retain the earlier bytes, evidence and interpretation.
+
+The bounded application correction capability uses the same authority, staging, draft and acceptance operations as JSON correction. It adds no alternate write path or automatic processing behavior. The existing restricted subset compiler requires current recorded coverage and refuses to drop inherited events. Full subset rewriting remains future work.
+
+## DWI content-check evidence — 10 October 2026
+
+The scientific kernel now records generic `ContentCheck` results: rule, target, exact inputs, observations and findings. Assessments with checks use canonical v2 identity; older assessments retain v1. Admission verifies evidence-to-manifest binding and includes check findings automatically. MRI-specific parsing, norms and header inspection stay in bids4s and the BIDS adapter.
+
+The initial `native-reference-v4` profile checks selected DWI gradient tables against bounded scalar NIfTI headers. The policy records its low-b and norm tolerances. Gzip reads inspect a bounded prefix and do not certify the entire compressed payload. Authoritative bytes remain untouched. Event content and anatomical orientation qualification remain separate work. The [scientific-core contract](scientific-core.md#implemented-slice-dwi-content-consistency) specifies exact limits and lifecycle proof.

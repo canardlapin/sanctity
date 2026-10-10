@@ -11,20 +11,34 @@ private[http] object PublicJson:
   def finding(f: Finding): Json = Json.obj("code" -> text(f.code), "severity" -> text(f.severity.toString),
     "path" -> opt(f.path)(p => text(p.value)), "message" -> text(f.message))
   def assessment(a: Assessment): Json = Json.obj("id" -> text(a.id.value.value), "policy" -> text(a.policy),
-    "admissible" -> Json.fromBoolean(a.admissible), "findings" -> Json.arr(a.findings.map(finding)*))
+    "admissible" -> Json.fromBoolean(a.admissible), "findings" -> Json.arr(a.findings.map(finding)*),
+    "checks" -> Json.arr(a.checks.map(contentCheck)*))
+  def contentCheck(c: ContentCheck): Json = Json.obj(
+    "rule" -> text(c.rule), "target" -> text(c.target.value),
+    "inputs" -> Json.arr(c.inputs.map(i => Json.obj("role" -> text(i.role), "path" -> text(i.path.value),
+      "digest" -> text(i.blob.digest.value), "size" -> Json.fromLong(i.blob.size)))*),
+    "facts" -> Json.obj(c.facts.toVector.sortBy(_._1).map((k, v) => k -> value(v))*),
+    "findings" -> Json.arr(c.findings.map(finding)*))
   def entry(e: Entry): Json = e match
     case Entry.Directory(p) => Json.obj("path" -> text(p.value), "kind" -> text("directory"))
     case Entry.File(p, _, b) => Json.obj("path" -> text(p.value), "kind" -> text("file"), "size" -> Json.fromLong(b.size))
   def relationship(r: ScientificRelationship): Json = Json.obj("from" -> text(r.from.value), "kind" -> text(r.kind),
     "to" -> Json.arr(r.to.map(p => text(p.value))*), "label" -> opt(r.label)(text),
-    "evidence" -> Json.arr(r.evidence.map(e => Json.obj("artifact" -> text(e.artifact.value),
-      "document" -> text(e.document.value), "field" -> text(e.field)))*))
+    "evidence" -> Json.arr(r.evidence.map(relationshipEvidence)*))
+  def relationshipEvidence(e: RelationshipEvidence): Json = e match
+    case RelationshipEvidence.MetadataField(a, d, f) =>
+      Json.obj("artifact" -> text(a.value), "document" -> text(d.value), "field" -> text(f))
+    case RelationshipEvidence.CompanionSelection(a, d, rule, root, entities, applicable) =>
+      Json.obj("kind" -> text("companion-selection"), "artifact" -> text(a.value), "document" -> text(d.value),
+        "rule" -> text(rule), "datasetRoot" -> opt(root)(p => text(p.value)),
+        "matchedEntities" -> Json.obj(entities.toVector.sortBy(_._1).map((k, v) => k -> text(v))*),
+        "applicable" -> Json.arr(applicable.map(p => text(p.value))*))
   def release(r: Release): Json = Json.obj(
     "ref" -> ref(r.ref), "parent" -> opt(r.parent)(p => text(p.render)), "manifest" -> text(r.manifest.id.value.value),
     "interpretation" -> text(r.interpretation.id.value.value), "profile" -> text(r.interpretation.profile.name),
     "coverage" -> text(r.interpretation.profile.coverage), "assessment" -> assessment(r.assessment),
     "acceptedAt" -> text(r.acceptedAt.toString), "entries" -> Json.arr(r.manifest.entries.map(entry)*),
-    "relationships" -> opt(r.interpretation.relationships)(g => Json.obj("version" -> text(g.version),
+    "relationships" -> opt(r.interpretation.relationships)(g => Json.obj("version" -> text(g.version), "evidenceVersion" -> Json.fromInt(g.evidenceVersion),
       "links" -> Json.arr(g.relationships.map(relationship)*))))
   def candidate(c: Candidate): Json = Json.obj("id" -> text(c.id.render), "dataset" -> text(c.dataset.render),
     "base" -> opt(c.base)(r => text(r.render)), "generation" -> Json.fromLong(c.generation),
@@ -49,7 +63,8 @@ private[http] object PublicJson:
       "fields" -> Json.arr(d.fields.map(f => Json.obj("name" -> text(f.name),
         "before" -> opt(f.before)(field), "after" -> opt(f.after)(field)))*)))*),
     "relationshipChanges" -> Json.arr(p.relationshipChanges.map(d => Json.obj("path" -> text(d.path.value),
-      "before" -> Json.arr(d.before.map(relationship)*), "after" -> Json.arr(d.after.map(relationship)*)))*))
+      "before" -> Json.arr(d.before.map(relationship)*), "after" -> Json.arr(d.after.map(relationship)*),
+      "changedDependencies" -> Json.arr(d.changedDependencies.map(p => text(p.value))*)))*))
   def receipt(r: AcceptanceReceipt): Json = Json.obj("ref" -> ref(r.release), "candidate" -> text(r.candidate.render),
     "key" -> text(r.key.value), "acceptedAt" -> text(r.at.toString))
   def grant(g: Grant): Json = Json.obj("id" -> text(g.id.render), "dataset" -> text(g.dataset.render),

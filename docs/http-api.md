@@ -77,7 +77,7 @@ A correction request has exactly these fields:
 }
 ```
 
-It produces a durable draft and candidate. Inspect `candidate.assessment`, `metadataChanges` and `relationshipChanges`, then accept using the candidate ID and a stable idempotency key. Retrying acceptance returns the same receipt. Retrying correction preparation creates another draft; preparation is not claimed to be idempotent.
+It produces a durable draft and candidate. Inspect `candidate.assessment`, `metadataChanges` and `relationshipChanges` (including changed direct dependency paths), then accept using the candidate ID and a stable idempotency key. Retrying acceptance returns the same receipt. Retrying correction preparation creates another draft; preparation is not claimed to be idempotent.
 
 A fixed-release read grant:
 
@@ -139,3 +139,7 @@ An authenticated mutation may return 404 if its credential is revoked between au
 The current engineering priority is the [scientific core](scientific-core.md). A later identity adapter will need: verified issuer/subject bindings, account lifecycle and membership, authentication assurance and recovery reconciliation. General uploads, remote view preparation, full-dataset archive delivery, browser sessions, audit/metrics endpoints, deployment TLS/rate limits and large-response pagination are not part of this HTTP profile.
 
 Protocol reference: [RFC 6750 bearer-token usage](https://www.rfc-editor.org/rfc/rfc6750). The adapter uses the [http4s 0.23 DSL](https://http4s.org/v0.23/docs/dsl.html); the application pins 0.23.30.
+
+Release relationship evidence distinguishes JSON field declarations from companion-selection rules. Companion evidence includes the selected path, matching entities and applicable hierarchy; `evidenceVersion` identifies the encoding. Companion writes currently use the application API only.
+
+Candidate and release assessments include `checks`: each exposes a versioned rule, target, exact input roles/paths/digests/sizes, observed facts and findings. DWI checks expose gradient counts, header facts and numeric policy. These observations are separate from authored/effective metadata; empty historical checks mean no such recorded assessment. Companion corrections still use the application API.

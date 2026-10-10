@@ -1678,13 +1678,20 @@
             "items": {
               "$ref": "#/components/schemas/Finding"
             }
+          },
+          "checks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ContentCheck"
+            }
           }
         },
         "required": [
           "id",
           "policy",
           "admissible",
-          "findings"
+          "findings",
+          "checks"
         ]
       },
       "Entry": {
@@ -2020,12 +2027,19 @@
                   "items": {
                     "$ref": "#/components/schemas/ScientificRelationship"
                   }
+                },
+                "changedDependencies": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
                 }
               },
               "required": [
                 "path",
                 "before",
-                "after"
+                "after",
+                "changedDependencies"
               ]
             }
           }
@@ -2491,23 +2505,73 @@
           "evidence": {
             "type": "array",
             "items": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "artifact": {
-                  "type": "string"
+              "oneOf": [
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "artifact": {
+                      "type": "string"
+                    },
+                    "document": {
+                      "type": "string"
+                    },
+                    "field": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "artifact",
+                    "document",
+                    "field"
+                  ]
                 },
-                "document": {
-                  "type": "string"
-                },
-                "field": {
-                  "type": "string"
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "kind": {
+                      "type": "string",
+                      "const": "companion-selection"
+                    },
+                    "artifact": {
+                      "type": "string"
+                    },
+                    "document": {
+                      "type": "string"
+                    },
+                    "rule": {
+                      "type": "string"
+                    },
+                    "datasetRoot": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "matchedEntities": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string"
+                      }
+                    },
+                    "applicable": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": [
+                    "kind",
+                    "artifact",
+                    "document",
+                    "rule",
+                    "datasetRoot",
+                    "matchedEntities",
+                    "applicable"
+                  ]
                 }
-              },
-              "required": [
-                "artifact",
-                "document",
-                "field"
               ]
             }
           }
@@ -2532,12 +2596,78 @@
             "items": {
               "$ref": "#/components/schemas/ScientificRelationship"
             }
+          },
+          "evidenceVersion": {
+            "type": "integer",
+            "enum": [
+              1,
+              2
+            ]
           }
         },
         "required": [
           "version",
-          "links"
+          "links",
+          "evidenceVersion"
         ]
+      },
+      "ContentCheck": {
+        "type": "object",
+        "required": [
+          "rule",
+          "target",
+          "inputs",
+          "facts",
+          "findings"
+        ],
+        "properties": {
+          "rule": {
+            "type": "string"
+          },
+          "target": {
+            "type": "string"
+          },
+          "inputs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "role",
+                "path",
+                "digest",
+                "size"
+              ],
+              "properties": {
+                "role": {
+                  "type": "string"
+                },
+                "path": {
+                  "type": "string"
+                },
+                "digest": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                "size": {
+                  "type": "integer",
+                  "format": "int64",
+                  "minimum": 0
+                }
+              }
+            }
+          },
+          "facts": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "Versioned observations; not authored metadata."
+          },
+          "findings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Finding"
+            }
+          }
+        }
       }
     }
   }

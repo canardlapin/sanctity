@@ -54,7 +54,7 @@ object Interpretation:
       participants: Vector[ParticipantFacts] = Vector.empty, queryVersion: Option[String] = None,
       relationships: Option[RelationshipGraph] = None): Either[Problem, Interpretation] =
     val paths = artifacts.map(_.path).toSet
-    if relationships.exists(g => RelationshipGraph.from(g.version, g.relationships, artifacts).isLeft) then
+    if relationships.exists(g => RelationshipGraph.from(g.version, g.relationships, artifacts, g.evidenceVersion).isLeft) then
       Left(Problem.InvalidManifest("relationships do not match interpretation evidence"))
     else if (queryVersion.isEmpty && (facts.nonEmpty || participants.nonEmpty)) || paths.size != artifacts.size || facts.map(_.path).distinct.size != facts.size ||
         participants.map(_.participant).distinct.size != participants.size || facts.exists(f => !paths.contains(f.path)) then Left(Problem.InvalidManifest("duplicate semantic artifact"))
@@ -70,7 +70,8 @@ object Interpretation:
       }
       val queryTokens = queryVersion.toVector.flatMap(v => Vector(v, facts.size.toString) ++
         facts.sortBy(_.path.value).flatMap(_.tokens) ++ Vector(participants.size.toString) ++ participants.sortBy(_.participant).flatMap(_.tokens))
-      val domain = if relationships.nonEmpty then "sanctity.interpretation.v3"
+      val domain = if relationships.exists(_.evidenceVersion == 2) then "sanctity.interpretation.v4"
+        else if relationships.nonEmpty then "sanctity.interpretation.v3"
         else if queryVersion.isEmpty then "sanctity.interpretation.v1" else "sanctity.interpretation.v2"
       val relationshipTokens = relationships.toVector.flatMap(g => Vector(queryVersion.fold("absent")(_ => "present")) ++ g.tokens)
       val id = InterpretationId(Digest.framed(domain, Vector(content.value.value) ++ profile.tokens ++ tokens ++ queryTokens ++ relationshipTokens))
@@ -81,18 +82,24 @@ final class Assessment private (
     val content: ManifestId,
     val interpretation: InterpretationId,
     val policy: String,
-    val findings: Vector[Finding]
+    val findings: Vector[Finding],
+    val checks: Vector[ContentCheck]
 ):
   def errors: Vector[Finding] = findings.filter(_.severity == Severity.Error)
   def admissible: Boolean = errors.isEmpty
 
 object Assessment:
-  def from(interpretation: Interpretation, policy: String, findings: Vector[Finding]): Assessment =
-    val ordered = findings.sortBy(f => (f.path.fold("")(_.value), f.code, f.message, f.severity.ordinal))
+  def from(interpretation: Interpretation, policy: String, findings: Vector[Finding], checks: Vector[ContentCheck] = Vector.empty): Assessment =
+    val checked = checks.sortBy(c => (c.target.value, c.rule, Digest.framed("sanctity.check.order.v1", c.tokens).value))
+    val all = if checked.isEmpty then findings else (findings ++ checked.flatMap(_.findings)).distinct
+    val ordered = all.sortBy(f => (f.path.fold("")(_.value), f.code, f.message, f.severity.ordinal))
     val tokens = Vector(interpretation.content.value.value, interpretation.id.value.value, policy) ++
       ordered.flatMap(f => Vector(f.path.fold("")(_.value), f.code, f.severity.toString, f.message))
-    new Assessment(AssessmentId(Digest.framed("sanctity.assessment.v1", tokens)),
-      interpretation.content, interpretation.id, policy, ordered)
+    val domain = if checked.isEmpty then "sanctity.assessment.v1" else "sanctity.assessment.v2"
+    val evidence = if checked.isEmpty then Vector.empty else Vector(checked.size.toString) ++
+      checked.flatMap(c => Vector(c.tokens.size.toString) ++ c.tokens)
+    new Assessment(AssessmentId(Digest.framed(domain, (if checked.isEmpty then tokens else Vector(ordered.size.toString) ++ tokens) ++ evidence)),
+      interpretation.content, interpretation.id, policy, ordered, checked)
 
 final case class FieldDelta(name: String, before: Option[EffectiveField], after: Option[EffectiveField]):
   def valueChanged: Boolean = before.map(_.value) != after.map(_.value)

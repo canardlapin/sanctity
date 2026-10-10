@@ -616,6 +616,230 @@ abstract class CatalogLifecycleSuite extends FunSuite:
     }
   }
 
+  private val eventTable = "onset\tduration\n0\t1\n"
+  private val rootEvents = "task-rest_events.tsv"
+  private val localEvents = "sub-01/func/sub-01_task-rest_events.tsv"
+
+  test("inherited event correction changes only the applicable acquisition and retains old closure and exact exports") {
+    fixture { (s, root) =>
+      for
+        _ <- IO.blocking {
+          Files.writeString(root.resolve("source").resolve(rootEvents), eventTable)
+          Files.writeString(root.resolve("source/task-rest_events.json"), """{"onset":{"Units":"s"},"duration":{"Units":"s"}}""")
+        }
+        initial <- accepted(s, root)
+        before <- checked(s.repository.release(s.context, initial.release))
+        prior <- Checked.lift[IO, RelationshipClosure](before.interpretation.relationshipClosure(Vector(path(SyntheticFixture.firstImage))))
+        _ = assert(prior.artifacts.contains(path(rootEvents)))
+        _ = assert(prior.metadataDocuments.contains(path("task-rest_events.json")))
+        edit <- checked(s.repository.correctCompanion(s.context, initial.release, path(localEvents), "onset\tduration\n2\t1\n", "Use acquisition-specific events"))
+        _ = assertEquals(edit.relationshipChanges.map(_.path), Vector(path(SyntheticFixture.firstImage)))
+        _ = assert(!edit.metadataChanges.exists(_.path == path(SyntheticFixture.firstImage)))
+        next <- checked(s.repository.accept(s.context, edit.candidate.id, key("events-override")))
+        after <- checked(s.repository.release(s.context, next.release))
+        closure <- Checked.lift[IO, RelationshipClosure](after.interpretation.relationshipClosure(Vector(path(SyntheticFixture.firstImage))))
+        _ = assert(closure.artifacts.contains(path(localEvents)))
+        _ = assert(!closure.artifacts.contains(path(rootEvents)))
+        _ = assertEquals(closure.relationships.head.evidence.collect {
+          case e: RelationshipEvidence.CompanionSelection => e.applicable
+        }, Vector(Vector(path(rootEvents), path(localEvents))))
+        other <- Checked.lift[IO, RelationshipClosure](after.interpretation.relationshipClosure(Vector(path(SyntheticFixture.secondImage))))
+        _ = assert(other.artifacts.contains(path(rootEvents)))
+        again <- checked(s.repository.release(s.context, initial.release))
+        _ = assertEquals(again.interpretation.id, before.interpretation.id)
+        retained <- Checked.lift[IO, RelationshipClosure](again.interpretation.relationshipClosure(Vector(path(SyntheticFixture.firstImage))))
+        _ = assertEquals(retained, prior)
+        _ = assertEquals(before.manifest.files.filter(_.path.fileName.endsWith(".nii")), after.manifest.files.filter(_.path.fileName.endsWith(".nii")))
+        _ <- checked(s.repository.exportFull(s.context, initial.release, new DirectoryExport[IO](root.resolve("events-old"))))
+        _ <- checked(s.repository.exportFull(s.context, next.release, new DirectoryExport[IO](root.resolve("events-new"))))
+        old <- IO.blocking(Files.readString(root.resolve("events-old").resolve(rootEvents)))
+        fresh <- IO.blocking(Files.readString(root.resolve("events-new").resolve(localEvents)))
+        _ = assertEquals(old, eventTable)
+        _ = assertEquals(fresh, "onset\tduration\n2\t1\n")
+      yield ()
+    }
+  }
+
+  test("editing selected companion bytes reports dependency impact without inventing a link change") {
+    fixture { (s, root) =>
+      for
+        _ <- IO.blocking(Files.writeString(root.resolve("source").resolve(rootEvents), eventTable))
+        initial <- accepted(s, root)
+        edit <- checked(s.repository.correctCompanion(s.context, initial.release, path(rootEvents), "onset\tduration\n4\t1\n", "Correct event timing"))
+        _ = assertEquals(edit.relationshipChanges.map(_.path).toSet, Set(path(SyntheticFixture.firstImage), path(SyntheticFixture.secondImage)))
+        _ = assert(edit.relationshipChanges.forall(d => d.before == d.after && d.changedDependencies == Vector(path(rootEvents))))
+        next <- checked(s.repository.accept(s.context, edit.candidate.id, key("events-bytes")))
+        before <- checked(s.repository.release(s.context, initial.release))
+        after <- checked(s.repository.release(s.context, next.release))
+        _ = assertEquals(before.manifest.byPath(path(rootEvents)).asInstanceOf[Entry.File].artifact, after.manifest.byPath(path(rootEvents)).asInstanceOf[Entry.File].artifact)
+      yield ()
+    }
+  }
+
+  test("ambiguous event companions block admission and never silently advance the head") {
+    fixture { (s, root) =>
+      for
+        _ <- IO.blocking(Files.writeString(root.resolve("source").resolve(rootEvents), eventTable))
+        initial <- accepted(s, root)
+        edit <- checked(s.repository.correctCompanion(s.context, initial.release, path("sub-01_task-rest_events.tsv"), eventTable, "Ambiguous root table"))
+        _ = assert(edit.candidate.assessment.errors.exists(_.code == "CompanionAmbiguous"))
+        denied <- s.repository.accept(s.context, edit.candidate.id, key("ambiguous-events"))
+        _ = assert(denied.left.toOption.exists(_.isInstanceOf[Problem.Rejected]))
+        dataset <- checked(s.catalog.dataset(s.context, s.dataset.id))
+        _ = assertEquals(dataset.head, Some(initial.release.release))
+      yield ()
+    }
+  }
+
+  test("DWI gradients form one group and an incomplete pair remains a rejected candidate") {
+    fixture { (s, root) =>
+      val image = "sub-01/dwi/sub-01_dwi.nii"
+      for
+        _ <- IO.blocking {
+          val source = root.resolve("source")
+          Files.createDirectories(source.resolve("sub-01/dwi"))
+          Files.write(source.resolve(image), Files.readAllBytes(source.resolve(SyntheticFixture.firstImage)))
+          Files.writeString(source.resolve("dwi.bval"), "0 1000\n")
+          Files.writeString(source.resolve("sub-01/sub-01_dwi.bvec"), "0 1\n0 0\n0 0\n")
+        }
+        initial <- accepted(s, root)
+        release <- checked(s.repository.release(s.context, initial.release))
+        closure <- Checked.lift[IO, RelationshipClosure](release.interpretation.relationshipClosure(Vector(path(image))))
+        _ = assertEquals(closure.relationships.map(_.kind), Vector("bids.dwi-gradients"))
+        _ = assertEquals(closure.relationships.head.to.toSet, Set(path("dwi.bval"), path("sub-01/sub-01_dwi.bvec")))
+        _ <- IO.blocking(Files.delete(root.resolve("source/sub-01/sub-01_dwi.bvec")))
+        dataset <- s.repository.create(s.context, s.dataset.custodian)
+        preview <- checked(s.repository.importNative(s.context, dataset.id, new NativeDirectorySource[IO](root.resolve("source"))))
+        _ = assert(preview.candidate.assessment.errors.exists(_.code == "CompanionMissingBvec"))
+        denied <- s.repository.accept(s.context, preview.candidate.id, key("missing-gradient"))
+        _ = assert(denied.left.toOption.exists(_.isInstanceOf[Problem.Rejected]))
+        _ = assert(!preview.candidate.interpretation.relationships.get.relationships.exists(_.kind == "bids.dwi-gradients"))
+      yield ()
+    }
+  }
+
+  test("root-level events prevent a restricted MRI subset from silently omitting them") {
+    fixture { (s, root) =>
+      for
+        _ <- IO.blocking(Files.writeString(root.resolve("source").resolve(rootEvents), eventTable))
+        initial <- accepted(s, root)
+        release <- checked(s.repository.release(s.context, initial.release))
+        selection <- checked(s.catalog.select(s.context, Vector(initial.release), ScientificQuery(artifacts = ArtifactPredicate.Suffix("bold"))))
+        result = new sanctity.bids.MriViewCompiler().plan(release, selection, DisclosureProfile(Set.empty, Set("TaskName", "RepetitionTime")))
+        _ = assert(result.left.toOption.exists(_.isInstanceOf[Problem.Unsupported]))
+      yield ()
+    }
+  }
+
+
+  test("DWI content evidence survives storage; count rejection preserves the head and corrected history") {
+    fixture { (s, root) =>
+      for
+        _ <- IO.blocking(DwiTestFiles.install(root.resolve("source")))
+        initial <- accepted(s, root)
+        before <- checked(s.repository.release(s.context, initial.release))
+        evidence = before.assessment.checks.head
+        _ = assertEquals(evidence.target, path(DwiTestFiles.image))
+        _ = assertEquals(evidence.facts("volumeCount"), MetadataValue.Number(2))
+        _ = assertEquals(evidence.inputs.map(_.role).toSet, Set("image", "bval", "bvec"))
+        bad <- checked(s.repository.correctCompanion(s.context, initial.release, path(DwiTestFiles.bval),
+          "0 1000 2000\n", "Incorrect extra gradient"))
+        _ = assert(bad.candidate.assessment.errors.exists(_.code == "DwiBvalCount"))
+        blocked <- s.repository.accept(s.context, bad.candidate.id, key("bad-dwi-count"))
+        _ = assert(blocked.left.toOption.exists(_.isInstanceOf[Problem.Rejected]))
+        head <- checked(s.catalog.dataset(s.context, s.dataset.id))
+        _ = assertEquals(head.head, Some(initial.release.release))
+        good <- checked(s.repository.correctCompanion(s.context, initial.release, path(DwiTestFiles.bval),
+          "0 1200\n", "Correct diffusion weighting"))
+        next <- checked(s.repository.accept(s.context, good.candidate.id, key("correct-dwi")))
+        after <- checked(s.repository.release(s.context, next.release))
+        historical <- checked(s.repository.release(s.context, initial.release))
+        _ = assertEquals(historical.assessment.id, before.assessment.id)
+        _ = assertEquals(historical.assessment.checks.head.inputs, evidence.inputs)
+        _ = assertNotEquals(after.assessment.id, before.assessment.id)
+        _ = assertNotEquals(after.assessment.checks.head.inputs.find(_.role == "bval"), evidence.inputs.find(_.role == "bval"))
+        _ = assertEquals(after.manifest.byPath(path(DwiTestFiles.image)), before.manifest.byPath(path(DwiTestFiles.image)))
+        _ <- checked(s.repository.exportFull(s.context, initial.release, new DirectoryExport[IO](root.resolve("dwi-before"))))
+        _ <- checked(s.repository.exportFull(s.context, next.release, new DirectoryExport[IO](root.resolve("dwi-after"))))
+        _ <- IO.blocking {
+          assertEquals(Files.readString(root.resolve("dwi-before/dwi.bval")), DwiTestFiles.values)
+          assertEquals(Files.readString(root.resolve("dwi-after/dwi.bval")), "0 1200\n")
+        }
+      yield ()
+    }
+  }
+
+  test("DWI malformed and nonunit vectors remain inspectable rejected corrections") {
+    fixture { (s, root) =>
+      for
+        _ <- IO.blocking(DwiTestFiles.install(root.resolve("source")))
+        initial <- accepted(s, root)
+        _ <- Vector(("0 NaN\n0 0\n0 0\n", "DwiNumber"), ("0 0.5\n0 0\n0 0\n", "DwiVectorNorm")).traverse_ { (text, code) =>
+          for
+            edit <- checked(s.repository.correctCompanion(s.context, initial.release, path(DwiTestFiles.bvec), text, "Invalid vector"))
+            _ = assert(edit.candidate.assessment.errors.exists(f => f.code == code && f.path.contains(path(DwiTestFiles.bvec)) && f.message.contains("column 2")))
+            stored <- checked(s.catalog.candidate(s.context, edit.candidate.id))
+            _ = assertEquals(stored.assessment.id, edit.candidate.assessment.id)
+            denied <- s.repository.accept(s.context, edit.candidate.id, key(code))
+            _ = assert(denied.left.toOption.exists(_.isInstanceOf[Problem.Rejected]))
+          yield ()
+        }
+      yield ()
+    }
+  }
+
+  test("big-endian NIfTI-2 gzip headers are assessed without rewriting the image") {
+    fixture { (s, root) =>
+      val name = DwiTestFiles.image + ".gz"
+      val bytes = DwiTestFiles.gzip(DwiTestFiles.nifti(version = 2, little = false))
+      for
+        _ <- IO.blocking(DwiTestFiles.install(root.resolve("source"), bytes, name))
+        initial <- accepted(s, root)
+        release <- checked(s.repository.release(s.context, initial.release))
+        facts = release.assessment.checks.head.facts
+        _ = assertEquals(facts("niftiVersion"), MetadataValue.Number(2))
+        _ = assertEquals(facts("byteOrder"), MetadataValue.Text("BigEndian"))
+        _ = assertEquals(facts("volumeCount"), MetadataValue.Number(2))
+        _ = assertEquals(facts("headerOnly"), MetadataValue.Flag(true))
+        _ <- checked(s.repository.exportFull(s.context, initial.release, new DirectoryExport[IO](root.resolve("dwi-gzip"))))
+        _ <- IO.blocking(assertEquals(Files.readAllBytes(root.resolve("dwi-gzip").resolve(name)).toVector, bytes.toVector))
+      yield ()
+    }
+  }
+
+  test("a short image payload is a content finding and cannot become an accepted release") {
+    fixture { (s, root) =>
+      for
+        _ <- IO.blocking(DwiTestFiles.install(root.resolve("source"), DwiTestFiles.nifti().take(352)))
+        preview <- imported(s, root)
+        _ = assert(preview.candidate.assessment.errors.exists(_.code == "DwiHeader"))
+        _ = assertEquals(preview.candidate.assessment.checks.head.inputs.size, 3)
+        denied <- s.repository.accept(s.context, preview.candidate.id, key("truncated-dwi"))
+        _ = assert(denied.left.toOption.exists(_.isInstanceOf[Problem.Rejected]))
+        head <- checked(s.catalog.dataset(s.context, s.dataset.id))
+        _ = assertEquals(head.head, None)
+      yield ()
+    }
+  }
+
+  test("shared gradients are checked independently against each acquisition's volume count") {
+    fixture { (s, root) =>
+      val other = "sub-02/dwi/sub-02_dwi.nii"
+      for
+        _ <- IO.blocking {
+          DwiTestFiles.install(root.resolve("source"))
+          DwiTestFiles.install(root.resolve("source"), DwiTestFiles.nifti(volumes = 3), other)
+        }
+        preview <- imported(s, root)
+        checks = preview.candidate.assessment.checks.map(c => c.target -> c).toMap
+        _ = assertEquals(checks(path(DwiTestFiles.image)).findings, Vector.empty)
+        _ = assertEquals(checks(path(other)).findings.map(_.code).toSet, Set("DwiBvalCount", "DwiBvecCount"))
+        denied <- s.repository.accept(s.context, preview.candidate.id, key("shared-dwi"))
+        _ = assert(denied.left.toOption.exists(_.isInstanceOf[Problem.Rejected]))
+      yield ()
+    }
+  }
+
 final class LifecycleSuite extends CatalogLifecycleSuite:
   protected def fixture(run: (RepositorySystem, Path) => IO[Unit]): Unit =
     Resource.make(IO.blocking(Files.createTempDirectory("sanctity-test-")))(TestFiles.remove).use { root =>

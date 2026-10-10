@@ -23,4 +23,8 @@ object Admission:
 
   private def bindings(manifest: Manifest, interpretation: Interpretation, assessment: Assessment): Either[Problem, Unit] =
     Either.cond(interpretation.content == manifest.id && assessment.content == manifest.id &&
-      assessment.interpretation == interpretation.id, (), Problem.Conflict("preparation evidence does not identify the draft"))
+      assessment.interpretation == interpretation.id &&
+      assessment.checks.forall(_.inputs.forall(i => manifest.byPath.get(i.path).exists {
+        case Entry.File(_, _, blob) => blob == i.blob
+        case _ => false
+      })), (), Problem.Conflict("preparation evidence does not identify the draft"))

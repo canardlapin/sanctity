@@ -1,7 +1,7 @@
 # Sanctity implementation plan
 
-Version 0.4 — engineering baseline and implementation evidence\
-Updated 7 October 2026
+Version 0.6 — engineering baseline and implementation evidence\
+Updated 10 October 2026
 
 Build complete scientific lifecycles around immutable accepted states, current authority, and one acceptance protocol. The [PRD](prd.md) remains the product contract; this plan distinguishes executable slices from full pilot qualification.
 
@@ -13,14 +13,14 @@ The native and PostgreSQL slices now extend across the four requested areas: sci
 | --- | --- | --- |
 | WP-02 | Scala 3.3.8; Cats Effect 3.5.7; FS2 3.11.0; http4s 0.23.30; direct sibling bids4s dependency and source fingerprints | Published/revision pin, CI and deployment packaging |
 | WP-03 | Checked IDs/paths/manifests, immutable evidence, pure admission/authority rules, scoped queries, versioned relationship graphs/closure/impact, projections and leases | Real fixture/domain review and scale |
-| WP-04 | Versioned inheritance/origins, strict JSON/participant TSV, explicit query interpretation identity, B0 identifier groups/IntendedFor evidence, historical decoding | Full schema context, implicit/DWI/event companions, image/table consistency, validator/oracle corpus |
+| WP-04 | Versioned inheritance/origins, strict JSON/participant TSV, explicit query interpretation identity, B0/IntendedFor evidence, inherited DWI/BOLD companions, typed selection evidence, DWI gradient/header checks, historical decoding | Full schema context, implicit fieldmap/stimulus dependencies, event content, validator/oracle corpus |
 | WP-05 | Streamed/verified immutable bytes, flushes, retained evidence, isolated full exports | Reclamation, filesystem/power-loss qualification, representative corpus |
 | WP-06 | Incremental checked migrations V001–V005; atomic acceptance, required query projections, receipts/audit/outbox; crash and rollback evidence | Production transaction/index scale and deployment review |
 | WP-07 | Durable principal records, custody/curator separation, action grants, fixed-release scopes, policy audit, revocable expiring API credentials, current authority on reads/writes/retries/delivery | Verified login bindings, memberships, grant expiry, delegation, full source-evidence API |
 | WP-08 | Correlated artifact/participant/session queries; SQL/reference agreement; lexical participant values; persisted frozen selections and stable pages | Acquisition/dataset-wide operator expansion, generated large oracle corpus, performance targets |
 | WP-09 | Import inventory/file checkpoints, renewable leases, stale-worker publication fencing, response-loss recovery, independent outbox delivery targets; authenticated curation/query/grant/file HTTP routes and resumable operator CLI | Remote upload/view/operations/evidence resources, metrics, failure-administration UI, production external consumers |
 | WP-10 | Catalog/blob backup and transactional closed restore gate; integrity verification; separately supplied current policy reconciliation; restored API credentials invalidated | Withdrawal journal, independently operated policy authority, production backup medium and RPO/RTO |
-| WP-11 / WP-12 | MRI view compiler, filtered participant fields, flattened approved metadata, normal assessment/acceptance and fixed-release sharing; hidden-field noninterference; cross-session relationship omissions blocked | Additional dependency profiles, pipeline bundles, bounded delegation and institutional approval |
+| WP-11 / WP-12 | MRI view compiler, filtered participant fields, flattened approved metadata, normal assessment/acceptance and fixed-release sharing; hidden-field noninterference; cross-session fieldmap and inherited-event omissions blocked | Additional dependency profiles, pipeline bundles, bounded delegation and institutional approval |
 | WP-13 | Pinned real dcm2niix conversion; explicit mapping/supplements/exclusions; retained input/output/log evidence; independent synthetic voxel/world-coordinate check | Scanner/vendor fixtures, representative geometry/timing review, automatic mapping and assignment registry |
 | WP-14 | Explicit XNAT API resource inventories and ZIP exports; streaming/checksums, experiment paging, source-change checks, local HTTP/API-export equivalence | Named installation, project/session/assessor survey, custom fields, participant reconciliation, full migration report and cutover |
 
@@ -28,9 +28,9 @@ The current implementation represents a prepared view as an ordinary release in 
 
 ### Verification record
 
-The complete PostgreSQL runner passed **108 tests: 58 ordinary tests and 50 PostgreSQL tests**. The ordinary suite includes kernel/relationship/codec checks, strict HTTP JSON/query grammar, 27 lifecycle contracts, XNAT API/export and loopback HTTP tests, and process cancellation/output/runtime checks. The database suite reruns the same 27 lifecycle contracts, adds 10 transaction/migration tests, five operation/fencing/recovery-gate tests and eight HTTP/credential/CLI tests.
+The complete PostgreSQL runner passed **145 tests: 85 ordinary tests and 60 PostgreSQL tests**. The ordinary suite includes kernel/relationship/codec checks, strict HTTP JSON/query grammar, 37 lifecycle contracts, XNAT API/export and loopback HTTP tests, and process cancellation/output/runtime checks. The database suite reruns the same 37 lifecycle contracts, adds 10 transaction/migration tests, five operation/fencing/recovery-gate tests and eight HTTP/credential/CLI tests.
 
-The scientific relationship slice adds four kernel laws, two persistence/legacy-decoding tests and four lifecycle cases run against both catalogs. It proves grouped fieldmap correction impact, unchanged image bytes and historical relationships, rejection of dangling declarations, legacy/unsupported reference handling and protection against cross-session subset omissions. Upstream `sbt compileAll testAll 'docs/mdoc'` passed **128 JVM tests, 109 Scala.js tests and 11 executable documentation files**; 17 portable cases exercise explicit association semantics.
+The scientific relationship slice adds four kernel laws, two persistence/legacy-decoding tests and four lifecycle cases run against both catalogs. It proves grouped fieldmap correction impact, unchanged image bytes and historical relationships, rejection of dangling declarations, legacy/unsupported reference handling and protection against cross-session subset omissions. The companion slice adds three kernel cases, two codec cases and five lifecycle cases per catalog. It proves inherited selection, exact event exports, direct dependency-byte impact, paired/missing gradients, immutable history and inherited-event subset protection. Upstream `sbt compileAll testAll 'docs/mdoc'` passed **159 JVM tests, 140 Scala.js tests and 11 executable documentation files**; 17 portable cases cover explicit fieldmaps, 15 cover companion selection and 16 cover gradient/header consistency. The DWI slice adds five kernel evidence cases, two codec/legacy cases, five bounded-read/resource cases and five lifecycle cases per catalog. It verifies count/norm rejection, input binding, unchanged heads, historical checks/exports and both NIfTI byte orders/versions. OpenAPI JSON and all local schema references also validate.
 
 The runner also completed these demonstrations outside the test count:
 
@@ -40,7 +40,7 @@ The runner also completed these demonstrations outside the test count:
 4. Revoke the grant, independently capture current policy, and restore the older backup into a fresh database/storage root.
 5. Confirm restored access is closed, verify bytes, reconcile current authority, confirm the guest remains denied, and export both historical releases again.
 
-Local evidence is retained under `target/postgres-check.JaKTUM/`, including the backup, current policy digest, server logs and restored exports. The executable reproduction is `scripts/check-postgres.sh`.
+Local evidence is retained under `target/postgres-check.s4c672/`, including the backup, current policy digest, server logs and restored exports. The executable reproduction is `scripts/check-postgres.sh`.
 
 The real-converter demonstration uses the checksum-pinned official **dcm2niix v1.0.20260724** macOS arm64 binary. It converts a three-slice synthetic explicit-VR MR fixture, records all outputs, maps to BIDS, assesses, accepts and exports. The independent checker verifies dimensions, every voxel value, scaling and RAS world coordinates. Use `scripts/fetch-dcm2niix.py` followed by `scripts/check-dicom.sh`; this evidence is separate from representative scanner qualification.
 
@@ -54,7 +54,7 @@ The authenticated API slice exposes curation, exact releases, metadata explanati
 
 All managed bytes are retained conservatively. No garbage collector or withdrawal operation is implemented. The restore proof covers revocation with a separately available authoritative policy snapshot; without current authority evidence, the service remains closed. Source listings establish declared observation scope, not an atomic global XNAT snapshot.
 
-The local library remains `../bids4s`. The scientific slice adds a portable fieldmap association resolver, downstream API specimen, documentation and JVM/Scala.js cases alongside the existing inheritance improvements. [bids4s integration](bids4s-integration.md) records their scope and evidence.
+The local library remains `../bids4s`. The scientific slices add portable fieldmap and companion resolvers, downstream API specimens, documentation and JVM/Scala.js cases alongside the existing inheritance improvements. [bids4s integration](bids4s-integration.md) records their scope and evidence.
 
 ## 1. Planning assumptions
 

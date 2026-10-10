@@ -44,8 +44,31 @@ private[postgres] object JsonCodecs:
   given Decoder[EffectiveField] = deriveDecoder
   given Encoder[ArtifactMetadata] = deriveEncoder
   given Decoder[ArtifactMetadata] = deriveDecoder
-  given Encoder[RelationshipEvidence] = deriveEncoder
-  given Decoder[RelationshipEvidence] = deriveDecoder
+  given Encoder[RelationshipEvidence] = Encoder.instance {
+    case RelationshipEvidence.MetadataField(a, d, f) =>
+      Json.obj("artifact" -> a.asJson, "document" -> d.asJson, "field" -> f.asJson)
+    case RelationshipEvidence.CompanionSelection(a, d, rule, root, entities, applicable) =>
+      Json.obj("kind" -> "companion-selection".asJson, "artifact" -> a.asJson, "document" -> d.asJson,
+        "rule" -> rule.asJson, "datasetRoot" -> root.asJson, "matchedEntities" -> entities.asJson, "applicable" -> applicable.asJson)
+  }
+  given Decoder[RelationshipEvidence] = Decoder.instance { c =>
+    c.get[Option[String]]("kind").flatMap {
+      case None => for
+        a <- c.get[RelPath]("artifact")
+        d <- c.get[RelPath]("document")
+        f <- c.get[String]("field")
+      yield RelationshipEvidence.MetadataField(a, d, f)
+      case Some("companion-selection") => for
+        a <- c.get[RelPath]("artifact")
+        d <- c.get[RelPath]("document")
+        rule <- c.get[String]("rule")
+        root <- c.get[Option[RelPath]]("datasetRoot")
+        entities <- c.get[Map[String, String]]("matchedEntities")
+        applicable <- c.get[Vector[RelPath]]("applicable")
+      yield RelationshipEvidence.CompanionSelection(a, d, rule, root, entities, applicable)
+      case _ => Left(DecodingFailure("unsupported relationship evidence kind", c.history))
+    }
+  }
   given Encoder[ScientificRelationship] = deriveEncoder
   given Decoder[ScientificRelationship] = deriveDecoder
   given Encoder[ArtifactFacts] = deriveEncoder
@@ -82,6 +105,21 @@ private[postgres] object JsonCodecs:
   given Decoder[Severity] = deriveDecoder
   given Encoder[Finding] = deriveEncoder
   given Decoder[Finding] = deriveDecoder
+  given Encoder[CheckInput] = deriveEncoder
+  given Decoder[CheckInput] = deriveDecoder
+  given Encoder[ContentCheck] = Encoder.instance(c => Json.obj(
+    "rule" -> c.rule.asJson, "target" -> c.target.asJson, "inputs" -> c.inputs.asJson,
+    "facts" -> c.facts.asJson, "findings" -> c.findings.asJson))
+  given Decoder[ContentCheck] = Decoder.instance { c =>
+    for
+      rule <- c.get[String]("rule")
+      target <- c.get[RelPath]("target")
+      inputs <- c.get[Vector[CheckInput]]("inputs")
+      facts <- c.get[Map[String, MetadataValue]]("facts")
+      findings <- c.get[Vector[Finding]]("findings")
+      check <- checked(c, ContentCheck.from(rule, target, inputs, facts, findings))
+    yield check
+  }
   given Encoder[sanctity.application.SourceEntry] = deriveEncoder
   given Decoder[sanctity.application.SourceEntry] = deriveDecoder
   given Encoder[IdempotencyKey] = Encoder.encodeString.contramap(_.value)
@@ -126,7 +164,7 @@ private[postgres] object JsonCodecs:
   given Encoder[Interpretation] = Encoder.instance(i => Json.obj(
     "id" -> i.id.asJson, "content" -> i.content.asJson, "profile" -> i.profile.asJson, "artifacts" -> i.artifacts.asJson,
     "facts" -> i.facts.asJson, "participants" -> i.participants.asJson, "queryVersion" -> i.queryVersion.asJson,
-    "relationships" -> i.relationships.fold(Json.Null)(g => Json.obj("version" -> g.version.asJson, "links" -> g.relationships.asJson))
+    "relationships" -> i.relationships.fold(Json.Null)(g => Json.obj("version" -> g.version.asJson, "evidenceVersion" -> g.evidenceVersion.asJson, "links" -> g.relationships.asJson))
   ))
   given Decoder[Interpretation] = Decoder.instance { cursor =>
     for
@@ -142,7 +180,8 @@ private[postgres] object JsonCodecs:
         for
           version <- j.hcursor.get[String]("version")
           links <- j.hcursor.get[Vector[ScientificRelationship]]("links")
-          g <- checked(cursor, RelationshipGraph.from(version, links, artifacts))
+          encoding <- j.hcursor.get[Option[Int]]("evidenceVersion").map(_.getOrElse(1))
+          g <- checked(cursor, RelationshipGraph.from(version, links, artifacts, encoding))
         yield g
       }
       interpretation <- checked(cursor, Interpretation.from(content, profile, artifacts, facts, participants, queryVersion, graph))
@@ -151,10 +190,10 @@ private[postgres] object JsonCodecs:
   }
 
   private final case class AssessmentRecord(id: AssessmentId, content: ManifestId, interpretation: InterpretationId,
-      policy: String, findings: Vector[Finding])
+      policy: String, findings: Vector[Finding], checks: Option[Vector[ContentCheck]])
   private given Encoder[AssessmentRecord] = deriveEncoder
   private given Decoder[AssessmentRecord] = deriveDecoder
-  given Encoder[Assessment] = Encoder.instance(a => AssessmentRecord(a.id, a.content, a.interpretation, a.policy, a.findings).asJson)
+  given Encoder[Assessment] = Encoder.instance(a => AssessmentRecord(a.id, a.content, a.interpretation, a.policy, a.findings, Option.when(a.checks.nonEmpty)(a.checks)).asJson)
 
   private val parser = new JawnParser(maxValueSize = None, allowDuplicateKeys = false)
 
@@ -172,7 +211,7 @@ private[postgres] object JsonCodecs:
 
   def assessment(text: String, interpretation: Interpretation): Either[Problem, Assessment] =
     decode[AssessmentRecord](text).flatMap { record =>
-      val result = Assessment.from(interpretation, record.policy, record.findings)
+      val result = Assessment.from(interpretation, record.policy, record.findings, record.checks.getOrElse(Vector.empty))
       Either.cond(record.id == result.id && record.content == result.content && record.interpretation == interpretation.id,
         result, Problem.Integrity("assessment identity or evidence binding mismatch"))
     }

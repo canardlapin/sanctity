@@ -13,7 +13,7 @@ Current work prioritizes the [scientific core](docs/scientific-core.md): explici
 | Area | Working behavior |
 | --- | --- |
 | Authority | Durable principals, dataset and fixed-release grants, independent metadata/content/propose/accept powers, curator-controlled administration, revocation and transactional checks |
-| Scientific relationships | Recorded B0 estimation groups and IntendedFor links, field-origin evidence, relationship correction impact, historical identity and bounded closure |
+| Scientific relationships | Recorded B0 groups, IntendedFor links, inherited DWI gradients and BOLD events, typed evidence, correction impact and bounded closure |
 | Scientific queries | Explicit artifact/participant/session correlation; SQL and reference interpreters; lexical participant values; versioned query facts and durable selections |
 | Scientific views | Selected MRI acquisitions, projected participant columns, flattened approved effective metadata, projection evidence, ordinary release acceptance and sharing |
 | Durable operations | Inventoried imports, verified file checkpoints, renewable worker leases, fenced publication, completion recovery, independent leased outbox targets |
@@ -68,7 +68,9 @@ The reference and PostgreSQL catalogs share pure [Admission](modules/kernel/src/
 
 [bids4s resolves explicit MRI declarations](../bids4s/modules/core/shared/src/main/scala/bids4s/BidsFieldmaps.scala). Sanctity binds the resulting grouped relationships, their field-origin evidence and resolver version into immutable interpretation identity. A metadata correction can preview changed acquisition relationships even when the affected image's own metadata is unchanged.
 
-`Interpretation.relationshipClosure` follows recorded relationships and returns associated artifacts plus metadata documents. This is a bounded declaration closure; complete companion resolution and qualified pipeline bundles are later scientific slices. Historical interpretations without this graph retain their identities and explicitly lack this coverage. See the [scientific-core plan and proof](docs/scientific-core.md).
+`Interpretation.relationshipClosure` follows recorded relationships and returns associated artifacts plus metadata documents. It includes selected DWI gradient pairs and BOLD event tables with their JSON metadata. Overridden companions remain evidence. Task-event content, stimulus dependencies and qualified pipeline bundles remain later scientific slices. Historical interpretations retain their identities and recorded coverage. `NativeRepository.correctCompanion` prepares bounded gradient/event edits and previews selection changes or changed dependency bytes. See the [scientific-core plan and proof](docs/scientific-core.md).
+
+DWI preparation now checks selected gradient values and counts against bounded NIfTI-1/2 header facts, including gzip and either byte order. Versioned `ContentCheck` records retain exact input digests, observations and findings within assessment identity; rejected corrections leave the accepted head unchanged. The named vector-norm policy performs no reorientation or voxel/affine qualification.
 
 ## Queries and sharing
 
