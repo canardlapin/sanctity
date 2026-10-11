@@ -48,7 +48,7 @@ Sanctity's `bids` module depends directly on `ProjectRef(../bids4s, coreJVM)`. T
 
 The adapter preserves authored bytes separately, then parses bounded metadata using Circe/Jawn with duplicate keys disabled and strict UTF-8 decoding. It rejects numeric values that would lose decimal meaning when converted to the current bids4s JSON representation. JSON syntax, profile support and inheritance findings remain visible on prepared candidates; errors prevent acceptance.
 
-The consumer profile supports one raw dataset. It rejects nested/derivative compositions explicitly while preserving their staged bytes; it does not claim that the library is incapable of their interpretation. The current `native-reference-v4` profile includes explicit NIfTI fieldmap declarations, inherited DWI gradient/BOLD event selection, and bounded DWI gradient/header consistency. Full conformance, event content, implicit companions and scientific qualification remain outside this profile.
+The consumer profile supports one raw dataset. It rejects nested/derivative compositions explicitly while preserving their staged bytes; it does not claim that the library is incapable of their interpretation. The current `native-reference-v5` profile includes explicit NIfTI fieldmap declarations, inherited DWI gradient/BOLD event selection, bounded DWI gradient/header consistency, and selected BOLD event content/timing assessments. Full conformance, stimulus/HED semantics, implicit companions and scientific qualification remain outside this profile.
 
 No additional bids4s source changes were needed for the native lifecycle integration. The previously recorded JVM/Scala.js evidence applies to the library; Sanctity has its own kernel and filesystem integration test gate (`sbt check`).
 
@@ -91,3 +91,48 @@ Companion-pass verification: `sbt compileAll testAll 'docs/mdoc'` passed 143 JVM
 Portable `BValues`, `BVectors`, `NiftiHeaderFacts` and `DwiConsistency` APIs now separate checked numeric/header interpretation from storage and decompression. Both first-contact targets exercise the public boundary. Sanctity supplies bounded prefix reads, explicit numeric-policy observations, exact input binding and durable assessment checks; it never reconstructs authored gradients from parsed Doubles. See [scope, limits and evidence](scientific-core.md#implemented-slice-dwi-content-consistency). The new companion and content APIs are committed locally at `980a18663066d92b0f7b3aac092d3a43424748bf`, pending upstream publication/review.
 
 DWI-pass verification: the complete upstream build passed 159 JVM tests, 140 Scala.js tests, both first-contact builds and 11 executable documentation files. Sanctity passed 145 tests (85 ordinary plus 60 PostgreSQL), crash/retry and coordinated restore. Evidence: `target/postgres-check.s4c672/`.
+
+## Event-content pass
+
+`CheckedEvents` adds strict bounded quoted TSV assessment with exact decimal seconds while preserving the permissive `BidsEvents`/`EventsTable` APIs. `EventTiming` distinguishes regular, variable and unavailable context. Sanctity binds table/image/metadata inputs into ordinary checks and shares its existing bounded header reader. Sidecar validation now allows a single `VolumeTiming` value for a single stored volume and rejects negative volume times. This pass is local work beyond the recorded commits above. See [contracts and limits](scientific-core.md#implemented-slice-task-event-content-and-timing).
+
+Event-pass verification: `sbt compileAll testAll 'docs/mdoc'` passed 182 JVM tests, 163 Scala.js tests, both first-contact builds and 11 executable documentation files. Sanctity passed 162 tests (96 ordinary plus 66 PostgreSQL), including 43 shared lifecycle cases on each catalog, plus crash/retry and coordinated restore. Evidence: `target/postgres-check.XNTo3m/`.
+
+## Subset-materialization pass
+
+The existing quoted-TSV scanner is now a reusable portable `CheckedTsv` API. It retains strict lexical/missing-value semantics, typed physical positions and budgets while allowing summary/event column projection and deterministic quoted output. Strict event assessment uses that scanner; permissive table/event loaders are unchanged. Both first-contact consumers exercise parse/select/render.
+
+Sanctity owns dependency closure, authorization, field masks, reference rewriting, source/output receipts and the effectful read boundary. These repository responsibilities remain outside bids4s. See [subset contracts and limits](scientific-core.md#implemented-slice-coherent-mri-subsets). No release of either repository is implied by this local slice.
+
+Subset-pass verification: the complete upstream build passed 187 JVM tests, 168 Scala.js tests, both first-contact consumers and 11 executable documentation files. Final Sanctity verification passed 192 tests (114 ordinary and 78 PostgreSQL), including 55 lifecycle contracts per catalog. Final tests: `target/subset-check.azzBVC/`; crash/retry and coordinated restore: `target/postgres-check.81SWyI/`.
+
+## Scientific change preparation
+
+The subsequent change slice uses the existing bids4s name/URI and checked TSV APIs without further upstream source edits. Sanctity owns simultaneous base-relative moves/removals, exact-plan acknowledgment, reference repair proposals, old/new dependency impact and ordinary draft admission. The versioned BIDS adapter handles IntendedFor and scans-table rewrites within its documented raw MRI profile.
+
+Verification passed 217 Sanctity tests (129 ordinary and 88 PostgreSQL), including 65 shared lifecycle cases per catalog, plus crash/retry and coordinated restore with current revocation. Evidence: `target/postgres-check.zhdagz/check.log`. The upstream verification above was unchanged at the end of the scientific-change pass. See the [scientific change contract](scientific-core.md#implemented-slice-scientific-file-changes).
+
+## Context and conformance pass
+
+The local upstream tree now exposes checked `BidsContext`, canonical registry
+and rule descriptors, configurable compound extensions, context-bound manifests,
+metadata results and sync/effect loaders. Defaults remain supported. Manifest
+construction/copy reparses files when switching contexts; the former case class
+retains apply/unapply/copy entry points but is no longer a Product. This is a
+pre-release source change, with no binary compatibility assertion.
+
+Sanctity records those descriptors and source fingerprints in interpretation v5,
+keeps authored BIDSVersion separate, and provides explicit same-content profile
+adoption. Historical v1–v4 identities are retained. Context checking in edit/view
+planners prevents an accidental switch to built-in semantics. See the
+[context contract](scientific-core.md#implemented-slice-explicit-semantic-context-and-profile-evolution)
+and [independent corpus](../modules/app/src/test/resources/conformance/README.md).
+No official-schema interpreter or full conformance claim is added.
+
+Context-pass verification: 194 JVM tests, 174 Scala.js tests, both downstream
+first-contact builds and 11 executable documentation files passed. Sanctity
+passed 235 tests (144 ordinary and 91 PostgreSQL), including 68 shared lifecycle
+cases per catalog, plus crash/retry and coordinated restore. Five pinned
+official-validator comparisons also passed. Evidence:
+`target/postgres-check.8ZCgnu/check.log`, `target/conformance-gr6_pdnp/`, and
+`../bids4s/target/context-upstream-check.log`.

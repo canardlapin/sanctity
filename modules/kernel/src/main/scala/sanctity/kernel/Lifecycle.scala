@@ -8,9 +8,9 @@ final case class Dataset(id: DatasetId, custodian: CustodianId, curator: Princip
 final case class ReleaseRef(dataset: DatasetId, release: ReleaseId)
 
 enum ActivityKind:
-  case NativeImport, MetadataCorrection, ScientificView
+  case NativeImport, MetadataCorrection, ScientificView, ScientificChange, Reinterpretation
 
-final case class Activity(kind: ActivityKind, actor: PrincipalId, reason: String, source: Option[String], at: Instant, projection: Option[ProjectionEvidence] = None, evidence: Option[BlobRef] = None, retained: Vector[BlobRef] = Vector.empty)
+final case class Activity(kind: ActivityKind, actor: PrincipalId, reason: String, source: Option[String], at: Instant, projection: Option[ProjectionEvidence] = None, evidence: Option[BlobRef] = None, retained: Vector[BlobRef] = Vector.empty, change: Option[ChangeEvidence] = None)
 final case class Draft(id: DraftId, dataset: DatasetId, base: Option[ReleaseId], generation: Long, manifest: Manifest, activity: Activity)
 final case class Candidate(
     id: CandidateId,
@@ -35,5 +35,5 @@ final case class Release(
 )
 final case class AcceptanceReceipt(release: ReleaseRef, candidate: CandidateId, key: IdempotencyKey, at: Instant)
 final case class Preview(candidate: Candidate, contentChanges: Vector[EntryDelta], metadataChanges: Vector[ArtifactImpact],
-    relationshipChanges: Vector[RelationshipDelta] = Vector.empty)
+    relationshipChanges: Vector[RelationshipDelta] = Vector.empty, dependencyImpact: DependencyImpact = DependencyImpact.empty)
 final case class ExportReceipt(manifest: ManifestId, files: Int, directories: Int, bytes: Long)

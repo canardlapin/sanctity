@@ -146,3 +146,59 @@ final class PersistenceSuite extends FunSuite:
     assertEquals(restored.findings, original.findings)
     assertEquals(restored.checks, Vector.empty)
   }
+
+  test("subset receipts round trip exact mappings and reject altered output or operation identity") {
+    val f = manifest.files.head
+    val receipt = right(ProjectionReceipt.from(manifest, interpretation.id, manifest,
+      Vector(ProjectionStep(f.path, "copy", Vector(CheckInput("content", f.path, f.blob)))), Digest.bytes(Array[Byte](9))))
+    val encoded = JsonCodecs.encode(receipt)
+    val restored = right(JsonCodecs.decode[ProjectionReceipt](encoded))
+    assertEquals(restored.id, receipt.id)
+    assertEquals(restored.files, receipt.files)
+    assert(restored.matches(manifest))
+    assert(JsonCodecs.decode[ProjectionReceipt](encoded.replace("\"copy\"", "\"rewrite\"")).isLeft)
+    assert(JsonCodecs.decode[ProjectionReceipt](encoded.replace("sub-01/a.nii", "sub-01/b.nii")).isLeft)
+  }
+
+  test("historical projection evidence without receipt decodes without inventing a transformation proof") {
+    val ref = ReleaseRef(Id[DatasetTag](UUID.randomUUID()), Id[ReleaseTag](UUID.randomUUID()))
+    val selection = right(FrozenSelection.from(Vector(ref), ScientificQuery(), Vector.empty))
+    val original = ProjectionEvidence(ref, selection.id, Digest.bytes(Array.emptyByteArray), "legacy-v3", Vector(path("participants.tsv")))
+    val encoded = JsonCodecs.encode(original)
+    val legacy = encoded.replace(",\"receipt\":null", "")
+    assert(!legacy.contains("receipt"))
+    val restored = right(JsonCodecs.decode[ProjectionEvidence](legacy))
+    assertEquals(restored, original)
+  }
+
+  test("scientific change activity retains its plan binding and requires its matching receipt") {
+    val source = ReleaseRef(Id[DatasetTag](UUID.randomUUID()), Id[ReleaseTag](UUID.randomUUID()))
+    val receipt = right(BlobRef.from(Digest.bytes(Array[Byte](1)), 1))
+    val evidence = ChangeEvidence(Digest.bytes(Array[Byte](2)), source, manifest.id, receipt)
+    val activity = Activity(ActivityKind.ScientificChange, Id[PrincipalTag](UUID.randomUUID()), "rename", None,
+      java.time.Instant.EPOCH, evidence = Some(receipt), change = Some(evidence))
+    val encoded = JsonCodecs.encode(activity)
+    assertEquals(right(JsonCodecs.decode[Activity](encoded)), activity)
+    val missingReceipt = JsonCodecs.encode(activity.copy(evidence = None))
+    assert(JsonCodecs.decode[Activity](missingReceipt).isLeft)
+    assert(JsonCodecs.decode[Activity](JsonCodecs.encode(activity.copy(change = None))).isLeft)
+    assert(JsonCodecs.decode[Activity](JsonCodecs.encode(activity.copy(kind = ActivityKind.MetadataCorrection))).isLeft)
+  }
+
+  test("semantic context is verified on decode and legacy interpretation identity survives") {
+    val context = right(SemanticContext.from("pilot", Some("1.10.0"), "partial", Vector("registry", "ordered"), Map("resolver" -> "v1")))
+    val value = right(Interpretation.from(manifest.id, profile.copy(context = Some(context)), interpretation.artifacts,
+      declaredBidsVersion = Some("1.9.0")))
+    val encoded = JsonCodecs.encode(value)
+    val decoded = right(JsonCodecs.decode[Interpretation](encoded))
+    assertEquals(decoded.id, value.id)
+    assertEquals(decoded.profile.context, Some(context))
+    assertEquals(decoded.declaredBidsVersion, Some("1.9.0"))
+    assert(JsonCodecs.decode[Interpretation](encoded.replace("ordered", "tampered")).isLeft)
+    assert(JsonCodecs.decode[Interpretation](encoded.replace("1.9.0", "1.8.0")).isLeft)
+    val legacy = new io.circe.jawn.JawnParser().parse(JsonCodecs.encode(interpretation)).toOption.get
+      .mapObject(o => o.add("value", o("value").get.mapObject { fields =>
+        fields.remove("declaredBidsVersion").add("profile", fields("profile").get.mapObject(_.remove("context")))
+      }))
+    assertEquals(right(JsonCodecs.decode[Interpretation](legacy.noSpaces)).id, interpretation.id)
+  }

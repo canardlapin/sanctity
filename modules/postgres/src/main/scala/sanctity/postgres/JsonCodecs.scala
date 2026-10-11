@@ -99,8 +99,33 @@ private[postgres] object JsonCodecs:
       _ <- verify(c, selection.id == id)
     yield selection
   }
+  given Encoder[SemanticContext] = Encoder.instance(c => Json.obj(
+    "id" -> c.id.asJson, "registryId" -> c.registryId.asJson, "name" -> c.name.asJson,
+    "specificationVersion" -> c.specificationVersion.asJson, "coverage" -> c.coverage.asJson,
+    "registryTokens" -> c.registryTokens.asJson, "rules" -> c.rules.asJson))
+  given Decoder[SemanticContext] = Decoder.instance { c =>
+    for
+      id <- c.get[Digest]("id")
+      registryId <- c.get[Digest]("registryId")
+      name <- c.get[String]("name")
+      version <- c.get[Option[String]]("specificationVersion")
+      coverage <- c.get[String]("coverage")
+      tokens <- c.get[Vector[String]]("registryTokens")
+      rules <- c.get[Map[String, String]]("rules")
+      result <- checked(c, SemanticContext.from(name, version, coverage, tokens, rules))
+      _ <- verify(c, result.id == id && result.registryId == registryId)
+    yield result
+  }
   given Encoder[SemanticProfile] = deriveEncoder
-  given Decoder[SemanticProfile] = deriveDecoder
+  given Decoder[SemanticProfile] = Decoder.instance { c =>
+    for
+      name <- c.get[String]("name")
+      library <- c.get[String]("libraryIdentity")
+      interpreter <- c.get[String]("interpreterIdentity")
+      coverage <- c.get[String]("coverage")
+      context <- c.get[Option[SemanticContext]]("context")
+    yield SemanticProfile(name, library, interpreter, coverage, context)
+  }
   given Encoder[Severity] = deriveEncoder
   given Decoder[Severity] = deriveDecoder
   given Encoder[Finding] = deriveEncoder
@@ -136,8 +161,40 @@ private[postgres] object JsonCodecs:
   given Decoder[PolicySnapshot] = deriveDecoder
   given Encoder[ActivityKind] = deriveEncoder
   given Decoder[ActivityKind] = deriveDecoder
+  given Encoder[ProjectionStep] = deriveEncoder
+  given Decoder[ProjectionStep] = deriveDecoder
+  given Encoder[ProjectionOutput] = deriveEncoder
+  given Decoder[ProjectionOutput] = deriveDecoder
+  given Encoder[ProjectionReceipt] = Encoder.instance(r => Json.obj(
+    "id" -> r.id.asJson, "sourceContent" -> r.sourceContent.asJson,
+    "sourceInterpretation" -> r.sourceInterpretation.asJson, "output" -> r.output.asJson, "specification" -> r.specification.asJson, "files" -> r.files.asJson))
+  given Decoder[ProjectionReceipt] = Decoder.instance { c =>
+    for
+      id <- c.get[Digest]("id")
+      source <- c.get[ManifestId]("sourceContent")
+      interpretation <- c.get[InterpretationId]("sourceInterpretation")
+      output <- c.get[ManifestId]("output")
+      specification <- c.get[Digest]("specification")
+      files <- c.get[Vector[ProjectionOutput]]("files")
+      receipt <- checked(c, ProjectionReceipt.checked(source, interpretation, output, specification, files))
+      _ <- verify(c, receipt.id == id)
+    yield receipt
+  }
   given Encoder[ProjectionEvidence] = deriveEncoder
-  given Decoder[ProjectionEvidence] = deriveDecoder
+  given Decoder[ProjectionEvidence] = Decoder.instance { c =>
+    for
+      source <- c.get[ReleaseRef]("source")
+      selection <- c.get[SelectionId]("selection")
+      profile <- c.get[Digest]("profile")
+      compiler <- c.get[String]("compiler")
+      generated <- c.get[Vector[RelPath]]("generated")
+      receipt <- c.get[Option[ProjectionReceipt]]("receipt")
+      evidence = ProjectionEvidence(source, selection, profile, compiler, generated, receipt)
+      _ <- verify(c, receipt.forall(_.specification == evidence.binding))
+    yield evidence
+  }
+  given Encoder[ChangeEvidence] = deriveEncoder
+  given Decoder[ChangeEvidence] = deriveDecoder
   given Encoder[Activity] = deriveEncoder
   given Decoder[Activity] = Decoder.instance { c =>
     for
@@ -149,7 +206,9 @@ private[postgres] object JsonCodecs:
       projection <- c.get[Option[ProjectionEvidence]]("projection")
       evidence <- c.get[Option[BlobRef]]("evidence")
       retained <- c.get[Option[Vector[BlobRef]]]("retained").map(_.getOrElse(Vector.empty))
-    yield Activity(kind, actor, reason, source, at, projection, evidence, retained)
+      change <- c.get[Option[ChangeEvidence]]("change")
+      _ <- verify(c, (kind == ActivityKind.ScientificChange) == change.nonEmpty && change.forall(v => evidence.contains(v.receipt)))
+    yield Activity(kind, actor, reason, source, at, projection, evidence, retained, change)
   }
 
   given Encoder[Manifest] = Encoder.instance(m => Json.obj("id" -> m.id.asJson, "entries" -> m.entries.asJson))
@@ -163,7 +222,7 @@ private[postgres] object JsonCodecs:
   }
   given Encoder[Interpretation] = Encoder.instance(i => Json.obj(
     "id" -> i.id.asJson, "content" -> i.content.asJson, "profile" -> i.profile.asJson, "artifacts" -> i.artifacts.asJson,
-    "facts" -> i.facts.asJson, "participants" -> i.participants.asJson, "queryVersion" -> i.queryVersion.asJson,
+    "declaredBidsVersion" -> i.declaredBidsVersion.asJson, "facts" -> i.facts.asJson, "participants" -> i.participants.asJson, "queryVersion" -> i.queryVersion.asJson,
     "relationships" -> i.relationships.fold(Json.Null)(g => Json.obj("version" -> g.version.asJson, "evidenceVersion" -> g.evidenceVersion.asJson, "links" -> g.relationships.asJson))
   ))
   given Decoder[Interpretation] = Decoder.instance { cursor =>
@@ -175,6 +234,7 @@ private[postgres] object JsonCodecs:
       facts <- cursor.get[Option[Vector[ArtifactFacts]]]("facts").map(_.getOrElse(Vector.empty))
       participants <- cursor.get[Option[Vector[ParticipantFacts]]]("participants").map(_.getOrElse(Vector.empty))
       queryVersion <- cursor.get[Option[String]]("queryVersion")
+      declared <- cursor.get[Option[String]]("declaredBidsVersion")
       relationJson <- cursor.get[Option[Json]]("relationships")
       graph <- relationJson.traverse { j =>
         for
@@ -184,7 +244,7 @@ private[postgres] object JsonCodecs:
           g <- checked(cursor, RelationshipGraph.from(version, links, artifacts, encoding))
         yield g
       }
-      interpretation <- checked(cursor, Interpretation.from(content, profile, artifacts, facts, participants, queryVersion, graph))
+      interpretation <- checked(cursor, Interpretation.from(content, profile, artifacts, facts, participants, queryVersion, graph, declared))
       _ <- verify(cursor, interpretation.id == id)
     yield interpretation
   }

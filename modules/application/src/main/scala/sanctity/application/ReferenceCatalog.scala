@@ -109,7 +109,8 @@ final class ReferenceCatalog[F[_]] private (
       state.modify { s =>
         val result = for
           draft <- authorizedDraft(s, ctx, id)
-          _ <- Admission.prepared(draft, generation, s.acceptedDrafts.contains(id), interpretation, assessment)
+          _ <- Admission.prepared(draft, generation, s.acceptedDrafts.contains(id), interpretation, assessment,
+            draft.base.flatMap(s.releases.get).filter(_.ref.dataset == draft.dataset).map(_.manifest.id))
         yield Candidate(candidateId, id, draft.dataset, draft.base, generation, draft.manifest, interpretation, assessment, draft.activity)
         result match
           case Left(problem) => s -> Left(problem)
@@ -136,7 +137,8 @@ final class ReferenceCatalog[F[_]] private (
               dataset <- authorized(s, ctx, candidate.dataset, Action.Accept)
               draft <- s.drafts.get(candidate.draft).toRight(Problem.Denied)
               _ <- candidate.activity.projection.traverse_(p => authorized(s, ctx, p.source.dataset, Action.ManageAccess))
-              _ <- Admission.accept(dataset, draft, candidate, s.acceptedDrafts.contains(draft.id))
+              _ <- Admission.accept(dataset, draft, candidate, s.acceptedDrafts.contains(draft.id),
+                draft.base.flatMap(s.releases.get).filter(_.ref.dataset == draft.dataset).map(_.manifest.id))
             yield (candidate, dataset)
 
             result match

@@ -1,6 +1,6 @@
 package sanctity.bids
 
-import bids4s.{BidsCompanionResolver, BidsCompanionKind, BidsCompanionOutcome, BidsFieldmapResolver, BidsMetadataResolution, BidsIssue, BidsIssueSeverity, BidsManifest, BidsMetadataResolver, BidsMetadataValidation, BidsName, BidsPath, JsonValue}
+import bids4s.{BidsContext, BidsCompanionResolver, BidsCompanionKind, BidsCompanionOutcome, BidsFieldmapResolver, BidsMetadataResolution, BidsIssue, BidsIssueSeverity, BidsManifest, BidsMetadataResolver, BidsMetadataValidation, BidsPath, JsonValue}
 import cats.effect.Async
 import cats.syntax.all.*
 import io.circe.Json
@@ -13,13 +13,14 @@ import java.nio.charset.{CodingErrorAction, StandardCharsets}
 import scala.util.Try
 
 /** Bounded reference profile. This is not an external BIDS conformance validator. */
-final class BidsInterpreter[F[_]: Async](store: BlobStore[F]) extends SemanticInterpreter[F]:
+final class BidsInterpreter[F[_]: Async](store: BlobStore[F], context: BidsContext = BidsContext.Default) extends SemanticInterpreter[F]:
   private val jsonLimit = 4L * 1024 * 1024
   private val totalLimit = 32L * 1024 * 1024
   private val parser = new JawnParser(maxValueSize = Some(4 * 1024 * 1024), allowDuplicateKeys = false)
   val profile: SemanticProfile = SemanticProfile(
-    "native-reference-v4", BuildIdentity.bids4s, BuildIdentity.sanctity,
-    "Built-in bids4s names and JSON inheritance; basic description/timing checks. Strict participant TSV and scoped query facts. Explicit NIfTI B0 fieldmap groups and IntendedFor links. Inherited DWI gradients and BOLD event companions. DWI gradient parsing, scalar NIfTI-1/2 header counts and versioned norm checks. No event content, affine/gradient orientation, gzip payload or full BIDS conformance validation."
+    "native-reference-v6", BuildIdentity.bids4s, BuildIdentity.sanctity,
+    "Context-selected bids4s names and JSON inheritance; basic description/timing checks. Strict participant TSV and scoped query facts. Explicit NIfTI B0 fieldmap groups and IntendedFor links. Inherited DWI gradients and BOLD event companions. DWI gradient parsing, scalar NIfTI-1/2 header counts and versioned norm checks. Strict selected BOLD event tables, explicit regular/variable timing context and contextual warnings. No stimulus/HED validation, affine/gradient orientation, gzip payload or full BIDS conformance validation.",
+    Some(BidsInterpreter.describe(context))
   )
 
   def prepare(manifest: Manifest): F[(Interpretation, Assessment)] =
@@ -51,11 +52,12 @@ final class BidsInterpreter[F[_]: Async](store: BlobStore[F]) extends SemanticIn
       }
       result <- Checked.lift[F, (Interpretation, Assessment)](interpret(manifest, decoded, participants.getOrElse(Vector.empty)))
       (interpretation, assessment) = result
-      checks <- new DwiContentChecks[F](store).assess(manifest, interpretation)
-    yield interpretation -> Assessment.from(interpretation, assessment.policy, assessment.findings, checks)
+      dwiChecks <- new DwiContentChecks[F](store).assess(manifest, interpretation)
+      eventChecks <- new EventContentChecks[F](store).assess(manifest, interpretation)
+    yield interpretation -> Assessment.from(interpretation, assessment.policy, assessment.findings, dwiChecks ++ eventChecks)
 
   private def interpret(manifest: Manifest, decoded: Vector[(RelPath, Either[String, JsonValue.Obj])], participants: Vector[ParticipantFacts]): Either[Problem, (Interpretation, Assessment)] =
-    val checked = BidsManifest.fromRelativePathsChecked(manifest.files.map(_.path.value))
+    val checked = BidsManifest.fromRelativePathsChecked(manifest.files.map(_.path.value), context = context)
     val sidecars = decoded.collect { case (path, Right(json)) => BidsPath(path.value) -> json }.toMap
     val resolver = BidsMetadataResolver(checked.value, sidecars)
     val findings = Vector.newBuilder[Finding]
@@ -79,7 +81,7 @@ final class BidsInterpreter[F[_]: Async](store: BlobStore[F]) extends SemanticIn
 
     val targets = manifest.files.filter { file =>
       !file.path.fileName.endsWith(".json") &&
-        BidsName.parse(file.path.fileName).orElse(BidsName.parseGeneric(file.path.fileName)).isRight
+        context.parse(file.path.fileName).orElse(context.parseGeneric(file.path.fileName)).isRight
     }
     val resolutions = Vector.newBuilder[BidsMetadataResolution]
     val artifacts = targets.flatMap { file =>
@@ -97,7 +99,7 @@ final class BidsInterpreter[F[_]: Async](store: BlobStore[F]) extends SemanticIn
           Some(ArtifactMetadata(file.path, fields, resolved.sources.map(s => relative(s.path)), resolved.datasetRoot.map(relative)))
     }
     val facts = artifacts.flatMap { artifact =>
-      BidsName.parse(artifact.path.fileName).toOption.flatMap { name =>
+      context.parsePath(BidsPath(artifact.path.value)).toOption.flatMap { name =>
         val entities = name.entities.values.map((key, value) => key.short -> value).toMap
         entities.get("sub").map { subject =>
           ArtifactFacts(artifact.path, s"sub-$subject", entities.get("ses").map("ses-" + _), name.kind, name.extension, entities)
@@ -119,7 +121,7 @@ final class BidsInterpreter[F[_]: Async](store: BlobStore[F]) extends SemanticIn
     val companionResolver = BidsCompanionResolver(checked.value)
     val resolvedPaths = artifacts.map(_.path).toSet
     val companionLinks = artifacts.flatMap { artifact =>
-      BidsName.parseGeneric(artifact.path.fileName).toOption.toVector
+      context.parseGeneric(artifact.path.fileName).toOption.toVector
         .filter(n => Set("nii", "nii.gz")(n.extension)).flatMap { name =>
           val kinds = name.kind match
             case "dwi" => Vector(BidsCompanionKind.Bval, BidsCompanionKind.Bvec)
@@ -162,8 +164,9 @@ final class BidsInterpreter[F[_]: Async](store: BlobStore[F]) extends SemanticIn
     }
     for
       graph <- RelationshipGraph.from(BidsInterpreter.RelationshipVersion, links ++ companionLinks, artifacts, evidenceVersion = 2)
-      interpretation <- Interpretation.from(manifest.id, profile, artifacts, facts, participants, Some("scientific-query-v1"), Some(graph))
-    yield interpretation -> Assessment.from(interpretation, "reference-admission-v4", findings.result())
+      interpretation <- Interpretation.from(manifest.id, profile, artifacts, facts, participants, Some("scientific-query-v1"), Some(graph),
+        sidecars.get(BidsPath("dataset_description.json")).flatMap(_.fields.get("BIDSVersion")).collect { case JsonValue.Str(v) => v })
+    yield interpretation -> Assessment.from(interpretation, "reference-admission-v6", findings.result())
 
   // All paths here originate in the already checked repository manifest.
   private def relative(path: BidsPath): RelPath =
@@ -199,3 +202,10 @@ final class BidsInterpreter[F[_]: Async](store: BlobStore[F]) extends SemanticIn
 
 object BidsInterpreter:
   val RelationshipVersion: String = BidsFieldmapResolver.Version + "+" + BidsCompanionResolver.Version
+
+  def describe(context: BidsContext): SemanticContext =
+    SemanticContext.from(context.name, context.specificationVersion, context.coverage, context.registryTokens,
+      context.ruleVersions ++ Map("repository-query" -> "scientific-query-v1",
+        "events" -> bids4s.CheckedEvents.Version, "event-timing" -> bids4s.EventTiming.Version,
+        "dwi" -> bids4s.DwiConsistency.Version, "nifti" -> bids4s.NiftiHeaderFacts.Version))
+      .fold(p => throw sanctity.application.Failure(p), identity)

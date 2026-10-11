@@ -1,15 +1,13 @@
 package sanctity.bids
 
-import bids4s.{BValues, BVectors, DwiConsistency, DwiIssue, DwiIssueCode, GradientText, NiftiHeaderFacts}
+import bids4s.{BValues, BVectors, DwiConsistency, DwiIssue, GradientText, NiftiHeaderFacts}
 import cats.effect.Async
 import cats.syntax.all.*
 import sanctity.application.{BlobStore, Checked}
 import sanctity.kernel.*
 
-import java.io.{ByteArrayInputStream, IOException}
 import java.nio.ByteBuffer
 import java.nio.charset.{CodingErrorAction, StandardCharsets}
-import java.util.zip.GZIPInputStream
 import scala.util.Try
 
 /** Prefix inspection is bounded independently of declared dimensions and compressed image size.
@@ -19,7 +17,7 @@ import scala.util.Try
 final class DwiContentChecks[F[_]](store: BlobStore[F])(using F: Async[F]):
   private val textLimit = GradientText.MaxCharacters.toLong
   private val totalTextLimit = 32L * 1024 * 1024
-  private val compressedPrefixLimit = 64 * 1024
+  private val headerReader = new NiftiHeaderReader[F](store)
   private val rule = DwiConsistency.Version + "+" + NiftiHeaderFacts.Version + "+sanctity-prefix-v1"
 
   def assess(manifest: Manifest, interpretation: Interpretation): F[Vector[ContentCheck]] =
@@ -39,7 +37,7 @@ final class DwiContentChecks[F[_]](store: BlobStore[F])(using F: Async[F]):
           pair <- Checked.lift[F, (Entry.File, Entry.File)]((bval, bvec).mapN((_, _))
             .toRight(Problem.Integrity("DWI relationship does not contain both gradient roles")))
           (valuesFile, vectorsFile) = pair
-          header <- readHeader(image)
+          header <- headerReader.read(image).map(_.leftMap(issueFinding(image.path, _)))
           values = texts(valuesFile.path).flatMap(text => BValues.parse(text).leftMap(_.map(issueFinding(valuesFile.path, _))))
           vectors = texts(vectorsFile.path).flatMap(text => BVectors.parse(text).leftMap(_.map(issueFinding(vectorsFile.path, _))))
           errors = header.left.toOption.toVector ++ values.left.toOption.toVector.flatten ++ vectors.left.toOption.toVector.flatten
@@ -64,37 +62,6 @@ final class DwiContentChecks[F[_]](store: BlobStore[F])(using F: Async[F]):
         .toEither.leftMap(_ => Vector(Finding("DwiEncoding", Severity.Error, Some(file.path), "gradient document is not valid UTF-8")))
     }
 
-  private def readHeader(file: Entry.File): F[Either[Finding, NiftiHeaderFacts]] =
-    val gzip = file.path.fileName.endsWith(".nii.gz")
-    val limit = if gzip then compressedPrefixLimit else NiftiHeaderFacts.MaxHeaderBytes
-    store.read(file.blob).take(limit.toLong).compile.to(Array).flatMap { prefix =>
-      F.blocking {
-        val decoded = if !gzip then Right(prefix) else gzipHeader(prefix, file.blob.size > prefix.length)
-        decoded.flatMap(NiftiHeaderFacts.parse).flatMap { header =>
-          if !gzip && file.blob.size < header.minimumFileBytes then
-            Left(DwiIssue(DwiIssueCode.Header, "image", "uncompressed file is shorter than the header's declared array"))
-          else Right(header)
-        }.leftMap(issueFinding(file.path, _))
-      }
-    }
-
-  private final class PrefixLimit extends IOException
-  private def gzipHeader(prefix: Array[Byte], limited: Boolean): Either[DwiIssue, Array[Byte]] =
-    val input = new ByteArrayInputStream(prefix):
-      override def read(): Int =
-        if available() == 0 && limited then throw new PrefixLimit else super.read()
-      override def read(b: Array[Byte], offset: Int, length: Int): Int =
-        if length > 0 && available() == 0 && limited then throw new PrefixLimit else super.read(b, offset, length)
-    try
-      val stream = new GZIPInputStream(input, 512)
-      try
-        val initial = stream.readNBytes(4)
-        NiftiHeaderFacts.headerSize(initial).map(size => initial ++ stream.readNBytes(size - initial.length))
-      finally stream.close()
-    catch
-      case _: PrefixLimit => Left(DwiIssue(DwiIssueCode.LimitExceeded, "image", "gzip header requires more than 64 KiB compressed input"))
-      case _: IOException => Left(DwiIssue(DwiIssueCode.Header, "image", "invalid or truncated gzip header prefix"))
-
   private def issueFinding(path: RelPath, issue: DwiIssue): Finding =
     val location = issue.row.fold("")(r => s" row $r") + issue.column.fold("")(c => s" column $c")
     Finding("Dwi" + issue.code.toString, Severity.Error, Some(path), issue.message + location)
@@ -106,7 +73,7 @@ final class DwiContentChecks[F[_]](store: BlobStore[F])(using F: Async[F]):
       "unitNormTolerance" -> n(DwiConsistency.UnitNormTolerance),
       "zeroNormTolerance" -> n(DwiConsistency.ZeroNormTolerance),
       "gradientConvention" -> MetadataValue.Text("FSL image-axis components; no reorientation"),
-      "compressedPrefixLimit" -> n(compressedPrefixLimit.toDouble),
+      "compressedPrefixLimit" -> n(NiftiHeaderReader.CompressedPrefixLimit.toDouble),
       "headerOnly" -> MetadataValue.Flag(true),
       "gzip" -> MetadataValue.Flag(gzip))
     config ++ header.toVector.flatMap { h => Vector(

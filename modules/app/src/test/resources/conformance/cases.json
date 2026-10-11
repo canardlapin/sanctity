@@ -1,0 +1,63 @@
+[
+  {
+    "id": "ds001",
+    "dataset": "ds001",
+    "mutation": null,
+    "officialErrors": []
+  },
+  {
+    "id": "ds114",
+    "dataset": "ds114",
+    "mutation": null,
+    "officialErrors": []
+  },
+  {
+    "id": "negative-rt",
+    "dataset": "ds001",
+    "mutation": {
+      "file": "task-balloonanalogrisktask_bold.json",
+      "field": "RepetitionTime",
+      "value": -1
+    },
+    "officialErrors": [
+      [
+        "JSON_SCHEMA_VALIDATION_ERROR",
+        "RepetitionTime"
+      ]
+    ]
+  },
+  {
+    "id": "missing-name",
+    "dataset": "ds001",
+    "mutation": {
+      "file": "dataset_description.json",
+      "field": "Name",
+      "remove": true
+    },
+    "officialErrors": [
+      [
+        "JSON_KEY_REQUIRED",
+        "Name"
+      ]
+    ]
+  },
+  {
+    "id": "conflicting-timing",
+    "dataset": "ds001",
+    "mutation": {
+      "file": "task-balloonanalogrisktask_bold.json",
+      "field": "VolumeTiming",
+      "value": [
+        0,
+        2,
+        4
+      ]
+    },
+    "officialErrors": [
+      [
+        "VOLUME_TIMING_AND_REPETITION_TIME_MUTUALLY_EXCLUSIVE",
+        ""
+      ]
+    ]
+  }
+]

@@ -1,0 +1,57 @@
+{
+  "validator": "3.0.2",
+  "schema": "1.2.2",
+  "bidsVersion": "1.11.1",
+  "cases": [
+    {
+      "case": "ds001",
+      "errors": [],
+      "rawReportSha256": "29097cd12c4ff52050d44a7dc1f5115bae7da1085ea411d36cce78d0547f47a5",
+      "totalFiles": 135,
+      "schemaVersion": "1.2.2"
+    },
+    {
+      "case": "ds114",
+      "errors": [],
+      "rawReportSha256": "c6cba4396d456fa71a4a4ca89f3ee10fa89d3d646ca23c567ba5f636a2851f88",
+      "totalFiles": 174,
+      "schemaVersion": "1.2.2"
+    },
+    {
+      "case": "negative-rt",
+      "errors": [
+        [
+          "JSON_SCHEMA_VALIDATION_ERROR",
+          "RepetitionTime"
+        ]
+      ],
+      "rawReportSha256": "63df4504bd5901e9936016d18b021c1b1915ae2bc5a2cec21a45402d72f86cde",
+      "totalFiles": 135,
+      "schemaVersion": "1.2.2"
+    },
+    {
+      "case": "missing-name",
+      "errors": [
+        [
+          "JSON_KEY_REQUIRED",
+          "Name"
+        ]
+      ],
+      "rawReportSha256": "0428832e92b76fe3a1e5bf5488dbb674d75db2ba5ef9eae058153edc2ad1e3e8",
+      "totalFiles": 135,
+      "schemaVersion": "1.2.2"
+    },
+    {
+      "case": "conflicting-timing",
+      "errors": [
+        [
+          "VOLUME_TIMING_AND_REPETITION_TIME_MUTUALLY_EXCLUSIVE",
+          ""
+        ]
+      ],
+      "rawReportSha256": "5937329717203ec9748c1dfb9a512eead210b6a87e138f33cb7b062eb7e27702",
+      "totalFiles": 135,
+      "schemaVersion": "1.2.2"
+    }
+  ]
+}

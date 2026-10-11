@@ -4,7 +4,6 @@ import cats.effect.{Deferred, IO, Resource}
 import cats.effect.unsafe.implicits.global
 import cats.syntax.all.*
 import fs2.Stream
-import munit.FunSuite
 import sanctity.application.{Checked, Failure, IdSource}
 import sanctity.kernel.*
 import sanctity.objects.{DirectoryExport, NativeDirectorySource}
@@ -12,7 +11,7 @@ import sanctity.objects.{DirectoryExport, NativeDirectorySource}
 import java.nio.file.{Files, Path, StandardOpenOption}
 import scala.jdk.CollectionConverters.*
 
-abstract class CatalogLifecycleSuite extends FunSuite:
+abstract class CatalogLifecycleSuite extends CatalogSubsetSuite:
   private def path(value: String): RelPath = RelPath.from(value).fold(p => fail(p.message), identity)
   private def key(value: String): IdempotencyKey = IdempotencyKey.from(value).fold(p => fail(p.message), identity)
   private def checked[A](value: IO[Either[Problem, A]]): IO[A] = value.flatMap(Checked.lift[IO, A])
@@ -32,6 +31,16 @@ abstract class CatalogLifecycleSuite extends FunSuite:
   private def correction(system: RepositorySystem, release: ReleaseRef, json: String = SyntheticFixture.correctedJson,
       at: String = SyntheticFixture.sharedSidecar): IO[Preview] =
     checked(system.repository.correctMetadata(system.context, release, path(at), json, "Test metadata correction"))
+
+  private def planned(system: RepositorySystem, release: Release, selection: FrozenSelection,
+      profile: DisclosureProfile): IO[Either[Problem, ProjectionPlan]] =
+    val compiler = new sanctity.bids.MriViewCompiler
+    compiler.documents(release, selection, profile) match
+      case Left(problem) => IO.pure(Left(problem))
+      case Right(paths) => paths.traverse { p =>
+        val file = release.manifest.byPath(p).asInstanceOf[Entry.File]
+        system.store.read(file.blob).through(fs2.text.utf8.decode).compile.string.map(p -> _)
+      }.map(v => compiler.plan(release, selection, profile, v.toMap))
 
   private def tree(root: Path): IO[Map[String, Option[Vector[Byte]]]] = IO.blocking {
     val walk = Files.walk(root)
@@ -199,19 +208,18 @@ abstract class CatalogLifecycleSuite extends FunSuite:
 
   test("hidden metadata changes do not alter projected view bytes") {
     fixture { (s, root) =>
-      val compiler = new sanctity.bids.MriViewCompiler
       val profile = DisclosureProfile(Set.empty, Set("TaskName", "RepetitionTime"))
       val query = ScientificQuery(artifacts = ArtifactPredicate.Entity("sub", "01"))
       for
         first <- accepted(s, root)
         release <- checked(s.repository.release(s.context, first.release))
         selection <- checked(s.catalog.select(s.context, Vector(first.release), query))
-        a <- Checked.lift[IO, ProjectionPlan](compiler.plan(release, selection, profile))
+        a <- checked(planned(s, release, selection, profile))
         edit <- correction(s, first.release, """{"TaskName":"rest","RepetitionTime":1.5,"PrivateNote":"excluded information"}""")
         second <- checked(s.repository.accept(s.context, edit.candidate.id, key("hidden-change")))
         newer <- checked(s.repository.release(s.context, second.release))
         newSelection <- checked(s.catalog.select(s.context, Vector(second.release), query))
-        b <- Checked.lift[IO, ProjectionPlan](compiler.plan(newer, newSelection, profile))
+        b <- checked(planned(s, newer, newSelection, profile))
         _ = assertEquals(a.generated, b.generated)
         _ = assertEquals(a.retained.map(f => f.path -> f.blob), b.retained.map(f => f.path -> f.blob))
         _ = assertNotEquals(a.evidence.source, b.evidence.source)
@@ -602,14 +610,14 @@ abstract class CatalogLifecycleSuite extends FunSuite:
         release <- checked(s.repository.release(s.context, initial.release))
         selection <- checked(s.catalog.select(s.context, Vector(initial.release),
           ScientificQuery(artifacts = ArtifactPredicate.Suffix("bold"))))
-        result = new sanctity.bids.MriViewCompiler().plan(release, selection,
+        result <- planned(s, release, selection,
           DisclosureProfile(Set.empty, Set("TaskName", "RepetitionTime")))
         _ = assert(result.left.toOption.exists(_.isInstanceOf[Problem.Unsupported]))
         closure <- Checked.lift[IO, RelationshipClosure](release.interpretation.relationshipClosure(Vector(path(SyntheticFixture.firstImage))))
         _ = assert(closure.artifacts.contains(path(image)))
         legacy <- Checked.lift[IO, Interpretation](Interpretation.from(release.manifest.id, release.interpretation.profile,
           release.interpretation.artifacts, release.interpretation.facts, release.interpretation.participants, release.interpretation.queryVersion))
-        unsupported = new sanctity.bids.MriViewCompiler().plan(release.copy(interpretation = legacy), selection,
+        unsupported <- planned(s, release.copy(interpretation = legacy), selection,
           DisclosureProfile(Set.empty, Set("TaskName", "RepetitionTime")))
         _ = assert(unsupported.left.toOption.exists(_.isInstanceOf[Problem.Unsupported]))
       yield ()
@@ -725,7 +733,7 @@ abstract class CatalogLifecycleSuite extends FunSuite:
         initial <- accepted(s, root)
         release <- checked(s.repository.release(s.context, initial.release))
         selection <- checked(s.catalog.select(s.context, Vector(initial.release), ScientificQuery(artifacts = ArtifactPredicate.Suffix("bold"))))
-        result = new sanctity.bids.MriViewCompiler().plan(release, selection, DisclosureProfile(Set.empty, Set("TaskName", "RepetitionTime")))
+        result <- planned(s, release, selection, DisclosureProfile(Set.empty, Set("TaskName", "RepetitionTime")))
         _ = assert(result.left.toOption.exists(_.isInstanceOf[Problem.Unsupported]))
       yield ()
     }
@@ -836,6 +844,165 @@ abstract class CatalogLifecycleSuite extends FunSuite:
         _ = assertEquals(checks(path(other)).findings.map(_.code).toSet, Set("DwiBvalCount", "DwiBvecCount"))
         denied <- s.repository.accept(s.context, preview.candidate.id, key("shared-dwi"))
         _ = assert(denied.left.toOption.exists(_.isInstanceOf[Problem.Rejected]))
+      yield ()
+    }
+  }
+
+
+  private def eventChecks(assessment: Assessment): Vector[ContentCheck] =
+    assessment.checks.filter(_.rule.startsWith(bids4s.CheckedEvents.Version))
+
+  test("event content correction rejects negative duration and preserves history and authored exports") {
+    fixture { (s, root) =>
+      val original = "onset\tduration\ttrial_type\tresponse_time\n-1\t2\tpractice\t-.1\n0\t0\tgo\tn/a\nn/a\tn/a\tunknown\tn/a\n"
+      val revised = original.replace("practice", "training")
+      for
+        _ <- IO.blocking {
+          Files.writeString(root.resolve("source").resolve(rootEvents), original)
+          Files.writeString(root.resolve("source/task-rest_events.json"), """{"trial_type":{"Description":"Condition"}}""")
+        }
+        initial <- accepted(s, root)
+        before <- checked(s.repository.release(s.context, initial.release))
+        oldChecks = eventChecks(before.assessment)
+        _ = assertEquals(oldChecks.size, 2)
+        _ = assert(oldChecks.forall(_.facts("eventCount") == MetadataValue.Number(3)))
+        _ = assert(oldChecks.forall(_.facts("missingOnsetCount") == MetadataValue.Number(1)))
+        _ = assert(oldChecks.forall(_.inputs.exists(_.path == path("task-rest_events.json"))))
+        bad <- checked(s.repository.correctCompanion(s.context, initial.release, path(rootEvents),
+          "onset\tduration\n0\t-1\n", "Invalid duration"))
+        _ = assertEquals(eventChecks(bad.candidate.assessment).flatMap(_.findings).count(_.code == "EventsDuration"), 2)
+        blocked <- s.repository.accept(s.context, bad.candidate.id, key("bad-event-duration"))
+        _ = assert(blocked.left.toOption.exists(_.isInstanceOf[Problem.Rejected]))
+        head <- checked(s.catalog.dataset(s.context, s.dataset.id))
+        _ = assertEquals(head.head, Some(initial.release.release))
+        edit <- checked(s.repository.correctCompanion(s.context, initial.release, path(rootEvents), revised, "Clarify condition"))
+        _ = assertEquals(edit.relationshipChanges.map(_.path).toSet, Set(path(SyntheticFixture.firstImage), path(SyntheticFixture.secondImage)))
+        next <- checked(s.repository.accept(s.context, edit.candidate.id, key("correct-event-content")))
+        after <- checked(s.repository.release(s.context, next.release))
+        historical <- checked(s.repository.release(s.context, initial.release))
+        _ = assertEquals(historical.assessment.id, before.assessment.id)
+        _ = assertEquals(eventChecks(historical.assessment).map(_.inputs), oldChecks.map(_.inputs))
+        _ = assertNotEquals(after.assessment.id, before.assessment.id)
+        _ = assertEquals(before.manifest.files.filter(_.path.fileName.endsWith(".nii")), after.manifest.files.filter(_.path.fileName.endsWith(".nii")))
+        _ <- checked(s.repository.exportFull(s.context, initial.release, new DirectoryExport[IO](root.resolve("checked-events-old"))))
+        _ <- checked(s.repository.exportFull(s.context, next.release, new DirectoryExport[IO](root.resolve("checked-events-new"))))
+        _ <- IO.blocking {
+          assertEquals(Files.readString(root.resolve("checked-events-old").resolve(rootEvents)), original)
+          assertEquals(Files.readString(root.resolve("checked-events-new").resolve(rootEvents)), revised)
+        }
+      yield ()
+    }
+  }
+
+  test("timing corrections reassess inherited event windows using exact metadata origins") {
+    fixture { (s, root) =>
+      for
+        _ <- IO.blocking(Files.writeString(root.resolve("source").resolve(rootEvents), "onset\tduration\n3.5\t0\n"))
+        initial <- accepted(s, root)
+        before <- checked(s.repository.release(s.context, initial.release))
+        prior = eventChecks(before.assessment).map(c => c.target -> c).toMap
+        _ = assert(prior(path(SyntheticFixture.firstImage)).findings.exists(_.code == "EventsOutsideWindow"))
+        _ = assert(!prior(path(SyntheticFixture.secondImage)).findings.exists(_.code == "EventsOutsideWindow"))
+        _ = assertEquals(prior(path(SyntheticFixture.firstImage)).facts("comparisonEndSeconds"), MetadataValue.Number(3))
+        edit <- correction(s, initial.release, """{"TaskName":"rest","RepetitionTime":3}""")
+        next <- checked(s.repository.accept(s.context, edit.candidate.id, key("event-timing-correction")))
+        after <- checked(s.repository.release(s.context, next.release))
+        current = eventChecks(after.assessment).map(c => c.target -> c).toMap
+        _ = assertEquals(current(path(SyntheticFixture.firstImage)).facts("comparisonEndSeconds"), MetadataValue.Number(6))
+        _ = assertEquals(current(path(SyntheticFixture.secondImage)).facts("comparisonEndSeconds"), MetadataValue.Number(4))
+        _ = assert(current.values.forall(!_.findings.exists(_.code == "EventsOutsideWindow")))
+        _ = assertNotEquals(prior(path(SyntheticFixture.firstImage)).inputs.find(_.path == path(SyntheticFixture.sharedSidecar)),
+          current(path(SyntheticFixture.firstImage)).inputs.find(_.path == path(SyntheticFixture.sharedSidecar)))
+        history <- checked(s.repository.release(s.context, initial.release))
+        _ = assertEquals(eventChecks(history.assessment).map(_.facts), eventChecks(before.assessment).map(_.facts))
+      yield ()
+    }
+  }
+
+  test("nonuniform event timing uses explicit volume times and rejects count disagreement") {
+    fixture { (s, root) =>
+      for
+        _ <- IO.blocking {
+          val source = root.resolve("source")
+          Files.writeString(source.resolve(rootEvents), "onset\tduration\n1.8\t0\n")
+          Files.writeString(source.resolve(SyntheticFixture.sharedSidecar),
+            """{"TaskName":"rest","VolumeTiming":[5,6.5],"FrameAcquisitionDuration":0.5}""")
+          Files.writeString(source.resolve("sub-02/func/sub-02_task-rest_bold.json"), "{}")
+        }
+        initial <- accepted(s, root)
+        release <- checked(s.repository.release(s.context, initial.release))
+        checks = eventChecks(release.assessment)
+        _ = assert(checks.forall(_.facts("timingMode") == MetadataValue.Text("Variable")))
+        _ = assert(checks.forall(_.facts("comparisonEndSeconds") == MetadataValue.Number(2)))
+        _ = assert(checks.forall(_.facts("volumeTimingOriginSeconds") == MetadataValue.Number(5)))
+        edit <- correction(s, initial.release, """{"TaskName":"rest","VolumeTiming":[0,1,3],"FrameAcquisitionDuration":0.5}""")
+        _ = assert(edit.candidate.assessment.errors.exists(_.code == "EventsVolumeCount"))
+        denied <- s.repository.accept(s.context, edit.candidate.id, key("bad-event-volume-count"))
+        _ = assert(denied.left.toOption.exists(_.isInstanceOf[Problem.Rejected]))
+        head <- checked(s.catalog.dataset(s.context, s.dataset.id))
+        _ = assertEquals(head.head, Some(initial.release.release))
+      yield ()
+    }
+  }
+
+  test("unavailable timing remains explicit while malformed event cells still block admission") {
+    fixture { (s, root) =>
+      for
+        _ <- IO.blocking {
+          val source = root.resolve("source")
+          Files.writeString(source.resolve(rootEvents), "onset\tduration\n100\tn/a\n")
+          Files.writeString(source.resolve(SyntheticFixture.sharedSidecar), """{"TaskName":"rest"}""")
+          Files.writeString(source.resolve("sub-02/func/sub-02_task-rest_bold.json"), "{}")
+        }
+        initial <- accepted(s, root)
+        release <- checked(s.repository.release(s.context, initial.release))
+        _ = assert(eventChecks(release.assessment).forall(_.facts("timingMode") == MetadataValue.Text("Unavailable")))
+        _ = assert(eventChecks(release.assessment).forall(!_.facts.contains("comparisonEndSeconds")))
+        edit <- checked(s.repository.correctCompanion(s.context, initial.release, path(rootEvents),
+          "onset\tduration\nNaN\t1\n", "Malformed time"))
+        _ = assert(edit.candidate.assessment.errors.exists(f => f.code == "EventsNumber" && f.message.contains("row 2 column 1")))
+        denied <- s.repository.accept(s.context, edit.candidate.id, key("invalid-event-number"))
+        _ = assert(denied.left.toOption.exists(_.isInstanceOf[Problem.Rejected]))
+      yield ()
+    }
+  }
+
+  test("variable slice timing without a frame duration never extrapolates a last interval") {
+    fixture { (s, root) =>
+      for
+        _ <- IO.blocking {
+          val source = root.resolve("source")
+          Files.writeString(source.resolve(rootEvents), "onset\tduration\n100\t1\n")
+          Files.writeString(source.resolve(SyntheticFixture.sharedSidecar), """{"TaskName":"rest","VolumeTiming":[0,1.5],"SliceTiming":[0]}""")
+          Files.writeString(source.resolve("sub-02/func/sub-02_task-rest_bold.json"), "{}")
+        }
+        initial <- accepted(s, root)
+        release <- checked(s.repository.release(s.context, initial.release))
+        checks = eventChecks(release.assessment)
+        _ = assert(checks.forall(_.facts("timingMode") == MetadataValue.Text("Variable")))
+        _ = assert(checks.forall(!_.facts.contains("comparisonEndSeconds")))
+        _ = assert(checks.forall(_.findings.exists(_.code == "EventsTimingUnavailable")))
+        _ = assert(!checks.exists(_.findings.exists(_.code == "EventsOutsideWindow")))
+      yield ()
+    }
+  }
+
+  test("event assessments use the shared gzip header reader and preserve quoted TSV bytes") {
+    fixture { (s, root) =>
+      val image = "sub-01/func/sub-01_task-rest_bold.nii.gz"
+      val table = "onset\tduration\tnote\n0\t1\t\"a\tb\"\n"
+      for
+        _ <- IO.blocking {
+          val source = root.resolve("source")
+          Files.delete(source.resolve(SyntheticFixture.firstImage))
+          Files.write(source.resolve(image), DwiTestFiles.gzip(DwiTestFiles.nifti(version = 2, little = false)))
+          Files.writeString(source.resolve(rootEvents), table)
+        }
+        initial <- accepted(s, root)
+        release <- checked(s.repository.release(s.context, initial.release))
+        _ = assert(eventChecks(release.assessment).exists(c => c.target == path(image) && c.facts("volumeCount") == MetadataValue.Number(2)))
+        _ <- checked(s.repository.exportFull(s.context, initial.release, new DirectoryExport[IO](root.resolve("events-gzip"))))
+        _ <- IO.blocking(assertEquals(Files.readString(root.resolve("events-gzip").resolve(rootEvents)), table))
       yield ()
     }
   }

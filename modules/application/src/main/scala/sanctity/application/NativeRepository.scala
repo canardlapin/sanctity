@@ -76,6 +76,20 @@ final class NativeRepository[F[_]](
       yield preview
     }
 
+  /** Explicitly adopt the configured semantics for unchanged bytes through ordinary admission. */
+  def reinterpret(ctx: AccessContext, base: ReleaseRef, reason: String): F[Either[Problem, Preview]] =
+    Checked.attempt {
+      for
+        _ <- catalog.check(ctx, base.dataset, Action.Propose).flatMap(Checked.lift[F, Unit])
+        _ <- Checked.lift[F, Unit](Either.cond(reason.trim.nonEmpty && reason.length <= 4096, (), Problem.Unsupported("a reinterpretation reason of at most 4096 characters is required")))
+        release <- catalog.release(ctx, base).flatMap(Checked.lift[F, Release])
+        now <- Clock[F].realTimeInstant
+        draft <- catalog.draft(ctx, base.dataset, Some(base.release), release.manifest,
+          Activity(ActivityKind.Reinterpretation, ctx.principal, reason, None, now)).flatMap(Checked.lift[F, Draft])
+        preview <- prepareInternal(ctx, draft)
+      yield preview
+    }
+
   def prepare(ctx: AccessContext, draft: DraftId): F[Either[Problem, Preview]] =
     Checked.attempt(catalog.readDraft(ctx, draft).flatMap(Checked.lift[F, Draft]).flatMap(prepareInternal(ctx, _)))
 
@@ -130,10 +144,18 @@ final class NativeRepository[F[_]](
     for
       result <- semantics.prepare(draft.manifest)
       (interpretation, assessment) = result
-      candidate <- catalog.prepared(ctx, draft.id, draft.generation, interpretation, assessment).flatMap(Checked.lift[F, Candidate])
       before <- draft.base.traverse(id => catalog.release(ctx, ReleaseRef(draft.dataset, id)).flatMap(Checked.lift[F, Release]))
+      projected <- draft.activity.projection.traverse(p => catalog.release(ctx, p.source).flatMap(Checked.lift[F, Release]))
+      _ <- Checked.lift[F, Unit](Either.cond(draft.activity.kind != ActivityKind.Reinterpretation ||
+        (before.exists(_.manifest.id == draft.manifest.id) && projected.isEmpty && draft.activity.change.isEmpty), (),
+        Problem.Conflict("reinterpretation requires unchanged content from an accepted base")))
+      _ <- Checked.lift[F, Unit](Either.cond(draft.activity.kind == ActivityKind.Reinterpretation ||
+        (before.toVector ++ projected).forall(_.interpretation.profile == interpretation.profile), (),
+        Problem.Conflict("semantic profile changed; explicitly reinterpret the source before editing or projecting")))
+      candidate <- catalog.prepared(ctx, draft.id, draft.generation, interpretation, assessment).flatMap(Checked.lift[F, Candidate])
       empty <- Checked.lift[F, Manifest](Manifest.from(Vector.empty))
       changes = before.fold(empty)(_.manifest).diff(candidate.manifest)
       impact = before.fold(Vector.empty[ArtifactImpact])(r => Impact.between(r.interpretation, candidate.interpretation))
       relationships = before.fold(Vector.empty[RelationshipDelta])(r => RelationshipImpact.between(r.interpretation, candidate.interpretation, changes.map(_.path).toSet))
-    yield Preview(candidate, changes, impact, relationships)
+      scope = before.fold(DependencyImpact.empty)(r => DependencyImpact.between(r.interpretation, candidate.interpretation, changes.map(_.path).toSet))
+    yield Preview(candidate, changes, impact, relationships, scope)

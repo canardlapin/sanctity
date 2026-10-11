@@ -144,7 +144,8 @@ final class PostgresCatalog[F[_]] private[postgres] (
         for
           loaded <- authorizedDraft(ctx, uuid(id), true)
           (draft, accepted) = loaded
-          _ <- lift(Admission.prepared(draft, generation, accepted, interpretation, assessment))
+          baseContent <- reinterpretationBase(draft)
+          _ <- lift(Admission.prepared(draft, generation, accepted, interpretation, assessment, baseContent))
           _ <- Records.storeInterpretation(interpretation)
           _ <- Records.storeAssessment(assessment)
           _ <- Records.indexesReady(draft.manifest, interpretation)
@@ -184,7 +185,8 @@ final class PostgresCatalog[F[_]] private[postgres] (
                 candidate <- hydrateCandidate(row)
                 draftRow <- fetchDraft(row.draft)
                 draft <- hydrateDraft(draftRow)
-                _ <- lift(Admission.accept(dataset, draft, candidate, draftRow.accepted.nonEmpty))
+                baseContent <- reinterpretationBase(draft)
+                _ <- lift(Admission.accept(dataset, draft, candidate, draftRow.accepted.nonEmpty, baseContent))
                 _ <- Records.indexesReady(candidate.manifest, candidate.interpretation)
                 timestamp <- sql"SELECT clock_timestamp()".query[Timestamp].unique
                 at = timestamp.toInstant
@@ -272,6 +274,14 @@ final class PostgresCatalog[F[_]] private[postgres] (
       dataset <- authorize(ctx, datasetId, write, action, allowAccept = allowAccept)
       row <- fetchCandidate(id)
     yield dataset -> row
+
+  private def reinterpretationBase(draft: Draft): ConnectionIO[Option[ManifestId]] =
+    if draft.activity.kind != ActivityKind.Reinterpretation then none[ManifestId].pure[ConnectionIO]
+    else draft.base.flatTraverse { base =>
+      sql"""SELECT c.manifest_id FROM release r JOIN candidate c ON c.id=r.candidate_id
+        WHERE r.id=${uuid(base)} AND r.dataset_id=${uuid(draft.dataset)}""".query[String].option
+        .flatMap(_.traverse(value => lift(Digest.from(value).map(ManifestId.apply))))
+    }
 
   private def fetchDraft(id: UUID): ConnectionIO[DraftRow] =
     sql"SELECT id,dataset_id,base,generation,manifest_id,activity::text,accepted_release FROM draft WHERE id=$id"

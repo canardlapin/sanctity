@@ -13,9 +13,10 @@ Current work prioritizes the [scientific core](docs/scientific-core.md): explici
 | Area | Working behavior |
 | --- | --- |
 | Authority | Durable principals, dataset and fixed-release grants, independent metadata/content/propose/accept powers, curator-controlled administration, revocation and transactional checks |
+| Interpretation context | Explicit registry/rule/coverage identity, authored BIDS version kept separately, unchanged-content profile adoption and stable historical queries |
 | Scientific relationships | Recorded B0 groups, IntendedFor links, inherited DWI gradients and BOLD events, typed evidence, correction impact and bounded closure |
 | Scientific queries | Explicit artifact/participant/session correlation; SQL and reference interpreters; lexical participant values; versioned query facts and durable selections |
-| Scientific views | Selected MRI acquisitions, projected participant columns, flattened approved effective metadata, projection evidence, ordinary release acceptance and sharing |
+| Scientific views | MRI dependency closure, localized gradients/events, projected participant/session/scan tables, rewritten references, exact transformation receipts, ordinary acceptance and sharing |
 | Durable operations | Inventoried imports, verified file checkpoints, renewable worker leases, fenced publication, completion recovery, independent leased outbox targets |
 | Recovery | Catalog/blob backup, transactional closed restore gate, integrity verification, reconciliation against separately supplied current policy |
 | DICOM | Pinned real converter, bounded/cancellable process lifetime, retained source/diagnostic evidence, explicit output mapping and exclusions |
@@ -26,7 +27,7 @@ These are bounded implementations with executable evidence. Institutional identi
 
 ## Build and native demonstration
 
-Prerequisites: Java 21, sbt, and the sibling `../bids4s` checkout with the metadata-resolution work described in [integration status](docs/bids4s-integration.md). The canonical library is [canardlapin/bids4s](https://github.com/canardlapin/bids4s). A direct sbt project dependency avoids a publication step.
+Prerequisites: Java 21, sbt, and the sibling `../bids4s` checkout with the context and metadata work described in [integration status](docs/bids4s-integration.md). The canonical library is [canardlapin/bids4s](https://github.com/canardlapin/bids4s). A direct sbt project dependency avoids a publication step.
 
 ```sh
 sbt check
@@ -64,13 +65,19 @@ Start at [NativeRepository](modules/application/src/main/scala/sanctity/applicat
 
 The reference and PostgreSQL catalogs share pure [Admission](modules/kernel/src/main/scala/sanctity/kernel/Admission.scala) and [Authority](modules/kernel/src/main/scala/sanctity/kernel/Authority.scala) rules. Application ports and access contexts are trusted internal capabilities. The [authenticated HTTP adapter](modules/http/src/main/scala/sanctity/http/RepositoryHttp.scala) obtains contexts from verified credentials and exposes bounded workflows with explicit public representations. The reference catalog deliberately refuses credential-bearing contexts; the PostgreSQL adapter rechecks their liveness transactionally.
 
+## Scientific changes
+
+`ScientificChanges.plan` prepares read-only rename/removal proposals against a pinned release. The BIDS adapter proposes `IntendedFor` and scans-table repairs; `prepare` requires the inspected plan digest and produces an ordinary assessed candidate. Moves retain artifact identity and image bytes. Previews explain before/after dependency scope; conflicting heads, blocking dependency findings and stale evidence cannot be accepted. See the [supported edit profile and proof](docs/scientific-core.md#implemented-slice-scientific-file-changes).
+
 ## Scientific relationships
 
 [bids4s resolves explicit MRI declarations](../bids4s/modules/core/shared/src/main/scala/bids4s/BidsFieldmaps.scala). Sanctity binds the resulting grouped relationships, their field-origin evidence and resolver version into immutable interpretation identity. A metadata correction can preview changed acquisition relationships even when the affected image's own metadata is unchanged.
 
-`Interpretation.relationshipClosure` follows recorded relationships and returns associated artifacts plus metadata documents. It includes selected DWI gradient pairs and BOLD event tables with their JSON metadata. Overridden companions remain evidence. Task-event content, stimulus dependencies and qualified pipeline bundles remain later scientific slices. Historical interpretations retain their identities and recorded coverage. `NativeRepository.correctCompanion` prepares bounded gradient/event edits and previews selection changes or changed dependency bytes. See the [scientific-core plan and proof](docs/scientific-core.md).
+`Interpretation.relationshipClosure` follows recorded relationships and returns associated artifacts plus metadata documents. It includes selected DWI gradient pairs and BOLD event tables with their JSON metadata. Overridden companions remain evidence. Stimulus dependencies and qualified pipeline bundles remain later scientific slices. Historical interpretations retain their identities and recorded coverage. `NativeRepository.correctCompanion` prepares bounded gradient/event edits and previews selection changes or changed dependency bytes. See the [scientific-core plan and proof](docs/scientific-core.md).
 
 DWI preparation now checks selected gradient values and counts against bounded NIfTI-1/2 header facts, including gzip and either byte order. Versioned `ContentCheck` records retain exact input digests, observations and findings within assessment identity; rejected corrections leave the accepted head unchanged. The named vector-norm policy performs no reorientation or voxel/affine qualification.
+
+Selected BOLD events now receive strict TSV/decimal assessment and recorded regular, variable or unavailable acquisition timing. Invalid content blocks acceptance; events beyond the documented comparison window produce review warnings. Every check binds exact table, image and metadata inputs through the existing `ContentCheck` record.
 
 ## Queries and sharing
 
@@ -95,7 +102,9 @@ Call `catalog.select(context, pinnedReleases, query)` to persist a frozen select
 
 Views use `ScientificViews.prepare`, followed by ordinary `repository.accept`. The destination is a separate empty dataset. The compiler retains selected image bytes, generates local JSON from approved effective fields, projects `participants.tsv`, and generates a neutral description. Source disclosure authority is checked during preparation and acceptance, including retries. The resulting release can receive a fixed-release grant without granting access to the source.
 
-The current view profile supports T1w/T2w and single-echo resting BOLD NIfTI. It requires recorded relationship coverage and refuses to omit explicit associated inputs, including links from another session. It blocks unsupported associations, fieldmaps, events/physiology, SBRef dependencies and file collections. Required BOLD task/timing fields cannot be masked. Disclosure profiles require curator approval; scientific and de-identification qualification remain separate.
+The `sanctity-mri-view-v4` profile supports T1w/T2w, single-echo task/rest BOLD and DWI, with resolved gradients/events and explicit EPI fieldmap groups, including dependencies in another session. It localizes inherited companions, projects participant/session/scan tables and their column dictionaries, and rewrites `IntendedFor` to retained targets. Each output file has a persisted source-to-output receipt. Export/re-import preserves the supported scientific meaning.
+
+`DisclosureProfile` has explicit `eventFields`, `sessionFields` and `scanFields` in addition to participant and metadata fields. Events require an explicit mask including `onset` and `duration`; retained column definitions are part of that column disclosure. Required acquisition/reference metadata cannot be masked. Stimulus/HED, SBRef/physiology, implicit phase/magnitude fieldmaps, EPI gradients and file collections remain outside this profile. See [scope, limits and proof](docs/scientific-core.md#implemented-slice-coherent-mri-subsets). This is a bounded structural profile; scientific and de-identification qualification remain separate.
 
 Grant actions are `ReadMetadata`, `ReadContent`, `Propose`, and `Accept`. The dataset curator administers grants. Dataset grants explicitly cover future releases; fixed-release grants permit reading only. Export reauthorization occurs before each chunk of at most 64 KiB. Expiring grants, delegation, group membership, institutional login and arbitrary source-evidence delivery are future work.
 

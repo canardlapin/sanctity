@@ -241,3 +241,39 @@ The bounded application correction capability uses the same authority, staging, 
 The scientific kernel now records generic `ContentCheck` results: rule, target, exact inputs, observations and findings. Assessments with checks use canonical v2 identity; older assessments retain v1. Admission verifies evidence-to-manifest binding and includes check findings automatically. MRI-specific parsing, norms and header inspection stay in bids4s and the BIDS adapter.
 
 The initial `native-reference-v4` profile checks selected DWI gradient tables against bounded scalar NIfTI headers. The policy records its low-b and norm tolerances. Gzip reads inspect a bounded prefix and do not certify the entire compressed payload. Authoritative bytes remain untouched. Event content and anatomical orientation qualification remain separate work. The [scientific-core contract](scientific-core.md#implemented-slice-dwi-content-consistency) specifies exact limits and lifecycle proof.
+
+## Event content and acquisition context — 10 October 2026
+
+A second scientific checker uses the existing ContentCheck/assessment/admission contract without a new kernel type or database migration. Strict event assessment is opt-in upstream so permissive readers retain their behavior. Event seconds use exact decimals; missing values remain explicit. Acquisition context distinguishes regular, variable and unavailable timing, with comparison-window exceedance treated as a review warning. No median TR is inferred for variable acquisitions and discarded-volume counts do not shift events.
+
+The receipt binds all applicable event/image metadata documents and records effective timing origins. The same bounded NIfTI reader serves DWI and events. Profile v5 and source fingerprints identify the new semantics; historical assessments retain their recorded coverage. See the [scope and proof](scientific-core.md#implemented-slice-task-event-content-and-timing).
+
+### Coherent subset materialization and receipt binding — 10 October 2026
+
+A scientific subset uses the ordinary release lifecycle. Pure planning identifies its supported closure and document needs; bounded reads supply exact text; generated files pass normal interpretation and assessment. Inherited companions are localized so omitted source files cannot change applicability. Fieldmap references retain only in-view targets, and complete explicit EPI groups can include another session without adding unrelated primary acquisitions.
+
+Event/session/scan disclosure is explicit. Column definitions accompany authorized columns. Internal transformation receipts bind the selection, compiler, disclosure profile, source content/interpretation and exact output; they are not exported into BIDS or exposed through a new HTTP route. Admission and persistence verify these bindings while historical projection records remain readable. The [scientific-core scope](scientific-core.md#implemented-slice-coherent-mri-subsets) documents supported families, refusal cases and synthetic round-trip evidence.
+
+## Inspected scientific change plans — 10 October 2026
+
+File moves/removals refer to a single immutable base and are applied simultaneously. The kernel preserves logical identity and rejects ambiguous inventories; scientific adapters own reference semantics. The first BIDS adapter repairs IntendedFor and scans filenames without inferring companion movement or deleting B0 dependencies. Before/after reverse dependency closure complements field and relationship deltas.
+
+Planning performs no writes. Preparation recomputes the inspected plan digest and enters the existing draft/assessment/acceptance workflow. A retained receipt identifies inputs, repairs and exact output; admission rejects stale receipt bindings after a draft edit. This is a bounded raw MRI profile, with participant/session relabeling and unsupported reference vocabularies deferred explicitly. See the [change contract](scientific-core.md#implemented-slice-scientific-file-changes).
+
+## Explicit context adoption — 10 October 2026
+
+Registry priority and contents, named semantic rules and declared coverage are
+scientific evidence. Record their canonical descriptor and digest alongside the
+existing code fingerprints. Keep the authored BIDSVersion separate from selected
+implementation coverage. Default semantics make no full-schema claim.
+
+An interpreter upgrade is adopted using an unchanged-content draft through the
+ordinary acceptance protocol. Old facts, selections, assessments and exports
+continue to identify their original interpretation. Transforming an old release
+with a different profile requires that explicit adoption first. Historical
+encoding domains remain readable rather than being rehashed during migration.
+
+Independent ds001/ds114 examples and the pinned official validator exercise the
+overlapping metadata checks; empty imaging placeholders and skipped header checks
+are disclosed. See the [scientific contract](scientific-core.md#implemented-slice-explicit-semantic-context-and-profile-evolution)
+and corpus provenance for precise supported and unsupported claims.

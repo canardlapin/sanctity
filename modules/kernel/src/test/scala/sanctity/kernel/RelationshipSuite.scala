@@ -92,3 +92,12 @@ final class RelationshipSuite extends FunSuite:
     val legacy = interpreted(Some(right(RelationshipGraph.from("v1", Vector(link(a, Vector(b))), artifacts))))
     assertEquals(legacy.id.value.value, "c6386cfcb97deca5363e6425e81806d2cade4f18e5ed7510f26780c0a0e82b1d")
   }
+
+  test("reverse dependency scope includes transitive consumers and terminates on cycles") {
+    val graph = right(RelationshipGraph.from("v1", Vector(link(a, Vector(b)), link(b, Vector(c)), link(c, Vector(a))), artifacts))
+    val at = interpreted(Some(graph))
+    val impact = DependencyImpact.between(at, interpreted(None), Set(path("c.nii.json")))
+    assertEquals(impact.before, Vector(a, b, c))
+    assertEquals(impact.after, Vector(c))
+    assertEquals(DependencyImpact.between(at, at, Set(path("unrelated.json"))), DependencyImpact.empty)
+  }
