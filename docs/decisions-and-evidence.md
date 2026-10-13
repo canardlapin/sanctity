@@ -15,6 +15,7 @@ The companion [design baseline](design-baseline.md) is the coherent working mode
 | Reserved contract | A distinction to preserve now; the full capability can arrive later |
 | Open decision | Needs source evidence, a pilot choice, or an implementation experiment |
 | Acceptance hypothesis | Proposed measurement or demonstration, not an achieved result |
+| Implemented baseline | Present in code; adoption and qualification gates are recorded separately |
 
 | ID | Decision or direction | Status |
 | --- | --- | --- |
@@ -33,8 +34,9 @@ The companion [design baseline](design-baseline.md) is the coherent working mode
 | DEC-13 | Native BIDS import/edit/export is the first architectural proof | Working proposal |
 | DEC-14 | Scoped MRI migration is the first controlled production outcome | Working proposal |
 | DEC-15 | Numerical performance, staffing, and schedule figures require evidence | Acceptance hypotheses |
+| DEC-16 | Carry v4g forward as the bounded release/curation/query/access console under WP-09; retain its regression contracts and close adoption through CON-01–04 | Implemented baseline; adoption qualification open |
 
-These proposals should become ADRs when actual choices are made. No ADR is marked accepted merely because it appears in these notes.
+The working proposals should become ADRs when actual choices are made. No ADR is marked accepted merely because it appears in these notes.
 
 ## What the consolidation changes
 
@@ -90,7 +92,7 @@ The controlled pilot should also prove one restricted sharing profile, access by
 
 ## Delivery assumptions and targets
 
-The inherited capacity assumption is two experienced full-time Scala/backend engineers, approximately 0.5 FTE neuroimaging scientist/curator, approximately 0.25 FTE platform support, and a product owner able to resolve scope and acceptance. Later UI work assumes dedicated frontend capacity.
+The inherited capacity assumption is two experienced full-time Scala/backend engineers, approximately 0.5 FTE neuroimaging scientist/curator, approximately 0.25 FTE platform support, and a product owner able to resolve scope and acceptance. Broader UI work assumes dedicated frontend capacity; the implemented console now has a bounded adoption workstream under WP-09.
 
 The earlier planning hypothesis was 26 weeks plus six weeks of reserve:
 
@@ -106,6 +108,10 @@ The earlier planning hypothesis was 26 weeks plus six weeks of reserve:
 | M7 | After pilot; estimate after backend choice | Production processing backend and fMRIPrep workflow |
 
 These are retained planning assumptions. The later identity/sharing/execution constraints require a revised estimate. Gates should constrain scope changes; a calendar date cannot waive scientific or transactional invariants.
+
+M6's UI timing is historical: DEC-16 and the current implementation plan place the
+existing console's adoption under WP-09. Further graphical workflows remain later
+scope; the console does not imply completion of institutional or pilot gates.
 
 | Area | Inherited proposed target | Conditions or unresolved part |
 | --- | --- | --- |
@@ -277,3 +283,175 @@ Independent ds001/ds114 examples and the pinned official validator exercise the
 overlapping metadata checks; empty imaging placeholders and skipped header checks
 are disclosed. See the [scientific contract](scientific-core.md#implemented-slice-explicit-semantic-context-and-profile-evolution)
 and corpus provenance for precise supported and unsupported claims.
+
+
+## MRI header and phase-difference coverage — 11 October 2026
+
+Choose observed header facts independently of authored metadata. Regular TR/header
+disagreement is a named warning policy so explicit corrections do not require
+rewriting immutable image bytes. That admission decision is distinct from official
+BIDS conformance, which reports a mismatch error. Do not guess milliseconds from
+a large numeric value: the independent NiBabel fixture stores 2000 with seconds.
+
+A phase-difference dependency requires magnitude1, permits magnitude2, and matches
+same-directory entities; consumers remain explicitly declared. The new family
+uses existing companion evidence and transitive closure. Missing/ambiguous members
+and invalid echo ordering block acceptance; a complete family does not prove
+registration or distortion-correction suitability.
+
+Independent fixtures retain MIT/CC0 notices, commit pins and digests. Six images
+have an independent NiBabel header oracle; the exact OpenNeuro phase family and
+nine consumer declarations have reviewed expectations. Official comparisons enable
+headers and expose the precise local/official differences. See the
+[corpus record](../modules/app/src/test/resources/mri-conformance/README.md).
+
+
+## Processing contracts reuse accepted views and drafts — 11 October 2026
+
+A bundle is an ordinary accepted view with a versioned input-readiness report.
+The compiler checks both source selection and emitted interpretation. Readiness
+is recipe-specific: an admitted TR/header discrepancy blocks the header-QC recipe.
+The content-tree digest identifies paths and bytes independently of logical
+artifact allocation; it neither grants access nor promises execution determinism.
+
+A derivative receipt binds an invocation, the exact accepted bundle, explicit
+targets, exact generated request bytes, code/runtime identity, parameters and the expected output inventory.
+Durable drafts journal collection. Expected remote outputs are distinct from verified local staging; only actual bytes become retained content. This prevents unfinished remote delivery from blocking recovery integrity checks. The same core accepts
+outputs atomically after scientific checks and current source-read/destination
+acceptance checks. PostgreSQL uses consistently ordered dataset locks; old activity
+payloads decode with absent optional bundle/processing evidence. No SQL migration
+or additional acceptance route is required.
+
+The first producer is trusted local Python header QC. Its child environment is
+explicitly replaced, and it consumes an isolated authorized bundle. This does not
+establish a general untrusted-code sandbox, durable scheduler, remote run token,
+scientifically qualified preprocessing pipeline or a standard BIDS QC vocabulary.
+Dataset-level derivative provenance follows the [BIDS description rules](https://bids-specification.readthedocs.io/en/stable/modality-agnostic-files/dataset-description.html#derived-dataset-and-pipeline-description);
+table columns and filenames have an explicit repository-local profile. Native
+re-import preserves the directory's content while labeling execution provenance
+as declared rather than locally verified. See the [contract and proof](scientific-core.md#implemented-slice-processing-inputs-and-derivative-return).
+
+
+## Derivative scientific evidence and private execution (11 October)
+
+- Cross-release checks name exact accepted content, interpretation and assessment.
+  Candidate-local checks remain backward-compatible. Scientific observations carry
+  metric/version/unit, source and checking evidence; missing-result queries have an
+  explicit release universe.
+- Header QC compares returned values with retained input observations. Receipt
+  consistency, observed local execution and scientific comparison are distinct
+  evidence claims. Imported declarations alone do not populate the verified index.
+- Private processing bundles reuse compilation and acceptance while inheriting
+  current source authority. Their creator cannot turn them into independently
+  shareable releases by changing a draft activity or adding a grant.
+- Run requests are durable before workspace preparation; software/request bytes are
+  retained before launch and completed output bytes before collection. Unknown
+  execution is explicit and requires an intentional retry decision.
+- Repeated derivative runs replace an explicitly selected base through normal
+  acceptance. Collection initiation has a unique destination/invocation binding.
+  V006 persists those bindings, runs and indexed observations.
+
+## 12 October 2026 — Temporal statistics through the existing scientific lifecycle
+
+The second processing recipe shares `LocalProcessingRuns` with header QC through
+`LocalRecipe`. The kernel and catalog schema remain recipe-independent. Portable
+NIfTI scaling facts are implemented upstream; bounded full-array checking, local
+execution and image admission live in the MRI adapter. `BuildIdentity` includes
+that adapter's Scala and resource sources so interpretation changes are identified.
+
+Payload admission is opt-in (`native-payload-v1`), preserving historical
+header-only meaning. Temporal statistics uses all volumes, scaled signal, float64
+output and shifted Welford population variance. Coded qform and sform remain
+separate. Image outputs have an explicit repository-local profile; generalized
+BIDS statistical-map conformance is not claimed. Per-run structural/provenance
+checks do not claim numerical recomputation. Independent two-pass voxel checks
+qualify the pinned recipe. See [contracts and limits](scientific-core.md#implemented-slice-temporal-image-statistics).
+
+## 12–13 October 2026 — Publication, phase-pair families and query scale
+
+A completed execution and its publication are separate immutable decisions.
+`PublicationIntent` binds the run/receipt, owner-publisher, destination, reviewed
+base and publisher-scoped idempotency key. The original run request is unchanged;
+an owner can intentionally publish retained outputs again with a different key.
+Current source/private-bundle authority and destination powers still apply, while
+the original execution destination need not remain writable. V007 transactionally
+binds each publication to its draft. Real crash/retry and closed/current-policy
+restore checks retain exact output bytes and preserve later source revocation.
+See the [publication contract](scientific-core.md#completed-run-publication-contract-night-tranche)
+and [demonstration receipt](evidence/publication-demo.json).
+
+Phase1/phase2 association belongs in the portable bids4s resolver. The bounded
+profile requires two phases and two magnitudes, exact family entities and ordered
+phase EchoTimes, with optional magnitude-time agreement. Sixteen independently
+specified cases retain BIDS/schema pins, CC0 synthetic bytes and reviewed official
+validator differences. Sanctity owns closure, disclosure, change planning and
+admission. Native interpretation v8, MRI view v7, file edits v3 and header-QC input
+contract v2 identify this expansion; the existing v7 admission envelope and
+historical identities remain readable. Association coherence is not phase physics
+or scanner qualification.
+
+Scientific and observation queries now have independent seeded source-fact
+oracles on both catalogs. The existing inventory and 100-input/100-release bounds
+remain unchanged. Measurement found repeated source-release hydration to be an
+avoidable observation-query cost. The only optimization groups inputs by exact
+release within the request, preserving every artifact check and all current
+scope checks. No cross-request cache, SQL/index change or migration was added.
+Two before/after pairs use one accepted database snapshot and retain host-load
+variation, plans, row counts, setup/storage costs and source fingerprints in the
+[scale comparison](evidence/query-scale-summary.json). The remaining 100-release
+path is still measured in seconds; these local results are not a production SLA.
+
+
+## 13 October 2026 — coherent multi-echo analysis inputs
+
+Implemented the [16-mote tranche](analysis-input-plan.md) for bounded multi-echo
+BOLD and local `stim_file` dependencies. Portable BIDS rules remain upstream;
+Sanctity owns exact table-column evidence, header coherence checks, authorized
+views, reviewed family/stimulus edits and per-image QC publication. Echo-time
+ordering and equal voxel spacing are explicit repository consistency policy;
+official conformance differences are retained. No echo combination, registration,
+scanner qualification, HED or remote stimulus resolution is claimed.
+
+Interpretation encoding 3/v7 adds table-column evidence without changing historical
+identity domains. Private inputs/publication continue to require current source
+access; accepted derivative releases retain their separate custody model. The
+final audit fixed zero-index normalization and prevented whole-family renames from
+silently dissolving an indexed family into separate single-echo runs.
+
+The default build now verifies an immutable complete upstream source snapshot,
+including unpublished source changes and license, with a deliberate sibling
+checkout override. Clean-source CI and archive-corruption rejection are qualified
+locally; hosted CI awaits a push. Both catalogs, upstream JVM/JS/public consumers,
+independent fixtures and actual crash/restore passed. Exact commands, counts,
+source digests and limits: [verification receipt](evidence/analysis-input-verification.json).
+
+## 13 October 2026 — console baseline and bounded adoption
+
+DEC-16 consolidates the supplied v4g handoff into the
+[WP-09 console baseline and adoption tasks](implementation-plan.md#console-baseline-and-adoption).
+The broad scored review loop ends here; subsequent work follows concrete defects,
+accessibility results and deliberate workflow changes. Phone layout preferences,
+correction column balance, query export/age and principal-ID guidance stay in the
+later backlog.
+
+The critical finding becomes a durable PROOF-08 obligation: carrying a correction
+to a newer head must not replay an old whole-file replacement over another
+accepted edit. Commit `a1420b0` restores a draft only against unchanged file content;
+otherwise it presents current content with the earlier edit as a diff. The
+regression example preserves a colleague's FlipAngle 60 instead of reverting it
+to 52. Preview ordering, inherited sidecar effects, path validation and responsive
+focus/announcement behavior are also recorded as contracts, with PRD AT-13.
+
+Backend inheritance is supported by the retained PostgreSQL run and the matching
+ConsoleSuite source digest in the [verification receipt](evidence/analysis-input-verification.json).
+The suite and integrated backend are now committed as `cb082fe`. CON-01 recovered
+80 original review files, including the browser harness, reports, logs, source
+builds and VoiceOver script; the [recovery manifest](evidence/console/recovery-manifest.json)
+binds their hashes. The original log records 59 behavior assertions, rather than
+the handoff's stated 51, plus 27 UI configurations and six layout checks.
+
+Commit `4b62084` retains those artifacts and adds a portable browser runner, CI
+and synthetic fixtures for the human screen-reader exercise. The
+[adoption receipt](evidence/console/adoption.json) binds the integrated source and
+new automated results. A real VoiceOver pass remains open; adoption stays pending
+until that human result is recorded and any blocking findings are resolved.

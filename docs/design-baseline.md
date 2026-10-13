@@ -363,7 +363,14 @@ Transfers report preserved, rewritten, omitted, unsupported, and unresolved info
 
 Durable drafts, findings, mapping decisions, diffs, metadata explanations, view plans, and progress are application resources from the start.
 
-The UI can then provide a dataset explorer, import workbench, metadata inspector, revision/provenance views, and sharing/processing flows over existing operations.
+The implemented v4g console now provides release/file exploration, metadata and
+finding inspection, correction/acceptance, queries and access workflows over the
+existing HTTP operations. Its [WP-09 adoption gates](implementation-plan.md#console-baseline-and-adoption)
+retain regression evidence and require real screen-reader qualification. Carrying
+a correction to a newer head must preserve intervening accepted file changes.
+
+Import workbenches, richer revision/provenance views, prepared views, processing
+and operations screens remain extensions of the same application resources.
 
 ## Implementation sequence
 

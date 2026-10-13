@@ -1,0 +1,40 @@
+{
+  "status": "not_run",
+  "tester": null,
+  "date": null,
+  "os": null,
+  "browser": null,
+  "voiceOverVersion": null,
+  "sourceRevision": "4b6208470caf6615076a433924c27adf8be23753",
+  "sourceSha256": {
+    "index.html": "3098e794d6a8fbb68b1dacc0b29481040579267ec75d36696de17e4c7f230cfa",
+    "app.css": "3834f94d9646970715a107d1c335820fed0fe0e2fa1a23df34c50d0db3d1f30e",
+    "app.js": "d81dae6481afc151516a7fcc55cde8adde1a93a8e0f9a0c6720f446cecd3999d",
+    "demo.js": "cc6ebcd860a7f77660acd105bc41c717c5d6b3457b4ffad307dd89f93ef81b1b"
+  },
+  "viewportResults": [],
+  "reason": "No human VoiceOver task report has been received. The macOS automation probe did not provide usable desktop control; no real screen-reader result is claimed.",
+  "runbook": "../../http-api.md#console-checks-and-voiceover-exercise",
+  "originalScript": "original/voiceover-script.md",
+  "startCommand": "node tests/console/serve.js",
+  "demoUrl": "http://127.0.0.1:8093/?demo",
+  "conflictUrl": "http://127.0.0.1:8093/conflict.html",
+  "tasks": [
+    "Admission, metadata and responsive focus",
+    "Subject-level sidecar correction, errors and preview",
+    "Fieldmap relationships",
+    "Freeze age-at-least-30 selection",
+    "Grant, cancel revocation and revoke",
+    "Concurrent correction preserving FlipAngle 60"
+  ],
+  "requiredResultFields": [
+    "tester",
+    "date",
+    "os",
+    "browser",
+    "voiceOverVersion",
+    "source hashes",
+    "viewport method and dimensions",
+    "pass/fail/not_run and notes for each task at each tested layout"
+  ]
+}

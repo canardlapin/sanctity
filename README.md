@@ -2,7 +2,7 @@
 
 Sanctity is a BIDS-native neuroimaging repository with a pure Scala kernel, an in-memory reference catalog, PostgreSQL persistence, and immutable managed bytes.
 
-A **release** fixes content, scientific interpretation, and admission evidence. A **frozen selection** fixes query inputs and membership. A **prepared scientific view** becomes an ordinary assessed release with its own custody and grants. Imports, corrections, and views all use the same preparation and atomic acceptance protocol.
+A **release** fixes content, scientific interpretation, and admission evidence. A **frozen selection** fixes query inputs and membership. A **prepared scientific view** becomes an ordinary assessed release with its own custody and grants. Imports, corrections, views and derivative submissions all use the same preparation and atomic acceptance protocol.
 
 [Product requirements](docs/prd.md), [implementation plan and evidence](docs/implementation-plan.md), [design baseline](docs/design-baseline.md), [decision record](docs/decisions-and-evidence.md), and [bids4s integration](docs/bids4s-integration.md) describe the broader product and remaining qualification.
 
@@ -17,17 +17,19 @@ Current work prioritizes the [scientific core](docs/scientific-core.md): explici
 | Scientific relationships | Recorded B0 groups, IntendedFor links, inherited DWI gradients and BOLD events, typed evidence, correction impact and bounded closure |
 | Scientific queries | Explicit artifact/participant/session correlation; SQL and reference interpreters; lexical participant values; versioned query facts and durable selections |
 | Scientific views | MRI dependency closure, localized gradients/events, projected participant/session/scan tables, rewritten references, exact transformation receipts, ordinary acceptance and sharing |
+| Processing | Versioned input readiness, frozen accepted bundles, separate derivative destinations, resumable output collection and an external header-QC producer |
 | Durable operations | Inventoried imports, verified file checkpoints, renewable worker leases, fenced publication, completion recovery, independent leased outbox targets |
 | Recovery | Catalog/blob backup, transactional closed restore gate, integrity verification, reconciliation against separately supplied current policy |
 | DICOM | Pinned real converter, bounded/cancellable process lifetime, retained source/diagnostic evidence, explicit output mapping and exclusions |
 | XNAT | Authenticated API streams, explicit resource inventories, experiment pagination, checksums, source-change checks, matching resource ZIP import |
 | HTTP and operator CLI | Revocable principal credentials, release/metadata inspection, correction and acceptance, fixed-release grants, frozen queries, guarded file streams, resumable local import |
+| Browser console | Release/file inspection, metadata origins, findings/relationships, sidecar correction and conflict recovery, frozen queries and access actions over the same API; [v4g adoption gates](docs/implementation-plan.md#console-baseline-and-adoption) remain open |
 
 These are bounded implementations with executable evidence. Institutional identity integration, full conformance, representative scientific qualification, production migration and performance remain open.
 
 ## Build and native demonstration
 
-Prerequisites: Java 21, sbt, and the sibling `../bids4s` checkout with the context and metadata work described in [integration status](docs/bids4s-integration.md). The canonical library is [canardlapin/bids4s](https://github.com/canardlapin/bids4s). A direct sbt project dependency avoids a publication step.
+Prerequisites: Java 21 and sbt. The default build verifies and extracts the exact [bids4s source pin](vendor/README.md), including the upstream license and unpublished scientific APIs. No sibling checkout is needed. The canonical library is [canardlapin/bids4s](https://github.com/canardlapin/bids4s).
 
 ```sh
 sbt check
@@ -42,7 +44,7 @@ An explicit destination must be new:
 sbt 'app/run /absolute/path/new-demo-workspace'
 ```
 
-Use `-Dsanctity.bids4s.path=/absolute/path/bids4s` for another library location.
+Use `-Dsanctity.bids4s.path=/absolute/path/bids4s` as an explicit upstream development override. After upstream checks, refresh the pin with `python3 scripts/source-snapshot.py pin`. `bash scripts/check-clean-source.sh` verifies an isolated source build; `.github/workflows/scientific-core.yml` runs the scientific and recovery gates in CI.
 
 The pinned application baseline is Scala 3.3.8, Cats Effect 3.5.7, FS2 3.11.0, http4s 0.23.30, Circe 0.14.10, Doobie 1.0.0-RC6, PostgreSQL JDBC 42.7.14 and MUnit 1.3.0. PostgreSQL checks use version 17.11.
 
@@ -56,6 +58,7 @@ The pinned application baseline is Scala 3.3.8, Cats Effect 3.5.7, FS2 3.11.0, h
 | `objects` | Immutable filesystem bytes, verification, inventory, isolated exports, bounded process resources |
 | `postgres` | Incremental checked migrations, catalog transactions, SQL queries, grants, operations, delivery leases, recovery |
 | `import-dicom` | Pinned conversion, explicit versioned mapping, output accounting, source evidence |
+| `processing-mri` | Header QC and temporal image statistics through one durable local runner; payload qualification, image derivative admission and resumable collection |
 | `import-xnat` | Qualified resource references, HTTP acquisition, pagination, declared ZIP export import |
 | `http` | Authenticated workflow routes, strict request grammar, explicit public JSON representations |
 | `app` | Assembly, API server, operator/import/credential/recovery CLI, demonstrations and shared tests |
@@ -65,6 +68,72 @@ Start at [NativeRepository](modules/application/src/main/scala/sanctity/applicat
 
 The reference and PostgreSQL catalogs share pure [Admission](modules/kernel/src/main/scala/sanctity/kernel/Admission.scala) and [Authority](modules/kernel/src/main/scala/sanctity/kernel/Authority.scala) rules. Application ports and access contexts are trusted internal capabilities. The [authenticated HTTP adapter](modules/http/src/main/scala/sanctity/http/RepositoryHttp.scala) obtains contexts from verified credentials and exposes bounded workflows with explicit public representations. The reference catalog deliberately refuses credential-bearing contexts; the PostgreSQL adapter rechecks their liveness transactionally.
 
+## Scientific processing demonstration
+
+```sh
+sbt 'app/runMain sanctity.app.ProcessingDemo'
+```
+
+Requires `/usr/bin/python3` in addition to the build prerequisites. This freezes
+one selected MRI acquisition into an assessed input bundle, runs a small external
+header-QC producer, resumes output collection into a separately governed dataset,
+and accepts/exports its derivative through the ordinary core. The printed workspace
+contains input and derivative exports and exact bundle/processing receipts. The QC table is a
+repository-local derivative profile; it does not claim motion, voxel-quality,
+registration or fMRIPrep qualification. See the [contract, limits and evidence](docs/scientific-core.md#implemented-slice-processing-inputs-and-derivative-return).
+
+The demo now creates a private bundle using a researcher's source-read grant,
+records a durable run before execution, accepts two successive QC releases and
+queries their exact-input measurements. It writes `run-and-observations.json` and
+both derivative exports, then demonstrates that source revocation blocks further
+private-bundle delivery. Source-bound checks reject returned values that disagree
+with the frozen input, even when the producer's inventory matches those bytes.
+
+`ProcessingInputs.preparePrivate` requires current source access and produces a
+creator-only bundle. `prepare` still creates a separately governed shared view and
+requires disclosure authority. `LocalQcRuns` adds recovery before collection;
+`beginStagedAt` creates a derivative revision against an explicit prior release.
+Migration V006 adds run records, observation indexes and idempotent submission
+bindings. See the [scientific contracts](docs/scientific-core.md#implemented-slice-derivative-evidence-observations-and-private-execution)
+for query bounds and remaining qualification limits.
+
+## Temporal image-processing demonstration
+
+```sh
+scripts/setup-mri-python.sh
+export SANCTITY_MRI_PYTHON="$PWD/target/mri-python/bin/python"
+sbt 'app/runMain sanctity.app.TemporalDemo'
+```
+
+This second recipe produces float64 temporal mean and population-SD images from
+fully assessed BOLD payloads. It shares the durable run/collection mechanism with
+header QC, checks source geometry, and exposes map summaries through scientific
+queries. Full export and re-import retain image bytes and supported metadata.
+[Contracts, qualification and limits](docs/scientific-core.md#implemented-slice-temporal-image-statistics)
+include the explicit repository-local derivative naming profile.
+
+Run the independent numerical oracle with the pinned Python environment:
+
+```sh
+"$SANCTITY_MRI_PYTHON" scripts/check-temporal-statistics.py --qualify target/temporal-qualification-new
+```
+
+The same environment is required for the new Scala lifecycle tests. The checker
+itself uses only Python's standard library; its separate producer subprocess uses
+NiBabel and NumPy. Qualification output includes per-case voxel comparisons,
+source/code digests, logical I/O and peak process RSS.
+
+The temporal demo also completes a run before a competing release advances its
+destination, then recovers through `DerivativeSubmissions.publish` with an explicit
+`PublicationIntent`. It deletes that run's execution workspace before collection,
+retains all output digests, and queries three successive releases. Inspect
+`publication.json` and independently verify the reconstructed `publication-oracle`
+directory with `scripts/check-temporal-statistics.py --workspace PATH`.
+Publication is owner-only, requires current source and destination authority, and
+uses its own retry key; it leaves the original execution evidence unchanged.
+Run `scripts/check-publication-recovery.sh` for the disposable PostgreSQL
+crash/retry and backup/restore proof, including source revocation after backup.
+
 ## Scientific changes
 
 `ScientificChanges.plan` prepares read-only rename/removal proposals against a pinned release. The BIDS adapter proposes `IntendedFor` and scans-table repairs; `prepare` requires the inspected plan digest and produces an ordinary assessed candidate. Moves retain artifact identity and image bytes. Previews explain before/after dependency scope; conflicting heads, blocking dependency findings and stale evidence cannot be accepted. See the [supported edit profile and proof](docs/scientific-core.md#implemented-slice-scientific-file-changes).
@@ -73,11 +142,18 @@ The reference and PostgreSQL catalogs share pure [Admission](modules/kernel/src/
 
 [bids4s resolves explicit MRI declarations](../bids4s/modules/core/shared/src/main/scala/bids4s/BidsFieldmaps.scala). Sanctity binds the resulting grouped relationships, their field-origin evidence and resolver version into immutable interpretation identity. A metadata correction can preview changed acquisition relationships even when the affected image's own metadata is unchanged.
 
-`Interpretation.relationshipClosure` follows recorded relationships and returns associated artifacts plus metadata documents. It includes selected DWI gradient pairs and BOLD event tables with their JSON metadata. Overridden companions remain evidence. Stimulus dependencies and qualified pipeline bundles remain later scientific slices. Historical interpretations retain their identities and recorded coverage. `NativeRepository.correctCompanion` prepares bounded gradient/event edits and previews selection changes or changed dependency bytes. See the [scientific-core plan and proof](docs/scientific-core.md).
+`Interpretation.relationshipClosure` follows recorded relationships and returns associated artifacts plus metadata documents. It includes selected DWI gradient pairs and BOLD event tables with their JSON metadata. Overridden companions remain evidence. Stimulus dependencies and production analysis qualification remain later scientific slices; the bounded header-QC bundle contract is implemented. Historical interpretations retain their identities and recorded coverage. `NativeRepository.correctCompanion` prepares bounded gradient/event edits and previews selection changes or changed dependency bytes. See the [scientific-core plan and proof](docs/scientific-core.md).
 
 DWI preparation now checks selected gradient values and counts against bounded NIfTI-1/2 header facts, including gzip and either byte order. Versioned `ContentCheck` records retain exact input digests, observations and findings within assessment identity; rejected corrections leave the accepted head unchanged. The named vector-norm policy performs no reorientation or voxel/affine qualification.
 
 Selected BOLD events now receive strict TSV/decimal assessment and recorded regular, variable or unavailable acquisition timing. Invalid content blocks acceptance; events beyond the documented comparison window produce review warnings. Every check binds exact table, image and metadata inputs through the existing `ContentCheck` record.
+
+The current v8 profile also records MRI spatial/time units, dimensions and coded
+transform observations, with explicit structural findings and TR discrepancies.
+The v7 subset compiler includes resolved phasediff and phase1/phase2 magnitude families, including
+cross-session dependencies. See the [MRI scientific contract](docs/scientific-core.md#implemented-slice-independent-mri-evidence-and-phase-difference-families)
+and [independent licensed corpus](modules/app/src/test/resources/mri-conformance/README.md)
+for rules, limits, independent header comparison and official-validator differences.
 
 ## Queries and sharing
 
@@ -102,9 +178,9 @@ Call `catalog.select(context, pinnedReleases, query)` to persist a frozen select
 
 Views use `ScientificViews.prepare`, followed by ordinary `repository.accept`. The destination is a separate empty dataset. The compiler retains selected image bytes, generates local JSON from approved effective fields, projects `participants.tsv`, and generates a neutral description. Source disclosure authority is checked during preparation and acceptance, including retries. The resulting release can receive a fixed-release grant without granting access to the source.
 
-The `sanctity-mri-view-v4` profile supports T1w/T2w, single-echo task/rest BOLD and DWI, with resolved gradients/events and explicit EPI fieldmap groups, including dependencies in another session. It localizes inherited companions, projects participant/session/scan tables and their column dictionaries, and rewrites `IntendedFor` to retained targets. Each output file has a persisted source-to-output receipt. Export/re-import preserves the supported scientific meaning.
+The `sanctity-mri-view-v8` profile supports T1w/T2w, single-echo and bounded multi-echo task/rest BOLD and DWI, with resolved gradients/events and explicit EPI, phasediff and phase1/phase2 fieldmap groups, including dependencies in another session. It localizes inherited companions, projects participant/session/scan tables and their column dictionaries, and rewrites `IntendedFor` to retained targets. Each output file has a persisted source-to-output receipt. Export/re-import preserves the supported scientific meaning.
 
-`DisclosureProfile` has explicit `eventFields`, `sessionFields` and `scanFields` in addition to participant and metadata fields. Events require an explicit mask including `onset` and `duration`; retained column definitions are part of that column disclosure. Required acquisition/reference metadata cannot be masked. Stimulus/HED, SBRef/physiology, implicit phase/magnitude fieldmaps, EPI gradients and file collections remain outside this profile. See [scope, limits and proof](docs/scientific-core.md#implemented-slice-coherent-mri-subsets). This is a bounded structural profile; scientific and de-identification qualification remain separate.
+`DisclosureProfile` has explicit `eventFields`, `sessionFields` and `scanFields` in addition to participant and metadata fields. Events require an explicit mask including `onset` and `duration`; retained column definitions are part of that column disclosure. Required acquisition/reference metadata cannot be masked. Stimulus/HED, SBRef/physiology, EPI gradients and file collections remain outside this profile. See [scope, limits and proof](docs/scientific-core.md#implemented-slice-coherent-mri-subsets). This is a bounded structural profile; scientific and de-identification qualification remain separate.
 
 Grant actions are `ReadMetadata`, `ReadContent`, `Propose`, and `Accept`. The dataset curator administers grants. Dataset grants explicitly cover future releases; fixed-release grants permit reading only. Export reauthorization occurs before each chunk of at most 64 KiB. Expiring grants, delegation, group membership, institutional login and arbitrary source-evidence delivery are future work.
 
@@ -119,6 +195,17 @@ scripts/check-postgres.sh
 The runner creates a private loopback PostgreSQL container, runs ordinary and database tests, demonstrates crash/retry recovery, then exercises backup/restore after an intervening grant revocation. It restores into a fresh database and verifies that the closed recovery gate prevents access before current policy is applied. The container and its volume are removed afterward. Logs, backups, policy receipts and exports remain under the printed `target/postgres-check.*/` directory.
 
 Database tests are separate from `sbt check`; they fail without the explicit disposable-test environment.
+
+The opt-in `bash scripts/check-query-scale.sh` harness measures accepted scientific
+queries up to 9,993 inventory entries and observations across 100 inputs and 100
+releases. It retains oracle-checked results, query plans, setup/storage costs and
+source fingerprints under `target/query-scale.*/`. See the
+[query qualification contract](docs/scientific-core.md#scientific-query-qualification-and-scale-harness)
+for cache conditions and interpretation limits. The [retained comparison](docs/evidence/query-scale-summary.json)
+shows the bounded source-validation change reducing the repeated 100-input case
+from 8.53 s to 355 ms and the 100-release case from 18.39 s to 9.68 s in one local
+repeat pair. All results match the independent oracle; shared-host timing limits
+and both comparison pairs are retained. The harness is separate from ordinary CI.
 
 For an existing development database:
 
@@ -150,6 +237,15 @@ sbt 'app/runMain sanctity.app.ApiServer'
 ```
 
 Use an existing provisioned principal, with PostgreSQL variables set as above. The CLI creates the credential file with mode `0600` and never prints its token. The server binds to loopback; external transport requires a TLS reverse proxy. Tokens authenticate stable principals, and current grants govern every action. Private source evidence stays out of public release responses. Institutional login and attenuated worker credentials are later integration work.
+
+The same server serves the browser console at `http://127.0.0.1:8080/` (or the
+configured port). Connect with the issued token and dataset ID. `/?demo` uses
+synthetic browser fixtures; normal mode uses the authenticated `/v1` API. The
+[console baseline and adoption checklist](docs/implementation-plan.md#console-baseline-and-adoption)
+records the reviewed scope, correction-safety contract, recovered evidence and
+remaining VoiceOver gate. Run `bash scripts/check-console.sh` for the browser
+regressions and v4f differential replay. The [screen-reader runbook](docs/http-api.md#console-checks-and-voiceover-exercise)
+provides the real VoiceOver tasks and a local synthetic conflict fixture.
 
 ## Durable work and recovery
 
@@ -206,4 +302,26 @@ The default native demo uses the volatile reference catalog. The PostgreSQL impl
 
 The profile currently supports one raw dataset and at most 10,000 inventory entries. JSON is limited to 4 MiB per document, 32 MiB total and depth 128; participant TSV is limited to 4 MiB and a strict unquoted format. Unsafe paths, symlinks, case/Unicode collisions, invalid UTF-8, duplicate JSON keys and lossy JSON numbers are rejected. Authored bytes remain authoritative for full export.
 
-Complete BIDS conformance, generic association closure, representative converter science, derivatives, processing bundles, general remote upload/view/operations interfaces, institutional authentication and large-scale performance remain unqualified or unimplemented. Tests use synthetic data and local fixtures; no live institutional XNAT migration has been performed.
+Complete BIDS conformance, generic association closure, representative converter science, general derivative/processing profiles, general remote upload/view/operations interfaces, institutional authentication and large-scale performance remain unqualified or unimplemented. Tests use synthetic data and local fixtures; no live institutional XNAT migration has been performed.
+
+
+### Coherent multi-echo analysis inputs
+
+Selecting one echo now retains its recorded BOLD family, shared events, and local
+stimulus assets referenced by retained `stim_file` cells. Echo times, timing and
+header dimensions/spacing have explicit consistency checks. Views preserve exact
+image/asset bytes and source receipts; dropping `stim_file` from the event mask
+also drops its assets. Reviewed family and stimulus moves preserve relationships.
+
+```sh
+sbt 'app/runMain sanctity.app.AnalysisInputsDemo'
+target/mri-python/bin/python scripts/check-analysis-input-conformance.py
+```
+
+The demonstration selects echo 2, freezes three echoes and two stimuli, publishes
+per-image header QC, corrects the source, verifies historical bytes, and exercises
+private-input and publication revocation. The conformance command uses the
+previously pinned Deno 2.5.4 executable at `target/conformance-tools/deno` (or
+`--deno /path/to/deno`). [Plan, motes and limits](docs/analysis-input-plan.md).
+Echo combination, SBRef, physiology, HED and scanner/registration qualification
+remain outside this profile.

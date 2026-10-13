@@ -1,0 +1,69 @@
+{
+  "schema": "sanctity.console-adoption.v1",
+  "recordedAt": "2026-10-13T15:49:15.299630+00:00",
+  "status": "pending_manual_accessibility",
+  "adopted": false,
+  "baseline": {
+    "name": "v4g",
+    "revision": "a1420b0edc6cad06af069ad63a71a9876ef4ac31"
+  },
+  "integratedBackendRevision": "cb082feaf5edb62c2cce30c06cb0367e30e2470d",
+  "browserHarnessRevision": "4b6208470caf6615076a433924c27adf8be23753",
+  "gates": {
+    "CON-01": {
+      "status": "complete",
+      "result": "80 original artifacts recovered and hashed; current 59 behavior assertions, 27 UI configurations, six layout checks and syntax checks pass. Seven new regressions reproduce on v4f. Three adapted legacy assertions are separately classified."
+    },
+    "CON-02": {
+      "status": "complete",
+      "result": "ConsoleSuite committed with backend; 414 tests and crash/retry/current-policy restore passed."
+    },
+    "CON-03": {
+      "status": "awaiting_human_result",
+      "result": "Original script recovered and extended runbook provided. Synthetic conflict setup verified; no VoiceOver pass recorded."
+    },
+    "CON-04": {
+      "status": "prepared_pending_CON-03",
+      "result": "This receipt binds the integrated code and automated evidence. Adoption remains false until the human result is recorded and blocking findings resolved."
+    }
+  },
+  "evidence": {
+    "recovery-manifest.json": {
+      "sha256": "ef98db0a5870960f0727ad48e234c690e1dbd4fed0eb1e631706340cce8a8e08"
+    },
+    "browser/receipt.json": {
+      "sha256": "7bfcf54cd67dc0db150d4f8b47d57e22165df473cbd8215c9d746c81d55ec35e"
+    },
+    "browser/current.log": {
+      "sha256": "3fcd321a559e9e7b5e51a48a361b186cf5fe6af1c86f2a3a7c836194e72b422e"
+    },
+    "browser/v4f.log": {
+      "sha256": "32ac782d8ae65074151cd0b6302ba0876c4c659b79598639df9bebb2a03bce84"
+    },
+    "postgres.json": {
+      "sha256": "2704d760b05f8d345d9774b674c4ea78142769ec0fc07a7260e868ac3fb9ac11"
+    },
+    "postgres.log": {
+      "sha256": "f3ea70fa839d031abd0497780e4af60d45cec6c28c2b7e5d9ea8001a7254c706"
+    },
+    "voiceover-fixture.json": {
+      "sha256": "8ad9390cac74345249d88c951bd906dc77e4842fc047f6a86bd4b381acf8010a"
+    },
+    "voiceover.json": {
+      "sha256": "821d9a72a9be1b381a69809f04a763480e8c6a68fddcba4a20bdf9f91bb65921"
+    }
+  },
+  "sourceState": "Backend code was unchanged between cb082fe and 4b62084. Browser and harness hashes match 4b62084. Only documentation consolidation and local agent state remained uncommitted during the final browser run.",
+  "limits": [
+    "Browser gate uses the synthetic demo transport; ConsoleSuite separately exercises real HTTP/PostgreSQL.",
+    "No real screen-reader qualification or iOS/mobile screen-reader claim.",
+    "CI configured; hosted execution has not run because these commits have not been pushed.",
+    "This receipt does not close G2, institutional identity, scientific or production pilot qualification."
+  ],
+  "deferred": [
+    "phone preview layout",
+    "correction column balance",
+    "query export and age column",
+    "principal-ID discovery guidance"
+  ]
+}

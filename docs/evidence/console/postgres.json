@@ -1,0 +1,24 @@
+{
+  "command": "bash scripts/check-postgres.sh",
+  "sourceRevision": "cb082feaf5edb62c2cce30c06cb0367e30e2470d",
+  "passed": true,
+  "ordinaryTests": 265,
+  "postgresTests": 149,
+  "totalTests": 414,
+  "consoleSuite": {
+    "passed": 1,
+    "failed": 0,
+    "sourceSha256": "60ca9199d34c10465ac253d81f80f5eda4cc59a7119617e88a749e4149c0e700"
+  },
+  "httpUnitTests": 5,
+  "httpIntegrationTests": 8,
+  "crashRetry": true,
+  "restorePreservedRevocation": true,
+  "log": "postgres.log",
+  "logSha256": "f3ea70fa839d031abd0497780e4af60d45cec6c28c2b7e5d9ea8001a7254c706",
+  "runtimeArtifacts": "target/postgres-check.SmOZtN",
+  "postgresVersion": "postgres (PostgreSQL) 17.11",
+  "postgresImage": "postgres@sha256:b0f9560a2de083e2cc7382e75f808c7381a32852a7ec49117deedb300e552b24",
+  "modulesGitTree": "1bd0a3d5755c5aaf390183f9005d4c13f53767ff",
+  "sourcePinSha256": "19f022d002f69292dec056eb0762b877438c47305cee6c176adf3e0f780e9146"
+}

@@ -1,7 +1,7 @@
 # Sanctity product requirements document
 
-Version 0.1 — draft for implementation planning\
-Updated 10 October 2026\
+Version 0.2 — draft for implementation planning and bounded console adoption\
+Updated 13 October 2026\
 Product owner, technical lead, scientific lead, and operator: to be assigned
 
 Sanctity is a BIDS-native neuroimaging repository built around exact scientific states, explainable transformations, and explicit authority. Its first product is a dependable Scala core that a laboratory can use to ingest, curate, query, share a bounded selection, and recover a scoped MRI collection.
@@ -61,7 +61,9 @@ One person may perform several roles. Roles are convenient action bundles; custo
 
 **Controlled pilot** adds a qualified MRI conversion profile, XNAT export/API migration, one restricted sharing profile, limited delegation, a bounded derivative-return demonstration, a Neurobagel projection fixture, performance qualification, and lifecycle/restore hardening.
 
-**Later expansion** adds the graphical interface, broader modalities and disclosure profiles, richer institutional identity administration, production federation, and selected execution backends including a production fMRIPrep workflow.
+**Console adoption** qualifies the implemented v4g release/curation/query/access console over the same HTTP contracts. It belongs to WP-09 and supplies curator-facing evidence for core alpha; its [adoption gates](implementation-plan.md#console-baseline-and-adoption) remain open. Broader pilot qualification is unchanged.
+
+**Later expansion** adds further graphical workflows, broader modalities and disclosure profiles, richer institutional identity administration, production federation, and selected execution backends including a production fMRIPrep workflow.
 
 | Capability | Core alpha | Controlled pilot | Later |
 | --- | --- | --- | --- |
@@ -75,7 +77,7 @@ One person may perform several roles. Roles are convenient action bundles; custo
 | XNAT | Qualified source-reference contract | Export and API routes | Further source variations |
 | Derivatives | Ordinary draft contract | One approved producer, separate destination | Production pipelines/schedulers |
 | Neurobagel | Projection contract | Compatible fixture | Operated production integration |
-| UI | Durable resources and HTTP/CLI | CLI/API | Graphical workflows |
+| UI | HTTP/CLI plus bounded console adoption under WP-09 | Qualified console workflows in curator rehearsal | Import, view, processing and operations graphical workflows |
 | Object storage | Adapter contract | Filesystem default | Object-store adapter as needed |
 
 The pilot excludes general arbitrary-code execution, automatic participant identity merging, arbitrary user-authored policy languages, unrestricted third-party plugins, global federated snapshots, generic anonymization guarantees, and multi-region availability. It also excludes treating BIDS acceptance as a guarantee of clinical or scientific validity beyond the qualified checks.
@@ -207,9 +209,9 @@ BIDS metadata applicability and precedence can span a dataset hierarchy. Sanctit
 | S-05 | A | Freeze exact releases and resolved membership for saved selections; bind pagination to that universe. Report changed authority rather than silently reducing a supposedly complete result. | PROOF-05; PROOF-12 |
 | S-06 | A | Distinguish absent, invalid, and typed values while retaining lexical form. Unsupported query operators fail explicitly; operational live views include observation context. | AT-05 |
 | S-07 | A | Separate physical index generations from scientific interpretation. Reindexing proves equivalence or requires a new interpretation; required indexes become visible with the release. | PROOF-03; PROOF-06 |
-| S-08 | A | Version content checks against exact input paths/digests/sizes; preserve observed facts separately from authored metadata. Failed checks prevent acceptance without changing historical evidence. Bounded DWI count/value/header and selected BOLD event/timing checks are implemented; broader modality checks remain open. | [DWI lifecycle proof](scientific-core.md#implemented-slice-dwi-content-consistency) |
+| S-08 | A | Version content checks against exact input paths/digests/sizes; preserve observed facts separately from authored metadata. Blocking check findings prevent acceptance without changing historical evidence. Bounded DWI/event checks, general MRI header observations, and phasediff/magnitude dependency checks are implemented; broader modality and scientific geometry qualification remain open. | [MRI lifecycle proof](scientific-core.md#implemented-slice-independent-mri-evidence-and-phase-difference-families) |
 | S-09 | A | Thread one explicit semantic context through parsing, classification, inheritance and queries. Bind registry descriptor, rule identities and coverage separately from authored BIDSVersion. Adopt changed interpretation through an explicit release; preserve old queries/assessments. | [context evolution proof](scientific-core.md#implemented-slice-explicit-semantic-context-and-profile-evolution) |
-| S-10 | A | Keep independent pinned examples and reviewed expectations; compare overlapping checks with a pinned official validator/schema. Record exclusions and unsupported semantics without claiming full conformance. | [independent corpus](../modules/app/src/test/resources/conformance/README.md) |
+| S-10 | A | Keep independent pinned examples and reviewed expectations; compare overlapping checks with a pinned official validator/schema. Record exclusions and unsupported semantics without claiming full conformance. | [metadata corpus](../modules/app/src/test/resources/conformance/README.md); [MRI corpus](../modules/app/src/test/resources/mri-conformance/README.md) |
 
 ### Views and materialization
 
@@ -260,13 +262,24 @@ XNAT documents separate scan-resource and image-assessor download paths. The pil
 | O-04 | A | Back up catalog and blobs coherently and restore representative releases/jobs; reconcile current access/lifecycle restrictions before serving. Production RPO/RTO qualification is due at pilot. | PROOF-22 |
 | O-05 | A | Expose actionable structured logs, operation metrics, audit events, queue age, storage/integrity status, and correlations without source secrets or unauthorized metadata. | AT-09 |
 | O-06 | P | Qualify schema/index upgrades and rollback/recovery procedure using a restored copy; unsupported old interpretations remain explicit rather than silently rewritten. | PROOF-03; PROOF-22 |
-| E-01 | P | An external approved producer obtains a bundle and returns a derivative through the ordinary draft API; interrupted collection resumes without an accepted partial derivative. | PROOF-15; PROOF-16 |
+| E-01 | P | An external approved producer obtains a bundle and returns a derivative through the ordinary draft API; interrupted collection resumes without an accepted partial derivative. The bounded header-QC profile now supplies executable application-level evidence; production recipe/sandbox and remote execution qualification remain open. | PROOF-15; PROOF-16; [bounded processing proof](scientific-core.md#implemented-slice-processing-inputs-and-derivative-return) |
 | E-02 | P | Produce one approved Neurobagel-compatible imaging/phenotypic fixture through supported export/query contracts, recording release/profile/generation and downstream tool acceptance. | PROOF-20; AT-11 |
-| E-03 | A | Provide CLI and versioned HTTP resources for drafts, findings, impact, acceptance, queries, exports, operations, and evidence. The later UI requires no alternate scientific write path. | AT-12 |
+| E-03 | A | Provide CLI and versioned HTTP resources for drafts, findings, impact, acceptance, queries, exports, operations, and evidence. The browser console uses these same contracts and requires no alternate scientific write path. Qualify its bounded workflows separately from the remaining API coverage. | AT-12; AT-13 |
 
-## 10. CLI and API experience
+## 10. CLI, API and console experience
 
 The CLI is the first curator interface and must be usable without SQL or storage-path knowledge. HTTP and CLI call the same application operations.
+
+The implemented browser console exposes the supported release, curation, query
+and access workflows over HTTP. Its adoption requires retained browser regressions,
+real backend contract evidence and a real screen-reader task pass. When moving a
+correction to the current head, restore the earlier draft only if the target file
+is unchanged from that draft's base; otherwise show current content and the earlier
+edit for explicit reapplication. A fresh preview and ordinary acceptance checks
+still apply. Findings must make blocking/new, no longer reported, not evaluated and
+unchanged outcomes distinguishable. Responsive layouts must preserve focus and
+in-progress inputs. The [console baseline](implementation-plan.md#console-baseline-and-adoption)
+records the regression obligations and deferred enhancements.
 
 The API must expose durable, addressable resources for datasets/releases, drafts, preparation candidates, assessments/findings, source inventories, mapping decisions, saved selections, prepared views, grants, runs, materializations, and operations. Large result sets are paged; byte transfer and long-running work are streamed or represented by operation handles.
 
@@ -329,6 +342,7 @@ The existing PROOF-01 through PROOF-24 remain the foundation. The scenarios belo
 | AT-10 | Concurrent collector, active export, abandoned draft, retained old release, withdrawn shared blob | Active roots protected; authorized collection respects all references; withdrawal semantics are explicit even when bytes remain for another authorized reference |
 | AT-11 | Supported Neurobagel fixture with approved phenotypic annotations and imaging availability | Selected downstream version accepts the output; unsupported mappings are findings; no private local path or source identifier is disclosed |
 | AT-12 | Curator completes native import/correction and pilot mapping through CLI/API | No direct SQL, manual blob editing, or private adapter API needed; documents and operation receipts explain each step |
+| AT-13 | Curator completes the supported console tasks at desktop and phone widths, including a concurrent sidecar correction, plus a real screen-reader exercise | No silent loss of a colleague's accepted edit; truthful preview and backend inheritance; preserved focus/inputs, usable error and table announcements; retained browser, PostgreSQL and manual evidence under CON-01–04 |
 
 Neurobagel's imaging preparation contract uses a BIDS metadata TSV with subject/session/suffix/path fields and supports generation through its CLI. The pilot must qualify the selected tool version against an approved view and appropriately annotated phenotypic inputs. [Neurobagel imaging preparation](https://neurobagel.org/user_guide/preparing_imaging_data/). Production federation is outside this acceptance scenario.
 
@@ -382,10 +396,30 @@ The product owner owns outcomes/scope, the technical lead owns architecture and 
 
 The baseline now includes bounded implementations of the four requested build-out areas: correlated scientific queries and frozen selections; MRI disclosure views accepted through the common lifecycle; durable import/delivery leases and coordinated recovery; and initial DICOM/XNAT adapters. Action-specific dataset and fixed-release grants establish their authority boundary.
 
-The current acceptance evidence is 217 passing Sanctity tests, 187 bids4s JVM tests and 168 Scala.js tests, compiled library documentation, independent-process/crash recovery, a real catalog/blob restore that preserves a later revocation, a real pinned dcm2niix synthetic conversion with an independent voxel/world-coordinate check, XNAT API/export agreement including loopback HTTP, and authenticated repository HTTP curation/sharing/revocation with private operator credential-file handling. [Run instructions](../README.md) and [implementation evidence](implementation-plan.md) state the exact profiles and limitations.
+The current acceptance evidence, exact test counts and reproduction artifacts are maintained in the [implementation evidence](implementation-plan.md#verification-record). It includes shared reference/PostgreSQL lifecycle contracts, independent scientific fixtures, process/crash recovery, coordinated restore preserving revocation, DICOM/XNAT adapter evidence and authenticated repository HTTP checks. [Run instructions](../README.md) state the supported profiles and limitations.
 
 The [authenticated HTTP profile](http-api.md) now exposes exact releases, metadata, corrections, acceptance, grants, frozen selections and file delivery. Its opaque API credentials authenticate stable principals; this does not complete institutional login or membership requirements. Recovery invalidates all restored credentials, and operators provision fresh ones after authority reconciliation. E-03 is partially implemented; remote ingestion, view preparation and operational/evidence interfaces remain open.
 
 The immediate engineering priority is now the [scientific core](scientific-core.md). Explicit B0 fieldmap groups and IntendedFor relationships are recorded with field-origin evidence, versioned interpretation identity, bounded closure and correction impact. Missing references block new acceptance; old interpretation identities remain stable. MRI subset planning refuses to drop declared inputs from other sessions. Inherited DWI gradient and BOLD event companions now participate in typed, versioned evidence and correction previews. New interpretations preserve earlier identities through explicit encoding versions. DWI gradient/header consistency now records immutable check evidence, blocks mismatched corrections and preserves historical assessments. Strict task-event content and explicit timing context now use the same ContentCheck contract. The first coherent MRI subset profile now materializes supported dependencies, projects tables, rewrites references and persists exact transformation receipts, with export/re-import proofs. The first bounded scientific file-change profile now handles explicit moves/removals, reference repair proposals, before/after dependency scope and stale-plan conflicts. Explicit registry/rule context, bound interpretation evidence, independent conformance fixtures and explicit profile evolution are now implemented within the documented partial coverage; broader change/subset profiles and institutional-login expansion remain separate work.
 
 This advances portions of K-07/K-08, S-02/S-03/S-04/S-05/S-06, V-01/V-03/V-04/V-05, A-02/A-03/A-05, I-01/I-02/I-04/I-05/I-06/I-07, and O-01/O-02/O-04. It does not mark those broad requirements or the production gates complete. Institutional identity/membership/delegation, broader HTTP workflows, general association closure, representative scientific qualification, full migration reconciliation, withdrawal, metrics and performance qualification remain open. Actual pilot data, acceptance owners, deployment and staffing remain explicit inputs.
+
+
+The processing foundation now additionally includes source-bound returned-value
+checks, versioned derivative observations with exact-input coverage queries,
+private processing bundles governed by current source access, durable local run
+states and repeated derivative releases against an explicit base. These advance
+scientific and execution requirements within the bounded header-QC profile.
+Production analysis, arbitrary-code isolation, remote run APIs, broad derivative
+formats, complete voxel-payload qualification and scale targets remain open.
+
+### Temporal image-statistics implementation evidence (12 October 2026)
+
+The scientific core now supports an opt-in full scalar-payload profile and a
+second processing recipe: temporal mean and population-SD images. Both header QC
+and temporal statistics use the same durable runner, private input authority,
+collection and acceptance contracts. Maps have source-grid checks, queryable
+summaries and exact export/re-import behavior. Qualification covers a bounded
+repository-local derivative profile; general pipeline/scanner qualification,
+hermetic execution, production scale and broader derivative vocabularies remain
+open. See [contracts and evidence](scientific-core.md#implemented-slice-temporal-image-statistics).

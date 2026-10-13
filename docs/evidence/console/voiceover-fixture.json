@@ -1,0 +1,21 @@
+{
+  "date": "2026-10-13T15:47:53.866Z",
+  "browser": "131.0.6778.33",
+  "fixture": "ready",
+  "text": {
+    "TaskName": "nback",
+    "RepetitionTime": 1.5,
+    "EchoTime": 0.03,
+    "FlipAngle": 60,
+    "PhaseEncodingDirection": "j-",
+    "SliceEncodingDirection": "k"
+  },
+  "earlierEdit": 1,
+  "errors": [],
+  "passed": true,
+  "sourceSha256": {
+    "tests/console/serve.js": "9810e1adc51990ab6a371f44e7ca96b24a6474a602f082fb581f0fa98f5deb74",
+    "tests/console/voiceover-conflict.js": "47e028fc8d3c39f3e6d19fe00a72595a327778b26987cde22d582cc5cf0e8523"
+  },
+  "scope": "Automated setup smoke check only. No VoiceOver run."
+}

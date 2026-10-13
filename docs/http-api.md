@@ -2,6 +2,70 @@
 
 This slice makes the existing release and curation contracts available through an authenticated HTTP boundary. It includes a loopback http4s server, operator commands and an [OpenAPI 3.1 contract](http-api.openapi.json). Institutional login, memberships and delegated execution credentials remain separate work.
 
+The server also serves the browser console at `/`. Connect with an operator-issued
+token and dataset ID; its release, correction, query and access screens use the
+same authenticated `/v1` routes. `/?demo` uses synthetic browser fixtures. The
+static shell/assets are public; repository data and mutations require the API's
+current authority checks. See the [v4g baseline and adoption gates](implementation-plan.md#console-baseline-and-adoption)
+for regression contracts, backend proof and remaining accessibility qualification.
+
+## Console checks and VoiceOver exercise
+
+Run `bash scripts/check-console.sh` for the recovered v4g browser gate and the
+seven-failure replay against the retained v4f build. It installs locked test-only
+dependencies, builds specimens from current UI sources and writes logs plus a
+source-hashed receipt under `target/console-check.*/`. The original
+[review evidence](evidence/console/recovery-manifest.json) remains unchanged.
+These checks use synthetic fixtures; the PostgreSQL runner separately executes
+ConsoleSuite against the real HTTP/backend contracts.
+
+For the real screen-reader gate, run `node tests/console/serve.js` and open
+`http://127.0.0.1:8093/?demo` in Safari. It serves only synthetic demo assets on
+loopback. Use Cmd-F5 to enable VoiceOver; VO means Ctrl-Option. VO-Right/Left reads
+items, Tab moves among controls, VO-U opens the rotor, and VO-Space activates.
+The [original script](evidence/console/original/voiceover-script.md) is retained;
+the following tasks consolidate the reviewer's five workflows and add conflict
+recovery. Record both desktop (1440×900) and narrow (390×844, where supported)
+results. A resized desktop browser is not an iOS VoiceOver qualification.
+
+1. **Inspect admission and metadata.** Submit an empty token and confirm the error
+   is announced; then use any demo token and the prefilled dataset. Read the
+   Admitted status, admission policy and Assessment findings. Open the file tree
+   to `sub-04/func/sub-04_task-rest_bold.nii.gz`: effective TR is 1.5 s and header
+   spacing is 2 s. Check folder expanded/collapsed state, labels/units, inspector
+   navigation, and filter focus/text while resizing.
+2. **Correct the mismatch.** Choose Add sidecar and change the path to
+   `sub-04/sub-04_task-rest_bold.json`. Set `{"RepetitionTime":2.0}`. Submit once
+   without a reason to check error announcement/focus, then give a reason.
+   Review the one affected file, the resolved mismatch, diff and content table;
+   accept, open the new release and verify TR 2 s with the subject-level origin.
+   Cell labels should not be spoken twice. In a fresh demo, try a negative TR
+   and confirm blocking findings are encountered first and acceptance is disabled.
+3. **Inspect fieldmaps.** Use Relationships to identify the AP fieldmap correcting
+   a run; inspect the PA fieldmap and its unused status. Confirm link direction,
+   endpoint names and disclosures can be understood without sight.
+4. **Freeze a query.** In Query, set participant age at least `30`, freeze the
+   selection, read its fixed release and result paths. Check numeric input labels,
+   readable result tables and focus after navigation.
+5. **Grant and revoke.** In Access, use synthetic recipient
+   `6c1d8e2a-4b7f-4a90-b3e5-1f2d7c9a0e64`, fixed-release scope and both read actions.
+   Create a grant; confirm announcement and focus on its Revoke control. Start
+   revoking, cancel with Escape, then confirm a second attempt. Confirm the result
+   is announced and actions are read in form order.
+6. **Recover a concurrent correction.** Open
+   `http://127.0.0.1:8093/conflict.html`. This test-only fixture prepares an EchoTime
+   0.031 draft after a synthetic colleague accepts FlipAngle 60. Follow Correct
+   the current head using VoiceOver. Read the changed-file warning and Your
+   earlier edit disclosure. Current content must retain FlipAngle 60 and EchoTime
+   0.03. Reapply EchoTime 0.031, preview and accept; check both values survive.
+
+Report tester, date, OS/Safari/VoiceOver versions, viewport method and dimensions,
+the source hashes printed by the fixture server, and pass/fail/not-run for each
+task at each layout. Include exact spoken wording for missing/duplicated labels,
+focus loss, unannounced errors or confusing outcomes. Any unsupported narrow
+layout remains not run. Record the outcome in the console adoption receipt;
+automated axe/keyboard results do not supply this human result.
+
 ## Credential and authority contract
 
 An operator issues a random 256-bit opaque credential for an existing principal, with a label and a lifetime from one second to 30 days. PostgreSQL retains only its SHA-256 digest, principal, expiry, revocation state and audit events. SHA-256 is suitable here because the input is a generated high-entropy secret, not a human password. Several credentials can authenticate the same stable principal; rotating them changes neither attribution nor custody.
@@ -48,7 +112,7 @@ Dataset creation, local import, credential administration and recovery are trust
 
 ## HTTP workflows
 
-Every route requires authentication. There are no raw blob-digest, local-filesystem, arbitrary-manifest, arbitrary-activity or arbitrary-interpretation endpoints.
+Every `/v1` route requires authentication. There are no raw blob-digest, local-filesystem, arbitrary-manifest, arbitrary-activity or arbitrary-interpretation endpoints.
 
 | Method and path | Result |
 | --- | --- |
