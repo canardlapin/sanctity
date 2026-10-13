@@ -521,7 +521,7 @@
     const [meta, text] = await Promise.allSettled([k === 'json' ? Promise.resolve(null) : getMetadata(d, r, p), isText ? getFileText(d, r, p) : Promise.resolve(null)]);
     if (my !== generation) return;
     const section = (title, ...body) => h('section', { class: 'section' }, h('h3', { class: 'overline' }, title), ...body);
-    if (findings.length) box.append(section('Findings', findingList(findings, false)));
+    if (findings.length) box.append(section('Findings', findingList(findings, false, null, null, null, keyFacts(rel.assessment.checks))));
     const noMeta = meta.status === 'rejected' && meta.reason instanceof ApiError && meta.reason.code === 'not_found';
     if (k !== 'json' && !(noMeta && k !== 'nii')) {
       const m = meta.value;
@@ -569,21 +569,49 @@
   const findingKey = f => f.code + '|' + f.severity + '|' + (f.path || '') + '|' + f.message;
   // Row/column positions vary per occurrence; the rest of the message is the finding's meaning.
   const messageShape = m => m.replace(/\brow \d+/g, 'row …').replace(/\bcolumn \d+/g, 'column …');
-  function findingList(findings, withPath = true, open, tags, why) {
+  // The positions a grouped message elides, e.g. "rows 50, 51"; a position shared by every occurrence stays in the message.
+  const POSITIONS = [['row', 'rows'], ['column', 'columns']];
+  const positionsOf = (fs, word) => [...new Set(fs.map(x => (new RegExp('\\b' + word + ' (\\d+)').exec(x.message) || [])[1]).filter(Boolean))].sort((a, b) => a - b);
+  const listPositions = ns => ns.slice(0, 12).join(', ') + (ns.length > 12 ? ' and ' + (ns.length - 12) + ' more' : '');
+  function groupMessage(fs) {
+    let m = fs[0].message;
+    for (const [one, many] of POSITIONS) if (positionsOf(fs, one).length > 1) m = m.replace(new RegExp('\\b' + one + ' \\d+', 'g'), many + ' ' + listPositions(positionsOf(fs, one)));
+    return m;
+  }
+  // Findings whose meaning is a comparison: the recorded facts that hold the compared values.
+  const KEY_FACTS = {
+    MriRepetitionTimeMismatch: [['Authored RepetitionTime', 'timingMetadata.RepetitionTime.value', 'RepetitionTime'], ['Header volume spacing', 'temporalSpacingSeconds', 'RepetitionTime']],
+  };
+  // detail(f) -> list of [label, value] for one finding, from the check that reported it.
+  const keyFacts = checks => f => {
+    const spec = KEY_FACTS[f.code];
+    const c = spec && checks.find(k => k.target === f.path && k.findings.some(x => x.code === f.code));
+    if (!c) return null;
+    const x = flatFacts(c.facts);
+    const got = spec.filter(([, k]) => k in x).map(([label, k, unit]) => [label, x[k], unit]);
+    return got.length ? got : null;
+  };
+  function findingList(findings, withPath = true, open, tags, why, detail) {
     const groups = new Map();
     for (const f of findings) { const k = f.code + '|' + f.severity + '|' + messageShape(f.message) + '|' + (tags ? tags(f) : ''); groups.set(k, [...(groups.get(k) || []), f]); }
     return h('ul', { class: 'findings' }, [...groups.values()].map(fs => {
-      const f = fs[0], tag = tags ? tags(f) : null, same = fs.every(x => x.message === f.message);
-      const paths = new Map(); fs.forEach(x => x.path && paths.set(x.path, (paths.get(x.path) || 0) + 1));
-      const where = [...paths].map(([p, n]) => h('span', { class: 'where-row' },
+      const f = fs[0], tag = tags ? tags(f) : null;
+      const paths = new Map(); fs.forEach(x => x.path && paths.set(x.path, [...(paths.get(x.path) || []), x]));
+      const many = paths.size > 1, varying = POSITIONS.filter(([one]) => positionsOf(fs, one).length > 1);
+      // Several files: positions vary by file, so each file lists its own.
+      const at = xs => varying.length ? varying.map(([one, more]) => (positionsOf(xs, one).length > 1 ? more : one) + ' ' + listPositions(positionsOf(xs, one))).join(' · ')
+        : xs.length > 1 ? plural(xs.length, 'occurrence') : null;
+      const where = [...paths].map(([p, xs]) => h('span', { class: 'where-row' },
         open ? h('button', { class: 'where linkish', type: 'button', onclick: () => open(p) }, pathText(p)) : h('span', { class: 'where' }, pathText(p)),
-        n > 1 ? h('span', { class: 'where-n' }, '× ' + n) : null));
+        many && at(xs) ? h('span', { class: 'where-n' }, at(xs)) : null));
+      const facts = !many && fs.length === 1 && detail ? detail(f) : null;
       return h('li', { class: 'finding ' + f.severity },
         h('span', { class: 'sev', title: f.severity }, f.severity === 'Error' ? I.err() : I.warn()),
         h('div', { class: 'stack s4' },
-          h('div', { class: 'row' }, h('span', { class: 'code' }, f.code), fs.length > 1 ? h('span', { class: 'count' }, '× ' + fs.length) : null,
+          h('div', { class: 'row' }, h('span', { class: 'code' }, f.code), fs.length > 1 ? h('span', { class: 'count' }, plural(fs.length, 'occurrence')) : null,
             h('span', { class: 'sev-label' }, f.severity === 'Error' ? 'Blocks acceptance' : 'Recorded warning'), tag ? h('span', { class: 'tag delta ' + tag.toLowerCase().replace(/\s+/g, '-') }, tag) : null),
-          h('p', { class: 'msg' }, same ? f.message : messageShape(f.message)),
+          h('p', { class: 'msg' }, many ? groupMessage(fs).replace(/\b(rows|columns) [\d, ]+( and \d+ more)?/g, '$1 listed by file') : groupMessage(fs)),
+          facts ? h('dl', { class: 'keyfacts' }, facts.map(([k, v, unit]) => h('div', {}, h('dt', {}, k), h('dd', {}, valueNode(unit, v))))) : null,
           why && why(f) ? h('p', { class: 'why' }, why(f)) : null,
           !withPath || !where.length ? null : where.length > 4
             ? h('details', { class: 'where-more' }, h('summary', {}, 'Show ' + plural(where.length, 'file')), h('div', { class: 'stack s2' }, where))
@@ -604,7 +632,7 @@
             h('div', { class: errors.length ? 'err' : '' }, h('b', {}, errors.length), h('span', {}, errors.length === 1 ? 'error' : 'errors')),
             h('div', { class: warnings.length ? 'warn' : '' }, h('b', {}, warnings.length), h('span', {}, warnings.length === 1 ? 'warning' : 'warnings')),
             h('div', {}, h('b', {}, a.checks.length), h('span', {}, 'content checks')))),
-        a.findings.length ? findingList([...errors, ...warnings], true, open) : h('p', { class: 'card empty' }, 'No findings. Every assessed rule passed.')),
+        a.findings.length ? findingList([...errors, ...warnings], true, open, null, null, keyFacts(a.checks)) : h('p', { class: 'card empty' }, 'No findings. Every assessed rule passed.')),
       h('section', { class: 'stack' }, h('h2', { class: 'overline' }, 'Content checks'),
         a.checks.length ? checksList(a.checks, open) :
           h('p', { class: 'card empty' }, 'No content checks recorded.')));
@@ -625,13 +653,14 @@
         h('p', { class: 'rule' }, c.rule),
         facts.length ? h('dl', { class: 'factlist' }, facts.map(([k, v]) => h('div', {}, h('dt', {}, k), h('dd', {}, show(v))))) : null));
   }
-  // One disclosure per rule family. Families whose checks report findings open with those checks first.
+  // One disclosure per rule family, checks with findings first. Families with blocking errors start open; warnings stay folded,
+  // since real releases often carry a warning on nearly every check.
   function checksList(checks, open) {
     const families = new Map();
     checks.forEach(c => { const f = c.rule.split('+')[0]; families.set(f, [...(families.get(f) || []), c]); });
     return h('div', { class: 'stack s10' }, [...families].map(([family, cs]) => {
       const flagged = cs.filter(c => c.findings.length), err = flagged.some(c => c.findings.some(f => f.severity === 'Error'));
-      return h('details', { class: 'card checks-ok' },
+      return h('details', { class: 'card checks-ok', open: err },
         h('summary', {}, h('span', { class: 'stack s2 grow' }, h('span', { class: 'mono small strong' }, family), h('span', { class: 'small muted' }, plural(cs.length, 'check'))),
           flagged.length ? h('span', { class: 'chip ' + (err ? 'err' : 'warn') }, flagged.length + ' with findings') : h('span', { class: 'chip ok' }, I.check(), 'All consistent')),
         h('ul', { class: 'checks' }, [...flagged, ...cs.filter(c => !c.findings.length)].map(c => checkItem(c, open))));
@@ -680,7 +709,9 @@
     let c = state.correction;
     if (!c || c.base !== d + '/' + r || (want && c.path !== want)) {
       const carried = c && !c.receipt ? c.reason : '';
-      c = state.correction = { key: uuid(), base: d + '/' + r, path: want, original: null, text: '', reason: carried, preview: null, receipt: null };
+      // Moving to another release for the same file (e.g. "Correct the current head" after a conflict) keeps the edited content.
+      const draft = c && !c.receipt && c.base !== d + '/' + r && c.path === want && c.text ? { text: c.text, carriedFrom: c.base.split('/')[1] } : { text: '' };
+      c = state.correction = { key: uuid(), base: d + '/' + r, path: want, original: null, reason: carried, preview: null, receipt: null, ...draft };
     }
     let rel, headId;
     try { [rel, headId] = await Promise.all([getRelease(d, r), getHead(d).catch(() => null)]); } catch (e) { if (my === generation) failure(ctx, 'release', e, () => render()); return; }
@@ -711,6 +742,7 @@
   const sidecarPathProblem = (p, files) => {
     if (!p) return 'Give the new sidecar a path, such as sub-02/func/sub-02_task-nback_run-1_bold.json.';
     if (!/\.json$/.test(p)) return 'Sidecar paths end in .json.';
+    if (/(^|\/)\.[^/]*$/.test(p)) return 'Name the sidecar after the files it applies to, such as sub-02_task-nback_bold.json.';
     if (/^\/|\/\/|(^|\/)\.\.?(\/|$)|\\/.test(p)) return 'Use a path relative to the dataset root, without “.” or “..” segments.';
     if (files.includes(p)) return 'That file already exists. Choose it from the list instead.';
     return null;
@@ -772,6 +804,7 @@
           h('span', { class: 'hint', id: 'c-text-hint' }, c.newMode ? 'Only the fields you set here override inherited values.' : 'The file is replaced as a whole. Values inherited by other files are recomputed in the preview.')),
         h('div', { class: 'field' }, h('label', { for: 'c-reason' }, 'Reason'),
           reason = h('input', { class: 'input', id: 'c-reason', maxlength: '2000', value: c.reason, placeholder: 'e.g. Protocol sheet gives TR = 1.8 s', 'aria-describedby': 'c-errors', oninput: () => { c.reason = reason.value; reason.removeAttribute('aria-invalid'); } })),
+        c.carriedFrom ? h('p', { class: 'notice warn' }, 'This content was written against release ' + short(c.carriedFrom) + '. It replaces the file in this release as a whole; review the preview’s line changes.') : null,
         err = h('div', { class: 'stack', id: 'c-errors' }),
         h('div', { class: 'row end' },
           h('a', { class: 'btn ghost', href: relHash(d, r, c.path && !c.newMode ? { path: c.path } : null) }, 'Cancel'),
@@ -878,8 +911,11 @@
               h('dt', { class: 'k' }, f.name),
               h('dd', { class: 'before' }, h('span', { class: 'sr-only' }, 'before: '), val(f.name, f.before)),
               h('dd', { class: 'to', 'aria-hidden': 'true' }, I.arrow()),
-              h('dd', { class: 'after' }, h('span', { class: 'sr-only' }, 'after: '), val(f.name, f.after))))))))
-            : h('p', { class: 'muted' }, 'No effective metadata changes.'),
+              h('dd', { class: 'after' }, h('span', { class: 'sr-only' }, 'after: '), val(f.name, f.after),
+                f.before && f.after && JSON.stringify(f.before.value) === JSON.stringify(f.after.value) ? h('span', { class: 'tag' }, 'Same value, new source') : null)))))))
+            : p.contentChanges.some(x => !x.before && x.path.endsWith('.json'))
+              ? h('p', { class: 'notice warn' }, 'The new sidecar changes no file’s effective metadata. BIDS inheritance applies it only to files in its directory or below whose entities and suffix it matches.')
+              : h('p', { class: 'muted' }, 'No effective metadata changes.'),
           h('p', { class: 'hint' }, 'Only files whose effective values change are listed. Files that set these fields in their own sidecars keep their values.')),
         diff ? h('section', { class: 'card pad stack s12' },
           h('div', { class: 'row between' }, h('h2', {}, 'Sidecar change'), h('span', { class: 'mono small muted' }, c.path)),
@@ -913,8 +949,8 @@
           btn = h('button', { class: 'btn primary', type: 'button', fk: 'accept', disabled: blocked, onclick: accept }, I.check(), h('span', {}, 'Accept as new release')),
           h('button', { class: 'btn ghost', type: 'button', onclick: () => { c.preview = null; c.key = uuid(); focusKey = 'c-text'; render(); } }, 'Back to edit')),
         h('p', { class: 'small muted' }, blocked ? 'Errors block acceptance. Edit the sidecar and prepare again.' : 'Requires accept authority. Retrying with the same key is safe.'),
-        a.findings.length ? h('div', { class: 'stack s8' }, h('h3', { class: 'overline' }, 'Findings after this change'), findingList(a.findings, true, null, tags, f => tags && tags(f) === 'New' ? cause(f) : null)) : h('p', { class: 'small muted' }, 'No findings.'),
-        resolved.length ? h('div', { class: 'stack s8' }, h('h3', { class: 'overline' }, 'No longer reported'), findingList(resolved, true, null, outcome, cause)) : null));
+        resolved.length ? h('div', { class: 'stack s8' }, h('h3', { class: 'overline' }, 'No longer reported'), findingList(resolved, true, null, outcome, cause)) : null,
+        a.findings.length ? h('div', { class: 'stack s8' }, h('h3', { class: 'overline' }, 'Findings after this change'), findingList(a.findings, true, null, tags, f => tags && tags(f) === 'New' ? cause(f) : null, keyFacts(a.checks))) : h('p', { class: 'small muted' }, 'No findings.')));
   }
 
   function receiptCard(d, c) {
@@ -1037,6 +1073,7 @@
     const queryHref = '#/d/' + enc(d) + '/query' + (ctx.release ? '?release=' + enc(ctx.release) : '');
     const nav = o => '#/d/' + enc(d) + '/selections/' + enc(id) + '?' + new URLSearchParams({ ...(ctx.release ? { release: ctx.release } : {}), offset: o });
     const participants = new Set(s.hits.map(x => x.participant));
+    const sessions = s.hits.some(x => x.session);   // a session column only when the dataset has sessions
     page(ctx, 'query',
       h('div', { class: 'page-head' }, h('div', { class: 'stack s10' },
         h('div', { class: 'crumbs' }, h('a', { href: queryHref }, 'Query'), I.chev(), h('span', {}, 'Selection')),
@@ -1046,13 +1083,14 @@
         (state.selectionQueries || {})[s.id] ? h('p', { class: 'small muted' }, 'Frozen from: ', state.selectionQueries[s.id].map((t, i) => [i ? ' · ' : '', h('span', { class: 'mono' }, t)])) : null),
         h('div', { class: 'row head-actions' }, h('a', { class: 'btn', href: queryHref }, 'New query'))),
       h('section', { class: 'card' },
-        s.hits.length ? h('div', { class: 'scroll-x' }, h('table', { class: 'data' },
+        s.hits.length ? h('div', { class: 'scroll-x' }, h('table', { class: 'data stackable' },
           h('caption', { class: 'sr-only' }, 'Files in selection ' + short(s.id)),
-          h('thead', {}, h('tr', {}, h('th', {}, 'Participant'), h('th', {}, 'Session'), h('th', {}, 'File'), h('th', {}, 'Release'))),
+          h('thead', {}, h('tr', {}, h('th', {}, 'Participant'), sessions ? h('th', {}, 'Session') : null, h('th', {}, 'File'), h('th', {}, 'Release'))),
           h('tbody', {}, s.hits.map(x => h('tr', {},
-            h('td', { class: 'mono' }, 'sub-' + x.participant), h('td', { class: 'mono muted' }, x.session ? 'ses-' + x.session : '—'),
-            h('td', {}, h('a', { class: 'mono', href: relHash(x.ref.dataset, x.ref.release, { path: x.path }) }, pathText(x.path))),
-            h('td', {}, h('span', { class: 'mono small muted' }, short(x.ref.release))))))))
+            h('td', { class: 'mono', 'data-label': 'Participant' }, 'sub-' + x.participant),
+            sessions ? h('td', { class: 'mono muted', 'data-label': 'Session' }, x.session ? 'ses-' + x.session : '—') : null,
+            h('td', { class: 'wide', 'data-label': 'File' }, h('a', { class: 'mono', href: relHash(x.ref.dataset, x.ref.release, { path: x.path }) }, pathText(x.path))),
+            h('td', { 'data-label': 'Release' }, h('span', { class: 'mono small muted' }, short(x.ref.release))))))))
           : offset > 0 && s.total > 0 ? h('div', { class: 'empty stack' }, h('p', {}, 'This page is past the end of the selection.'), h('a', { class: 'btn sm', href: nav(0) }, 'First page'))
           : h('p', { class: 'empty' }, 'No files matched. The selection is still frozen and can be cited.'),
         s.total > limit && offset < s.total ? h('div', { class: 'pager' }, h('span', { class: 'small muted' }, 'Showing ' + (offset + 1) + '–' + Math.min(offset + limit, s.total) + ' of ' + s.total),
@@ -1080,7 +1118,7 @@
     const drawActions = () => actionsBox.replaceChildren(...ACTIONS.map(([k, label, help]) => {
       const locked = form.scope === 'release' && !READ_ONLY.has(k);
       if (locked) form.chosen.delete(k);
-      return h('label', { class: 'action' + (locked ? ' locked' : '') }, h('input', { type: 'checkbox', id: 'act-' + k, checked: form.chosen.has(k), disabled: locked, onchange: ev => ev.target.checked ? form.chosen.add(k) : form.chosen.delete(k) }),
+      return h('label', { class: 'action' + (locked ? ' locked' : '') }, h('input', { type: 'checkbox', id: 'act-' + k, checked: form.chosen.has(k), disabled: locked, onchange: ev => { ev.target.checked ? form.chosen.add(k) : form.chosen.delete(k); if (form.chosen.size) actionsBox.closest('fieldset').removeAttribute('aria-describedby'); } }),
         h('span', { class: 'stack s2' }, h('b', {}, label), h('span', { class: 'hint' }, locked ? 'Release grants permit reading only.' : help)));
     }));
     drawActions();
@@ -1089,7 +1127,7 @@
       ev.preventDefault(); err.replaceChildren();
       const who = recipient.value.trim();
       if (!UUID.test(who)) { err.append(h('p', { class: 'notice err', role: 'alert', id: 'g-err' }, 'The recipient must be a principal UUID.')); recipient.setAttribute('aria-invalid', 'true'); recipient.setAttribute('aria-describedby', 'g-err'); recipient.focus(); return; }
-      if (!form.chosen.size) { err.append(h('p', { class: 'notice err', role: 'alert' }, 'Choose at least one action.')); return; }
+      if (!form.chosen.size) { err.append(h('p', { class: 'notice err', role: 'alert', id: 'g-act-err' }, 'Choose at least one action.')); actionsBox.closest('fieldset').setAttribute('aria-describedby', 'g-act-err'); actionsBox.querySelector('input:not(:disabled)').focus(); return; }
       if (state.granting) return;
       state.granting = true;
       const owner = state.principal, my = generation;
@@ -1147,23 +1185,23 @@
           h('button', { class: 'btn primary', type: 'submit' }, 'Create grant')),
         h('div', { class: 'stack s18' },
           h('section', { class: 'card' }, h('div', { class: 'pad head-pad' }, h('h2', { tabindex: '-1', fk: 'grants-head' }, 'Granted in this session')),
-            grants.length ? h('div', { class: 'scroll-x' }, h('table', { class: 'data' }, h('thead', {}, h('tr', {}, h('th', {}, 'Grant'), h('th', {}, 'Recipient'), h('th', {}, 'Scope'), h('th', {}, 'Actions'), h('th', {}, h('span', { class: 'sr-only' }, 'Revoke')))),
-              h('tbody', {}, grants.map(g => h('tr', {}, h('td', {}, hashChip(g.id, 'grant id')), h('td', {}, g.recipient ? hashChip(g.recipient, 'recipient') : h('span', { class: 'muted small' }, 'by id')), h('td', { class: 'small' }, g.release ? 'Release ' + short(g.release) : g.recipient ? 'Dataset' : 'Unknown'),
-                h('td', { class: 'small' }, g.revokedAt && !g.actions.length ? '—' : h('ul', { class: 'plain-list' }, g.actions.map(x => h('li', {}, (ACTIONS.find(a => a[0] === x) || [x, x])[1])))),
-                h('td', { class: 'num actions-cell' }, g.revokedAt ? h('span', { class: 'chip', title: 'Recorded by this browser at ' + g.revokedAt }, 'Revoked ' + when(g.revokedAt))
+            grants.length ? h('div', { class: 'scroll-x' }, h('table', { class: 'data stackable' }, h('thead', {}, h('tr', {}, h('th', {}, 'Grant'), h('th', {}, 'Recipient'), h('th', {}, 'Scope'), h('th', {}, 'Actions'), h('th', {}, h('span', { class: 'sr-only' }, 'Revoke')))),
+              h('tbody', {}, grants.map(g => h('tr', {}, h('td', { 'data-label': 'Grant' }, hashChip(g.id, 'grant id')), h('td', { 'data-label': 'Recipient' }, g.recipient ? hashChip(g.recipient, 'recipient') : h('span', { class: 'muted small' }, 'by id')), h('td', { class: 'small', 'data-label': 'Scope' }, g.release ? 'Release ' + short(g.release) : g.recipient ? 'Dataset' : 'Unknown'),
+                h('td', { class: 'small', 'data-label': 'Actions' }, g.revokedAt && !g.actions.length ? '—' : h('ul', { class: 'plain-list' }, g.actions.map(x => h('li', {}, (ACTIONS.find(a => a[0] === x) || [x, x])[1])))),
+                h('td', { class: 'num actions-cell wide' }, g.revokedAt ? h('span', { class: 'chip', title: 'Recorded by this browser at ' + g.revokedAt }, 'Revoked ' + when(g.revokedAt))
                   : state.revoking === g.id
                   ? h('div', { class: 'row nowrap end' },
                       h('button', { class: 'btn sm danger confirm', type: 'button', fk: 'revoke:' + g.id, onclick: () => revoke(g.id, tableErr) }, 'Confirm revoke'),
                       h('button', { class: 'btn sm', type: 'button', fk: 'cancel:' + g.id, onclick: cancelRevoke }, 'Cancel'))
-                  : h('button', { class: 'btn sm danger', type: 'button', fk: 'grant:' + g.id, onclick: () => revoke(g.id, tableErr) }, 'Revoke')))))))
+                  : h('button', { class: 'btn sm danger', type: 'button', fk: 'grant:' + g.id, 'aria-label': 'Revoke grant ' + short(g.id), onclick: () => revoke(g.id, tableErr) }, 'Revoke')))))))
               : h('p', { class: 'pad muted small' }, 'Grants you create here are listed until you sign out. The API does not list existing grants, so copy a grant id if you may need to revoke it later.'),
             tableErr),
           h('form', { class: 'card pad stack', onsubmit: ev => { ev.preventDefault(); const v = revokeInput.value.trim(); if (UUID.test(v)) revoke(v, revokeErr); else { revokeInput.setAttribute('aria-invalid', 'true'); revokeErr.replaceChildren(h('p', { class: 'notice err', role: 'alert' }, 'Grant identifiers are UUIDs.')); revokeInput.focus(); } }, novalidate: true },
             h('h2', {}, 'Revoke by identifier'),
-            h('div', { class: 'row nowrap' }, revokeInput = h('input', { class: 'input mono', id: 'revoke-id', fk: 'revoke-id', value: pendingById ? state.revoking : state.revokeInput || '', oninput: ev => { state.revokeInput = ev.target.value; ev.target.removeAttribute('aria-invalid'); }, placeholder: 'Grant id', 'aria-label': 'Grant id to revoke' }),
+            h('div', { class: 'row nowrap' }, revokeInput = h('input', { class: 'input mono', id: 'revoke-id', fk: 'revoke-id', value: pendingById ? state.revoking : state.revokeInput || '', oninput: ev => { state.revokeInput = ev.target.value; ev.target.removeAttribute('aria-invalid'); }, placeholder: 'Grant id', 'aria-label': 'Grant id to revoke', 'aria-describedby': 'revoke-err' }),
               h('button', { class: 'btn danger' + (pendingById ? ' confirm' : ''), type: 'submit', fk: pendingById ? 'revoke:' + state.revoking : 'revoke-by-id' }, pendingById ? 'Confirm revoke' : 'Revoke'),
               pendingById ? h('button', { class: 'btn', type: 'button', fk: 'cancel:' + state.revoking, onclick: cancelRevoke }, 'Cancel') : null),
-            revokeErr = h('div', { class: 'stack' }, state.armError && !known(state.armError.gid) ? h('p', { class: 'notice err', role: 'alert' }, 'Grant ' + short(state.armError.gid) + ' was not revoked. ' + state.armError.text) : null)))));
+            revokeErr = h('div', { class: 'stack', id: 'revoke-err' }, state.armError && !known(state.armError.gid) ? h('p', { class: 'notice err', role: 'alert' }, 'Grant ' + short(state.armError.gid) + ' was not revoked. ' + state.armError.text) : null)))));
     state.armError = null;
     function scopeText() { return form.scope === 'dataset' ? 'Includes every future release of this dataset.' : 'Only this exact release.'; }
   }
@@ -1221,6 +1259,8 @@
     if (skip) { ev.preventDefault(); document.getElementById('main')?.focus(); }
   });
 
+  // The file tree folds on narrow screens; re-render a selected file's view when the viewport crosses that width.
+  matchMedia('(max-width: 980px)').addEventListener('change', () => { const { parts, q } = route(); if (parts[2] === 'r' && parts[3] && !parts[4] && q.get('path')) render(); });
   const start = () => render();
   if (/(^|[?&])demo\b/.test(location.search) && !window.SanctityDemo) {
     const s = document.createElement('script'); s.src = 'demo.js'; s.onload = start; document.head.append(s);

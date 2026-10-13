@@ -512,3 +512,24 @@ table.data.compact td, table.data.compact th { padding: 6px 10px; }
 .tree-fold > summary::-webkit-details-marker { display: none; }
 .tree-fold > summary .strong { color: var(--accent-ink); }
 .tree-fold[open] > summary .strong { color: var(--muted); }
+
+/* Comparison findings carry the compared values. */
+.keyfacts { display: flex; flex-wrap: wrap; gap: 4px 18px; margin: 2px 0 0; }
+.keyfacts div { display: flex; gap: 6px; align-items: baseline; }
+.keyfacts dt { font-size: 12px; color: var(--muted); }
+.keyfacts dd { margin: 0; font-family: var(--mono); font-size: 13px; }
+.fact b { white-space: nowrap; }
+
+/* Narrow screens: data tables become labelled blocks, so no column (or Revoke) hides off-canvas. */
+@media (max-width: 720px) {
+  table.data.stackable thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  table.data.stackable, table.data.stackable tbody { display: block; }
+  table.data.stackable tr { display: grid; grid-template-columns: minmax(84px, max-content) 1fr; gap: 6px 12px; padding: 12px; border-bottom: 1px solid var(--rule); }
+  table.data.stackable tr:last-child { border-bottom: 0; }
+  table.data.stackable td { display: contents; }
+  table.data.stackable td[data-label]::before { content: attr(data-label); font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); font-weight: 600; align-self: baseline; }
+  table.data.stackable td > * { min-width: 0; overflow-wrap: anywhere; }
+  table.data.stackable td.wide:not([data-label]) > * { grid-column: 1 / -1; }
+  table.data.stackable .actions-cell > * { justify-content: stretch; }
+  table.data.stackable .actions-cell .btn { flex: 1; justify-content: center; }
+}

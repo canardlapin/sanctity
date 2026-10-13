@@ -73,12 +73,17 @@
   const parse = t => { try { return JSON.parse(t); } catch { return null; } };
   const finding = (code, severity, path, message) => ({ code, severity, path, message });
   const stem = p => p.replace(/\.(nii\.gz|nii|json|tsv|bval|bvec)$/, '');
+  // BIDS inheritance: JSON sidecars in the file's directory or above, with the same suffix and a subset of its entities,
+  // applied from the shallowest (least specific) to the deepest.
+  const nameParts = n => { const parts = stem(n).split('_'); return { suffix: parts.pop(), entities: parts }; };
   function layers(texts, p) {
-    const out = [];
-    const m = /^sub-(\d+)\/func\/sub-\d+_task-(\w+)_/.exec(p);
-    if (m && texts[`task-${m[2]}_bold.json`]) out.push(`task-${m[2]}_bold.json`);
-    if (texts[stem(p) + '.json']) out.push(stem(p) + '.json');
-    return out;
+    const file = p.split('/').pop(), dir = p.slice(0, -file.length), img = nameParts(file);
+    const depth = k => k.split('/').length;
+    return Object.keys(texts).filter(k => {
+      if (!k.endsWith('.json') || k === p) return false;
+      const n = k.split('/').pop(), j = nameParts(n);
+      return dir.startsWith(k.slice(0, -n.length)) && j.suffix === img.suffix && j.entities.every(e => img.entities.includes(e));
+    }).sort((a, b) => depth(a) - depth(b) || nameParts(a).entities.length - nameParts(b).entities.length);
   }
   function metadata(texts, p) {
     if (!/\.nii\.gz$/.test(p) || !(p in binaries)) return null;
