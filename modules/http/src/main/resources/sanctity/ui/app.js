@@ -746,7 +746,8 @@
         c.preview = await api('POST', releaseUrl(d, r) + '/corrections', { json: JSON.stringify({ path: c.path, text: c.text, reason: c.reason }) });
         announce('Candidate prepared. Review the preview.');
         focusKey = 'preview-head';
-        render();
+        // Keep ?path in step with an edited new-sidecar path, or the view would treat it as a different correction.
+        go('#/d/' + enc(d) + '/r/' + enc(r) + '/correct?path=' + enc(c.path), true);
       } catch (e) {
         submitBtn.removeAttribute('aria-busy'); submitBtn.textContent = 'Prepare preview';
         err.append(h('p', { class: 'notice err', role: 'alert' }, explain(e)));
