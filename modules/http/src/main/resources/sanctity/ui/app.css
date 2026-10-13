@@ -507,11 +507,14 @@ table.data.compact td, table.data.compact th { padding: 6px 10px; }
 .where-n { font: 11.5px/1 var(--sans); color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
 .where-more summary { cursor: pointer; font-size: 12.5px; color: var(--accent-ink); width: fit-content; }
 .where-more[open] summary { margin-bottom: 6px; }
-.tree-fold { display: grid; gap: 10px; }
-.tree-fold > summary { display: flex; align-items: center; gap: 12px; padding: 12px 16px; cursor: pointer; list-style: none; }
-.tree-fold > summary::-webkit-details-marker { display: none; }
-.tree-fold > summary .strong { color: var(--accent-ink); }
-.tree-fold[open] > summary .strong { color: var(--muted); }
+.tree-side { display: grid; gap: 10px; align-content: start; align-self: stretch; min-width: 0; }
+.tree-fold-bar { display: none; align-items: center; gap: 12px; padding: 12px 16px; width: 100%; text-align: left; font: inherit; color: inherit; cursor: pointer; }
+.tree-fold-bar .strong { color: var(--accent-ink); }
+.tree-fold-bar[aria-expanded="true"] .strong { color: var(--muted); }
+@media (max-width: 980px) {
+  .tree-side.foldable .tree-fold-bar { display: flex; }
+  .tree-side.foldable.folded > .tree { display: none; }
+}
 
 /* Comparison findings carry the compared values. */
 .keyfacts { display: flex; flex-wrap: wrap; gap: 4px 18px; margin: 2px 0 0; }
@@ -527,9 +530,12 @@ table.data.compact td, table.data.compact th { padding: 6px 10px; }
   table.data.stackable tr { display: grid; grid-template-columns: minmax(84px, max-content) 1fr; gap: 6px 12px; padding: 12px; border-bottom: 1px solid var(--rule); }
   table.data.stackable tr:last-child { border-bottom: 0; }
   table.data.stackable td { display: contents; }
-  table.data.stackable td[data-label]::before { content: attr(data-label); font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); font-weight: 600; align-self: baseline; }
-  table.data.stackable td > * { min-width: 0; overflow-wrap: anywhere; }
+  table.data.stackable td[data-label]::before { content: attr(data-label); content: attr(data-label) / ""; font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); font-weight: 600; align-self: baseline; }
+  table.data.stackable td > * { min-width: 0; overflow-wrap: anywhere; justify-self: start; }
   table.data.stackable td.wide:not([data-label]) > * { grid-column: 1 / -1; }
-  table.data.stackable .actions-cell > * { justify-content: stretch; }
+  table.data.stackable .actions-cell > * { justify-self: stretch; }
   table.data.stackable .actions-cell .btn { flex: 1; justify-content: center; }
 }
+.keyfacts.inline { margin: 0; gap: 2px 12px; }
+.keyfacts.inline dt, .keyfacts.inline dd { font-size: 11.5px; }
+.where-row { flex-wrap: wrap; }

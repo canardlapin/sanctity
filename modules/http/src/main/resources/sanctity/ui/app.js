@@ -460,14 +460,20 @@
       items[Math.max(0, Math.min(items.length - 1, i + (ev.key === 'ArrowDown' ? 1 : -1)))].focus();
     });
     draw();
-    const nav = h('nav', { class: 'card tree', 'aria-label': 'Release files' },
+    const nav = h('nav', { class: 'card tree', id: 'release-tree', 'aria-label': 'Release files' },
       h('div', { class: 'tree-filter' }, h('input', { class: 'input', type: 'search', id: 'tree-filter', placeholder: 'Filter files', 'aria-label': 'Filter files',
         oninput: ev => { filter = ev.target.value.trim().toLowerCase(); draw(); } })), list);
     // On narrow screens a chosen file comes first; the tree folds into one line that names the selection.
+    // CSS decides when the fold applies, so resizing re-renders nothing (focus, filter and disclosures survive).
     const fold = !!selected && narrow();
-    const side = fold ? h('details', { class: 'tree-fold' },
-      h('summary', { class: 'card' }, I.dir(), h('span', { class: 'stack s2 grow' }, h('span', { class: 'small muted' }, 'Files · ' + rel.entries.filter(e => e.kind === 'file').length),
-        h('span', { class: 'mono small' }, pathText(selected))), h('span', { class: 'small strong' }, 'Browse')), nav) : nav;
+    const browse = h('span', { class: 'small strong' }, 'Browse');
+    const bar = selected ? h('button', { class: 'card tree-fold-bar', type: 'button', fk: 'tree-fold', 'aria-expanded': 'false', 'aria-controls': 'release-tree',
+      onclick: () => { const folded = side.classList.toggle('folded'); bar.setAttribute('aria-expanded', String(!folded)); browse.textContent = folded ? 'Browse' : 'Hide'; } },
+      I.dir(), h('span', { class: 'stack s2 grow' }, h('span', { class: 'small muted' }, 'Files · ' + rel.entries.filter(e => e.kind === 'file').length),
+        h('span', { class: 'mono small' }, pathText(selected))), browse) : null;
+    const side = h('div', { class: 'tree-side' + (selected ? ' foldable folded' : '') }, bar, nav);
+    // A tree in use stays open, so narrowing the window never hides the focused control.
+    nav.addEventListener('focusin', () => { if (bar && side.classList.contains('folded')) { side.classList.remove('folded'); bar.setAttribute('aria-expanded', 'true'); browse.textContent = 'Hide'; } });
     const inspector = h('section', { class: 'card inspector', 'aria-label': 'File inspector', tabindex: '-1', fk: 'inspector' });
     if (fold && focusKey && focusKey.startsWith('f:')) focusKey = 'inspector';   // the chosen file's button is folded away
     panel.append(h('div', { class: 'workspace' }, side, inspector));
@@ -534,6 +540,7 @@
     const fileChecks = rel.assessment.checks.filter(x => x.target === p);
     if (fileChecks.length) box.append(section('Content checks', h('ul', { class: 'checks inline' }, fileChecks.map(x => checkItem(x, null, x.findings.length > 0 && !narrow())))));
     if (links.length) box.append(section('Linked acquisitions', relRows(links, p, q => go(relHash(d, r, { path: q })))));
+    else if (k === 'nii' && /\/fmap\//.test(p)) box.append(section('Linked acquisitions', h('p', { class: 'muted small' }, 'No run selects this fieldmap: no IntendedFor names it and no B0FieldSource matches its B0FieldIdentifier.')));
     if (isText) box.append(section('Content', text.status === 'rejected' ? h('p', { class: 'muted small' }, explain(text.reason))
       : k === 'tsv' ? tsvTable(text.value) : h('pre', { class: 'code', tabindex: '0', 'aria-label': 'Content of ' + p }, text.value)));
   }
@@ -601,17 +608,22 @@
       // Several files: positions vary by file, so each file lists its own.
       const at = xs => varying.length ? varying.map(([one, more]) => (positionsOf(xs, one).length > 1 ? more : one) + ' ' + listPositions(positionsOf(xs, one))).join(' · ')
         : xs.length > 1 ? plural(xs.length, 'occurrence') : null;
+      // Compared values: once for the entry when every file agrees, otherwise on each file's row.
+      const factsOf = new Map(detail ? [...paths].map(([p, xs]) => [p, xs.length === 1 ? detail(xs[0]) : null]) : []);
+      const shared = factsOf.size && [...factsOf.values()].every(v => v && JSON.stringify(v) === JSON.stringify([...factsOf.values()][0])) ? [...factsOf.values()][0] : null;
+      const factList = (facts, cls) => h('dl', { class: 'keyfacts' + (cls || '') }, facts.map(([k, v, unit]) => h('div', {}, h('dt', {}, k), h('dd', {}, valueNode(unit, v)))));
       const where = [...paths].map(([p, xs]) => h('span', { class: 'where-row' },
         open ? h('button', { class: 'where linkish', type: 'button', onclick: () => open(p) }, pathText(p)) : h('span', { class: 'where' }, pathText(p)),
-        many && at(xs) ? h('span', { class: 'where-n' }, at(xs)) : null));
-      const facts = !many && fs.length === 1 && detail ? detail(f) : null;
+        many && at(xs) ? h('span', { class: 'where-n' }, at(xs)) : null,
+        !shared && factsOf.get(p) ? factList(factsOf.get(p), ' inline') : null));
       return h('li', { class: 'finding ' + f.severity },
         h('span', { class: 'sev', title: f.severity }, f.severity === 'Error' ? I.err() : I.warn()),
         h('div', { class: 'stack s4' },
-          h('div', { class: 'row' }, h('span', { class: 'code' }, f.code), fs.length > 1 ? h('span', { class: 'count' }, plural(fs.length, 'occurrence')) : null,
-            h('span', { class: 'sev-label' }, f.severity === 'Error' ? 'Blocks acceptance' : 'Recorded warning'), tag ? h('span', { class: 'tag delta ' + tag.toLowerCase().replace(/\s+/g, '-') }, tag) : null),
-          h('p', { class: 'msg' }, many ? groupMessage(fs).replace(/\b(rows|columns) [\d, ]+( and \d+ more)?/g, '$1 listed by file') : groupMessage(fs)),
-          facts ? h('dl', { class: 'keyfacts' }, facts.map(([k, v, unit]) => h('div', {}, h('dt', {}, k), h('dd', {}, valueNode(unit, v))))) : null,
+          h('div', { class: 'row' }, tag ? h('span', { class: 'tag delta ' + tag.toLowerCase().replace(/\s+/g, '-') }, tag) : null,
+            h('span', { class: 'code' }, f.code), fs.length > 1 ? h('span', { class: 'count' }, plural(fs.length, 'occurrence')) : null,
+            h('span', { class: 'sev-label' }, f.severity === 'Error' ? 'Blocks acceptance' : 'Recorded warning')),
+          h('p', { class: 'msg' }, many ? groupMessage(fs).replace(/\b(rows|columns) \d+(?:, \d+)*(?: and \d+ more)?/g, '$1 listed by file') : groupMessage(fs)),
+          shared ? factList(shared) : null,
           why && why(f) ? h('p', { class: 'why' }, why(f)) : null,
           !withPath || !where.length ? null : where.length > 4
             ? h('details', { class: 'where-more' }, h('summary', {}, 'Show ' + plural(where.length, 'file')), h('div', { class: 'stack s2' }, where))
@@ -627,7 +639,7 @@
         h('section', { class: 'card pad stack' },
           h('div', { class: 'row between' },
             h('h2', {}, a.admissible ? 'Admitted' : 'Blocked by admission'), hashChip(a.id, 'assessment id')),
-          h('p', { class: 'mono small muted' }, a.policy),
+          h('p', { class: 'small muted' }, 'Admission policy ', h('span', { class: 'mono' }, a.policy)),
           h('div', { class: 'tally' },
             h('div', { class: errors.length ? 'err' : '' }, h('b', {}, errors.length), h('span', {}, errors.length === 1 ? 'error' : 'errors')),
             h('div', { class: warnings.length ? 'warn' : '' }, h('b', {}, warnings.length), h('span', {}, warnings.length === 1 ? 'warning' : 'warnings')),
@@ -709,9 +721,12 @@
     let c = state.correction;
     if (!c || c.base !== d + '/' + r || (want && c.path !== want)) {
       const carried = c && !c.receipt ? c.reason : '';
-      // Moving to another release for the same file (e.g. "Correct the current head" after a conflict) keeps the edited content.
-      const draft = c && !c.receipt && c.base !== d + '/' + r && c.path === want && c.text ? { text: c.text, carriedFrom: c.base.split('/')[1] } : { text: '' };
-      c = state.correction = { key: uuid(), base: d + '/' + r, path: want, original: null, reason: carried, preview: null, receipt: null, ...draft };
+      // Moving to another release for the same file (e.g. "Correct the current head" after a conflict) carries the edit with the
+      // content it was written against. The editor restores it only if that file is unchanged here (see restoreDraft).
+      const untouched = c && c.draft && c.text === c.draft.text;
+      const draft = c && !c.receipt && c.base !== d + '/' + r && c.path === want && c.text
+        ? { text: c.text, original: untouched ? c.draft.original : c.original != null ? c.original : '', from: untouched ? c.draft.from : c.base.split('/')[1] } : null;
+      c = state.correction = { key: uuid(), base: d + '/' + r, path: want, original: null, text: '', reason: carried, preview: null, receipt: null, draft };
     }
     let rel, headId;
     try { [rel, headId] = await Promise.all([getRelease(d, r), getHead(d).catch(() => null)]); } catch (e) { if (my === generation) failure(ctx, 'release', e, () => render()); return; }
@@ -744,17 +759,38 @@
     if (!/\.json$/.test(p)) return 'Sidecar paths end in .json.';
     if (/(^|\/)\.[^/]*$/.test(p)) return 'Name the sidecar after the files it applies to, such as sub-02_task-nback_bold.json.';
     if (/^\/|\/\/|(^|\/)\.\.?(\/|$)|\\/.test(p)) return 'Use a path relative to the dataset root, without “.” or “..” segments.';
+    if (/\s/.test(p)) return 'BIDS paths do not contain spaces.';
     if (files.includes(p)) return 'That file already exists. Choose it from the list instead.';
+    const under = files.find(f => p.startsWith(f + '/'));
+    if (under) return under + ' is a file, so it cannot contain other files.';
     return null;
   };
   async function editCard(d, r, c, sidecars, files) {
     let text, reason, err, submitBtn, newPath;
+    const draftNote = h('div', { class: 'stack s8' });
+    // A carried edit is restored only onto the content it was written against; otherwise it would silently revert
+    // whatever changed in between (a lost update). Then the editor shows the current file and the earlier edit as a diff.
+    const restoreDraft = current => {
+      const dr = c.draft;
+      if (!dr || c.text) return;
+      if (dr.original === current) {
+        c.text = dr.text;
+        draftNote.replaceChildren(h('p', { class: 'notice' }, 'Your edit from release ' + short(dr.from) + ' is restored. ' + (current ? 'This file has not changed since, so nothing else is overwritten.' : 'The file still does not exist here.')));
+        return;
+      }
+      const diff = lineDiff(dr.original, dr.text);
+      draftNote.replaceChildren(h('div', { class: 'notice warn stack s8' },
+        h('p', {}, c.path.split('/').pop() + ' changed after your edit was written against release ' + short(dr.from) + '. The editor shows its current content; re-apply your change to it.'),
+        diff ? h('details', { class: 'draft-diff' }, h('summary', {}, 'Your earlier edit'),
+          h('pre', { class: 'code linediff', tabindex: '0' }, diff.map(([op, line]) => h('span', { class: 'ln ' + (op === '+' ? 'add' : op === '-' ? 'del' : '') },
+            h('span', { class: 'op', 'aria-hidden': 'true' }, op), h('span', { class: 'sr-only' }, op === '+' ? 'added: ' : op === '-' ? 'removed: ' : ''), line, '\n')))) : null));
+    };
     const load = async p => {
       c.path = p; c.original = null;
       if (!p) { text.value = ''; return; }
-      if (c.newMode) { c.original = ''; text.value = c.text; return; }
+      if (c.newMode) { c.original = ''; restoreDraft(''); text.value = c.text; return; }
       text.value = ''; text.placeholder = 'Loading current content…';
-      try { const t = await getFileText(d, r, p); if (c.path !== p) return; c.original = t; text.value = c.text || t; text.placeholder = ''; }
+      try { const t = await getFileText(d, r, p); if (c.path !== p) return; c.original = t; restoreDraft(t); text.value = c.text || t; text.placeholder = ''; }
       catch (e) { text.placeholder = explain(e) + ' Paste the complete corrected JSON.'; }
     };
     const submit = async ev => {
@@ -804,7 +840,7 @@
           h('span', { class: 'hint', id: 'c-text-hint' }, c.newMode ? 'Only the fields you set here override inherited values.' : 'The file is replaced as a whole. Values inherited by other files are recomputed in the preview.')),
         h('div', { class: 'field' }, h('label', { for: 'c-reason' }, 'Reason'),
           reason = h('input', { class: 'input', id: 'c-reason', maxlength: '2000', value: c.reason, placeholder: 'e.g. Protocol sheet gives TR = 1.8 s', 'aria-describedby': 'c-errors', oninput: () => { c.reason = reason.value; reason.removeAttribute('aria-invalid'); } })),
-        c.carriedFrom ? h('p', { class: 'notice warn' }, 'This content was written against release ' + short(c.carriedFrom) + '. It replaces the file in this release as a whole; review the preview’s line changes.') : null,
+        draftNote,
         err = h('div', { class: 'stack', id: 'c-errors' }),
         h('div', { class: 'row end' },
           h('a', { class: 'btn ghost', href: relHash(d, r, c.path && !c.newMode ? { path: c.path } : null) }, 'Cancel'),
@@ -815,7 +851,7 @@
           ['Sanctity prepares a candidate from this release plus your edit.', 'It re-resolves metadata inheritance and acquisition relationships, then re-runs admission checks.',
            'You review every changed value and finding before anything is accepted.', 'Acceptance is atomic and safe to retry. This release never changes.']
             .map(t => h('li', {}, t)))));
-    if (c.newMode) { c.original = ''; text.value = c.text || ''; }
+    if (c.newMode) { c.original = ''; restoreDraft(''); text.value = c.text || ''; }
     else if (c.path) await load(c.path);
     return card;
   }
@@ -873,6 +909,14 @@
       return 'Resolved';
     };
     const fresh = a.findings.filter(f => tags && tags(f) === 'New').length;
+    // What needs a decision comes first: blocking errors, then findings this change introduces; then what it cleared.
+    const attention = [...a.findings.filter(f => f.severity === 'Error'), ...a.findings.filter(f => f.severity !== 'Error' && (!tags || tags(f) === 'New'))];
+    const newWhy = f => tags && tags(f) === 'New' ? cause(f) : null;
+    const findingSections = [
+      [!tags ? 'Findings after this change' : attention.some(f => f.severity === 'Error') ? 'Blocking and new findings' : 'New findings', attention, tags, newWhy, a.checks],
+      ['No longer reported', resolved.filter(f => outcome(f) !== 'Not evaluated'), outcome, cause, base ? base.assessment.checks : []],
+      ['Not evaluated after this change', resolved.filter(f => outcome(f) === 'Not evaluated'), outcome, cause, base ? base.assessment.checks : []],
+      ['Unchanged findings', tags ? a.findings.filter(f => !attention.includes(f)) : [], tags, null, a.checks]];
     const blocked = !a.admissible || a.findings.some(f => f.severity === 'Error');
     let err, btn;
     const accept = async () => {
@@ -891,6 +935,7 @@
     };
     const byPath = new Map();
     p.metadataChanges.forEach(m => byPath.set(m.path, [...(byPath.get(m.path) || []), ...m.fields]));
+    const inert = !byPath.size && p.contentChanges.some(x => !x.before && x.path.endsWith('.json'));
     const val = (name, f) => f ? h('span', { class: 'stack s2' }, valueNode(name, f.value), h('span', { class: 'origin' }, 'from ', h('span', { class: 'mono' }, pathText(f.origin)))) : h('span', { class: 'none' }, 'absent');
     c.firstAffected = p.metadataChanges.length ? p.metadataChanges[0].path : null;
     const diff = c.original != null ? lineDiff(c.original, c.text) : null;
@@ -913,10 +958,10 @@
               h('dd', { class: 'to', 'aria-hidden': 'true' }, I.arrow()),
               h('dd', { class: 'after' }, h('span', { class: 'sr-only' }, 'after: '), val(f.name, f.after),
                 f.before && f.after && JSON.stringify(f.before.value) === JSON.stringify(f.after.value) ? h('span', { class: 'tag' }, 'Same value, new source') : null)))))))
-            : p.contentChanges.some(x => !x.before && x.path.endsWith('.json'))
+            : inert
               ? h('p', { class: 'notice warn' }, 'The new sidecar changes no file’s effective metadata. BIDS inheritance applies it only to files in its directory or below whose entities and suffix it matches.')
               : h('p', { class: 'muted' }, 'No effective metadata changes.'),
-          h('p', { class: 'hint' }, 'Only files whose effective values change are listed. Files that set these fields in their own sidecars keep their values.')),
+          h('p', { class: 'hint' }, 'Only files whose effective values or their sources change are listed. Files that set these fields in their own sidecars keep their values.')),
         diff ? h('section', { class: 'card pad stack s12' },
           h('div', { class: 'row between' }, h('h2', {}, 'Sidecar change'), h('span', { class: 'mono small muted' }, c.path)),
           h('pre', { class: 'code linediff', tabindex: '0', 'aria-label': 'Line changes to ' + c.path },
@@ -927,10 +972,10 @@
             h('p', { class: 'small muted' }, rc.before.length + ' before → ' + rc.after.length + ' after',
               rc.changedDependencies.length ? '; changed dependencies: ' + rc.changedDependencies.join(', ') : '')))) : null,
         p.contentChanges.length ? h('section', { class: 'card pad stack' }, h('h2', {}, 'Content changes'),
-          h('table', { class: 'data' }, h('thead', {}, h('tr', {}, h('th', {}, 'Path'), h('th', { class: 'num' }, 'Before'), h('th', { class: 'num' }, 'After'))),
-            h('tbody', {}, p.contentChanges.map(x => h('tr', {}, h('td', { class: 'mono' }, pathText(x.path)),
-              h('td', { class: 'num' }, x.before ? bytes(x.before.size) : 'New file'),
-              h('td', { class: 'num' }, !x.after ? 'Removed' : x.before && x.before.size === x.after.size ? 'Same size, new content' : bytes(x.after.size))))))) : null),
+          h('table', { class: 'data stackable' }, h('thead', {}, h('tr', {}, h('th', {}, 'Path'), h('th', { class: 'num' }, 'Before'), h('th', { class: 'num' }, 'After'))),
+            h('tbody', {}, p.contentChanges.map(x => h('tr', {}, h('td', { class: 'mono', 'data-label': 'Path' }, pathText(x.path)),
+              h('td', { class: 'num', 'data-label': 'Before' }, x.before ? bytes(x.before.size) : 'New file'),
+              h('td', { class: 'num', 'data-label': 'After' }, !x.after ? 'Removed' : x.before && x.before.size === x.after.size ? 'Same size, new content' : bytes(x.after.size))))))) : null),
       h('aside', { class: 'card pad stack s16 sticky decision' },
         h('h2', {}, 'Candidate'),
         a.admissible ? h('span', { class: 'seal ok' }, I.seal(), 'Admissible') : h('span', { class: 'seal err' }, I.stop(), 'Not admissible'),
@@ -944,13 +989,14 @@
         h('p', { class: 'finding-summary small' }, a.findings.length || resolved.length
           ? [h('b', {}, String(fresh)), ' new, ', h('b', {}, String(a.findings.length - fresh)), ' unchanged, ', h('b', {}, String(resolved.length)), ' no longer reported. Details below.']
           : 'No findings before or after this change.'),
+        inert ? h('p', { class: 'notice warn small' }, 'Accepting adds the file but changes no effective metadata.') : null,
         err = h('div', { class: 'stack' }),
         h('div', { class: 'row' },
-          btn = h('button', { class: 'btn primary', type: 'button', fk: 'accept', disabled: blocked, onclick: accept }, I.check(), h('span', {}, 'Accept as new release')),
+          btn = h('button', { class: 'btn ' + (inert ? '' : 'primary'), type: 'button', fk: 'accept', disabled: blocked, onclick: accept }, I.check(), h('span', {}, 'Accept as new release')),
           h('button', { class: 'btn ghost', type: 'button', onclick: () => { c.preview = null; c.key = uuid(); focusKey = 'c-text'; render(); } }, 'Back to edit')),
         h('p', { class: 'small muted' }, blocked ? 'Errors block acceptance. Edit the sidecar and prepare again.' : 'Requires accept authority. Retrying with the same key is safe.'),
-        resolved.length ? h('div', { class: 'stack s8' }, h('h3', { class: 'overline' }, 'No longer reported'), findingList(resolved, true, null, outcome, cause)) : null,
-        a.findings.length ? h('div', { class: 'stack s8' }, h('h3', { class: 'overline' }, 'Findings after this change'), findingList(a.findings, true, null, tags, f => tags && tags(f) === 'New' ? cause(f) : null, keyFacts(a.checks))) : h('p', { class: 'small muted' }, 'No findings.')));
+        ...findingSections.map(([title, fs, label, why, checks]) => fs.length ? h('div', { class: 'stack s8' }, h('h3', { class: 'overline' }, title), findingList(fs, true, null, label, why, keyFacts(checks))) : null),
+        a.findings.length || resolved.length ? null : h('p', { class: 'small muted' }, 'No findings.')));
   }
 
   function receiptCard(d, c) {
@@ -1187,7 +1233,7 @@
           h('section', { class: 'card' }, h('div', { class: 'pad head-pad' }, h('h2', { tabindex: '-1', fk: 'grants-head' }, 'Granted in this session')),
             grants.length ? h('div', { class: 'scroll-x' }, h('table', { class: 'data stackable' }, h('thead', {}, h('tr', {}, h('th', {}, 'Grant'), h('th', {}, 'Recipient'), h('th', {}, 'Scope'), h('th', {}, 'Actions'), h('th', {}, h('span', { class: 'sr-only' }, 'Revoke')))),
               h('tbody', {}, grants.map(g => h('tr', {}, h('td', { 'data-label': 'Grant' }, hashChip(g.id, 'grant id')), h('td', { 'data-label': 'Recipient' }, g.recipient ? hashChip(g.recipient, 'recipient') : h('span', { class: 'muted small' }, 'by id')), h('td', { class: 'small', 'data-label': 'Scope' }, g.release ? 'Release ' + short(g.release) : g.recipient ? 'Dataset' : 'Unknown'),
-                h('td', { class: 'small', 'data-label': 'Actions' }, g.revokedAt && !g.actions.length ? '—' : h('ul', { class: 'plain-list' }, g.actions.map(x => h('li', {}, (ACTIONS.find(a => a[0] === x) || [x, x])[1])))),
+                h('td', { class: 'small', 'data-label': 'Actions' }, g.revokedAt && !g.actions.length ? '—' : h('ul', { class: 'plain-list' }, [...g.actions].sort((x, y) => ACTIONS.findIndex(a => a[0] === x) - ACTIONS.findIndex(a => a[0] === y)).map(x => h('li', {}, (ACTIONS.find(a => a[0] === x) || [x, x])[1])))),
                 h('td', { class: 'num actions-cell wide' }, g.revokedAt ? h('span', { class: 'chip', title: 'Recorded by this browser at ' + g.revokedAt }, 'Revoked ' + when(g.revokedAt))
                   : state.revoking === g.id
                   ? h('div', { class: 'row nowrap end' },
@@ -1259,8 +1305,6 @@
     if (skip) { ev.preventDefault(); document.getElementById('main')?.focus(); }
   });
 
-  // The file tree folds on narrow screens; re-render a selected file's view when the viewport crosses that width.
-  matchMedia('(max-width: 980px)').addEventListener('change', () => { const { parts, q } = route(); if (parts[2] === 'r' && parts[3] && !parts[4] && q.get('path')) render(); });
   const start = () => render();
   if (/(^|[?&])demo\b/.test(location.search) && !window.SanctityDemo) {
     const s = document.createElement('script'); s.src = 'demo.js'; s.onload = start; document.head.append(s);
