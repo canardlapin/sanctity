@@ -6,7 +6,7 @@ import com.comcast.ip4s.{Host, Port}
 import org.http4s.ember.server.EmberServerBuilder
 import sanctity.application.{Checked, IdSource, NativeRepository}
 import sanctity.bids.BidsInterpreter
-import sanctity.http.RepositoryHttp
+import sanctity.http.{ConsoleAssets, RepositoryHttp}
 import sanctity.kernel.Problem
 import sanctity.objects.FileBlobStore
 import sanctity.postgres.{DatabaseConfig, PostgresDatabase}
@@ -30,8 +30,8 @@ object ApiServer extends IOApp.Simple:
           api = new RepositoryHttp[IO](catalog, repository, db.credentials(ids))
           slots <- Semaphore[IO](8)
           _ <- EmberServerBuilder.default[IO].withHost(Host.fromString("127.0.0.1").get).withPort(port)
-            .withMaxConnections(64).withHttpApp(api.app.mapF(response => slots.permit.use(_ => response)))
-            .build.use(server => IO.println(s"Sanctity API listening on ${server.address}; storage: ${Path.of(storage).toAbsolutePath}") *> IO.never)
+            .withMaxConnections(64).withHttpApp(ConsoleAssets.withApi(api.app).mapF(response => slots.permit.use(_ => response)))
+            .build.use(server => IO.println(s"Sanctity API and console listening on http://${server.addressIp4s}; storage: ${Path.of(storage).toAbsolutePath}") *> IO.never)
         yield ()
       }
     yield ()
