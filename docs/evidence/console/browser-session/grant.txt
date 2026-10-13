@@ -1,0 +1,31 @@
+Access
+
+Grants are explicit and separate from scientific identity. A dataset grant covers future releases. A release grant fixes one exact state, for reading only.
+
+Grant access
+Recipient principal
+Scope
+Release 2273b551
+Whole dataset
+Only this exact release.
+Actions
+Read metadata
+Inspect releases, files and effective metadata.
+Read content
+Download file bytes.
+Propose
+Release grants permit reading only.
+Accept
+Release grants permit reading only.
+Managing access cannot be delegated.
+Create grant
+Granted in this session
+GRANT	RECIPIENT	SCOPE	ACTIONS	
+REVOKE
+
+94ae7b86	6c1d8e2a	Release 2273b551	
+Read metadata
+Read content
+	Revoke
+Revoke by identifier
+Revoke

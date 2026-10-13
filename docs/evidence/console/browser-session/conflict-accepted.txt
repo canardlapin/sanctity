@@ -1,0 +1,103 @@
+Dataset
+b7e3c1d2
+Release
+a4c9a352
+Episodic sequence memory — MRI pilot
+Admitted
+Accepted Oct 13, 2026, 03:33 PM EDT
+Profile native-reference-v7
+BIDS 1.10.0
+60 files
+Query
+Propose correction
+1c9a4e70
+Sep 18, 2026
+5e2f8a13
+Sep 29, 2026
+9d4b2e61
+Oct 8, 2026
+69944633
+Oct 13, 2026
+a4c9a352
+Oct 13, 2026
+Manifest bec8049c1749
+Interpretation 86c2948d3ac4
+Assessment 0f96912475f0
+Files
+60
+Assessment
+4
+Relationships
+16
+Files · 60
+sub-01/func/sub-01_task-nback_run-1_bold.nii.gz
+Browse
+NII · 179 MiB
+sub-01/func/sub-01_task-nback_run-1_bold.nii.gz
+Add sidecar
+Download
+EFFECTIVE METADATA
+TaskName
+Inherited from task-nback_bold.json
+nback
+RepetitionTime
+Inherited from task-nback_bold.json
+1.5
+s
+EchoTime
+Inherited from task-nback_bold.json
+0.031
+s
+FlipAngle
+Inherited from task-nback_bold.json
+60°
+PhaseEncodingDirection
+Inherited from task-nback_bold.json
+j-
+SliceEncodingDirection
+Inherited from task-nback_bold.json
+k
+
+Resolved from task-nback_bold.json
+
+CONTENT CHECKS
+bids-mri-header-consistency-v1
+Consistent
+image
+sub-01_task-nback_run-1_bold.nii.gz
+sub-01/func/sub-01_task-nback_run-1_bold.nii.gz, digest
+e808e3e6a478
+metadata-0
+task-nback_bold.json
+task-nback_bold.json, digest
+49c5675c51c2
+16 recorded facts · rule and observations
+bids-events-content-v1
+Consistent
+events
+sub-01_task-nback_run-1_events.tsv
+sub-01/func/sub-01_task-nback_run-1_events.tsv, digest
+43c62a5625c2
+image
+sub-01_task-nback_run-1_bold.nii.gz
+sub-01/func/sub-01_task-nback_run-1_bold.nii.gz, digest
+e808e3e6a478
+metadata-0
+task-nback_bold.json
+task-nback_bold.json, digest
+49c5675c51c2
+16 recorded facts · rule and observations
+LINKED ACQUISITIONS
+Fieldmaps by run
+sub-01/func/sub-01_task-nback_run-1_bold.nii.gz
+THIS FILE
+sub-01/fmap/sub-01_dir-AP_epi.nii.gz
+
+Declared by sub-01/fmap/sub-01_dir-AP_epi.json · IntendedFor
+
+Task events
+sub-01/func/sub-01_task-nback_run-1_bold.nii.gz
+THIS FILE
+sub-01/func/sub-01_task-nback_run-1_events.tsv
+
+Declared by companion rule bids-mri-companions-v1:Events

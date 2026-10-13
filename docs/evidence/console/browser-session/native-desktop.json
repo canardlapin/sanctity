@@ -1,0 +1,27 @@
+{
+  "date": "2026-10-13T19:34:47.078Z",
+  "os": "macOS 15.1.1",
+  "nativeComputerUseToolExposed": false,
+  "windowServerPresent": true,
+  "CGPreflightScreenCaptureAccess": false,
+  "AXIsProcessTrusted": false,
+  "systemEventsUiElementsEnabled": false,
+  "desktopCapture": "Command succeeded but produced wallpaper/menu bar without application windows; not a usable native application capture.",
+  "voiceOverApplicationLaunched": true,
+  "voiceOverReadLastPhrase": {
+    "error": -1728,
+    "message": "Cannot get content of last phrase"
+  },
+  "voiceOverNavigationAttempt": {
+    "error": -1708,
+    "message": "Does not understand the perform command message"
+  },
+  "voiceOverQuitAfterAttempt": true,
+  "permissionSettingsChanged": false,
+  "result": "No usable native VoiceOver control or spoken-output evidence. Browser automation is available independently.",
+  "verificationCommands": [
+    "System Events: get UI elements enabled",
+    "CoreGraphics: CGPreflightScreenCaptureAccess()",
+    "ApplicationServices: AXIsProcessTrusted()"
+  ]
+}

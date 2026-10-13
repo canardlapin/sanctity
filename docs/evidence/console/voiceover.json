@@ -13,7 +13,7 @@
     "demo.js": "cc6ebcd860a7f77660acd105bc41c717c5d6b3457b4ffad307dd89f93ef81b1b"
   },
   "viewportResults": [],
-  "reason": "No human VoiceOver task report has been received. The macOS automation probe did not provide usable desktop control; no real screen-reader result is claimed.",
+  "reason": "Real VoiceOver exercise remains not run. The native automation attempt found a desktop but macOS Accessibility and Screen Recording permissions were unavailable to this process. VoiceOver scripting did not provide usable spoken output or navigation. The successful browser walkthrough is separate evidence.",
   "runbook": "../../http-api.md#console-checks-and-voiceover-exercise",
   "originalScript": "original/voiceover-script.md",
   "startCommand": "node tests/console/serve.js",
@@ -36,5 +36,7 @@
     "source hashes",
     "viewport method and dimensions",
     "pass/fail/not_run and notes for each task at each tested layout"
-  ]
+  ],
+  "automationAttempt": "browser-session/native-desktop.json",
+  "browserWalkthrough": "browser-session/receipt.json"
 }

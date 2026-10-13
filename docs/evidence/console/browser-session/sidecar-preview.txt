@@ -1,0 +1,96 @@
+Release 9d4b2e61
+Correction
+Add sub-04_task-rest_bold.json
+
+Prepared against this exact release and assessed like any import. It becomes the dataset head only when someone with accept authority accepts it.
+
+Edit
+2
+Review preview
+3
+Accepted
+Effective metadata changes
+1 file affected
+
+sub-04/func/sub-04_task-rest_bold.nii.gz
+
+RepetitionTime
+before:
+1.5
+s
+from task-rest_bold.json
+after:
+2
+s
+from sub-04/sub-04_task-rest_bold.json
+
+Only files whose effective values or their sources change are listed. Files that set these fields in their own sidecars keep their values.
+
+Sidecar change
+sub-04/sub-04_task-rest_bold.json
++
+added:
+{"RepetitionTime":2.0}
+
+Content changes
+PATH	BEFORE	AFTER
+sub-04/sub-04_task-rest_bold.json	New file	23 B
+Candidate
+Admissible
+Candidate
+85af8786-016a-40fb-9490-342f1db334ee
+Base release
+9d4b2e61
+Generation
+0
+Reason
+Browser walkthrough: header spacing is 2 seconds
+Manifest
+c595843a95d7
+Interpretation
+904023dd25bd
+Assessment
+6bf0bb17dccb
+Retry key
+299ec8d5
+
+0 new, 3 unchanged, 1 no longer reported. Details below.
+
+Accept as new release
+Back to edit
+
+Requires accept authority. Retrying with the same key is safe.
+
+NO LONGER REPORTED
+RESOLVED
+MriRepetitionTimeMismatch
+Recorded warning
+
+RepetitionTime: authored TR differs from header spacing converted to seconds
+
+Authored RepetitionTime
+1.5
+s
+Header volume spacing
+2
+s
+
+Re-checked because sub-04/sub-04_task-rest_bold.json is an input of bids-mri-header-consistency-v1. Changed: timingMetadata.RepetitionTime.origin task-rest_bold.json → sub-04/sub-04_task-rest_bold.json; timingMetadata.RepetitionTime.value 1.5 → 2.
+
+sub-04/func/sub-04_task-rest_bold.nii.gz
+UNCHANGED FINDINGS
+UNCHANGED
+EventsOutsideWindow
+2 occurrences
+Recorded warning
+
+event extends beyond the recorded comparison window ending at 405.0 s; review timing alignment rows 50, 51 column 1
+
+sub-03/func/sub-03_task-nback_run-1_events.tsv
+UNCHANGED
+MriTransformUnavailable
+Recorded warning
+
+qform_code/sform_code: neither transform is declared; orientation is unavailable
+
+sub-04/func/sub-04_task-rest_bold.nii.gz

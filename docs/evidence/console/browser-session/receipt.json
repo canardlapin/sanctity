@@ -1,0 +1,274 @@
+{
+  "schema": "sanctity.console-browser-session.v1",
+  "date": "2026-10-13T19:34:47.078Z",
+  "operator": "Codex",
+  "method": "Playwright driving an isolated headed Chromium; browser screenshots inspected by the agent",
+  "browser": "131.0.6778.33",
+  "playwright": "1.49.1",
+  "sourceRevision": "8b28d87afd6a598b94c1847f86a44eb4bf9b9590",
+  "sourceSha256": {
+    "index.html": "3098e794d6a8fbb68b1dacc0b29481040579267ec75d36696de17e4c7f230cfa",
+    "app.js": "d81dae6481afc151516a7fcc55cde8adde1a93a8e0f9a0c6720f446cecd3999d",
+    "app.css": "3834f94d9646970715a107d1c335820fed0fe0e2fa1a23df34c50d0db3d1f30e",
+    "demo.js": "cc6ebcd860a7f77660acd105bc41c717c5d6b3457b4ffad307dd89f93ef81b1b"
+  },
+  "transport": "Synthetic demo served from loopback with the fixture server CSP",
+  "interactionViewports": {
+    "ordinaryWorkflows": {
+      "width": 1440,
+      "height": 900
+    },
+    "conflictRecoveryAndAcceptance": {
+      "width": 390,
+      "height": 844
+    }
+  },
+  "captureViewports": [
+    {
+      "width": 1440,
+      "height": 900
+    },
+    {
+      "width": 390,
+      "height": 844
+    }
+  ],
+  "results": [
+    {
+      "name": "metadata",
+      "checks": [
+        {
+          "name": "Mismatch displays authored 1.5 s and header 2 s",
+          "pass": true
+        }
+      ],
+      "screenshots": [
+        "metadata-1440.png",
+        "metadata-390.png"
+      ],
+      "renderedText": "metadata.txt"
+    },
+    {
+      "name": "missing-reason",
+      "checks": [
+        {
+          "name": "Error visible and focus returns to Reason",
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "sidecar-preview",
+      "checks": [
+        {
+          "name": "One file affected; mismatch resolved; subject-level source shown",
+          "pass": true
+        }
+      ],
+      "screenshots": [
+        "sidecar-preview-1440.png",
+        "sidecar-preview-390.png"
+      ],
+      "renderedText": "sidecar-preview.txt"
+    },
+    {
+      "name": "sidecar-accepted",
+      "checks": [
+        {
+          "name": "New release inherits TR 2 s from subject-level sidecar",
+          "pass": true
+        }
+      ],
+      "screenshots": [
+        "sidecar-accepted-1440.png",
+        "sidecar-accepted-390.png"
+      ],
+      "renderedText": "sidecar-accepted.txt"
+    },
+    {
+      "name": "relationships",
+      "checks": [
+        {
+          "name": "Fieldmap links run to AP fieldmap",
+          "pass": true
+        }
+      ],
+      "screenshots": [
+        "relationships-1440.png",
+        "relationships-390.png"
+      ],
+      "renderedText": "relationships.txt"
+    },
+    {
+      "name": "query",
+      "checks": [
+        {
+          "name": "Age at least 30 produces frozen four-file selection for two participants",
+          "pass": true
+        }
+      ],
+      "screenshots": [
+        "query-1440.png",
+        "query-390.png"
+      ],
+      "renderedText": "query.txt"
+    },
+    {
+      "name": "grant",
+      "checks": [
+        {
+          "name": "Grant moves focus to Revoke; Escape cancels; read actions retain form order",
+          "pass": true
+        }
+      ],
+      "screenshots": [
+        "grant-1440.png",
+        "grant-390.png"
+      ],
+      "renderedText": "grant.txt"
+    },
+    {
+      "name": "revoked",
+      "checks": [
+        {
+          "name": "Confirmed grant revocation is recorded",
+          "pass": true
+        }
+      ],
+      "screenshots": [
+        "revoked-1440.png",
+        "revoked-390.png"
+      ],
+      "renderedText": "revoked.txt"
+    },
+    {
+      "name": "conflict-recovery",
+      "checks": [
+        {
+          "name": "Current head keeps FlipAngle 60 and EchoTime 0.03; earlier edit remains a separate disclosure",
+          "pass": true
+        }
+      ],
+      "screenshots": [
+        "conflict-recovery-1440.png",
+        "conflict-recovery-390.png"
+      ],
+      "renderedText": "conflict-recovery.txt"
+    },
+    {
+      "name": "conflict-accepted",
+      "checks": [
+        {
+          "name": "After reapplying and accepting EchoTime, accepted run retains EchoTime 0.031 s and FlipAngle 60 degrees",
+          "pass": true
+        }
+      ],
+      "screenshots": [
+        "conflict-accepted-1440.png",
+        "conflict-accepted-390.png"
+      ],
+      "renderedText": "conflict-accepted.txt"
+    }
+  ],
+  "passed": true,
+  "limits": [
+    "Browser interaction evidence only; no native computer-use tool is exposed in this session.",
+    "No VoiceOver qualification or spoken-output claims.",
+    "Not a complete execution of every substep in the VoiceOver runbook.",
+    "Snapshots at two widths do not mean every workflow was performed independently at both widths.",
+    "All grants, corrections and accepted releases were synthetic."
+  ],
+  "artifacts": {
+    "conflict-accepted-1440.png": {
+      "sha256": "0f36a923f50ceb73da25c8937631a26ed80334367cb9ebc7ad54a9131ea5c730"
+    },
+    "conflict-accepted-390.png": {
+      "sha256": "a6bf4e164702de312e63f3bcd75a1c62a731d50ff430fc055a0fc6dc86724591"
+    },
+    "conflict-accepted.txt": {
+      "sha256": "d2c0a76ef78cf5cf2565732cdf976e2f445285753ef22999fde76d7efc1c85ee"
+    },
+    "conflict-recovery-1440.png": {
+      "sha256": "f1c69ce6a10146c6ef163f59b479e920e819d9fa3059707b80c455e632b9df73"
+    },
+    "conflict-recovery-390.png": {
+      "sha256": "e4f35012cb147d0278df2d22094a585a06d25d7306c17f8cbee7ddc58a63e114"
+    },
+    "conflict-recovery.txt": {
+      "sha256": "0e76aeaf6bfdfe3af5cd3e994fccdb0d1dfe31039039a0efd473fa89ac09fc0c"
+    },
+    "grant-1440.png": {
+      "sha256": "1cfde038fed2b91f01fd8e68bedd08bf52262bf35c42f60e8507c976f564c8ef"
+    },
+    "grant-390.png": {
+      "sha256": "044c12e6d384f7f4bcec6b5e202176ecbb0a6d46a7206bff3587ef70865929f3"
+    },
+    "grant.txt": {
+      "sha256": "6c6607e994a1f7db95834c32a1ae9bea323555adab60f2a54965017e91b5b47d"
+    },
+    "metadata-1440.png": {
+      "sha256": "54529d22bd352f10c4fbc1923133f2e0b5215bbb9b5a1bda2329bc0874f23690"
+    },
+    "metadata-390.png": {
+      "sha256": "a399afa91907d7b7f335f24d0a239a715e1ddbeb291e823286d87df793807417"
+    },
+    "metadata.txt": {
+      "sha256": "560543c4bb24cf0cc0d83e106619d35e3ebd111a4321ea3c0599fa9c95520619"
+    },
+    "query-1440.png": {
+      "sha256": "3daa8d6482a526c422fc0c0f5bc6c4bc4747142a1f37a453b0c1ad2f6508acbf"
+    },
+    "query-390.png": {
+      "sha256": "0a9b4b8ab7d925792606137637f7cef29ffdd892b5b7d4eec094217b978cf447"
+    },
+    "query.txt": {
+      "sha256": "52d29271570e8b65a69191ed661b3c980b761bab78a3c9362c7ab50319c8f562"
+    },
+    "relationships-1440.png": {
+      "sha256": "614e66e82af97cb52c55b7a3215678a1482077151e5de3855bc3794d064f0940"
+    },
+    "relationships-390.png": {
+      "sha256": "009256659eacc51d2f93f01a4f82fda37459a26e2f060df2cee09bb8dfdf993d"
+    },
+    "relationships.txt": {
+      "sha256": "6449f582ae61399d90e3593523ca9a11534d43c4ba614bece59cba894721971a"
+    },
+    "revoked-1440.png": {
+      "sha256": "6a5992cf91a2c78024d7ae9a78cff391c5fd5aef114c28c67da4d7262b8cdc9a"
+    },
+    "revoked-390.png": {
+      "sha256": "9c3516a9da080ff6fe308daec04710e0bf039a383261b1bfa187ed4e337f638a"
+    },
+    "revoked.txt": {
+      "sha256": "132324683ece293d99cc47d91e7cebbe81cbea1692b717a69c86e53abd2b176b"
+    },
+    "sidecar-accepted-1440.png": {
+      "sha256": "ce220183f3bf8b85a76a64a2e75c359b4e72796038299d8aaac36bef8520c8da"
+    },
+    "sidecar-accepted-390.png": {
+      "sha256": "55f123c5b6c2930c6abbc8ffe3b74b1c46dfcda913cafec05df5c29f918752ba"
+    },
+    "sidecar-accepted.txt": {
+      "sha256": "86f6f3829c1b7f170428a2398dfd5ad56d045999dc24672ed11e2e40bc185c96"
+    },
+    "sidecar-preview-1440.png": {
+      "sha256": "85e5a6ca2166e9c47c2ad600656fdafce0ba6bb3fe48b66014ce1f06bd2da48f"
+    },
+    "sidecar-preview-390.png": {
+      "sha256": "3cee05f31528acf77a11c3c7fdc0a678a640a90315e1c959b64ff0ef2b0daf22"
+    },
+    "sidecar-preview.txt": {
+      "sha256": "bfcfef7f503c3cbc37a91274b0e6e8bc2ab022caf984712f125fe9a59bcaca31"
+    }
+  },
+  "visuallyInspectedCaptures": [
+    "sidecar-preview-390.png",
+    "query-1440.png",
+    "conflict-recovery-390.png",
+    "conflict-accepted-390.png"
+  ],
+  "fixtureSha256": {
+    "tests/console/serve.js": "9810e1adc51990ab6a371f44e7ca96b24a6474a602f082fb581f0fa98f5deb74",
+    "tests/console/voiceover-conflict.js": "47e028fc8d3c39f3e6d19fe00a72595a327778b26987cde22d582cc5cf0e8523"
+  }
+}

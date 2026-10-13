@@ -1,0 +1,16 @@
+Query
+Selection
+4 matching files
+Frozen
+Selection f21d8fef6c93
+2 participants
+
+Frozen from: participant age ≥ 30 · suffix bold
+
+New query
+Files in selection f21d8fef
+PARTICIPANT	FILE	RELEASE
+sub-02	sub-02/func/sub-02_task-nback_run-1_bold.nii.gz	2273b551
+sub-02	sub-02/func/sub-02_task-rest_bold.nii.gz	2273b551
+sub-04	sub-04/func/sub-04_task-nback_run-1_bold.nii.gz	2273b551
+sub-04	sub-04/func/sub-04_task-rest_bold.nii.gz	2273b551

@@ -1,0 +1,163 @@
+Dataset
+b7e3c1d2
+Release
+9d4b2e61
+Episodic sequence memory — MRI pilot
+Admitted
+Accepted Oct 8, 2026, 12:03 PM EDT
+Profile native-reference-v7
+BIDS 1.10.0
+60 files
+Query
+Propose correction
+1c9a4e70
+Sep 18, 2026
+5e2f8a13
+Sep 29, 2026
+9d4b2e61
+Oct 8, 2026
+Manifest 245b721056a9
+Interpretation fcad48797762
+Assessment 44e22c718366
+Files
+60
+Assessment
+4
+Relationships
+16
+sub-01
+sub-02
+sub-03
+sub-04
+anat
+dwi
+fmap
+func
+NII
+sub-04_task-nback_run-1_bold.nii.gz
+179 MiB
+TSV
+sub-04_task-nback_run-1_events.tsv
+781 B
+NII
+sub-04_task-rest_bold.nii.gz
+2 findings
+2
+147 MiB
+TXT
+CHANGES
+130 B
+JSON
+dataset_description.json
+170 B
+JSON
+participants.json
+239 B
+TSV
+participants.tsv
+109 B
+TXT
+README
+198 B
+JSON
+task-nback_bold.json
+157 B
+JSON
+task-rest_bold.json
+89 B
+NII · 147 MiB
+sub-04/func/sub-04_task-rest_bold.nii.gz
+Add sidecar
+Download
+FINDINGS
+MriRepetitionTimeMismatch
+Recorded warning
+
+RepetitionTime: authored TR differs from header spacing converted to seconds
+
+Authored RepetitionTime
+1.5
+s
+Header volume spacing
+2
+s
+MriTransformUnavailable
+Recorded warning
+
+qform_code/sform_code: neither transform is declared; orientation is unavailable
+
+EFFECTIVE METADATA
+TaskName
+Inherited from task-rest_bold.json
+rest
+RepetitionTime
+Inherited from task-rest_bold.json
+1.5
+s
+EchoTime
+Inherited from task-rest_bold.json
+0.03
+s
+FlipAngle
+Inherited from task-rest_bold.json
+52°
+
+Resolved from task-rest_bold.json
+
+CONTENT CHECKS
+bids-mri-header-consistency-v1
+2 findings
+
+MriRepetitionTimeMismatch, MriTransformUnavailable
+
+image
+sub-04_task-rest_bold.nii.gz
+sub-04/func/sub-04_task-rest_bold.nii.gz, digest
+eff096f50988
+metadata-0
+task-rest_bold.json
+task-rest_bold.json, digest
+423d94cb90c3
+16 recorded facts · rule and observations
+
+bids-mri-header-consistency-v1+nifti-header-observations-v2+sanctity-prefix-v1
+
+byteOrder
+LittleEndian
+dimensions
+[64,64,40,270]
+headerOnly
+true
+niftiVersion
+1
+qformCode
+0
+qformDeclared
+false
+sformCode
+0
+sformDeclared
+false
+spatialUnit
+millimeter
+temporalUnit
+second
+unitsCode
+10
+temporalSpacingSeconds
+2
+repetitionTimeAbsoluteTolerance
+0.000001
+repetitionTimeRelativeTolerance
+0.00001
+timingMetadata.RepetitionTime.origin
+task-rest_bold.json
+timingMetadata.RepetitionTime.value
+1.5
+LINKED ACQUISITIONS
+Fieldmaps by run
+sub-04/func/sub-04_task-rest_bold.nii.gz
+THIS FILE
+sub-04/fmap/sub-04_dir-AP_epi.nii.gz
+
+Declared by sub-04/fmap/sub-04_dir-AP_epi.json · IntendedFor

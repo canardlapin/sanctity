@@ -1,0 +1,118 @@
+Dataset
+b7e3c1d2
+Release
+2273b551
+Episodic sequence memory — MRI pilot
+Admitted
+Accepted Oct 13, 2026, 03:32 PM EDT
+Profile native-reference-v7
+BIDS 1.10.0
+61 files
+Query
+Propose correction
+1c9a4e70
+Sep 18, 2026
+5e2f8a13
+Sep 29, 2026
+9d4b2e61
+Oct 8, 2026
+2273b551
+Oct 13, 2026
+Manifest c595843a95d7
+Interpretation 904023dd25bd
+Assessment 6bf0bb17dccb
+Files
+61
+Assessment
+3
+Relationships
+16
+Fieldmaps by run 8
+Each run and the fieldmaps whose IntendedFor names it
+sub-01/func/sub-01_task-nback_run-1_bold.nii.gz
+sub-01/fmap/sub-01_dir-AP_epi.nii.gz
+
+Declared by sub-01/fmap/sub-01_dir-AP_epi.json · IntendedFor
+
+sub-01/func/sub-01_task-rest_bold.nii.gz
+sub-01/fmap/sub-01_dir-AP_epi.nii.gz
+
+Declared by sub-01/fmap/sub-01_dir-AP_epi.json · IntendedFor
+
+sub-02/func/sub-02_task-nback_run-1_bold.nii.gz
+sub-02/fmap/sub-02_dir-AP_epi.nii.gz
+
+Declared by sub-02/fmap/sub-02_dir-AP_epi.json · IntendedFor
+
+sub-02/func/sub-02_task-rest_bold.nii.gz
+sub-02/fmap/sub-02_dir-AP_epi.nii.gz
+
+Declared by sub-02/fmap/sub-02_dir-AP_epi.json · IntendedFor
+
+sub-03/func/sub-03_task-nback_run-1_bold.nii.gz
+sub-03/fmap/sub-03_dir-AP_epi.nii.gz
+
+Declared by sub-03/fmap/sub-03_dir-AP_epi.json · IntendedFor
+
+sub-03/func/sub-03_task-rest_bold.nii.gz
+sub-03/fmap/sub-03_dir-AP_epi.nii.gz
+
+Declared by sub-03/fmap/sub-03_dir-AP_epi.json · IntendedFor
+
+sub-04/func/sub-04_task-nback_run-1_bold.nii.gz
+sub-04/fmap/sub-04_dir-AP_epi.nii.gz
+
+Declared by sub-04/fmap/sub-04_dir-AP_epi.json · IntendedFor
+
+sub-04/func/sub-04_task-rest_bold.nii.gz
+sub-04/fmap/sub-04_dir-AP_epi.nii.gz
+
+Declared by sub-04/fmap/sub-04_dir-AP_epi.json · IntendedFor
+
+Task events 4
+BOLD run and its events table
+sub-01/func/sub-01_task-nback_run-1_bold.nii.gz
+sub-01/func/sub-01_task-nback_run-1_events.tsv
+
+Declared by companion rule bids-mri-companions-v1:Events
+
+sub-02/func/sub-02_task-nback_run-1_bold.nii.gz
+sub-02/func/sub-02_task-nback_run-1_events.tsv
+
+Declared by companion rule bids-mri-companions-v1:Events
+
+sub-03/func/sub-03_task-nback_run-1_bold.nii.gz
+sub-03/func/sub-03_task-nback_run-1_events.tsv
+
+Declared by companion rule bids-mri-companions-v1:Events
+
+sub-04/func/sub-04_task-nback_run-1_bold.nii.gz
+sub-04/func/sub-04_task-nback_run-1_events.tsv
+
+Declared by companion rule bids-mri-companions-v1:Events
+
+DWI gradients 4
+Diffusion image and its bval/bvec tables
+sub-01/dwi/sub-01_dwi.nii.gz
+sub-01/dwi/sub-01_dwi.bval
+sub-01/dwi/sub-01_dwi.bvec
+
+Declared by companion rule bids-mri-companions-v1:Bval; companion rule bids-mri-companions-v1:Bvec
+
+sub-02/dwi/sub-02_dwi.nii.gz
+sub-02/dwi/sub-02_dwi.bval
+sub-02/dwi/sub-02_dwi.bvec
+
+Declared by companion rule bids-mri-companions-v1:Bval; companion rule bids-mri-companions-v1:Bvec
+
+sub-03/dwi/sub-03_dwi.nii.gz
+sub-03/dwi/sub-03_dwi.bval
+sub-03/dwi/sub-03_dwi.bvec
+
+Declared by companion rule bids-mri-companions-v1:Bval; companion rule bids-mri-companions-v1:Bvec
+
+sub-04/dwi/sub-04_dwi.nii.gz
+sub-04/dwi/sub-04_dwi.bval
+sub-04/dwi/sub-04_dwi.bvec
+
+Declared by companion rule bids-mri-companions-v1:Bval; companion rule bids-mri-companions-v1:Bvec

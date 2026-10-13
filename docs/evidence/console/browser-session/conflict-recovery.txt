@@ -1,0 +1,77 @@
+Release 69944633
+Correction
+Correct task-nback_bold.json
+
+Prepared against this exact release and assessed like any import. It becomes the dataset head only when someone with accept authority accepts it.
+
+1
+Edit
+2
+3
+Sidecar
+Choose a JSON file…
+dataset_description.json
+participants.json
+sub-01/anat/sub-01_T1w.json
+sub-01/dwi/sub-01_dwi.json
+sub-01/fmap/sub-01_dir-AP_epi.json
+sub-01/fmap/sub-01_dir-PA_epi.json
+sub-02/anat/sub-02_T1w.json
+sub-02/dwi/sub-02_dwi.json
+sub-02/fmap/sub-02_dir-AP_epi.json
+sub-02/fmap/sub-02_dir-PA_epi.json
+sub-02/func/sub-02_task-nback_run-1_bold.json
+sub-03/anat/sub-03_T1w.json
+sub-03/dwi/sub-03_dwi.json
+sub-03/fmap/sub-03_dir-AP_epi.json
+sub-03/fmap/sub-03_dir-PA_epi.json
+sub-04/anat/sub-04_T1w.json
+sub-04/dwi/sub-04_dwi.json
+sub-04/fmap/sub-04_dir-AP_epi.json
+sub-04/fmap/sub-04_dir-PA_epi.json
+task-nback_bold.json
+task-rest_bold.json
+New sidecar…
+Complete replacement content
+The file is replaced as a whole. Values inherited by other files are recomputed in the preview.
+Reason
+
+task-nback_bold.json changed after your edit was written against release 9d4b2e61. The editor shows its current content; re-apply your change to it.
+
+Your earlier edit
+ 
+{
+
+ 
+  "TaskName": "nback",
+
+ 
+  "RepetitionTime": 1.5,
+
+-
+removed:
+  "EchoTime": 0.03,
+
++
+added:
+  "EchoTime": 0.031,
+
+ 
+  "FlipAngle": 52,
+
+ 
+  "PhaseEncodingDirection": "j-",
+
+ 
+  "SliceEncodingDirection": "k"
+
+ 
+}
+
+Cancel
+Prepare preview
+WHAT HAPPENS NEXT
+Sanctity prepares a candidate from this release plus your edit.
+It re-resolves metadata inheritance and acquisition relationships, then re-runs admission checks.
+You review every changed value and finding before anything is accepted.
+Acceptance is atomic and safe to retry. This release never changes.

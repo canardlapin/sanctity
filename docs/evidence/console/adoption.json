@@ -1,6 +1,6 @@
 {
   "schema": "sanctity.console-adoption.v1",
-  "recordedAt": "2026-10-13T15:49:15.299630+00:00",
+  "recordedAt": "2026-10-13T19:34:47.078Z",
   "status": "pending_manual_accessibility",
   "adopted": false,
   "baseline": {
@@ -20,7 +20,7 @@
     },
     "CON-03": {
       "status": "awaiting_human_result",
-      "result": "Original script recovered and extended runbook provided. Synthetic conflict setup verified; no VoiceOver pass recorded."
+      "result": "Native attempt recorded: macOS Accessibility and Screen Recording permissions unavailable; no usable VoiceOver control/output. Ten browser-walkthrough observations pass, including accepted concurrent-edit preservation; this does not close the screen-reader gate."
     },
     "CON-04": {
       "status": "prepared_pending_CON-03",
@@ -50,7 +50,13 @@
       "sha256": "8ad9390cac74345249d88c951bd906dc77e4842fc047f6a86bd4b381acf8010a"
     },
     "voiceover.json": {
-      "sha256": "821d9a72a9be1b381a69809f04a763480e8c6a68fddcba4a20bdf9f91bb65921"
+      "sha256": "701ab719fb9bd6f65b64ae495fd074e91b51d804c28c69e38d59663fb989b5b7"
+    },
+    "browser-session/receipt.json": {
+      "sha256": "4a739d26acb972a158ec5b9b3dec803a187928b5e7105976337ca8ce3c32ec07"
+    },
+    "browser-session/native-desktop.json": {
+      "sha256": "bf014574927b0822c84a68b389e4e2d10ab61fc2cf0604902bc49f5359c9f2ee"
     }
   },
   "sourceState": "Backend code was unchanged between cb082fe and 4b62084. Browser and harness hashes match 4b62084. Only documentation consolidation and local agent state remained uncommitted during the final browser run.",
