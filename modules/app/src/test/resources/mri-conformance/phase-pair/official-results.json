@@ -1,0 +1,137 @@
+{
+  "validator": "jsr:@bids/validator@3.0.2",
+  "schemaSha256": "9bac1441212012d1971982053545dba8160652d73d8d0faed71709b4401ad300",
+  "niftiHeadersChecked": true,
+  "ignoredIssues": [],
+  "cases": [
+    {
+      "case": "complete-cross-session",
+      "officialErrors": [],
+      "repositoryFindings": []
+    },
+    {
+      "case": "missing-phase1",
+      "officialErrors": [
+        [
+          "SIDECAR_WITHOUT_DATAFILE",
+          ""
+        ]
+      ],
+      "repositoryFindings": [
+        "PhasePairMissingMember"
+      ]
+    },
+    {
+      "case": "missing-phase2",
+      "officialErrors": [
+        [
+          "SIDECAR_WITHOUT_DATAFILE",
+          ""
+        ]
+      ],
+      "repositoryFindings": [
+        "PhasePairMissingMember"
+      ]
+    },
+    {
+      "case": "missing-magnitude1",
+      "officialErrors": [
+        [
+          "SIDECAR_WITHOUT_DATAFILE",
+          ""
+        ]
+      ],
+      "repositoryFindings": [
+        "PhasePairMissingMember"
+      ]
+    },
+    {
+      "case": "missing-magnitude2",
+      "officialErrors": [
+        [
+          "SIDECAR_WITHOUT_DATAFILE",
+          ""
+        ]
+      ],
+      "repositoryFindings": [
+        "PhasePairMissingMember"
+      ]
+    },
+    {
+      "case": "ambiguous-phase",
+      "officialErrors": [],
+      "repositoryFindings": [
+        "PhasePairAmbiguousMember"
+      ]
+    },
+    {
+      "case": "ambiguous-magnitude",
+      "officialErrors": [],
+      "repositoryFindings": [
+        "PhasePairAmbiguousMember"
+      ]
+    },
+    {
+      "case": "different-acquisition",
+      "officialErrors": [],
+      "repositoryFindings": [
+        "PhasePairMissingMember"
+      ]
+    },
+    {
+      "case": "run-padding",
+      "officialErrors": [],
+      "repositoryFindings": []
+    },
+    {
+      "case": "missing-echo-time",
+      "officialErrors": [
+        [
+          "SIDECAR_KEY_REQUIRED",
+          "EchoTime"
+        ]
+      ],
+      "repositoryFindings": [
+        "PhasePairEchoTimes"
+      ]
+    },
+    {
+      "case": "reversed-echo-times",
+      "officialErrors": [],
+      "repositoryFindings": [
+        "PhasePairEchoTimes"
+      ]
+    },
+    {
+      "case": "magnitude-echo-mismatch",
+      "officialErrors": [],
+      "repositoryFindings": [
+        "PhasePairEchoTimes"
+      ]
+    },
+    {
+      "case": "missing-reference-target",
+      "officialErrors": [],
+      "repositoryFindings": [
+        "FieldmapMissingTarget"
+      ]
+    },
+    {
+      "case": "mixed-representation",
+      "officialErrors": [],
+      "repositoryFindings": [
+        "PhasePairMixedRepresentation"
+      ]
+    },
+    {
+      "case": "separate-phasediff",
+      "officialErrors": [],
+      "repositoryFindings": []
+    },
+    {
+      "case": "separate-epi",
+      "officialErrors": [],
+      "repositoryFindings": []
+    }
+  ]
+}

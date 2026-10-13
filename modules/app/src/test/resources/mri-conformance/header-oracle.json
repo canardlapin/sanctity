@@ -1,0 +1,682 @@
+{
+  "nibabel": "5.3.2",
+  "numpy": "2.2.6",
+  "images": {
+    "anatomical.nii": {
+      "sha256": "1c089f37b6597a38bb4157a1e1b3f7f13f1bc9d4e7a8cfdfaf91d85cd8f66594",
+      "version": 1,
+      "byteOrder": "BigEndian",
+      "dimensions": [
+        33,
+        41,
+        25
+      ],
+      "pixelDimensions": [
+        -1.0,
+        2.0,
+        2.0,
+        2.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "unitsCode": 10,
+      "qformCode": 2,
+      "sformCode": 2,
+      "quaternion": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "qoffset": [
+        32.0,
+        -40.0,
+        -16.0
+      ],
+      "sformRows": [
+        [
+          -2.0,
+          0.0,
+          0.0,
+          32.0
+        ],
+        [
+          0.0,
+          2.0,
+          0.0,
+          -40.0
+        ],
+        [
+          0.0,
+          0.0,
+          2.0,
+          -16.0
+        ]
+      ],
+      "datatype": 4,
+      "bitsPerVoxel": 16,
+      "dataOffset": 352
+    },
+    "ds000117/sub-01/ses-mri/fmap/sub-01_ses-mri_acq-func_magnitude1.nii.gz": {
+      "sha256": "a2bea15c376a1ce424a7fd44afc0a9dd7346d877e6843ead97bca4dea5f1d47c",
+      "version": 1,
+      "byteOrder": "LittleEndian",
+      "dimensions": [
+        64,
+        64,
+        33
+      ],
+      "pixelDimensions": [
+        -1.0,
+        3.0,
+        3.0,
+        3.75,
+        0.4000000059604645,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "unitsCode": 10,
+      "qformCode": 1,
+      "sformCode": 1,
+      "quaternion": [
+        0.0,
+        0.973578929901123,
+        0.22835072875022888
+      ],
+      "qoffset": [
+        100.56779479980469,
+        -45.853118896484375,
+        -79.71357727050781
+      ],
+      "sformRows": [
+        [
+          -3.0,
+          0.0,
+          -0.0,
+          100.56779479980469
+        ],
+        [
+          -0.0,
+          2.6871354579925537,
+          -1.6673799753189087,
+          -45.853118896484375
+        ],
+        [
+          0.0,
+          1.33390474319458,
+          3.358917474746704,
+          -79.71357727050781
+        ]
+      ],
+      "datatype": 4,
+      "bitsPerVoxel": 16,
+      "dataOffset": 352
+    },
+    "ds000117/sub-01/ses-mri/fmap/sub-01_ses-mri_acq-func_magnitude2.nii.gz": {
+      "sha256": "6c7b7cc03026d166e808b6f2b80dad28fdcbd1f98dcef513e81cb5f9097f950c",
+      "version": 1,
+      "byteOrder": "LittleEndian",
+      "dimensions": [
+        64,
+        64,
+        33
+      ],
+      "pixelDimensions": [
+        -1.0,
+        3.0,
+        3.0,
+        3.75,
+        0.4000000059604645,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "unitsCode": 10,
+      "qformCode": 1,
+      "sformCode": 1,
+      "quaternion": [
+        0.0,
+        0.973578929901123,
+        0.22835072875022888
+      ],
+      "qoffset": [
+        100.56779479980469,
+        -45.853118896484375,
+        -79.71357727050781
+      ],
+      "sformRows": [
+        [
+          -3.0,
+          0.0,
+          -0.0,
+          100.56779479980469
+        ],
+        [
+          -0.0,
+          2.6871354579925537,
+          -1.6673799753189087,
+          -45.853118896484375
+        ],
+        [
+          0.0,
+          1.33390474319458,
+          3.358917474746704,
+          -79.71357727050781
+        ]
+      ],
+      "datatype": 4,
+      "bitsPerVoxel": 16,
+      "dataOffset": 352
+    },
+    "ds000117/sub-01/ses-mri/fmap/sub-01_ses-mri_acq-func_phasediff.nii.gz": {
+      "sha256": "7f226db83621b35ec94d0a0e9f956bc03c421d7af99f39e8a2e712c14c27d080",
+      "version": 1,
+      "byteOrder": "LittleEndian",
+      "dimensions": [
+        64,
+        64,
+        33
+      ],
+      "pixelDimensions": [
+        -1.0,
+        3.0,
+        3.0,
+        3.75,
+        0.4000000059604645,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "unitsCode": 10,
+      "qformCode": 1,
+      "sformCode": 1,
+      "quaternion": [
+        0.0,
+        0.973578929901123,
+        0.22835072875022888
+      ],
+      "qoffset": [
+        100.56779479980469,
+        -45.853118896484375,
+        -79.71357727050781
+      ],
+      "sformRows": [
+        [
+          -3.0,
+          0.0,
+          -0.0,
+          100.56779479980469
+        ],
+        [
+          -0.0,
+          2.6871354579925537,
+          -1.6673799753189087,
+          -45.853118896484375
+        ],
+        [
+          0.0,
+          1.33390474319458,
+          3.358917474746704,
+          -79.71357727050781
+        ]
+      ],
+      "datatype": 4,
+      "bitsPerVoxel": 16,
+      "dataOffset": 352
+    },
+    "example4d.nii.gz": {
+      "sha256": "42097dfbab9d2a036b41ae5c97a359591cf2cf5c3f8dc6ca6455c0b8a7f22696",
+      "version": 1,
+      "byteOrder": "LittleEndian",
+      "dimensions": [
+        128,
+        96,
+        24,
+        2
+      ],
+      "pixelDimensions": [
+        -1.0,
+        2.0,
+        2.0,
+        2.1999990940093994,
+        2000.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "unitsCode": 10,
+      "qformCode": 1,
+      "sformCode": 1,
+      "quaternion": [
+        -1.9451068140294884e-26,
+        -0.9967085123062134,
+        -0.0810687392950058
+      ],
+      "qoffset": [
+        117.8551025390625,
+        -35.72294235229492,
+        -7.248798370361328
+      ],
+      "sformRows": [
+        [
+          -2.0,
+          6.714715653593746e-19,
+          9.081024511081715e-18,
+          117.8551025390625
+        ],
+        [
+          -6.714715653593746e-19,
+          1.9737114906311035,
+          -0.35552823543548584,
+          -35.72294235229492
+        ],
+        [
+          8.25548088896093e-18,
+          0.3232076168060303,
+          2.171081781387329,
+          -7.248798370361328
+        ]
+      ],
+      "datatype": 4,
+      "bitsPerVoxel": 16,
+      "dataOffset": 416
+    },
+    "example_nifti2.nii.gz": {
+      "sha256": "a53e59e70eb0d8275a4fe347422a89551aee92d0eb1137a3444b1932a28c3fe2",
+      "version": 2,
+      "byteOrder": "LittleEndian",
+      "dimensions": [
+        32,
+        20,
+        12,
+        2
+      ],
+      "pixelDimensions": [
+        -1.0,
+        2.0,
+        2.0,
+        2.1999990940093994,
+        2000.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "unitsCode": 10,
+      "qformCode": 1,
+      "sformCode": 1,
+      "quaternion": [
+        -1.9451068140294884e-26,
+        -0.9967085123062134,
+        -0.0810687392950058
+      ],
+      "qoffset": [
+        117.8551025390625,
+        -35.72294235229492,
+        -7.248798370361328
+      ],
+      "sformRows": [
+        [
+          -2.0,
+          6.714715653593746e-19,
+          9.081024511081715e-18,
+          117.8551025390625
+        ],
+        [
+          -6.714715653593746e-19,
+          1.9737114906311035,
+          -0.35552823543548584,
+          -35.72294235229492
+        ],
+        [
+          8.25548088896093e-18,
+          0.3232076168060303,
+          2.171081781387329,
+          -7.248798370361328
+        ]
+      ],
+      "datatype": 4,
+      "bitsPerVoxel": 16,
+      "dataOffset": 608
+    },
+    "phase-pair/dataset/sub-01/ses-cal/fmap/sub-01_ses-cal_acq-gre_run-01_magnitude1.nii": {
+      "sha256": "c916a0ff69cab3b0c909f1214b4e540266850b281e3b8f2f8411b882b36a0452",
+      "version": 1,
+      "byteOrder": "LittleEndian",
+      "dimensions": [
+        2,
+        2,
+        1
+      ],
+      "pixelDimensions": [
+        1.0,
+        2.0,
+        3.0,
+        4.0,
+        1.5,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "unitsCode": 10,
+      "qformCode": 1,
+      "sformCode": 1,
+      "quaternion": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "qoffset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "sformRows": [
+        [
+          2.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          3.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          4.0,
+          0.0
+        ]
+      ],
+      "datatype": 16,
+      "bitsPerVoxel": 32,
+      "dataOffset": 352
+    },
+    "phase-pair/dataset/sub-01/ses-cal/fmap/sub-01_ses-cal_acq-gre_run-01_magnitude2.nii": {
+      "sha256": "c916a0ff69cab3b0c909f1214b4e540266850b281e3b8f2f8411b882b36a0452",
+      "version": 1,
+      "byteOrder": "LittleEndian",
+      "dimensions": [
+        2,
+        2,
+        1
+      ],
+      "pixelDimensions": [
+        1.0,
+        2.0,
+        3.0,
+        4.0,
+        1.5,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "unitsCode": 10,
+      "qformCode": 1,
+      "sformCode": 1,
+      "quaternion": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "qoffset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "sformRows": [
+        [
+          2.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          3.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          4.0,
+          0.0
+        ]
+      ],
+      "datatype": 16,
+      "bitsPerVoxel": 32,
+      "dataOffset": 352
+    },
+    "phase-pair/dataset/sub-01/ses-cal/fmap/sub-01_ses-cal_acq-gre_run-01_phase1.nii": {
+      "sha256": "c916a0ff69cab3b0c909f1214b4e540266850b281e3b8f2f8411b882b36a0452",
+      "version": 1,
+      "byteOrder": "LittleEndian",
+      "dimensions": [
+        2,
+        2,
+        1
+      ],
+      "pixelDimensions": [
+        1.0,
+        2.0,
+        3.0,
+        4.0,
+        1.5,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "unitsCode": 10,
+      "qformCode": 1,
+      "sformCode": 1,
+      "quaternion": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "qoffset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "sformRows": [
+        [
+          2.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          3.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          4.0,
+          0.0
+        ]
+      ],
+      "datatype": 16,
+      "bitsPerVoxel": 32,
+      "dataOffset": 352
+    },
+    "phase-pair/dataset/sub-01/ses-cal/fmap/sub-01_ses-cal_acq-gre_run-01_phase2.nii": {
+      "sha256": "c916a0ff69cab3b0c909f1214b4e540266850b281e3b8f2f8411b882b36a0452",
+      "version": 1,
+      "byteOrder": "LittleEndian",
+      "dimensions": [
+        2,
+        2,
+        1
+      ],
+      "pixelDimensions": [
+        1.0,
+        2.0,
+        3.0,
+        4.0,
+        1.5,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "unitsCode": 10,
+      "qformCode": 1,
+      "sformCode": 1,
+      "quaternion": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "qoffset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "sformRows": [
+        [
+          2.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          3.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          4.0,
+          0.0
+        ]
+      ],
+      "datatype": 16,
+      "bitsPerVoxel": 32,
+      "dataOffset": 352
+    },
+    "phase-pair/dataset/sub-01/ses-task/func/sub-01_ses-task_task-rest_run-1_bold.nii": {
+      "sha256": "31cd208e0ba19d0a608f1f6e8801af614890382a602516d5e796f0b499b4316e",
+      "version": 1,
+      "byteOrder": "LittleEndian",
+      "dimensions": [
+        2,
+        2,
+        1,
+        2
+      ],
+      "pixelDimensions": [
+        1.0,
+        2.0,
+        3.0,
+        4.0,
+        1.5,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "unitsCode": 10,
+      "qformCode": 1,
+      "sformCode": 1,
+      "quaternion": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "qoffset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "sformRows": [
+        [
+          2.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          3.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          4.0,
+          0.0
+        ]
+      ],
+      "datatype": 16,
+      "bitsPerVoxel": 32,
+      "dataOffset": 352
+    },
+    "phase-pair/dataset/sub-01/ses-task/func/sub-01_ses-task_task-rest_run-2_bold.nii": {
+      "sha256": "31cd208e0ba19d0a608f1f6e8801af614890382a602516d5e796f0b499b4316e",
+      "version": 1,
+      "byteOrder": "LittleEndian",
+      "dimensions": [
+        2,
+        2,
+        1,
+        2
+      ],
+      "pixelDimensions": [
+        1.0,
+        2.0,
+        3.0,
+        4.0,
+        1.5,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "unitsCode": 10,
+      "qformCode": 1,
+      "sformCode": 1,
+      "quaternion": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "qoffset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "sformRows": [
+        [
+          2.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          3.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          4.0,
+          0.0
+        ]
+      ],
+      "datatype": 16,
+      "bitsPerVoxel": 32,
+      "dataOffset": 352
+    }
+  }
+}

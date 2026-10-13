@@ -45,7 +45,8 @@ final class Interpretation private (
     val participants: Vector[ParticipantFacts],
     val queryVersion: Option[String],
     val relationships: Option[RelationshipGraph],
-    val declaredBidsVersion: Option[String]
+    val declaredBidsVersion: Option[String],
+    val observations: Vector[ScientificObservation]
 ):
   lazy val byPath: Map[RelPath, ArtifactMetadata] = artifacts.map(a => a.path -> a).toMap
   def relationshipClosure(roots: Vector[RelPath]): Either[Problem, RelationshipClosure] =
@@ -54,9 +55,11 @@ final class Interpretation private (
 object Interpretation:
   def from(content: ManifestId, profile: SemanticProfile, artifacts: Vector[ArtifactMetadata], facts: Vector[ArtifactFacts] = Vector.empty,
       participants: Vector[ParticipantFacts] = Vector.empty, queryVersion: Option[String] = None,
-      relationships: Option[RelationshipGraph] = None, declaredBidsVersion: Option[String] = None): Either[Problem, Interpretation] =
+      relationships: Option[RelationshipGraph] = None, declaredBidsVersion: Option[String] = None, observations: Vector[ScientificObservation] = Vector.empty): Either[Problem, Interpretation] =
     val paths = artifacts.map(_.path).toSet
-    if relationships.exists(g => RelationshipGraph.from(g.version, g.relationships, artifacts, g.evidenceVersion).isLeft) then
+    if observations.size > 10000 || observations.exists(o => !o.valid) || observations.map(o => o.source -> o.metric).distinct.size != observations.size then
+      Left(Problem.InvalidManifest("invalid or duplicate scientific observation"))
+    else if relationships.exists(g => RelationshipGraph.from(g.version, g.relationships, artifacts, g.evidenceVersion).isLeft) then
       Left(Problem.InvalidManifest("relationships do not match interpretation evidence"))
     else if (queryVersion.isEmpty && (facts.nonEmpty || participants.nonEmpty)) || paths.size != artifacts.size || facts.map(_.path).distinct.size != facts.size ||
         participants.map(_.participant).distinct.size != participants.size || facts.exists(f => !paths.contains(f.path)) then Left(Problem.InvalidManifest("duplicate semantic artifact"))
@@ -73,14 +76,17 @@ object Interpretation:
       val queryTokens = queryVersion.toVector.flatMap(v => Vector(v, facts.size.toString) ++
         facts.sortBy(_.path.value).flatMap(_.tokens) ++ Vector(participants.size.toString) ++ participants.sortBy(_.participant).flatMap(_.tokens))
       val contextual = profile.context.nonEmpty || declaredBidsVersion.nonEmpty
-      val domain = if contextual then "sanctity.interpretation.v5"
+      val domain = if relationships.exists(_.evidenceVersion == 3) then "sanctity.interpretation.v7"
+        else if contextual then "sanctity.interpretation.v5"
         else if relationships.exists(_.evidenceVersion == 2) then "sanctity.interpretation.v4"
         else if relationships.nonEmpty then "sanctity.interpretation.v3"
         else if queryVersion.isEmpty then "sanctity.interpretation.v1" else "sanctity.interpretation.v2"
       val relationshipTokens = relationships.toVector.flatMap(g => Vector(queryVersion.fold("absent")(_ => "present")) ++ g.tokens)
       val contextTokens = if contextual then Vector(profile.context.nonEmpty.toString, declaredBidsVersion.nonEmpty.toString) ++ declaredBidsVersion.toVector else Vector.empty
-      val id = InterpretationId(Digest.framed(domain, Vector(content.value.value) ++ contextTokens ++ profile.tokens ++ tokens ++ queryTokens ++ relationshipTokens))
-      Right(new Interpretation(id, content, profile, ordered, facts.sortBy(_.path.value), participants.sortBy(_.participant), queryVersion, relationships, declaredBidsVersion))
+      val observed = observations.sortBy(o => (Digest.framed("sanctity.released-artifact.v1", o.source.tokens).value, o.metric.name, o.metric.version, o.metric.unit.getOrElse("")))
+      val observationTokens = if observed.isEmpty then Vector.empty else Vector("observations-v1", observed.size.toString) ++ observed.flatMap(_.tokens)
+      val id = InterpretationId(Digest.framed(if observed.nonEmpty then "sanctity.interpretation.v6" else domain, Vector(content.value.value) ++ contextTokens ++ profile.tokens ++ tokens ++ queryTokens ++ relationshipTokens ++ observationTokens))
+      Right(new Interpretation(id, content, profile, ordered, facts.sortBy(_.path.value), participants.sortBy(_.participant), queryVersion, relationships, declaredBidsVersion, observed))
 
 final class Assessment private (
     val id: AssessmentId,

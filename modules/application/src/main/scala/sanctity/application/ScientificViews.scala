@@ -22,15 +22,25 @@ final class ScientificViews[F[_]: Async](
     compiler: ViewCompiler, ids: IdSource[F]
 ):
   def prepare(ctx: AccessContext, source: ReleaseRef, selectionId: SelectionId,
-      destination: DatasetId, profile: DisclosureProfile): F[Either[Problem, Preview]] = Checked.attempt {
+      destination: DatasetId, profile: DisclosureProfile): F[Either[Problem, Preview]] =
+    prepareWith(ctx, source, selectionId, destination, profile, false)
+
+  def preparePrivate(ctx: AccessContext, source: ReleaseRef, selectionId: SelectionId,
+      destination: DatasetId, profile: DisclosureProfile): F[Either[Problem, Preview]] =
+    prepareWith(ctx, source, selectionId, destination, profile, true)
+
+  private def prepareWith(ctx: AccessContext, source: ReleaseRef, selectionId: SelectionId,
+      destination: DatasetId, profile: DisclosureProfile, privateUse: Boolean): F[Either[Problem, Preview]] = Checked.attempt {
     for
-      _ <- catalog.check(ctx, source.dataset, Action.ManageAccess).flatMap(Checked.lift[F, Unit])
+      _ <- if privateUse then Async[F].unit else catalog.check(ctx, source.dataset, Action.ManageAccess).flatMap(Checked.lift[F, Unit])
       _ <- catalog.check(ctx, source.dataset, Action.ReadContent, Some(source.release)).flatMap(Checked.lift[F, Unit])
       _ <- catalog.check(ctx, destination, Action.Propose).flatMap(Checked.lift[F, Unit])
       target <- catalog.dataset(ctx, destination).flatMap(Checked.lift[F, Dataset])
       _ <- Checked.lift[F, Unit](Either.cond(target.head.isEmpty && destination != source.dataset, (),
         Problem.Conflict("view requires an empty, separate destination dataset")))
       release <- catalog.release(ctx, source).flatMap(Checked.lift[F, Release])
+      _ <- Checked.lift[F, Unit](Either.cond(!privateUse || (target.curator == ctx.principal && release.activity.kind != ActivityKind.PrivateBundle),
+        (), Problem.Unsupported("private bundles require their creator's destination and a non-private source")))
       selection <- catalog.selection(ctx, selectionId).flatMap(Checked.lift[F, FrozenSelection])
       paths <- Checked.lift[F, Vector[RelPath]](compiler.documents(release, selection, profile))
       inputs <- Checked.lift[F, Vector[Entry.File]](paths.distinct.traverse(p => release.manifest.byPath.get(p)
@@ -75,7 +85,7 @@ final class ScientificViews[F[_]: Async](
       receipt <- Checked.lift[F, ProjectionReceipt](ProjectionReceipt.from(release.manifest,
         release.interpretation.id, manifest, plan.steps, plan.evidence.binding))
       now <- Clock[F].realTimeInstant
-      activity = Activity(ActivityKind.ScientificView, ctx.principal, "Materialized authorized scientific view",
+      activity = Activity(if privateUse then ActivityKind.PrivateBundle else ActivityKind.ScientificView, ctx.principal, "Materialized authorized scientific view",
         None, now, Some(plan.evidence.copy(receipt = Some(receipt))))
       draft <- catalog.draft(ctx, destination, None, manifest, activity).flatMap(Checked.lift[F, Draft])
       preview <- repository.prepare(ctx, draft.id).flatMap(Checked.lift[F, Preview])

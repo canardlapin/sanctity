@@ -49,6 +49,9 @@ trait BlobStore[F[_]]:
 
 trait SemanticInterpreter[F[_]]:
   def prepare(manifest: Manifest): F[(Interpretation, Assessment)]
+  def prepare(manifest: Manifest, @scala.annotation.unused activity: Activity): F[(Interpretation, Assessment)] = prepare(manifest)
+
+  def prepare(manifest: Manifest, activity: Activity, @scala.annotation.unused sources: Vector[Release]): F[(Interpretation, Assessment)] = prepare(manifest, activity)
 
 final case class AuthorizedFile[F[_]](digest: Digest, size: Long, bytes: Stream[F, Byte])
 
@@ -61,6 +64,12 @@ trait Catalog[F[_]]:
   def revoke(ctx: AccessContext, dataset: DatasetId, grant: GrantId): F[Either[Problem, Unit]]
   def select(ctx: AccessContext, releases: Vector[ReleaseRef], query: ScientificQuery): F[Either[Problem, FrozenSelection]]
   def selection(ctx: AccessContext, id: SelectionId): F[Either[Problem, FrozenSelection]]
+  def startRun(ctx: AccessContext, spec: RunSpec, key: IdempotencyKey): F[Either[Problem, ProcessingRun]]
+  def readRun(ctx: AccessContext, id: RunId): F[Either[Problem, ProcessingRun]]
+  /** Completed owner-held evidence under current input authority, independent of the old destination. */
+  def completedRun(ctx: AccessContext, id: RunId): F[Either[Problem, ProcessingRun]]
+  def advanceRun(ctx: AccessContext, id: RunId, generation: Long, update: RunUpdate): F[Either[Problem, ProcessingRun]]
+  def observations(ctx: AccessContext, releases: Vector[ReleaseRef], query: ObservationQuery): F[Either[Problem, Vector[ObservationHit]]]
   def create(ctx: AccessContext, custodian: CustodianId): F[Dataset]
   def dataset(ctx: AccessContext, id: DatasetId): F[Either[Problem, Dataset]]
   def draft(ctx: AccessContext, dataset: DatasetId, base: Option[ReleaseId], manifest: Manifest, activity: Activity): F[Either[Problem, Draft]]

@@ -3,7 +3,19 @@ ThisBuild / scalaVersion := "3.3.8"
 ThisBuild / version := "0.1.0-SNAPSHOT"
 ThisBuild / publish / skip := true
 
-lazy val bids4sDirectory = file(sys.props.getOrElse("sanctity.bids4s.path", "../bids4s")).getCanonicalFile
+lazy val bids4sDirectory = sys.props.get("sanctity.bids4s.path").map(file(_).getCanonicalFile).getOrElse {
+  val archive = file("vendor/bids4s-source.zip").getCanonicalFile
+  val properties = new java.util.Properties
+  val input = new java.io.FileInputStream(file("project/bids4s-source.properties"))
+  try properties.load(input) finally input.close()
+  val expected = properties.getProperty("sha256")
+  val actual = java.security.MessageDigest.getInstance("SHA-256").digest(IO.readBytes(archive))
+    .map(b => f"${b & 0xff}%02x").mkString
+  require(actual == expected, "bids4s source snapshot digest mismatch")
+  val directory = file("target/source-dependencies/bids4s-" + expected).getCanonicalFile
+  IO.unzip(archive, directory)
+  directory
+}
 lazy val bids4sCore = ProjectRef(bids4sDirectory.toURI, "coreJVM")
 
 lazy val common = Seq(
@@ -40,7 +52,7 @@ lazy val bids = project.in(file("modules/bids")).dependsOn(application, bids4sCo
     }
     val upstream = ((bids4sDirectory / "modules/core/shared/src/main") ** "*.scala").get ++
       ((bids4sDirectory / "modules/core/jvm/src/main") ** "*.scala").get ++ Seq(bids4sDirectory / "build.sbt")
-    val own = Seq("kernel", "application", "bids").flatMap(m => ((root / "modules" / m / "src/main") ** "*.scala").get) ++ Seq(root / "build.sbt")
+    val own = Seq("kernel", "application", "bids", "processing-mri").flatMap(m => ((root / "modules" / m / "src/main") ** "*.scala").get) ++ ((root / "modules/processing-mri/src/main/resources") ** "*").get.filter(_.isFile) ++ Seq(root / "build.sbt")
     val output = (Compile / sourceManaged).value / "sanctity/bids/BuildIdentity.scala"
     IO.write(output, "package sanctity.bids\nobject BuildIdentity:\n" +
       "  val bids4s: String = \"sha256:" + fingerprint(bids4sDirectory, upstream) + "\"\n" +
@@ -63,6 +75,7 @@ lazy val postgres = project.in(file("modules/postgres")).dependsOn(application).
   )
 )
 lazy val importDicom = project.in(file("modules/import-dicom")).dependsOn(bids, objects).settings(common)
+lazy val processingMri = project.in(file("modules/processing-mri")).dependsOn(bids, objects).settings(common)
 lazy val importXnat = project.in(file("modules/import-xnat")).dependsOn(application, objects).settings(common).settings(
   libraryDependencies ++= Seq("org.http4s" %% "http4s-ember-client" % "0.23.30", "io.circe" %% "circe-jawn" % "0.14.10")
 )
@@ -76,11 +89,11 @@ lazy val http = project.in(file("modules/http")).dependsOn(application).settings
 lazy val integration = project.in(file("modules/integration")).dependsOn(app % "compile->compile;test->test,compile").settings(common).settings(
   Test / parallelExecution := false
 )
-lazy val app = project.in(file("modules/app")).dependsOn(bids, objects, postgres, importDicom, importXnat, http).settings(common).settings(
+lazy val app = project.in(file("modules/app")).dependsOn(bids, objects, postgres, importDicom, importXnat, http, processingMri).settings(common).settings(
   Compile / run / fork := true,
   Compile / mainClass := Some("sanctity.app.Demo")
 )
-lazy val root = project.in(file(".")).aggregate(kernel, application, bids, objects, postgres, importDicom, importXnat, http, app).settings(
+lazy val root = project.in(file(".")).aggregate(kernel, application, bids, objects, postgres, importDicom, importXnat, http, processingMri, app).settings(
   name := "sanctity",
   publish / skip := true
 )

@@ -109,7 +109,8 @@ abstract class CatalogLifecycleSuite extends CatalogSubsetSuite:
           def copy(from: String, to: String): Unit =
             val target = source.resolve(to)
             Files.createDirectories(target.getParent)
-            val _ = Files.copy(source.resolve(from), target)
+            val _ = if to.endsWith("_T1w.nii") then Files.write(target, DwiTestFiles.nifti(volumes = 1))
+              else Files.copy(source.resolve(from), target)
           copy(SyntheticFixture.firstImage, "sub-01/ses-a/anat/sub-01_ses-a_T1w.nii")
           copy(SyntheticFixture.firstImage, "sub-01/ses-b/func/sub-01_ses-b_task-rest_bold.nii")
           copy(SyntheticFixture.firstImage, "sub-02/ses-a/anat/sub-02_ses-a_T1w.nii")
@@ -372,6 +373,7 @@ abstract class CatalogLifecycleSuite extends CatalogSubsetSuite:
       for
         initial <- accepted(s, root)
         release <- checked(s.repository.release(s.context, initial.release))
+        edit <- correction(s, initial.release)
         image = release.manifest.files.find(_.path.value == SyntheticFixture.firstImage).get
         location = root.resolve("storage/objects").resolve(image.blob.digest.value.take(2)).resolve(image.blob.digest.value)
         _ <- IO.blocking(Files.write(location, Array.fill[Byte](image.blob.size.toInt)(9)))
@@ -383,7 +385,8 @@ abstract class CatalogLifecycleSuite extends CatalogSubsetSuite:
           try assert(!listing.iterator().asScala.exists(_.getFileName.toString.startsWith(".sanctity-export-")))
           finally listing.close()
         }
-        edit <- correction(s, initial.release)
+        failedPreparation <- s.repository.correctMetadata(s.context, initial.release, path(SyntheticFixture.sharedSidecar), SyntheticFixture.correctedJson, "Corrupt source")
+        _ = assert(failedPreparation.left.toOption.exists(_.isInstanceOf[Problem.Integrity]))
         outcome <- s.repository.accept(s.context, edit.candidate.id, key("corrupt"))
         _ = assert(outcome.left.toOption.exists(_.isInstanceOf[Problem.Integrity]))
       yield ()
@@ -839,7 +842,7 @@ abstract class CatalogLifecycleSuite extends CatalogSubsetSuite:
           DwiTestFiles.install(root.resolve("source"), DwiTestFiles.nifti(volumes = 3), other)
         }
         preview <- imported(s, root)
-        checks = preview.candidate.assessment.checks.map(c => c.target -> c).toMap
+        checks = preview.candidate.assessment.checks.filter(_.rule.startsWith(bids4s.DwiConsistency.Version)).map(c => c.target -> c).toMap
         _ = assertEquals(checks(path(DwiTestFiles.image)).findings, Vector.empty)
         _ = assertEquals(checks(path(other)).findings.map(_.code).toSet, Set("DwiBvalCount", "DwiBvecCount"))
         denied <- s.repository.accept(s.context, preview.candidate.id, key("shared-dwi"))

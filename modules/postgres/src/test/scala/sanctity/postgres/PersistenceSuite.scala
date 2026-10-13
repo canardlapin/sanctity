@@ -31,6 +31,21 @@ final class PersistenceSuite extends FunSuite:
     assertEquals(decoded.artifacts, interpretation.artifacts)
     assertEquals(decoded.profile, profile)
   }
+  test("table-column evidence round trips with immutable identity and rejects column tampering") {
+    val table = path("events.tsv")
+    val asset = path("stimuli/a.txt")
+    val metas = Vector(table, asset).map(p => ArtifactMetadata(p, Map.empty, Vector.empty, None))
+    val relation = ScientificRelationship(table, "bids.event-stimuli", Vector(asset), None,
+      Vector(RelationshipEvidence.TableColumn(table, table, "stim_file", "bids-stimuli-v1")))
+    val graph = right(RelationshipGraph.from("stimuli", Vector(relation), metas, 3))
+    val value = right(Interpretation.from(manifest.id, profile, metas, relationships = Some(graph)))
+    val encoded = JsonCodecs.encode(value)
+    val decoded = right(JsonCodecs.decode[Interpretation](encoded))
+    assertEquals(decoded.id, value.id)
+    assertEquals(decoded.relationships.get.relationships, Vector(relation))
+    assert(JsonCodecs.decode[Interpretation](encoded.replace("stim_file", "other_column")).isLeft)
+    assert(JsonCodecs.decode[Interpretation](encoded.replace("\"evidenceVersion\":3", "\"evidenceVersion\":2")).isLeft)
+  }
   test("tampered identity and unsupported envelope versions are rejected") {
     val encoded = JsonCodecs.encode(manifest)
     assert(JsonCodecs.decode[Manifest](encoded.replace("sub-01/a.nii", "sub-01/b.nii")).isLeft)
@@ -201,4 +216,62 @@ final class PersistenceSuite extends FunSuite:
         fields.remove("declaredBidsVersion").add("profile", fields("profile").get.mapObject(_.remove("context")))
       }))
     assertEquals(right(JsonCodecs.decode[Interpretation](legacy.noSpaces)).id, interpretation.id)
+  }
+
+  test("processing receipts round trip and historical activities omit new optional contracts") {
+    val blob = manifest.files.head.blob
+    val receipt = ProcessingEvidence(Id[RunTag](UUID.randomUUID()),
+      ReleaseRef(Id[DatasetTag](UUID.randomUUID()), Id[ReleaseTag](UUID.randomUUID())), blob.digest,
+      ProducerIdentity("qc", "1", blob, "python-test"), Map("mode" -> "header"), Vector(OutputFile(path("qc.tsv"), blob)), Vector(path("image.nii")), blob)
+    val decoded = right(JsonCodecs.decode[ProcessingEvidence](JsonCodecs.encode(receipt)))
+    assertEquals(decoded, receipt)
+    assertEquals(decoded.id, receipt.id)
+    val legacy = Activity(ActivityKind.NativeImport, Id[PrincipalTag](UUID.randomUUID()), "import", None, java.time.Instant.EPOCH)
+    val json = io.circe.jawn.parse(JsonCodecs.encode(legacy)).toOption.get
+    val old = json.mapObject(_.mapValues(v => v.asObject.fold(v)(o => io.circe.Json.fromJsonObject(o.remove("bundle").remove("processing").remove("publication")))))
+    assertEquals(right(JsonCodecs.decode[Activity](old.noSpaces)), legacy)
+  }
+
+  test("publication identity and activity bindings survive decoding and reject tampering") {
+    val blob = manifest.files.head.blob
+    val owner = Id[PrincipalTag](UUID.randomUUID())
+    val result = ProcessingEvidence(Id[RunTag](UUID.randomUUID()),
+      ReleaseRef(Id[DatasetTag](UUID.randomUUID()), Id[ReleaseTag](UUID.randomUUID())), blob.digest,
+      ProducerIdentity("qc", "1", blob, "python-test"), Map.empty, Vector(OutputFile(path("qc.tsv"), blob)), Vector(path("image.nii")), blob)
+    val intent = PublicationIntent(result.invocation, result.id, owner, Id[DatasetTag](UUID.randomUUID()), None,
+      right(IdempotencyKey.from("publish")))
+    assertEquals(right(JsonCodecs.decode[PublicationIntent](JsonCodecs.encode(intent))), intent)
+    assert(JsonCodecs.decode[PublicationIntent](JsonCodecs.encode(intent).replace("publish\"", "changed\"")).isLeft)
+    val activity = Activity(ActivityKind.Derivative, owner, "publish", None, java.time.Instant.EPOCH,
+      processing = Some(result), publication = Some(intent))
+    assertEquals(right(JsonCodecs.decode[Activity](JsonCodecs.encode(activity))), activity)
+    assert(JsonCodecs.decode[Activity](JsonCodecs.encode(activity.copy(processing = None))).isLeft)
+    assert(JsonCodecs.decode[Activity](JsonCodecs.encode(activity.copy(actor = Id[PrincipalTag](UUID.randomUUID())))).isLeft)
+    val spec = RunSpec(result.input, result.bundle, intent.destination, None, InputContract("qc", "1"))
+    val run = ProcessingRun(result.invocation, owner, spec, right(IdempotencyKey.from("run")), 3, RunStatus.Completed,
+      Some(ExecutionEvidence(result.producer, result.request, result.targets)), Some(result))
+    assertEquals(right(JsonCodecs.decode[ProcessingRun](JsonCodecs.encode(run))), run)
+    assertEquals(right(JsonCodecs.decode[ProcessingEvidence](JsonCodecs.encode(result))).id, result.id)
+  }
+
+  test("derivative observations and cross-release checks round trip while legacy identities remain unchanged") {
+    val file = manifest.files.head
+    val source = ReleasedArtifact(ReleaseRef(Id[DatasetTag](UUID.randomUUID()), Id[ReleaseTag](UUID.randomUUID())),
+      interpretation.id, Assessment.from(interpretation, "source", Vector.empty).id, file.path, file.blob)
+    val metric = MetricDefinition("volumes", "1", None)
+    val observed = right(Interpretation.from(manifest.id, profile, Vector.empty, observations =
+      Vector(ScientificObservation(source, metric, 2, file.path, "qc.v1"))))
+    val encoded = JsonCodecs.encode(observed)
+    assertEquals(right(JsonCodecs.decode[Interpretation](encoded)).observations, observed.observations)
+    assert(JsonCodecs.decode[Interpretation](encoded.replace("volumes", "other")).isLeft)
+    val c = right(ContentCheck.from("qc.v1", file.path, Vector(CheckInput("output", file.path, file.blob)),
+      Map("volumes" -> MetadataValue.Number(2)), Vector.empty, Vector(source)))
+    val a = Assessment.from(observed, "qc", Vector.empty, Vector(c))
+    assertEquals(right(JsonCodecs.assessment(JsonCodecs.encode(a), observed)).checks.head.external, Vector(source))
+    val legacy = JsonCodecs.encode(interpretation).replace(",\"observations\":[]", "").replace("\"observations\":[],", "")
+    assertEquals(right(JsonCodecs.decode[Interpretation](legacy)).id, interpretation.id)
+    val ordinary = right(ContentCheck.from("ordinary", file.path, Vector(CheckInput("file", file.path, file.blob)), Map.empty, Vector.empty))
+    val old = Assessment.from(interpretation, "old", Vector.empty, Vector(ordinary))
+    val oldJson = JsonCodecs.encode(old).replace(",\"external\":[]", "").replace("\"external\":[],", "")
+    assertEquals(right(JsonCodecs.assessment(oldJson, interpretation)).id, old.id)
   }

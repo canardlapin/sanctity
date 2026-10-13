@@ -1,0 +1,310 @@
+{
+  "seed": 17029,
+  "snapshotDumpSha256": "71e4c453d51ec86bd47784e4bf2e55a0cceef0b266e0b3f2f8c0ca8159c6117f",
+  "pairs": [
+    {
+      "before": "controlled-before",
+      "after": "controlled-after",
+      "observations": [
+        {
+          "inputs": 1,
+          "derivativeReleases": 1,
+          "rows": 1,
+          "beforeMedianMs": 439.174667,
+          "afterMedianMs": 124.750458,
+          "observedRatio": 3.52042528773722,
+          "beforeP95Ms": 674.617542,
+          "afterP95Ms": 125.923375
+        },
+        {
+          "inputs": 100,
+          "derivativeReleases": 1,
+          "rows": 100,
+          "beforeMedianMs": 7695.619083,
+          "afterMedianMs": 140.794709,
+          "observedRatio": 54.65843949434207,
+          "beforeP95Ms": 7826.737958,
+          "afterP95Ms": 147.22475
+        },
+        {
+          "inputs": 100,
+          "derivativeReleases": 100,
+          "rows": 10000,
+          "beforeMedianMs": 19063.096209,
+          "afterMedianMs": 8640.692833,
+          "observedRatio": 2.206199963062615,
+          "beforeP95Ms": 19295.15875,
+          "afterP95Ms": 13432.042584
+        }
+      ],
+      "unchangedSelectionControls": [
+        {
+          "images": 29,
+          "case": "all",
+          "beforeMedianMs": 153.201959,
+          "afterMedianMs": 66.122208
+        },
+        {
+          "images": 29,
+          "case": "same-session",
+          "beforeMedianMs": 152.554417,
+          "afterMedianMs": 78.287167
+        },
+        {
+          "images": 29,
+          "case": "lexical-subject-01",
+          "beforeMedianMs": 99.278583,
+          "afterMedianMs": 41.372458
+        },
+        {
+          "images": 29,
+          "case": "numeric-age-18",
+          "beforeMedianMs": 100.382584,
+          "afterMedianMs": 28.810417
+        },
+        {
+          "images": 29,
+          "case": "strict-decimal-boundary",
+          "beforeMedianMs": 80.679625,
+          "afterMedianMs": 29.3765
+        },
+        {
+          "images": 244,
+          "case": "all",
+          "beforeMedianMs": 109.645125,
+          "afterMedianMs": 126.536833
+        },
+        {
+          "images": 244,
+          "case": "same-session",
+          "beforeMedianMs": 102.718041,
+          "afterMedianMs": 62.834584
+        },
+        {
+          "images": 244,
+          "case": "lexical-subject-01",
+          "beforeMedianMs": 86.404292,
+          "afterMedianMs": 43.450292
+        },
+        {
+          "images": 244,
+          "case": "numeric-age-18",
+          "beforeMedianMs": 145.097083,
+          "afterMedianMs": 30.432834
+        },
+        {
+          "images": 244,
+          "case": "strict-decimal-boundary",
+          "beforeMedianMs": 123.849917,
+          "afterMedianMs": 31.287209
+        },
+        {
+          "images": 2896,
+          "case": "all",
+          "beforeMedianMs": 295.455417,
+          "afterMedianMs": 330.587792
+        },
+        {
+          "images": 2896,
+          "case": "same-session",
+          "beforeMedianMs": 446.18975,
+          "afterMedianMs": 172.106958
+        },
+        {
+          "images": 2896,
+          "case": "lexical-subject-01",
+          "beforeMedianMs": 223.658,
+          "afterMedianMs": 93.209334
+        },
+        {
+          "images": 2896,
+          "case": "numeric-age-18",
+          "beforeMedianMs": 263.571833,
+          "afterMedianMs": 89.7455
+        },
+        {
+          "images": 2896,
+          "case": "strict-decimal-boundary",
+          "beforeMedianMs": 464.912625,
+          "afterMedianMs": 96.359584
+        }
+      ],
+      "storageEqual": false,
+      "beforeStorageBytes": 29343744,
+      "afterStorageBytes": 31023104,
+      "beforeIndexBytes": 13885440,
+      "afterIndexBytes": 13885440
+    },
+    {
+      "before": "repeat-before",
+      "after": "repeat-after",
+      "observations": [
+        {
+          "inputs": 1,
+          "derivativeReleases": 1,
+          "rows": 1,
+          "beforeMedianMs": 409.870542,
+          "afterMedianMs": 476.618875,
+          "observedRatio": 0.8599544908917004,
+          "beforeP95Ms": 768.469792,
+          "afterP95Ms": 478.630833
+        },
+        {
+          "inputs": 100,
+          "derivativeReleases": 1,
+          "rows": 100,
+          "beforeMedianMs": 8527.116583,
+          "afterMedianMs": 354.840833,
+          "observedRatio": 24.03082111747833,
+          "beforeP95Ms": 8809.834958,
+          "afterP95Ms": 420.286708
+        },
+        {
+          "inputs": 100,
+          "derivativeReleases": 100,
+          "rows": 10000,
+          "beforeMedianMs": 18387.93425,
+          "afterMedianMs": 9681.758375,
+          "observedRatio": 1.899234987879978,
+          "beforeP95Ms": 20045.05375,
+          "afterP95Ms": 10314.844584
+        }
+      ],
+      "unchangedSelectionControls": [
+        {
+          "images": 29,
+          "case": "all",
+          "beforeMedianMs": 150.523459,
+          "afterMedianMs": 203.583375
+        },
+        {
+          "images": 29,
+          "case": "same-session",
+          "beforeMedianMs": 130.278416,
+          "afterMedianMs": 129.347916
+        },
+        {
+          "images": 29,
+          "case": "lexical-subject-01",
+          "beforeMedianMs": 87.606,
+          "afterMedianMs": 199.63675
+        },
+        {
+          "images": 29,
+          "case": "numeric-age-18",
+          "beforeMedianMs": 83.443417,
+          "afterMedianMs": 112.327542
+        },
+        {
+          "images": 29,
+          "case": "strict-decimal-boundary",
+          "beforeMedianMs": 119.935584,
+          "afterMedianMs": 101.333834
+        },
+        {
+          "images": 244,
+          "case": "all",
+          "beforeMedianMs": 131.694458,
+          "afterMedianMs": 137.499542
+        },
+        {
+          "images": 244,
+          "case": "same-session",
+          "beforeMedianMs": 223.307334,
+          "afterMedianMs": 136.329542
+        },
+        {
+          "images": 244,
+          "case": "lexical-subject-01",
+          "beforeMedianMs": 91.580083,
+          "afterMedianMs": 114.192416
+        },
+        {
+          "images": 244,
+          "case": "numeric-age-18",
+          "beforeMedianMs": 124.732,
+          "afterMedianMs": 89.380541
+        },
+        {
+          "images": 244,
+          "case": "strict-decimal-boundary",
+          "beforeMedianMs": 93.615333,
+          "afterMedianMs": 164.484917
+        },
+        {
+          "images": 2896,
+          "case": "all",
+          "beforeMedianMs": 372.690042,
+          "afterMedianMs": 389.72125
+        },
+        {
+          "images": 2896,
+          "case": "same-session",
+          "beforeMedianMs": 367.475125,
+          "afterMedianMs": 539.421708
+        },
+        {
+          "images": 2896,
+          "case": "lexical-subject-01",
+          "beforeMedianMs": 372.146708,
+          "afterMedianMs": 420.61975
+        },
+        {
+          "images": 2896,
+          "case": "numeric-age-18",
+          "beforeMedianMs": 276.147542,
+          "afterMedianMs": 303.657667
+        },
+        {
+          "images": 2896,
+          "case": "strict-decimal-boundary",
+          "beforeMedianMs": 504.78175,
+          "afterMedianMs": 250.068875
+        }
+      ],
+      "storageEqual": true,
+      "beforeStorageBytes": 31023104,
+      "afterStorageBytes": 31023104,
+      "beforeIndexBytes": 13885440,
+      "afterIndexBytes": 13885440
+    }
+  ],
+  "changedMeasuredSourceFiles": [
+    "modules/postgres/src/main/scala/sanctity/postgres/PostgresCatalog.scala"
+  ],
+  "optimization": "Group input artifacts by exact release within a request, load the immutable accepted release once, and validate every artifact. Authorization and SQL are unchanged. No cross-request cache.",
+  "deterministicEffect": "100 input artifacts from one release require 1 acceptedSource load instead of 100.",
+  "oracleVerified": true,
+  "inputReleaseValidationCallsBefore": 100,
+  "inputReleaseValidationCallsAfter": 1,
+  "limits": [
+    "Shared host timings vary; unchanged selection controls also change. Raw observed speedups are not solely attributable to the optimization.",
+    "Three warm samples per case; empirical p95 equals their maximum. No timing SLA or CI threshold.",
+    "PostgreSQL restarts before each sequence; release contexts are loaded before cases and the OS cache is not cleared. First-call samples are not pristine cold-cache measurements.",
+    "The 100-derivative-release path still decodes and checks every accepted derivative release; that remaining cost is intentionally retained."
+  ],
+  "tradeoffs": {
+    "migrationAdded": false,
+    "indexesChanged": false,
+    "ingestionCodeChanged": false,
+    "additionalGroupingEntriesAtMost": 100
+  },
+  "reports": [
+    {
+      "path": "docs/evidence/query-scale-controlled-before.json",
+      "sha256": "94ed33ccca277688cb8934869a70c765c9fccb138fc9fb9c885aba1e78cc3e32"
+    },
+    {
+      "path": "docs/evidence/query-scale-controlled-after.json",
+      "sha256": "77437cb4d7f1096a12c8a6b08c62b869c7225f28cfafe02d53ccb3615c46506f"
+    },
+    {
+      "path": "docs/evidence/query-scale-repeat-before.json",
+      "sha256": "176c31cf43d0eeddac1e27f504df620a921c8434bd155a61a94453920262d9a6"
+    },
+    {
+      "path": "docs/evidence/query-scale-repeat-after.json",
+      "sha256": "d5a7491a533576e308b67c22619e266e7e29074b0c73448461e97a98b0540fb8"
+    }
+  ]
+}

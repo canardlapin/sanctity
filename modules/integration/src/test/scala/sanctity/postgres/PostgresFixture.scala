@@ -41,5 +41,7 @@ private[postgres] object PostgresFixture:
     yield PgFixture(config, database, system, root)
 
 final class PostgresLifecycleSuite extends CatalogLifecycleSuite:
+  // Generated oracle cases exercise many accepted releases and policy transitions.
+  override val munitTimeout: scala.concurrent.duration.Duration = scala.concurrent.duration.Duration(5, "minutes")
   protected def fixture(run: (RepositorySystem, Path) => IO[Unit]): Unit =
     PostgresFixture.resource.use(fixture => run(fixture.system, fixture.root)).unsafeRunSync()

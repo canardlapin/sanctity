@@ -142,7 +142,10 @@ final class NativeRepository[F[_]](
 
   private def prepareInternal(ctx: AccessContext, draft: Draft): F[Preview] =
     for
-      result <- semantics.prepare(draft.manifest)
+      sources <- draft.activity.processing.toVector.traverse(p =>
+        catalog.check(ctx, p.input.dataset, Action.ReadContent, Some(p.input.release)).flatMap(Checked.lift[F, Unit]) *>
+          catalog.release(ctx, p.input).flatMap(Checked.lift[F, Release]))
+      result <- semantics.prepare(draft.manifest, draft.activity, sources)
       (interpretation, assessment) = result
       before <- draft.base.traverse(id => catalog.release(ctx, ReleaseRef(draft.dataset, id)).flatMap(Checked.lift[F, Release]))
       projected <- draft.activity.projection.traverse(p => catalog.release(ctx, p.source).flatMap(Checked.lift[F, Release]))

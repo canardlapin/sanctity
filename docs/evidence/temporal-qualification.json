@@ -1,0 +1,248 @@
+{
+  "producerSha256": "e392638cb3afbf3a6ffb0127601b1fff2cb9330150e9643ebb64fc1f179d611e",
+  "oracleSha256": "fe8931040ef7aedaa3b4894c8b077ff97dc5c03c06fbcb63efef1806a1d602ad",
+  "cases": [
+    {
+      "case": "nifti1-le-4",
+      "inputSha256": "32bbb1a645a33055206a3ca8b09a080cdf598fc5108e794dbcfe6dadebc1f2ab",
+      "checkedOutputVoxels": 8,
+      "maximumAbsoluteError": 0.0,
+      "absoluteTolerance": 1e-10,
+      "relativeTolerance": 1e-12,
+      "logicalBytes": 376,
+      "seconds": 0.012591875158250332,
+      "peakRssBytes": 40288256
+    },
+    {
+      "case": "nifti1-le-4-gzip",
+      "inputSha256": "39da87566fff060b0ab0a94829987b769d491419cb82869524f466fea6f24598",
+      "checkedOutputVoxels": 8,
+      "maximumAbsoluteError": 0.0,
+      "absoluteTolerance": 1e-10,
+      "relativeTolerance": 1e-12,
+      "logicalBytes": 376,
+      "seconds": 0.0067497920244932175,
+      "peakRssBytes": 40665088
+    },
+    {
+      "case": "nifti1-le-64",
+      "inputSha256": "73aff5ffeedd08f8774d2affaa67f8ed920b460521fc5da59b8e99b85c7c2f3d",
+      "checkedOutputVoxels": 8,
+      "maximumAbsoluteError": 0.0,
+      "absoluteTolerance": 1e-10,
+      "relativeTolerance": 1e-12,
+      "logicalBytes": 448,
+      "seconds": 0.006189499981701374,
+      "peakRssBytes": 41271296
+    },
+    {
+      "case": "nifti1-le-64-gzip",
+      "inputSha256": "3f7a08d16d421f9922e22e689a3ac205fefed26898c54efcce1bdada5354e2b9",
+      "checkedOutputVoxels": 8,
+      "maximumAbsoluteError": 0.0,
+      "absoluteTolerance": 1e-10,
+      "relativeTolerance": 1e-12,
+      "logicalBytes": 448,
+      "seconds": 0.006018832791596651,
+      "peakRssBytes": 39682048
+    },
+    {
+      "case": "nifti1-be-4",
+      "inputSha256": "9582458e8fc2b2b02d450b194d19b1d5971636555ef983c6e5405f62e2c48d35",
+      "checkedOutputVoxels": 8,
+      "maximumAbsoluteError": 0.0,
+      "absoluteTolerance": 1e-10,
+      "relativeTolerance": 1e-12,
+      "logicalBytes": 376,
+      "seconds": 0.006530000362545252,
+      "peakRssBytes": 39059456
+    },
+    {
+      "case": "nifti1-be-4-gzip",
+      "inputSha256": "2d0aef8ac64197b2e06508059647dfd30786efbaad06664647e6ffe0b8adf720",
+      "checkedOutputVoxels": 8,
+      "maximumAbsoluteError": 0.0,
+      "absoluteTolerance": 1e-10,
+      "relativeTolerance": 1e-12,
+      "logicalBytes": 376,
+      "seconds": 0.006528665777295828,
+      "peakRssBytes": 40976384
+    },
+    {
+      "case": "nifti1-be-64",
+      "inputSha256": "12f5e84f8f55357c617cc071e961418102afcb768709b2ca528253eb393fdc60",
+      "checkedOutputVoxels": 8,
+      "maximumAbsoluteError": 0.0,
+      "absoluteTolerance": 1e-10,
+      "relativeTolerance": 1e-12,
+      "logicalBytes": 448,
+      "seconds": 0.006282833870500326,
+      "peakRssBytes": 41844736
+    },
+    {
+      "case": "nifti1-be-64-gzip",
+      "inputSha256": "67bc1aaaf8e08fced20770d4ab5492d57637641d9c209e696ad0309896163999",
+      "checkedOutputVoxels": 8,
+      "maximumAbsoluteError": 0.0,
+      "absoluteTolerance": 1e-10,
+      "relativeTolerance": 1e-12,
+      "logicalBytes": 448,
+      "seconds": 0.006084083579480648,
+      "peakRssBytes": 41123840
+    },
+    {
+      "case": "nifti2-le-4",
+      "inputSha256": "da4daf2586a2ba02a55b2ea4292d4fe338fd29d278b83b319cd8f2de4f5479ff",
+      "checkedOutputVoxels": 8,
+      "maximumAbsoluteError": 0.0,
+      "absoluteTolerance": 1e-10,
+      "relativeTolerance": 1e-12,
+      "logicalBytes": 568,
+      "seconds": 0.006086249835789204,
+      "peakRssBytes": 40353792
+    },
+    {
+      "case": "nifti2-le-4-gzip",
+      "inputSha256": "d4eb6295e6d69f74c09216498698f9bc4937646b7ac23ec70017449fec56b4aa",
+      "checkedOutputVoxels": 8,
+      "maximumAbsoluteError": 0.0,
+      "absoluteTolerance": 1e-10,
+      "relativeTolerance": 1e-12,
+      "logicalBytes": 568,
+      "seconds": 0.006414041854441166,
+      "peakRssBytes": 40861696
+    },
+    {
+      "case": "nifti2-le-64",
+      "inputSha256": "f9ba3e15c63d5338d34ffdcd844cdab7b9ac639246b1df48f330a7b2faf34387",
+      "checkedOutputVoxels": 8,
+      "maximumAbsoluteError": 0.0,
+      "absoluteTolerance": 1e-10,
+      "relativeTolerance": 1e-12,
+      "logicalBytes": 640,
+      "seconds": 0.006765459198504686,
+      "peakRssBytes": 40468480
+    },
+    {
+      "case": "nifti2-le-64-gzip",
+      "inputSha256": "a310c1f238b6d8cde9f199d1d3815f8d9600695b952278c49ca46e8d34dc5a74",
+      "checkedOutputVoxels": 8,
+      "maximumAbsoluteError": 0.0,
+      "absoluteTolerance": 1e-10,
+      "relativeTolerance": 1e-12,
+      "logicalBytes": 640,
+      "seconds": 0.0067877089604735374,
+      "peakRssBytes": 42090496
+    },
+    {
+      "case": "nifti2-be-4",
+      "inputSha256": "157d9efcf6dca051de6e9a274f218aa21d9a3403e8a71623b023ba4956252e7d",
+      "checkedOutputVoxels": 8,
+      "maximumAbsoluteError": 0.0,
+      "absoluteTolerance": 1e-10,
+      "relativeTolerance": 1e-12,
+      "logicalBytes": 568,
+      "seconds": 0.006703208200633526,
+      "peakRssBytes": 40468480
+    },
+    {
+      "case": "nifti2-be-4-gzip",
+      "inputSha256": "6727d6e2d97c2b1bc321a3c6db238229d9679ccfbcf38e53a9ba190ca785b680",
+      "checkedOutputVoxels": 8,
+      "maximumAbsoluteError": 0.0,
+      "absoluteTolerance": 1e-10,
+      "relativeTolerance": 1e-12,
+      "logicalBytes": 568,
+      "seconds": 0.006110500078648329,
+      "peakRssBytes": 39108608
+    },
+    {
+      "case": "nifti2-be-64",
+      "inputSha256": "c1880162d568f99873b593195ee5c168c456697b21e98685902ca6cfc7f38010",
+      "checkedOutputVoxels": 8,
+      "maximumAbsoluteError": 0.0,
+      "absoluteTolerance": 1e-10,
+      "relativeTolerance": 1e-12,
+      "logicalBytes": 640,
+      "seconds": 0.007059665862470865,
+      "peakRssBytes": 41238528
+    },
+    {
+      "case": "nifti2-be-64-gzip",
+      "inputSha256": "99e05c6488afccac92743487331ed0a2a0b3f0c0291b3175ebacc62a6b3c0380",
+      "checkedOutputVoxels": 8,
+      "maximumAbsoluteError": 0.0,
+      "absoluteTolerance": 1e-10,
+      "relativeTolerance": 1e-12,
+      "logicalBytes": 640,
+      "seconds": 0.006017833016812801,
+      "peakRssBytes": 39600128
+    },
+    {
+      "case": "large-offset-small-variance",
+      "inputSha256": "752f54b4a3916490764ac3241f6a5703deb603eb803b67dbcd4cc866a9cf5179",
+      "checkedOutputVoxels": 8,
+      "maximumAbsoluteError": 0.0,
+      "absoluteTolerance": 1e-10,
+      "relativeTolerance": 1e-12,
+      "logicalBytes": 448,
+      "seconds": 0.007165249902755022,
+      "peakRssBytes": 40402944
+    },
+    {
+      "case": "constant-signal",
+      "inputSha256": "0a8fea76beee05363c8f7662f982d3b775b385816e7744a4df1828eede9ffa02",
+      "checkedOutputVoxels": 8,
+      "maximumAbsoluteError": 0.0,
+      "absoluteTolerance": 1e-10,
+      "relativeTolerance": 1e-12,
+      "logicalBytes": 448,
+      "seconds": 0.006416375283151865,
+      "peakRssBytes": 40976384
+    },
+    {
+      "case": "example4d",
+      "inputSha256": "42097dfbab9d2a036b41ae5c97a359591cf2cf5c3f8dc6ca6455c0b8a7f22696",
+      "checkedOutputVoxels": 589824,
+      "maximumAbsoluteError": 0.0,
+      "absoluteTolerance": 1e-10,
+      "relativeTolerance": 1e-12,
+      "logicalBytes": 1180064,
+      "seconds": 0.02870987495407462,
+      "peakRssBytes": 67911680
+    },
+    {
+      "case": "example_nifti2",
+      "inputSha256": "a53e59e70eb0d8275a4fe347422a89551aee92d0eb1137a3444b1932a28c3fe2",
+      "checkedOutputVoxels": 15360,
+      "maximumAbsoluteError": 0.0,
+      "absoluteTolerance": 1e-10,
+      "relativeTolerance": 1e-12,
+      "logicalBytes": 31328,
+      "seconds": 0.00885416567325592,
+      "peakRssBytes": 41172992
+    },
+    {
+      "case": "memory-4-volumes",
+      "inputSha256": "baf3aec52ac23a9bbbc3d5c1e56e9bef99dc10e26e2e64532955801d7092951a",
+      "checkedOutputVoxels": 262144,
+      "maximumAbsoluteError": 0.0,
+      "absoluteTolerance": 1e-10,
+      "relativeTolerance": 1e-12,
+      "logicalBytes": 2097504,
+      "seconds": 0.02499787462875247,
+      "peakRssBytes": 49872896
+    },
+    {
+      "case": "memory-64-volumes",
+      "inputSha256": "b96af1f1d8798c5978edaee056ac8625405ed37fd2d9efa30f032d89e536c628",
+      "checkedOutputVoxels": 262144,
+      "maximumAbsoluteError": 6.821210263296962e-13,
+      "absoluteTolerance": 1e-10,
+      "relativeTolerance": 1e-12,
+      "logicalBytes": 33554784,
+      "seconds": 0.18809645902365446,
+      "peakRssBytes": 56197120
+    }
+  ]
+}

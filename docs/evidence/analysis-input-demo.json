@@ -1,0 +1,107 @@
+{
+  "bids4sFingerprint": "sha256:2577f05b60ca05900991bfc054a276461d1339164d0359a0b21e2464e4cff346",
+  "bundle": "40b4b19d5044993b0037f1aa3aec9bd8b6535bc767b4e877513b12b488c36153",
+  "correctedSource": "7c86b494-8e82-4aca-af07-86900fbda341",
+  "executionWorkspaceRemoved": true,
+  "input": "b68d1066-6adf-4fd7-b56d-361252559597",
+  "inputs": [
+    {
+      "path": "dataset_description.json",
+      "sha256": "3ebc57010e680de709e663ea529991e613ea32c94e23d38af28d9def30f92377",
+      "size": 118
+    },
+    {
+      "path": "participants.tsv",
+      "sha256": "a3f1467aa0689eb2dbe516c699225bc68f31b230bf81232c712b756ffa41fcdb",
+      "size": 22
+    },
+    {
+      "path": "stimuli/images/red.ppm",
+      "sha256": "c940efc28573af63c6ebbfeb23e69ded35c645b0dca6c4553d62aa1977912614",
+      "size": 19
+    },
+    {
+      "path": "stimuli/tone.txt",
+      "sha256": "e3261777de92fc9a6f050d601fac3516f07cbd19fd3b7f2d28cf8aa5d5aeeb23",
+      "size": 51
+    },
+    {
+      "path": "sub-01/func/sub-01_task-cue_run-01_echo-1_bold.json",
+      "sha256": "bebdb4ab84a875fa3f4a3ef3a96e69a46d311b72cabc630e8b08fdf41fbbbdb7",
+      "size": 72
+    },
+    {
+      "path": "sub-01/func/sub-01_task-cue_run-01_echo-1_bold.nii",
+      "sha256": "00147f06726a8784000000e5e4b53af3b129cae87938103d4abc721919ca924d",
+      "size": 448
+    },
+    {
+      "path": "sub-01/func/sub-01_task-cue_run-01_echo-2_bold.json",
+      "sha256": "ea756f7c13f57c6c85a1dd284b09fb7663376fc5246ff4deaae81904d90be596",
+      "size": 72
+    },
+    {
+      "path": "sub-01/func/sub-01_task-cue_run-01_echo-2_bold.nii",
+      "sha256": "61f0b5cb032dcad33f6bee27474a71ac490b05209c353a99ca36933ad8e7e849",
+      "size": 448
+    },
+    {
+      "path": "sub-01/func/sub-01_task-cue_run-01_echo-3_bold.json",
+      "sha256": "ca870927eead7148faeb83f6a36077257223d5adeeaf7df5d146f91497558587",
+      "size": 72
+    },
+    {
+      "path": "sub-01/func/sub-01_task-cue_run-01_echo-3_bold.nii",
+      "sha256": "7a3294c16b677b225230927794fdc7f05487cfc3bd9a0458c760a5f702ecf15d",
+      "size": 448
+    },
+    {
+      "path": "sub-01/func/sub-01_task-cue_run-01_events.json",
+      "sha256": "b78856c9db0eac72d637c60d99223ef1a132130e33ed119d4907d88d3f2d51e6",
+      "size": 135
+    },
+    {
+      "path": "sub-01/func/sub-01_task-cue_run-01_events.tsv",
+      "sha256": "480644b94220319a9c401d7241149cf8b70e22656a372318cd3dfa71662be989",
+      "size": 124
+    }
+  ],
+  "output": "b8f80f21-5323-472e-9b4a-8691c9cad269",
+  "outputs": [
+    {
+      "path": "dataset_description.json",
+      "sha256": "a0a4777a4f366dec28c77246ecc1884192ff8a39d9435afa9ee46ebecee6428a",
+      "size": 973
+    },
+    {
+      "path": "qc.json",
+      "sha256": "847bc5fed8834f10e45d82bd28420d992341ac7155abc09d480f09dd5d47cb5e",
+      "size": 437
+    },
+    {
+      "path": "qc.tsv",
+      "sha256": "823f4887fa1c3f8aeb772d12a4409c0dfb5c58dfce7c22333b8b79d4685da771",
+      "size": 274
+    }
+  ],
+  "processedEchoes": 3,
+  "processing": "e51a1ddcd5cc542a41775be3a208a8db44914856aaae4673d09305988314ff3e",
+  "publication": "48d1d39b2e2d51feef1e6ee376f93f0c5f02dc877b80fe527bd66cbf812c9577",
+  "revokedInputDenied": true,
+  "revokedPublicationDenied": true,
+  "run": "1dd3eb72-1d9c-4469-ad35-a1f8de08bfda",
+  "selectedEchoes": 1,
+  "source": "a1bc3e75-8f4d-433b-9f9b-91958e3084a2",
+  "sourceFingerprint": "sha256:8109ffc93f293971d0d82d9f9f3fd884195697018b3b462ff08915d53623444b",
+  "workspace": "/Users/bbuchsbaum/code/scala/sanctity/target/analysis-input-demo-11701286674086417186",
+  "verification": {
+    "inputAndOutputDigests": true,
+    "historicalSecondEchoTime": 0.02,
+    "sharedEventTables": 1,
+    "exactStimulusAssets": [
+      "stimuli/images/red.ppm",
+      "stimuli/tone.txt"
+    ],
+    "independentQcRows": 3
+  }
+}

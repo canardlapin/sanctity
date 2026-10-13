@@ -1,0 +1,487 @@
+{
+  "baseRevision": "927a4247538d4e47a28eb3e015be5de3c501e23a",
+  "archive": "bids4s-source.zip",
+  "sha256": "19f022d002f69292dec056eb0762b877438c47305cee6c176adf3e0f780e9146",
+  "files": [
+    {
+      "path": ".github/workflows/ci.yml",
+      "size": 1745,
+      "sha256": "c360690456a899fe8356a87d545ef4ed680949fa1330eec890264b26fb0af4fa"
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "size": 913,
+      "sha256": "d1850a2482da8d9414e2e8f7e9e57541aaae7a5d537dbf320ade06b42b65bd83"
+    },
+    {
+      "path": ".gitignore",
+      "size": 134,
+      "sha256": "847ae2b2a0fdf5cde2cc759554f5614deb906193d92648307b6afe91fc65261f"
+    },
+    {
+      "path": ".jvmopts",
+      "size": 7,
+      "sha256": "13282c97f706dffc206afaa77303ebb1f654ddb728e9056a3a6863cc25f49bd9"
+    },
+    {
+      "path": "AGENTS.md",
+      "size": 2014,
+      "sha256": "940c1fcdd89e7741709444d70eac7fe8c946ab33c599c0d409e7512e4d5d8047"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "size": 645,
+      "sha256": "de7ec8dc395019bf0e7b1ce97894e9def910fc03c9e97b404d421522fb8f7816"
+    },
+    {
+      "path": "LICENSE",
+      "size": 11358,
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    },
+    {
+      "path": "PROVENANCE.md",
+      "size": 773,
+      "sha256": "3cbba567d96d1bc14a38bbb46bf93d37057090189ce0377085490c9175ad678e"
+    },
+    {
+      "path": "README.md",
+      "size": 6183,
+      "sha256": "c18f02109ba6872f5298a702b08aa7f7219d8e62fa875a20241fa317ad8c6f85"
+    },
+    {
+      "path": "SECURITY.md",
+      "size": 477,
+      "sha256": "368b00678a94998b6a923c755b35a2e2e3cdf48c6ad486f4b100184d2b6b159b"
+    },
+    {
+      "path": "build.sbt",
+      "size": 4165,
+      "sha256": "80d2262e0f8792ef5d1a52364130c9de10dc4fc35c981dcb9ebe9445f383fe3b"
+    },
+    {
+      "path": "docs/README.md",
+      "size": 1501,
+      "sha256": "9da7ca2e0816728872da3725d061d41a9b1ac9f30026c59cdbbaf387af7b8a01"
+    },
+    {
+      "path": "docs/api-reference.md",
+      "size": 905,
+      "sha256": "b576d5ca673119803cd134df25d7260015dd039773358c6d9e72ccdb67bc9437"
+    },
+    {
+      "path": "docs/compatibility.md",
+      "size": 1306,
+      "sha256": "3384946c14e63f6ab77fc93826dfab8d7d40ec7f6aa7d8413d6f945bc8613a07"
+    },
+    {
+      "path": "docs/design/directory.conf",
+      "size": 25,
+      "sha256": "7ab71fa435920af3b61a8a39e07114fa6b8972398defea4632e50445f032a822"
+    },
+    {
+      "path": "docs/design/validation-and-effect-boundary.md",
+      "size": 16278,
+      "sha256": "4493ad7ea41394722352b3045cedbfb2e653c1ae308ddccd42ddddb6c4cca3fb"
+    },
+    {
+      "path": "docs/directory.conf",
+      "size": 186,
+      "sha256": "f448630c0b8b2f6ed8d268c0dbfdff8319a606594f4cb23c648ed5e828729442"
+    },
+    {
+      "path": "docs/getting-started.md",
+      "size": 2121,
+      "sha256": "379db453e31f8870036856832aac2d5f4d5cf3f0ca9559ee947f682fedb83ff6"
+    },
+    {
+      "path": "docs/loading-and-validation.md",
+      "size": 25648,
+      "sha256": "92ab3860e0596a2f405baeade4294701def27bbcc2cbe7711035e957a1ee948f"
+    },
+    {
+      "path": "docs/pybids-parity.md",
+      "size": 5874,
+      "sha256": "5c2c390dbb27e8fd408f3489b8434ad389a63818e1b85d144ae86027d80d438b"
+    },
+    {
+      "path": "docs/querying.md",
+      "size": 2462,
+      "sha256": "e1be44fdc00384dad3b91200aed529275a5af406947a4ae8b9145ffa710ceb85"
+    },
+    {
+      "path": "docs/tables-and-confounds.md",
+      "size": 2523,
+      "sha256": "bf5c67f7e8bf6dc4a52682143cb6492d7c7ced52a5b48b0d1b00774654d7951f"
+    },
+    {
+      "path": "modules/benchmarks/src/main/scala/bids4s/benchmarks/BidsLayoutBenchmarks.scala",
+      "size": 2895,
+      "sha256": "0ac4cd057cfac626a31b38c8c506cd8857bb259f8623ad1e82c9ec888b615e61"
+    },
+    {
+      "path": "modules/benchmarks/src/main/scala/bids4s/benchmarks/BidsLayoutCourt.scala",
+      "size": 3659,
+      "sha256": "b8289c8d04378f465cfd37d521e1d09670e56a390386d940eb5f3736dcabe4dd"
+    },
+    {
+      "path": "modules/core/README.md",
+      "size": 533,
+      "sha256": "8b310617e6f1fec4d4d1546533e7ac2cb8106be77d970b88e2cb4559ca5c089b"
+    },
+    {
+      "path": "modules/core/jvm/src/main/scala/bids4s/io/BidsPathStore.scala",
+      "size": 3667,
+      "sha256": "a507b1c170f0e08199d29734cd5746fd27340824f3525d3951851daea5494355"
+    },
+    {
+      "path": "modules/core/jvm/src/main/scala/bids4s/io/BidsProjectLoader.scala",
+      "size": 22109,
+      "sha256": "1d415f256395a4c3a5d888d662883af80645b3f115113a63af2deb1464cc1e02"
+    },
+    {
+      "path": "modules/core/jvm/src/main/scala/bids4s/io/BidsProjectLoaderF.scala",
+      "size": 10458,
+      "sha256": "9c00779adf4612116ae028ae45dff44bc1cd20b3eb4d222b3221ea09e9979036"
+    },
+    {
+      "path": "modules/core/jvm/src/test/scala/bids4s/io/BidsProjectLoaderFSuite.scala",
+      "size": 13939,
+      "sha256": "3aaedfb29fa639e40847ed4437d419bd2bf6ca609c215a357010b90f088c5c72"
+    },
+    {
+      "path": "modules/core/jvm/src/test/scala/bids4s/io/BidsProjectLoaderSuite.scala",
+      "size": 14164,
+      "sha256": "34920dc4e9f8f7adc135201b97188cf6d0c0e15023d39f0cc31728aff025d8dd"
+    },
+    {
+      "path": "modules/core/shared/src/main/scala/bids4s/BidsCompanions.scala",
+      "size": 5010,
+      "sha256": "cb97766feaec55e893ae8bf1005c9f94f76f461852706c0975b0a92bbc108a82"
+    },
+    {
+      "path": "modules/core/shared/src/main/scala/bids4s/BidsContext.scala",
+      "size": 4828,
+      "sha256": "66e690685a5530982749e0a8e7c71fd6dbf825d74c4b65ff7e16f3d77ae3e774"
+    },
+    {
+      "path": "modules/core/shared/src/main/scala/bids4s/BidsEither.scala",
+      "size": 532,
+      "sha256": "50aedd7f046250e056e06eb9c601be5a0096707ee7b1cb7e2afd7502fa1295e8"
+    },
+    {
+      "path": "modules/core/shared/src/main/scala/bids4s/BidsEntities.scala",
+      "size": 1841,
+      "sha256": "3def8e3ac3eff10fba3db9d1e0320b5b3b221d095785833e6e7497b44d78213a"
+    },
+    {
+      "path": "modules/core/shared/src/main/scala/bids4s/BidsError.scala",
+      "size": 2855,
+      "sha256": "032b061ccb376750eb0acedf5bc55782dcfff4b1d2f6e526f6e8104c9c18cb8a"
+    },
+    {
+      "path": "modules/core/shared/src/main/scala/bids4s/BidsFieldmaps.scala",
+      "size": 10632,
+      "sha256": "7a9509dfe721fc6faba2ebecd7bb884d6d6537d0adc4cdb2f6da0a90b84a9729"
+    },
+    {
+      "path": "modules/core/shared/src/main/scala/bids4s/BidsJson.scala",
+      "size": 8825,
+      "sha256": "078f7db28a75105d5ea8213dcf610c00644acb9300c7e6b076aabf811d06a57a"
+    },
+    {
+      "path": "modules/core/shared/src/main/scala/bids4s/BidsManifest.scala",
+      "size": 12951,
+      "sha256": "c2d0f0ac61d6fc6fab533280b467927808d621b1d26fba7eb68b56e0dde6f40c"
+    },
+    {
+      "path": "modules/core/shared/src/main/scala/bids4s/BidsMetadata.scala",
+      "size": 4441,
+      "sha256": "1682cadea495afb6c3ab4c406bbcf5e8e6fdc6588786d6c8335b64ad9a547897"
+    },
+    {
+      "path": "modules/core/shared/src/main/scala/bids4s/BidsMultiEcho.scala",
+      "size": 5508,
+      "sha256": "d7fce0049939ad1d92c9fc6bbf5accd70832fb809c13168a8b441d28446519f5"
+    },
+    {
+      "path": "modules/core/shared/src/main/scala/bids4s/BidsName.scala",
+      "size": 3331,
+      "sha256": "458ec73b92c5dd0ff5eec054a01afe8f5e8f4d311a37f4b88eff0e3bf125d124"
+    },
+    {
+      "path": "modules/core/shared/src/main/scala/bids4s/BidsPhaseDifference.scala",
+      "size": 5117,
+      "sha256": "01b22237706219cf377cafce8712bf03cf9acf46983c2660a1eda58a3851a834"
+    },
+    {
+      "path": "modules/core/shared/src/main/scala/bids4s/BidsPhasePair.scala",
+      "size": 5801,
+      "sha256": "8a37afaace16a7793dfaa7fc6f146f03d117f4f91422ed392e093814c0d5762b"
+    },
+    {
+      "path": "modules/core/shared/src/main/scala/bids4s/BidsProject.scala",
+      "size": 12971,
+      "sha256": "8200cf4b364d3e0d72a88890fa13cd9ea80de52c82e2d8ff52944018d882d9a8"
+    },
+    {
+      "path": "modules/core/shared/src/main/scala/bids4s/BidsQuery.scala",
+      "size": 13270,
+      "sha256": "43b83bdd24569e43128c91b0e07f6283b0c4b9529fd460f0a329508b5637ffc3"
+    },
+    {
+      "path": "modules/core/shared/src/main/scala/bids4s/BidsRegistry.scala",
+      "size": 2467,
+      "sha256": "f5b7f608ea9d926975ca551365a182b8529afa68af5ce86cffff6d249424d0df"
+    },
+    {
+      "path": "modules/core/shared/src/main/scala/bids4s/BidsSpec.scala",
+      "size": 17729,
+      "sha256": "ffb0b969e4312b1f8782f0cd99700f017d0924548996f395e157c5e0b4e3cb01"
+    },
+    {
+      "path": "modules/core/shared/src/main/scala/bids4s/BidsStimuli.scala",
+      "size": 2488,
+      "sha256": "1b5ec6589edcc695005f416fc5f3757e4c80569a1ad045fb872f42fc6bdc749c"
+    },
+    {
+      "path": "modules/core/shared/src/main/scala/bids4s/BidsStore.scala",
+      "size": 1549,
+      "sha256": "4ee9d39c305a099b5215f3022b5a5b9f0663ac1c15706c78bf853c4efb789a68"
+    },
+    {
+      "path": "modules/core/shared/src/main/scala/bids4s/BidsTable.scala",
+      "size": 8221,
+      "sha256": "1cbc9956c731ad08202006e5e1c4069a02d1563e099a3fd958dd30e7e823b92f"
+    },
+    {
+      "path": "modules/core/shared/src/main/scala/bids4s/BidsUri.scala",
+      "size": 3040,
+      "sha256": "f54002fafc9dc46d9d1e9b093b1d5d6c5cd47d732f3e17d17b6d89a5d732068f"
+    },
+    {
+      "path": "modules/core/shared/src/main/scala/bids4s/BidsValidation.scala",
+      "size": 8733,
+      "sha256": "0141db6ff63367d0c0c0766d31b5d1d5611d08c252b9e9cd00701fbd1de4c9de"
+    },
+    {
+      "path": "modules/core/shared/src/main/scala/bids4s/CheckedEvents.scala",
+      "size": 6170,
+      "sha256": "962e23b8dfd231e69f8f4ade6e6d0cb376ee5ff3893123901db36c1d84ddc5b7"
+    },
+    {
+      "path": "modules/core/shared/src/main/scala/bids4s/CheckedTsv.scala",
+      "size": 5122,
+      "sha256": "b0ae85c85c96bdfbd3e18d813557bfa7ff18985988a6cc797966188af760ba2a"
+    },
+    {
+      "path": "modules/core/shared/src/main/scala/bids4s/ConfoundReduction.scala",
+      "size": 8675,
+      "sha256": "8a1531d74df1c9208a732db6bebc0df9aaeb4f64990d4a7bfc1d9a36446bc60a"
+    },
+    {
+      "path": "modules/core/shared/src/main/scala/bids4s/Confounds.scala",
+      "size": 23485,
+      "sha256": "8a4b2679b96b7a39b4ecd969a6436757ffe83b13e14b73ee5041898c96ae098b"
+    },
+    {
+      "path": "modules/core/shared/src/main/scala/bids4s/DwiConsistency.scala",
+      "size": 5158,
+      "sha256": "4e28c4ed34f7507d929d1df83fa8ac532cf6d5fdee776483599fb9e233e55ef1"
+    },
+    {
+      "path": "modules/core/shared/src/main/scala/bids4s/EntityKey.scala",
+      "size": 3837,
+      "sha256": "a09bd1fad35973dd62823f444ec22edf7f1f421a9741d24ee0b58311277e6eb1"
+    },
+    {
+      "path": "modules/core/shared/src/main/scala/bids4s/EventTiming.scala",
+      "size": 5584,
+      "sha256": "0ca608bbbf7b66c86549b7b49683568f6ec776432529a8116b3888f0e6804459"
+    },
+    {
+      "path": "modules/core/shared/src/main/scala/bids4s/Ids.scala",
+      "size": 2292,
+      "sha256": "646384fe34fcaf01011ed7860378c237390229557da10b9b584864d3d72ff07c"
+    },
+    {
+      "path": "modules/core/shared/src/main/scala/bids4s/MriHeaderConsistency.scala",
+      "size": 5764,
+      "sha256": "b9c535d913446dc23447f5c1f361cf45ce5af14b7435c08b2b04b671beb086ae"
+    },
+    {
+      "path": "modules/core/shared/src/main/scala/bids4s/NiftiHeaderFacts.scala",
+      "size": 5068,
+      "sha256": "13e7873330e6cf53bc59b4b92d1d7f775d0a0772e23a80c7d46593f13f4bdd47"
+    },
+    {
+      "path": "modules/core/shared/src/main/scala/bids4s/NiftiScaling.scala",
+      "size": 1303,
+      "sha256": "e3e34acaafe2b0e3e3a11edad1ae6975d5fc4c98fb32dd1c4ba374850b135315"
+    },
+    {
+      "path": "modules/core/shared/src/test/scala/bids4s/AnalysisInputSuite.scala",
+      "size": 5937,
+      "sha256": "7f937de9d03da062015c2f99bac884597e7aa020580760b5a93fd70aa478e89b"
+    },
+    {
+      "path": "modules/core/shared/src/test/scala/bids4s/BidsCompanionSuite.scala",
+      "size": 6032,
+      "sha256": "f987f6ba6de921f5e237ec5967604c7719d1eda10fb94a32ebf9455098c0f80e"
+    },
+    {
+      "path": "modules/core/shared/src/test/scala/bids4s/BidsContextSuite.scala",
+      "size": 5056,
+      "sha256": "b8c77ae7a49246b59cc92cb17666fff076e4d64b6bf1ad016f5a361a14730070"
+    },
+    {
+      "path": "modules/core/shared/src/test/scala/bids4s/BidsFieldmapSuite.scala",
+      "size": 9071,
+      "sha256": "d053f57f2e6928da25784dba428f080171f658b89f6fb0e46803fc13f714ae5f"
+    },
+    {
+      "path": "modules/core/shared/src/test/scala/bids4s/BidsJsonSuite.scala",
+      "size": 1053,
+      "sha256": "7fc729b2c2413f97d6ce8b7209c785bb4de3a1215ccace3276ee5307a1a65828"
+    },
+    {
+      "path": "modules/core/shared/src/test/scala/bids4s/BidsManifestSuite.scala",
+      "size": 7639,
+      "sha256": "c60f0964d2f8fd42e34df4c8a26a7a3d53498c0b7853e2bf4d92720308779db5"
+    },
+    {
+      "path": "modules/core/shared/src/test/scala/bids4s/BidsMetadataSuite.scala",
+      "size": 8779,
+      "sha256": "e920ea59ac0d20ce7f92a5c9972533a58fb0e2460e84a611617ca41f8623d881"
+    },
+    {
+      "path": "modules/core/shared/src/test/scala/bids4s/BidsNameSuite.scala",
+      "size": 4150,
+      "sha256": "2755f4f3a498d949267bcd04c7bf2951727fdecf86ec780e8f17c6accd51a70b"
+    },
+    {
+      "path": "modules/core/shared/src/test/scala/bids4s/BidsPhaseDifferenceSuite.scala",
+      "size": 3896,
+      "sha256": "99a8e0061ffbd245bc3cb354e9123babe5a5e971094e5b4cb2fbf87c12c51f43"
+    },
+    {
+      "path": "modules/core/shared/src/test/scala/bids4s/BidsPhasePairSuite.scala",
+      "size": 4827,
+      "sha256": "faa37e1e4978eb0828687081af79f516fa8cfdac8edb18b7ce48de55d915acb3"
+    },
+    {
+      "path": "modules/core/shared/src/test/scala/bids4s/BidsProjectSuite.scala",
+      "size": 6788,
+      "sha256": "982ecce0531bf8cac445a8dca112bef6e791f3f9c6fb0fe282d8c173f26ef05f"
+    },
+    {
+      "path": "modules/core/shared/src/test/scala/bids4s/BidsQueryPropertiesSuite.scala",
+      "size": 5287,
+      "sha256": "c39946f0f12c6134f283b8703b7040442aa864b6f948a1b574cdd0a331462034"
+    },
+    {
+      "path": "modules/core/shared/src/test/scala/bids4s/BidsQuerySuite.scala",
+      "size": 9182,
+      "sha256": "cd7c0ecc34fda2b7c994ecf07ddb330607b5de3cd409e74f263482d6c79a0d5e"
+    },
+    {
+      "path": "modules/core/shared/src/test/scala/bids4s/BidsStoreSuite.scala",
+      "size": 1715,
+      "sha256": "2f6533a66732b34c81037c0a5a601d07837610f5c1151aae6ec184c1df02820a"
+    },
+    {
+      "path": "modules/core/shared/src/test/scala/bids4s/BidsTableSuite.scala",
+      "size": 4337,
+      "sha256": "5340110c0ac8f9fcd5ffbf64afe1c1c9e1f22fe1b19be30cbf099188115e478b"
+    },
+    {
+      "path": "modules/core/shared/src/test/scala/bids4s/BidsUriSuite.scala",
+      "size": 1684,
+      "sha256": "e683ab07229add90d7749b0c8e9c8dce20085d0d611e357fbc3ae84c26e27c9c"
+    },
+    {
+      "path": "modules/core/shared/src/test/scala/bids4s/BidsValidationSuite.scala",
+      "size": 1953,
+      "sha256": "30d9a0ac066837caddbc63ece6ba7242c04741746e76c6455372db575244c443"
+    },
+    {
+      "path": "modules/core/shared/src/test/scala/bids4s/CheckedEventsSuite.scala",
+      "size": 9606,
+      "sha256": "47d18eb1fc99050ed7a08fb02764acc39427d2fa95236553beecb66de908bebb"
+    },
+    {
+      "path": "modules/core/shared/src/test/scala/bids4s/CheckedTsvSuite.scala",
+      "size": 2274,
+      "sha256": "1e1995c612f46961e70ad2184143636e1ca0cf957f51e6bc5523085e27373556"
+    },
+    {
+      "path": "modules/core/shared/src/test/scala/bids4s/ConfoundsSuite.scala",
+      "size": 8726,
+      "sha256": "b828d32168b69c4cb3f81c7b765480f76f2f4217870ad185fffc5643264dc8d8"
+    },
+    {
+      "path": "modules/core/shared/src/test/scala/bids4s/DwiConsistencySuite.scala",
+      "size": 7689,
+      "sha256": "f4998538374345c7063e811fa25844ea5ac0576de9a14f6a597846cbdcb90684"
+    },
+    {
+      "path": "modules/core/shared/src/test/scala/bids4s/EntityValueEqualitySuite.scala",
+      "size": 1275,
+      "sha256": "b1be4086815ce58f34c6119449e6013d05776b9da00d8790c49c872412c9afd1"
+    },
+    {
+      "path": "modules/core/shared/src/test/scala/bids4s/MriHeaderSuite.scala",
+      "size": 5049,
+      "sha256": "db169d3208834e626065017cb8f252b6f79fb79469c48ea6e9846a53a14f1c88"
+    },
+    {
+      "path": "modules/core/shared/src/test/scala/bids4s/NiftiScalingSuite.scala",
+      "size": 1253,
+      "sha256": "8a1680d4eebff4bb9a7ccdeed4860f666d2567f4d027903d838630bd1eb64056"
+    },
+    {
+      "path": "modules/core/shared/src/test/scala/bids4s/PreprocessedMetadataSuite.scala",
+      "size": 1499,
+      "sha256": "388e1cfbfe0afcf7a12dd794687efeb585b124b7b9f76dc8072e6986674a783b"
+    },
+    {
+      "path": "modules/core/shared/src/test/scala/bids4s/ScientificExtensionSuite.scala",
+      "size": 1465,
+      "sha256": "34a10feb14fdcae402d4884ffacdfb6a4b85d03107f672dd6e42eb094b38a4ce"
+    },
+    {
+      "path": "modules/first-contact/shared/src/main/scala/example/FirstContact.scala",
+      "size": 2830,
+      "sha256": "04907634afeb86658d0150455d46ccdea57d28666b996f52198625b527dc8b99"
+    },
+    {
+      "path": "project/build.properties",
+      "size": 19,
+      "sha256": "3d013fad6ecab773b7cfdda92fc04890836e8f33709be272322c054b78ffaa70"
+    },
+    {
+      "path": "project/plugins.sbt",
+      "size": 432,
+      "sha256": "e8c5ae945ddfdfeb4b72f7d737579ac2391a60b312c828d7c3807261255af79b"
+    },
+    {
+      "path": "scripts/pybids-court.sh",
+      "size": 2236,
+      "sha256": "c2e7c9afbfcd9e09aaed2075ae06f6cab4d095c644d18a8e657c2f70be7ed26b"
+    },
+    {
+      "path": "tools/parity/make_fixture.py",
+      "size": 5555,
+      "sha256": "201973c2fa7745455d596df5cc288a46b9244b3d8d453fb07e08886b5b0df4f1"
+    },
+    {
+      "path": "tools/parity/pybids_court.py",
+      "size": 6977,
+      "sha256": "87e4ca2c5560d636ad4a67ecd1796769e0594d37f54063354cb3f96a34779e52"
+    },
+    {
+      "path": "tools/parity/summarize_court.py",
+      "size": 3537,
+      "sha256": "1b31d97b83846ff8fc087f302da4a177112f407580a14b24ecb6bbb60ea4d1b6"
+    }
+  ]
+}

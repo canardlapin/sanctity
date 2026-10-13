@@ -28,6 +28,9 @@ private[http] object PublicJson:
   def relationshipEvidence(e: RelationshipEvidence): Json = e match
     case RelationshipEvidence.MetadataField(a, d, f) =>
       Json.obj("artifact" -> text(a.value), "document" -> text(d.value), "field" -> text(f))
+    case RelationshipEvidence.TableColumn(a, d, column, rule) =>
+      Json.obj("kind" -> Json.fromString("table-column"), "artifact" -> Json.fromString(a.value),
+        "document" -> Json.fromString(d.value), "column" -> Json.fromString(column), "rule" -> Json.fromString(rule))
     case RelationshipEvidence.CompanionSelection(a, d, rule, root, entities, applicable) =>
       Json.obj("kind" -> text("companion-selection"), "artifact" -> text(a.value), "document" -> text(d.value),
         "rule" -> text(rule), "datasetRoot" -> opt(root)(p => text(p.value)),

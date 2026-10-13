@@ -1,0 +1,115 @@
+{
+  "policy": "Bounded multi-echo and local stimulus profile; findings are authored independently of resolver output. Official conformance differences are reviewed separately.",
+  "cases": [
+    {
+      "name": "complete",
+      "findings": []
+    },
+    {
+      "name": "missing-echo-time",
+      "jsonEdits": {
+        "sub-01/func/sub-01_task-cue_run-01_echo-2_bold.json": {}
+      },
+      "findings": [
+        "MultiEchoEchoTimes"
+      ]
+    },
+    {
+      "name": "reversed-echo-time",
+      "jsonEdits": {
+        "sub-01/func/sub-01_task-cue_run-01_echo-2_bold.json": {
+          "EchoTime": 0.005
+        }
+      },
+      "findings": [
+        "MultiEchoEchoTimes"
+      ]
+    },
+    {
+      "name": "equal-echo-time",
+      "jsonEdits": {
+        "sub-01/func/sub-01_task-cue_run-01_echo-2_bold.json": {
+          "EchoTime": 0.01
+        }
+      },
+      "findings": [
+        "MultiEchoEchoTimes"
+      ]
+    },
+    {
+      "name": "conflicting-timing",
+      "jsonEdits": {
+        "sub-01/func/sub-01_task-cue_run-01_echo-2_bold.json": {
+          "EchoTime": 0.02,
+          "RepetitionTime": 3
+        }
+      },
+      "findings": [
+        "MultiEchoTiming"
+      ]
+    },
+    {
+      "name": "singleton",
+      "delete": [
+        "sub-01/func/sub-01_task-cue_run-01_echo-2_bold.nii",
+        "sub-01/func/sub-01_task-cue_run-01_echo-3_bold.nii"
+      ],
+      "findings": [
+        "MultiEchoMissingMember"
+      ]
+    },
+    {
+      "name": "duplicate-index",
+      "copy": {
+        "sub-01/func/sub-01_task-cue_run-01_echo-2_bold.nii": "sub-01/func/sub-01_task-cue_run-01_echo-02_bold.nii"
+      },
+      "findings": [
+        "MultiEchoAmbiguousMember",
+        "MultiEchoEchoTimes"
+      ]
+    },
+    {
+      "name": "different-grid",
+      "pixelDimension": {
+        "sub-01/func/sub-01_task-cue_run-01_echo-2_bold.nii": 5
+      },
+      "findings": [
+        "MultiEchoImageCoherence"
+      ]
+    },
+    {
+      "name": "missing-stimulus",
+      "delete": [
+        "stimuli/images/red.ppm"
+      ],
+      "findings": [
+        "StimulusMissingFile"
+      ]
+    },
+    {
+      "name": "unsafe-stimulus",
+      "writes": {
+        "task-cue_events.tsv": "onset\tduration\tstim_file\n0\t1\t../secret.txt\n"
+      },
+      "findings": [
+        "StimulusUnsafePath"
+      ]
+    },
+    {
+      "name": "uri-stimulus",
+      "writes": {
+        "task-cue_events.tsv": "onset\tduration\tstim_file\n0\t1\thttps://example.org/image.png\n"
+      },
+      "findings": [
+        "StimulusUnsafePath"
+      ]
+    },
+    {
+      "name": "missing-stimulus-cells",
+      "writes": {
+        "task-cue_events.tsv": "onset\tduration\tstim_file\n0\t1\tn/a\n"
+      },
+      "findings": []
+    }
+  ]
+}

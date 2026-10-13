@@ -5,9 +5,11 @@ enum RelationshipEvidence:
   case MetadataField(artifact: RelPath, document: RelPath, field: String)
   case CompanionSelection(artifact: RelPath, document: RelPath, rule: String,
       datasetRoot: Option[RelPath], matchedEntities: Map[String, String], applicable: Vector[RelPath])
+  case TableColumn(artifact: RelPath, document: RelPath, column: String, rule: String)
 
   private[kernel] def tokens: Vector[String] = this match
     case MetadataField(a, d, f) => Vector(a.value, d.value, f)
+    case TableColumn(a, d, column, rule) => Vector(a.value, d.value, column, rule)
     case CompanionSelection(a, d, rule, root, entities, applicable) =>
       Vector(a.value, d.value, rule, root.fold("")(_.value), entities.size.toString) ++
         entities.toVector.sortBy(_._1).flatMap((k, v) => Vector(k, v)) ++
@@ -17,6 +19,7 @@ enum RelationshipEvidence:
 
   private[kernel] def orderKey: (String, String, String) = this match
     case MetadataField(a, d, f) => (a.value, d.value, f)
+    case TableColumn(a, d, column, rule) => (a.value, d.value, column + ":" + rule)
     case CompanionSelection(a, d, _, _, _, _) => (a.value, d.value, Digest.framed("sanctity.companion.order.v1", tokens).value)
 
 object RelationshipEvidence:
@@ -72,9 +75,12 @@ object RelationshipGraph:
     def evidenceValid(r: ScientificRelationship, e: RelationshipEvidence): Boolean = e match
       case RelationshipEvidence.MetadataField(a, d, f) =>
         metadata.get(a).flatMap(_.fields.get(f)).exists(_.origin == d)
+      case RelationshipEvidence.TableColumn(a, d, column, rule) =>
+        evidenceVersion == 3 && a == r.from && d == a && metadata.contains(d) &&
+          column.matches("[A-Za-z][A-Za-z0-9_]{0,99}") && rule.nonEmpty && rule.length <= 100 && !rule.exists(_.isControl)
       case RelationshipEvidence.CompanionSelection(a, d, rule, root, entities, applicable) =>
         val parent = a.value.split('/').dropRight(1).mkString("/")
-        evidenceVersion == 2 && a == r.from && r.to.contains(d) &&
+        evidenceVersion >= 2 && a == r.from && r.to.contains(d) &&
           rule.nonEmpty && rule.length <= 200 && !rule.exists(_.isControl) &&
           metadata.get(a).exists(_.datasetRoot == root) &&
           applicable.nonEmpty && applicable.size <= 1024 && applicable.last == d &&
@@ -86,13 +92,13 @@ object RelationshipGraph:
           } &&
           applicable.map(_.value.count(_ == '/')).sliding(2).forall(v => v.size < 2 || v(0) < v(1)) &&
           entities.size <= 100 && entities.forall((k, v) => k.nonEmpty && k.length <= 100 && v.nonEmpty && v.length <= 4096)
-    val valid = Set(1, 2)(evidenceVersion) && version.nonEmpty && version.length <= 200 && !version.exists(_.isControl) &&
+    val valid = Set(1, 2, 3)(evidenceVersion) && version.nonEmpty && version.length <= 200 && !version.exists(_.isControl) &&
       canonical.size <= 100000 && canonical.map(_.to.size.toLong).sum <= 100000 && canonical.distinct.size == canonical.size && canonical.forall { r =>
         metadata.contains(r.from) && r.kind.matches("[a-z][a-z0-9.-]{0,99}") && r.to.nonEmpty &&
           r.to.distinct.size == r.to.size && r.to.forall(metadata.contains) && r.label.forall(_.nonEmpty) &&
           r.evidence.nonEmpty && r.evidence.distinct.size == r.evidence.size &&
           r.evidence.forall(evidenceValid(r, _)) &&
-          (evidenceVersion == 2 || r.evidence.forall(_.isInstanceOf[RelationshipEvidence.MetadataField]))
+          (evidenceVersion >= 2 || r.evidence.forall(_.isInstanceOf[RelationshipEvidence.MetadataField]))
       }
     Either.cond(valid,
       new RelationshipGraph(version, canonical.sortBy(r => (r.from.value, r.kind, r.label.getOrElse(""), Digest.framed("sanctity.relationship.order.v1", r.tokens(evidenceVersion)).value)), evidenceVersion),
@@ -107,6 +113,11 @@ object RelationshipImpact:
     (left.keySet ++ right.keySet).toVector.sortBy(_.value).flatMap { p =>
       val a = left.getOrElse(p, Vector.empty)
       val b = right.getOrElse(p, Vector.empty)
-      val changed = (a ++ b).flatMap(_.to).filter(changedPaths).distinct.sortBy(_.value)
+      val evidenceDocuments = (a ++ b).flatMap(_.evidence).map {
+        case RelationshipEvidence.MetadataField(_, document, _) => document
+        case RelationshipEvidence.CompanionSelection(_, document, _, _, _, _) => document
+        case RelationshipEvidence.TableColumn(_, document, _, _) => document
+      }
+      val changed = ((a ++ b).flatMap(_.to) ++ evidenceDocuments).filter(changedPaths).distinct.sortBy(_.value)
       Option.when(a != b || changed.nonEmpty)(RelationshipDelta(p, a, b, changed))
     }

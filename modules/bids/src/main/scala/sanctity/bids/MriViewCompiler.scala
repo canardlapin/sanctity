@@ -15,8 +15,9 @@ final class MriViewCompiler(bidsContext: BidsContext = BidsContext.Default) exte
   private val parser = new JawnParser(maxValueSize = Some(4 * 1024 * 1024), allowDuplicateKeys = false)
   private val referenceFields = Set("IntendedFor", "B0FieldSource", "B0FieldIdentifier")
   private val forbidden = Set("Sources", "RawSources", "AssociatedEmptyRoom", "M0Scan", "AnatomicalLandmarkCoordinates")
-  private val supportedKinds = Set("bids.b0-field-source", "bids.intended-for", "bids.dwi-gradients", "bids.task-events")
-  private val structural = EventTiming.Fields ++ Set("TaskName", "PhaseEncodingDirection", "TotalReadoutTime")
+  private val supportedKinds = Set("bids.b0-field-source", "bids.intended-for", "bids.dwi-gradients", "bids.task-events", "bids.phasediff-magnitudes", "bids.phase-pair-family", "bids.multi-echo-bold", "bids.event-stimuli")
+  private val structural = EventTiming.Fields ++ Set("TaskName", "PhaseEncodingDirection", "TotalReadoutTime", "EchoTime1", "EchoTime2", "EchoTime")
+  private val fieldmapSuffixes = Set("epi", "phasediff", "phase1", "phase2", "magnitude1", "magnitude2")
   private val imageExtensions = Set("nii", "nii.gz")
 
   private final case class Context(roots: Set[RelPath], closure: RelationshipClosure,
@@ -27,10 +28,11 @@ final class MriViewCompiler(bidsContext: BidsContext = BidsContext.Default) exte
     val selected = selection.hits.map(_.path).toSet
     // A suffix query can include local gradients/tables. They are permitted only if
     // covered by the closure of selected primary images; they never create new roots.
-    val roots = selected.filter(p => facts.get(p).exists(f => imageExtensions(f.extension) && f.suffix != "epi"))
+    val roots = selected.filter(p => facts.get(p).exists(f => imageExtensions(f.extension) && !fieldmapSuffixes(f.suffix)))
     def supported(f: ArtifactFacts): Boolean =
       imageExtensions(f.extension) && Set("T1w", "T2w", "bold", "dwi")(f.suffix) &&
-        !f.entities.keySet.exists(Set("echo", "part", "chunk", "recording", "sample", "flip", "inv", "mt"))
+        !f.entities.keySet.exists(Set("part", "chunk", "recording", "sample", "flip", "inv", "mt")) &&
+        (!f.entities.contains("echo") || f.suffix == "bold")
     for
       _ <- require(source.interpretation.profile.context.contains(BidsInterpreter.describe(bidsContext)),
         "source interpretation context differs from the compiler; explicitly reinterpret before transforming")
@@ -39,7 +41,7 @@ final class MriViewCompiler(bidsContext: BidsContext = BidsContext.Default) exte
       _ <- require(selection.releases == Vector(source.ref) && roots.nonEmpty,
         "MRI view needs a nonempty selection from exactly one release")
       _ <- require(roots.forall(p => facts.get(p).exists(supported)) && selection.hits.forall(h => facts.get(h.path).exists(f => f.participant == h.participant && f.session == h.session)),
-        "select T1w/T2w, single-echo BOLD or DWI NIfTI acquisitions")
+        "select T1w/T2w, BOLD echo families or DWI NIfTI acquisitions")
       _ <- require((profile.participantFields ++ profile.sessionFields ++ profile.scanFields ++ profile.eventFields.getOrElse(Set.empty))
         .forall(_.matches("[A-Za-z][A-Za-z0-9_]*")) && !profile.participantFields("participant_id") &&
         !profile.sessionFields("session_id") && !profile.scanFields("filename"), "invalid table field mask")
@@ -49,16 +51,21 @@ final class MriViewCompiler(bidsContext: BidsContext = BidsContext.Default) exte
         "relationship or metadata input is absent from the source manifest")
       images = closure.artifacts.flatMap(facts.get).filter(f => imageExtensions(f.extension))
       imagePaths = images.map(_.path).toSet
-      _ <- require(closure.relationships.forall(r => imagePaths(r.from) && (r.kind match
-        case "bids.task-events" => r.to.size == 1 && r.to.head.fileName.endsWith("events.tsv")
-        case "bids.dwi-gradients" => r.to.size == 2 && r.to.map(_.fileName.split('.').last).toSet == Set("bval", "bvec")
-        case _ => r.to.forall(imagePaths))), "malformed MRI dependency group")
-      _ <- require(images.forall(f => supported(f) || (f.suffix == "epi" && !f.entities.keySet.exists(Set("echo", "part", "chunk")))),
-        "subset supports only explicit EPI fieldmap dependencies; implicit phase/magnitude families require another profile")
-      _ <- require(images.forall(f => roots(f.path) || f.suffix == "epi"), "dependency would add an unselected primary acquisition")
+      _ <- require(closure.relationships.forall(r => r.kind match
+        case "bids.event-stimuli" => r.from.fileName.endsWith("events.tsv") && r.to.forall(_.value.startsWith("stimuli/"))
+        case "bids.task-events" => imagePaths(r.from) && r.to.size == 1 && r.to.head.fileName.endsWith("events.tsv")
+        case "bids.dwi-gradients" => imagePaths(r.from) && r.to.size == 2 && r.to.map(_.fileName.split('.').last).toSet == Set("bval", "bvec")
+        case _ => imagePaths(r.from) && r.to.forall(imagePaths)), "malformed MRI dependency group")
+      _ <- require(images.forall(f => supported(f) || (fieldmapSuffixes(f.suffix) && !f.entities.keySet.exists(Set("echo", "part", "chunk")))),
+        "subset supports explicit EPI and resolved phasediff or phase-pair families")
+      echoMembers = closure.relationships.filter(r => r.kind == "bids.multi-echo-bold" && roots(r.from)).flatMap(_.to).toSet
+      _ <- require(images.forall(f => roots(f.path) || echoMembers(f.path) || fieldmapSuffixes(f.suffix)), "dependency would add an unselected primary acquisition")
       _ <- require(images.forall(f => selection.hits.exists(_.participant == f.participant)), "dependency crosses the selected participant scope")
       _ <- require(closure.relationships.filter(r => Set("bids.b0-field-source", "bids.intended-for")(r.kind))
-        .forall(_.to.forall(p => facts.get(p).exists(_.suffix == "epi"))), "fieldmap source is outside the explicit EPI profile")
+        .forall(_.to.forall(p => facts.get(p).exists(f => fieldmapSuffixes(f.suffix)))), "fieldmap source is outside the supported MRI family profile")
+      _ <- require(images.filter(f => Set("phasediff", "phase1", "phase2", "magnitude1", "magnitude2")(f.suffix)).forall { f =>
+        closure.relationships.exists(r => Set("bids.phasediff-magnitudes", "bids.phase-pair-family")(r.kind) && (r.from == f.path || r.to.contains(f.path)))
+      }, "phase/magnitude dependencies require a complete recorded family")
       _ <- require(closure.artifacts.forall(p => source.interpretation.byPath(p).datasetRoot.isEmpty), "nested datasets require another subset profile")
       _ <- images.traverse_ { f =>
         val expected = f.suffix match
@@ -71,7 +78,7 @@ final class MriViewCompiler(bidsContext: BidsContext = BidsContext.Default) exte
       }
       _ <- images.traverse_ { f =>
         val companions = source.interpretation.facts.filter(c => c.participant == f.participant && c.session == f.session &&
-          Set("sbref", "physio", "stim", "fieldmap", "phasediff", "phase1", "phase2", "magnitude1", "magnitude2")(c.suffix))
+          Set("sbref", "physio", "stim", "fieldmap")(c.suffix))
         // Conservatively reject applicable companions outside the recorded vocabulary.
         require(!companions.exists(c => c.entities.forall { (k, v) =>
           f.entities.get(k).forall(w => equivalent(k, v, w))
@@ -144,11 +151,15 @@ final class MriViewCompiler(bidsContext: BidsContext = BidsContext.Default) exte
         val fields = effective(f.path)
         val needed = fields.keySet.intersect(structural ++ referenceFields)
         val timing = f.suffix != "bold" || (fields.contains("TaskName") && (fields.contains("RepetitionTime") || fields.contains("VolumeTiming")))
+        val phase = f.suffix != "phasediff" || (Set("EchoTime1", "EchoTime2").subsetOf(fields.keySet) &&
+          links.exists(r => r.from == f.path && r.kind == "bids.phasediff-magnitudes"))
+        val pair = !Set("phase1", "phase2")(f.suffix) || (fields.contains("EchoTime") &&
+          links.exists(r => r.from == f.path && r.kind == "bids.phase-pair-family"))
         val epi = f.suffix != "epi" || Set("PhaseEncodingDirection", "TotalReadoutTime").subsetOf(fields.keySet)
         for
           _ <- room
           _ <- require(!fields.keySet.exists(forbidden), s"unsupported metadata dependency: ${f.path.value}")
-          _ <- require(needed.subsetOf(profile.metadataFields) && timing && epi, s"disclosure mask must preserve required acquisition/reference metadata: ${f.path.value}")
+          _ <- require(needed.subsetOf(profile.metadataFields) && timing && epi && phase && pair, s"disclosure mask must preserve required acquisition/reference metadata: ${f.path.value}")
           _ <- require(f.suffix != "dwi" || links.exists(r => r.from == f.path && r.kind == "bids.dwi-gradients"), "DWI gradient group is missing")
           _ <- require(f.suffix != "bold" || f.entities.get("task").contains("rest") || links.exists(r => r.from == f.path && r.kind == "bids.task-events"),
             "task BOLD requires a resolved event table in this subset profile")
@@ -180,7 +191,14 @@ final class MriViewCompiler(bidsContext: BidsContext = BidsContext.Default) exte
           yield copy(p, target)
         }
       }
-      _ <- links.filter(_.kind == "bids.task-events").traverse_ { r =>
+      _ <- links.filter(_.kind == "bids.event-stimuli").flatMap(_.to).distinct.sortBy(_.value).traverse_ { p =>
+        require(files.contains(p), "stimulus dependency is absent").map { _ =>
+          if profile.eventFields.exists(_("stim_file")) then copy(p, p)
+        }
+      }
+      _ <- links.filter(_.kind == "bids.task-events").distinctBy { r =>
+        (r.to, eventPath(c.images.find(_.path == r.from).get))
+      }.traverse_ { r =>
         val f = c.images.find(_.path == r.from).get
         for
           _ <- room
@@ -191,11 +209,11 @@ final class MriViewCompiler(bidsContext: BidsContext = BidsContext.Default) exte
           _ <- require(Set("onset", "duration").subsetOf(mask), "event mask must include onset and duration")
           assessed = assessedEvents(p)
           events <- assessed.table.toRight(Problem.Unsupported("event source failed strict assessment"))
-          _ <- require(!events.table.columns.exists(Set("stim_file", "HED")) && !effective(p).keySet.exists(Set("HED", "StimulusPresentation")) && !effective(p).values.exists(hasHed),
-            "stimulus references and HED need a separate subset profile")
+          _ <- require(!events.table.columns.contains("HED") && !effective(p).keySet.exists(Set("HED", "StimulusPresentation")) && !effective(p).values.exists(hasHed),
+            "HED requires a separate subset profile")
           names = events.table.columns.filter(mask)
           selected <- events.table.select(names).leftMap(e => Problem.Unsupported(e.message))
-          target <- RelPath.from(f.path.value.stripSuffix("_bold." + f.extension) + "_events.tsv")
+          target <- RelPath.from(eventPath(f))
           sidecar <- RelPath.from(target.value.stripSuffix(".tsv") + ".json")
         yield
           if names == events.table.columns then copy(p, target)
@@ -229,7 +247,7 @@ final class MriViewCompiler(bidsContext: BidsContext = BidsContext.Default) exte
         outputs.size <= 10000 && outputs.map(_.collisionKey).distinct.size == outputs.size,
         "subset output has conflicting paths or exceeds 10000 files").map { _ =>
         ProjectionPlan(kept, made, ProjectionEvidence(source.ref, selection.id, profile.id,
-          "sanctity-mri-view-v5:" + BidsInterpreter.describe(bidsContext).id.value, made.map(_._1)), proof, decisions)
+          "sanctity-mri-view-v8:" + BidsInterpreter.describe(bidsContext).id.value, made.map(_._1)), proof, decisions)
       }
     }
 
@@ -296,6 +314,10 @@ final class MriViewCompiler(bidsContext: BidsContext = BidsContext.Default) exte
     case MetadataValue.Record(fields) => fields.contains("HED") || fields.values.exists(hasHed)
     case MetadataValue.Array(values) => values.exists(hasHed)
     case _ => false
+  private def eventPath(f: ArtifactFacts): String =
+    val parent = f.path.parent.fold("")(_.value + "/")
+    parent + f.path.fileName.stripSuffix("_bold." + f.extension).split('_').filterNot(_.startsWith("echo-")).mkString("_") + "_events.tsv"
+
   private def equivalent(key: String, a: String, b: String): Boolean =
     if Set("run", "echo", "flip", "inv", "split", "chunk")(key) && a.forall(_.isDigit) && b.forall(_.isDigit) then
       a.dropWhile(_ == '0') == b.dropWhile(_ == '0')

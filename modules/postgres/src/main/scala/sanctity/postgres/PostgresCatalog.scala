@@ -61,6 +61,7 @@ final class PostgresCatalog[F[_]] private[postgres] (
   def select(ctx: AccessContext, refs: Vector[ReleaseRef], query: ScientificQuery): F[Either[Problem, FrozenSelection]] = run {
     for
       _ <- lift(FrozenSelection.from(refs, query, Vector.empty))
+      _ <- authorizeScopes(ctx, refs.map(r => (r.dataset, Action.ReadMetadata, Some(r.release))), false)
       hits <- refs.sortBy(r => (r.dataset.render, r.release.render)).traverse { ref =>
         for
           _ <- authorize(ctx, uuid(ref.dataset), false, Action.ReadMetadata, Some(ref.release))
@@ -85,9 +86,98 @@ final class PostgresCatalog[F[_]] private[postgres] (
         .query[String].option.flatMap(v => lift(v.toRight(Problem.Denied)))
       result <- lift(JsonCodecs.decode[FrozenSelection](payload))
       _ <- Records.require(result.id == id, "selection identity mismatch")
-      _ <- result.releases.traverse_(r => authorize(ctx, uuid(r.dataset), false, Action.ReadMetadata, Some(r.release)))
+      _ <- authorizeScopes(ctx, result.releases.map(r => (r.dataset, Action.ReadMetadata, Some(r.release))), false)
     yield result
   }
+
+  def startRun(ctx: AccessContext, spec: RunSpec, key: IdempotencyKey): F[Either[Problem, ProcessingRun]] =
+    ids.next[RunTag].flatMap { id => run {
+      for
+        _ <- lift(Either.cond(spec.valid, (), Problem.Unsupported("invalid run specification")))
+        _ <- runAuthority(ctx, spec, true)
+        input <- acceptedSource(spec.input)
+        _ <- lift(spec.validateInput(input))
+        previous <- sql"SELECT payload::text FROM processing_run WHERE destination=${uuid(spec.destination)} AND owner=${uuid(ctx.principal)} AND request_key=${key.value}"
+          .query[String].option
+        result <- previous match
+          case Some(payload) => lift(JsonCodecs.decode[ProcessingRun](payload)).flatMap(r =>
+            lift(Either.cond(r.spec == spec, r, Problem.Conflict("run key belongs to another request"))))
+          case None => for {
+            target <- authorize(ctx, uuid(spec.destination), true, Action.Propose)
+            _ <- lift(Either.cond(target.head == spec.base, (), Problem.Conflict("run destination head advanced")))
+            record = ProcessingRun(id, ctx.principal, spec, key, 0, RunStatus.Planned)
+            payload = JsonCodecs.encode(record)
+            _ <- sql"INSERT INTO processing_run(id,destination,owner,request_key,payload) VALUES(${uuid(id)},${uuid(spec.destination)},${uuid(ctx.principal)},${key.value},$payload::jsonb)".update.run
+          } yield record
+      yield result
+    }}
+
+  private def runAuthority(ctx: AccessContext, spec: RunSpec, source: Boolean): ConnectionIO[Unit] =
+    authorizeScopes(ctx, Vector((spec.destination, Action.Propose, Option.empty[ReleaseId])) ++
+      (if source then Vector((spec.input.dataset, Action.ReadContent, Some(spec.input.release))) else Vector.empty), true)
+
+  private def loadRun(ctx: AccessContext, id: RunId, lock: Boolean): ConnectionIO[ProcessingRun] =
+    (fr"SELECT payload::text FROM processing_run WHERE id=${uuid(id)} AND owner=${uuid(ctx.principal)}" ++
+      (if lock then fr"FOR UPDATE" else Fragment.empty)).query[String].option.flatMap(v => lift(v.toRight(Problem.Denied)))
+      .flatMap(p => lift(JsonCodecs.decode[ProcessingRun](p))).flatMap(r => Records.require(r.id == id && r.owner == ctx.principal, "run identity mismatch").as(r))
+
+  def readRun(ctx: AccessContext, id: RunId): F[Either[Problem, ProcessingRun]] = run {
+    for
+      record <- loadRun(ctx, id, false)
+      _ <- runAuthority(ctx, record.spec, false)
+    yield record
+  }
+
+  def advanceRun(ctx: AccessContext, id: RunId, generation: Long, update: RunUpdate): F[Either[Problem, ProcessingRun]] = run {
+    for
+      initial <- loadRun(ctx, id, false)
+      _ <- runAuthority(ctx, initial.spec, Set(RunStatus.Executing, RunStatus.Completed)(update.status))
+      current <- loadRun(ctx, id, true)
+      _ <- lift(Either.cond(current.generation == generation, (), Problem.Conflict("stale run generation")))
+      next <- lift(current.advance(update))
+      _ <- next.result.traverse_(p => acceptedSource(p.input).flatMap(r => lift(p.validateInput(r))))
+      _ <- next.retained.traverse_(b => sql"INSERT INTO blob(digest,size) VALUES(${b.digest.value},${b.size}) ON CONFLICT DO NOTHING".update.run)
+      payload = JsonCodecs.encode(next)
+      _ <- sql"UPDATE processing_run SET payload=$payload::jsonb WHERE id=${uuid(id)}".update.run
+    yield next
+  }
+
+  def completedRun(ctx: AccessContext, id: RunId): F[Either[Problem, ProcessingRun]] = run {
+    for
+      record <- loadRun(ctx, id, false)
+      _ <- authorizeScopes(ctx, Vector((record.spec.input.dataset, Action.ReadContent, Some(record.spec.input.release))), false)
+      _ <- lift(Either.cond(record.valid && record.status == RunStatus.Completed, (), Problem.Conflict("run has not completed")))
+    yield record
+  }
+
+  def observations(ctx: AccessContext, refs: Vector[ReleaseRef], query: ObservationQuery): F[Either[Problem, Vector[ObservationHit]]] = run {
+    for
+      _ <- lift(Either.cond(query.valid && refs.size <= 100 && refs.distinct.size == refs.size, (), Problem.Unsupported("invalid observation query universe")))
+      _ <- authorizeScopes(ctx, (refs ++ query.inputs.map(_.at)).distinct.map(r => (r.dataset, Action.ReadMetadata, Some(r.release))), false)
+      // Accepted releases are immutable. Decode each input release once in this request,
+      // while retaining the exact identity/path/blob check for every requested artifact.
+      _ <- query.inputs.groupBy(_.at).toVector.sortBy((at, _) => (at.dataset.render, at.release.render)).traverse_ { (at, inputs) =>
+        acceptedSource(at).flatMap(r => inputs.traverse_(i => Records.require(i.matches(r), "unknown observation input")))
+      }
+      hits <- refs.traverse { ref =>
+        acceptedSource(ref).flatMap(r => ScientificSql.ready(r.interpretation) *> ScientificSql.observations(ref, r.interpretation, query))
+      }
+    yield hits.flatten.sortBy(h => (h.at.dataset.render, h.at.release.render, h.observation.source.path.value))
+  }
+
+  private def acceptedSource(ref: ReleaseRef): ConnectionIO[Release] =
+    for
+      row <- sql"SELECT candidate_id,accepted_by,accepted_at FROM release WHERE dataset_id=${uuid(ref.dataset)} AND id=${uuid(ref.release)}"
+        .query[(UUID, UUID, Timestamp)].option.flatMap(v => lift(v.toRight(Problem.Denied)))
+      (id, actor, at) = row
+      c <- fetchCandidate(id).flatMap(hydrateCandidate)
+    yield Release(ref, c.base, c.manifest, c.interpretation, c.assessment, c.activity, Id[PrincipalTag](actor), at.toInstant)
+
+  private def validateEvidence(activity: Activity, interpretation: Interpretation, assessment: Assessment): ConnectionIO[Unit] =
+    activity.projection.filter(_ => activity.kind == ActivityKind.PrivateBundle).traverse_(p => acceptedSource(p.source).flatMap(r =>
+      Records.require(r.activity.kind != ActivityKind.PrivateBundle, "nested private bundles are not supported"))) *>
+      activity.processing.toVector.traverse(p => acceptedSource(p.input)).flatMap(sources =>
+        lift(DerivativeEvidence.validate(activity, interpretation, assessment, sources)))
 
   def create(ctx: AccessContext, custodian: CustodianId): F[Dataset] =
     ids.next[DatasetTag].flatMap { id =>
@@ -99,23 +189,54 @@ final class PostgresCatalog[F[_]] private[postgres] (
   def dataset(ctx: AccessContext, id: DatasetId): F[Either[Problem, Dataset]] = run(authorize(ctx, uuid(id), false))
 
   def draft(ctx: AccessContext, dataset: DatasetId, base: Option[ReleaseId], manifest: Manifest, activity: Activity): F[Either[Problem, Draft]] =
-    ids.next[DraftTag].flatMap { id =>
-      run {
-        for
-          _ <- authorize(ctx, uuid(dataset), true, Action.Propose)
-          _ <- lift(Either.cond(activity.actor == ctx.principal, (), Problem.Denied))
-          _ <- base.traverse_ { release =>
-            sql"SELECT EXISTS (SELECT 1 FROM release WHERE dataset_id=${uuid(dataset)} AND id=${uuid(release)})".query[Boolean].unique
-              .flatMap(found => lift(Either.cond(found, (), Problem.NotFound("base release", release.render))))
+    ids.next[DraftTag].flatMap { id => run {
+      for
+        // A publisher/key spans destinations; serialize before taking ordered dataset locks.
+        _ <- activity.publication.traverse_ { p =>
+          val lock = s"sanctity.publication:${ctx.principal.render}:${p.key.value}"
+          sql"SELECT pg_advisory_xact_lock(hashtextextended($lock, 0))::text".query[String].unique.void
+        }
+        _ <- authorizeScopes(ctx, Vector((dataset, Action.Propose, Option.empty[ReleaseId])) ++
+          activity.processing.toVector.map(p => (p.input.dataset, Action.ReadContent, Some(p.input.release))) ++
+          activity.projection.filter(_ => activity.kind == ActivityKind.PrivateBundle).toVector.map(p => (p.source.dataset, Action.ReadContent, Some(p.source.release))), true)
+        target <- authorize(ctx, uuid(dataset), true, Action.Propose)
+        _ <- lift(Either.cond(activity.actor == ctx.principal, (), Problem.Denied))
+        _ <- processingInput(ctx, activity)
+        _ <- activity.publication match
+          case Some(p) => for {
+            r <- loadRun(ctx, p.run, false)
+            _ <- lift(p.validate(ctx, r))
+            _ <- lift(Either.cond(p.matches(dataset, base, activity), (), Problem.Conflict("publication intent differs from draft")))
+          } yield ()
+          case None => activity.processing.traverse_(p => sql"SELECT payload::text FROM processing_run WHERE id=${uuid(p.invocation)}".query[String].option
+            .flatMap(_.traverse_(text => lift(JsonCodecs.decode[ProcessingRun](text)).flatMap(r => lift(r.submission(ctx, dataset, base, p))))))
+        _ <- base.traverse_(r => acceptedSource(ReleaseRef(dataset, r)))
+        previous <- activity.publication match
+          case Some(p) => sql"SELECT intent_id,draft_id FROM processing_publication WHERE publisher=${uuid(ctx.principal)} AND request_key=${p.key.value}"
+            .query[(String, UUID)].option.flatMap(_.traverse { (intent, draft) =>
+              lift(Either.cond(intent == p.id.value, draft, Problem.Conflict("publication key belongs to another request")))
+            })
+          case None => activity.processing.flatTraverse(p => sql"SELECT draft_id FROM derivative_submission WHERE destination=${uuid(dataset)} AND invocation=${uuid(p.invocation)}".query[UUID].option)
+        result <- previous match
+          case Some(previousId) => authorizedDraft(ctx, previousId, false).flatMap { (d, _) =>
+            lift(Either.cond(d.dataset == dataset && d.base == base && d.activity.actor == ctx.principal &&
+              d.activity.publication == activity.publication && d.activity.processing.map(_.id) == activity.processing.map(_.id),
+              d, Problem.Conflict("invocation already collected with another request")))
           }
-          _ <- Records.storeManifest(manifest)
-          _ <- Records.storeEvidence(activity)
-          payload = JsonCodecs.encode(activity)
-          _ <- sql"""INSERT INTO draft (id,dataset_id,base,generation,manifest_id,activity)
-            VALUES (${uuid(id)},${uuid(dataset)},${base.map(uuid)},0,${manifest.id.value.value},$payload::jsonb)""".update.run
-        yield Draft(id, dataset, base, 0L, manifest, activity)
-      }
-    }
+          case None => for {
+            _ <- lift(Either.cond(activity.processing.isEmpty || target.head == base, (), Problem.Conflict("derivative destination head advanced")))
+            _ <- Records.storeManifest(manifest)
+            _ <- Records.storeEvidence(activity)
+            payload = JsonCodecs.encode(activity)
+            _ <- sql"""INSERT INTO draft (id,dataset_id,base,generation,manifest_id,activity)
+              VALUES (${uuid(id)},${uuid(dataset)},${base.map(uuid)},0,${manifest.id.value.value},$payload::jsonb)""".update.run
+            _ <- activity.publication match
+              case Some(p) => sql"""INSERT INTO processing_publication(publisher,request_key,intent_id,run_id,draft_id)
+                VALUES(${uuid(p.publisher)},${p.key.value},${p.id.value},${uuid(p.run)},${uuid(id)})""".update.run.void
+              case None => activity.processing.traverse_(p => sql"INSERT INTO derivative_submission(destination,invocation,draft_id) VALUES(${uuid(dataset)},${uuid(p.invocation)},${uuid(id)})".update.run)
+          } yield Draft(id, dataset, base, 0L, manifest, activity)
+      yield result
+    }}
 
   def readDraft(ctx: AccessContext, id: DraftId): F[Either[Problem, Draft]] =
     run(authorizedDraft(ctx, uuid(id), false).map(_._1))
@@ -127,6 +248,7 @@ final class PostgresCatalog[F[_]] private[postgres] (
         (current, accepted) = loaded
         _ <- lift(Either.cond(!accepted, (), Problem.Conflict("draft already accepted")))
         _ <- lift(Either.cond(current.generation == generation, (), Problem.Conflict("stale draft generation")))
+        _ <- lift(Admission.revision(current.activity, activity))
         _ <- lift(Either.cond(activity.actor == ctx.principal, (), Problem.Denied))
         _ <- lift(Either.cond(generation < Long.MaxValue, (), Problem.Conflict("draft generation exhausted")))
         _ <- Records.storeManifest(manifest)
@@ -146,6 +268,7 @@ final class PostgresCatalog[F[_]] private[postgres] (
           (draft, accepted) = loaded
           baseContent <- reinterpretationBase(draft)
           _ <- lift(Admission.prepared(draft, generation, accepted, interpretation, assessment, baseContent))
+          _ <- validateEvidence(draft.activity, interpretation, assessment)
           _ <- Records.storeInterpretation(interpretation)
           _ <- Records.storeAssessment(assessment)
           _ <- Records.indexesReady(draft.manifest, interpretation)
@@ -161,10 +284,15 @@ final class PostgresCatalog[F[_]] private[postgres] (
     run(candidateScope(ctx, uuid(id), false, Action.Propose, allowAccept = true).flatMap(pair => hydrateCandidate(pair._2)))
 
   def receipt(ctx: AccessContext, id: CandidateId, key: IdempotencyKey): F[Either[Problem, Option[AcceptanceReceipt]]] =
-    run(candidateScope(ctx, uuid(id), false, Action.Accept).flatMap { (_, row) =>
-      lift(JsonCodecs.decode[Activity](row.activity)).flatMap(_.projection.traverse_(p =>
-        authorize(ctx, uuid(p.source.dataset), false, Action.ManageAccess))) *> priorReceipt(ctx, row, key)
-    })
+    run {
+      for
+        row <- fetchCandidate(uuid(id))
+        activity <- lift(JsonCodecs.decode[Activity](row.activity))
+        _ <- authorizeActivity(ctx, row, activity, false)
+        _ <- processingInput(ctx, activity)
+        receipt <- priorReceipt(ctx, row, key)
+      yield receipt
+    }
 
   def accept(ctx: AccessContext, id: CandidateId, key: IdempotencyKey, lease: Option[WorkLease] = None): F[Either[Problem, AcceptanceReceipt]] =
     ids.next[ReleaseTag].flatMap { releaseId =>
@@ -172,8 +300,8 @@ final class PostgresCatalog[F[_]] private[postgres] (
         for
           initial <- fetchCandidate(uuid(id))
           activity <- lift(JsonCodecs.decode[Activity](initial.activity))
-          locks = (Vector(Id[DatasetTag](initial.dataset) -> Action.Accept) ++ activity.projection.toVector.map(p => p.source.dataset -> Action.ManageAccess)).sortBy(_._1.render)
-          _ <- locks.traverse_((dataset, action) => authorize(ctx, uuid(dataset), true, action))
+          _ <- authorizeActivity(ctx, initial, activity, true)
+          _ <- processingInput(ctx, activity)
           scoped <- candidateScope(ctx, uuid(id), true, Action.Accept)
           (dataset, row) = scoped
           prior <- priorReceipt(ctx, row, key)
@@ -186,6 +314,7 @@ final class PostgresCatalog[F[_]] private[postgres] (
                 draftRow <- fetchDraft(row.draft)
                 draft <- hydrateDraft(draftRow)
                 baseContent <- reinterpretationBase(draft)
+                _ <- validateEvidence(candidate.activity, candidate.interpretation, candidate.assessment)
                 _ <- lift(Admission.accept(dataset, draft, candidate, draftRow.accepted.nonEmpty, baseContent))
                 _ <- Records.indexesReady(candidate.manifest, candidate.interpretation)
                 timestamp <- sql"SELECT clock_timestamp()".query[Timestamp].unique
@@ -215,6 +344,27 @@ final class PostgresCatalog[F[_]] private[postgres] (
       }
     }
 
+  private def authorizeActivity(ctx: AccessContext, row: CandidateRow, activity: Activity, write: Boolean): ConnectionIO[Unit] =
+    val scopes = Vector((Id[DatasetTag](row.dataset), Action.Accept, Option.empty[ReleaseId])) ++
+      activity.projection.toVector.map(p => if activity.kind == ActivityKind.PrivateBundle then
+        (p.source.dataset, Action.ReadContent, Some(p.source.release)) else (p.source.dataset, Action.ManageAccess, Option.empty[ReleaseId])) ++
+      activity.processing.toVector.map(p => (p.input.dataset, Action.ReadContent, Some(p.input.release)))
+    authorizeScopes(ctx, scopes, write) *>
+      privateActivity(ctx, activity)
+
+  private def processingInput(ctx: AccessContext, activity: Activity): ConnectionIO[Unit] =
+    activity.processing.traverse_ { p =>
+      for
+        _ <- authorize(ctx, uuid(p.input.dataset), false, Action.ReadContent, Some(p.input.release))
+        row <- sql"SELECT candidate_id,accepted_by,accepted_at FROM release WHERE dataset_id=${uuid(p.input.dataset)} AND id=${uuid(p.input.release)}"
+          .query[(UUID, UUID, Timestamp)].option.flatMap(v => lift(v.toRight(Problem.Denied)))
+        (id, actor, at) = row
+        c <- fetchCandidate(id).flatMap(hydrateCandidate)
+        _ <- lift(p.validateInput(Release(p.input, c.base, c.manifest, c.interpretation, c.assessment, c.activity,
+          Id[PrincipalTag](actor), at.toInstant)))
+      yield ()
+    }
+
   def release(ctx: AccessContext, ref: ReleaseRef): F[Either[Problem, Release]] = run {
     for
       _ <- authorize(ctx, uuid(ref.dataset), false, Action.ReadMetadata, Some(ref.release))
@@ -238,6 +388,28 @@ final class PostgresCatalog[F[_]] private[postgres] (
     yield metadata
   }
 
+  /** Discover inherited private scopes before locking any dataset; recheck after locks. */
+  private def privateSource(id: UUID, release: Option[ReleaseId]): ConnectionIO[Option[ReleaseRef]] =
+    for
+      row <- sql"SELECT head FROM dataset WHERE id=$id".query[Option[UUID]].option
+      selected = release.map(uuid).orElse(row.flatten)
+      activity <- selected.flatTraverse(r => sql"SELECT c.activity::text FROM release r JOIN candidate c ON c.id=r.candidate_id WHERE r.dataset_id=$id AND r.id=$r"
+        .query[String].option.flatMap(_.traverse(p => lift(JsonCodecs.decode[Activity](p)))))
+    yield activity.filter(_.kind == ActivityKind.PrivateBundle).flatMap(_.projection).map(_.source)
+
+  private def lockScopes(scopes: Vector[(DatasetId, Action, Option[ReleaseId])], write: Boolean): ConnectionIO[Unit] =
+    for
+      dependencies <- scopes.traverse((id, _, release) => privateSource(uuid(id), release))
+      ids = (scopes.map(_._1) ++ dependencies.flatten.map(_.dataset)).distinct.sortBy(_.render)
+      lock = if write then Fragment.const("FOR UPDATE") else Fragment.const("FOR SHARE")
+      _ <- ids.traverse_(id => (fr"SELECT id FROM dataset WHERE id=${uuid(id)}" ++ lock).query[UUID].option)
+      current <- scopes.traverse((id, _, release) => privateSource(uuid(id), release))
+      _ <- lift(Either.cond(current == dependencies, (), Problem.Conflict("private authorization scope changed; retry")))
+    yield ()
+
+  private def authorizeScopes(ctx: AccessContext, scopes: Vector[(DatasetId, Action, Option[ReleaseId])], write: Boolean): ConnectionIO[Unit] =
+    lockScopes(scopes, write) *> scopes.sortBy(_._1.render).traverse_((id, action, release) => authorize(ctx, uuid(id), write, action, release))
+
   private[postgres] def authorize(ctx: AccessContext, id: UUID, write: Boolean,
       action: Action = Action.ReadMetadata, release: Option[ReleaseId] = None,
       allowAccept: Boolean = false): ConnectionIO[Dataset] =
@@ -245,6 +417,7 @@ final class PostgresCatalog[F[_]] private[postgres] (
     for
       _ <- OperationsSql.active
       _ <- CredentialSql.check(ctx)
+      _ <- lockScopes(Vector((Id[DatasetTag](id), action, release)), write)
       row <- (fr"SELECT id,custodian,curator,head FROM dataset WHERE id=$id" ++ lock)
         .query[(UUID, UUID, UUID, Option[UUID])].option.flatMap(v => lift(v.toRight(Problem.Denied)))
       (datasetId, custodian, curator, head) = row
@@ -258,21 +431,48 @@ final class PostgresCatalog[F[_]] private[postgres] (
       }
       _ <- lift(Either.cond(Authority.permits(dataset, decoded, ctx, action, release) ||
         (allowAccept && Authority.permits(dataset, decoded, ctx, Action.Accept, release)), (), Problem.Denied))
+      _ <- release.orElse(dataset.head).traverse_ { selected =>
+        sql"SELECT c.activity::text FROM release r JOIN candidate c ON c.id=r.candidate_id WHERE r.dataset_id=$id AND r.id=${uuid(selected)}"
+          .query[String].option.flatMap(_.traverse_(payload => lift(JsonCodecs.decode[Activity](payload)).flatMap { activity =>
+            if activity.kind != ActivityKind.PrivateBundle then ().pure[ConnectionIO]
+            else for
+              _ <- lift(Either.cond(activity.actor == ctx.principal && Set(Action.ReadMetadata, Action.ReadContent, Action.Accept)(action), (), Problem.Denied))
+              p <- lift(activity.projection.toRight(Problem.Denied))
+              _ <- authorize(ctx, uuid(p.source.dataset), false, if action == Action.ReadMetadata then Action.ReadMetadata else Action.ReadContent, Some(p.source.release))
+            yield ()
+          }))
+      }
     yield dataset
+
+  private def privateActivity(ctx: AccessContext, activity: Activity): ConnectionIO[Unit] =
+    if activity.kind != ActivityKind.PrivateBundle then ().pure[ConnectionIO]
+    else for
+      _ <- lift(Either.cond(activity.actor == ctx.principal, (), Problem.Denied))
+      p <- lift(activity.projection.toRight(Problem.Denied))
+      _ <- authorize(ctx, uuid(p.source.dataset), false, Action.ReadContent, Some(p.source.release))
+    yield ()
 
   private def authorizedDraft(ctx: AccessContext, id: UUID, write: Boolean): ConnectionIO[(Draft, Boolean)] =
     for
       dataset <- sql"SELECT dataset_id FROM draft WHERE id=$id".query[UUID].option.flatMap(v => lift(v.toRight(Problem.Denied)))
-      _ <- authorize(ctx, dataset, write, Action.Propose)
       row <- fetchDraft(id)
       draft <- hydrateDraft(row)
+      _ <- authorizeScopes(ctx, Vector((Id[DatasetTag](dataset), Action.Propose, Option.empty[ReleaseId])) ++
+        draft.activity.projection.filter(_ => draft.activity.kind == ActivityKind.PrivateBundle).toVector.map(p => (p.source.dataset, Action.ReadContent, Some(p.source.release))), write)
+      _ <- privateActivity(ctx, draft.activity)
+      current <- fetchDraft(id)
+      _ <- lift(Either.cond(current.generation == row.generation && current.accepted == row.accepted, (), Problem.Conflict("draft changed while acquiring authority; retry")))
     yield draft -> row.accepted.nonEmpty
 
   private def candidateScope(ctx: AccessContext, id: UUID, write: Boolean, action: Action, allowAccept: Boolean = false): ConnectionIO[(Dataset, CandidateRow)] =
     for
       datasetId <- sql"SELECT dataset_id FROM candidate WHERE id=$id".query[UUID].option.flatMap(v => lift(v.toRight(Problem.Denied)))
-      dataset <- authorize(ctx, datasetId, write, action, allowAccept = allowAccept)
       row <- fetchCandidate(id)
+      activity <- lift(JsonCodecs.decode[Activity](row.activity))
+      _ <- lockScopes(Vector((Id[DatasetTag](datasetId), action, Option.empty[ReleaseId])) ++
+        activity.projection.filter(_ => activity.kind == ActivityKind.PrivateBundle).toVector.map(p => (p.source.dataset, Action.ReadContent, Some(p.source.release))), write)
+      dataset <- authorize(ctx, datasetId, write, action, allowAccept = allowAccept)
+      _ <- privateActivity(ctx, activity)
     yield dataset -> row
 
   private def reinterpretationBase(draft: Draft): ConnectionIO[Option[ManifestId]] =

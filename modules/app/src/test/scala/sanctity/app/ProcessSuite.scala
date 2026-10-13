@@ -36,3 +36,12 @@ final class ProcessSuite extends FunSuite:
       yield ()
     }.unsafeRunSync()
   }
+
+  test("an explicit process environment does not inherit repository configuration") {
+    Resource.make(IO.blocking(Files.createTempDirectory("sanctity-process-env-")))(TestFiles.remove).use { root =>
+      ManagedProcess.run[IO](Vector("/usr/bin/env"), root, environment = Some(Map("SANCTITY_PROCESS_SCOPE" -> "fixture"))).map { result =>
+        assertEquals(result.exitCode, 0)
+        assertEquals(new String(result.output.toArray, java.nio.charset.StandardCharsets.UTF_8), "SANCTITY_PROCESS_SCOPE=fixture\n")
+      }
+    }.unsafeRunSync()
+  }

@@ -17,6 +17,10 @@ final class EventContentChecks[F[_]](store: BlobStore[F])(using F: Async[F]):
     bids4s.NiftiHeaderFacts.Version + "+" + NiftiHeaderReader.Version
 
   def assess(manifest: Manifest, interpretation: Interpretation): F[Vector[ContentCheck]] =
+    assess(manifest, interpretation, Map.empty)
+
+  private[bids] def assess(manifest: Manifest, interpretation: Interpretation,
+      headers: Map[RelPath, Either[bids4s.DwiIssue, bids4s.NiftiHeaderFacts]]): F[Vector[ContentCheck]] =
     val groups = interpretation.relationships.toVector.flatMap(_.relationships).filter(_.kind == "bids.task-events")
     val files = manifest.files.map(f => f.path -> f).toMap
     val tables = groups.flatMap(_.to).distinct.flatMap(files.get)
@@ -35,7 +39,7 @@ final class EventContentChecks[F[_]](store: BlobStore[F])(using F: Async[F]):
           _ <- Checked.lift[F, Unit](Either.cond(sources.size <= 98, (), Problem.LimitExceeded("event check exceeds 98 metadata documents")))
           documents <- Checked.lift[F, Vector[Entry.File]](sources.traverse(p =>
             files.get(p).toRight(Problem.Integrity("event metadata source is absent from manifest"))))
-          header <- reader.read(image)
+          header <- headers.get(image.path).fold(reader.read(image))(F.pure)
           volumes = header.toOption.filter(h => Set(3, 4)(h.dimensions.size)).map(_.dimensions.lift(3).getOrElse(1L))
           imageFindings = header.fold(
             issue => Vector(Finding("EventsImage" + issue.code.toString, Severity.Error, Some(image.path), issue.message)),

@@ -1,0 +1,8 @@
+{
+  "EchoTime": 0.00746,
+  "B0FieldIdentifier": "gre-pair",
+  "IntendedFor": [
+    "bids::sub-01/ses-task/func/sub-01_ses-task_task-rest_run-1_bold.nii",
+    "bids::sub-01/ses-task/func/sub-01_ses-task_task-rest_run-2_bold.nii"
+  ]
+}

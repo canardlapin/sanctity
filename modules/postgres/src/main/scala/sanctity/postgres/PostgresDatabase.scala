@@ -48,7 +48,7 @@ final class PostgresDatabase[F[_]] private[postgres] (
   /** Advisory lock plus transactional DDL; drift or a newer schema fails closed. */
   def migrate: F[Unit] =
     F.blocking {
-      Vector("V001__catalog.sql", "V002__authority.sql", "V003__queries.sql", "V004__operations.sql", "V005__credentials.sql").zipWithIndex.map { (name, index) =>
+      Vector("V001__catalog.sql", "V002__authority.sql", "V003__queries.sql", "V004__operations.sql", "V005__credentials.sql", "V006__processing.sql", "V007__publication.sql").zipWithIndex.map { (name, index) =>
         val stream = Option(getClass.getResourceAsStream(s"/sanctity/postgres/$name"))
           .getOrElse(throw Failure(Problem.Operational("missing catalog migration")))
         val source = try new String(stream.readAllBytes(), StandardCharsets.UTF_8) finally stream.close()

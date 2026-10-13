@@ -3,7 +3,6 @@ package sanctity.app
 import bids4s.*
 import cats.effect.{IO, Ref}
 import fs2.Stream
-import munit.FunSuite
 import sanctity.application.*
 import sanctity.bids.{BidsChangeCompiler, BidsInterpreter, MriViewCompiler}
 import sanctity.kernel.*
@@ -11,7 +10,7 @@ import sanctity.objects.{DirectoryExport, NativeDirectorySource}
 import java.nio.file.{Files, Path}
 
 /** The same profile-evolution laws are exercised by both catalog implementations. */
-abstract class CatalogContextSuite extends FunSuite:
+abstract class CatalogContextSuite extends CatalogMriSuite:
   protected def fixture(run: (RepositorySystem, Path) => IO[Unit]): Unit
   private def checked[A](a: IO[Either[Problem, A]]): IO[A] = a.flatMap(Checked.lift[IO, A])
   private def p(s: String): RelPath = RelPath.from(s).toOption.get

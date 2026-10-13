@@ -175,7 +175,11 @@ final class HttpSuite extends FunSuite:
   test("cached contexts cannot publish after credential revocation; active file delivery stops at a chunk boundary") {
     PostgresFixture.resource.use { f =>
       for
-        _ <- IO.blocking(Files.write(f.root.resolve("source").resolve(SyntheticFixture.firstImage), Array.fill[Byte](200000)(17)))
+        _ <- IO.blocking {
+          val image = f.root.resolve("source").resolve(SyntheticFixture.firstImage)
+          // Preserve a valid image header while making delivery span several chunks.
+          val _ = Files.write(image, java.util.Arrays.copyOf(Files.readAllBytes(image), 200000))
+        }
         initial <- publish(f)
         token <- checked(credentials(f).issue(f.system.context.principal, "stream", 3600))
         ctx <- checked(credentials(f).authenticate(token.secret))

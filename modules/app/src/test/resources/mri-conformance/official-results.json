@@ -1,0 +1,45 @@
+{
+  "validator": "jsr:@bids/validator@3.0.2",
+  "schemaSha256": "9bac1441212012d1971982053545dba8160652d73d8d0faed71709b4401ad300",
+  "niftiHeadersChecked": true,
+  "cases": [
+    {
+      "case": "complete",
+      "errors": []
+    },
+    {
+      "case": "without-optional-magnitude2",
+      "errors": []
+    },
+    {
+      "case": "missing-magnitude1",
+      "errors": []
+    },
+    {
+      "case": "missing-echo-time2",
+      "errors": [
+        [
+          "ECHOTIME1_2_DIFFERENCE_UNREASONABLE",
+          ""
+        ],
+        [
+          "SIDECAR_KEY_REQUIRED",
+          "EchoTime2"
+        ]
+      ]
+    },
+    {
+      "case": "invalid-spatial-spacing",
+      "errors": []
+    },
+    {
+      "case": "header-tr-mismatch",
+      "errors": [
+        [
+          "REPETITION_TIME_MISMATCH",
+          ""
+        ]
+      ]
+    }
+  ]
+}

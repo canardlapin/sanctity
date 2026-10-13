@@ -1,0 +1,163 @@
+{
+  "oracle": "NiBabel 5.3.2",
+  "generatorSha256": "d9d44311bc1569510021f88553657c09a03502d64e3069123a377339c96a84e8",
+  "images": [
+    {
+      "path": "sub-01/ses-cal/fmap/sub-01_ses-cal_acq-gre_run-01_magnitude1.nii",
+      "sha256": "c916a0ff69cab3b0c909f1214b4e540266850b281e3b8f2f8411b882b36a0452",
+      "shape": [
+        2,
+        2,
+        1
+      ],
+      "units": [
+        "mm",
+        "sec"
+      ],
+      "zooms": [
+        2.0,
+        3.0,
+        4.0
+      ],
+      "voxels": [
+        1.0,
+        2.0,
+        3.0,
+        4.0
+      ]
+    },
+    {
+      "path": "sub-01/ses-cal/fmap/sub-01_ses-cal_acq-gre_run-01_magnitude2.nii",
+      "sha256": "c916a0ff69cab3b0c909f1214b4e540266850b281e3b8f2f8411b882b36a0452",
+      "shape": [
+        2,
+        2,
+        1
+      ],
+      "units": [
+        "mm",
+        "sec"
+      ],
+      "zooms": [
+        2.0,
+        3.0,
+        4.0
+      ],
+      "voxels": [
+        1.0,
+        2.0,
+        3.0,
+        4.0
+      ]
+    },
+    {
+      "path": "sub-01/ses-cal/fmap/sub-01_ses-cal_acq-gre_run-01_phase1.nii",
+      "sha256": "c916a0ff69cab3b0c909f1214b4e540266850b281e3b8f2f8411b882b36a0452",
+      "shape": [
+        2,
+        2,
+        1
+      ],
+      "units": [
+        "mm",
+        "sec"
+      ],
+      "zooms": [
+        2.0,
+        3.0,
+        4.0
+      ],
+      "voxels": [
+        1.0,
+        2.0,
+        3.0,
+        4.0
+      ]
+    },
+    {
+      "path": "sub-01/ses-cal/fmap/sub-01_ses-cal_acq-gre_run-01_phase2.nii",
+      "sha256": "c916a0ff69cab3b0c909f1214b4e540266850b281e3b8f2f8411b882b36a0452",
+      "shape": [
+        2,
+        2,
+        1
+      ],
+      "units": [
+        "mm",
+        "sec"
+      ],
+      "zooms": [
+        2.0,
+        3.0,
+        4.0
+      ],
+      "voxels": [
+        1.0,
+        2.0,
+        3.0,
+        4.0
+      ]
+    },
+    {
+      "path": "sub-01/ses-task/func/sub-01_ses-task_task-rest_run-1_bold.nii",
+      "sha256": "31cd208e0ba19d0a608f1f6e8801af614890382a602516d5e796f0b499b4316e",
+      "shape": [
+        2,
+        2,
+        1,
+        2
+      ],
+      "units": [
+        "mm",
+        "sec"
+      ],
+      "zooms": [
+        2.0,
+        3.0,
+        4.0,
+        1.5
+      ],
+      "voxels": [
+        1.0,
+        2.0,
+        3.0,
+        4.0,
+        5.0,
+        6.0,
+        7.0,
+        8.0
+      ]
+    },
+    {
+      "path": "sub-01/ses-task/func/sub-01_ses-task_task-rest_run-2_bold.nii",
+      "sha256": "31cd208e0ba19d0a608f1f6e8801af614890382a602516d5e796f0b499b4316e",
+      "shape": [
+        2,
+        2,
+        1,
+        2
+      ],
+      "units": [
+        "mm",
+        "sec"
+      ],
+      "zooms": [
+        2.0,
+        3.0,
+        4.0,
+        1.5
+      ],
+      "voxels": [
+        1.0,
+        2.0,
+        3.0,
+        4.0,
+        5.0,
+        6.0,
+        7.0,
+        8.0
+      ]
+    }
+  ],
+  "fileDigestsVerified": 14
+}

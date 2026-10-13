@@ -1,0 +1,26 @@
+{
+  "profile": "bids-phase-pair-family-v1",
+  "allowedEntities": ["sub", "ses", "acq", "run"],
+  "requiredRoles": ["phase1", "phase2", "magnitude1", "magnitude2"],
+  "pairing": "Same parent directory, dataset boundary and entities; run indices compare numerically, subject/session labels lexically.",
+  "timing": "Positive finite phase1 EchoTime < phase2 EchoTime. If a magnitude EchoTime is present it must equal its numbered phase EchoTime.",
+  "relationships": "Every member depends on the other three. Existing explicit B0 and IntendedFor links select consumers; family pairing does not infer consumers.",
+  "cases": [
+    {"name": "complete-cross-session", "mutation": "none", "groups": 1, "findings": []},
+    {"name": "missing-phase1", "mutation": "remove phase1 image", "groups": 0, "findings": ["PhasePairMissingMember"]},
+    {"name": "missing-phase2", "mutation": "remove phase2 image", "groups": 0, "findings": ["PhasePairMissingMember"]},
+    {"name": "missing-magnitude1", "mutation": "remove magnitude1 image", "groups": 0, "findings": ["PhasePairMissingMember"]},
+    {"name": "missing-magnitude2", "mutation": "remove magnitude2 image", "groups": 0, "findings": ["PhasePairMissingMember"]},
+    {"name": "ambiguous-phase", "mutation": "add compressed copy of phase1 image", "groups": 0, "findings": ["PhasePairAmbiguousMember"]},
+    {"name": "ambiguous-magnitude", "mutation": "add compressed copy of magnitude2 image", "groups": 0, "findings": ["PhasePairAmbiguousMember"]},
+    {"name": "different-acquisition", "mutation": "rename magnitude1 acq-gre to acq-other", "groups": 0, "findings": ["PhasePairMissingMember"]},
+    {"name": "run-padding", "mutation": "rename magnitude1 run-01 to run-1", "groups": 1, "findings": []},
+    {"name": "missing-echo-time", "mutation": "remove phase2 EchoTime", "groups": 0, "findings": ["PhasePairEchoTimes"]},
+    {"name": "reversed-echo-times", "mutation": "set phase2 EchoTime to 0.005", "groups": 0, "findings": ["PhasePairEchoTimes"]},
+    {"name": "magnitude-echo-mismatch", "mutation": "set magnitude2 EchoTime to 0.008", "groups": 0, "findings": ["PhasePairEchoTimes"]},
+    {"name": "missing-reference-target", "mutation": "change phase1 IntendedFor to an absent BOLD path", "groups": 1, "findings": ["FieldmapMissingTarget"]},
+    {"name": "mixed-representation", "mutation": "add phasediff with the same directory/entities", "groups": 0, "findings": ["PhasePairMixedRepresentation"]},
+    {"name": "separate-phasediff", "mutation": "add complete phasediff family with acq-other", "groups": 1, "findings": []},
+    {"name": "separate-epi", "mutation": "add EPI family with a distinct B0 identifier", "groups": 1, "findings": []}
+  ]
+}

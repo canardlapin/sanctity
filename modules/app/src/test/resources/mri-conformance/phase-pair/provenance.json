@@ -1,0 +1,74 @@
+{
+  "kind": "synthetic-direct-byte-fixture",
+  "license": "CC0-1.0",
+  "generator": "scripts/create-phase-pair-fixture.py",
+  "generatorSha256": "d9d44311bc1569510021f88553657c09a03502d64e3069123a377339c96a84e8",
+  "schemaSha256": "9bac1441212012d1971982053545dba8160652d73d8d0faed71709b4401ad300",
+  "specification": "https://github.com/bids-standard/bids-specification/blob/v1.11.1/src/modality-specific-files/magnetic-resonance-imaging-data.md#case-2-two-phase-maps-and-two-magnitude-images",
+  "expectedMembers": [
+    "sub-01/ses-cal/fmap/sub-01_ses-cal_acq-gre_run-01_phase1.nii",
+    "sub-01/ses-cal/fmap/sub-01_ses-cal_acq-gre_run-01_phase2.nii",
+    "sub-01/ses-cal/fmap/sub-01_ses-cal_acq-gre_run-01_magnitude1.nii",
+    "sub-01/ses-cal/fmap/sub-01_ses-cal_acq-gre_run-01_magnitude2.nii"
+  ],
+  "target": "sub-01/ses-task/func/sub-01_ses-task_task-rest_run-1_bold.nii",
+  "excludedTarget": "sub-01/ses-task/func/sub-01_ses-task_task-rest_run-2_bold.nii",
+  "files": {
+    "LICENSE": {
+      "sha256": "d0afab4329feecfe30a7c1cca897c3fa248f6443e43aac9ae1ecc8f6fd2e3660",
+      "size": 70
+    },
+    "README": {
+      "sha256": "59538a8554d8ecd708dc492094b3b528c495cf124dc50ae70660e7963c26a26f",
+      "size": 129
+    },
+    "dataset_description.json": {
+      "sha256": "d72b491d2e8d3fb2777c5b8caa6d92cb3056919a8d80265ea4d90978b6a1533e",
+      "size": 173
+    },
+    "sub-01/ses-cal/fmap/sub-01_ses-cal_acq-gre_run-01_magnitude1.json": {
+      "sha256": "c12458f02345c4092f3a4b3f8683050fb77229635e0c98c7db056e2443b09556",
+      "size": 24
+    },
+    "sub-01/ses-cal/fmap/sub-01_ses-cal_acq-gre_run-01_magnitude1.nii": {
+      "sha256": "c916a0ff69cab3b0c909f1214b4e540266850b281e3b8f2f8411b882b36a0452",
+      "size": 368
+    },
+    "sub-01/ses-cal/fmap/sub-01_ses-cal_acq-gre_run-01_magnitude2.json": {
+      "sha256": "a77ce194a4234846a046d7b9840aeb89ed212b14514a12493eabdbfec03bf3f8",
+      "size": 26
+    },
+    "sub-01/ses-cal/fmap/sub-01_ses-cal_acq-gre_run-01_magnitude2.nii": {
+      "sha256": "c916a0ff69cab3b0c909f1214b4e540266850b281e3b8f2f8411b882b36a0452",
+      "size": 368
+    },
+    "sub-01/ses-cal/fmap/sub-01_ses-cal_acq-gre_run-01_phase1.json": {
+      "sha256": "c0a1c5947f9ff683ab1edafc6a6352760e06b214d472a05186c9ff14c9531389",
+      "size": 232
+    },
+    "sub-01/ses-cal/fmap/sub-01_ses-cal_acq-gre_run-01_phase1.nii": {
+      "sha256": "c916a0ff69cab3b0c909f1214b4e540266850b281e3b8f2f8411b882b36a0452",
+      "size": 368
+    },
+    "sub-01/ses-cal/fmap/sub-01_ses-cal_acq-gre_run-01_phase2.json": {
+      "sha256": "c605a51d762aa18a374c608c0d5d52e7c3bba1cc1c446e773baadb73a6f2ecc6",
+      "size": 234
+    },
+    "sub-01/ses-cal/fmap/sub-01_ses-cal_acq-gre_run-01_phase2.nii": {
+      "sha256": "c916a0ff69cab3b0c909f1214b4e540266850b281e3b8f2f8411b882b36a0452",
+      "size": 368
+    },
+    "sub-01/ses-task/func/sub-01_ses-task_task-rest_run-1_bold.nii": {
+      "sha256": "31cd208e0ba19d0a608f1f6e8801af614890382a602516d5e796f0b499b4316e",
+      "size": 384
+    },
+    "sub-01/ses-task/func/sub-01_ses-task_task-rest_run-2_bold.nii": {
+      "sha256": "31cd208e0ba19d0a608f1f6e8801af614890382a602516d5e796f0b499b4316e",
+      "size": 384
+    },
+    "task-rest_bold.json": {
+      "sha256": "99c96ed145891fc678bb0d9197dc274aac6fa1b8a1a6463790734bd71b85a73b",
+      "size": 81
+    }
+  }
+}

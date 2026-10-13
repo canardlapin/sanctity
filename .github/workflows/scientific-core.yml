@@ -1,0 +1,29 @@
+name: Scientific core
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  scientific-core:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: sbt/setup-sbt@v1
+      - run: python3 -m pip install uv==0.12.17
+      - run: bash scripts/setup-mri-python.sh
+      - run: bash scripts/check-clean-source.sh
+      - run: bash scripts/check-postgres.sh
+      - name: Portable upstream semantics and public consumers
+        run: |
+          revision=$(sed -n 's/^sha256=//p' project/bids4s-source.properties)
+          cd "target/source-dependencies/bids4s-$revision"
+          sbt compileAll testAll 'docs/mdoc'

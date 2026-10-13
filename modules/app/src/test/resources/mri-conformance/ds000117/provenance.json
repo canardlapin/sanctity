@@ -1,0 +1,99 @@
+{
+  "repository": "OpenNeuroDatasets/ds000117",
+  "commit": "74fb8db3352f0cf425f11ebeba6c7a2aa1974c0e",
+  "license": "CC0 as declared in the retained dataset_description.json",
+  "inventory": [
+    "dataset_description.json",
+    "sub-01/ses-mri/fmap/sub-01_ses-mri_acq-func_magnitude1.json",
+    "sub-01/ses-mri/fmap/sub-01_ses-mri_acq-func_magnitude1.nii.gz",
+    "sub-01/ses-mri/fmap/sub-01_ses-mri_acq-func_magnitude2.json",
+    "sub-01/ses-mri/fmap/sub-01_ses-mri_acq-func_magnitude2.nii.gz",
+    "sub-01/ses-mri/fmap/sub-01_ses-mri_acq-func_phasediff.json",
+    "sub-01/ses-mri/fmap/sub-01_ses-mri_acq-func_phasediff.nii.gz",
+    "sub-01/ses-mri/func/sub-01_ses-mri_task-facerecognition_run-01_bold.json",
+    "sub-01/ses-mri/func/sub-01_ses-mri_task-facerecognition_run-01_bold.nii.gz",
+    "sub-01/ses-mri/func/sub-01_ses-mri_task-facerecognition_run-02_bold.json",
+    "sub-01/ses-mri/func/sub-01_ses-mri_task-facerecognition_run-02_bold.nii.gz",
+    "sub-01/ses-mri/func/sub-01_ses-mri_task-facerecognition_run-03_bold.json",
+    "sub-01/ses-mri/func/sub-01_ses-mri_task-facerecognition_run-03_bold.nii.gz",
+    "sub-01/ses-mri/func/sub-01_ses-mri_task-facerecognition_run-04_bold.json",
+    "sub-01/ses-mri/func/sub-01_ses-mri_task-facerecognition_run-04_bold.nii.gz",
+    "sub-01/ses-mri/func/sub-01_ses-mri_task-facerecognition_run-05_bold.json",
+    "sub-01/ses-mri/func/sub-01_ses-mri_task-facerecognition_run-05_bold.nii.gz",
+    "sub-01/ses-mri/func/sub-01_ses-mri_task-facerecognition_run-06_bold.json",
+    "sub-01/ses-mri/func/sub-01_ses-mri_task-facerecognition_run-06_bold.nii.gz",
+    "sub-01/ses-mri/func/sub-01_ses-mri_task-facerecognition_run-07_bold.json",
+    "sub-01/ses-mri/func/sub-01_ses-mri_task-facerecognition_run-07_bold.nii.gz",
+    "sub-01/ses-mri/func/sub-01_ses-mri_task-facerecognition_run-08_bold.json",
+    "sub-01/ses-mri/func/sub-01_ses-mri_task-facerecognition_run-08_bold.nii.gz",
+    "sub-01/ses-mri/func/sub-01_ses-mri_task-facerecognition_run-09_bold.json",
+    "sub-01/ses-mri/func/sub-01_ses-mri_task-facerecognition_run-09_bold.nii.gz"
+  ],
+  "files": {
+    "dataset_description.json": {
+      "sha256": "83189ed96ee956aad62d831d909af8c7d2e69b82a29d39100ecfa951e6117f58",
+      "size": 931
+    },
+    "sub-01/ses-mri/fmap/sub-01_ses-mri_acq-func_magnitude1.json": {
+      "sha256": "0c3e78fa87cb2784750bdd88b14b449b8c42142b209d1f6b313fceb867756427",
+      "size": 3072
+    },
+    "sub-01/ses-mri/fmap/sub-01_ses-mri_acq-func_magnitude1.nii.gz": {
+      "sha256": "a2bea15c376a1ce424a7fd44afc0a9dd7346d877e6843ead97bca4dea5f1d47c",
+      "size": 184134
+    },
+    "sub-01/ses-mri/fmap/sub-01_ses-mri_acq-func_magnitude2.json": {
+      "sha256": "79e2b89f073254dda56cb601feaf3794ef5648754fb6522805c45e7c53dff337",
+      "size": 3043
+    },
+    "sub-01/ses-mri/fmap/sub-01_ses-mri_acq-func_magnitude2.nii.gz": {
+      "sha256": "6c7b7cc03026d166e808b6f2b80dad28fdcbd1f98dcef513e81cb5f9097f950c",
+      "size": 182131
+    },
+    "sub-01/ses-mri/fmap/sub-01_ses-mri_acq-func_phasediff.json": {
+      "sha256": "ec6da90576ab6b0507e144eb90ec7e459531477258c94e91b08a6b7b686ec9bc",
+      "size": 15291
+    },
+    "sub-01/ses-mri/fmap/sub-01_ses-mri_acq-func_phasediff.nii.gz": {
+      "sha256": "7f226db83621b35ec94d0a0e9f956bc03c421d7af99f39e8a2e712c14c27d080",
+      "size": 211879
+    },
+    "sub-01/ses-mri/func/sub-01_ses-mri_task-facerecognition_run-01_bold.json": {
+      "sha256": "2672ec14c6c85b6ddfeff3ca34de257f145cc92547de6fd62044cf06b53edc03",
+      "size": 36227
+    },
+    "sub-01/ses-mri/func/sub-01_ses-mri_task-facerecognition_run-02_bold.json": {
+      "sha256": "808d7c297cbf607e0d47510d5ef41e45410c1d7c32622c582915b02aa6842b4f",
+      "size": 36226
+    },
+    "sub-01/ses-mri/func/sub-01_ses-mri_task-facerecognition_run-03_bold.json": {
+      "sha256": "491a3f2545d5e476c334d5454e8ee4e020cc99d8704b49acaff6a8d30e2da91e",
+      "size": 36226
+    },
+    "sub-01/ses-mri/func/sub-01_ses-mri_task-facerecognition_run-04_bold.json": {
+      "sha256": "646b1c8315088cd4781e4071d4feb0884e4c02a612b18ad265f87bcc0558874a",
+      "size": 36226
+    },
+    "sub-01/ses-mri/func/sub-01_ses-mri_task-facerecognition_run-05_bold.json": {
+      "sha256": "489f4893e6054df56a9714a35790a4be99b3349b63f3e3c22c6429f5d1ed6845",
+      "size": 36227
+    },
+    "sub-01/ses-mri/func/sub-01_ses-mri_task-facerecognition_run-06_bold.json": {
+      "sha256": "69e91e0fcf9c16a747c108c15e4dfa0ced15623b551213b18a8a24010b76c5b5",
+      "size": 36225
+    },
+    "sub-01/ses-mri/func/sub-01_ses-mri_task-facerecognition_run-07_bold.json": {
+      "sha256": "b61279175c366b568d65ee779caea7b0978126495546fc0037a00ccb40e6fef1",
+      "size": 36226
+    },
+    "sub-01/ses-mri/func/sub-01_ses-mri_task-facerecognition_run-08_bold.json": {
+      "sha256": "e398b267f370d3249048c7e39db61ba5959f199686ca636288fd1b00d7d162a6",
+      "size": 36229
+    },
+    "sub-01/ses-mri/func/sub-01_ses-mri_task-facerecognition_run-09_bold.json": {
+      "sha256": "448c5b41f99aee2d65d72e43322620fa44ac902efb7dffa3c7d3312e55c9b98d",
+      "size": 36231
+    }
+  },
+  "scope": "sub-01/ses-mri fieldmap images and metadata; BOLD inventory and metadata only, no functional payloads"
+}

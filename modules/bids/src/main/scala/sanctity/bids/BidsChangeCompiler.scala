@@ -11,11 +11,11 @@ import sanctity.kernel.*
   * removal of B0 group declarations. Unsupported reference vocabularies fail closed.
   */
 final class BidsChangeCompiler(bidsContext: BidsContext = BidsContext.Default) extends ScientificChangeCompiler:
-  val identity: String = "sanctity-bids-file-edits-v1:" + BuildIdentity.bids4s + ":" + BuildIdentity.sanctity + ":" + BidsInterpreter.describe(bidsContext).id.value
+  val identity: String = "sanctity-bids-file-edits-v4:" + BuildIdentity.bids4s + ":" + BuildIdentity.sanctity + ":" + BidsInterpreter.describe(bidsContext).id.value
   private val parser = new JawnParser(maxValueSize = Some(4 * 1024 * 1024), allowDuplicateKeys = false)
   private val printer = Printer.spaces2.copy(sortKeys = true)
   private val unsupportedReferences = Set("Sources", "RawSources", "AssociatedEmptyRoom", "M0Scan", "DatasetLinks")
-  private val suffixes = Set("T1w", "T2w", "bold", "dwi", "epi", "events")
+  private val suffixes = Set("T1w", "T2w", "bold", "dwi", "epi", "events", "phasediff", "phase1", "phase2", "magnitude1", "magnitude2")
   private val extensions = Set("nii", "nii.gz", "json", "bval", "bvec", "tsv")
 
   private def require(ok: Boolean, detail: String): Either[Problem, Unit] =
@@ -30,9 +30,28 @@ final class BidsChangeCompiler(bidsContext: BidsContext = BidsContext.Default) e
         source.interpretation.artifacts.forall(_.datasetRoot.isEmpty) &&
         !source.manifest.files.exists(f => f.path.fileName == "dataset_description.json" && f.path.parent.nonEmpty),
         "file edits require the current single raw dataset relationship profile")
+      _ <- source.interpretation.relationships.toVector.flatMap(_.relationships).filter(_.kind == "bids.multi-echo-bold").traverse_ { r =>
+        val members = (r.to :+ r.from).toSet
+        val affected = edits.filter(e => members(e.source))
+        val destinations = affected.flatMap(_.destination)
+        val names = destinations.flatMap(p => bidsContext.parseGeneric(p.fileName).toOption)
+        val keys = names.map(n => n.entities.values.map { (k, v) =>
+          val normalized = if k.short == "run" then v.dropWhile(_ == '0') else v
+          k.short -> (if normalized.isEmpty then "0" else normalized)
+        }.toMap - "echo")
+        val coherent = destinations.isEmpty || (names.size == members.size &&
+          names.forall(_.entities.get(bids4s.EntityKey.Echo).nonEmpty) && keys.distinct.size == 1)
+        require(affected.isEmpty || (affected.map(_.source).toSet == members &&
+          affected.map(_.destination.isEmpty).distinct.size == 1 && coherent),
+          "echo family images must be moved as one indexed family or removed together; metadata can be corrected independently")
+      }
       _ <- edits.traverse_ { edit =>
         def name(path: RelPath) = bidsContext.parseGeneric(path.fileName).leftMap(e => Problem.Unsupported(e.message))
-        for
+        if edit.source.value.startsWith("stimuli/") then
+          edit.destination.traverse_(to => require(to.value.startsWith("stimuli/") &&
+            bids4s.BidsStimulusResolver.path(to.value.stripPrefix("stimuli/")).exists(_.value == to.value),
+            "stimulus moves must remain safe local paths beneath stimuli/"))
+        else for
           from <- name(edit.source)
           _ <- require(suffixes(from.kind) && extensions(from.extension) &&
             !edit.source.value.split('/').exists(Set("derivatives", "sourcedata", "stimuli", "code", "phenotype")),
@@ -56,8 +75,10 @@ final class BidsChangeCompiler(bidsContext: BidsContext = BidsContext.Default) e
 
   def documents(source: Release, edits: Vector[FileEdit]): Either[Problem, Vector[RelPath]] =
     context(source, edits).map { mapping =>
-      source.manifest.files.filter(f => mapping.getOrElse(f.path, Some(f.path)).nonEmpty &&
-        (f.path.fileName.endsWith(".json") || f.path.fileName.endsWith("_scans.tsv")))
+      val events = source.interpretation.relationships.toVector.flatMap(_.relationships).filter(_.kind == "bids.task-events").flatMap(_.to).toSet
+      source.manifest.files.filter(f => mapping.getOrElse(f.path, Some(f.path)).nonEmpty && !f.path.value.startsWith("stimuli/") &&
+        (f.path.fileName.endsWith(".json") || f.path.fileName.endsWith("_scans.tsv") ||
+          (mapping.keys.exists(_.value.startsWith("stimuli/")) && events(f.path))))
         .map(_.path).sortBy(_.value)
     }
 
@@ -74,12 +95,30 @@ final class BidsChangeCompiler(bidsContext: BidsContext = BidsContext.Default) e
           _ <- require(text.getBytes(java.nio.charset.StandardCharsets.UTF_8).length <= 4 * 1024 * 1024,
             "source document exceeds 4 MiB")
           rewritten <- if path.fileName.endsWith(".json") then json(source, path, output, text, mapping)
-            else scans(source, path, text, mapping)
+            else if path.fileName.endsWith("_scans.tsv") then scans(source, path, text, mapping)
+            else stimuli(source, text, mapping)
         yield rewritten.map { value =>
-          ReferenceRepair(input, output, value, if path.fileName.endsWith(".json") then "bids.intended-for.v1" else "bids.scans-filename.v1")
+          ReferenceRepair(input, output, value, if path.fileName.endsWith(".json") then "bids.intended-for.v1"
+            else if path.fileName.endsWith("_scans.tsv") then "bids.scans-filename.v1" else "bids.stim-file.v1")
         }
       }
     yield result.flatten
+
+  private def stimuli(source: Release, text: String, mapping: Map[RelPath, Option[RelPath]]): Either[Problem, Option[String]] =
+    for
+      table <- CheckedTsv.parse(text).leftMap(e => Problem.Unsupported(e.message)).map(_.table)
+      column = table.columns.indexOf("stim_file")
+      rows <- table.rows.traverse { row =>
+        if column < 0 || row(column).isEmpty then Right(row)
+        else for
+          path <- bids4s.BidsStimulusResolver.path(row(column).get).leftMap(Problem.Unsupported.apply)
+          original <- RelPath.from(path.value)
+          _ <- require(source.manifest.byPath.get(original).exists(_.isInstanceOf[Entry.File]), "referenced stimulus is absent")
+          next <- mapping.getOrElse(original, Some(original)).toRight(Problem.Unsupported("cannot remove a stimulus still referenced by retained events"))
+        yield row.updated(column, Some(next.value.stripPrefix("stimuli/")))
+      }
+      revised <- BidsTable.fromRows(table.columns, rows).leftMap(e => Problem.Unsupported(e.message))
+    yield Option.when(rows != table.rows)(CheckedTsv.render(revised))
 
   private def json(source: Release, path: RelPath, output: RelPath, text: String,
       mapping: Map[RelPath, Option[RelPath]]): Either[Problem, Option[String]] =

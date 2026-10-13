@@ -23,6 +23,7 @@ object DwiTestFiles:
       b.putShort(48, volumes.toShort)
       b.putShort(70, 16.toShort)
       b.putShort(72, 32.toShort)
+      (1 to 3).foreach(i => b.putFloat(76 + i * 4, 1f))
       b.putFloat(108, offset.toFloat)
       Vector(110, 43, 49, 0).zipWithIndex.foreach((v, i) => b.put(344 + i, v.toByte))
     else
@@ -33,6 +34,7 @@ object DwiTestFiles:
       b.putLong(16, 4)
       (1 to 3).foreach(i => b.putLong(16 + i * 8, 1))
       b.putLong(48, volumes.toLong)
+      (1 to 3).foreach(i => b.putDouble(104 + i * 8, 1.0))
       b.putLong(168, offset.toLong)
     b.array()
 

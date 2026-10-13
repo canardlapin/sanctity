@@ -1,0 +1,70 @@
+{
+  "demoWorkspace": "modules/app/target/temporal-demo-5273967863392902356",
+  "publication": {
+    "destination": "2ee4be37-0c71-43e5-88a8-73d9b7359e89",
+    "draft": "0d880084-a891-4f0c-b047-2c0e90e5fe2f",
+    "executionWorkspaceRemoved": true,
+    "inputRelease": "56802e35-c578-4074-8ed9-c95d23e48a51",
+    "key": "reviewed-publication",
+    "originalBase": "4ddd3070-efb3-4e6f-8a55-8f4dbcb5dfbd",
+    "outputs": [
+      {
+        "path": "dataset_description.json",
+        "sha256": "a140b511bb5fe25c436010b4e61029c17d67f1d2ba0949b48bc714cecc9c5d07",
+        "size": 1203
+      },
+      {
+        "path": "sub-01/func/sub-01_task-rest_desc-temporalMean_statmap.json",
+        "sha256": "e3d3dcc921202867c01a6b1c3cd77354143cb8d2b2ee5974618edaf04d77eee4",
+        "size": 532
+      },
+      {
+        "path": "sub-01/func/sub-01_task-rest_desc-temporalMean_statmap.nii",
+        "sha256": "57c04e5a86932186ab2e58edf0871f18fee5c7d0303a89ea408fdb71964c3945",
+        "size": 360
+      },
+      {
+        "path": "sub-01/func/sub-01_task-rest_desc-temporalStddev_statmap.json",
+        "sha256": "033ae3761487e9d913d996217b99d2f0c01ad548c27b7dc71054867caa31ec58",
+        "size": 534
+      },
+      {
+        "path": "sub-01/func/sub-01_task-rest_desc-temporalStddev_statmap.nii",
+        "sha256": "22e290d6a8e680e793d9773fd005b192cf74b2f35143e34eb6076c673be69147",
+        "size": 360
+      }
+    ],
+    "publication": "967850534825ad57c9ca587f42f769998ebc0cba52f94c071f21f2779cb30229",
+    "publisher": "7835cf2f-2ee6-4896-b197-154a250c435e",
+    "receipt": "01661de08728c8d7f37110c1f88962630dea4f427a3ae26b510615bf02c4d511",
+    "release": "5189f087-47f7-4b9a-8908-c029c53f571a",
+    "reviewedBase": "4ccc4d59-45fb-4193-bf9e-74ee1ce2a84d",
+    "run": "6b9c8f96-fb14-4dad-b921-c7f962f7b014",
+    "sourceRevocationDeniedRetry": true
+  },
+  "observations": {
+    "acceptedResults": 3,
+    "firstRelease": "4ddd3070-efb3-4e6f-8a55-8f4dbcb5dfbd",
+    "generation": 3,
+    "inputRelease": "56802e35-c578-4074-8ed9-c95d23e48a51",
+    "metric": "temporal-mean.spatial-mean",
+    "publication": "967850534825ad57c9ca587f42f769998ebc0cba52f94c071f21f2779cb30229",
+    "run": "6b9c8f96-fb14-4dad-b921-c7f962f7b014",
+    "secondRelease": "4ccc4d59-45fb-4193-bf9e-74ee1ce2a84d",
+    "status": "Completed",
+    "thirdRelease": "5189f087-47f7-4b9a-8908-c029c53f571a",
+    "value": 5.0
+  },
+  "verification": {
+    "command": "SANCTITY_MRI_PYTHON=target/mri-python/bin/python sbt app/runMain sanctity.app.TemporalDemo; target/mri-python/bin/python scripts/check-temporal-statistics.py --workspace modules/app/target/temporal-demo-5273967863392902356/publication-oracle",
+    "oracle": {
+      "checkedOutputVoxels": 2,
+      "maximumAbsoluteError": 0.0,
+      "absoluteTolerance": 1e-10,
+      "relativeTolerance": 1e-12
+    },
+    "exportedFilesVerified": 5,
+    "executionWorkspaceRemoved": true,
+    "sourceRevocationDeniedRetry": true
+  }
+}

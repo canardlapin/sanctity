@@ -3,6 +3,11 @@ set -euo pipefail
 
 task_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$task_root"
+export SANCTITY_MRI_PYTHON="${SANCTITY_MRI_PYTHON:-$task_root/target/mri-python/bin/python}"
+if [[ ! -x "$SANCTITY_MRI_PYTHON" ]]; then
+  echo "Run scripts/setup-mri-python.sh first, or set SANCTITY_MRI_PYTHON to the pinned recipe environment." >&2
+  exit 1
+fi
 mkdir -p target
 workspace="$(mktemp -d "$task_root/target/postgres-check.XXXXXX")"
 container=""

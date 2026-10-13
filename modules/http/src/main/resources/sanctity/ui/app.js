@@ -690,7 +690,7 @@
   const FIELDMAP = new Set(['bids.intended-for', 'bids.b0-field-source']);
   const kindName = k => (KIND[k] || [k])[0];
   const kindHelp = k => (KIND[k] || [k, ''])[1];
-  const evidenceText = e => e.kind === 'companion-selection' ? 'companion rule ' + e.rule : e.document + ' · ' + e.field;
+  const evidenceText = e => e.kind === 'companion-selection' ? 'companion rule ' + e.rule : e.document + ' · ' + (e.kind === 'table-column' ? 'column ' + e.column : e.field);
   function endpoint(p, focus, open) {
     return p === focus ? h('span', { class: 'endpoint self' }, pathText(p), h('span', { class: 'tag' }, 'this file'))
       : h('button', { class: 'endpoint linkish', type: 'button', onclick: () => open(p) }, pathText(p));

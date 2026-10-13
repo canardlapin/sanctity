@@ -2,7 +2,7 @@
 
 Updated 10 October 2026.
 
-Sanctity uses the sibling checkout at `../bids4s`, whose canonical repository is [canardlapin/bids4s](https://github.com/canardlapin/bids4s). The inspected base commit is `ed67e0e1578e752fe95c41387eff3458b3bb59db`. The metadata and relationship improvements are committed and pushed as `6308ed506d3a8b1f86fc022a9eeeec94ad35dd4b`; this is the companion revision for Sanctity's initial commit, not a published dependency version. The companion-selection and DWI-consistency additions are committed locally as `980a18663066d92b0f7b3aac092d3a43424748bf`; that commit has not been pushed.
+Sanctity now defaults to a verified complete source archive in `vendor/bids4s-source.zip`; `../bids4s` remains the explicit development checkout, whose canonical repository is [canardlapin/bids4s](https://github.com/canardlapin/bids4s). The inspected base commit is `ed67e0e1578e752fe95c41387eff3458b3bb59db`. The metadata and relationship improvements are committed and pushed as `6308ed506d3a8b1f86fc022a9eeeec94ad35dd4b`; this is the companion revision for Sanctity's initial commit, not a published dependency version. The companion-selection and DWI-consistency additions are committed locally as `980a18663066d92b0f7b3aac092d3a43424748bf`; that commit has not been pushed.
 
 The project owner has authorized refining, upgrading, and optimizing this library as Sanctity's requirements reveal reusable BIDS needs. Its repository guidance requires a pure portable domain, JVM-only effectful adapters, checked public failures, deterministic diagnostics, and JVM plus Scala.js verification.
 
@@ -44,11 +44,11 @@ Sanctity now includes reference content/interpretation/assessment/release record
 
 ## Current executable consumer
 
-Sanctity's `bids` module depends directly on `ProjectRef(../bids4s, coreJVM)`. The build generates SHA-256 fingerprints of the library and interpreter source inputs for the semantic profile; a mutable checkout's version label alone is insufficient identity. This records the code used, without substituting for a reviewed dependency release and reproducible build pin.
+Sanctity's `bids` module uses `ProjectRef(..., coreJVM)` over the SHA-256-pinned source archive by default; `sanctity.bids4s.path` selects a development override. The build generates SHA-256 fingerprints of the library and interpreter source inputs for the semantic profile; a mutable checkout's version label alone is insufficient identity. The archive pin makes unpublished sources reproducible; source fingerprints still record the actual code used. A published upstream release remains separate work.
 
 The adapter preserves authored bytes separately, then parses bounded metadata using Circe/Jawn with duplicate keys disabled and strict UTF-8 decoding. It rejects numeric values that would lose decimal meaning when converted to the current bids4s JSON representation. JSON syntax, profile support and inheritance findings remain visible on prepared candidates; errors prevent acceptance.
 
-The consumer profile supports one raw dataset. It rejects nested/derivative compositions explicitly while preserving their staged bytes; it does not claim that the library is incapable of their interpretation. The current `native-reference-v5` profile includes explicit NIfTI fieldmap declarations, inherited DWI gradient/BOLD event selection, bounded DWI gradient/header consistency, and selected BOLD event content/timing assessments. Full conformance, stimulus/HED semantics, implicit companions and scientific qualification remain outside this profile.
+The consumer profile supports one raw dataset. It rejects nested/derivative compositions explicitly while preserving their staged bytes; it does not claim that the library is incapable of their interpretation. The current `native-reference-v9` profile includes explicit NIfTI fieldmap declarations, inherited DWI gradient/BOLD event selection, bounded DWI gradient/header consistency, selected BOLD event content/timing assessments, explicit phasediff/phase-pair and multi-echo BOLD families, and selected local `stim_file` dependencies. Full conformance, HED, broader implicit companions and scanner qualification remain outside this profile.
 
 No additional bids4s source changes were needed for the native lifecycle integration. The previously recorded JVM/Scala.js evidence applies to the library; Sanctity has its own kernel and filesystem integration test gate (`sbt check`).
 
@@ -74,7 +74,7 @@ Seventeen portable tests cover multi-member and multiple groups, participant sco
 
 Sanctity persists this evidence in a versioned relationship graph within interpretation identity. Canonical v1/v2 records remain readable without a graph; new records use v3 and explicitly identify their relationship profile. Correction previews include affected relationship groups, and subset planning refuses undeclared coverage or omitted cross-session fieldmaps.
 
-This is declaration semantics and repository consistency. That pass covered explicit declarations. The following pass adds gradient/event selection; implicit phase/magnitude companions, image geometry and full processing-bundle qualification remain later work. The [scientific-core plan](scientific-core.md) is the immediate roadmap.
+This is declaration semantics and repository consistency. That pass covered explicit declarations. The following pass adds gradient/event selection; phase-difference companions are added in the later MRI pass below. Scientific geometry and full processing-bundle qualification remain open. The [scientific-core plan](scientific-core.md) is the immediate roadmap.
 
 ## Companion-selection pass
 
@@ -136,3 +136,63 @@ cases per catalog, plus crash/retry and coordinated restore. Five pinned
 official-validator comparisons also passed. Evidence:
 `target/postgres-check.8ZCgnu/check.log`, `target/conformance-gr6_pdnp/`, and
 `../bids4s/target/context-upstream-check.log`.
+
+
+## Independent MRI and phase-difference pass — 11 October 2026
+
+Portable header observations now retain pixel dimensions, units and both coded
+transforms without selecting an affine. `MriHeaderConsistency` adds versioned
+structural and TR-comparison policies. `BidsPhaseDifferenceResolver` adds required
+magnitude1/optional magnitude2 grouping and echo-time checks through the existing
+resolved-metadata seam. The context descriptor includes the new family rule.
+
+Sanctity owns bounded shared header reads, exact check evidence, version adoption,
+curation, subset compilation and admission. Its licensed external MRI corpus is
+checked against pinned NiBabel observations and explicit official-validator cases.
+See the [scientific contract](scientific-core.md#implemented-slice-independent-mri-evidence-and-phase-difference-families).
+No MRI-specific types were added to the kernel and no persistence migration was needed.
+
+## Scalar payload boundary
+
+`NiftiScaling` adds a portable checked interpretation of NIfTI-1/2 scalar slope
+and intercept, in both byte orders. It does not alter `NiftiHeaderFacts` or claim
+voxel-array validation. Sanctity's opt-in MRI payload adapter owns streaming,
+gzip/extent checks, datatype qualification and finite scaled-value inspection.
+Temporal execution and image derivative admission remain outside bids4s.
+The scaling slice passed the complete upstream JVM/JS and mdoc checks on
+12 October 2026; see the [current verification record](implementation-plan.md#verification-record).
+
+## Phase-pair family pass — 12 October 2026
+
+The portable `BidsPhasePairResolver` is a separate pure API alongside the unchanged
+phase-difference resolver. It returns complete four-member groups, deterministic
+findings and resolved EchoTime origin evidence, bounded to 10,000 images. Its
+sixteen portable cases exercise missing/ambiguous members, timing, entity and
+context rules, independent overlapping representations and input-order stability.
+Sanctity binds its explicit descriptor into the v8 interpretation context and owns
+view closure, masks, change plans, processing readiness and current authority.
+
+The [phase-pair corpus](../modules/app/src/test/resources/mri-conformance/phase-pair/README.md)
+records the pinned BIDS source, sixteen official-validator comparisons and
+reviewed policy differences. Shared reference/PostgreSQL cases prove closure,
+export/re-import, exact byte receipts, readiness, accepted history and reviewed
+rename/removal behavior. This adds association coherence without phase physics
+or a claim of scanner qualification.
+
+Full upstream verification for this pass: `sbt compileAll testAll 'docs/mdoc'`
+passed 229 JVM tests, 209 Scala.js tests, both first-contact consumers and eleven
+executable documentation files. Log: `target/night-bids4s-full.log`. The integrated
+Sanctity final runner passed 377 tests, with 105 shared lifecycle
+cases per catalog; recovery evidence is recorded in the implementation plan.
+
+
+### Multi-echo and stimulus APIs — 13 October 2026
+
+Portable `BidsMultiEchoResolver` and `BidsStimulusResolver` now have typed bounded
+results, JVM/JS tests, external-package first-contact consumers and executable
+documentation. Sanctity adds exact table-column relationship evidence, effectful
+header coherence checking, authorized view compilation and reviewed reference
+repairs. These responsibilities remain at their respective library/repository
+boundaries. The complete upstream source pin includes these unpublished changes;
+its manifest records base revision and every file digest. See the
+[analysis-input plan and evidence](analysis-input-plan.md).

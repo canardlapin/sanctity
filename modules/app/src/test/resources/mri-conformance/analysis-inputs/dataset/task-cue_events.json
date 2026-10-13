@@ -1,0 +1,8 @@
+{
+  "trial_type": {
+    "Description": "Synthetic trial"
+  },
+  "stim_file": {
+    "Description": "Local synthetic stimulus"
+  }
+}

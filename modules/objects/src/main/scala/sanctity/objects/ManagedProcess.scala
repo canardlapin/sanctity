@@ -15,7 +15,7 @@ final case class ProcessResult(exitCode: Int, output: Vector[Byte])
 /** Argument vectors never pass through a shell. Pipe cancellation terminates the owned process. */
 object ManagedProcess:
   def run[F[_]: Async](arguments: Vector[String], directory: Path,
-      timeout: FiniteDuration = 10.minutes, outputLimit: Int = 4 * 1024 * 1024): F[ProcessResult] =
+      timeout: FiniteDuration = 10.minutes, outputLimit: Int = 4 * 1024 * 1024, environment: Option[Map[String, String]] = None): F[ProcessResult] =
     val F = Async[F]
     def stop(process: Process): F[Unit] = F.blocking {
       val children = process.descendants()
@@ -26,7 +26,12 @@ object ManagedProcess:
         val _ = process.waitFor(5, java.util.concurrent.TimeUnit.SECONDS)
     }.void
     Resource.make(F.blocking {
-      new ProcessBuilder(arguments.asJava).directory(directory.toFile).redirectErrorStream(true).start()
+      val builder = new ProcessBuilder(arguments.asJava).directory(directory.toFile).redirectErrorStream(true)
+      environment.foreach { values =>
+        builder.environment().clear()
+        builder.environment().putAll(values.asJava)
+      }
+      builder.start()
     })(process => stop(process) *> F.blocking {
       process.getInputStream.close()
       process.getErrorStream.close()

@@ -1,0 +1,28 @@
+{
+  "repository": "nipy/nibabel",
+  "commit": "7b5060e4bb105ed0c08c203db3dc5cf536d9c2aa",
+  "tag": "5.3.2",
+  "license": "MIT; see COPYING",
+  "files": {
+    "anatomical.nii": {
+      "url": "https://raw.githubusercontent.com/nipy/nibabel/7b5060e4bb105ed0c08c203db3dc5cf536d9c2aa/nibabel/tests/data/anatomical.nii",
+      "sha256": "1c089f37b6597a38bb4157a1e1b3f7f13f1bc9d4e7a8cfdfaf91d85cd8f66594",
+      "size": 68002
+    },
+    "example4d.nii.gz": {
+      "url": "https://raw.githubusercontent.com/nipy/nibabel/7b5060e4bb105ed0c08c203db3dc5cf536d9c2aa/nibabel/tests/data/example4d.nii.gz",
+      "sha256": "42097dfbab9d2a036b41ae5c97a359591cf2cf5c3f8dc6ca6455c0b8a7f22696",
+      "size": 346451
+    },
+    "example_nifti2.nii.gz": {
+      "url": "https://raw.githubusercontent.com/nipy/nibabel/7b5060e4bb105ed0c08c203db3dc5cf536d9c2aa/nibabel/tests/data/example_nifti2.nii.gz",
+      "sha256": "a53e59e70eb0d8275a4fe347422a89551aee92d0eb1137a3444b1932a28c3fe2",
+      "size": 21160
+    },
+    "COPYING": {
+      "url": "https://raw.githubusercontent.com/nipy/nibabel/7b5060e4bb105ed0c08c203db3dc5cf536d9c2aa/COPYING",
+      "sha256": "5ab0638392203d737b4d6c70e3920a61888efdee7de84a8374f3626522306dc7",
+      "size": 9830
+    }
+  }
+}

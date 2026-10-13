@@ -21,6 +21,10 @@ final class DwiContentChecks[F[_]](store: BlobStore[F])(using F: Async[F]):
   private val rule = DwiConsistency.Version + "+" + NiftiHeaderFacts.Version + "+sanctity-prefix-v1"
 
   def assess(manifest: Manifest, interpretation: Interpretation): F[Vector[ContentCheck]] =
+    assess(manifest, interpretation, Map.empty)
+
+  private[bids] def assess(manifest: Manifest, interpretation: Interpretation,
+      headers: Map[RelPath, Either[bids4s.DwiIssue, bids4s.NiftiHeaderFacts]]): F[Vector[ContentCheck]] =
     val groups = interpretation.relationships.toVector.flatMap(_.relationships).filter(_.kind == "bids.dwi-gradients")
     val gradientPaths = groups.flatMap(_.to).distinct
     val files = manifest.files.map(f => f.path -> f).toMap
@@ -37,7 +41,7 @@ final class DwiContentChecks[F[_]](store: BlobStore[F])(using F: Async[F]):
           pair <- Checked.lift[F, (Entry.File, Entry.File)]((bval, bvec).mapN((_, _))
             .toRight(Problem.Integrity("DWI relationship does not contain both gradient roles")))
           (valuesFile, vectorsFile) = pair
-          header <- headerReader.read(image).map(_.leftMap(issueFinding(image.path, _)))
+          header <- headers.get(image.path).fold(headerReader.read(image))(F.pure).map(_.leftMap(issueFinding(image.path, _)))
           values = texts(valuesFile.path).flatMap(text => BValues.parse(text).leftMap(_.map(issueFinding(valuesFile.path, _))))
           vectors = texts(vectorsFile.path).flatMap(text => BVectors.parse(text).leftMap(_.map(issueFinding(vectorsFile.path, _))))
           errors = header.left.toOption.toVector ++ values.left.toOption.toVector.flatten ++ vectors.left.toOption.toVector.flatten

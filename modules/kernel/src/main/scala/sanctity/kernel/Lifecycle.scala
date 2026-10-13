@@ -8,9 +8,9 @@ final case class Dataset(id: DatasetId, custodian: CustodianId, curator: Princip
 final case class ReleaseRef(dataset: DatasetId, release: ReleaseId)
 
 enum ActivityKind:
-  case NativeImport, MetadataCorrection, ScientificView, ScientificChange, Reinterpretation
+  case NativeImport, MetadataCorrection, ScientificView, ScientificChange, Reinterpretation, Derivative, PrivateBundle
 
-final case class Activity(kind: ActivityKind, actor: PrincipalId, reason: String, source: Option[String], at: Instant, projection: Option[ProjectionEvidence] = None, evidence: Option[BlobRef] = None, retained: Vector[BlobRef] = Vector.empty, change: Option[ChangeEvidence] = None)
+final case class Activity(kind: ActivityKind, actor: PrincipalId, reason: String, source: Option[String], at: Instant, projection: Option[ProjectionEvidence] = None, evidence: Option[BlobRef] = None, retained: Vector[BlobRef] = Vector.empty, change: Option[ChangeEvidence] = None, bundle: Option[BundleEvidence] = None, processing: Option[ProcessingEvidence] = None, publication: Option[PublicationIntent] = None)
 final case class Draft(id: DraftId, dataset: DatasetId, base: Option[ReleaseId], generation: Long, manifest: Manifest, activity: Activity)
 final case class Candidate(
     id: CandidateId,

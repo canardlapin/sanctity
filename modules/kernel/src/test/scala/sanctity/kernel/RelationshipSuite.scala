@@ -70,7 +70,7 @@ final class RelationshipSuite extends FunSuite:
     assert(graph(evidence.copy(document = inherited)).isLeft)
     assert(graph(evidence.copy(datasetRoot = Some(path("other")))).isLeft)
     assert(graph(evidence.copy(applicable = Vector(path("missing.tsv"), selected))).isLeft)
-    assert(RelationshipGraph.from("companions", Vector(relation), metas, 3).isLeft)
+    assert(RelationshipGraph.from("companions", Vector(relation), metas, 4).isLeft)
     val current = right(Interpretation.from(content, profile, metas, relationships = Some(valid)))
     val closure = right(current.relationshipClosure(Vector(target)))
     assertEquals(closure.artifacts.toSet, Set(target, selected))
@@ -91,6 +91,27 @@ final class RelationshipSuite extends FunSuite:
   test("the recorded pre-companion v3 identity remains byte-for-byte stable") {
     val legacy = interpreted(Some(right(RelationshipGraph.from("v1", Vector(link(a, Vector(b))), artifacts))))
     assertEquals(legacy.id.value.value, "c6386cfcb97deca5363e6425e81806d2cade4f18e5ed7510f26780c0a0e82b1d")
+  }
+
+  test("table-column evidence requires its own graph encoding and binds the actual source table") {
+    val table = path("events.tsv")
+    val asset = path("stimuli/a.txt")
+    val metas = Vector(table, asset).map(p => ArtifactMetadata(p, Map.empty, Vector.empty, None))
+    val evidence = new RelationshipEvidence.TableColumn(table, table, "stim_file", "stimuli-v1")
+    val relation = ScientificRelationship(table, "test.stimuli", Vector(asset), None, Vector(evidence))
+    def graph(e: RelationshipEvidence, version: Int) = RelationshipGraph.from("stimuli", Vector(relation.copy(evidence = Vector(e))), metas, version)
+    assert(graph(evidence, 2).isLeft)
+    assert(graph(evidence.copy(document = asset), 3).isLeft)
+    assert(graph(evidence.copy(artifact = asset), 3).isLeft)
+    assert(graph(evidence.copy(column = "invalid column"), 3).isLeft)
+    val current = right(Interpretation.from(content, profile, metas, relationships = Some(right(graph(evidence, 3)))))
+    assertEquals(right(current.relationshipClosure(Vector(table))).artifacts.toSet, Set(table, asset))
+    assertEquals(RelationshipImpact.between(current, current, Set(table)).head.changedDependencies, Vector(table))
+  }
+
+  test("changes to the exact metadata evidence appear even when membership and origins are unchanged") {
+    val i = interpreted(Some(right(RelationshipGraph.from("v1", Vector(link(a, Vector(b))), artifacts))))
+    assertEquals(RelationshipImpact.between(i, i, Set(path("a.nii.json"))).head.changedDependencies, Vector(path("a.nii.json")))
   }
 
   test("reverse dependency scope includes transitive consumers and terminates on cycles") {

@@ -43,7 +43,7 @@ abstract class CatalogSubsetSuite extends CatalogChangeSuite:
     write(source, "task-motor_events.json", """{"trial_type":{"Description":"approved category"},"private_note":{"Description":"hidden"}}""")
     Vector(bold, other, anat, dwi, ap, pa, "sub-02/func/sub-02_task-motor_bold.nii").foreach { name =>
       Files.createDirectories(source.resolve(name).getParent)
-      val _ = Files.write(source.resolve(name), DwiTestFiles.nifti())
+      val _ = Files.write(source.resolve(name), DwiTestFiles.nifti(volumes = if name == anat then 1 else 2))
     }
     write(source, bold.stripSuffix(".nii") + ".json", """{"B0FieldSource":"pair","Subset":"yes"}""")
     write(source, other.stripSuffix(".nii") + ".json", """{"B0FieldSource":"pair"}""")
@@ -85,7 +85,7 @@ abstract class CatalogSubsetSuite extends CatalogChangeSuite:
         _ = assert(preview.candidate.assessment.admissible, preview.candidate.assessment.errors.toString)
         accepted <- checked(s.repository.accept(s.context, preview.candidate.id, key("subset")))
         subset <- checked(s.catalog.release(s.context, accepted.release))
-        _ = assertEquals(subset.activity.projection.get.compiler, "sanctity-mri-view-v5:" + source.interpretation.profile.context.get.id.value)
+        _ = assertEquals(subset.activity.projection.get.compiler, "sanctity-mri-view-v8:" + source.interpretation.profile.context.get.id.value)
         receipt = subset.activity.projection.get.receipt.get
         _ = assert(receipt.matches(subset.manifest))
         _ = assertEquals(receipt.sourceContent, source.manifest.id)
@@ -102,8 +102,8 @@ abstract class CatalogSubsetSuite extends CatalogChangeSuite:
         _ = assert(links.exists(r => r.from == p(bold) && r.kind == "bids.task-events" && r.to == Vector(p(localized))))
         _ = assertEquals(subset.interpretation.byPath(p(bold)).fields("RepetitionTime").value,
           source.interpretation.byPath(p(bold)).fields("RepetitionTime").value)
-        _ = assertEquals(checkMeaning(subset.assessment), checkMeaning(source.assessment).filter(x => Set(bold, dwi)(x._1)).map { (target, rule, facts) =>
-          (target, rule, if target == bold then facts.updated("columns", MetadataValue.Array(Vector("onset", "duration", "trial_type").map(MetadataValue.Text.apply))) else facts)
+        _ = assertEquals(checkMeaning(subset.assessment), checkMeaning(source.assessment).filter(x => Set(bold, anat, dwi, ap, pa)(x._1)).map { (target, rule, facts) =>
+          (target, rule, if target == bold && facts.contains("columns") then facts.updated("columns", MetadataValue.Array(Vector("onset", "duration", "trial_type").map(MetadataValue.Text.apply))) else facts)
         })
         _ <- checked(s.repository.exportFull(s.context, subset.ref, new DirectoryExport[IO](root.resolve("subset"))))
         _ <- IO.blocking {
@@ -177,16 +177,15 @@ abstract class CatalogSubsetSuite extends CatalogChangeSuite:
     }
   }
 
-  test("stimulus-bearing events are refused even when the stimulus column would be masked") {
+  test("missing stimulus assets block admission before a masked subset can be prepared") {
     fixture { (s, root) =>
       for
         _ <- install(root)
         _ <- IO.blocking(write(root.resolve("source"), events, "onset\tduration\tstim_file\n0\t1\timage.png\n"))
-        source <- acceptSource(s, root)
-        selection <- select(s, source.release)
-        target <- s.repository.create(s.context, s.dataset.custodian)
-        result <- views(s).prepare(s.context, source.release, selection.id, target.id, profile)
-        _ = assert(result.left.toOption.exists(_.message.contains("stimulus")))
+        preview <- checked(s.repository.importNative(s.context, s.dataset.id, new NativeDirectorySource[IO](root.resolve("source"))))
+        _ = assert(preview.candidate.assessment.errors.exists(_.code == "StimulusMissingFile"))
+        result <- s.repository.accept(s.context, preview.candidate.id, key("missing-stimulus"))
+        _ = assert(result.isLeft)
       yield ()
     }
   }
@@ -248,7 +247,7 @@ abstract class CatalogSubsetSuite extends CatalogChangeSuite:
         view <- prepare(s, source.release, selection)
         metadata = view.candidate.interpretation.byPath(p(bold)).fields
         _ = assert(!metadata.contains("RepetitionTime"))
-        check = view.candidate.assessment.checks.find(_.target == p(bold)).get
+        check = view.candidate.assessment.checks.find(c => c.target == p(bold) && c.rule.startsWith(bids4s.CheckedEvents.Version)).get
         _ = assertEquals(check.facts("timingMode"), MetadataValue.Text("Variable"))
         _ = assertEquals(check.facts("comparisonEndSeconds"), MetadataValue.Number(2))
         _ = assert(view.candidate.assessment.admissible)

@@ -1,0 +1,96 @@
+{
+  "kind": "synthetic-direct-byte-fixture",
+  "license": "CC0-1.0",
+  "generator": "scripts/create-analysis-input-fixture.py",
+  "generatorSha256": "6358b0e31f0898fa4240fa79beb05a57679571f39def8d069f8289692ac6c393",
+  "expectedMembers": [
+    "sub-01/func/sub-01_task-cue_run-01_echo-1_bold.nii",
+    "sub-01/func/sub-01_task-cue_run-01_echo-2_bold.nii",
+    "sub-01/func/sub-01_task-cue_run-01_echo-3_bold.nii"
+  ],
+  "events": "task-cue_events.tsv",
+  "expectedStimuli": [
+    "stimuli/images/red.ppm",
+    "stimuli/tone.txt"
+  ],
+  "expectedDimensions": [
+    2,
+    2,
+    2,
+    3
+  ],
+  "expectedSpacing": [
+    2,
+    3,
+    4,
+    2
+  ],
+  "expectedEchoTimes": [
+    0.01,
+    0.02,
+    0.03
+  ],
+  "schemaSha256": "9bac1441212012d1971982053545dba8160652d73d8d0faed71709b4401ad300",
+  "files": {
+    "LICENSE": {
+      "sha256": "d0afab4329feecfe30a7c1cca897c3fa248f6443e43aac9ae1ecc8f6fd2e3660",
+      "size": 70
+    },
+    "README": {
+      "sha256": "3cf6e8c7c51b497474af492c1d0dce85c74031567879129fa4d1bae2e53d58f1",
+      "size": 101
+    },
+    "dataset_description.json": {
+      "sha256": "4a16ae3fc70e922e4c708a30001a7e078857c89587b4f528bac31e7f9f1cf655",
+      "size": 170
+    },
+    "stimuli/images/red.ppm": {
+      "sha256": "c940efc28573af63c6ebbfeb23e69ded35c645b0dca6c4553d62aa1977912614",
+      "size": 19
+    },
+    "stimuli/tone.txt": {
+      "sha256": "e3261777de92fc9a6f050d601fac3516f07cbd19fd3b7f2d28cf8aa5d5aeeb23",
+      "size": 51
+    },
+    "stimuli/unreferenced.json": {
+      "sha256": "4ce96cfbf05ebd9039619709a2b7d6d77eba6797c7d3362720231febdd291a1c",
+      "size": 69
+    },
+    "sub-01/func/sub-01_task-cue_run-01_echo-1_bold.json": {
+      "sha256": "53e162a71c9f4f1b412318d0104f76d61c314b1b5db70c308b78158d6e0f2ee5",
+      "size": 23
+    },
+    "sub-01/func/sub-01_task-cue_run-01_echo-1_bold.nii": {
+      "sha256": "00147f06726a8784000000e5e4b53af3b129cae87938103d4abc721919ca924d",
+      "size": 448
+    },
+    "sub-01/func/sub-01_task-cue_run-01_echo-2_bold.json": {
+      "sha256": "33740ae0cc64e38ddc2c9416a6c633eff4289490438643f26a4d625dd1dfc145",
+      "size": 23
+    },
+    "sub-01/func/sub-01_task-cue_run-01_echo-2_bold.nii": {
+      "sha256": "61f0b5cb032dcad33f6bee27474a71ac490b05209c353a99ca36933ad8e7e849",
+      "size": 448
+    },
+    "sub-01/func/sub-01_task-cue_run-01_echo-3_bold.json": {
+      "sha256": "af32954d486a6b5ef8bf048c6cc47eb8e989aa75a59dfd50ce17051e68b158f2",
+      "size": 23
+    },
+    "sub-01/func/sub-01_task-cue_run-01_echo-3_bold.nii": {
+      "sha256": "7a3294c16b677b225230927794fdc7f05487cfc3bd9a0458c760a5f702ecf15d",
+      "size": 448
+    },
+    "task-cue_bold.json": {
+      "sha256": "2a53db7a693995adaed20128c581b753714840049101f87602be04fa1a03c453",
+      "size": 49
+    },
+    "task-cue_events.json": {
+      "sha256": "ef10f23148aef2f30e20709c8a50398078530f12e78229215ea4f4725b1c8ab9",
+      "size": 131
+    },
+    "task-cue_events.tsv": {
+      "sha256": "480644b94220319a9c401d7241149cf8b70e22656a372318cd3dfa71662be989",
+      "size": 124
+    }
+  }
+}
