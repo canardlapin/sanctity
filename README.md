@@ -244,7 +244,11 @@ synthetic browser fixtures; normal mode uses the authenticated `/v1` API. The
 [console baseline and adoption checklist](docs/implementation-plan.md#console-baseline-and-adoption)
 records the reviewed scope, correction-safety contract, recovered evidence and
 remaining VoiceOver gate. Run `bash scripts/check-console.sh` for the browser
-regressions and v4f differential replay. The [screen-reader runbook](docs/http-api.md#console-checks-and-voiceover-exercise)
+regressions and v4f differential replay. Run `bash scripts/check-console-backend.sh`
+for the headless browser rehearsal against a disposable PostgreSQL database and
+the real authenticated API. It exercises correction, concurrent editing, frozen
+queries and grant/revoke, then verifies committed database records. The
+[screen-reader runbook](docs/http-api.md#console-checks-and-voiceover-exercise)
 provides the real VoiceOver tasks and a local synthetic conflict fixture.
 
 ## Durable work and recovery

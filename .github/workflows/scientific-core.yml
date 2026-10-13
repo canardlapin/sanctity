@@ -24,6 +24,30 @@ jobs:
           name: console-evidence
           path: target/console-check.*/
           if-no-files-found: error
+  console-backend:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      PLAYWRIGHT_BROWSERS_PATH: ${{ github.workspace }}/target/console-browsers
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: sbt/setup-sbt@v1
+      - run: npm ci --prefix tests/console --ignore-scripts --no-audit --no-fund
+      - run: node tests/console/node_modules/playwright/cli.js install --with-deps chromium
+      - run: bash scripts/check-console-backend.sh
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: console-backend-evidence
+          path: target/console-backend.*/
+          if-no-files-found: error
   scientific-core:
     runs-on: ubuntu-24.04
     timeout-minutes: 45

@@ -1,6 +1,6 @@
 {
   "schema": "sanctity.console-adoption.v1",
-  "recordedAt": "2026-10-13T19:34:47.078Z",
+  "recordedAt": "2026-10-13T21:21:35.540Z",
   "status": "pending_manual_accessibility",
   "adopted": false,
   "baseline": {
@@ -25,6 +25,10 @@
     "CON-04": {
       "status": "prepared_pending_CON-03",
       "result": "This receipt binds the integrated code and automated evidence. Adoption remains false until the human result is recorded and blocking findings resolved."
+    },
+    "CON-05": {
+      "status": "complete",
+      "result": "Real browser/HTTP/PostgreSQL rehearsal passes all eight scenarios plus independent SQL verification after browser/server shutdown. Two authenticated editors recover from a 409 while preserving FlipAngle 60; subject-level acceptance, frozen selection and fixed-release grant/revocation are verified."
     }
   },
   "evidence": {
@@ -57,11 +61,26 @@
     },
     "browser-session/native-desktop.json": {
       "sha256": "bf014574927b0822c84a68b389e4e2d10ab61fc2cf0604902bc49f5359c9f2ee"
+    },
+    "backend/receipt.json": {
+      "sha256": "ca57e8fbc3a7ecfefa347c70a1c71c3f4a4603d20b57fa36b6a6d03bfcc533e6"
+    },
+    "backend/browser.json": {
+      "sha256": "b0f242fd29f04d0c6ff428c4b5a8a4512611e090270a89b54b4e780609df61e2"
+    },
+    "backend/persistence.json": {
+      "sha256": "a388dab9660ce4e023794b69a1b02c5a60698c1d346d1189d818c2b85a6c9cb3"
+    },
+    "backend/backend.log": {
+      "sha256": "e0d131e7a2c2ffeb3f1ab6af658168e43332ce8df8e61cced02179ec0bba46d5"
+    },
+    "backend/browser.log": {
+      "sha256": "4c3a06a112eded56ad4a4b91c36bbd2297f461557614af036b98d639a4195f2a"
     }
   },
-  "sourceState": "Backend code was unchanged between cb082fe and 4b62084. Browser and harness hashes match 4b62084. Only documentation consolidation and local agent state remained uncommitted during the final browser run.",
+  "sourceState": "The original browser/backend receipts retain their recorded source bindings. The real-backend rehearsal used production sources unchanged from 082a5db; backend/receipt.json binds those sources and the new rehearsal/CI files by SHA-256. The new harness was tested before committing.",
   "limits": [
-    "Browser gate uses the synthetic demo transport; ConsoleSuite separately exercises real HTTP/PostgreSQL.",
+    "The original browser regression gate uses demo transport. The additional headless rehearsal uses real authenticated HTTP/PostgreSQL and an imported invented fixture; it is not representative-data qualification.",
     "No real screen-reader qualification or iOS/mobile screen-reader claim.",
     "CI configured; hosted execution has not run because these commits have not been pushed.",
     "This receipt does not close G2, institutional identity, scientific or production pilot qualification."

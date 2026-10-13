@@ -1,0 +1,9 @@
+{
+  "passed" : true,
+  "verifiedAfterBrowserAndServerClosed" : true,
+  "head" : "216268a8-5622-490d-a5a3-393f6ccd14cc",
+  "releases" : 4,
+  "acceptanceReceipts" : 4,
+  "frozenSelections" : 1,
+  "browserGrantRevoked" : true
+}

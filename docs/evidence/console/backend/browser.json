@@ -1,0 +1,433 @@
+{
+  "schema": "sanctity.console-backend-browser.v1",
+  "startedAt": "2026-10-13T21:21:30.061Z",
+  "finishedAt": "2026-10-13T21:21:34.843Z",
+  "browser": "131.0.6778.33",
+  "headless": true,
+  "fixture": "invented BIDS data with real NIfTI headers; ordinary import and acceptance",
+  "interactions": {
+    "curatorAndColleague": "1440x900; curator switches to 390x844 for conflict recovery and access",
+    "recipient": "390x844"
+  },
+  "results": [
+    {
+      "name": "authentication",
+      "passed": true,
+      "detail": "Empty and invalid credentials rejected; two independent curators authenticate; ungranted recipient cannot read."
+    },
+    {
+      "name": "metadata-and-relationships",
+      "passed": true,
+      "detail": "Real imported NIfTI header reports 2 s against authored TR 1.5 s, with recorded fieldmap relationships."
+    },
+    {
+      "name": "subject-sidecar",
+      "passed": true,
+      "detail": "Browser accepts the subject-level sidecar; reload and independent HTTP reads confirm TR 2 s and immutable initial TR 1.5 s."
+    },
+    {
+      "name": "frozen-query",
+      "passed": true,
+      "detail": "Age ≥30 and BOLD selection contains the two sub-02 runs at the accepted release."
+    },
+    {
+      "name": "concurrent-correction",
+      "passed": true,
+      "detail": "Two authenticated sessions produce a real 409. Reapplication preserves FlipAngle 60 and EchoTime 0.031; historical sidecars and frozen selection stay unchanged."
+    },
+    {
+      "name": "fixed-release-grant",
+      "passed": true,
+      "detail": "Recipient reads granted release and bytes after Escape cancels revocation; dataset head and ungranted historical release remain hidden."
+    },
+    {
+      "name": "revocation",
+      "passed": true,
+      "detail": "Confirmed revocation denies fresh metadata/file requests and removes the recipient view after reload."
+    },
+    {
+      "name": "transport",
+      "passed": true,
+      "detail": "Real same-origin API traffic under production CSP; no demo transport or browser exceptions."
+    }
+  ],
+  "persisted": {
+    "selection": "1a75f97cd242a324925fc5c396353455a28abeea77a34eb2ffd681909e0e64c0",
+    "head": "216268a8-5622-490d-a5a3-393f6ccd14cc",
+    "staleCandidate": "32a34014-30f8-446a-8ad7-2f5fc935d4e4",
+    "grant": "ce0e67f3-79fb-4b1e-8407-cf7614ea486a"
+  },
+  "servedUiSha256": {
+    "index.html": "3098e794d6a8fbb68b1dacc0b29481040579267ec75d36696de17e4c7f230cfa",
+    "app.js": "d81dae6481afc151516a7fcc55cde8adde1a93a8e0f9a0c6720f446cecd3999d",
+    "app.css": "3834f94d9646970715a107d1c335820fed0fe0e2fa1a23df34c50d0db3d1f30e"
+  },
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/v1/me",
+      "status": 401
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/aa87f8ba-d134-45d6-8e6e-a21308e226ed",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/aa87f8ba-d134-45d6-8e6e-a21308e226ed/file",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/aa87f8ba-d134-45d6-8e6e-a21308e226ed",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/aa87f8ba-d134-45d6-8e6e-a21308e226ed/file",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/aa87f8ba-d134-45d6-8e6e-a21308e226ed/metadata",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/aa87f8ba-d134-45d6-8e6e-a21308e226ed/corrections",
+      "status": 201
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/v1/candidates/51e5c1f3-cbaf-4178-9397-13c43211e1c1/accept",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/aa87f8ba-d134-45d6-8e6e-a21308e226ed",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/2737e118-51f9-4d7e-a5da-97c38ee19b3d",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/2737e118-51f9-4d7e-a5da-97c38ee19b3d",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/2737e118-51f9-4d7e-a5da-97c38ee19b3d/file",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/aa87f8ba-d134-45d6-8e6e-a21308e226ed",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/2737e118-51f9-4d7e-a5da-97c38ee19b3d/metadata",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/v1/selections",
+      "status": 201
+    },
+    {
+      "method": "GET",
+      "path": "/v1/selections/1a75f97cd242a324925fc5c396353455a28abeea77a34eb2ffd681909e0e64c0",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/2737e118-51f9-4d7e-a5da-97c38ee19b3d/file",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/2737e118-51f9-4d7e-a5da-97c38ee19b3d/corrections",
+      "status": 201
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/2737e118-51f9-4d7e-a5da-97c38ee19b3d",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/2737e118-51f9-4d7e-a5da-97c38ee19b3d/file",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/2737e118-51f9-4d7e-a5da-97c38ee19b3d/corrections",
+      "status": 201
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/v1/candidates/d7e59082-e1db-4965-9e55-19beb1f8655a/accept",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/2737e118-51f9-4d7e-a5da-97c38ee19b3d",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/a9a2f250-18ff-48ce-9795-e7fd4f175253",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/v1/candidates/32a34014-30f8-446a-8ad7-2f5fc935d4e4/accept",
+      "status": 409
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/a9a2f250-18ff-48ce-9795-e7fd4f175253",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/a9a2f250-18ff-48ce-9795-e7fd4f175253/file",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/a9a2f250-18ff-48ce-9795-e7fd4f175253/corrections",
+      "status": 201
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/v1/candidates/3f63cf7a-126e-4aff-8a58-ed1577751e8d/accept",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/a9a2f250-18ff-48ce-9795-e7fd4f175253",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/216268a8-5622-490d-a5a3-393f6ccd14cc",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/216268a8-5622-490d-a5a3-393f6ccd14cc",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/216268a8-5622-490d-a5a3-393f6ccd14cc/file",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/a9a2f250-18ff-48ce-9795-e7fd4f175253",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/2737e118-51f9-4d7e-a5da-97c38ee19b3d",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/aa87f8ba-d134-45d6-8e6e-a21308e226ed",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/216268a8-5622-490d-a5a3-393f6ccd14cc/metadata",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/grants",
+      "status": 201
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/216268a8-5622-490d-a5a3-393f6ccd14cc",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/216268a8-5622-490d-a5a3-393f6ccd14cc/file",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/a9a2f250-18ff-48ce-9795-e7fd4f175253",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/216268a8-5622-490d-a5a3-393f6ccd14cc/metadata",
+      "status": 200
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/grants/ce0e67f3-79fb-4b1e-8407-cf7614ea486a",
+      "status": 204
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/216268a8-5622-490d-a5a3-393f6ccd14cc",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018",
+      "status": 404
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/216268a8-5622-490d-a5a3-393f6ccd14cc/file",
+      "status": 404
+    }
+  ],
+  "pageErrors": [],
+  "passed": true,
+  "limits": [
+    "Not a VoiceOver or representative scientific-data qualification.",
+    "No crash/restart test; independent SQL verification follows browser/server shutdown."
+  ]
+}

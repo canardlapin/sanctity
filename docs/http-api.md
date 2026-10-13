@@ -19,6 +19,25 @@ source-hashed receipt under `target/console-check.*/`. The original
 These checks use synthetic fixtures; the PostgreSQL runner separately executes
 ConsoleSuite against the real HTTP/backend contracts.
 
+Run `bash scripts/check-console-backend.sh` for the complete browser-to-backend
+rehearsal. It requires Docker, Node and the existing Java/sbt build prerequisites;
+the script installs the locked browser dependencies and Chromium. It starts a
+pinned disposable PostgreSQL container, imports invented BIDS data with real
+NIfTI headers, and serves the normal console/API on an ephemeral loopback port.
+Three isolated browser sessions use short-lived credentials passed to the
+browser runner over stdin. The rehearsal uses normal API requests and production
+CSP, with no demo transport or request interception.
+
+The scenarios cover authentication errors, metadata/relationships, subject-level
+sidecar acceptance, a frozen age query, conflicting edits by two principals,
+fixed-release sharing and revocation. After the browser and HTTP server close,
+independent SQL checks verify the dataset head, four releases and acceptance
+receipts, frozen selection and revoked grant. Screenshots, redacted logs, source
+hashes and results go under `target/console-backend.*/`. The test schema, temporary
+storage and container are removed when the run ends. CI runs this as the separate
+`console-backend` job and retains failure artifacts. This evidence does not supply
+a VoiceOver result or a representative-data qualification.
+
 For the real screen-reader gate, run `node tests/console/serve.js` and open
 `http://127.0.0.1:8093/?demo` in Safari. It serves only synthetic demo assets on
 loopback. Use Cmd-F5 to enable VoiceOver; VO means Ctrl-Option. VO-Right/Left reads
