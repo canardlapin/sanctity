@@ -5,3 +5,4 @@ project/project/
 .bloop/
 .idea/
 .DS_Store
+node_modules/

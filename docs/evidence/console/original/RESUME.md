@@ -1,0 +1,6 @@
+# Sanctity console hill climb — resume note (2026-10-12)
+Selected build: v4g (out/v4g; commits 6c3d5d9, 6fbb2bc, 2eb473d, a1420b0) — live-backend round; previous v3c. Source: modules/http/src/main/resources/sanctity/ui/{index.html,app.css,app.js,demo.js}; server route modules/http/src/main/scala/sanctity/http/ConsoleAssets.scala (+ConsoleAssetsSuite), mounted in modules/app/.../ApiServer.scala.
+Rounds: v0 (gate fail, mobile), v1 (gate fail, CLS), v1b, v2, v3, v3b (blocker fix, focused verification), v3c (self-verified patch), v4–v4d (live-backend round; see changes-v4d.txt).
+Gate: bash checks/run.sh <round> (ui.js axe/overflow/driven state, behaviour.js 32 probes, cls, syntax). Build: bash build.sh <round>.
+Tracker artifact: https://claude.ai/artifact/KLneD8WuWk4SJA5Ctys4CN (publish publish/index.html with root artifact/).
+v4d reviewed by 3 fresh critics (critiques/v4d-*.md; means visual 8.2, function 7.9, user 7.7). B0 view observed live (../live/shots-b0); live accept re-evidenced (../live/shots-v4e-accept). ConsoleSuite (modules/integration) uncommitted pending backend commit. VoiceOver script: voiceover-script.md. Open items: see changes-v4e.txt last line; real screen-reader run; branded Safari/Firefox. Live harness: ../live (make_source.py, env.sh, drive-live.js, aria-live.js); Postgres container and server stopped after the run.

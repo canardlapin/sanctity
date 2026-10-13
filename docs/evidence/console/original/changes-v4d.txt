@@ -1,0 +1,34 @@
+Round v4 (v4 → v4b → v4c → v4d): live-backend round. Self-verified; no fresh critics this round.
+
+Live run: disposable PostgreSQL 17 (pinned digest) + real ApiServer serving the console. Synthetic 4-subject BIDS source (real NIfTI-1 headers), imported via RepositoryCli, owner + guest credentials. Driven in Chromium, Firefox and WebKit (Playwright builds). Evidence: live-evidence/.
+- All 11 flows pass in all three engines with zero console errors or page errors: sign in, tree, metadata, TSV, SHA-256-verified download, assessment, relationships, add-sidecar preview, query/selection, grant, 390px pass.
+- Real correction accepted in Chromium: new sub-02 sidecar; receipt shows Matches preview ×3; new head drops the TR mismatch.
+- WebKit's CSP "apply a stylesheet" errors come from Playwright's screenshot styling: 0 errors before the first screenshot, +1 per screenshot. Not the console.
+
+Defects found only with live data, now fixed:
+- FALSE "Superseded": fixing a TR mismatch showed SUPERSEDED because the same check also carried an unrelated MriTransformUnavailable. Outcome now compares the finding's code. Live: tag Resolved. Probe add-sidecar-resolves.
+- Fieldmap relationships reversed: backend links run → fieldmap sources (BidsInterpreter fieldmap associations); the console and demo had fieldmap → run. Relabelled "Fieldmaps by run", arrow "corrected by". Probe fieldmap-direction.
+- Assessment page about 10,500px tall: every check had a finding, so none collapsed, and each listed 15–20 raw facts. Checks are now one disclosure per rule family; facts sit behind "N recorded facts" (flattened dotted names, dl). Live: 900px.
+- EventsOutsideWindow is reported per row; findings now group by message shape (row/column numbers elided), with per-file counts. Lists of more than 4 files collapse. Probe row-findings-grouped.
+- No way to create a sidecar (the usual fix for a subject-specific TR): "New sidecar…" option with path validation; "Add sidecar" on images that have none. Demo endpoint accepts new JSON paths, as the real one does. Probes add-sidecar-resolves, new-sidecar-path-validated.
+- Blocked-line flag missed InconsistentMetadata, which is reported on the affected images; the flag now considers files whose metadata the edit changes.
+
+Open items closed:
+- NEW findings now name moved facts (flattened). Live: "timingMetadata.RepetitionTime.value 1.5 → 2". Probe new-finding-moved-facts.
+- Access table stale after Access → Query → Back: a late grant or revoke repaints when back on the same Access route, keeping focus. Probe access-round-trip-fresh.
+- Long mobile release page: the tree folds to a one-line "Files · N / selected path · Browse" disclosure once a file is selected; the inspector head stacks; facts stay folded on narrow screens. Live inspector page 3402 → 2446 px. Probe mobile-tree-folds.
+- Demo vocabulary now matches the backend:
+  - codes: InvalidJson, MetadataResolution, InconsistentMetadata, FieldmapMissingTarget (Error), MriRepetitionTimeMismatch, MriTransformUnavailable, EventsOutsideWindow
+  - observed messages; rule names
+  - fact names: temporalSpacingSeconds, timingMetadata, comparisonEndSeconds, …
+  - metadata-0 roles; companion evidence rules (:Events, :Bval, :Bvec); policy reference-admission-v7; generation 0; unit-norm bvecs (the real admission rejected the old ones)
+  - Release-1 story changed: a stale IntendedFor is an Error and could never have been accepted.
+- "157 B → 157 B" content row now reads "Same size, new content"; new files read "New file".
+- Accessibility tree (Chromium, Firefox snapshots, live): units read with a space; check input chips no longer read the file name twice.
+
+Not done / caveats:
+- No actual screen-reader run (VoiceOver/NVDA); only accessibility-tree snapshots.
+- Engines are Playwright's Firefox/WebKit builds, not branded Safari or Firefox.
+- b0-field-source links: shape follows BidsInterpreter, but the live run produced none (no B0FieldSource-matched fixture), so that view is unobserved; the demo no longer fabricates them.
+- New probes on v3c: 6 fail, the path-validation probe cannot run (no field). Partly confounded by v3c's older demo vocabulary; the Superseded defect itself was observed on the live backend with v3c.
+Gate: v4d exit 0 — ui 27/27, behaviour 39/39, layout shift ≤ 0.0011, syntax PASS (logs/gate-v4d.log). sbt http/test 5/5, app/compile pass.

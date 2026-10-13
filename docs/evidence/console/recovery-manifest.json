@@ -1,0 +1,416 @@
+{
+  "recoveredAt": "2026-10-13",
+  "sourceDirectory": "/private/tmp/claude-502/-Users-bbuchsbaum-code-scala-sanctity/426d0876-1b21-42b2-8db4-ff8823f27ac9/scratchpad/hc",
+  "files": [
+    {
+      "original": "RUBRIC.md",
+      "retained": "docs/evidence/console/original/RUBRIC.md",
+      "sha256": "e6f8af5ae73d3c854fcaa508c1a014f2d4d450f2710f7d9345d92e53b24074a5"
+    },
+    {
+      "original": "RESUME.md",
+      "retained": "docs/evidence/console/original/RESUME.md",
+      "sha256": "ba894a6bdfa81e90e4c065e6c0a48396bf2c632949a5b14299ac5c3bc1118481"
+    },
+    {
+      "original": "changes-v4d.txt",
+      "retained": "docs/evidence/console/original/changes-v4d.txt",
+      "sha256": "bfaf60d2a4052611861c1b5ed2976a368079cb15207ddc665761c9cbe586c370"
+    },
+    {
+      "original": "changes-v4f.txt",
+      "retained": "docs/evidence/console/original/changes-v4f.txt",
+      "sha256": "8c3e7bee45a61b4a53d47d172ab4e525eb3da1b39a628b5967c21a4e6e2259e3"
+    },
+    {
+      "original": "changes-v4g.txt",
+      "retained": "docs/evidence/console/original/changes-v4g.txt",
+      "sha256": "b92553c63d9f4ea7c5bd0c05e433e3d0ea1d7b740735ba3c2456ae7f400c537e"
+    },
+    {
+      "original": "voiceover-script.md",
+      "retained": "docs/evidence/console/original/voiceover-script.md",
+      "sha256": "6846bf803a81031ea1a5166124c8e27e00e80405a89cb8728c07e57ebff8b85e"
+    },
+    {
+      "original": "hillclimb.json",
+      "retained": "docs/evidence/console/original/hillclimb.json",
+      "sha256": "034376b5a2805b00e053219cf00c3616a931fbf7e7ca02470db2a61cbd0b01cd"
+    },
+    {
+      "original": "package.json",
+      "retained": "docs/evidence/console/original/package.json",
+      "sha256": "941347c20a7563f0c0c410d8e48fc90b6c57a6070ea42ddb623d1c713dcfce7a"
+    },
+    {
+      "original": "package-lock.json",
+      "retained": "docs/evidence/console/original/package-lock.json",
+      "sha256": "3a4090f30ff4b1a8fcc6b330059b0667f79bbb8098f0b0abb7ce7c8890790a21"
+    },
+    {
+      "original": "build.sh",
+      "retained": "docs/evidence/console/original/build.sh",
+      "sha256": "d6ed750a2a6ef20e1129f60e24a258e12db577235c4f42a01845ca09891647d5"
+    },
+    {
+      "original": "checks/run.sh",
+      "retained": "docs/evidence/console/original/checks/run.sh",
+      "sha256": "f1dc0cc90511138527d113c7afcfa605f7408261ce852b1bbdaa969468bd9d27"
+    },
+    {
+      "original": "checks/ui.js",
+      "retained": "docs/evidence/console/original/checks/ui.js",
+      "sha256": "dd095e3689e62db33ce4a4dff28dda37e47bc402d579cab632055710e96afb32"
+    },
+    {
+      "original": "checks/behaviour.js",
+      "retained": "docs/evidence/console/original/checks/behaviour.js",
+      "sha256": "f1659273bbf745650dd7600be5342a386552d4437fe09a63ebd2ccd196d7083c"
+    },
+    {
+      "original": "scripts/lib.js",
+      "retained": "docs/evidence/console/original/scripts/lib.js",
+      "sha256": "d638b68f538cf10a7f27a33fd205aed21be22d0fe5381fda9ebeff16f6279183"
+    },
+    {
+      "original": "scripts/checks/cls.js",
+      "retained": "docs/evidence/console/original/scripts/checks/cls.js",
+      "sha256": "1209f86da9cc58029d8de92a62672ea0daeb30ceb925e7b8ad6f236082f26112"
+    },
+    {
+      "original": "specimens/drive.js",
+      "retained": "docs/evidence/console/original/specimens/drive.js",
+      "sha256": "a6ae2f189e98713d95242a1c8e549c72bca7d57239d43a4d5b506b0dc0f62bbd"
+    },
+    {
+      "original": "specimens/specs.json",
+      "retained": "docs/evidence/console/original/specimens/specs.json",
+      "sha256": "ae4e6034fe41575ef53bf9b5db354fa34579795068c54e1624ddd40630a1d0ac"
+    },
+    {
+      "original": "logs/gate-v4d.log",
+      "retained": "docs/evidence/console/original/logs/gate-v4d.log",
+      "sha256": "85882e5efdda0588c507ded1a6adc24c1cf85a7ea1609316a37afc5f96e62423"
+    },
+    {
+      "original": "artifact/critiques/v4d-visual.md",
+      "retained": "docs/evidence/console/original/critiques/v4d-visual.md",
+      "sha256": "77c21b1eaa425683f85ee7c733e7b1830a262aa3bcad348902a732744852dbb9"
+    },
+    {
+      "original": "artifact/critiques/v4d-function.md",
+      "retained": "docs/evidence/console/original/critiques/v4d-function.md",
+      "sha256": "2c801b4fb79fcd52f07f54736e56e0cae87ca3d090effd1018f0f7997d3c8e5b"
+    },
+    {
+      "original": "artifact/critiques/v4d-user.md",
+      "retained": "docs/evidence/console/original/critiques/v4d-user.md",
+      "sha256": "4dd52f2e584dccfda2024b25b71d6db34736fc8caa147a4e66945a1e78a5d0fe"
+    },
+    {
+      "original": "logs/gate-v4f.log",
+      "retained": "docs/evidence/console/original/logs/gate-v4f.log",
+      "sha256": "2b76b10de854f09d2e1e09264b8a904c9cfd05d28e83eab013a95f106250182c"
+    },
+    {
+      "original": "artifact/critiques/v4f-visual.md",
+      "retained": "docs/evidence/console/original/critiques/v4f-visual.md",
+      "sha256": "5fd5382229fa6fb493f36a613646e5c92793c5a6b906538ae9d1808608fe216b"
+    },
+    {
+      "original": "artifact/critiques/v4f-function.md",
+      "retained": "docs/evidence/console/original/critiques/v4f-function.md",
+      "sha256": "89f623ed27f2ae9417d7b7a232c33702c7bc61112f0f82909caf9a93bb5b8319"
+    },
+    {
+      "original": "artifact/critiques/v4f-user.md",
+      "retained": "docs/evidence/console/original/critiques/v4f-user.md",
+      "sha256": "22195537febd500116f4551fc74a09011956f492a58a37104ad5cf344a17e2e2"
+    },
+    {
+      "original": "logs/gate-v4g.log",
+      "retained": "docs/evidence/console/original/logs/gate-v4g.log",
+      "sha256": "6641c573dbfae98323026840e02efb200a0f1600f59451506939354f37f86bf6"
+    },
+    {
+      "original": "out/v4f/SOURCE.txt",
+      "retained": "docs/evidence/console/original/out/v4f/SOURCE.txt",
+      "sha256": "b03ae3eca0bb0521be5700ef9697d8eb8521786047bbf499ff614130797bf142"
+    },
+    {
+      "original": "out/v4f/access.html",
+      "retained": "docs/evidence/console/original/out/v4f/access.html",
+      "sha256": "af3807d1b2934de1517fe4a63a34550676cb3dbdb35bdbc936842087e9af06cc"
+    },
+    {
+      "original": "out/v4f/app.css",
+      "retained": "docs/evidence/console/original/out/v4f/app.css",
+      "sha256": "fda41a14baa6e30c5666c5106870052dc3cca0196b4f82f3c630607b91fc34d5"
+    },
+    {
+      "original": "out/v4f/app.js",
+      "retained": "docs/evidence/console/original/out/v4f/app.js",
+      "sha256": "298c38ec9013226f8411d1b857eed983816e2c40dedd83473c39d559d066ab7c"
+    },
+    {
+      "original": "out/v4f/assessment.html",
+      "retained": "docs/evidence/console/original/out/v4f/assessment.html",
+      "sha256": "73b7624d8ef6de8581d7351a812332dd19b1c35183e6743331c2bed8803c9c1d"
+    },
+    {
+      "original": "out/v4f/connect.html",
+      "retained": "docs/evidence/console/original/out/v4f/connect.html",
+      "sha256": "dc074a76b905b1f4c2b3c82010bce326e0281aa19286f83a28561d052b47906c"
+    },
+    {
+      "original": "out/v4f/correction-blocked.html",
+      "retained": "docs/evidence/console/original/out/v4f/correction-blocked.html",
+      "sha256": "ce6b53f3316b4486cb3936913ec471c6e015acabdf7c8049f1e9a51e9a5fe0b1"
+    },
+    {
+      "original": "out/v4f/correction.html",
+      "retained": "docs/evidence/console/original/out/v4f/correction.html",
+      "sha256": "0d6cd4d58946d4aa5283f114e41e86f4f7dc15c0dce6096d271257b5d40133b9"
+    },
+    {
+      "original": "out/v4f/demo.js",
+      "retained": "docs/evidence/console/original/out/v4f/demo.js",
+      "sha256": "cc6ebcd860a7f77660acd105bc41c717c5d6b3457b4ffad307dd89f93ef81b1b"
+    },
+    {
+      "original": "out/v4f/drive.js",
+      "retained": "docs/evidence/console/original/out/v4f/drive.js",
+      "sha256": "a6ae2f189e98713d95242a1c8e549c72bca7d57239d43a4d5b506b0dc0f62bbd"
+    },
+    {
+      "original": "out/v4f/index.html",
+      "retained": "docs/evidence/console/original/out/v4f/index.html",
+      "sha256": "3098e794d6a8fbb68b1dacc0b29481040579267ec75d36696de17e4c7f230cfa"
+    },
+    {
+      "original": "out/v4f/query.html",
+      "retained": "docs/evidence/console/original/out/v4f/query.html",
+      "sha256": "ede4f38b9b37036188770ba95314d2999f29e0541697be8caf581d2bceda2b5a"
+    },
+    {
+      "original": "out/v4f/relationships.html",
+      "retained": "docs/evidence/console/original/out/v4f/relationships.html",
+      "sha256": "06c01f7a874ed0850c83eccabf975bbb8b0e1b8072ab6771d5c8c7cb44edd6c1"
+    },
+    {
+      "original": "out/v4f/release-empty.html",
+      "retained": "docs/evidence/console/original/out/v4f/release-empty.html",
+      "sha256": "95381bd2f32d4c7aa3994858641c948bc78392cdf34c37e7b17418f2f56dc5e7"
+    },
+    {
+      "original": "out/v4f/release.html",
+      "retained": "docs/evidence/console/original/out/v4f/release.html",
+      "sha256": "9076b0affd3ac1d9ae19d17f87e126686304503c7cb7b04f50ac6ead8a868999"
+    },
+    {
+      "original": "out/v4f/spec-access.js",
+      "retained": "docs/evidence/console/original/out/v4f/spec-access.js",
+      "sha256": "c93833261a2166bd079a75df9704c95ba57d91b999364b4fb8ef5bb478580607"
+    },
+    {
+      "original": "out/v4f/spec-assessment.js",
+      "retained": "docs/evidence/console/original/out/v4f/spec-assessment.js",
+      "sha256": "db55bde2b8d2c9d4de8085f50ae0e6c3090fcd31b4a63b2fb9b84ccfe2fd0760"
+    },
+    {
+      "original": "out/v4f/spec-connect.js",
+      "retained": "docs/evidence/console/original/out/v4f/spec-connect.js",
+      "sha256": "6183273110938234c49877f744ae7e17ca568104c1abfa18e36dbec2763a225f"
+    },
+    {
+      "original": "out/v4f/spec-correction-blocked.js",
+      "retained": "docs/evidence/console/original/out/v4f/spec-correction-blocked.js",
+      "sha256": "927499aa1416c8f70ab24461749ccb0c71988315e4999b377a6b1278dc15eb10"
+    },
+    {
+      "original": "out/v4f/spec-correction.js",
+      "retained": "docs/evidence/console/original/out/v4f/spec-correction.js",
+      "sha256": "36e52a46d772fa92cb2d62e251ce3d6918c66e976677eda6a0f26350f0afa045"
+    },
+    {
+      "original": "out/v4f/spec-query.js",
+      "retained": "docs/evidence/console/original/out/v4f/spec-query.js",
+      "sha256": "9f5b56ceba0cbc3058ebdaa5fc8a7c698ba75b138c7587a51f19b2ac2ff32ea7"
+    },
+    {
+      "original": "out/v4f/spec-relationships.js",
+      "retained": "docs/evidence/console/original/out/v4f/spec-relationships.js",
+      "sha256": "4a87d80b8eba40bcd0d01a27fdb5cba277e8138b303d2d73e92314eedb4f73a9"
+    },
+    {
+      "original": "out/v4f/spec-release-empty.js",
+      "retained": "docs/evidence/console/original/out/v4f/spec-release-empty.js",
+      "sha256": "a887da6ed2904fa2025e43159c1ebacdb96c27bac2ce368701f01b77a3796b2b"
+    },
+    {
+      "original": "out/v4f/spec-release.js",
+      "retained": "docs/evidence/console/original/out/v4f/spec-release.js",
+      "sha256": "7e198adbbbef75e78d78f6e02fe188b3d374f43e05c094b23e74add37cffbed9"
+    },
+    {
+      "original": "out/v4g/SOURCE.txt",
+      "retained": "docs/evidence/console/original/out/v4g/SOURCE.txt",
+      "sha256": "3aec70b4382fa7fae921a925cfef5643c7e86f03b611e54d0c01ed6d9871c63f"
+    },
+    {
+      "original": "out/v4g/access.html",
+      "retained": "docs/evidence/console/original/out/v4g/access.html",
+      "sha256": "af3807d1b2934de1517fe4a63a34550676cb3dbdb35bdbc936842087e9af06cc"
+    },
+    {
+      "original": "out/v4g/app.css",
+      "retained": "docs/evidence/console/original/out/v4g/app.css",
+      "sha256": "3834f94d9646970715a107d1c335820fed0fe0e2fa1a23df34c50d0db3d1f30e"
+    },
+    {
+      "original": "out/v4g/app.js",
+      "retained": "docs/evidence/console/original/out/v4g/app.js",
+      "sha256": "319f893c99b486652136d0ed6ae3fd84794f63af1a3ae6c3f77f7795113b6d99"
+    },
+    {
+      "original": "out/v4g/assessment.html",
+      "retained": "docs/evidence/console/original/out/v4g/assessment.html",
+      "sha256": "73b7624d8ef6de8581d7351a812332dd19b1c35183e6743331c2bed8803c9c1d"
+    },
+    {
+      "original": "out/v4g/connect.html",
+      "retained": "docs/evidence/console/original/out/v4g/connect.html",
+      "sha256": "dc074a76b905b1f4c2b3c82010bce326e0281aa19286f83a28561d052b47906c"
+    },
+    {
+      "original": "out/v4g/correction-blocked.html",
+      "retained": "docs/evidence/console/original/out/v4g/correction-blocked.html",
+      "sha256": "ce6b53f3316b4486cb3936913ec471c6e015acabdf7c8049f1e9a51e9a5fe0b1"
+    },
+    {
+      "original": "out/v4g/correction.html",
+      "retained": "docs/evidence/console/original/out/v4g/correction.html",
+      "sha256": "0d6cd4d58946d4aa5283f114e41e86f4f7dc15c0dce6096d271257b5d40133b9"
+    },
+    {
+      "original": "out/v4g/demo.js",
+      "retained": "docs/evidence/console/original/out/v4g/demo.js",
+      "sha256": "cc6ebcd860a7f77660acd105bc41c717c5d6b3457b4ffad307dd89f93ef81b1b"
+    },
+    {
+      "original": "out/v4g/drive.js",
+      "retained": "docs/evidence/console/original/out/v4g/drive.js",
+      "sha256": "a6ae2f189e98713d95242a1c8e549c72bca7d57239d43a4d5b506b0dc0f62bbd"
+    },
+    {
+      "original": "out/v4g/index.html",
+      "retained": "docs/evidence/console/original/out/v4g/index.html",
+      "sha256": "3098e794d6a8fbb68b1dacc0b29481040579267ec75d36696de17e4c7f230cfa"
+    },
+    {
+      "original": "out/v4g/query.html",
+      "retained": "docs/evidence/console/original/out/v4g/query.html",
+      "sha256": "ede4f38b9b37036188770ba95314d2999f29e0541697be8caf581d2bceda2b5a"
+    },
+    {
+      "original": "out/v4g/relationships.html",
+      "retained": "docs/evidence/console/original/out/v4g/relationships.html",
+      "sha256": "06c01f7a874ed0850c83eccabf975bbb8b0e1b8072ab6771d5c8c7cb44edd6c1"
+    },
+    {
+      "original": "out/v4g/release-empty.html",
+      "retained": "docs/evidence/console/original/out/v4g/release-empty.html",
+      "sha256": "95381bd2f32d4c7aa3994858641c948bc78392cdf34c37e7b17418f2f56dc5e7"
+    },
+    {
+      "original": "out/v4g/release.html",
+      "retained": "docs/evidence/console/original/out/v4g/release.html",
+      "sha256": "9076b0affd3ac1d9ae19d17f87e126686304503c7cb7b04f50ac6ead8a868999"
+    },
+    {
+      "original": "out/v4g/spec-access.js",
+      "retained": "docs/evidence/console/original/out/v4g/spec-access.js",
+      "sha256": "c93833261a2166bd079a75df9704c95ba57d91b999364b4fb8ef5bb478580607"
+    },
+    {
+      "original": "out/v4g/spec-assessment.js",
+      "retained": "docs/evidence/console/original/out/v4g/spec-assessment.js",
+      "sha256": "db55bde2b8d2c9d4de8085f50ae0e6c3090fcd31b4a63b2fb9b84ccfe2fd0760"
+    },
+    {
+      "original": "out/v4g/spec-connect.js",
+      "retained": "docs/evidence/console/original/out/v4g/spec-connect.js",
+      "sha256": "6183273110938234c49877f744ae7e17ca568104c1abfa18e36dbec2763a225f"
+    },
+    {
+      "original": "out/v4g/spec-correction-blocked.js",
+      "retained": "docs/evidence/console/original/out/v4g/spec-correction-blocked.js",
+      "sha256": "927499aa1416c8f70ab24461749ccb0c71988315e4999b377a6b1278dc15eb10"
+    },
+    {
+      "original": "out/v4g/spec-correction.js",
+      "retained": "docs/evidence/console/original/out/v4g/spec-correction.js",
+      "sha256": "36e52a46d772fa92cb2d62e251ce3d6918c66e976677eda6a0f26350f0afa045"
+    },
+    {
+      "original": "out/v4g/spec-query.js",
+      "retained": "docs/evidence/console/original/out/v4g/spec-query.js",
+      "sha256": "9f5b56ceba0cbc3058ebdaa5fc8a7c698ba75b138c7587a51f19b2ac2ff32ea7"
+    },
+    {
+      "original": "out/v4g/spec-relationships.js",
+      "retained": "docs/evidence/console/original/out/v4g/spec-relationships.js",
+      "sha256": "4a87d80b8eba40bcd0d01a27fdb5cba277e8138b303d2d73e92314eedb4f73a9"
+    },
+    {
+      "original": "out/v4g/spec-release-empty.js",
+      "retained": "docs/evidence/console/original/out/v4g/spec-release-empty.js",
+      "sha256": "a887da6ed2904fa2025e43159c1ebacdb96c27bac2ce368701f01b77a3796b2b"
+    },
+    {
+      "original": "out/v4g/spec-release.js",
+      "retained": "docs/evidence/console/original/out/v4g/spec-release.js",
+      "sha256": "7e198adbbbef75e78d78f6e02fe188b3d374f43e05c094b23e74add37cffbed9"
+    },
+    {
+      "original": "shots/v4g-review/access-390.png",
+      "retained": "docs/evidence/console/original/shots/v4g-review/access-390.png",
+      "sha256": "706a53e8347e756aa6eba15bcab21cb5000aaee0fc012d9623be52b66238b538"
+    },
+    {
+      "original": "shots/v4g-review/assessment.png",
+      "retained": "docs/evidence/console/original/shots/v4g-review/assessment.png",
+      "sha256": "09fa425f62f2270701957c13aaef3eab384ad39b8a5405fa8728661a8167b88a"
+    },
+    {
+      "original": "shots/v4g-review/decision-1.8.png",
+      "retained": "docs/evidence/console/original/shots/v4g-review/decision-1.8.png",
+      "sha256": "62056857d17f63e22ea313f097b9d3cd9cf45663f0ca0f47b6e31ba789139694"
+    },
+    {
+      "original": "shots/v4g-review/inspector-rest.png",
+      "retained": "docs/evidence/console/original/shots/v4g-review/inspector-rest.png",
+      "sha256": "d580c211102c1a58aa4361d56f8057d71a2609cdf3baf878fd1b20f9f7ec0d25"
+    },
+    {
+      "original": "shots/v4g-review/preview.png",
+      "retained": "docs/evidence/console/original/shots/v4g-review/preview.png",
+      "sha256": "e048ec67494af2e2a4e6e991215f37400092061450e4e01cc3d455cb1e0dd3a2"
+    },
+    {
+      "original": "shots/v4g-review/selection-390.png",
+      "retained": "docs/evidence/console/original/shots/v4g-review/selection-390.png",
+      "sha256": "c0cea561c84b1d4e45015ac2aef7547bd08802ff16b403f18cb23d84c11463e8"
+    }
+  ],
+  "notes": [
+    "Original files copied without edits.",
+    "Original handoff says 51 probes; original v4g log contains 59 passing behaviour assertions, 27 passing UI configurations and 6 layout observations.",
+    "No real VoiceOver result is present in the recovered evidence.",
+    "Replaying the v4g harness on v4f also fails three pre-existing assertions adapted to v4g DOM/wording: mobile-tree-folds, fold-follows-viewport, head-keeps-draft. The seven new defect probes are classified separately."
+  ],
+  "baselineSourceMatches": {
+    "v4f": "2eb473d9f4eedf42b36a02802a4934d19bb634af",
+    "v4g": "a1420b0"
+  }
+}

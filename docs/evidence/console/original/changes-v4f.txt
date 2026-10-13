@@ -1,0 +1,11 @@
+- Round v4f: works through the v4d fresh-review findings. Self-verified; v4d scores remain the latest independent scores. Commit 2eb473d.
+- Grouped row findings list their rows ("rows 50, 51"), per file when several files share one finding; counts read "N occurrences".
+- TR mismatch shows the compared values beside the finding: Authored RepetitionTime 1.5 s, Header volume spacing 2 s (fact names pinned by ConsoleSuite against the real backend).
+- Preview: "No longer reported" comes first; source-only changes are tagged "Same value, new source"; a new sidecar that changes nothing gets a warning; a nameless ".json" path is refused.
+- "Correct the current head" keeps the edited content, with a note to review the diff.
+- Phones: grant and selection tables become labelled blocks (Revoke full width, on screen); an all-empty Session column is dropped.
+- Tree fold follows viewport changes; rule families with blocking errors start open (warning-only families stay folded, as live data carries a warning on nearly every check).
+- Access: "Choose at least one action" is tied to the Actions group and focuses it; revoke-by-id error is described; each Revoke names its grant.
+- Demo resolves sidecars by BIDS inheritance (subject-level sidecars apply).
+- Gate v4f: exit 0 (ui, 44 behaviour probes, CLS, syntax). Probes 35–44 all fail on v4e and pass on v4f. logs/gate-v4f.log; screens in shots/v4f-review/.
+- Still open: no real screen-reader run (script: voiceover-script.md); branded Safari/Firefox; fresh critics on v4f.

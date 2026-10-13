@@ -1,0 +1,78 @@
+ui connect @1440 light: PASS
+ui connect @390 light: PASS
+ui connect @1440 dark: PASS
+ui release @1440 light: PASS
+ui release @390 light: PASS
+ui release @1440 dark: PASS
+ui release-empty @1440 light: PASS
+ui release-empty @390 light: PASS
+ui release-empty @1440 dark: PASS
+ui assessment @1440 light: PASS
+ui assessment @390 light: PASS
+ui assessment @1440 dark: PASS
+ui relationships @1440 light: PASS
+ui relationships @390 light: PASS
+ui relationships @1440 dark: PASS
+ui correction @1440 light: PASS
+ui correction @390 light: PASS
+ui correction @1440 dark: PASS
+ui correction-blocked @1440 light: PASS
+ui correction-blocked @390 light: PASS
+ui correction-blocked @1440 dark: PASS
+ui query @1440 light: PASS
+ui query @390 light: PASS
+ui query @1440 dark: PASS
+ui access @1440 light: PASS
+ui access @390 light: PASS
+ui access @1440 dark: PASS
+ui summary: 27/27 PASS
+behaviour no-inline-style c-4f18-a5d9-0e6c1b2f8a73: PASS 0 elements
+behaviour no-inline-style c-4f18-a5d9-0e6c1b2f8a73: PASS 0 elements
+behaviour no-inline-style 5d9-0e6c1b2f8a73/correct: PASS 0 elements
+behaviour no-inline-style 9c21-6f0a3d9e8b14/access: PASS 0 elements
+behaviour no-inline-style #/: PASS 0 elements
+behaviour focus-after-folder: PASS d:sub-01
+behaviour focus-after-file: PASS f:participants.tsv
+behaviour tab-arrow-focus: PASS Assessment4
+behaviour tab-keeps-file: PASS #/d/b7e3c1d2-5a4f-4e8b-9c21-6f0a3d9e8b14/r/9d4b2e61-7a3c-4f18-a5d9-0e6c1b2f8a73?path=README
+behaviour no-stale-preview: PASS
+behaviour no-delegation-offer: PASS
+behaviour exact-decimal: PASS {"releases":[{"dataset":"b7e3c1d2-5a4f-4e8b-9c21-6f0a3d9e8b14","release":"9d4b2e61-7a3c-4f18-a5d9-0e6c1b2f8a73"}],"participants":{"op":"fieldAtLeast","name":"ag
+behaviour mobile-inspector-visible: PASS inspector top 176
+behaviour no-double-click-revoke: PASS deletes 0
+behaviour escape-cancels-revoke: PASS
+behaviour dropdown-switch-keeps-preview: PASS
+behaviour access-no-release-scope: PASS
+behaviour compact-digest-chips: PASS max chip height 25
+behaviour mobile-diff-readable: PASS path lines 2
+behaviour back-to-edit-focus: PASS {"id":"c-text","kept":true}
+behaviour non-head-correction-warned: PASS
+behaviour no-route-race: PASS
+behaviour single-revoke-request: PASS deletes 1
+behaviour revoked-grant-recorded: PASS
+behaviour enter-adds-release: PASS {"h":"#/d/b7e3c1d2-5a4f-4e8b-9c21-6f0a3d9e8b14/query?release=9d4b2e61-7a3c-4f18-a5d9-0e6c1b2f8a73","added":true}
+behaviour pager-focus: PASS pager-prev
+behaviour assessment-compact-390: PASS height 1593
+behaviour receipt-identity-verified: PASS matches 3
+behaviour blocked-line-flagged: PASS
+behaviour finding-cause-shown: PASS why lines 2
+behaviour inspector-header-check: PASS
+behaviour no-false-resolved: PASS
+behaviour no-grant-leak: PASS {"rows":0,"nullKey":null}
+behaviour check-inputs-named: PASS
+behaviour add-sidecar-resolves: PASS add link 1, tag Resolved
+behaviour new-finding-moved-facts: PASS Re-checked because task-nback_bold.json is an input of bids-mri-header-consistency-v1. Changed: timingMetadata.RepetitionTime.value 1.5 → 1.8.
+behaviour row-findings-grouped: PASS 1 entries
+behaviour fieldmap-direction: PASS sub-01/func/sub-01_task-nback_run-1_bold.nii.gz => sub-01/fmap/sub-01_dir-AP_epi.nii.gz
+behaviour access-round-trip-fresh: PASS 1 rows
+behaviour mobile-tree-folds: PASS {"fold":true,"gap":137}
+behaviour new-sidecar-path-validated: PASS Use a path relative to the dataset root, without “.” or “..” segments.
+behaviour failures: 0
+layout shift v4d/release.html @390: initial-shift-sum=0.0000 -> PASS
+layout shift v4d/release.html @1440: initial-shift-sum=0.0000 -> PASS
+layout shift v4d/correction.html @390: initial-shift-sum=0.0011 -> PASS
+layout shift v4d/correction.html @1440: initial-shift-sum=0.0002 -> PASS
+layout shift v4d/connect.html @390: initial-shift-sum=0.0000 -> PASS
+layout shift v4d/connect.html @1440: initial-shift-sum=0.0000 -> PASS
+syntax PASS
+gate exit 0

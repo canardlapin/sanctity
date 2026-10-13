@@ -1,0 +1,21 @@
+{
+  "title": "Sanctity console hill climb",
+  "intro": "First graphical console for the Sanctity BIDS repository: release inspection with explained metadata inheritance, admission evidence, previewed corrections, frozen queries and grants. Specimens run the real UI against a fixture transport shaped like the /v1 API.",
+  "captureNote": "Desktop 1440x1000; mobile 390x844. Driven states are reached by specimens/drive.js before capture.",
+  "dims": ["typography", "color", "layout", "hierarchy", "components", "function", "themes", "mobile", "identity", "fidelity"],
+  "critics": { "visual": "Visual design", "function": "Function & accessibility", "user": "Curator / researcher" },
+  "viewports": { "desktop": { "width": 1440, "height": 1000 }, "mobile": { "width": 390, "height": 844 } },
+  "shots": [
+    { "name": "connect", "label": "Sign in", "file": "connect.html", "vp": "desktop", "wait": 1500 },
+    { "name": "release", "label": "Release · inherited metadata", "file": "release.html", "vp": "desktop", "wait": 1800 },
+    { "name": "release-dark", "label": "Release · dark", "file": "release.html", "vp": "desktop", "dark": true, "wait": 1800 },
+    { "name": "release-mobile", "label": "Release · 390px", "file": "release.html", "vp": "mobile", "wait": 1800 },
+    { "name": "assessment", "label": "Assessment", "file": "assessment.html", "vp": "desktop", "wait": 1500 },
+    { "name": "relationships", "label": "Relationships", "file": "relationships.html", "vp": "desktop", "wait": 1500 },
+    { "name": "correction", "label": "Correction preview", "file": "correction.html", "vp": "desktop", "wait": 2200 },
+    { "name": "correction-blocked", "label": "Blocked candidate", "file": "correction-blocked.html", "vp": "desktop", "wait": 2200 },
+    { "name": "correction-mobile", "label": "Correction · 390px", "file": "correction.html", "vp": "mobile", "wait": 2200 },
+    { "name": "query", "label": "Frozen selection", "file": "query.html", "vp": "desktop", "wait": 2000 },
+    { "name": "access", "label": "Access", "file": "access.html", "vp": "desktop", "wait": 2000 }
+  ]
+}

@@ -1,0 +1,10 @@
+- Round v4g: fixes from the v4f fresh reviews (visual, function, user; critiques/v4f-*.md). Self-verified. Commit a1420b0.
+- MAJOR (function critic): carrying a draft to the current head could revert a colleague's accepted change (lost update). Now restored only onto unchanged content; otherwise the editor shows the head's content plus the earlier edit as a diff. Probe 45 reproduces the v4f revert (FlipAngle 60 → 52) and passes on v4g.
+- Preview order (visual critic regression): blocking and new findings first, then no longer reported, not evaluated, unchanged.
+- Compared values on multi-file mismatch groups; "rows listed by file column" spacing; delta tag first.
+- Phone tree fold is pure CSS; resizing keeps focus/filter/disclosures; a tree in use stays open. (First v4g gate failed on resize-keeps-focus; fixed and rebuilt before acceptance.)
+- Paths with spaces or inside an existing file refused; inert sidecar flagged beside Accept (non-primary button).
+- Stacked labels visual-only (no double reading); content-changes table stacks; chips no longer stretch; grant actions in form order; "Admission policy" labelled; unused fieldmap explained.
+- Real backend: ConsoleSuite now proves a subject-level sidecar (sub-02/sub-02_task-nback_bold.json) reaches the run and resolves the mismatch (the user critic's adoption condition). Uncommitted, pending the backend commit.
+- Gate v4g: exit 0 (51 behaviour probes). The 7 new probes fail on v4f. logs/gate-v4g.log; shots/v4g-review/.
+- Not addressed (taste or out of scope): preview order at 390 (Candidate first, praised by an earlier visual critic), correction column balance, Query operator truncation/export/age column, principal-id guidance, "Files 60 items" tab names, pre.linediff aria-label incomplete, phone header height.

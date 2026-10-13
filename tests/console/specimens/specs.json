@@ -1,0 +1,19 @@
+{
+  "connect": { "hash": "#/" },
+  "release": { "hash": "#/d/b7e3c1d2-5a4f-4e8b-9c21-6f0a3d9e8b14/r/9d4b2e61-7a3c-4f18-a5d9-0e6c1b2f8a73?path=sub-02%2Ffunc%2Fsub-02_task-nback_run-1_bold.nii.gz",
+    "steps": [{ "wait": ".fieldrow" }] },
+  "release-empty": { "hash": "#/d/b7e3c1d2-5a4f-4e8b-9c21-6f0a3d9e8b14/r/9d4b2e61-7a3c-4f18-a5d9-0e6c1b2f8a73", "steps": [{ "wait": ".tree .item" }] },
+  "assessment": { "hash": "#/d/b7e3c1d2-5a4f-4e8b-9c21-6f0a3d9e8b14/r/9d4b2e61-7a3c-4f18-a5d9-0e6c1b2f8a73?tab=assessment", "steps": [{ "wait": ".finding" }] },
+  "relationships": { "hash": "#/d/b7e3c1d2-5a4f-4e8b-9c21-6f0a3d9e8b14/r/9d4b2e61-7a3c-4f18-a5d9-0e6c1b2f8a73?tab=relationships", "steps": [{ "wait": ".rel" }] },
+  "correction": { "hash": "#/d/b7e3c1d2-5a4f-4e8b-9c21-6f0a3d9e8b14/r/9d4b2e61-7a3c-4f18-a5d9-0e6c1b2f8a73/correct?path=task-nback_bold.json",
+    "steps": [{ "waitValue": "#c-text" }, { "replace": ["#c-text", "\"RepetitionTime\": 1.5", "\"RepetitionTime\": 1.8"] },
+      { "fill": ["#c-reason", "Protocol sheet for the n-back sequence gives TR = 1.8 s"] }, { "click": "form button[type=submit]" }, { "wait": ".change-row .after" }] },
+  "correction-blocked": { "hash": "#/d/b7e3c1d2-5a4f-4e8b-9c21-6f0a3d9e8b14/r/9d4b2e61-7a3c-4f18-a5d9-0e6c1b2f8a73/correct?path=task-nback_bold.json",
+    "steps": [{ "waitValue": "#c-text" }, { "replace": ["#c-text", "\"RepetitionTime\": 1.5", "\"RepetitionTime\": 0"] },
+      { "fill": ["#c-reason", "Testing a blocked candidate"] }, { "click": "form button[type=submit]" }, { "wait": ".seal.err" }] },
+  "query": { "hash": "#/d/b7e3c1d2-5a4f-4e8b-9c21-6f0a3d9e8b14/query?release=9d4b2e61-7a3c-4f18-a5d9-0e6c1b2f8a73",
+    "steps": [{ "wait": ".cond" }, { "fill": [".cond input[aria-label='Participant condition 1 value']", "25"] }, { "click": "form button[type=submit]" }, { "wait": "table.data tbody tr" }] },
+  "access": { "hash": "#/d/b7e3c1d2-5a4f-4e8b-9c21-6f0a3d9e8b14/access?release=9d4b2e61-7a3c-4f18-a5d9-0e6c1b2f8a73",
+    "steps": [{ "wait": "#g-recipient" }, { "fill": ["#g-recipient", "6c1d8e2a-4b7f-4a90-b3e5-1f2d7c9a0e64"] }, { "check": ".action:nth-child(2) input" },
+      { "click": "form button[type=submit]" }, { "wait": "table.data tbody tr" }] }
+}

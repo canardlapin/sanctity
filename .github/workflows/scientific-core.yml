@@ -5,6 +5,25 @@ on:
 permissions:
   contents: read
 jobs:
+  console:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      PLAYWRIGHT_BROWSERS_PATH: ${{ github.workspace }}/target/console-browsers
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci --prefix tests/console --ignore-scripts --no-audit --no-fund
+      - run: node tests/console/node_modules/playwright/cli.js install --with-deps chromium
+      - run: node tests/console/run.js
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: console-evidence
+          path: target/console-check.*/
+          if-no-files-found: error
   scientific-core:
     runs-on: ubuntu-24.04
     timeout-minutes: 45

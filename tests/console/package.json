@@ -1,0 +1,11 @@
+{
+  "name": "sanctity-console-checks",
+  "version": "1.0.0",
+  "private": true,
+  "type": "commonjs",
+  "description": "Recovered v4g browser regressions and differential v4f replay",
+  "dependencies": {
+    "axe-core": "4.10.2",
+    "playwright": "1.49.1"
+  }
+}

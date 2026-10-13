@@ -1,0 +1,8 @@
+6fbb2bc16a253a18346cdb104dc1c4f1bbc310d2
+ M modules/http/src/main/resources/sanctity/ui/app.css
+ M modules/http/src/main/resources/sanctity/ui/app.js
+ M modules/http/src/main/resources/sanctity/ui/demo.js
+fda41a14baa6e30c5666c5106870052dc3cca0196b4f82f3c630607b91fc34d5  /Users/bbuchsbaum/code/scala/sanctity/modules/http/src/main/resources/sanctity/ui/app.css
+298c38ec9013226f8411d1b857eed983816e2c40dedd83473c39d559d066ab7c  /Users/bbuchsbaum/code/scala/sanctity/modules/http/src/main/resources/sanctity/ui/app.js
+cc6ebcd860a7f77660acd105bc41c717c5d6b3457b4ffad307dd89f93ef81b1b  /Users/bbuchsbaum/code/scala/sanctity/modules/http/src/main/resources/sanctity/ui/demo.js
+3098e794d6a8fbb68b1dacc0b29481040579267ec75d36696de17e4c7f230cfa  /Users/bbuchsbaum/code/scala/sanctity/modules/http/src/main/resources/sanctity/ui/index.html
