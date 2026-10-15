@@ -1,8 +1,8 @@
 {
   "schema": "sanctity.console-adoption.v1",
-  "recordedAt": "2026-10-15T15:04:41.000Z",
-  "status": "pending_manual_accessibility",
-  "adopted": false,
+  "recordedAt": "2026-10-15T19:56:05.000Z",
+  "status": "adopted_with_limitation",
+  "adopted": true,
   "baseline": {
     "name": "v4g",
     "revision": "a1420b0edc6cad06af069ad63a71a9876ef4ac31"
@@ -19,12 +19,12 @@
       "result": "ConsoleSuite committed with backend; 414 tests and crash/retry/current-policy restore passed."
     },
     "CON-03": {
-      "status": "awaiting_human_result",
-      "result": "Native attempt recorded: macOS Accessibility and Screen Recording permissions unavailable; no usable VoiceOver control/output. Ten browser-walkthrough observations pass, including accepted concurrent-edit preservation; this does not close the screen-reader gate. The runbook now has seven tasks, adding an events-table correction (blocked row, paired row changes, phone reading order)."
+      "status": "deferred_by_product_decision",
+      "result": "Deferred on 15 October 2026 by the product owner until the first screen-reader user; not an adoption blocker. Automated axe/keyboard/focus checks remain in the console gate. The seven-task runbook and a hosted test page are ready for when it is run. Native attempt earlier: macOS Accessibility and Screen Recording permissions unavailable. Ten browser-walkthrough observations pass."
     },
     "CON-04": {
-      "status": "prepared_pending_CON-03",
-      "result": "This receipt binds the integrated code and automated evidence. Adoption remains false until the human result is recorded and blocking findings resolved."
+      "status": "complete",
+      "result": "Console adopted for sighted and keyboard use against the integrated revision and evidence below. Screen-reader use is unverified (CON-03 deferred)."
     },
     "CON-05": {
       "status": "complete",
@@ -81,9 +81,9 @@
   "sourceState": "browser/receipt.json binds the four console sources, identical to integratedBackendRevision. backend/receipt.json binds 153 production and harness files by SHA-256; it ran on that revision plus uncommitted backend work in the same tree (organization authority, policy witness, service module), so roughly 50 of those hashes name files not yet committed. Re-run scripts/check-console-backend.sh once that work is committed to bind the rehearsal to a clean revision.",
   "limits": [
     "The original browser regression gate uses demo transport. The additional headless rehearsal uses real authenticated HTTP/PostgreSQL and an imported invented fixture; it is not representative-data qualification.",
-    "No real screen-reader qualification or iOS/mobile screen-reader claim.",
     "CI configured; hosted execution has not run because these commits have not been pushed.",
-    "This receipt does not close G2, institutional identity, scientific or production pilot qualification."
+    "This receipt does not close G2, institutional identity, scientific or production pilot qualification.",
+    "Screen-reader (VoiceOver/iOS) use is unverified; CON-03 is deferred until a screen-reader user is expected."
   ],
   "deferred": [
     "correction column balance",
