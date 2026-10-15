@@ -57,6 +57,14 @@ const versionSpecificAssertions = {
   'fold-follows-viewport': 'v4g tests the CSS fold structure introduced after v4f',
   'head-keeps-draft': 'v4g expects the new “is restored” notice; v4f used “carried over”'
 };
+// Probes for behaviour added after v4g (table/gradient corrections, unconfirmed policy outcomes).
+// v4f never had these features, so their v4f outcomes are recorded but not required either way.
+const postV4gAssertions = [
+  'companion-correction-offered', 'table-tab-separator', 'table-width-refused', 'table-correction-accepted', 'table-blocked-row-marked',
+  'beh-correction-checked', 'gradient-correction-checked', 'table-carried-no-lost-update', 'table-preview-mobile',
+  'policy-unknown-revoke', 'policy-pending-grant'
+];
+const assertionCount = 59 + postV4gAssertions.length;
 const checks = {};
 checks.current = run('current', 'bash', [path.join(harness, 'checks/run.sh'), 'current']);
 checks.v4f = run('v4f', process.execPath, [path.join(harness, 'checks/behaviour.js'), 'v4f']);
@@ -65,10 +73,10 @@ checks.current.assertions = assertions(checks.current.text);
 checks.v4f.assertions = assertions(checks.v4f.text);
 const actualFailures = checks.v4f.assertions.filter(a => a.result === 'FAIL').map(a => a.name).sort();
 const extraFailures = actualFailures.filter(name => !expectedFailures.includes(name));
-const differentialPassed = checks.v4f.exitCode === 1 && checks.v4f.assertions.length === 59 &&
+const differentialPassed = checks.v4f.exitCode === 1 && checks.v4f.assertions.length === assertionCount &&
   expectedFailures.every(name => actualFailures.includes(name)) &&
-  extraFailures.every(name => Object.hasOwn(versionSpecificAssertions, name));
-const currentPassed = checks.current.exitCode === 0 && checks.current.assertions.length === 59 &&
+  extraFailures.every(name => Object.hasOwn(versionSpecificAssertions, name) || postV4gAssertions.includes(name));
+const currentPassed = checks.current.exitCode === 0 && checks.current.assertions.length === assertionCount &&
   checks.current.assertions.every(a => a.result === 'PASS') && /ui summary: 27\/27 PASS/.test(checks.current.text);
 for (const value of Object.values(checks)) delete value.text;
 (async () => {
@@ -82,7 +90,7 @@ for (const value of Object.values(checks)) delete value.text;
     browser: { engine: 'chromium', version: browserVersion },
     uiViewports: [{ width: 1440, height: 900, scheme: 'light' }, { width: 390, height: 900, scheme: 'light' }, { width: 1440, height: 900, scheme: 'dark' }],
     behaviourViewports: '1440x900 default; explicit 390x844 and resize cases in checks/behaviour.js',
-    checks, differential: { expectedFailures, actualFailures, versionSpecificAssertions, extraFailures, passed: differentialPassed },
+    checks, differential: { expectedFailures, actualFailures, versionSpecificAssertions, postV4gAssertions, extraFailures, passed: differentialPassed },
     passed: currentPassed && differentialPassed,
     limits: ['Synthetic demo transport; PostgreSQL contracts are qualified separately.', 'axe/keyboard/layout checks are not a real VoiceOver test.']
   };

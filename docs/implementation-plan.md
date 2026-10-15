@@ -85,6 +85,8 @@ These are regression obligations for the supported slice, linked to
 | Scientific explanations agree with the backend | Each grouped TR finding exposes both compared values for every file; row/column summaries remain readable. Subject-level inheritance reaches the run in the real backend. Label the admission policy and unused fieldmaps explicitly. | PROOF-02; PROOF-09; ConsoleSuite |
 | Correction path and intent survive the workflow | Preserve an edited new-sidecar path through preview; reject whitespace and paths beneath an existing file. | PROOF-09; `6fbb2bc` |
 | Responsive layout preserves the user's place | Resizing retains file-filter text, focus and active tree use. Tables, including content changes, stack at phone widths without duplicate screen-reader labels; grant actions follow form order. | AT-13; browser probes and manual VoiceOver |
+| Table and gradient corrections are reviewed as content | Events/behavioural TSV and DWI gradients appear in the correction selector and file inspector. The editor types tabs and keeps Escape-then-Tab exit; ragged rows and empty cells are refused before a request. The preview leads with a row-level change, marks rows named by blocking findings, and carries the same lost-update protection as sidecars. | Backend `correctCompanion`; browser probes; backend rehearsal `table-correction` |
+| Access outcomes are never overstated | `policy_pending` and `policy_outcome_unknown` grant/revoke responses say the change is unconfirmed, show the full operation id for an operator and advise against repeating it; a revocation is never reported as revoked or as not revoked. | ADR 004; browser probes |
 
 #### Adoption work and completion criteria
 

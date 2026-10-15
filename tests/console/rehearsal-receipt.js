@@ -12,7 +12,7 @@ const read = file => JSON.parse(fs.readFileSync(path.join(output, file), 'utf8')
 const sha = file => crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex');
 const browser = read('browser.json'), persistence = read('persistence.json');
 const expected = ['authentication', 'metadata-and-relationships', 'subject-sidecar', 'frozen-query',
-  'concurrent-correction', 'fixed-release-grant', 'revocation', 'transport'];
+  'concurrent-correction', 'table-correction', 'fixed-release-grant', 'revocation', 'transport'];
 assert(browser.passed && persistence.passed);
 assert.deepEqual(browser.results.map(r => r.name), expected);
 assert(browser.results.every(r => r.passed));

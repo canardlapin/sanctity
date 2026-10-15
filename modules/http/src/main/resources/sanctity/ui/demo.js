@@ -53,6 +53,8 @@
     const dir = i => [Math.cos(i * 0.7), Math.sin(i * 0.7) * Math.cos(i * 1.3), Math.sin(i * 0.7) * Math.sin(i * 1.3)];
     base[`${p}dwi/sub-${s}_dwi.bvec`] = [0, 1, 2].map(ax => Array.from({ length: 65 }, (_, i) => i % 13 === 0 ? '0' : dir(i)[ax].toFixed(6)).join(' ')).join('\n') + '\n';
     base[`${p}func/sub-${s}_task-nback_run-1_events.tsv`] = 'onset\tduration\ttrial_type\n' + eventOnsets(s).map((o, i) => `${o}\t2.0\t${['0back', '2back'][i % 2]}`).join('\n') + '\n';
+    if (s === '01' || s === '02') base[`${p}beh/sub-${s}_task-recall_beh.tsv`] = 'trial\tresponse\tresponse_time\n' +
+      Array.from({ length: 12 }, (_, i) => `${i + 1}\t${['old', 'new'][(i * 7 + +s) % 2]}\t${i === 5 ? 'n/a' : (0.62 + ((i * 37 + +s * 11) % 41) / 100).toFixed(3)}`).join('\n') + '\n';
     binaries[`${p}anat/sub-${s}_T1w.nii.gz`] = 15728640 + +s * 91233;
     binaries[`${p}func/sub-${s}_task-nback_run-1_bold.nii.gz`] = 187695104 + +s * 1021;
     binaries[`${p}func/sub-${s}_task-rest_bold.nii.gz`] = 154140672 + +s * 733;
@@ -97,7 +99,61 @@
     }
     return { path: p, fields, sources };
   }
-  // Codes, messages, rules and fact names follow the live reference-admission-v7 backend (observed 2026-10-12).
+  // Tables and gradients are read from the release texts, so a corrected document is re-assessed as the backend does.
+  // Messages follow bids4s CheckedTsv/CheckedEvents/DwiConsistency: message, then " row R column C".
+  const tsvRows = t => t.replace(/\r?\n$/, '').split(/\r?\n/).map(l => l.split('\t'));
+  const DECIMAL = /^-?(0|[1-9][0-9]*)(\.[0-9]+)?([eE][-+]?[0-9]+)?$/;
+  function readEvents(text, path) {
+    const issues = [], rows = [];
+    const err = (code, message, row, col) => issues.push(finding('Events' + code, 'Error', path, message + ' row ' + row + (col ? ' column ' + col : '')));
+    const [cols, ...body] = tsvRows(text);
+    ['onset', 'duration'].forEach((name, i) => { if (cols[i] !== name) err('Header', name + ' must be column ' + (i + 1), 1, i + 1); });
+    let missingOnset = 0, missingDuration = 0, previous = null;
+    body.forEach((cells, i) => {
+      const line = i + 2;
+      if (cells.length !== cols.length) err('Width', `row has ${cells.length} cells; expected ${cols.length}`, line);
+      cells.forEach((v, c) => { if (v === '') err('MissingValue', 'empty cell; use n/a for unavailable values', line, c + 1); });
+      const num = c => { const v = cells[c]; if (v == null || v === '' || v === 'n/a') return null;
+        if (!DECIMAL.test(v)) { err('Number', 'expected bounded decimal seconds or n/a', line, c + 1); return null; } return Number(v); };
+      const onset = cols[0] === 'onset' ? num(0) : null, duration = cols[1] === 'duration' ? num(1) : null;
+      if (onset == null) missingOnset++; if (duration == null) missingDuration++;
+      if (duration != null && duration < 0) err('Duration', 'duration must be nonnegative or n/a', line, 2);
+      if (onset != null && previous != null && previous > onset)
+        issues.push(finding('EventsOrder', 'Warning', path, 'known onsets are not sorted row ' + line + ' column 1'));
+      if (onset != null) { previous = onset; rows.push([onset, duration || 0, line]); }
+    });
+    return { issues, rows, columns: cols, missingOnset, missingDuration, valid: !issues.some(f => f.severity === 'Error') };
+  }
+  function readGradients(bvalText, bvecText, bval, bvec, volumes) {
+    const issues = [];
+    const values = (t, path, input) => (t || '').replace(/\n$/, '').split('\n').map((l, r) => l.trim().split(/\s+/).filter(Boolean).map((v, c) => {
+      if (!DECIMAL.test(v)) issues.push(finding('DwiNumber', 'Error', path, 'expected a finite decimal number row ' + (r + 1) + ' column ' + (c + 1)));
+      return Number(v); }));
+    const b = values(bvalText, bval).flat(), v = values(bvecText, bvec);
+    const vectors = v.length === 3 && v.every(r => r.length === v[0].length) ? v[0].length : 0;
+    if (!issues.length && b.length !== volumes) issues.push(finding('DwiBvalCount', 'Error', bval, `${b.length} b-values for ${volumes} image volumes`));
+    if (!issues.length && vectors !== volumes) issues.push(finding('DwiBvecCount', 'Error', bvec, `${vectors} vectors for ${volumes} image volumes`));
+    return { issues, bvalCount: b.length, bvecCount: vectors };
+  }
+  const BEH_RULE = 'sanctity-behavioural-v1+bids-quoted-tsv-v1+bids-events-content-v1+bids-stimuli-v1';
+  function readBehaviour(text, path) {
+    const issues = [];
+    const [cols, ...body] = tsvRows(text);
+    body.forEach((cells, i) => {
+      if (!issues.length && cells.length !== cols.length) issues.push(finding('BehaviouralTable', 'Error', path, `row width differs from header at row ${i + 2}, column 1`));
+      const e = cells.indexOf('');
+      if (!issues.length && e >= 0) issues.push(finding('BehaviouralTable', 'Error', path, `empty cell; use n/a at row ${i + 2}, column ${e + 1}`));
+    });
+    const rt = cols.indexOf('response_time');
+    if (!issues.length && rt >= 0) body.forEach((cells, i) => { if (cells[rt] !== 'n/a' && !DECIMAL.test(cells[rt]))
+      issues.push(finding('BehaviouralResponseTime', 'Error', path, `response_time must be a bounded decimal or n/a at row ${i + 2}`)); });
+    return { issues, facts: { recordingKind: 'behavioural', timingBasis: 'unavailable; no recording clock inferred',
+      ...(issues.some(f => f.code === 'BehaviouralTable') ? {} : { rowCount: body.length, columns: cols }) } };
+  }
+  const behavioural = texts => Object.keys(texts).some(k => /(^|\/)beh\/[^/]+_beh\.tsv$/.test(k));
+
+  // Codes, messages, rules and fact names follow the live reference-admission-v7 backend (observed 2026-10-12);
+  // behavioural checks follow repository-mri-behavioural-admission-v1.
   function interpret(texts) {
     const findings = [], checks = [], links = [];
     const files = [...Object.keys(texts), ...Object.keys(binaries)];
@@ -146,22 +202,30 @@
           facts: { ...header(img, dims, hdr), repetitionTimeAbsoluteTolerance: 1e-6, repetitionTimeRelativeTolerance: 1e-5, ...(t.meta ? { timingMetadata: t.meta } : {}) }, findings: fs });
         findings.push(...fs);
       }
-      // Event timing against the nominal acquisition window (volumeCount × RepetitionTime).
-      const t = timing(bold), rows = eventOnsets(s).map(o => [o, 2.0]);
-      const end = t.tr != null ? +(VOLUMES * t.tr).toFixed(6) : null;
-      const ef = end == null ? [] : rows.map(([o, d], i) => o + d > end ? finding('EventsOutsideWindow', 'Warning', events,
-        `event extends beyond the recorded comparison window ending at ${decimal(end)} s; review timing alignment row ${i + 2} column 1`) : null).filter(Boolean);
+      // Event timing against the nominal acquisition window (volumeCount × RepetitionTime); a table with errors is not compared.
+      const t = timing(bold), ev = readEvents(texts[events], events), rows = ev.rows;
+      const end = t.tr != null && ev.valid ? +(VOLUMES * t.tr).toFixed(6) : null;
+      const ef = end == null ? [] : rows.map(([o, d, line]) => o + d > end ? finding('EventsOutsideWindow', 'Warning', events,
+        `event extends beyond the recorded comparison window ending at ${decimal(end)} s; review timing alignment row ${line} column 1`) : null).filter(Boolean);
+      const onsets = rows.map(r => r[0]);
       checks.push({ rule: 'bids-events-content-v1+bids-events-timing-v1+nifti-header-observations-v2+sanctity-prefix-v1', target: bold,
         inputs: [input('events', events), input('image', bold), ...metaInputs(bold)],
-        facts: { columns: ['onset', 'duration', 'trial_type'], eventCount: rows.length, earliestOnsetSeconds: rows[0][0], latestOnsetSeconds: rows[rows.length - 1][0],
-          missingDurationCount: 0, missingOnsetCount: 0, headerOnly: true, timeOrigin: 'first stored volume; no discarded-volume offset applied', volumeCount: VOLUMES, volumeTimingOriginSeconds: 0,
+        facts: { columns: ev.columns, eventCount: rows.length + ev.missingOnset, ...(onsets.length ? { earliestOnsetSeconds: Math.min(...onsets), latestOnsetSeconds: Math.max(...onsets) } : {}),
+          missingDurationCount: ev.missingDuration, missingOnsetCount: ev.missingOnset, headerOnly: true, timeOrigin: 'first stored volume; no discarded-volume offset applied', volumeCount: VOLUMES, volumeTimingOriginSeconds: 0,
           ...(end != null ? { comparisonEndSeconds: end, endBasis: 'nominal volumeCount * RepetitionTime', lastVolumeOnsetSeconds: +((VOLUMES - 1) * t.tr).toFixed(6), timingMode: 'Regular', timingMetadata: t.meta } : {}) },
-        findings: ef });
-      findings.push(...ef);
+        findings: [...ev.issues, ...ef] });
+      findings.push(...ev.issues, ...ef);
+      const bval = stem(dwi) + '.bval', bvec = stem(dwi) + '.bvec', g = readGradients(texts[bval], texts[bvec], bval, bvec, 65);
       checks.push({ rule: 'bids-dwi-consistency-v1+nifti-header-observations-v2+sanctity-prefix-v1', target: dwi,
-        inputs: [input('bval', stem(dwi) + '.bval'), input('bvec', stem(dwi) + '.bvec'), input('image', dwi)],
-        facts: { ...header(dwi, [96, 96, 60, 65], null), bvalCount: 65, bvecCount: 65, gradientConvention: 'FSL image-axis components; no reorientation',
-          lowBMaximum: 50, unitNormTolerance: 0.01, volumeCount: 65, zeroNormTolerance: 1e-6 }, findings: [] });
+        inputs: [input('bval', bval), input('bvec', bvec), input('image', dwi)],
+        facts: { ...header(dwi, [96, 96, 60, 65], null), bvalCount: g.bvalCount, bvecCount: g.bvecCount, gradientConvention: 'FSL image-axis components; no reorientation',
+          lowBMaximum: 50, unitNormTolerance: 0.01, volumeCount: 65, zeroNormTolerance: 1e-6 }, findings: g.issues });
+      findings.push(...g.issues);
+    }
+    for (const bp of Object.keys(texts).filter(k => /(^|\/)beh\/[^/]+_beh\.tsv$/.test(k)).sort()) {
+      const b = readBehaviour(texts[bp], bp);
+      checks.push({ rule: BEH_RULE, target: bp, inputs: [input('table', bp)], facts: b.facts, findings: b.issues });
+      findings.push(...b.issues);
     }
     const entries = new Map();
     for (const f of files) {
@@ -175,14 +239,15 @@
   const identityOf = texts => {
     const manifest = hex('manifest:' + JSON.stringify(Object.entries(texts).sort()) + JSON.stringify(binaries));
     const interpretation = hex('interp:native-reference-v7:' + manifest);
-    return { manifest, interpretation, assessment: hex('assess:' + POLICY + interpretation) };
+    return { manifest, interpretation, assessment: hex('assess:' + policyOf(texts) + interpretation) };
   };
-  const assessment = (seed, i) => ({ id: hex('assess' + seed), policy: POLICY, admissible: i.admissible, findings: i.findings, checks: i.checks });
+  const policyOf = texts => behavioural(texts) ? 'repository-mri-behavioural-admission-v1' : POLICY;
+  const assessment = (seed, i, texts) => ({ id: hex('assess' + seed), policy: policyOf(texts), admissible: i.admissible, findings: i.findings, checks: i.checks });
   function releaseJson(id) {
     const r = releases.get(id), i = interpret(r.texts);
     const ident = r.identity || identityOf(r.texts);
     return { ref: { dataset: DS, release: id }, parent: r.parent, manifest: ident.manifest, interpretation: ident.interpretation,
-      profile: 'native-reference-v7', coverage: 'Context-selected bids4s names and JSON inheritance; basic description/timing checks. Explicit NIfTI B0 fieldmap groups and IntendedFor links. Inherited DWI gradients and BOLD event companions. Bounded MRI dimensions, units and TR/header comparison; discrepancies remain observations. No full BIDS conformance validation.', assessment: { ...assessment(id, i), id: ident.assessment }, acceptedAt: r.acceptedAt, entries: i.entries,
+      profile: behavioural(r.texts) ? 'native-mri-behavioural-v1' : 'native-reference-v7', coverage: 'Context-selected bids4s names and JSON inheritance; basic description/timing checks. Explicit NIfTI B0 fieldmap groups and IntendedFor links. Inherited DWI gradients and BOLD event companions. Bounded MRI dimensions, units and TR/header comparison; discrepancies remain observations. No full BIDS conformance validation.' + (behavioural(r.texts) ? ' Strict bounded behavioural tables, optional corresponding events and local stimuli; no behavioural clock qualification.' : ''), assessment: { ...assessment(id, i, r.texts), id: ident.assessment }, acceptedAt: r.acceptedAt, entries: i.entries,
       relationships: { version: 'bids-fieldmap-associations-v1+bids-mri-companions-v1+bids-phasediff-family-v1', evidenceVersion: 2, links: i.links } };
   }
 
@@ -213,7 +278,9 @@
           return crypto.subtle ? crypto.subtle.digest('SHA-256', bytes).then(d => done([...new Uint8Array(d)].map(x => x.toString(16).padStart(2, '0')).join(''))) : done(hex(p));
         }
         if (method === 'POST' && seg[5] === 'corrections') {
-          if (!b || typeof b.path !== 'string' || typeof b.text !== 'string' || typeof b.reason !== 'string' || !/^(?!\/)(?!.*(^|\/)\.\.?(\/|$))[^\u0000]+\.json$/.test(b.path) || b.path in binaries) return fail(400, 'invalid_request');
+          if (!b || typeof b.path !== 'string' || typeof b.text !== 'string' || typeof b.reason !== 'string' || !/^(?!\/)(?!.*(^|\/)\.\.?(\/|$))[^\u0000]+$/.test(b.path) || b.path in binaries) return fail(400, 'invalid_request');
+          const name = b.path.split('/').pop();
+          if (!/\.json$/.test(name) && !['dwi.bval', 'dwi.bvec', 'events.tsv', 'beh.tsv'].some(x => name === x || name.endsWith('_' + x))) return fail(400, 'invalid_request');
           const texts = { ...rel.texts, [b.path]: b.text.endsWith('\n') ? b.text : b.text + '\n' };
           const after = interpret(texts);
           const metadataChanges = [];
@@ -226,7 +293,7 @@
           }
           const id = uuid();
           const ident = identityOf(texts);
-          const cand = { id, dataset: DS, base: seg[4], generation: 0, manifest: ident.manifest, interpretation: ident.interpretation, assessment: { ...assessment(id, after), id: ident.assessment } };
+          const cand = { id, dataset: DS, base: seg[4], generation: 0, manifest: ident.manifest, interpretation: ident.interpretation, assessment: { ...assessment(id, after, texts), id: ident.assessment } };
           candidates.set(id, { cand, texts, base: seg[4] });
           const sz = t => utf8(t).length;
           return clone({ candidate: cand,

@@ -304,6 +304,22 @@ textarea.input { font-family: var(--mono); font-size: 13px; line-height: 1.55; m
 .linediff .del .op { text-decoration: none; }
 .linediff .flagged { background: var(--err-wash); color: var(--err); }
 .linediff .flagged .op { color: var(--err); font-weight: 700; }
+.input.tsv { tab-size: 12; white-space: pre; overflow-x: auto; }
+/* Table change: rows with their numbers, changed cells marked, unchanged runs collapsed */
+.tdiff { border-collapse: collapse; font: 12.5px/1.5 var(--mono); min-width: 100%; }
+.tdiff th, .tdiff td { padding: 3px 10px; text-align: left; white-space: nowrap; border-bottom: 1px solid var(--rule); }
+.tdiff thead th { font-weight: 600; color: var(--ink-2); background: var(--sunk); position: sticky; top: 0; }
+.tdiff .num { text-align: right; color: var(--muted); font-variant-numeric: tabular-nums; }
+.tdiff .op { width: 1.4em; padding-inline: 0; color: var(--muted); text-align: center; }
+.tdiff tr.add { background: var(--accent-wash); color: var(--ink); }
+.tdiff tr.add .op { color: var(--accent-ink); }
+.tdiff tr.del td:not(.op) { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--rule-strong); }
+.tdiff td.chg { font-weight: 700; box-shadow: inset 0 -2px 0 var(--accent); }
+.tdiff tr.del td.chg { box-shadow: none; }
+.tdiff tr.flagged { background: var(--err-wash); color: var(--err); }
+.tdiff tr.flagged .op { color: var(--err); font-weight: 700; }
+.tdiff tr.gap td { color: var(--muted); font: italic 12px/1.4 var(--sans); background: var(--sunk); text-align: center; }
+.tdiff .none { color: var(--muted); font-style: italic; }
 
 /* Findings */
 .findings { display: grid; gap: 8px; }
@@ -491,6 +507,8 @@ table.data.compact td, table.data.compact th { padding: 6px 10px; }
   .tree .item[aria-current="true"], .nav a[aria-current="page"], .lineage .node[aria-current="true"] { outline: 2px solid Highlight; }
   .tabs button[aria-selected="true"] { border-bottom-color: Highlight; }
   .segmented label:has(input:checked) { outline: 2px solid Highlight; }
+  .tdiff td.chg { text-decoration: underline; }
+  .tdiff tr.flagged { outline: 2px solid Mark; outline-offset: -2px; }
 }
 
 /* Live-data scale: grouped checks, folded facts, long path lists, folded tree on narrow screens */

@@ -207,6 +207,48 @@ const accept = async (page, status = 200) => {
     await capture(owner, 'conflict-accepted-390');
     check(stage, 'Two authenticated sessions produce a real 409. Reapplication preserves FlipAngle 60 and EchoTime 0.031; historical sidecars and frozen selection stay unchanged.');
 
+    stage = 'table-correction';
+    // Sub-01's events run past the 18 s window (12 volumes at 1.5 s): the real backend re-checks a corrected table.
+    const eventsPath = 'sub-01/func/sub-01_task-nback_run-1_events.tsv';
+    await owner.setViewportSize({ width: 1440, height: 900 });
+    await owner.goto(config.baseUrl + '/' + `#/d/${config.dataset}/r/${persisted.head}/correct?path=${encodeURIComponent(eventsPath)}`);
+    await until(async () => (await owner.locator('#c-text').inputValue()).startsWith('onset\t'), 'Editor did not load the real events table');
+    const table = await owner.locator('#c-text').inputValue();
+    const prepareTable = async (text, reason) => {
+      await owner.locator('#c-text').fill(text); await owner.locator('#c-reason').fill(reason);
+      const pending = owner.waitForResponse(r => r.request().method() === 'POST' && r.url().endsWith('/corrections'));
+      await owner.getByRole('button', { name: 'Prepare preview', exact: true }).press('Enter');
+      const response = await pending; assert.equal(response.status(), 201);
+      await owner.locator('[data-fk="accept"]').waitFor();
+      return response.json();
+    };
+    const blocked = await prepareTable(table.replace('\n6.0\t', '\nabc\t'), 'Probe: a malformed onset must block');
+    assert(!blocked.candidate.assessment.admissible);
+    assert(blocked.candidate.assessment.findings.some(f => f.code === 'EventsNumber' && f.path === eventsPath && /row 2 column 1/.test(f.message)));
+    assert.equal(await owner.locator('[data-fk="preview-head"]').innerText(), 'Table change');
+    assert.deepEqual(await owner.locator('.tdiff tr.flagged th').allInnerTexts(), ['2']);
+    assert(await owner.locator('[data-fk="accept"]').isDisabled());
+    await capture(owner, 'table-blocked-desktop');
+    await owner.getByRole('button', { name: 'Back to edit', exact: true }).press('Enter');
+    const fixedTable = table.replace('\n30.0\t', '\n14.0\t').replace('\n33.0\t', '\n16.0\t');
+    assert.notEqual(fixedTable, table);
+    const tablePreview = await prepareTable(fixedTable, 'Log sheet gives onsets 14 and 16 s for the last two trials');
+    assert(tablePreview.candidate.assessment.admissible);
+    assert(!tablePreview.candidate.assessment.findings.some(f => f.code === 'EventsOutsideWindow' && f.path === eventsPath));
+    assert.deepEqual(await owner.locator('.tdiff tbody tr:not(.gap) th').allInnerTexts(), ['4', '5', '5', '6', '6']);
+    assert.match(await owner.locator('.finding', { hasText: 'EventsOutsideWindow' }).first().innerText(), /resolved/i);
+    await capture(owner, 'table-preview-desktop');
+    const tableAccepted = await accept(owner);
+    assert.match(await owner.locator('.steps [aria-current="step"]').innerText(), /Accepted/);
+    persisted.head = tableAccepted.ref.release;
+    assert.equal(await (await read(ownerApi, releaseUrl(persisted.head) + '/file?path=' + encodeURIComponent(eventsPath))).text(), fixedTable);
+    assert(!(await json(ownerApi, releaseUrl(persisted.head))).assessment.findings.some(f => f.code === 'EventsOutsideWindow' && f.path === eventsPath));
+    assert.equal((await sidecar(ownerApi, persisted.head)).FlipAngle, 60);
+    await owner.getByRole('link', { name: 'Open new release', exact: true }).click();
+    await until(async () => decodeURIComponent(await owner.evaluate(() => location.hash)).includes(persisted.head + '?path=' + eventsPath), 'Open new release did not show the corrected table');
+    await owner.locator('.inspector-head').waitFor();
+    check(stage, 'A malformed onset is blocked with its row marked; corrected onsets clear the window warning, are accepted and become the head without disturbing the sidecar.');
+
     stage = 'fixed-release-grant';
     await owner.getByRole('navigation', { name: 'Workspace' }).getByRole('link', { name: 'Access', exact: true }).click();
     await owner.locator('#g-recipient').fill(config.recipient);

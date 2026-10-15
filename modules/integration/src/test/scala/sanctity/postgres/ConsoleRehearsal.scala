@@ -102,8 +102,8 @@ object ConsoleRehearsal extends IOApp.Simple:
       receipts <- sql"SELECT count(*) FROM acceptance_receipt WHERE dataset_id=$dataset".query[Long].unique.transact(f.database.transactor)
       selected <- sql"SELECT count(*) FROM frozen_selection WHERE id=$selection".query[Long].unique.transact(f.database.transactor)
       revoked <- sql"SELECT revoked_at IS NOT NULL FROM access_grant WHERE id=$grant AND dataset_id=$dataset".query[Boolean].unique.transact(f.database.transactor)
-      _ <- ensure(actualHead == head && releases == 4 && receipts == 4 && selected == 1 && revoked,
-        "Post-browser database state disagrees with the rehearsal: expected four releases/receipts, frozen selection and revoked grant")
+      _ <- ensure(actualHead == head && releases == 5 && receipts == 5 && selected == 1 && revoked,
+        "Post-browser database state disagrees with the rehearsal: expected five releases/receipts, frozen selection and revoked grant")
       result = Json.obj("passed" -> Json.True, "verifiedAfterBrowserAndServerClosed" -> Json.True,
         "head" -> Json.fromString(head.toString), "releases" -> Json.fromLong(releases),
         "acceptanceReceipts" -> Json.fromLong(receipts), "frozenSelections" -> Json.fromLong(selected),

@@ -17,7 +17,11 @@ dependencies, builds specimens from current UI sources and writes logs plus a
 source-hashed receipt under `target/console-check.*/`. The original
 [review evidence](evidence/console/recovery-manifest.json) remains unchanged.
 These checks use synthetic fixtures; the PostgreSQL runner separately executes
-ConsoleSuite against the real HTTP/backend contracts.
+ConsoleSuite against the real HTTP/backend contracts. Eleven later probes cover
+event, behavioural and DWI gradient corrections (row-level preview, blocked rows,
+tab entry, lost-update protection) and unconfirmed `policy_pending` /
+`policy_outcome_unknown` grant and revoke outcomes. The v4f build predates these
+features, so the receipt records their v4f outcomes without requiring them.
 
 Run `bash scripts/check-console-backend.sh` for the complete browser-to-backend
 rehearsal. It requires Docker, Node and the existing Java/sbt build prerequisites;
@@ -29,9 +33,10 @@ browser runner over stdin. The rehearsal uses normal API requests and production
 CSP, with no demo transport or request interception.
 
 The scenarios cover authentication errors, metadata/relationships, subject-level
-sidecar acceptance, a frozen age query, conflicting edits by two principals,
-fixed-release sharing and revocation. After the browser and HTTP server close,
-independent SQL checks verify the dataset head, four releases and acceptance
+sidecar acceptance, a frozen age query, conflicting edits by two principals, a
+blocked and then accepted events-table correction, fixed-release sharing and
+revocation. After the browser and HTTP server close,
+independent SQL checks verify the dataset head, five releases and acceptance
 receipts, frozen selection and revoked grant. Screenshots, redacted logs, source
 hashes and results go under `target/console-backend.*/`. The test schema, temporary
 storage and container are removed when the run ends. CI runs this as the separate

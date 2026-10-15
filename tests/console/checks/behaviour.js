@@ -378,6 +378,143 @@ const DS = 'b7e3c1d2-5a4f-4e8b-9c21-6f0a3d9e8b14', R3 = '9d4b2e61-7a3c-4f18-a5d9
       await p.setViewportSize({ width: 390, height: 844 }); await p.waitForTimeout(300); await p.setViewportSize({ width: 1440, height: 900 }); await p.waitForTimeout(300);
       const st = await p.evaluate(() => ({ focus: document.activeElement.id, value: document.querySelector('#tree-filter').value }));
       result('resize-keeps-focus', st.focus === 'tree-filter' && st.value === 'nback', JSON.stringify(st)); await ctx.close(); }
+
+    // Post-v4g: the backend corrects event/behavioural tables and DWI gradients, and access changes can end
+    // with an unconfirmed policy outcome. Each probe records exactly one result, even when an older build throws.
+    const guarded = async (name, body) => {
+      const opened = [];
+      const o = async (...a) => { const r = await open(...a); opened.push(r[0]); return r; };
+      let recorded = false;
+      const done = (ok, detail) => { recorded = true; result(name, ok, detail); };
+      try { await body(o, done); } catch (e) { if (!recorded) done(false, 'threw: ' + String(e.message).split('\n')[0].slice(0, 120)); }
+      finally { for (const c of opened) await c.close().catch(() => {}); }
+      if (!recorded) result(name, false, 'no result');
+    };
+    const EV3 = 'sub-03/func/sub-03_task-nback_run-1_events.tsv', BEH = 'sub-01/beh/sub-01_task-recall_beh.tsv', BVAL = 'sub-02/dwi/sub-02_dwi.bval';
+    const correctAt = (r, file) => `#/d/${DS}/r/${r}/correct?path=${encodeURIComponent(file)}`;
+    const loaded = p => p.waitForFunction(() => document.querySelector('#c-text') && document.querySelector('#c-text').value, null, { timeout: 5000 });
+    // Rewrite file lines (1-based, header = row 1) in the editor, as a curator would.
+    const editRows = async (p, edits) => {
+      const lines = (await p.inputValue('#c-text')).split('\n');
+      for (const [row, f] of Object.entries(edits)) lines[row - 1] = f(lines[row - 1]);
+      await p.fill('#c-text', lines.join('\n'));
+    };
+    const prepare = async (p, reason = 'probe') => {
+      await p.fill('#c-reason', reason); await p.click('form button[type=submit]');
+      await p.waitForSelector('[data-fk="preview-head"]', { timeout: 5000 });
+    };
+    // 51. Tables and gradients are offered for correction, grouped by kind.
+    await guarded('companion-correction-offered', async (o, done) => {
+      const [, p] = await o(`#/d/${DS}/r/${R3}?path=${encodeURIComponent(EV3)}`);
+      await p.waitForSelector('.inspector-head', { timeout: 5000 });
+      const link = await p.locator('.inspector-head a', { hasText: 'Correct' }).count();
+      await p.click('.inspector-head a:has-text("Correct")'); await loaded(p);
+      const st = await p.evaluate(() => ({ groups: [...document.querySelectorAll('#c-path optgroup')].map(g => g.label), selected: document.querySelector('#c-path').value }));
+      done(link === 1 && st.selected.endsWith('_events.tsv') && ['Sidecars', 'Event and behavioural tables', 'DWI gradients'].every(g => st.groups.includes(g)), JSON.stringify({ link, ...st }));
+    });
+    // 52. In a table, Tab types a column separator; Escape then Tab leaves (no keyboard trap).
+    await guarded('table-tab-separator', async (o, done) => {
+      const [, p] = await o(correctAt(R3, EV3)); await loaded(p);
+      await p.focus('#c-text'); await p.evaluate(() => { const t = document.querySelector('#c-text'); t.setSelectionRange(t.value.length, t.value.length); }); await p.keyboard.type('412.0'); await p.keyboard.press('Tab');
+      const typed = await p.evaluate(() => ({ tail: document.querySelector('#c-text').value.slice(-6), focus: document.activeElement.id }));
+      await p.keyboard.press('Escape'); await p.keyboard.press('Tab');
+      const left = await p.evaluate(() => document.activeElement.id);
+      done(typed.tail === '412.0\t' && typed.focus === 'c-text' && left !== 'c-text', JSON.stringify({ ...typed, left }));
+    });
+    // 53. A row whose columns were separated by spaces is refused before any request, naming the row.
+    await guarded('table-width-refused', async (o, done) => {
+      const [, p] = await o(correctAt(R3, EV3)); await loaded(p);
+      let posts = 0; await p.exposeFunction('__post', () => { posts++; });
+      await p.evaluate(() => { const d = window.SanctityDemo, r = d.request; d.request = (m, u, x) => { if (m === 'POST') window.__post(); return r(m, u, x); }; });
+      await editRows(p, { 7: l => l.replace(/\t/g, '   ') });
+      await p.fill('#c-reason', 'probe'); await p.click('form button[type=submit]'); await p.waitForTimeout(300);
+      const st = await p.evaluate(() => ({ msg: (document.querySelector('#c-errors') || {}).textContent, inv: document.querySelector('#c-text').getAttribute('aria-invalid') }));
+      done(/Row 7 has 1 column/.test(st.msg) && st.inv === 'true' && posts === 0, JSON.stringify({ ...st, posts }).slice(0, 160));
+    });
+    // 54. A table correction leads with its rows, resolves the timing warning, and advances through acceptance.
+    await guarded('table-correction-accepted', async (o, done) => {
+      const [, p] = await o(correctAt(R3, EV3)); await loaded(p);
+      await editRows(p, { 50: l => l.replace('405.75', '399.0'), 51: l => l.replace('406.5', '400.0') });
+      await prepare(p, 'probe: log sheet gives the last two onsets');
+      const st = await p.evaluate(() => {
+        const first = document.querySelector('.split > .stack h2'), focus = document.activeElement;
+        const rows = [...document.querySelectorAll('.tdiff tbody tr:not(.gap)')].map(r => r.querySelector('th').textContent);
+        const tag = (() => { const f = [...document.querySelectorAll('.finding')].find(x => /EventsOutsideWindow/.test(x.textContent) && /sub-03/.test(x.textContent)); return f ? (f.querySelector('.tag.delta') || {}).textContent : 'absent'; })();
+        return { first: first && first.textContent, focused: focus && focus.dataset.fk, rows, chg: document.querySelectorAll('.tdiff td.chg').length,
+          gap: !!document.querySelector('.tdiff tr.gap'), meta: /Effective metadata changes/.test(document.querySelector('main').textContent), tag,
+          accept: !document.querySelector('[data-fk="accept"]').disabled };
+      });
+      await p.click('[data-fk="accept"]'); await p.waitForSelector('[data-fk="receipt-head"]', { timeout: 5000 }); await p.waitForTimeout(400);
+      const end = await p.evaluate(() => ({ matches: (document.querySelector('main').textContent.match(/Matches preview/g) || []).length, step: (document.querySelector('.steps [aria-current="step"]') || {}).textContent }));
+      done(st.first === 'Table change' && st.focused === 'preview-head' && st.rows.join() === '49,50,50,51,51' && st.chg === 4 && st.gap && !st.meta && /resolved/i.test(st.tag) && st.accept && end.matches >= 3 && /Accepted/.test(end.step),
+        JSON.stringify({ ...st, ...end }));
+    });
+    // 55. A blocking table error names its row, and the row is marked in the change.
+    await guarded('table-blocked-row-marked', async (o, done) => {
+      const [, p] = await o(correctAt(R3, EV3)); await loaded(p);
+      await editRows(p, { 10: l => l.replace(/^[^\t]+/, 'abc') }); await prepare(p);
+      const st = await p.evaluate(() => ({ seal: (document.querySelector('.seal') || {}).textContent, flagged: [...document.querySelectorAll('.tdiff tr.flagged th')].map(e => e.textContent),
+        sr: (document.querySelector('.tdiff tr.flagged .sr-only') || {}).textContent, first: (document.querySelector('.decision .finding .code') || {}).textContent,
+        accept: document.querySelector('[data-fk="accept"]').disabled, hint: /Edit the table/.test(document.querySelector('.decision').textContent) }));
+      done(/Not admissible/.test(st.seal) && st.flagged.join() === '10' && /blocked by a finding/.test(st.sr) && /EventsNumber/.test(st.first) && st.accept && st.hint, JSON.stringify(st));
+    });
+    // 56. A behavioural table's response times are re-checked.
+    await guarded('beh-correction-checked', async (o, done) => {
+      const [, p] = await o(correctAt(R3, BEH)); await loaded(p);
+      await editRows(p, { 3: l => l.replace(/[^\t]+$/, 'fast') }); await prepare(p);
+      const st = await p.evaluate(() => ({ first: (document.querySelector('.decision .finding .code') || {}).textContent, flagged: [...document.querySelectorAll('.tdiff tr.flagged th')].map(e => e.textContent) }));
+      done(/BehaviouralResponseTime/.test(st.first) && st.flagged.join() === '3', JSON.stringify(st));
+    });
+    // 57. A gradient correction is shown as a gradient change and its count is re-checked.
+    await guarded('gradient-correction-checked', async (o, done) => {
+      const [, p] = await o(correctAt(R3, BVAL)); await loaded(p);
+      await p.fill('#c-text', (await p.inputValue('#c-text')).replace(/ 1000\n$/, '\n')); await prepare(p);
+      const st = await p.evaluate(() => ({ head: (document.querySelector('[data-fk="preview-head"]') || {}).textContent, first: (document.querySelector('.decision .finding .code') || {}).textContent,
+        msg: (document.querySelector('.decision .finding .msg') || {}).textContent }));
+      done(st.head === 'Gradient change' && /DwiBvalCount/.test(st.first) && /64 b-values for 65/.test(st.msg), JSON.stringify(st));
+    });
+    // 58. A carried table edit never reverts a row a colleague changed meanwhile (lost update).
+    await guarded('table-carried-no-lost-update', async (o, done) => {
+      const [, p] = await o(correctAt(R3, EV3)); await loaded(p);
+      await editRows(p, { 51: l => l.replace('406.5', '400.0') });
+      await p.evaluate(async ([ds, r, f]) => { const api = window.SanctityDemo.request;
+        const t = await api('GET', `/v1/datasets/${ds}/releases/${r}/file?path=${encodeURIComponent(f)}`, { raw: true }).then(x => x.text());
+        const pv = await api('POST', `/v1/datasets/${ds}/releases/${r}/corrections`, { body: JSON.stringify({ path: f, text: t.replace('405.75', '399.0'), reason: 'colleague' }) });
+        await api('POST', `/v1/candidates/${pv.candidate.id}/accept`, { headers: { 'Idempotency-Key': 'colleague-table' } }); }, [DS, R3, EV3]);
+      await prepare(p); await p.click('[data-fk="accept"]');
+      await p.click('a:has-text("Correct the current head")', { timeout: 5000 }); await p.waitForTimeout(800);
+      const st = await p.evaluate(() => ({ text: document.querySelector('#c-text').value, note: /changed after your edit/.test(document.body.innerText), earlier: !!document.querySelector('details.draft-diff') }));
+      done(/\n399\.0\t/.test(st.text) && /\n406\.5\t/.test(st.text) && st.note && st.earlier, JSON.stringify({ note: st.note, earlier: st.earlier, colleague: /\n399\.0\t/.test(st.text), mine: /\n400\.0\t/.test(st.text) }));
+    });
+    // 59. At 390 a table change scrolls inside its card, never the page.
+    await guarded('table-preview-mobile', async (o, done) => {
+      const [, p] = await o(correctAt(R3, EV3), { width: 390, height: 844 }); await loaded(p);
+      await editRows(p, { 50: l => l.replace('405.75', '399.0') }); await prepare(p);
+      const st = await p.evaluate(() => ({ overflow: document.documentElement.scrollWidth - innerWidth, table: !!document.querySelector('.tdiff') }));
+      done(st.table && st.overflow === 0, JSON.stringify(st));
+    });
+    // 60. A revocation with an unknown policy outcome is never reported as "not revoked" or as revoked.
+    const OP = '4f6c2a1e-8b3d-4e7a-9c05-2d1e7f9a3b68';
+    await guarded('policy-unknown-revoke', async (o, done) => {
+      const [, p] = await o(`#/d/${DS}/access?release=${R3}`);
+      await p.fill('#g-recipient', '6c1d8e2a-4b7f-4a90-b3e5-1f2d7c9a0e64'); await p.click('form button[type=submit]');
+      await p.waitForSelector('table.data tbody tr button.danger', { timeout: 5000 });
+      await p.evaluate(op => { const d = window.SanctityDemo, r = d.request; d.request = (m, u, x) => m === 'DELETE' ? Promise.reject({ status: 503, code: 'policy_outcome_unknown:' + op }) : r(m, u, x); }, OP);
+      await p.locator('table.data tbody tr button.danger').first().click(); await p.waitForTimeout(300);
+      await p.locator('button.confirm').first().click(); await p.waitForTimeout(500);
+      const st = await p.evaluate(() => { const row = document.querySelector('table.data tbody tr');
+        return { alert: (document.querySelector('main [role=alert]') || {}).textContent || '', table: row ? row.innerText.replace(/\s+/g, ' ') : 'none',
+          open: !!(row && row.querySelector('button.danger')) && !/Revoked/.test(row.textContent) }; });
+      done(/revocation not confirmed/.test(st.alert) && !/was not revoked/.test(st.alert) && st.alert.includes(OP) && /Outcome unknown/.test(st.alert) && st.open, JSON.stringify({ ...st, alert: st.alert.slice(0, 90) }));
+    });
+    // 61. A grant whose policy acknowledgement is pending says so, names the operation, and lists no grant.
+    await guarded('policy-pending-grant', async (o, done) => {
+      const [, p] = await o(`#/d/${DS}/access?release=${R3}`);
+      await p.evaluate(op => { const d = window.SanctityDemo, r = d.request; d.request = (m, u, x) => m === 'POST' && /grants$/.test(u) ? Promise.reject({ status: 503, code: 'policy_pending:' + op }) : r(m, u, x); }, OP);
+      await p.fill('#g-recipient', '6c1d8e2a-4b7f-4a90-b3e5-1f2d7c9a0e64'); await p.click('form button[type=submit]'); await p.waitForTimeout(500);
+      const st = await p.evaluate(() => ({ alert: (document.querySelector('main [role=alert]') || {}).textContent || '', rows: document.querySelectorAll('table.data tbody tr').length }));
+      done(/Not confirmed/.test(st.alert) && st.alert.includes(OP) && /Do not repeat/.test(st.alert) && st.rows === 0, JSON.stringify({ ...st, alert: st.alert.slice(0, 120) }));
+    });
   } finally { await b.close(); }
   console.log(`behaviour failures: ${bad}`);
   process.exitCode = bad ? 1 : 0;

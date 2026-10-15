@@ -41,6 +41,9 @@
     return m[1] === 'nii.gz' ? 'nii' : m[1];
   };
   const TEXT_KINDS = new Set(['json', 'tsv', 'bval', 'bvec', 'txt']);
+  // Documents a correction can replace: JSON sidecars, and the event/behavioural tables and DWI gradients the backend re-assesses.
+  const docKind = p => /\.json$/.test(p) ? 'json' : /(^|[/_])(events|beh)\.tsv$/.test(p) ? 'table' : /(^|[/_])dwi\.(bval|bvec)$/.test(p) ? 'gradients' : null;
+  const DOC = { json: ['sidecar', 'Sidecar change', 'Sidecars'], table: ['table', 'Table change', 'Event and behavioural tables'], gradients: ['gradient file', 'Gradient change', 'DWI gradients'] };
   const stem = p => p.replace(/\.(nii\.gz|nii|json|tsv|bval|bvec)$/, '');
   const uuid = () => (crypto.randomUUID ? crypto.randomUUID() : 'k-' + Date.now() + '-' + Math.random().toString(16).slice(2));
   const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -113,8 +116,17 @@
   class ApiError extends Error {
     constructor(status, code) { super(code); this.status = status; this.code = code; }
   }
+  const policyProblem = e => {
+    const m = e instanceof ApiError && /^policy_(pending|outcome_unknown):(.+)$/.exec(e.code);
+    return m ? { pending: m[1] === 'pending', op: m[2] } : null;
+  };
   const explain = e => {
     if (!(e instanceof ApiError)) return 'The repository could not be reached. Check that the Sanctity API is running.';
+    // The operation id may name an earlier access change still awaiting acknowledgement, not this one.
+    const policy = policyProblem(e);
+    if (policy) return policy.pending
+      ? 'Not confirmed. An access change is recorded but its independent policy acknowledgement is pending (operation ' + policy.op + '). It may be this change or an earlier one. Do not repeat it; ask an operator to resolve that operation, then check access.'
+      : 'Outcome unknown. The repository cannot tell whether this access change took effect (operation ' + policy.op + '). Do not repeat it or assume it was rolled back; ask an operator to resolve that operation first.';
     return ({
       unauthorized: 'This credential was not accepted. It may be revoked or mistyped.',
       not_found: 'Not found, or not visible to this credential. Sanctity does not distinguish the two.',
@@ -517,7 +529,7 @@
       h('div', { class: 'stack s6 grow' }, h('span', { class: 'eyebrow' }, entry ? [k ? k.toUpperCase() + ' · ' : '', h('span', { class: 'nocaps' }, bytes(entry.size))] : 'Not in this release'),
         h('h2', { class: 'path' }, pathText(p)), status),
       h('div', { class: 'row nowrap' },
-        (k === 'json' || /_(beh|events)\.tsv$/.test(p)) ? h('a', { class: 'btn sm', href: '#/d/' + enc(d) + '/r/' + enc(r) + '/correct?path=' + enc(p) }, I.edit(), 'Correct') : null,
+        docKind(p) ? h('a', { class: 'btn sm', href: '#/d/' + enc(d) + '/r/' + enc(r) + '/correct?path=' + enc(p) }, I.edit(), 'Correct') : null,
         k === 'nii' && entry && !rel.entries.some(e => e.path === stem(p) + '.json') ? h('a', { class: 'btn sm', href: '#/d/' + enc(d) + '/r/' + enc(r) + '/correct?path=' + enc(stem(p) + '.json'),
           title: 'Add ' + stem(p).split('/').pop() + '.json to override inherited values for this image' }, I.plus(), 'Add sidecar') : null,
         entry ? h('button', { class: 'btn sm', type: 'button', onclick: download }, I.down(), 'Download') : null)));
@@ -733,7 +745,7 @@
     if (my !== generation) return;
     c.stale = !!headId && headId !== r && !c.receipt;
     c.headId = headId;
-    const sidecars = rel.entries.filter(e => e.kind === 'file' && (e.path.endsWith('.json') || /_(beh|events)\.tsv$/.test(e.path))).map(e => e.path);
+    const sidecars = rel.entries.filter(e => e.kind === 'file' && docKind(e.path)).map(e => e.path);
     const files = rel.entries.filter(e => e.kind === 'file').map(e => e.path);
     // A requested path that is not in the release is a new sidecar.
     if (c.path && !c.preview && !c.receipt && !files.includes(c.path)) { c.newMode = true; c.newPath = c.path; }
@@ -765,8 +777,30 @@
     if (under) return under + ' is a file, so it cannot contain other files.';
     return null;
   };
+  // The two TSV rules every table check applies first; the preview reports the rest with row numbers.
+  const tableProblem = t => {
+    if (!t.trim()) return 'Provide the complete replacement table, starting with its header row.';
+    const rows = t.replace(/\r?\n$/, '').split(/\r?\n/).map(l => l.split('\t')), width = rows[0].length;
+    for (let i = 1; i < rows.length; i++) {
+      if (rows[i].length !== width) return 'Row ' + (i + 1) + ' has ' + rows[i].length + (rows[i].length === 1 ? ' column' : ' columns') + '; the header has ' + width + '. Separate columns with tabs, not spaces.';
+      const empty = rows[i].indexOf('');
+      if (empty >= 0) return 'Row ' + (i + 1) + ', column ' + (empty + 1) + ' (' + rows[0][empty] + ') is empty. Write n/a for a missing value.';
+    }
+    return null;
+  };
   async function editCard(d, r, c, sidecars, files) {
     let text, reason, err, submitBtn, newPath;
+    const kind = c.newMode ? 'json' : docKind(c.path);
+    // In a table, Tab types the column separator. Escape then Tab leaves, so the editor never traps keyboard focus.
+    let leaving = false;
+    const tableKeys = ev => {
+      if (kind !== 'table') return;
+      if (ev.key === 'Escape') { leaving = true; return; }
+      const plain = ev.key === 'Tab' && !ev.shiftKey && !ev.altKey && !ev.ctrlKey && !ev.metaKey;
+      if (!plain || leaving) { leaving = false; return; }
+      ev.preventDefault(); text.setRangeText('\t', text.selectionStart, text.selectionEnd, 'end');
+      c.text = text.value; text.removeAttribute('aria-invalid');
+    };
     const draftNote = h('div', { class: 'stack s8' });
     // A carried edit is restored only onto the content it was written against; otherwise it would silently revert
     // whatever changed in between (a lost update). Then the editor shows the current file and the earlier edit as a diff.
@@ -802,9 +836,13 @@
       const problems = [], invalid = new Set();
       const pathProblem = c.newMode ? sidecarPathProblem(c.path, files) : !c.path ? 'Choose the document to correct.' : null;
       if (pathProblem) { problems.push(pathProblem); if (c.newMode) invalid.add(newPath); }
-      if (c.path.endsWith('.json')) {
+      const kind = docKind(c.path);
+      if (kind === 'json' || c.newMode) {
         try { JSON.parse(c.text); } catch (x) { problems.push('The ' + (c.newMode ? 'content' : 'replacement') + ' is not valid JSON: ' + x.message); invalid.add(text); }
-      } else if (!c.text.trim()) { problems.push('Provide the complete replacement table.'); invalid.add(text); }
+      } else {
+        const p = kind === 'table' ? tableProblem(c.text) : !c.text.trim() ? 'Provide the complete replacement values.' : null;
+        if (p) { problems.push(p); invalid.add(text); }
+      }
       if (!c.reason) { problems.push('Give a reason. It is recorded with the candidate.'); invalid.add(reason); }
       if (c.reason.length > 2000) { problems.push('Keep the reason to 2000 characters or fewer.'); invalid.add(reason); }
       if (!c.newMode && c.original != null && c.text === c.original) { problems.push('The content is unchanged.'); invalid.add(text); }
@@ -831,15 +869,21 @@
             c.newMode = v === NEW_SIDECAR; c.path = c.newMode ? (c.newPath || '') : v; c.text = (c.drafts || {})[v] || ''; c.original = null; focusKey = c.newMode ? 'c-new' : 'c-path';
             go('#/d/' + enc(d) + '/r/' + enc(r) + '/correct' + (c.path ? '?path=' + enc(c.path) : ''), true);
           } },
-            h('option', { value: '' }, 'Choose a JSON or table file…'), sidecars.map(s => h('option', { value: s, selected: !c.newMode && s === c.path }, s)),
+            h('option', { value: '' }, 'Choose a document…'),
+            Object.keys(DOC).map(k => { const of = sidecars.filter(s => docKind(s) === k);
+              return of.length ? h('optgroup', { label: DOC[k][2] }, of.map(s => h('option', { value: s, selected: !c.newMode && s === c.path }, s))) : null; }),
             h('option', { value: NEW_SIDECAR, selected: !!c.newMode }, 'New sidecar…'))),
         c.newMode ? h('div', { class: 'field' }, h('label', { for: 'c-new' }, 'New sidecar path'),
           newPath = h('input', { class: 'input mono', id: 'c-new', fk: 'c-new', value: c.newPath || '', autocomplete: 'off', spellcheck: 'false', placeholder: 'sub-02/func/sub-02_task-nback_run-1_bold.json', 'aria-describedby': 'c-new-hint c-errors',
             oninput: () => { c.newPath = newPath.value; newPath.removeAttribute('aria-invalid'); } }),
           h('span', { class: 'hint', id: 'c-new-hint' }, 'BIDS inheritance applies it to the files it matches, after any dataset- or task-level sidecar.')) : null,
         h('div', { class: 'field' }, h('label', { for: 'c-text' }, c.newMode ? 'Content' : 'Complete replacement content'),
-          text = h('textarea', { class: 'input', id: 'c-text', fk: 'c-text', spellcheck: 'false', rows: 12, placeholder: c.newMode ? '{ "RepetitionTime": 2.0 }' : null, 'aria-describedby': 'c-text-hint c-errors', oninput: () => { c.text = text.value; text.removeAttribute('aria-invalid'); } }),
-          h('span', { class: 'hint', id: 'c-text-hint' }, c.newMode ? 'Only the fields you set here override inherited values.' : 'The file is replaced as a whole. Values inherited by other files are recomputed in the preview.')),
+          text = h('textarea', { class: 'input' + (kind === 'table' ? ' tsv' : ''), id: 'c-text', fk: 'c-text', spellcheck: 'false', rows: 12, wrap: kind === 'json' ? null : 'off', placeholder: c.newMode ? '{ "RepetitionTime": 2.0 }' : null, 'aria-describedby': 'c-text-hint c-errors',
+            oninput: () => { c.text = text.value; text.removeAttribute('aria-invalid'); }, onkeydown: tableKeys }),
+          h('span', { class: 'hint', id: 'c-text-hint' }, c.newMode ? 'Only the fields you set here override inherited values.'
+            : kind === 'table' ? 'The table is replaced as a whole. Tab inserts a column separator; press Escape, then Tab, to leave the editor. Write n/a for a missing value.'
+            : kind === 'gradients' ? 'The file is replaced as a whole. Separate values with spaces; gradient checks are re-run in the preview.'
+            : 'The file is replaced as a whole. Values inherited by other files are recomputed in the preview.')),
         h('div', { class: 'field' }, h('label', { for: 'c-reason' }, 'Reason'),
           reason = h('input', { class: 'input', id: 'c-reason', maxlength: '2000', value: c.reason, placeholder: 'e.g. Protocol sheet gives TR = 1.8 s', 'aria-describedby': 'c-errors', oninput: () => { c.reason = reason.value; reason.removeAttribute('aria-invalid'); } })),
         draftNote,
@@ -850,7 +894,8 @@
       h('aside', { class: 'stack s14 explainer' },
         h('h2', { class: 'overline' }, 'What happens next'),
         h('ol', { class: 'numbered' },
-          ['Sanctity prepares a candidate from this release plus your edit.', 'It re-resolves metadata inheritance and acquisition relationships, then re-runs admission checks.',
+          ['Sanctity prepares a candidate from this release plus your edit.', kind === 'json' || !kind ? 'It re-resolves metadata inheritance and acquisition relationships, then re-runs admission checks.'
+            : 'It re-reads the ' + DOC[kind][0] + ' and re-runs the checks that use it, then the other admission checks.',
            'You review every changed value and finding before anything is accepted.', 'Acceptance is atomic and safe to retry. This release never changes.']
             .map(t => h('li', {}, t)))));
     if (c.newMode) { c.original = ''; restoreDraft(''); text.value = c.text || ''; }
@@ -858,20 +903,63 @@
     return card;
   }
 
-  // Minimal line diff (LCS) for small sidecars.
+  // Minimal line diff (LCS). Common leading and trailing lines are matched first, so an edit to a long table stays cheap.
   function lineDiff(a, b) {
     const lines = t => t === '' ? [] : t.replace(/\n$/, '').split('\n');
-    const x = lines(a), y = lines(b);
+    const xs = lines(a), ys = lines(b);
+    let lead = 0, tail = 0;
+    while (lead < xs.length && lead < ys.length && xs[lead] === ys[lead]) lead++;
+    while (tail < xs.length - lead && tail < ys.length - lead && xs[xs.length - 1 - tail] === ys[ys.length - 1 - tail]) tail++;
+    const x = xs.slice(lead, xs.length - tail), y = ys.slice(lead, ys.length - tail);
     if (x.length * y.length > 250000) return null;
     const m = x.length, n = y.length, t = Array.from({ length: m + 1 }, () => new Uint16Array(n + 1));
     for (let i = m - 1; i >= 0; i--) for (let j = n - 1; j >= 0; j--) t[i][j] = x[i] === y[j] ? t[i + 1][j + 1] + 1 : Math.max(t[i + 1][j], t[i][j + 1]);
-    const out = []; let i = 0, j = 0;
+    const out = xs.slice(0, lead).map(l => [' ', l]); let i = 0, j = 0;
     while (i < m || j < n) {
       if (i < m && j < n && x[i] === y[j]) { out.push([' ', x[i]]); i++; j++; }
       else if (i < m && (j === n || t[i + 1][j] >= t[i][j + 1])) out.push(['-', x[i++]]);
       else out.push(['+', y[j++]]);
     }
-    return out;
+    return out.concat(xs.slice(xs.length - tail).map(l => [' ', l]));
+  }
+
+  // A table's line diff as rows: the header stays on top, changed cells are marked, and long unchanged runs collapse.
+  function tableDiff(path, text, diff, badRows) {
+    const cells = l => l.split('\t');
+    let o = 0, n = 0;
+    const numbered = diff.map(([op, line]) => { if (op !== '+') o++; if (op !== '-') n++; return { op, line, row: op === '-' ? o : n }; });
+    // Pair each removed run with the added run after it, and show each pair together: was, then changed to.
+    const rows = [];
+    for (let k = 0; k < numbered.length;) {
+      if (numbered[k].op !== '-') { rows.push(numbered[k++]); continue; }
+      let a = k; while (a < numbered.length && numbered[a].op === '-') a++;
+      let b = a; while (b < numbered.length && numbered[b].op === '+') b++;
+      const pairs = Math.min(a - k, b - a);
+      for (let i = 0; i < pairs; i++) { numbered[k + i].pair = numbered[a + i]; numbered[a + i].pair = numbered[k + i]; rows.push(numbered[k + i], numbered[a + i]); }
+      rows.push(...numbered.slice(k + pairs, a), ...numbered.slice(a + pairs, b));
+      k = b;
+    }
+    const bad = r => r.op !== '-' && badRows.has(r.row);
+    const key = r => r.op !== ' ' || bad(r);
+    const body = rows.filter(r => !(r.op === ' ' && r.row === 1));   // an unchanged header is the table head
+    const shown = body.map((r, k) => key(r) || (body[k - 1] && key(body[k - 1])) || (body[k + 1] && key(body[k + 1])));
+    const changed = rows.filter(r => r.op === '+' || (r.op === '-' && !r.pair)).length;
+    const header = cells(text.replace(/\r?\n[\s\S]*$/, ''));
+    const out = [];
+    for (let k = 0; k < body.length; k++) {
+      if (!shown[k]) { let e = k; while (e < body.length && !shown[e]) e++;
+        out.push(h('tr', { class: 'gap' }, h('td', { colspan: String(header.length + 2) }, (e - k) + (e - k === 1 ? ' unchanged row' : ' unchanged rows'))));
+        k = e - 1; continue; }
+      const r = body[k], b = bad(r), was = r.pair ? cells(r.pair.line) : null;
+      const label = r.op === '+' ? (r.pair ? 'Changed to' : 'Added') : r.op === '-' ? (r.pair ? 'Was' : 'Removed') : 'Unchanged';
+      out.push(h('tr', { class: (r.op === '+' ? 'add' : r.op === '-' ? 'del' : '') + (b ? ' flagged' : '') },
+        h('th', { scope: 'row', class: 'num' }, String(r.row)),
+        h('td', { class: 'op' }, h('span', { 'aria-hidden': 'true' }, b ? '!' : r.op.trim()), h('span', { class: 'sr-only' }, label + (b ? ', blocked by a finding' : ''))),
+        cells(r.line).map((v, x) => h('td', { class: was && was[x] !== v ? 'chg' : null }, v === '' ? h('span', { class: 'none' }, 'empty') : v))));
+    }
+    return [changed, h('div', { class: 'scroll-x' }, h('table', { class: 'tdiff', 'aria-label': 'Row changes to ' + path },
+      h('thead', {}, h('tr', {}, h('th', { scope: 'col', class: 'num' }, 'Row'), h('th', { scope: 'col' }, h('span', { class: 'sr-only' }, 'Change')), header.map(c => h('th', { scope: 'col' }, c)))),
+      h('tbody', {}, out)))];
   }
 
   function previewCard(d, r, c, base) {
@@ -940,17 +1028,36 @@
     const inert = !byPath.size && p.contentChanges.some(x => !x.before && x.path.endsWith('.json'));
     const val = (name, f) => f ? h('span', { class: 'stack s2' }, valueNode(name, f.value), h('span', { class: 'origin' }, 'from ', h('span', { class: 'mono' }, pathText(f.origin)))) : h('span', { class: 'none' }, 'absent');
     c.firstAffected = p.metadataChanges.length ? p.metadataChanges[0].path : null;
+    const kind = c.newMode ? 'json' : docKind(c.path) || 'json';
     const diff = c.original != null ? lineDiff(c.original, c.text) : null;
-    let keys = []; try { keys = Object.keys(JSON.parse(c.text)); } catch { /* validated earlier */ }
+    let keys = []; if (kind === 'json') try { keys = Object.keys(JSON.parse(c.text)); } catch { /* validated earlier */ }
     // Errors on the edited file or on any file whose effective metadata it changes (e.g. InconsistentMetadata on the images).
     const affected = new Set([c.path, ...p.metadataChanges.map(m => m.path)]);
     const errs = a.findings.filter(f => f.severity === 'Error' && affected.has(f.path));
     const flaggedKeys = keys.filter(k => errs.some(f => f.message.includes(k)));
     const flagged = line => flaggedKeys.some(k => line.includes('"' + k + '"'));
-    return h('div', { class: 'split' },
-      h('div', { class: 'stack s18' },
-        h('section', { class: 'card pad stack s12' },
-          h('div', { class: 'row between' }, h('h2', { tabindex: '-1', fk: 'preview-head' }, 'Effective metadata changes'),
+    // Table and gradient findings name rows ("row 7 column 1"); mark those rows in the change.
+    const badRows = new Set(errs.filter(f => f.path === c.path).flatMap(f => [...f.message.matchAll(/\brow (\d+)/g)].map(m => +m[1])));
+    const lead = kind === 'json' ? 'meta' : 'diff';
+    const headProps = part => part === lead ? { tabindex: '-1', fk: 'preview-head' } : {};
+    const [changedRows, rowTable] = kind === 'table' && diff ? tableDiff(c.path, c.text, diff, badRows) : [0, null];
+    const diffSection = kind === 'table'
+      ? h('section', { class: 'card pad stack s12' },
+          h('div', { class: 'row between' }, h('h2', headProps('diff'), DOC.table[1]),
+            h('span', { class: 'chip' }, diff ? changedRows + (changedRows === 1 ? ' row changed' : ' rows changed') : 'Too large to compare')),
+          h('p', { class: 'mono small muted' }, pathText(c.path)),
+          rowTable || h('p', { class: 'muted' }, 'This change is too large to show row by row. Content changes below give the sizes.'),
+          badRows.size ? h('p', { class: 'hint' }, 'Rows marked ! are named by a finding that blocks acceptance.') : null)
+      : diff ? h('section', { class: 'card pad stack s12' },
+          h('div', { class: 'row between' }, h('h2', headProps('diff'), DOC[kind][1]), h('span', { class: 'mono small muted' }, c.path)),
+          h('pre', { class: 'code linediff', tabindex: '0', 'aria-label': 'Line changes to ' + c.path },
+            diff.map(([op, line]) => { const bad = op === '+' && flagged(line); return h('span', { class: 'ln ' + (op === '+' ? 'add' : op === '-' ? 'del' : '') + (bad ? ' flagged' : '') },
+              h('span', { class: 'op', 'aria-hidden': 'true' }, bad ? '!' : op), h('span', { class: 'sr-only' }, op === '+' ? (bad ? 'added, blocked by a finding: ' : 'added: ') : op === '-' ? 'removed: ' : ''), line, '\n'); })))
+      : kind !== 'json' ? h('section', { class: 'card pad stack s12' }, h('h2', headProps('diff'), DOC[kind][1]), h('p', { class: 'muted' }, 'This change is too large to show line by line. Content changes below give the sizes.'))
+      : null;
+    // A sidecar change leads with effective metadata; a table or gradient change leads with its own content.
+    const metaSection = kind === 'json' || byPath.size ? h('section', { class: 'card pad stack s12' },
+          h('div', { class: 'row between' }, h('h2', headProps('meta'), 'Effective metadata changes'),
             h('span', { class: 'chip' }, byPath.size + (byPath.size === 1 ? ' file affected' : ' files affected'))),
           byPath.size ? h('ul', { class: 'changes' }, [...byPath].map(([path, fs]) => h('li', { class: 'change' },
             h('p', { class: 'change-path mono' }, pathText(path)),
@@ -963,12 +1070,10 @@
             : inert
               ? h('p', { class: 'notice warn' }, 'The new sidecar changes no file’s effective metadata. BIDS inheritance applies it only to files in its directory or below whose entities and suffix it matches.')
               : h('p', { class: 'muted' }, 'No effective metadata changes.'),
-          h('p', { class: 'hint' }, 'Only files whose effective values or their sources change are listed. Files that set these fields in their own sidecars keep their values.')),
-        diff ? h('section', { class: 'card pad stack s12' },
-          h('div', { class: 'row between' }, h('h2', {}, 'Sidecar change'), h('span', { class: 'mono small muted' }, c.path)),
-          h('pre', { class: 'code linediff', tabindex: '0', 'aria-label': 'Line changes to ' + c.path },
-            diff.map(([op, line]) => { const bad = op === '+' && flagged(line); return h('span', { class: 'ln ' + (op === '+' ? 'add' : op === '-' ? 'del' : '') + (bad ? ' flagged' : '') },
-              h('span', { class: 'op', 'aria-hidden': 'true' }, bad ? '!' : op), h('span', { class: 'sr-only' }, op === '+' ? (bad ? 'added, blocked by a finding: ' : 'added: ') : op === '-' ? 'removed: ' : ''), line, '\n'); }))) : null,
+          h('p', { class: 'hint' }, 'Only files whose effective values or their sources change are listed. Files that set these fields in their own sidecars keep their values.')) : null;
+    return h('div', { class: 'split' },
+      h('div', { class: 'stack s18' },
+        lead === 'meta' ? [metaSection, diffSection] : [diffSection, metaSection],
         p.relationshipChanges.length ? h('section', { class: 'card pad stack' }, h('h2', {}, 'Relationship changes'),
           p.relationshipChanges.map(rc => h('div', { class: 'stack s6' }, h('p', { class: 'mono small strong' }, rc.path),
             h('p', { class: 'small muted' }, rc.before.length + ' before → ' + rc.after.length + ' after',
@@ -996,7 +1101,7 @@
         h('div', { class: 'row' },
           btn = h('button', { class: 'btn ' + (inert ? '' : 'primary'), type: 'button', fk: 'accept', disabled: blocked, onclick: accept }, I.check(), h('span', {}, 'Accept as new release')),
           h('button', { class: 'btn ghost', type: 'button', onclick: () => { c.preview = null; c.key = uuid(); focusKey = 'c-text'; render(); } }, 'Back to edit')),
-        h('p', { class: 'small muted' }, blocked ? 'Errors block acceptance. Edit the sidecar and prepare again.' : 'Requires accept authority. Retrying with the same key is safe.'),
+        h('p', { class: 'small muted' }, blocked ? 'Errors block acceptance. Edit the ' + DOC[kind][0] + ' and prepare again.' : 'Requires accept authority. Retrying with the same key is safe.'),
         ...findingSections.map(([title, fs, label, why, checks]) => fs.length ? h('div', { class: 'stack s8' }, h('h3', { class: 'overline' }, title), findingList(fs, true, null, label, why, keyFacts(checks))) : null),
         a.findings.length || resolved.length ? null : h('p', { class: 'small muted' }, 'No findings.')));
   }
@@ -1203,14 +1308,16 @@
           saveGrants(known ? mine.map(g => g.id === gid ? { ...g, revokedAt: at } : g) : [{ id: gid, dataset: d, recipient: null, release: null, actions: [], revokedAt: at }, ...mine], owner);
           announce('Grant ' + short(gid) + ' revoked.'); focusKey = 'grants-head';
         }
-      } catch (x) { state.armError = { gid, text: explain(x) }; focusKey = known(gid) ? 'grant:' + gid : 'revoke-id'; }
+      } catch (x) { state.armError = { gid, text: explain(x), unconfirmed: !!policyProblem(x) }; focusKey = known(gid) ? 'grant:' + gid : 'revoke-id'; }
       state.revoking = null; state.revokeBusy = false;
       if (owner === state.principal && my === generation) accessView(d, q);
       else if (owner === state.principal && onAccess(d)) { focusKey = null; rememberFocus(); accessView(d, route().q); }
       else state.armError = null;
     };
     const known = gid => grants.some(g => g.id === gid);
-    const tableErr = h('div', { class: 'stack pad-x' }, state.armError && known(state.armError.gid) ? h('p', { class: 'notice err', role: 'alert' }, 'Grant ' + short(state.armError.gid) + ' was not revoked. ' + state.armError.text) : null);
+    // A policy error leaves the revocation's outcome open, so never report it as not revoked.
+    const revokeFailure = a => 'Grant ' + short(a.gid) + (a.unconfirmed ? ': revocation not confirmed. ' : ' was not revoked. ') + a.text;
+    const tableErr = h('div', { class: 'stack pad-x' }, state.armError && known(state.armError.gid) ? h('p', { class: 'notice err', role: 'alert' }, revokeFailure(state.armError)) : null);
     function cancelRevoke() { if (state.revokeBusy) return; const gid = state.revoking; state.revokeInput = grants.some(g => g.id === gid) ? state.revokeInput : gid; state.revoking = null; focusKey = grants.some(g => g.id === gid) ? 'grant:' + gid : 'revoke-by-id'; accessView(d, q); announce('Revoke cancelled.'); }
     onEscape = state.revoking ? cancelRevoke : null;
     const pendingById = state.revoking && !grants.some(g => g.id === state.revoking);
@@ -1249,7 +1356,7 @@
             h('div', { class: 'row nowrap' }, revokeInput = h('input', { class: 'input mono', id: 'revoke-id', fk: 'revoke-id', value: pendingById ? state.revoking : state.revokeInput || '', oninput: ev => { state.revokeInput = ev.target.value; ev.target.removeAttribute('aria-invalid'); }, placeholder: 'Grant id', 'aria-label': 'Grant id to revoke', 'aria-describedby': 'revoke-err' }),
               h('button', { class: 'btn danger' + (pendingById ? ' confirm' : ''), type: 'submit', fk: pendingById ? 'revoke:' + state.revoking : 'revoke-by-id' }, pendingById ? 'Confirm revoke' : 'Revoke'),
               pendingById ? h('button', { class: 'btn', type: 'button', fk: 'cancel:' + state.revoking, onclick: cancelRevoke }, 'Cancel') : null),
-            revokeErr = h('div', { class: 'stack', id: 'revoke-err' }, state.armError && !known(state.armError.gid) ? h('p', { class: 'notice err', role: 'alert' }, 'Grant ' + short(state.armError.gid) + ' was not revoked. ' + state.armError.text) : null)))));
+            revokeErr = h('div', { class: 'stack', id: 'revoke-err' }, state.armError && !known(state.armError.gid) ? h('p', { class: 'notice err', role: 'alert' }, revokeFailure(state.armError)) : null)))));
     state.armError = null;
     function scopeText() { return form.scope === 'dataset' ? 'Includes every future release of this dataset.' : 'Only this exact release.'; }
   }
