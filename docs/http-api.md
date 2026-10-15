@@ -49,8 +49,9 @@ loopback. Use Cmd-F5 to enable VoiceOver; VO means Ctrl-Option. VO-Right/Left re
 items, Tab moves among controls, VO-U opens the rotor, and VO-Space activates.
 The [original script](evidence/console/original/voiceover-script.md) is retained;
 the following tasks consolidate the reviewer's five workflows and add conflict
-recovery. Record both desktop (1440×900) and narrow (390×844, where supported)
-results. A resized desktop browser is not an iOS VoiceOver qualification.
+recovery and an events-table correction. Record both desktop (1440×900) and narrow
+(390×844, where supported) results. A resized desktop browser is not an iOS
+VoiceOver qualification.
 
 1. **Inspect admission and metadata.** Submit an empty token and confirm the error
    is announced; then use any demo token and the prefilled dataset. Read the
@@ -82,6 +83,20 @@ results. A resized desktop browser is not an iOS VoiceOver qualification.
    the current head using VoiceOver. Read the changed-file warning and Your
    earlier edit disclosure. Current content must retain FlipAngle 60 and EchoTime
    0.03. Reapply EchoTime 0.031, preview and accept; check both values survive.
+7. **Correct an events table.** Back in the demo, open
+   `sub-03/func/sub-03_task-nback_run-1_events.tsv`. Its Assessment reports
+   EventsOutsideWindow for rows 50 and 51 (window ends at 405 s). Choose Correct.
+   The editor's hint should be read with it: Tab inserts a column separator, and
+   Escape then Tab leaves the editor. Confirm both work and that leaving is
+   discoverable from what is spoken. First change the onset in row 2 to `abc` and
+   prepare the preview. Confirm that the blocking EventsNumber finding is read
+   before others, that row 2 is announced as blocked by a finding, and that
+   acceptance is disabled. Go back to edit. Restore row 2, set onsets 405.75 →
+   399.0 and 406.5 → 400.0, then prepare again. Focus should land on "Table
+   change". Each changed row should be read as "Was", then "Changed to", with each
+   changed cell followed by "changed". At the narrow layout the change is read
+   before the Candidate panel. Confirm EventsOutsideWindow is reported resolved,
+   accept, and read the new release.
 
 Report tester, date, OS/Safari/VoiceOver versions, viewport method and dimensions,
 the source hashes printed by the fixture server, and pass/fail/not-run for each

@@ -490,7 +490,6 @@ table.data.compact td, table.data.compact th { padding: 6px 10px; }
   .lineage .node { padding: 6px 9px; }
   .tabs { gap: 0; }
   .tabs button { padding: 10px 7px; font-size: 14px; gap: 5px; }
-  .decision { order: -1; }
   .change-row { grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 4px 10px; }
   .change-row .k { grid-column: 1 / -1; }
   .rels.grouped .rel { grid-template-columns: 1fr; }

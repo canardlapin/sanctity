@@ -217,8 +217,12 @@
     if (!focusKey) return false;
     const keys = focusKey.split('|');
     const el = keys.map(k => [...document.querySelectorAll('[data-fk]')].find(x => x.dataset.fk === k)).find(Boolean);
-    if (el) { el.focus({ preventScroll: true }); focusKey = null; return true; }
-    return false;
+    if (!el) return false;
+    el.focus({ preventScroll: true }); focusKey = null;
+    // A restored control that would sit under the sticky header or below the fold is brought into view.
+    const bar = document.querySelector('.topbar'), top = bar ? bar.getBoundingClientRect().bottom : 0, box = el.getBoundingClientRect();
+    if (box.top < top || box.bottom > innerHeight) window.scrollBy(0, box.top - top - 12);
+    return true;
   }
 
   // ---------- theme ----------
@@ -955,7 +959,8 @@
       out.push(h('tr', { class: (r.op === '+' ? 'add' : r.op === '-' ? 'del' : '') + (b ? ' flagged' : '') },
         h('th', { scope: 'row', class: 'num' }, String(r.row)),
         h('td', { class: 'op' }, h('span', { 'aria-hidden': 'true' }, b ? '!' : r.op.trim()), h('span', { class: 'sr-only' }, label + (b ? ', blocked by a finding' : ''))),
-        cells(r.line).map((v, x) => h('td', { class: was && was[x] !== v ? 'chg' : null }, v === '' ? h('span', { class: 'none' }, 'empty') : v))));
+        cells(r.line).map((v, x) => { const chg = was && was[x] !== v;   // marked by colour, and in words for screen readers
+          return h('td', { class: chg ? 'chg' : null }, v === '' ? h('span', { class: 'none' }, 'empty') : v, chg ? h('span', { class: 'sr-only' }, ', changed') : null); })));
     }
     return [changed, h('div', { class: 'scroll-x' }, h('table', { class: 'tdiff', 'aria-label': 'Row changes to ' + path },
       h('thead', {}, h('tr', {}, h('th', { scope: 'col', class: 'num' }, 'Row'), h('th', { scope: 'col' }, h('span', { class: 'sr-only' }, 'Change')), header.map(c => h('th', { scope: 'col' }, c)))),
@@ -980,10 +985,13 @@
       const [was, now] = pairOf(f), k = now || was;
       if (!k || ![was, now].some(x => x && x.inputs.some(i => i.path === c.path))) return null;
       const x = flatFacts(was && was.facts), y = flatFacts(now && now.facts);
-      const moved = was && now ? [...new Set([...Object.keys(x), ...Object.keys(y)])].filter(n => JSON.stringify(x[n]) !== JSON.stringify(y[n]))
-        .map(n => n + ' ' + (n in x ? show(x[n]) : 'absent') + ' → ' + (n in y ? show(y[n]) : 'absent')) : [];
+      const names = was && now ? [...new Set([...Object.keys(x), ...Object.keys(y)])].filter(n => JSON.stringify(x[n]) !== JSON.stringify(y[n])) : [];
+      // Facts a blocked input no longer yields are named once, not listed as "→ absent" one by one.
+      const list = (label, xs, sep) => xs.length ? ' ' + label + ': ' + xs.slice(0, 4).join(sep) + (xs.length > 4 ? sep + 'and ' + (xs.length - 4) + ' more' : '') + '.' : '';
       return 'Re-checked because ' + c.path + ' is an input of ' + k.rule.split('+')[0] + '.' +
-        (moved.length ? ' Changed: ' + moved.slice(0, 4).join('; ') + (moved.length > 4 ? '; and ' + (moved.length - 4) + ' more' : '') + '.' : '');
+        list('Changed', names.filter(n => n in x && n in y).map(n => n + ' ' + show(x[n]) + ' → ' + show(y[n])), '; ') +
+        list('Newly recorded', names.filter(n => !(n in x)).map(n => n + ' ' + show(y[n])), '; ') +
+        list('No longer recorded', names.filter(n => !(n in y)), ', ');
     };
     // Resolved only when the same check still ran, observed the same facts and no longer reports this code;
     // other findings on that check (e.g. an unrelated transform warning) do not count against it.

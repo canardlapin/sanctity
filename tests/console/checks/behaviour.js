@@ -440,13 +440,13 @@ const DS = 'b7e3c1d2-5a4f-4e8b-9c21-6f0a3d9e8b14', R3 = '9d4b2e61-7a3c-4f18-a5d9
         const first = document.querySelector('.split > .stack h2'), focus = document.activeElement;
         const rows = [...document.querySelectorAll('.tdiff tbody tr:not(.gap)')].map(r => r.querySelector('th').textContent);
         const tag = (() => { const f = [...document.querySelectorAll('.finding')].find(x => /EventsOutsideWindow/.test(x.textContent) && /sub-03/.test(x.textContent)); return f ? (f.querySelector('.tag.delta') || {}).textContent : 'absent'; })();
-        return { first: first && first.textContent, focused: focus && focus.dataset.fk, rows, chg: document.querySelectorAll('.tdiff td.chg').length,
+        return { first: first && first.textContent, focused: focus && focus.dataset.fk, rows, chg: document.querySelectorAll('.tdiff td.chg').length, spoken: [...document.querySelectorAll('.tdiff td.chg')].every(td => / changed$/.test(td.textContent)),
           gap: !!document.querySelector('.tdiff tr.gap'), meta: /Effective metadata changes/.test(document.querySelector('main').textContent), tag,
           accept: !document.querySelector('[data-fk="accept"]').disabled };
       });
       await p.click('[data-fk="accept"]'); await p.waitForSelector('[data-fk="receipt-head"]', { timeout: 5000 }); await p.waitForTimeout(400);
       const end = await p.evaluate(() => ({ matches: (document.querySelector('main').textContent.match(/Matches preview/g) || []).length, step: (document.querySelector('.steps [aria-current="step"]') || {}).textContent }));
-      done(st.first === 'Table change' && st.focused === 'preview-head' && st.rows.join() === '49,50,50,51,51' && st.chg === 4 && st.gap && !st.meta && /resolved/i.test(st.tag) && st.accept && end.matches >= 3 && /Accepted/.test(end.step),
+      done(st.first === 'Table change' && st.focused === 'preview-head' && st.rows.join() === '49,50,50,51,51' && st.chg === 4 && st.spoken && st.gap && !st.meta && /resolved/i.test(st.tag) && st.accept && end.matches >= 3 && /Accepted/.test(end.step),
         JSON.stringify({ ...st, ...end }));
     });
     // 55. A blocking table error names its row, and the row is marked in the change.
@@ -455,8 +455,11 @@ const DS = 'b7e3c1d2-5a4f-4e8b-9c21-6f0a3d9e8b14', R3 = '9d4b2e61-7a3c-4f18-a5d9
       await editRows(p, { 10: l => l.replace(/^[^\t]+/, 'abc') }); await prepare(p);
       const st = await p.evaluate(() => ({ seal: (document.querySelector('.seal') || {}).textContent, flagged: [...document.querySelectorAll('.tdiff tr.flagged th')].map(e => e.textContent),
         sr: (document.querySelector('.tdiff tr.flagged .sr-only') || {}).textContent, first: (document.querySelector('.decision .finding .code') || {}).textContent,
-        accept: document.querySelector('[data-fk="accept"]').disabled, hint: /Edit the table/.test(document.querySelector('.decision').textContent) }));
-      done(/Not admissible/.test(st.seal) && st.flagged.join() === '10' && /blocked by a finding/.test(st.sr) && /EventsNumber/.test(st.first) && st.accept && st.hint, JSON.stringify(st));
+        accept: document.querySelector('[data-fk="accept"]').disabled, hint: /Edit the table/.test(document.querySelector('.decision').textContent),
+        why: (document.querySelector('.decision .finding') || {}).textContent || '' }));
+      // Facts a blocked table no longer yields are grouped, not each listed as "→ absent".
+      done(/Not admissible/.test(st.seal) && st.flagged.join() === '10' && /blocked by a finding/.test(st.sr) && /EventsNumber/.test(st.first) && st.accept && st.hint
+        && /No longer recorded: comparisonEndSeconds/.test(st.why) && !/absent/.test(st.why), JSON.stringify({ ...st, why: st.why.slice(0, 200) }));
     });
     // 56. A behavioural table's response times are re-checked.
     await guarded('beh-correction-checked', async (o, done) => {
@@ -486,12 +489,14 @@ const DS = 'b7e3c1d2-5a4f-4e8b-9c21-6f0a3d9e8b14', R3 = '9d4b2e61-7a3c-4f18-a5d9
       const st = await p.evaluate(() => ({ text: document.querySelector('#c-text').value, note: /changed after your edit/.test(document.body.innerText), earlier: !!document.querySelector('details.draft-diff') }));
       done(/\n399\.0\t/.test(st.text) && /\n406\.5\t/.test(st.text) && st.note && st.earlier, JSON.stringify({ note: st.note, earlier: st.earlier, colleague: /\n399\.0\t/.test(st.text), mine: /\n400\.0\t/.test(st.text) }));
     });
-    // 59. At 390 a table change scrolls inside its card, never the page.
+    // 59. At 390 a table change scrolls inside its card, never the page; it reads before the decision, in focus order, and its focused heading is visible.
     await guarded('table-preview-mobile', async (o, done) => {
       const [, p] = await o(correctAt(R3, EV3), { width: 390, height: 844 }); await loaded(p);
       await editRows(p, { 50: l => l.replace('405.75', '399.0') }); await prepare(p);
-      const st = await p.evaluate(() => ({ overflow: document.documentElement.scrollWidth - innerWidth, table: !!document.querySelector('.tdiff') }));
-      done(st.table && st.overflow === 0, JSON.stringify(st));
+      const st = await p.evaluate(() => { const y = s => document.querySelector(s).getBoundingClientRect().top, f = document.activeElement;
+        return { overflow: document.documentElement.scrollWidth - innerWidth, table: !!document.querySelector('.tdiff'), focused: f.dataset.fk,
+          changeFirst: y('.split > .stack') < y('.decision'), seen: f.getBoundingClientRect().top >= document.querySelector('.topbar').getBoundingClientRect().bottom && f.getBoundingClientRect().bottom <= innerHeight }; });
+      done(st.table && st.overflow === 0 && st.focused === 'preview-head' && st.changeFirst && st.seen, JSON.stringify(st));
     });
     // 60. A revocation with an unknown policy outcome is never reported as "not revoked" or as revoked.
     const OP = '4f6c2a1e-8b3d-4e7a-9c05-2d1e7f9a3b68';
