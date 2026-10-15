@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 1,
+  "task": "O01.2",
+  "status": "passed",
+  "kind": "protected-configuration-and-runtime-qualification",
+  "at": "2026-10-14T13:52:37.213963+00:00",
+  "artifact": {
+    "path": "target/service-release-o012-20261014-r2/sanctity-0.1.0-SNAPSHOT.zip",
+    "sha256": "d3150b7dbba28426224d844787c78b016925bca1787edadb800a2095d22d222a",
+    "runtimeJars": 49
+  },
+  "commands": [
+    "python3 scripts/package-service.py --output target/service-release-o012-20261014-r2",
+    "python3 scripts/check-service-package.py target/service-release-o012-20261014-r2/sanctity-0.1.0-SNAPSHOT.zip --output target/service-smoke-o012-20261014-r3",
+    "python3 /private/tmp/sanctity-o012-regression.py (retained as regression-procedure.py)",
+    "plutil -lint docs/deployment/org.sanctity.service.plist.example",
+    "git diff --check"
+  ],
+  "acceptance": [
+    {
+      "criterion": "Validate database/storage/port/proxy/secret settings before serving; omit secrets from errors and ordinary process diagnostics.",
+      "result": "pass",
+      "evidence": "smoke-receipt.json; ServiceConfigurationSuite and config/secret canaries"
+    },
+    {
+      "criterion": "Provide loopback/proxy or equivalent protected-origin configuration, TLS termination guidance, filesystem ownership and process supervision.",
+      "result": "pass",
+      "evidence": "deployment templates in source snapshot; actual loopback/proxy boundary tests"
+    },
+    {
+      "criterion": "Graceful shutdown stops new work, drains or safely checkpoints bounded in-flight work and leaves leases recoverable after forced termination.",
+      "result": "pass",
+      "evidence": "active HTTP drain/cancel/new-admission tests; real SIGTERM/SIGKILL restart; OperationsSuite interruption, lease fencing and response-loss recovery"
+    },
+    {
+      "criterion": "Validate storage-root ownership/path isolation and redaction of JDBC URLs, proxy headers and exception causes; test missing/read-only roots, unsafe origins and port collisions with credential canaries.",
+      "result": "pass",
+      "evidence": "invalid/missing/readonly/symlink storage, credential isolation, origin/URL settings and occupied port; raw-log assertions"
+    }
+  ],
+  "observed": {
+    "serviceTests": 9,
+    "postgresOperationTests": 5,
+    "postgresHttpTests": 8,
+    "packagedRuntimeChecks": 9,
+    "configurationCanaries": "pass against raw diagnostics; no post-hoc redaction",
+    "activeShutdown": "new requests denied; complete response drains; stalled response canceled within bound",
+    "packagedRestarts": "SIGTERM and SIGKILL; release identity, exact bytes and revoked credentials unchanged",
+    "moteClosure": "only O01.2; no O01 gate or epic closure"
+  },
+  "failuresFixed": [
+    {
+      "case": "initial packaged smoke",
+      "cause": "test harness used macOS /var alias for new canonical-path requirement",
+      "fix": "resolve temporary runtime root before building configuration; reran all matrix cases"
+    },
+    {
+      "case": "occupied port",
+      "cause": "detached Ember failure reached IOApp default stack-trace reporter",
+      "fix": "shared protected IOApp reporter; rebuilt distribution and passed occupied-port/raw-log checks"
+    }
+  ],
+  "inputs": {
+    "docs/deployment/nginx.conf.example": "aa23160dda0d78463c9ac7516e6b708d09b3ee4e8aae9a98c9e9fefac43681e4",
+    "docs/deployment/org.sanctity.service.plist.example": "381f72ade4a61a6744bef594108f7e4da388a5f82a2bb4d0f5e3f0d4f69e8eea",
+    "docs/deployment/sanctity.service.example": "76bca0f69cd257ced0547f869e9eee3c27febda6653cd212dcc47ce526e2b63a",
+    "docs/deployment/service.env.example": "6dbe113722654fe955e539137104ce19258f294a2477e2a9efd139192f3cb9cc",
+    "docs/service-distribution.md": "30e1c89e6347480f3fdf81960eb05a2cbd4f60ebee317d558d883c1d628812ef",
+    "modules/service/src/main/scala/sanctity/app/ApiServer.scala": "d6e01f6d2ecf4c1964a54b5fa54329a278b0401be51b5a2b15a21be3071129a1",
+    "modules/service/src/main/scala/sanctity/app/MigrationCli.scala": "a3459c2c8ec60baba71d8d78a4bd1dcfc8ebd902596f1ddfd2a50400fbbc711a",
+    "modules/service/src/main/scala/sanctity/app/ProtectedOrigin.scala": "28678be791e4310316621582a32219ad3cf8cd29c4e494d77ca4492cfe10a643",
+    "modules/service/src/main/scala/sanctity/app/RecoveryCli.scala": "e25e024c02353db7a8516859389165442aab24e34c4a153b0e5ea6968d6168a5",
+    "modules/service/src/main/scala/sanctity/app/RepositoryCli.scala": "2173beb0b04ee395eb1b56938cfeef49cd3b7d95470c0206847c14ff18a097e2",
+    "modules/service/src/main/scala/sanctity/app/ServiceConfiguration.scala": "a614f818a60de3155738a8937c83b183aeced7b61bfd9d2f9a833f24df67dcb9",
+    "modules/service/src/main/scala/sanctity/app/ServiceMain.scala": "749f1fcf4cfd90e40752cea68e129f90f8a4851f7ad7d87c74eed5379a345118",
+    "scripts/package-service.py": "5af1105b19ccc5424d34904d9d67c9a002d0fc10380568bb7f6878006836423d",
+    "modules/service/src/test/scala/sanctity/app/ServiceConfigurationSuite.scala": "d6ca84150d04604c39ac1b34961fdf4ebd39aac4485a66f11db78493e9746d43",
+    "scripts/check-service-package.py": "d551fd6a39e8b1b3319f8db1b27d0bb1a729c50212065c1f5d0b66c4d4937ca5",
+    "docs/evidence/institutional-pilot/O01.2/regression.log": "9b47d9f6fe045b6aa313e29348a5af162269356e017a26b0f0084305bb688913",
+    "docs/evidence/institutional-pilot/O01.2/initial-path-failure.log": "e0cbda10a358d73a11761cbc7ec32e66931a28ffee04e5cd4dd964a901673847",
+    "docs/evidence/institutional-pilot/O01.2/build-receipt.json": "7f17cf27f8c48369d59d7a0fa7e787aac99e6091c19745abdbd10e521b0e957b",
+    "docs/evidence/institutional-pilot/O01.2/source-inventory.json": "15a877ff03421e1dd09bb58508db15373888ddea4977f837e1f318f68b5d01b0",
+    "docs/evidence/institutional-pilot/O01.2/service.log": "02e513b2d9c2331216f49809f1e4c540b94ccd8932427132097618f74c92c64b",
+    "docs/evidence/institutional-pilot/O01.2/source-snapshot.zip": "c856b293ad25c091a422b343cefcae2d46c93b5c6c25d3d50c2a1674ba8c168d",
+    "docs/evidence/institutional-pilot/O01.2/artifact-manifest.json": "d9e0908d615827cc9740e64f1597a95c8343bc4d67752419a98218f53aab6644",
+    "docs/evidence/institutional-pilot/O01.2/regression-procedure.py": "49e76128abf413c7c9d7fcc9e5b0f3fef10a148c680dda1bb48e9fc7dcb65408",
+    "docs/evidence/institutional-pilot/O01.2/smoke-receipt.json": "9bc858f8b14242dd0f1b273b470ef73c12f7ab455cd4a367df4637208ce5667b",
+    "docs/evidence/institutional-pilot/O01.2/port-bind-failure.log": "133dd49e2f47216b640d18bf4c32cbac29e8842dc3a72342c94e8073f54ac88c",
+    "docs/evidence/institutional-pilot/O01.2/build.log": "fce24648c7794127e831b0a818e8487478eef2373b0237c244ea5154df565cab"
+  },
+  "sourceProvenance": "source-inventory.json and source-snapshot.zip preserve this task build; vendor ZIP remains separately pinned in repository. Prior O01.1 source and artifact preserved before changes under local-artifacts/compatibility/pre-core-20261014.",
+  "limits": [
+    "Synthetic disposable single-host fixture; no retained local demo service, institution or real TLS endpoint.",
+    "TLS/proxy and supervisor templates provided; launchd plist syntax checked, Linux/actual TLS host acceptance remains later.",
+    "Runtime and operator commands still migrate with privileged credentials; O01.3 owns role/schema separation.",
+    "Response draining is implemented; broad stream/background-worker admission and observability remain O02.",
+    "Forced termination cannot drain work; tested durable lease fencing/response-loss recovery does not imply physical power-loss durability."
+  ]
+}

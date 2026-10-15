@@ -1,0 +1,437 @@
+{
+  "schemaVersion": 1,
+  "at": "2026-10-14T15:53:35.478995+00:00",
+  "kind": "core-hardening-T2-organization-and-durability-contract",
+  "status": "passed",
+  "completed": [
+    "O03.1",
+    "F02.2"
+  ],
+  "taskReceipts": {
+    "O03.1": "docs/evidence/institutional-pilot/O03.1/receipt.json",
+    "F02.2": "docs/evidence/institutional-pilot/F02.2/receipt.json"
+  },
+  "counts": {
+    "requiredEpics": 8,
+    "conditionalEpics": 2,
+    "gates": 26,
+    "tasks": 79,
+    "requiredTasks": 73,
+    "conditionalTasks": 6,
+    "taskKinds": {
+      "engineering": 60,
+      "institutional": 12,
+      "mixed": 7
+    },
+    "totalNodesIncludingProgram": 116,
+    "closedTasks": 12,
+    "closedGates": 1,
+    "closedEpics": 0
+  },
+  "checks": {
+    "acyclic": true,
+    "all116MoteSpecificationsParentsAndDependencies": "pass",
+    "allClosedReceiptsResolvedAgainstCurrentOrExactArchivedInputs": true,
+    "receiptInputHashesChecked": 547,
+    "packageSourceInventoryHashesChecked": 430,
+    "fourPackageDigestsChecked": true,
+    "coreDependencyNodes": 73,
+    "localDemoDependencyNodes": 74,
+    "institutionalMixedExternalEngineeringBlockers": [],
+    "allInstitutionalMixedAndAreaReviewsRemainOpen": true,
+    "publishedTaskAndGateTablesMatch": true,
+    "currentDocumentLinksResolved": 165,
+    "moteDoctor": "pass",
+    "activeClaimsAndReservations": 0,
+    "diffWhitespace": "pass"
+  },
+  "nextReadyEngineering": [
+    "F03.1",
+    "F04.1",
+    "H03.1",
+    "O01.4",
+    "O02.1",
+    "O02.3"
+  ],
+  "recommendedFirstWork": [
+    "F03.1"
+  ],
+  "verification": {
+    "distinctTests": 248,
+    "referenceOrganizationTests": 14,
+    "serviceTests": 9,
+    "allPostgresIntegrationTests": 225,
+    "newOrganizationDatabaseTests": 11,
+    "packagedChecks": 11,
+    "historicalCompatibility": "original and V008 candidate both pass the unchanged corpus-v2 oracle",
+    "migrationFailure": "terminate backend after first V008 ALTER; verify rollback and historical hashes; explicit retry succeeds",
+    "oldBinary": "retained V007 binary refuses upgraded V008 catalog",
+    "policyProtocol": {
+      "interruptionPositionsAcrossThreeEventSequences": 1024,
+      "adversarialGroups": 8,
+      "rejectedAlternative": "local commit/ack then async replication can resurrect a revoked grant after primary loss",
+      "review": "engineering adversarial review before persistence work; trust/fencing assumptions and unresolved-intent availability cost explicit"
+    }
+  },
+  "archivedReceiptInputs": [
+    {
+      "task": "F01.3",
+      "path": "modules/postgres/src/main/scala/sanctity/postgres/PostgresDatabase.scala",
+      "sha256": "2b123b878cc446ce42b140e4b9614c5fc959e8147efcb46a3a91fbf6f58a36a7",
+      "archives": [
+        "docs/evidence/institutional-pilot/O01.2/source-snapshot.zip",
+        "local-artifacts/compatibility/pre-core-20261014/source.zip"
+      ]
+    },
+    {
+      "task": "F02.1",
+      "path": "modules/application/src/main/scala/sanctity/application/ReferenceOrganizationCatalog.scala",
+      "sha256": "23c63c137e7bbbf94db16b11371531b963afdd3b128308660a9dc06bcd59fa04",
+      "archives": [
+        "docs/evidence/institutional-pilot/O01.3/source-snapshot.zip",
+        "docs/evidence/institutional-pilot/F02.1/source-snapshot.zip"
+      ]
+    },
+    {
+      "task": "F02.1",
+      "path": "docs/organization-reference.md",
+      "sha256": "a67a35ec185ac7359f9cc55acacf296649f279114d2d7f1286f971bd13d1ff65",
+      "archives": [
+        "docs/evidence/institutional-pilot/F02.1/source-snapshot.zip",
+        "docs/evidence/core-hardening-t2/prior-documents.zip"
+      ]
+    },
+    {
+      "task": "H06.2",
+      "path": "scripts/check-upgrade-compatibility.py",
+      "sha256": "2a508a02e594fe00385e6b30dd1bfc474c627778dc3bf61ff71cb1a2f026a322",
+      "archives": [
+        "docs/evidence/institutional-pilot/H06.2/source-snapshot.zip"
+      ]
+    },
+    {
+      "task": "H06.2",
+      "path": "docs/upgrade-compatibility.md",
+      "sha256": "6addd06e4ede74aae9693f2c71973777d950a67fa2b5b91dc8cd5423482fcb1a",
+      "archives": [
+        "docs/evidence/institutional-pilot/H06.2/source-snapshot.zip",
+        "docs/evidence/core-hardening-t2/prior-documents.zip"
+      ]
+    },
+    {
+      "task": "L01.1",
+      "path": "docs/local-demo-plan.md",
+      "sha256": "a17c95185928ea5f98c2fffe8018ad288f98247f747257f8da20df003809dc02",
+      "archives": [
+        "docs/evidence/core-hardening-baseline/docs/local-demo-plan.md"
+      ]
+    },
+    {
+      "task": "L01.1",
+      "path": "docs/institutional-readiness-backlog.json",
+      "sha256": "848ec5a4b9556b0ff0306993b88c06727d158c748224d08ceb9b32ee14b1e9ea",
+      "archives": [
+        "docs/evidence/core-hardening-baseline/docs/institutional-readiness-backlog.json"
+      ]
+    },
+    {
+      "task": "L01.1",
+      "path": "docs/evidence/institutional-readiness-motes.json",
+      "sha256": "fb2b5ab19936f010f987f2b112d3a8e7bccbfcf90e3c2ad2015d1d70a38f318e",
+      "archives": [
+        "docs/evidence/core-hardening-baseline/docs/evidence/institutional-readiness-motes.json"
+      ]
+    },
+    {
+      "task": "L01.1",
+      "path": "docs/service-distribution.md",
+      "sha256": "6c2d2d6c8b36279cb9123a95b7e203358966a74e59d83a1c84f7705ca755237e",
+      "archives": [
+        "local-artifacts/compatibility/pre-core-20261014/source.zip"
+      ]
+    },
+    {
+      "task": "O01.1",
+      "path": "scripts/package-service.py",
+      "sha256": "4471e9ff1e73e6cb1fcdb59c3713d21add84a7b694f334f7cc1cc65804ecdf65",
+      "archives": [
+        "local-artifacts/compatibility/pre-core-20261014/source.zip"
+      ]
+    },
+    {
+      "task": "O01.1",
+      "path": "scripts/check-service-package.py",
+      "sha256": "39aeef4bb123bfa3835a1d5960b002f0fd09b9c86f56e6382e7c26f5d1a7772d",
+      "archives": [
+        "docs/evidence/core-hardening-t1/prior-tooling.zip"
+      ]
+    },
+    {
+      "task": "O01.1",
+      "path": "docs/service-distribution.md",
+      "sha256": "6c2d2d6c8b36279cb9123a95b7e203358966a74e59d83a1c84f7705ca755237e",
+      "archives": [
+        "local-artifacts/compatibility/pre-core-20261014/source.zip"
+      ]
+    },
+    {
+      "task": "O01.1",
+      "path": "modules/service/src/main/scala/sanctity/app/ApiServer.scala",
+      "sha256": "7d526c9276f60c9e815da08ccb7a7531290779f770001db4b925078df7cbb807",
+      "archives": [
+        "local-artifacts/compatibility/pre-core-20261014/source.zip"
+      ]
+    },
+    {
+      "task": "O01.1",
+      "path": "modules/service/src/main/scala/sanctity/app/MigrationCli.scala",
+      "sha256": "157db84d3e63c262ea7d56f40ec77ab681b8f9fad1e39ce6f805bb60f8bc0f95",
+      "archives": [
+        "local-artifacts/compatibility/pre-core-20261014/source.zip"
+      ]
+    },
+    {
+      "task": "O01.1",
+      "path": "modules/service/src/main/scala/sanctity/app/RecoveryCli.scala",
+      "sha256": "ee8865f6f13af98e261885567d819711a014078b83fff4f4ed4f3c0f045dd682",
+      "archives": [
+        "local-artifacts/compatibility/pre-core-20261014/source.zip"
+      ]
+    },
+    {
+      "task": "O01.1",
+      "path": "modules/service/src/main/scala/sanctity/app/RepositoryCli.scala",
+      "sha256": "f2c91175691989a56fbc2abf3955ab9b90917b949654c132d57d38ac0fe6d4a9",
+      "archives": [
+        "local-artifacts/compatibility/pre-core-20261014/source.zip"
+      ]
+    },
+    {
+      "task": "O01.1",
+      "path": "modules/service/src/main/scala/sanctity/app/ServiceMain.scala",
+      "sha256": "749f1fcf4cfd90e40752cea68e129f90f8a4851f7ad7d87c74eed5379a345118",
+      "archives": [
+        "docs/evidence/institutional-pilot/O01.3/source-snapshot.zip",
+        "docs/evidence/institutional-pilot/O01.2/source-snapshot.zip",
+        "local-artifacts/compatibility/pre-core-20261014/source.zip"
+      ]
+    },
+    {
+      "task": "O01.2",
+      "path": "docs/deployment/org.sanctity.service.plist.example",
+      "sha256": "381f72ade4a61a6744bef594108f7e4da388a5f82a2bb4d0f5e3f0d4f69e8eea",
+      "archives": [
+        "docs/evidence/institutional-pilot/O01.2/source-snapshot.zip"
+      ]
+    },
+    {
+      "task": "O01.2",
+      "path": "docs/deployment/service.env.example",
+      "sha256": "6dbe113722654fe955e539137104ce19258f294a2477e2a9efd139192f3cb9cc",
+      "archives": [
+        "docs/evidence/institutional-pilot/O01.2/source-snapshot.zip"
+      ]
+    },
+    {
+      "task": "O01.2",
+      "path": "docs/service-distribution.md",
+      "sha256": "30e1c89e6347480f3fdf81960eb05a2cbd4f60ebee317d558d883c1d628812ef",
+      "archives": [
+        "docs/evidence/institutional-pilot/O01.2/source-snapshot.zip"
+      ]
+    },
+    {
+      "task": "O01.2",
+      "path": "modules/service/src/main/scala/sanctity/app/ApiServer.scala",
+      "sha256": "d6e01f6d2ecf4c1964a54b5fa54329a278b0401be51b5a2b15a21be3071129a1",
+      "archives": [
+        "docs/evidence/institutional-pilot/O01.2/source-snapshot.zip"
+      ]
+    },
+    {
+      "task": "O01.2",
+      "path": "modules/service/src/main/scala/sanctity/app/MigrationCli.scala",
+      "sha256": "a3459c2c8ec60baba71d8d78a4bd1dcfc8ebd902596f1ddfd2a50400fbbc711a",
+      "archives": [
+        "docs/evidence/institutional-pilot/O01.2/source-snapshot.zip"
+      ]
+    },
+    {
+      "task": "O01.2",
+      "path": "modules/service/src/main/scala/sanctity/app/RecoveryCli.scala",
+      "sha256": "e25e024c02353db7a8516859389165442aab24e34c4a153b0e5ea6968d6168a5",
+      "archives": [
+        "docs/evidence/institutional-pilot/O01.2/source-snapshot.zip"
+      ]
+    },
+    {
+      "task": "O01.2",
+      "path": "modules/service/src/main/scala/sanctity/app/RepositoryCli.scala",
+      "sha256": "2173beb0b04ee395eb1b56938cfeef49cd3b7d95470c0206847c14ff18a097e2",
+      "archives": [
+        "docs/evidence/institutional-pilot/O01.2/source-snapshot.zip"
+      ]
+    },
+    {
+      "task": "O01.2",
+      "path": "modules/service/src/main/scala/sanctity/app/ServiceMain.scala",
+      "sha256": "749f1fcf4cfd90e40752cea68e129f90f8a4851f7ad7d87c74eed5379a345118",
+      "archives": [
+        "docs/evidence/institutional-pilot/O01.3/source-snapshot.zip",
+        "docs/evidence/institutional-pilot/O01.2/source-snapshot.zip",
+        "local-artifacts/compatibility/pre-core-20261014/source.zip"
+      ]
+    },
+    {
+      "task": "O01.2",
+      "path": "scripts/check-service-package.py",
+      "sha256": "d551fd6a39e8b1b3319f8db1b27d0bb1a729c50212065c1f5d0b66c4d4937ca5",
+      "archives": [
+        "docs/evidence/institutional-pilot/O01.2/source-snapshot.zip"
+      ]
+    },
+    {
+      "task": "O01.3",
+      "path": "docs/service-distribution.md",
+      "sha256": "8bc7f09ad1041c2200cb8a3144c38395c4da84c3420b60a4ef588a564b0f487e",
+      "archives": [
+        "docs/evidence/institutional-pilot/O01.3/source-snapshot.zip",
+        "docs/evidence/core-hardening-t2/prior-documents.zip"
+      ]
+    },
+    {
+      "task": "O01.3",
+      "path": "modules/integration/src/test/scala/sanctity/postgres/ServicePrivilegesSuite.scala",
+      "sha256": "81a47f3102f88f91e64ab4c31b18439aa9fbebb15c4f8f7cf0ece8e8325b6034",
+      "archives": [
+        "docs/evidence/institutional-pilot/O01.3/source-snapshot.zip"
+      ]
+    },
+    {
+      "task": "O01.3",
+      "path": "modules/postgres/src/main/scala/sanctity/postgres/PostgresDatabase.scala",
+      "sha256": "06aa70d765dfec15280e736081934ac72fafd7c83d6c65d2b060704cfc58eb7a",
+      "archives": [
+        "docs/evidence/institutional-pilot/O01.3/source-snapshot.zip"
+      ]
+    },
+    {
+      "task": "O01.3",
+      "path": "modules/service/src/main/scala/sanctity/app/ApiServer.scala",
+      "sha256": "41f953276730cc8178a3527dca90916ae01e1e995f9ed5aa8bee1e4f90eb71df",
+      "archives": [
+        "docs/evidence/institutional-pilot/O01.3/source-snapshot.zip"
+      ]
+    },
+    {
+      "task": "O01.3",
+      "path": "modules/service/src/main/scala/sanctity/app/MigrationCli.scala",
+      "sha256": "921320ced21681916301ed7dc09545fc5985b1a11026b45bad02ae8756fa0424",
+      "archives": [
+        "docs/evidence/institutional-pilot/O01.3/source-snapshot.zip"
+      ]
+    },
+    {
+      "task": "O01.3",
+      "path": "modules/service/src/main/scala/sanctity/app/ServiceMain.scala",
+      "sha256": "749f1fcf4cfd90e40752cea68e129f90f8a4851f7ad7d87c74eed5379a345118",
+      "archives": [
+        "docs/evidence/institutional-pilot/O01.3/source-snapshot.zip",
+        "docs/evidence/institutional-pilot/O01.2/source-snapshot.zip",
+        "local-artifacts/compatibility/pre-core-20261014/source.zip"
+      ]
+    },
+    {
+      "task": "O01.3",
+      "path": "scripts/check-service-package.py",
+      "sha256": "430fad2a07631ecb5977c38a54d3775bf617573fa3a1ddbc27c43993939e8f54",
+      "archives": [
+        "docs/evidence/institutional-pilot/O01.3/source-snapshot.zip"
+      ]
+    },
+    {
+      "task": "O01.3",
+      "path": "modules/application/src/main/scala/sanctity/application/ReferenceOrganizationCatalog.scala",
+      "sha256": "23c63c137e7bbbf94db16b11371531b963afdd3b128308660a9dc06bcd59fa04",
+      "archives": [
+        "docs/evidence/institutional-pilot/O01.3/source-snapshot.zip",
+        "docs/evidence/institutional-pilot/F02.1/source-snapshot.zip"
+      ]
+    },
+    {
+      "task": "O01.3",
+      "path": "modules/postgres/src/main/scala/sanctity/postgres/PostgresCatalog.scala",
+      "sha256": "82085f406745f48de126e0fd2b6a283308efbfe4ebcca7a5d5b919eed87ca685",
+      "archives": [
+        "docs/evidence/institutional-pilot/O01.3/source-snapshot.zip",
+        "docs/evidence/institutional-pilot/O01.2/source-snapshot.zip",
+        "local-artifacts/compatibility/pre-core-20261014/source.zip"
+      ]
+    },
+    {
+      "task": "O01.3",
+      "path": "modules/postgres/src/main/scala/sanctity/postgres/PostgresCredentials.scala",
+      "sha256": "92f3c4aab9ead0415f6a74cf0b7500893321818a4a2498e3dc9d7236561fa8b4",
+      "archives": [
+        "docs/evidence/institutional-pilot/O01.3/source-snapshot.zip",
+        "docs/evidence/institutional-pilot/O01.2/source-snapshot.zip",
+        "local-artifacts/compatibility/pre-core-20261014/source.zip"
+      ]
+    },
+    {
+      "task": "O01.3",
+      "path": "modules/postgres/src/main/scala/sanctity/postgres/PostgresRecovery.scala",
+      "sha256": "83013d62eca92b8a835e0df8595b537597a286578c1ac31c2b32515abcf0351b",
+      "archives": [
+        "docs/evidence/institutional-pilot/O01.3/source-snapshot.zip",
+        "docs/evidence/institutional-pilot/O03.1/source-snapshot.zip",
+        "docs/evidence/institutional-pilot/O01.2/source-snapshot.zip",
+        "local-artifacts/compatibility/pre-core-20261014/source.zip"
+      ]
+    },
+    {
+      "task": "O03.1",
+      "path": "modules/postgres/src/main/scala/sanctity/postgres/PostgresRecovery.scala",
+      "sha256": "83013d62eca92b8a835e0df8595b537597a286578c1ac31c2b32515abcf0351b",
+      "archives": [
+        "docs/evidence/institutional-pilot/O01.3/source-snapshot.zip",
+        "docs/evidence/institutional-pilot/O03.1/source-snapshot.zip",
+        "docs/evidence/institutional-pilot/O01.2/source-snapshot.zip",
+        "local-artifacts/compatibility/pre-core-20261014/source.zip"
+      ]
+    }
+  ],
+  "inputs": {
+    "README.md": "13dfe081b87b63c62f2708dc6b063ba5baabd487e1dcd71a1d2a544dc4123849",
+    "docs/core-hardening-plan.md": "3d5ee057dc8d1f4ae775d6d9f261fc6fae0bac732dc5da6d82be628a263dab09",
+    "docs/local-demo-plan.md": "e79190c5d360a98338e83782ee8d6ae2eb781b05b98919e5d6280038f4974d60",
+    "docs/institutional-pilot-epics.md": "54bad7a1fceaf56047a5b210bfc8326f0cf8c0640916bea32f7d9baa4cb2c38c",
+    "docs/institutional-readiness-plan.md": "41eb7991b10728c60624afb8e49ac5c1c7df78d38841242506261a44daccfd2f",
+    "docs/implementation-plan.md": "8b37f4c1129943452c7696483ee43065ba3cad63deaf886a66c195d099cce737",
+    "docs/service-distribution.md": "032eeebe957152f7165d019ba797851009b9654938888e496edbc977d3ddc56a",
+    "docs/organization-reference.md": "79081cd8df3bab73243113dcd1f66df293ef9bbf63db87399e6e8ce0de70c86f",
+    "docs/upgrade-compatibility.md": "749cbea0e5453cbd614cb82eea2a2a25720cec1512a611f8ca642d3d2254526d",
+    "docs/engineering-workload.md": "b6509b04bc46e6229e13b227801a173f569a2637bd9c0f1f330400fa4dd6b14a",
+    "docs/workloads/engineering-v1.json": "9b8189577896c9505fb757a94f2bd46aec4edc8f56ebb6271123627b309e0610",
+    "docs/evidence/institutional-pilot/O03.1/receipt.json": "dd70195979fd18d497707be1eccc921ecc41412e3aec46468c607b9564828253",
+    "docs/evidence/institutional-pilot/F02.2/receipt.json": "e22e5fa0d17ec8cc8e1e3b46d57a8ddee584629ce59e54f83be627df8dda3159",
+    "docs/institutional-readiness-backlog.json": "fe3bef98e57e8e32fe7671bb1cb6181f5a48c84bb2dd81b8cb716cdbc1248890",
+    "docs/evidence/institutional-readiness-motes.json": "5479a60dc48216de84c710e4fff00d600ebeaff243a1d8c24c55c673294a4b59",
+    "docs/evidence/core-hardening-t1/prior-documents.zip": "d7c2123fbc11d50946c8086845e4cae8818922447223ccc0ba13f1d820ce8106",
+    "docs/evidence/core-hardening-t1/prior-documents.json": "44357893de16ae0a08b8284fe303bda6342e5e8be262da692b7e9051b4003117",
+    "docs/evidence/core-hardening-t1/prior-tooling.zip": "aa474daa7d18f3f62b644c0aa1f4bc6c8fdffdf4848bfbcf282e049932ae97fa",
+    "docs/evidence/core-hardening-t1/prior-tooling.json": "6f9f03c4d473eefc281e5321bbf600de714772238ea9456fddb446430b51d403",
+    "docs/evidence/core-hardening-t2/prior-documents.zip": "fcbd2191c15a78123233fe8c40e802b7e6039199beceb9fc0543e126a2f41603",
+    "docs/evidence/core-hardening-t2/prior-documents.json": "788ebd28a3ae5d27071825fd06edf68a807b78ee296d347a1f220dd727ebd46e",
+    "docs/evidence/core-hardening-t2/verification-procedure.py": "0b22427255cd5247e3cad3beaa0e982fc9a14c89c8fae03378fd069790b4c46c",
+    "docs/evidence/institutional-pilot-progress.json": "2033afeadfe0af0f0d97f665c5279af48a9df1f0afad608c8186bf7822c49548"
+  },
+  "limitations": [
+    "No independent witness is implemented; legacy recovery cannot reopen organization-enabled catalogs.",
+    "All six core reviews and H00 remain open; no retained local demo or institutional qualification.",
+    "Organization persistence and explicit-steward/exact-grant enforcement are implemented; full role/action/provenance coverage remains F03.",
+    "Performance budgets/corpus are frozen targets; no service performance pass.",
+    "Historical import replay uses retained same-host source identity; no source-independent/physical recovery claim.",
+    "Changes remain local and uncommitted; no institution contacted."
+  ]
+}

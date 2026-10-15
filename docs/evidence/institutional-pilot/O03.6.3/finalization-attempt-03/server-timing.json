@@ -1,0 +1,16 @@
+{
+  "observed": {
+    "backend": 450,
+    "transactionStartedAt": "2026-10-15T03:48:29.461877+00:00",
+    "queryStartedAt": "2026-10-15T03:48:29.930387+00:00",
+    "observedAt": "2026-10-15T03:48:29.952273+00:00"
+  },
+  "observedDrainSeconds": 5.472973,
+  "serverMessages": [
+    "2026-10-15 03:48:34.462 UTC [450] FATAL:  terminating connection due to transaction timeout",
+    "2026-10-15 03:48:34.462 UTC [450] CONTEXT:  SQL statement \"SELECT pg_sleep(20)\"",
+    "2026-10-15 03:48:34.462 UTC [450] STATEMENT:  INSERT INTO policy_acknowledgement(event_id,certificate) VALUES($1::uuid,$2::jsonb) ON CONFLICT(event_id) DO NOTHING",
+    "2026-10-15 03:48:34.462 UTC [450] LOG:  disconnection: session time: 0:00:06.142 user=new_runtime database=case1 host=172.19.0.3 port=59430"
+  ],
+  "serverDisconnectSeconds": 5.000123
+}

@@ -1,6 +1,6 @@
 # Sanctity product requirements document
 
-Version 0.2 — draft for implementation planning and bounded console adoption\
+Version 0.3 — institutional product direction and retained qualification requirements\
 Updated 13 October 2026\
 Product owner, technical lead, scientific lead, and operator: to be assigned
 
@@ -9,6 +9,14 @@ Sanctity is a BIDS-native neuroimaging repository built around exact scientific 
 **Product promise:** for every accepted state whose required content is retained, Sanctity can identify its exact content, explain the interpretation used to answer queries, show why it was accepted, and reproduce its declared BIDS representation. Current access and lifecycle policies govern use.
 
 This PRD defines required product behavior and acceptance evidence. The [implementation plan](implementation-plan.md) defines the proposed engineering sequence. The [design baseline](design-baseline.md) retains architectural rationale; [decisions and evidence](decisions-and-evidence.md) retains the earlier discussion and open questions. This PRD and its plan supersede earlier scope and schedule proposals where they differ. All documents remain proposals until the relevant decisions are adopted.
+
+**Current product direction:** the [core vision](vision.md) makes the excellent
+interface, lab/project organization and governed collaboration part of the repository
+product. The [institutional readiness plan](institutional-readiness-plan.md) adds the
+proposed product contracts, beta gates and next delivery sequence. Its sequencing
+takes precedence over the earlier deferral of experience and organizational workflows
+below. Existing scientific/authority/recovery invariants and original pilot obligations
+remain in force; an institutional beta is not a claim that every original gate passed.
 
 The canonical BIDS dependency is **[canardlapin/bids4s](https://github.com/canardlapin/bids4s)**. Its current README describes a pre-release Scala 3 library and does not imply an available stable release. Phase P0 must pin a usable revision/artifact and verify API coverage and compatibility. [bids4s README](https://github.com/canardlapin/bids4s/blob/main/README.md). The sibling checkout and first implemented metadata-resolution improvements are recorded in [bids4s integration status](bids4s-integration.md); they do not yet constitute a published dependency pin.
 

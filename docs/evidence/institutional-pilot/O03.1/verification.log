@@ -1,0 +1,20 @@
+{
+  "status": "passed",
+  "crashWindowSequences": 1024,
+  "cases": [
+    "witness outage prevents unprepared local commit",
+    "locally effective revocation with replication outage stays unacknowledged and restore-closed",
+    "abort only before local commit on fenced live transaction; aborted intent does not change policy",
+    "duplicate preparation/finalization/response idempotent; same key with different intent refused",
+    "old scientific backup cannot restore grant, disabled identity or outgoing stewardship",
+    "fenced writer cannot commit/finalize or start a new intent",
+    "stale/foreign/tampered proofs, wrong nonce, missing suffix/middle, reorder/duplicate and unavailable current authority refused",
+    "counterexample retained: async-only acknowledgment resurrects a locally revoked grant"
+  ],
+  "limits": [
+    "Finite abstract protocol model, not a proof over unbounded histories.",
+    "HMAC models authenticity only; Ed25519/TLS/keys and real durable I/O remain O03.2.",
+    "External writer fencing and non-rollback witness continuity are explicit assumptions, not inferred from signatures.",
+    "No deployed independent recovery or institutional physical-loss qualification."
+  ]
+}

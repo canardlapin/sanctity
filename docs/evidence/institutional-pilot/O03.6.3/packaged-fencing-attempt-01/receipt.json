@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "status": "passed",
+  "artifactSha256": "4099e1cdce2fdabf6dd061d9df2ba1d24160fc819f8367e17a9fdb9d650aa94c",
+  "harnessSha256": "3c11c04875392825f29869b3dfe40d75553a849ce817f5140071b4fecf328a35",
+  "cases": [
+    {
+      "case": "setup",
+      "status": "passed",
+      "checks": [
+        "complete restrictive enrollment",
+        "old history byte identity",
+        "revoked grant and credentials remain denied",
+        "leased intake/delivery state included without secrets",
+        "retired old SQL role",
+        "fresh least-privilege role",
+        "separate OS users and real cross-store permission denial"
+      ],
+      "elapsedSeconds": 82.457
+    },
+    {
+      "case": "packaged-http-barrier-fencing",
+      "status": "passed",
+      "checks": [
+        "real packaged API accepts valid bearer before barrier",
+        "same running API returns 503 after barrier",
+        "local epoch unchanged",
+        "restarted packaged API refuses stale writer"
+      ],
+      "elapsedSeconds": 29.326,
+      "beforeStatus": 200,
+      "afterStatus": 503,
+      "classpath": "artifact lib jars only; no qualification harness on service classpath"
+    }
+  ],
+  "configuration": {
+    "installation": "b8e98efb-a751-44e7-b7d0-399177db149b",
+    "baseImage": "eclipse-temurin@sha256:000fd431958bc81a24abe1e8e5f0f0fd3ae365a594bd50aadb20696805f9408c",
+    "fixtureImageId": "sha256:4d9c8e25415a80f035ee229b77d09f0670df32c9d5c44c4a1840766bcb36c972",
+    "postgresImage": "postgres@sha256:b0f9560a2de083e2cc7382e75f808c7381a32852a7ec49117deedb300e552b24",
+    "uids": {
+      "witness": 10001,
+      "primary": 10002,
+      "operator": 10003
+    },
+    "fileMode": "0600",
+    "directoryMode": "0700",
+    "readOnlyRootFilesystem": true,
+    "separateNamedVolumes": true,
+    "crossMountedStoreAccess": "read/write denied in both directions",
+    "writerHasRecoveryOrSigningPrivateKey": false,
+    "certificateFingerprints": {
+      "server": "ba3e1ff442a374de615e5bc7219c3926d8be17ed648f1fcfc3943fa66a7e8cfd",
+      "writer": "90375922afb41c861e81d8ce4a347f1ebc58f80573854894743c6c5f60c25f96",
+      "recovery": "63b43368dc78652dd3a8beb9c48737a68aaa35f0feae6a9b11b10337a7be5846"
+    },
+    "witnessConfigurationSha256": "04d0f07ae9757b1a5d5401a02669e67878fd603314d930d547959968d9adbdc9",
+    "signingPublicSha256": "06e3fd8fda29bb60ab59557de61edb0aecdb231134be30e75b455f8e1b792fa9",
+    "checkpointSha256": "221e354e6bd65dcd90a404c54beafea215c0845481d9a663883e10d0764fb5a4",
+    "scientificHistorySha256": "e9f36a2be8d4a240b687a8835ec26fae68be79bf3b159a3c846ac7baa478d2e6",
+    "signingFixture": "Known RFC8032 vector 1; synthetic only",
+    "java": "openjdk version \"21.0.12.1\" 2026-08-18 LTS\nOpenJDK Runtime Environment Temurin-21.0.12.1+1 (build 21.0.12.1+1-LTS)\nOpenJDK 64-Bit Server VM Temurin-21.0.12.1+1 (build 21.0.12.1+1-LTS, mixed mode, sharing)",
+    "postgres": {
+      "version": "PostgreSQL 17.11 on aarch64-unknown-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit",
+      "fsync": "on",
+      "synchronousCommit": "on",
+      "fullPageWrites": "on"
+    }
+  },
+  "scope": "Real isolated Java processes, PostgreSQL and TLS witness; synthetic primary deletion and exact durable boundaries.",
+  "limitations": [
+    "Same Docker host and physical storage; not host/disk-loss or institutional qualification.",
+    "Test-only JDBC and after-force pause controls are excluded from the service artifact.",
+    "No organization replay or barrier release; restored catalogs stay closed."
+  ]
+}

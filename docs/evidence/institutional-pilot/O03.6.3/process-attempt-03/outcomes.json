@@ -1,0 +1,450 @@
+[
+  {
+    "case": "setup",
+    "status": "passed",
+    "checks": [
+      "complete restrictive enrollment",
+      "old history byte identity",
+      "revoked grant and credentials remain denied",
+      "leased intake/delivery state included without secrets",
+      "retired old SQL role",
+      "fresh least-privilege role",
+      "separate OS users and real cross-store permission denial"
+    ],
+    "elapsedSeconds": 49.317
+  },
+  {
+    "case": "primary-before-prepare",
+    "status": "passed",
+    "checks": [
+      "kill or lost response at exact JDBC boundary",
+      "no false durable response",
+      "atomic local restriction/event",
+      "restart exact outcome or conservative refusal",
+      "no duplicate event"
+    ],
+    "elapsedSeconds": 17.483,
+    "localCommitted": false,
+    "journalKinds": [
+      "ENROLL"
+    ]
+  },
+  {
+    "case": "primary-before-local-commit",
+    "status": "passed",
+    "checks": [
+      "kill or lost response at exact JDBC boundary",
+      "no false durable response",
+      "atomic local restriction/event",
+      "restart exact outcome or conservative refusal",
+      "no duplicate event"
+    ],
+    "elapsedSeconds": 20.805,
+    "localCommitted": false,
+    "journalKinds": [
+      "ENROLL",
+      "PREPARE"
+    ]
+  },
+  {
+    "case": "primary-after-local-commit",
+    "status": "passed",
+    "checks": [
+      "kill or lost response at exact JDBC boundary",
+      "no false durable response",
+      "atomic local restriction/event",
+      "restart exact outcome or conservative refusal",
+      "no duplicate event"
+    ],
+    "elapsedSeconds": 24.87,
+    "localCommitted": true,
+    "journalKinds": [
+      "ENROLL",
+      "PREPARE"
+    ]
+  },
+  {
+    "case": "primary-lost-local-response",
+    "status": "passed",
+    "checks": [
+      "kill or lost response at exact JDBC boundary",
+      "no false durable response",
+      "atomic local restriction/event",
+      "restart exact outcome or conservative refusal",
+      "no duplicate event"
+    ],
+    "elapsedSeconds": 24.892,
+    "localCommitted": true,
+    "journalKinds": [
+      "ENROLL",
+      "PREPARE"
+    ]
+  },
+  {
+    "case": "primary-before-receipt-insert",
+    "status": "passed",
+    "checks": [
+      "kill or lost response at exact JDBC boundary",
+      "no false durable response",
+      "atomic local restriction/event",
+      "restart exact outcome or conservative refusal",
+      "no duplicate event"
+    ],
+    "elapsedSeconds": 27.341,
+    "localCommitted": true,
+    "journalKinds": [
+      "ENROLL",
+      "PREPARE",
+      "COMMIT"
+    ]
+  },
+  {
+    "case": "primary-before-receipt-commit",
+    "status": "passed",
+    "checks": [
+      "kill or lost response at exact JDBC boundary",
+      "no false durable response",
+      "atomic local restriction/event",
+      "restart exact outcome or conservative refusal",
+      "no duplicate event"
+    ],
+    "elapsedSeconds": 25.025,
+    "localCommitted": true,
+    "journalKinds": [
+      "ENROLL",
+      "PREPARE",
+      "COMMIT"
+    ]
+  },
+  {
+    "case": "primary-after-receipt-commit",
+    "status": "passed",
+    "checks": [
+      "kill or lost response at exact JDBC boundary",
+      "no false durable response",
+      "atomic local restriction/event",
+      "restart exact outcome or conservative refusal",
+      "no duplicate event"
+    ],
+    "elapsedSeconds": 30.374,
+    "localCommitted": true,
+    "journalKinds": [
+      "ENROLL",
+      "PREPARE",
+      "COMMIT"
+    ]
+  },
+  {
+    "case": "primary-lost-receipt-response",
+    "status": "passed",
+    "checks": [
+      "kill or lost response at exact JDBC boundary",
+      "no false durable response",
+      "atomic local restriction/event",
+      "restart exact outcome or conservative refusal",
+      "no duplicate event"
+    ],
+    "elapsedSeconds": 27.513,
+    "localCommitted": true,
+    "journalKinds": [
+      "ENROLL",
+      "PREPARE",
+      "COMMIT"
+    ]
+  },
+  {
+    "case": "witness-enroll-record",
+    "status": "passed",
+    "checks": [
+      "separate witness SIGKILL after forced record",
+      "response cannot report success",
+      "verified restart retains exact durable suffix",
+      "exact resumption or closed unresolved absence"
+    ],
+    "elapsedSeconds": 25.992,
+    "journalKinds": [
+      "ENROLL"
+    ]
+  },
+  {
+    "case": "witness-enroll-head",
+    "status": "passed",
+    "checks": [
+      "separate witness SIGKILL after forced head",
+      "response cannot report success",
+      "verified restart retains exact durable suffix",
+      "exact resumption or closed unresolved absence"
+    ],
+    "elapsedSeconds": 31.903,
+    "journalKinds": [
+      "ENROLL"
+    ]
+  },
+  {
+    "case": "witness-prepare-record",
+    "status": "passed",
+    "checks": [
+      "separate witness SIGKILL after forced record",
+      "response cannot report success",
+      "verified restart retains exact durable suffix",
+      "exact resumption or closed unresolved absence"
+    ],
+    "elapsedSeconds": 18.08,
+    "journalKinds": [
+      "ENROLL",
+      "PREPARE"
+    ]
+  },
+  {
+    "case": "witness-prepare-head",
+    "status": "passed",
+    "checks": [
+      "separate witness SIGKILL after forced head",
+      "response cannot report success",
+      "verified restart retains exact durable suffix",
+      "exact resumption or closed unresolved absence"
+    ],
+    "elapsedSeconds": 28.618,
+    "journalKinds": [
+      "ENROLL",
+      "PREPARE"
+    ]
+  },
+  {
+    "case": "witness-commit-record",
+    "status": "passed",
+    "checks": [
+      "separate witness SIGKILL after forced record",
+      "response cannot report success",
+      "verified restart retains exact durable suffix",
+      "exact resumption or closed unresolved absence"
+    ],
+    "elapsedSeconds": 28.996,
+    "journalKinds": [
+      "ENROLL",
+      "PREPARE",
+      "COMMIT"
+    ]
+  },
+  {
+    "case": "witness-commit-head",
+    "status": "passed",
+    "checks": [
+      "separate witness SIGKILL after forced head",
+      "response cannot report success",
+      "verified restart retains exact durable suffix",
+      "exact resumption or closed unresolved absence"
+    ],
+    "elapsedSeconds": 34.281,
+    "journalKinds": [
+      "ENROLL",
+      "PREPARE",
+      "COMMIT"
+    ]
+  },
+  {
+    "case": "witness-abort-record",
+    "status": "passed",
+    "checks": [
+      "separate witness SIGKILL after forced record",
+      "response cannot report success",
+      "verified restart retains exact durable suffix",
+      "exact resumption or closed unresolved absence"
+    ],
+    "elapsedSeconds": 20.84,
+    "journalKinds": [
+      "ENROLL",
+      "PREPARE",
+      "ABORT"
+    ]
+  },
+  {
+    "case": "witness-abort-head",
+    "status": "passed",
+    "checks": [
+      "separate witness SIGKILL after forced head",
+      "response cannot report success",
+      "verified restart retains exact durable suffix",
+      "exact resumption or closed unresolved absence"
+    ],
+    "elapsedSeconds": 22.167,
+    "journalKinds": [
+      "ENROLL",
+      "PREPARE",
+      "ABORT"
+    ]
+  },
+  {
+    "case": "witness-recovery_barrier-record",
+    "status": "passed",
+    "checks": [
+      "separate witness SIGKILL after forced record",
+      "response cannot report success",
+      "verified restart retains exact durable suffix",
+      "exact resumption or closed unresolved absence"
+    ],
+    "elapsedSeconds": 24.344,
+    "journalKinds": [
+      "ENROLL",
+      "RECOVERY_BARRIER"
+    ]
+  },
+  {
+    "case": "witness-recovery_barrier-head",
+    "status": "passed",
+    "checks": [
+      "separate witness SIGKILL after forced head",
+      "response cannot report success",
+      "verified restart retains exact durable suffix",
+      "exact resumption or closed unresolved absence"
+    ],
+    "elapsedSeconds": 31.588,
+    "journalKinds": [
+      "ENROLL",
+      "RECOVERY_BARRIER"
+    ]
+  },
+  {
+    "case": "exact-retry-and-adversarial-wire",
+    "status": "passed",
+    "checks": [
+      "separate writer exact terminal replay with unchanged heads",
+      "changed-payload",
+      "reordered-event",
+      "unknown-capability",
+      "foreign-installation"
+    ],
+    "elapsedSeconds": 15.891
+  },
+  {
+    "case": "pending-restriction-no-overtaking",
+    "status": "passed",
+    "checks": [
+      "locally committed revocation denies before acknowledgement",
+      "outage prevents overtaking",
+      "successor PREPARE follows predecessor COMMIT"
+    ],
+    "elapsedSeconds": 32.084
+  },
+  {
+    "case": "lost-primary-unresolved-prepare",
+    "status": "passed",
+    "checks": [
+      "actual primary database destroyed",
+      "fresh signed barrier obtained without primary",
+      "unresolved intent retained",
+      "old backup cannot authorize ABORT or reopen"
+    ],
+    "elapsedSeconds": 28.841
+  },
+  {
+    "case": "acknowledged-primary-loss",
+    "status": "passed",
+    "checks": [
+      "acknowledged policy survives actual primary database deletion",
+      "witness restart retains exact head",
+      "restored stale catalog refused"
+    ],
+    "elapsedSeconds": 19.155,
+    "acknowledgedHead": "75363b3c2e687c762894088748630aa97eeeba56acda4e2abb42ed55e5c1dc11"
+  },
+  {
+    "case": "barrier-running-service-and-permit-drain",
+    "status": "passed",
+    "checks": [
+      "running service denied after fresh barrier without local epoch change",
+      "admitted SQL transaction aborts and rolls back",
+      "restart refuses old writer"
+    ],
+    "elapsedSeconds": 23.162,
+    "admittedAt": "2026-10-15T03:31:44.128972+00:00",
+    "barrierReturnedAt": "2026-10-15T03:31:47.249339+00:00",
+    "firstDeniedAt": "2026-10-15T03:31:47.191000+00:00",
+    "drainSeconds": 4.871705,
+    "samplingToleranceSeconds": 0.25,
+    "drainObservation": "held server transaction disappears within five-second permit plus polling tolerance"
+  },
+  {
+    "case": "store-gap",
+    "status": "passed",
+    "checks": [
+      "altered independent store refuses verified restart",
+      "primary admission remains closed"
+    ],
+    "elapsedSeconds": 11.716,
+    "alteration": "gap"
+  },
+  {
+    "case": "store-reorder",
+    "status": "passed",
+    "checks": [
+      "altered independent store refuses verified restart",
+      "primary admission remains closed"
+    ],
+    "elapsedSeconds": 23.22,
+    "alteration": "reorder"
+  },
+  {
+    "case": "store-payload",
+    "status": "passed",
+    "checks": [
+      "altered independent store refuses verified restart",
+      "primary admission remains closed"
+    ],
+    "elapsedSeconds": 14.528,
+    "alteration": "payload"
+  },
+  {
+    "case": "store-capability",
+    "status": "passed",
+    "checks": [
+      "altered independent store refuses verified restart",
+      "primary admission remains closed"
+    ],
+    "elapsedSeconds": 18.002,
+    "alteration": "capability"
+  },
+  {
+    "case": "store-foreign",
+    "status": "passed",
+    "checks": [
+      "altered independent store refuses verified restart",
+      "primary admission remains closed"
+    ],
+    "elapsedSeconds": 17.313,
+    "alteration": "foreign"
+  },
+  {
+    "case": "empty-witness-refusal",
+    "status": "passed",
+    "checks": [
+      "empty witness cannot establish current authority",
+      "completed primary cannot re-enroll an empty witness"
+    ],
+    "elapsedSeconds": 16.25
+  },
+  {
+    "case": "altered-client-trust",
+    "status": "passed",
+    "checks": [
+      "valid alternate signing pin rejected",
+      "foreign installation trust rejected",
+      "original protected trust succeeds"
+    ],
+    "elapsedSeconds": 15.169
+  },
+  {
+    "case": "packaged-http-barrier-fencing",
+    "status": "passed",
+    "checks": [
+      "real packaged API accepts valid bearer before barrier",
+      "same running API returns 503 after barrier",
+      "local epoch unchanged",
+      "restarted packaged API refuses stale writer"
+    ],
+    "elapsedSeconds": 15.506,
+    "beforeStatus": 200,
+    "afterStatus": 503,
+    "classpath": "artifact lib jars only; no qualification harness on service classpath"
+  }
+]

@@ -1,0 +1,29 @@
+{
+  "archive": "docs/evidence/core-authority-f032/prior-documents.zip",
+  "files": [
+    {
+      "path": "docs/organization-reference.md",
+      "sha256": "8f627b7062a9131ad4f79a8d218765ee23cf58f949334b01bfed263c9e5011a4"
+    },
+    {
+      "path": "docs/core-hardening-plan.md",
+      "sha256": "c043ed502a9a0e678852aa1c84d435a6243eba94e98b3a51b60ffa1d30c6c965"
+    },
+    {
+      "path": "docs/institutional-pilot-epics.md",
+      "sha256": "b1c0eea5c42ec82cc7421555484585606f32228e81509732f284d6a758957b65"
+    },
+    {
+      "path": "docs/implementation-plan.md",
+      "sha256": "8b14e0f90052325a02743df79794851af566f87642bc46e832dfa4732f240db4"
+    },
+    {
+      "path": "docs/local-demo-plan.md",
+      "sha256": "90cd263ed552d34ae4d6ee678a6ea55e8b3799dac617afe38ae5c5d8d44d1f6f"
+    },
+    {
+      "path": "docs/evidence/institutional-pilot-progress.json",
+      "sha256": "a3b7bb9b93213280268f415f08745063665a2c290d2674ce8977b9905d451c0f"
+    }
+  ]
+}

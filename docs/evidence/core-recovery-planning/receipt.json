@@ -1,0 +1,118 @@
+{
+  "schemaVersion": 1,
+  "at": "2026-10-14T17:15:51.857951+00:00",
+  "kind": "recovery-priority-planning",
+  "status": "passed",
+  "created": {
+    "O03.6": "bd-01M4XPCN6RSRCS8CB96BR5Y8GY",
+    "O03.7": "bd-01M4XPDDP01BGZJJ73Z32TFCC1",
+    "O03.8": "bd-01M4XPDEAPFG0QFQT27TWEKH41"
+  },
+  "amended": [
+    "F03.2",
+    "H03.1",
+    "O03.2",
+    "O03.4",
+    "O03.5",
+    "O03",
+    "H03"
+  ],
+  "completedImplementationTasks": [],
+  "counts": {
+    "requiredEpics": 8,
+    "conditionalEpics": 2,
+    "gates": 26,
+    "tasks": 82,
+    "requiredTasks": 76,
+    "conditionalTasks": 6,
+    "taskKinds": {
+      "engineering": 63,
+      "institutional": 12,
+      "mixed": 7
+    },
+    "totalNodesIncludingProgram": 119,
+    "closedTasks": 12,
+    "closedGates": 1,
+    "closedEpics": 0
+  },
+  "checks": {
+    "all119MoteSpecificationsParentsAndDependencies": "pass",
+    "acyclic": true,
+    "originalIDsCriteriaDependenciesAndStatusesPreserved": true,
+    "newTasksOpenP0": 3,
+    "earlyRecoveryHasNoBrowserIdentityOrInstitutionalPrerequisite": true,
+    "fullIdentitySessionLifecycleAndOffHostAcceptanceStillRequired": true,
+    "allRequiredTasksReachable": true,
+    "publishedTaskAndGateTablesMatch": true,
+    "historicalReceiptInputsResolved": 594,
+    "packageSourceInputsResolved": 430,
+    "fourPackageDigestsUnchanged": true,
+    "currentDocumentLinksResolved": 118,
+    "moteDoctorAndFsck": "pass",
+    "activeClaimsAndReservations": 0,
+    "diffWhitespace": "pass"
+  },
+  "nextReadyEngineering": [
+    "F03.1",
+    "F04.1",
+    "H03.1",
+    "O01.4",
+    "O02.1",
+    "O02.3"
+  ],
+  "recoveryPriority": {
+    "status": "planned; all recovery implementation remains open",
+    "reason": "Restore organization-enabled catalogs without resurrecting post-backup revocations; user approved making tested recovery the next core milestone.",
+    "orderedWork": [
+      "F03.1",
+      "F03.2",
+      "H03.1",
+      "O03.6",
+      "O03.7",
+      "F02.3",
+      "F03.3",
+      "F03.4",
+      "O03.8"
+    ],
+    "independentlyReady": [
+      "H03.1"
+    ],
+    "exit": "Packaged current-capability backup-change-isolate-restore succeeds with exact retained science, legitimate access and zero restored revoked permissions; corrupt/stale/unknown evidence stays closed.",
+    "fullIntegration": [
+      "O03.2",
+      "O03.4",
+      "O03.5",
+      "O04.1",
+      "O04.3",
+      "H03",
+      "H00"
+    ],
+    "deferredQualification": [
+      "O03.3",
+      "Q03.1"
+    ],
+    "orderingRule": "Schedule this sequence before browser workspace expansion; only true prerequisites are hard edges. Keep at most two compatible implementation tasks active. Future identity/session/lifecycle features must join the same journal and full restore qualification before final acceptance."
+  },
+  "inputs": {
+    "docs/core-hardening-plan.md": "ef147a23dc5e271f704ba1fdd1832397070de850cdedd42487a46c2a11ba0f43",
+    "docs/institutional-pilot-epics.md": "d76fb39bd4c2b0a60f803be15b4d824244d5bc51ffc38ac88c191c7bf2f3675b",
+    "docs/institutional-readiness-plan.md": "a85580945d5ed1e9b95e0bb697d132acce485496ecf62c47af5b3c4f8569c20a",
+    "docs/implementation-plan.md": "7bc1f8c3fba201bd10f63b92a0691c137b4eb9b80183c4349f0ad42e5fff0406",
+    "docs/local-demo-plan.md": "183dd2f3773d93236afdc1a02fc555ed374bc658c89998ceff3cd2620d67e476",
+    "docs/institutional-readiness-backlog.json": "9693c870476b4feb5d2d324081f49a7b6eed657a88bb80cd1171aee916f0611c",
+    "docs/evidence/institutional-readiness-motes.json": "791866690ee24451f31f0b821f984fde4013bd46bc200b7c180763ca26cb7c03",
+    "docs/evidence/core-recovery-planning/changes.json": "83e4fa5488affd7e68704482b7780775bc9e04d42e1afcd1b627c4d5c7feeea9",
+    "docs/evidence/core-recovery-planning/prior-documents.zip": "eb07a6064bade1dfda1c82d3a679905f0453c19946f30b394b2cbd91bed356c5",
+    "docs/evidence/core-recovery-planning/prior-documents.json": "710d47d44f141895e88d50945d915fd46d3ea6fae20d18c5875373de75c6a261",
+    "docs/evidence/core-recovery-planning/prior-mote-states.json": "2bba57f865a8edde2f425444a87163d85320f0f4fd7874415bab839c263cb554",
+    "docs/evidence/core-recovery-planning/verification-procedure.py": "55cd3e593d7fdbaad133a3c6ce819254a2637dfdddbde2b87c08427e2a1471a3",
+    "docs/evidence/institutional-pilot-progress.json": "bbdecaeec6ca6b53fdb1ab24f886bc5ac08b7ce1c5fac58a78b65ce9f16ea872",
+    "docs/evidence/core-recovery-planning/mote-states.json": "7712657ba179e837698bfaffbb226536d72d8c217c05284cb64944264ecef9f7"
+  },
+  "limitations": [
+    "Planning/acceptance/dependency changes only; no recovery implementation or new service test execution.",
+    "Organization-enabled recovery remains unavailable until the new path is implemented and qualified.",
+    "Current-capability recovery does not close full identity/session/lifecycle, H03/H00, local-demo or institutional acceptance.",
+    "Separate services on this computer do not prove survival of loss of the computer or disk."
+  ]
+}

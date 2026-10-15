@@ -1,0 +1,85 @@
+{
+  "schema": "sanctity.institutional-readiness-review.v1",
+  "recordedAt": "2026-10-14T02:33:17.421718+00:00",
+  "deploymentModel": {
+    "status": "user-confirmed",
+    "scope": "One institution hosting several labs and selected external collaborators"
+  },
+  "verdict": "Supervised evaluation runnable; institutional beta and primary-repository readiness not established",
+  "method": "Read-only implementation/evidence audit followed by documentation and local mote planning; application tests and institutional deployment were not rerun",
+  "retainedEvidence": [
+    {
+      "path": "docs/evidence/bold-timing-verification.json",
+      "sha256": "89c13b8cd3a9261401a8c414a05b67645d67aefd98a64aea511b2e931120a1f5"
+    },
+    {
+      "path": "docs/evidence/console/adoption.json",
+      "sha256": "2a4b513babc5ca5786bc6610795a62befa29b7df58124c400495bc9164ab64f1"
+    },
+    {
+      "path": "docs/evidence/query-scale-summary.json",
+      "sha256": "be4ab06feef9873af24a6f3fc9d9bea937a60ea31b70f0d43c997e3343ec8c8b"
+    }
+  ],
+  "sourceComparison": {
+    "manifest": "target/bold-timing-final-source/manifest.json",
+    "manifestSha256": "bf6961608a06cfec266fe0ee500b47f1dff4e4ff2ec910a133d4c25cfbd03466",
+    "implementationAndVerificationInputsCompared": 330,
+    "mismatches": []
+  },
+  "planningValidation": {
+    "localLinksChecked": 21,
+    "backlogReferencesExist": true,
+    "dependencyGraphAcyclic": true,
+    "moteBodiesAndDependenciesMatch": true,
+    "allItemsOpen": true,
+    "ready": [
+      "SITE01",
+      "F01",
+      "O01"
+    ],
+    "workItems": 18,
+    "requiredItems": 16,
+    "conditionalItems": [
+      "W03",
+      "C01"
+    ],
+    "gitDiffCheck": true
+  },
+  "artifacts": [
+    {
+      "path": "docs/vision.md",
+      "sha256": "c1e51e9d940923c9aa3f7bcc20a1344f840d82a2b1db5cfd597e63e46df0d5fa"
+    },
+    {
+      "path": "docs/institutional-readiness-plan.md",
+      "sha256": "7b7099348e2ad12671dbd706689c0afd0a45a02f4900cc31058b9e8f7d1db2f4"
+    },
+    {
+      "path": "docs/institutional-readiness-backlog.json",
+      "sha256": "25fa98c9ef2969b70ae088a0c21682914be782ad23744b79b1592b555b1f77a8"
+    },
+    {
+      "path": "docs/evidence/institutional-readiness-motes.json",
+      "sha256": "fe4b9e92b23cc8303aff0b75feebdf4f858ec5abf232615be76b919f70d0f310"
+    },
+    {
+      "path": "README.md",
+      "sha256": "a9bf21f5bc90f43c9bb5aed86c6fc2a3a5b796163ec1f9278d724ea054aaf119"
+    },
+    {
+      "path": "docs/prd.md",
+      "sha256": "67e626cfbd425d3def16b2f57c4691790500f3af64007bbb8815f74a0e47a1c9"
+    },
+    {
+      "path": "docs/implementation-plan.md",
+      "sha256": "98ae0222e9d7f29d99452a37047d86aa4a4f117f73718cbd24ee83ea1482976f"
+    }
+  ],
+  "limits": [
+    "No new runtime, security, performance or disaster-recovery qualification",
+    "Named institution, owners, identity provider, permitted collection and deployment resources remain to be selected",
+    "Effort ranges are planning assumptions, not observed delivery estimates",
+    "Plans and mote state remain local; no implementation, commit, publication or cutover performed"
+  ]
+}

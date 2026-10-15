@@ -1,0 +1,282 @@
+{
+  "completed": "2026-10-13T21:38:31.322185-04:00",
+  "scope": "Every-BOLD volume and slice timing evidence, coherent disclosure and exact input readiness",
+  "sourceFingerprint": "sha256:7c62d1645f04b72216e32b8b5920d6ba876ec35e5b8f0fce8432aae920517367",
+  "bids4sFingerprint": "sha256:2577f05b60ca05900991bfc054a276461d1339164d0359a0b21e2464e4cff346",
+  "upstreamArchiveSha256": "19f022d002f69292dec056eb0762b877438c47305cee6c176adf3e0f780e9146",
+  "tests": {
+    "ordinary": 469,
+    "postgresql": 210,
+    "total": 679,
+    "sharedLifecycleEachCatalog": 183,
+    "isolatedOrdinary": 469,
+    "focusedTimingCases": 36,
+    "newSharedLifecycleCases": 9
+  },
+  "gates": {
+    "databaseCrashRetry": true,
+    "closedRestore": true,
+    "currentPolicyReconciliationAndRevocation": true,
+    "isolatedCompiledInputsMatch": true,
+    "comparedCompiledInputFiles": 315,
+    "diffCheck": true
+  },
+  "independent": {
+    "tool": "NiBabel",
+    "version": "5.3.2",
+    "headers": 12,
+    "generatedFilesReproduced": 8,
+    "acquiredHeaders": 4,
+    "receipt": "modules/app/src/test/resources/mri-conformance/bold-timing/independent-results.json",
+    "sha256": "e25d76dc2cfff92d47cdb1e3b67425ff33bc0ef8d9bbe7e98086ba54640196dc"
+  },
+  "workspaces": {
+    "postgres": "target/postgres-check.CPnDFe",
+    "isolatedBuild": "target/clean-source.J8I1Jj"
+  },
+  "logs": [
+    {
+      "path": "target/bold-timing-postgres.log",
+      "sha256": "250261cf198ca8f6c8db784323b80c8da120f53111c1c014c7e8a38c7b093bea"
+    },
+    {
+      "path": "target/bold-timing-clean-source.log",
+      "sha256": "0f2ff2998163440c400aae279617f0e336ea841a1f62219072e8eefdf8abca10"
+    },
+    {
+      "path": "target/bold-timing-independent.log",
+      "sha256": "ca5173f6518dbf387a1794910e9e64861f43e57ceca62c199e9b121cfd4925ea"
+    }
+  ],
+  "checkpoint": {
+    "path": "target/bold-timing-checkpoint/manifest.json",
+    "archiveSha256": "7f574069c4b908f9a993d6e1b97617f2b8aa8f0b58d66193d95986299842b5fe"
+  },
+  "sourceSnapshot": {
+    "path": "target/bold-timing-final-source/sanctity.zip",
+    "sha256": "c29a4ff94da4752595fc7f38a9dfa5c3faef146c86b3e633478b4a5ef643218d",
+    "manifest": "target/bold-timing-final-source/manifest.json",
+    "files": 500,
+    "scope": "Git-visible source excluding .mote, .omc, vendor and this subsequently written verification receipt"
+  },
+  "changesSinceCheckpoint": [
+    {
+      "path": ".github/workflows/scientific-core.yml",
+      "size": 3194,
+      "sha256": "de9f56f7ab1b040be886b92ef00705165ad817a0ca32782356def5839ef65c70"
+    },
+    {
+      "path": "README.md",
+      "size": 30597,
+      "sha256": "eeb024cfd0056ed492b13c2cab51bdc6b5ebf29b1414fc60234ab5cd5718757f"
+    },
+    {
+      "path": "docs/bold-timing-plan.md",
+      "size": 7778,
+      "sha256": "e730328121efe5e7b4e3a04a6316a0b20f0ae6c861312441ec72363fd4b71bcd"
+    },
+    {
+      "path": "docs/evidence/bold-timing-motes.json",
+      "size": 321,
+      "sha256": "d3e7c9bfbeb6b450632d86e154f5746bb6306c75938680d38acc3ce3844722d2"
+    },
+    {
+      "path": "docs/implementation-plan.md",
+      "size": 69714,
+      "sha256": "04fba3a817d5a45d9d60d9bf0891d89784760287c5fd95cd7093edaee44fc966"
+    },
+    {
+      "path": "docs/scientific-core.md",
+      "size": 87992,
+      "sha256": "a210b99c37236675e7c2360cc6589e386d19c66c6977a361e0d16554d3b133fb"
+    },
+    {
+      "path": "modules/app/src/test/resources/mri-conformance/bold-timing/independent-results.json",
+      "size": 4157,
+      "sha256": "e25d76dc2cfff92d47cdb1e3b67425ff33bc0ef8d9bbe7e98086ba54640196dc"
+    },
+    {
+      "path": "modules/app/src/test/resources/mri-conformance/bold-timing/v1-be-axis2.nii",
+      "size": 640,
+      "sha256": "fdc19f8d65e193166973721a8bf7549ec8cd71b4d9bb86bd5057d92ea55adb7f"
+    },
+    {
+      "path": "modules/app/src/test/resources/mri-conformance/bold-timing/v1-be-axis3.nii.gz",
+      "size": 80,
+      "sha256": "a2f63b3c702d14486b80699e57d8c0a37113dc78f8d11f3ff0ce4a01a80b8d81"
+    },
+    {
+      "path": "modules/app/src/test/resources/mri-conformance/bold-timing/v1-le-axis0.nii",
+      "size": 640,
+      "sha256": "395d02fe31cc460851e13f6d9a4d2c7c2b68ca13e09ea86b91653faa141a462f"
+    },
+    {
+      "path": "modules/app/src/test/resources/mri-conformance/bold-timing/v1-le-axis1.nii.gz",
+      "size": 74,
+      "sha256": "c76a0f997e0151b962341b5e38cc0c3ca0c92ea9b6f5085b9bd676eb4af576af"
+    },
+    {
+      "path": "modules/app/src/test/resources/mri-conformance/bold-timing/v2-be-axis2.nii",
+      "size": 832,
+      "sha256": "44d65e1ffd848a55e1b44a45b634e947a8706cffa7931fba8cbacf0d25bbae14"
+    },
+    {
+      "path": "modules/app/src/test/resources/mri-conformance/bold-timing/v2-be-axis3.nii.gz",
+      "size": 90,
+      "sha256": "7e2f5c569013d3fba55ca324261f7fe421ce2994c1c9a1849504876ebb64fcd2"
+    },
+    {
+      "path": "modules/app/src/test/resources/mri-conformance/bold-timing/v2-le-axis0.nii",
+      "size": 832,
+      "sha256": "43328a78c4f0536936cddf04af583ab06eff6f40e4e9bd7696ee656af46eac72"
+    },
+    {
+      "path": "modules/app/src/test/resources/mri-conformance/bold-timing/v2-le-axis1.nii.gz",
+      "size": 87,
+      "sha256": "9afccc14685900d83b51847cf208c4c87978a6e81689742698616dc0f9387453"
+    },
+    {
+      "path": "modules/app/src/test/scala/sanctity/app/BoldTimingLifecycleSuite.scala",
+      "size": 10637,
+      "sha256": "852dfd678d1f9c3f8ac1bd8323dc7e373cc25b463d64738a4b049a10380aac28"
+    },
+    {
+      "path": "modules/app/src/test/scala/sanctity/app/BoldTimingSuite.scala",
+      "size": 7828,
+      "sha256": "dcffdbbc784ba97470ae2f453b2e34671fd3b4597b0ac214fc22fe502d8036ca"
+    },
+    {
+      "path": "modules/app/src/test/scala/sanctity/app/GeneratedQuerySuite.scala",
+      "size": 4404,
+      "sha256": "e8dd3f8ea72d2040a12083eb3d7925dfe0ed2390d6ed74ced3566b27a1820b55"
+    },
+    {
+      "path": "modules/app/src/test/scala/sanctity/app/MriHeaderChecksSuite.scala",
+      "size": 5001,
+      "sha256": "032ebf482de929e759c2b493d3dab2495c1d5a4d87676140fd95d6e86a800926"
+    },
+    {
+      "path": "modules/app/src/test/scala/sanctity/app/SubsetSuite.scala",
+      "size": 23311,
+      "sha256": "a56c1c5258835821b9a340db0e8014bb5370acfe84ad291742b079bb11c1676e"
+    },
+    {
+      "path": "modules/bids/src/main/scala/sanctity/bids/BidsInterpreter.scala",
+      "size": 17771,
+      "sha256": "62c51d27e3d431bbcb56817dbe50dae80633698d981339b5ba7e24d0c61cd127"
+    },
+    {
+      "path": "modules/bids/src/main/scala/sanctity/bids/BoldTimingChecks.scala",
+      "size": 9569,
+      "sha256": "112805f88c7af409e22b20127fd390f671289f2290ace00e3a8bf1da9e291b38"
+    },
+    {
+      "path": "modules/bids/src/main/scala/sanctity/bids/MriHeaderChecks.scala",
+      "size": 5101,
+      "sha256": "02c09509081f06ef307b177bee6b99b93eb155717d7b6efb897a320935b5f104"
+    },
+    {
+      "path": "modules/bids/src/main/scala/sanctity/bids/MriInputPlanner.scala",
+      "size": 7910,
+      "sha256": "16612f4a2c3be65d0534baf00dd611bae6bf0009b2d7476e0cd6b6d705ead1eb"
+    },
+    {
+      "path": "modules/bids/src/main/scala/sanctity/bids/MriViewCompiler.scala",
+      "size": 24289,
+      "sha256": "4b181ed043d827a7dd0b8a7f65b1422d367e4e1824a30f4133fab23666b375a3"
+    },
+    {
+      "path": "modules/bids/src/main/scala/sanctity/bids/NiftiHeaderReader.scala",
+      "size": 2716,
+      "sha256": "573953408cf9e8b6efa5bbf062a8e6afc6a88c585404021e87e096a3b5583f39"
+    },
+    {
+      "path": "scripts/check-bold-timing.py",
+      "size": 3808,
+      "sha256": "d8de649fbdf8a83c934a93ff2e180ce8cad6c5b5e86bdba4c260fe1b128060dd"
+    }
+  ],
+  "limits": [
+    "No slice-time correction or scanner synchronization qualification",
+    "Official BIDS validator not rerun for this slice",
+    "Numerical producer unchanged; no new algorithm claim",
+    "Hosted CI not run",
+    "Changes uncommitted"
+  ],
+  "motes": {
+    "epic": "bd-01M4VZYCWA6HXPX2DME3TWJ38P",
+    "allSixAndEpicClosed": true,
+    "states": [
+      {
+        "assignee": null,
+        "id": "bd-01M4VZYCWA6HXPX2DME3TWJ38P",
+        "priority": 1,
+        "status": "closed",
+        "tags": [
+          "bold-timing"
+        ],
+        "title": "BOLD timing evidence: complete input assessment"
+      },
+      {
+        "assignee": null,
+        "id": "bd-01M4VZYD3F7MVKV18WHYJFES9B",
+        "priority": 1,
+        "status": "closed",
+        "tags": [
+          "bold-timing"
+        ],
+        "title": "T1: Observe NIfTI slice dimensions within shared bounded header reads"
+      },
+      {
+        "assignee": null,
+        "id": "bd-01M4VZYDCMPSE9AGSGT3C2V9V7",
+        "priority": 1,
+        "status": "closed",
+        "tags": [
+          "bold-timing"
+        ],
+        "title": "T2: Assess volume and slice timing on every BOLD image"
+      },
+      {
+        "assignee": null,
+        "id": "bd-01M4VZYDGXMKDSFWYG0FFB0TSM",
+        "priority": 1,
+        "status": "closed",
+        "tags": [
+          "bold-timing"
+        ],
+        "title": "T3: Version timing evidence and preserve coherent view metadata"
+      },
+      {
+        "assignee": null,
+        "id": "bd-01M4VZYDN5K8C32MSZXF0JKPG1",
+        "priority": 1,
+        "status": "closed",
+        "tags": [
+          "bold-timing"
+        ],
+        "title": "T4: Qualify timing with adversarial and independent header fixtures"
+      },
+      {
+        "assignee": null,
+        "id": "bd-01M4VZYDSEAM9BSMTFVDBPMK5Q",
+        "priority": 1,
+        "status": "closed",
+        "tags": [
+          "bold-timing"
+        ],
+        "title": "T5: Prove timing correction, history and export on both catalogs"
+      },
+      {
+        "assignee": null,
+        "id": "bd-01M4VZYDXWKVZXXYVKGFYS08JV",
+        "priority": 1,
+        "status": "closed",
+        "tags": [
+          "bold-timing"
+        ],
+        "title": "T6: Retain timing full-gate and isolated-source evidence"
+      }
+    ]
+  }
+}

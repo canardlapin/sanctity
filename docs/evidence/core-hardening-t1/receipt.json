@@ -1,0 +1,273 @@
+{
+  "schemaVersion": 1,
+  "at": "2026-10-14T14:47:52.444823+00:00",
+  "kind": "core-hardening-T1-execution",
+  "status": "passed",
+  "completed": [
+    "O01.2",
+    "F02.1",
+    "O01.3",
+    "H06.2",
+    "H04.1"
+  ],
+  "taskReceipts": {
+    "O01.2": "docs/evidence/institutional-pilot/O01.2/receipt.json",
+    "F02.1": "docs/evidence/institutional-pilot/F02.1/receipt.json",
+    "O01.3": "docs/evidence/institutional-pilot/O01.3/receipt.json",
+    "H06.2": "docs/evidence/institutional-pilot/H06.2/receipt.json",
+    "H04.1": "docs/evidence/institutional-pilot/H04.1/receipt.json"
+  },
+  "counts": {
+    "requiredEpics": 8,
+    "conditionalEpics": 2,
+    "gates": 26,
+    "tasks": 79,
+    "requiredTasks": 73,
+    "conditionalTasks": 6,
+    "taskKinds": {
+      "engineering": 60,
+      "institutional": 12,
+      "mixed": 7
+    },
+    "totalNodesIncludingProgram": 116,
+    "closedTasks": 10,
+    "closedGates": 1,
+    "closedEpics": 0
+  },
+  "checks": {
+    "acyclic": true,
+    "all116MoteSpecificationsParentsAndDependencies": "pass",
+    "allClosedReceiptsResolvedAgainstCurrentOrExactArchivedInputs": true,
+    "receiptInputHashesChecked": 225,
+    "packageSourceInventoryHashesChecked": 316,
+    "threePackageDigestsChecked": true,
+    "coreDependencyNodes": 73,
+    "localDemoDependencyNodes": 74,
+    "institutionalMixedExternalEngineeringBlockers": [],
+    "allInstitutionalMixedAndAreaReviewsRemainOpen": true,
+    "publishedTaskAndGateTablesMatch": true,
+    "currentDocumentLinksResolved": 157,
+    "moteDoctor": "pass",
+    "activeClaimsAndReservations": 0,
+    "diffWhitespace": "pass"
+  },
+  "nextReadyEngineering": [
+    "F02.2",
+    "F03.1",
+    "O01.4",
+    "O02.1",
+    "O02.3",
+    "O03.1"
+  ],
+  "recommendedFirstWork": [
+    "O03.1",
+    "F02.2"
+  ],
+  "verification": {
+    "distinctFocusedTests": 97,
+    "finalRelevantRuns": [
+      "F02.1: 47 kernel + 14 organization",
+      "O01.3: 9 service + 4 privilege + 10 transaction + 5 operations + 8 HTTP"
+    ],
+    "packagedChecks": 10,
+    "historicalCompatibility": "old and current package restored comparisons pass",
+    "workload": "two deterministic generations each; quick materialized independently validated; stress recipes checked",
+    "prior679Tests": "historical O01.1 evidence; not rerun or added to current count"
+  },
+  "archivedReceiptInputs": [
+    {
+      "task": "F01.3",
+      "path": "modules/postgres/src/main/scala/sanctity/postgres/PostgresDatabase.scala",
+      "sha256": "2b123b878cc446ce42b140e4b9614c5fc959e8147efcb46a3a91fbf6f58a36a7",
+      "archives": [
+        "docs/evidence/institutional-pilot/O01.2/source-snapshot.zip",
+        "local-artifacts/compatibility/pre-core-20261014/source.zip"
+      ]
+    },
+    {
+      "task": "L01.1",
+      "path": "docs/local-demo-plan.md",
+      "sha256": "a17c95185928ea5f98c2fffe8018ad288f98247f747257f8da20df003809dc02",
+      "archives": [
+        "docs/evidence/core-hardening-baseline/docs/local-demo-plan.md"
+      ]
+    },
+    {
+      "task": "L01.1",
+      "path": "docs/institutional-readiness-backlog.json",
+      "sha256": "848ec5a4b9556b0ff0306993b88c06727d158c748224d08ceb9b32ee14b1e9ea",
+      "archives": [
+        "docs/evidence/core-hardening-baseline/docs/institutional-readiness-backlog.json"
+      ]
+    },
+    {
+      "task": "L01.1",
+      "path": "docs/evidence/institutional-readiness-motes.json",
+      "sha256": "fb2b5ab19936f010f987f2b112d3a8e7bccbfcf90e3c2ad2015d1d70a38f318e",
+      "archives": [
+        "docs/evidence/core-hardening-baseline/docs/evidence/institutional-readiness-motes.json"
+      ]
+    },
+    {
+      "task": "L01.1",
+      "path": "docs/service-distribution.md",
+      "sha256": "6c2d2d6c8b36279cb9123a95b7e203358966a74e59d83a1c84f7705ca755237e",
+      "archives": [
+        "local-artifacts/compatibility/pre-core-20261014/source.zip"
+      ]
+    },
+    {
+      "task": "O01.1",
+      "path": "scripts/package-service.py",
+      "sha256": "4471e9ff1e73e6cb1fcdb59c3713d21add84a7b694f334f7cc1cc65804ecdf65",
+      "archives": [
+        "local-artifacts/compatibility/pre-core-20261014/source.zip"
+      ]
+    },
+    {
+      "task": "O01.1",
+      "path": "scripts/check-service-package.py",
+      "sha256": "39aeef4bb123bfa3835a1d5960b002f0fd09b9c86f56e6382e7c26f5d1a7772d",
+      "archives": [
+        "docs/evidence/core-hardening-t1/prior-tooling.zip"
+      ]
+    },
+    {
+      "task": "O01.1",
+      "path": "docs/service-distribution.md",
+      "sha256": "6c2d2d6c8b36279cb9123a95b7e203358966a74e59d83a1c84f7705ca755237e",
+      "archives": [
+        "local-artifacts/compatibility/pre-core-20261014/source.zip"
+      ]
+    },
+    {
+      "task": "O01.1",
+      "path": "modules/service/src/main/scala/sanctity/app/ApiServer.scala",
+      "sha256": "7d526c9276f60c9e815da08ccb7a7531290779f770001db4b925078df7cbb807",
+      "archives": [
+        "local-artifacts/compatibility/pre-core-20261014/source.zip"
+      ]
+    },
+    {
+      "task": "O01.1",
+      "path": "modules/service/src/main/scala/sanctity/app/MigrationCli.scala",
+      "sha256": "157db84d3e63c262ea7d56f40ec77ab681b8f9fad1e39ce6f805bb60f8bc0f95",
+      "archives": [
+        "local-artifacts/compatibility/pre-core-20261014/source.zip"
+      ]
+    },
+    {
+      "task": "O01.1",
+      "path": "modules/service/src/main/scala/sanctity/app/RecoveryCli.scala",
+      "sha256": "ee8865f6f13af98e261885567d819711a014078b83fff4f4ed4f3c0f045dd682",
+      "archives": [
+        "local-artifacts/compatibility/pre-core-20261014/source.zip"
+      ]
+    },
+    {
+      "task": "O01.1",
+      "path": "modules/service/src/main/scala/sanctity/app/RepositoryCli.scala",
+      "sha256": "f2c91175691989a56fbc2abf3955ab9b90917b949654c132d57d38ac0fe6d4a9",
+      "archives": [
+        "local-artifacts/compatibility/pre-core-20261014/source.zip"
+      ]
+    },
+    {
+      "task": "O01.2",
+      "path": "docs/deployment/org.sanctity.service.plist.example",
+      "sha256": "381f72ade4a61a6744bef594108f7e4da388a5f82a2bb4d0f5e3f0d4f69e8eea",
+      "archives": [
+        "docs/evidence/institutional-pilot/O01.2/source-snapshot.zip"
+      ]
+    },
+    {
+      "task": "O01.2",
+      "path": "docs/deployment/service.env.example",
+      "sha256": "6dbe113722654fe955e539137104ce19258f294a2477e2a9efd139192f3cb9cc",
+      "archives": [
+        "docs/evidence/institutional-pilot/O01.2/source-snapshot.zip"
+      ]
+    },
+    {
+      "task": "O01.2",
+      "path": "docs/service-distribution.md",
+      "sha256": "30e1c89e6347480f3fdf81960eb05a2cbd4f60ebee317d558d883c1d628812ef",
+      "archives": [
+        "docs/evidence/institutional-pilot/O01.2/source-snapshot.zip"
+      ]
+    },
+    {
+      "task": "O01.2",
+      "path": "modules/service/src/main/scala/sanctity/app/ApiServer.scala",
+      "sha256": "d6e01f6d2ecf4c1964a54b5fa54329a278b0401be51b5a2b15a21be3071129a1",
+      "archives": [
+        "docs/evidence/institutional-pilot/O01.2/source-snapshot.zip"
+      ]
+    },
+    {
+      "task": "O01.2",
+      "path": "modules/service/src/main/scala/sanctity/app/MigrationCli.scala",
+      "sha256": "a3459c2c8ec60baba71d8d78a4bd1dcfc8ebd902596f1ddfd2a50400fbbc711a",
+      "archives": [
+        "docs/evidence/institutional-pilot/O01.2/source-snapshot.zip"
+      ]
+    },
+    {
+      "task": "O01.2",
+      "path": "modules/service/src/main/scala/sanctity/app/RecoveryCli.scala",
+      "sha256": "e25e024c02353db7a8516859389165442aab24e34c4a153b0e5ea6968d6168a5",
+      "archives": [
+        "docs/evidence/institutional-pilot/O01.2/source-snapshot.zip"
+      ]
+    },
+    {
+      "task": "O01.2",
+      "path": "modules/service/src/main/scala/sanctity/app/RepositoryCli.scala",
+      "sha256": "2173beb0b04ee395eb1b56938cfeef49cd3b7d95470c0206847c14ff18a097e2",
+      "archives": [
+        "docs/evidence/institutional-pilot/O01.2/source-snapshot.zip"
+      ]
+    },
+    {
+      "task": "O01.2",
+      "path": "scripts/check-service-package.py",
+      "sha256": "d551fd6a39e8b1b3319f8db1b27d0bb1a729c50212065c1f5d0b66c4d4937ca5",
+      "archives": [
+        "docs/evidence/institutional-pilot/O01.2/source-snapshot.zip"
+      ]
+    }
+  ],
+  "inputs": {
+    "README.md": "12f165b07a2ed6497b7bc3eb42c801e47dd22efeb593900967b2cd514027cfe4",
+    "docs/core-hardening-plan.md": "0d470dcd1f72e9d5cfd62011eee9922b91f361a169692405804cfc251c0a2431",
+    "docs/local-demo-plan.md": "3500d250e1ec47dcbbf137eb5f5549d7c0f5a3208eb3b4bbc415f76947b25817",
+    "docs/institutional-pilot-epics.md": "4ddbabc9983d4e97f6a01263b9f71c9d055f89a910616713201ce775c83de57a",
+    "docs/institutional-readiness-plan.md": "6a7c69e13000620b37a3cf5252c8edcef75bf15940ed5fc642c43cd4b555a70c",
+    "docs/implementation-plan.md": "eb3dcb0872872a08bdbf71e7e696cebfc25c40b70b1e122141d21dfe8346067f",
+    "docs/service-distribution.md": "8bc7f09ad1041c2200cb8a3144c38395c4da84c3420b60a4ef588a564b0f487e",
+    "docs/organization-reference.md": "a67a35ec185ac7359f9cc55acacf296649f279114d2d7f1286f971bd13d1ff65",
+    "docs/upgrade-compatibility.md": "6addd06e4ede74aae9693f2c71973777d950a67fa2b5b91dc8cd5423482fcb1a",
+    "docs/engineering-workload.md": "b6509b04bc46e6229e13b227801a173f569a2637bd9c0f1f330400fa4dd6b14a",
+    "docs/workloads/engineering-v1.json": "9b8189577896c9505fb757a94f2bd46aec4edc8f56ebb6271123627b309e0610",
+    "docs/evidence/institutional-pilot/O01.2/receipt.json": "075ae3258a98298e9bb5b134d4bbe9eeda9f6a740b163c87b5a49f2a80c04a7d",
+    "docs/evidence/institutional-pilot/F02.1/receipt.json": "862c643e9e8a2d597c67e5f7842512f540b60da2a189b85875f9ca22a141d4f1",
+    "docs/evidence/institutional-pilot/O01.3/receipt.json": "8beb2a7036106e8e9415024f3383e6fbd5f43032dd3ad28efabe08db26d7d13c",
+    "docs/evidence/institutional-pilot/H06.2/receipt.json": "d4ee0d0cf1cc3d1df8d25aa4d25858581ab7d50d7338c3d77c9c50066307ef7c",
+    "docs/evidence/institutional-pilot/H04.1/receipt.json": "cd0edfeb0ddbeee64660c706ccb36aa33f690df3c48d447f6e3f02796423b0a1",
+    "docs/institutional-readiness-backlog.json": "fe3bef98e57e8e32fe7671bb1cb6181f5a48c84bb2dd81b8cb716cdbc1248890",
+    "docs/evidence/institutional-readiness-motes.json": "5479a60dc48216de84c710e4fff00d600ebeaff243a1d8c24c55c673294a4b59",
+    "docs/evidence/core-hardening-t1/prior-documents.zip": "d7c2123fbc11d50946c8086845e4cae8818922447223ccc0ba13f1d820ce8106",
+    "docs/evidence/core-hardening-t1/prior-documents.json": "44357893de16ae0a08b8284fe303bda6342e5e8be262da692b7e9051b4003117",
+    "docs/evidence/core-hardening-t1/prior-tooling.zip": "aa474daa7d18f3f62b644c0aa1f4bc6c8fdffdf4848bfbcf282e049932ae97fa",
+    "docs/evidence/core-hardening-t1/prior-tooling.json": "6f9f03c4d473eefc281e5321bbf600de714772238ea9456fddb446430b51d403",
+    "docs/evidence/core-hardening-t1/verification-procedure.py": "741f87f395df59bc92ff47447d75a472d8c59e999463d18363ea317266f5f12b",
+    "docs/evidence/institutional-pilot-progress.json": "40204e57df4dc5e7c6db6e566d9010397cdb617a9c605f89d695501e862c85d0"
+  },
+  "limitations": [
+    "All six core reviews and H00 remain open; no retained local demo or institutional qualification.",
+    "Reference organization transitions are not yet PostgreSQL/current-authority integration.",
+    "Performance budgets/corpus are frozen targets; no service performance pass.",
+    "Historical import replay uses retained same-host source identity; no source-independent/physical recovery claim.",
+    "Changes remain local and uncommitted; no institution contacted."
+  ]
+}

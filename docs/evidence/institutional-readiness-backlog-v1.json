@@ -1,0 +1,413 @@
+{
+  "schema": "sanctity.institutional-readiness-backlog.v1",
+  "date": "2026-10-13",
+  "status": "planned",
+  "plan": "docs/institutional-readiness-plan.md",
+  "vision": "docs/vision.md",
+  "program": {
+    "title": "Deliver a governed and recoverable institutional repository beta",
+    "priority": 0,
+    "outcome": "Meet the lab/project repository promise within an explicitly accepted institutional scope.",
+    "completion": "All required items pass with retained evidence and named acceptance; SITE01 adds C01/W03 as blocking dependencies when the selected beta needs them. No production cutover or implementation completion is implied by planning.",
+    "required": [
+      "SITE01",
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F06",
+      "O01",
+      "O02",
+      "O03",
+      "O04",
+      "W01",
+      "W02",
+      "Q01",
+      "Q02",
+      "Q03"
+    ]
+  },
+  "items": [
+    {
+      "key": "SITE01",
+      "title": "Define institutional beta scope, owners and acceptance envelope",
+      "priority": 0,
+      "dependsOn": [],
+      "required": true,
+      "ownerRole": "Product owner with institutional operator and curator",
+      "outcome": "A named deployment brief replacing planning assumptions with the selected institution's actual needs.",
+      "acceptance": [
+        "Record hosting, identity provider and external-collaborator model, data classification, permitted source collections, retention/withdrawal obligations and support hours.",
+        "Name acceptance owners and record capacity, growth, availability and recovery targets, distinguishing scientific-data RPO from restrictive-policy durability.",
+        "Explicitly reconcile beta scope with PRD targets and original pilot gates; if DICOM/XNAT or visualization is essential, make C01/W03 a dependency of program completion. Unavailable real inputs remain open; do not invent acceptance."
+      ],
+      "references": [
+        "docs/institutional-readiness-plan.md#1-what-we-can-responsibly-stand-up",
+        "docs/prd.md"
+      ]
+    },
+    {
+      "key": "F01",
+      "title": "Specify lab, project, role and offboarding contracts",
+      "priority": 0,
+      "dependsOn": [],
+      "required": true,
+      "tranche": "foundation",
+      "ownerRole": "Backend lead with product owner",
+      "outcome": "A small organizational model with explicit authority and a migration path from the existing curator model.",
+      "acceptance": [
+        "Write an ADR and role/action matrix covering lab membership, project participation, dataset placement, discovery, source evidence, fixed-release sharing, grant expiry, principal disablement and stewardship transfer.",
+        "Define link-versus-authority behavior, independent versus membership-derived grants and last-steward recovery without rewriting scientific identities.",
+        "Specify public API and migration examples for existing datasets/curators; keep proposals clear where institution-specific inputs are outstanding."
+      ],
+      "references": [
+        "docs/vision.md",
+        "modules/kernel/src/main/scala/sanctity/kernel/Authority.scala",
+        "modules/kernel/src/main/scala/sanctity/kernel/Lifecycle.scala"
+      ]
+    },
+    {
+      "key": "F02",
+      "title": "Persist governed labs, projects and memberships",
+      "priority": 0,
+      "dependsOn": [
+        "F01"
+      ],
+      "required": true,
+      "tranche": "foundation",
+      "ownerRole": "Backend engineer",
+      "outcome": "Reference and PostgreSQL catalogs support durable organizational records and controlled administration.",
+      "acceptance": [
+        "Add checked migrations and application contracts for labs/projects, membership, project dataset placement and human-readable metadata; preserve existing release IDs and attribution.",
+        "Migrate old curator/dataset records explicitly and provide audited stewardship transfer; no default public workspace or accidental access widening.",
+        "Prove reference/PostgreSQL agreement, concurrent updates, authorized administration, upgrade preservation and denial of unauthorized membership changes."
+      ],
+      "references": [
+        "modules/application/src/main/scala/sanctity/application/Capabilities.scala",
+        "modules/postgres/src/main/scala/sanctity/postgres/PostgresDatabase.scala"
+      ]
+    },
+    {
+      "key": "F03",
+      "title": "Enforce current memberships, principal state and expiring access",
+      "priority": 0,
+      "dependsOn": [
+        "F02"
+      ],
+      "required": true,
+      "tranche": "foundation",
+      "ownerRole": "Backend engineer",
+      "outcome": "Every repository access path reflects current organizational authority, with explainable effective access.",
+      "acceptance": [
+        "Replace permanent curator bypass with governed stewardship and enforce principal disablement, membership removal and grant expiry transactionally.",
+        "Apply authority to directory listings/counts, dataset/release reads, queries, preparations, acceptance/retries/receipts, downloads and run input/destination use; preserve bounded disclosure and fixed-release semantics.",
+        "Add authorized effective-access inspection and negative fixtures for cross-lab leakage, independent grants, concurrent policy changes and stale contexts; ensure continuing delivery rechecks the declared policy bound."
+      ],
+      "references": [
+        "modules/kernel/src/main/scala/sanctity/kernel/Authority.scala",
+        "modules/postgres/src/main/scala/sanctity/postgres/PostgresCatalog.scala",
+        "modules/integration/src/test/scala/sanctity/postgres/HttpSuite.scala"
+      ]
+    },
+    {
+      "key": "F04",
+      "title": "Implement institutional sign-in and browser-session lifecycle",
+      "priority": 0,
+      "dependsOn": [
+        "F01"
+      ],
+      "required": true,
+      "tranche": "foundation",
+      "ownerRole": "Backend/integration engineer with identity administrator",
+      "outcome": "One institutional identity provider authenticates stable principals with a usable and revocable browser session.",
+      "acceptance": [
+        "Use verified provider subject bindings; cover approved external collaborators, account disablement/recovery, expiry and logout without email-only identity merging.",
+        "Define session storage/transport, origin and request protections, secret rotation and current authorization; retain explicit service credentials rather than conferring arbitrary caller identity.",
+        "Qualify provider errors, invalid/stale sessions and contract behavior in automated fixtures; retain a selected-provider staging rehearsal before beta qualification. Missing real provider access stays an explicit open gate."
+      ],
+      "references": [
+        "modules/application/src/main/scala/sanctity/application/Authentication.scala",
+        "docs/http-api.md"
+      ]
+    },
+    {
+      "key": "F05",
+      "title": "Deliver authorized lab and project discovery in the console",
+      "priority": 0,
+      "dependsOn": [
+        "F03",
+        "F04"
+      ],
+      "required": true,
+      "tranche": "foundation",
+      "ownerRole": "Frontend/integration engineer",
+      "outcome": "A signed-in user finds permitted projects/datasets and manages collaboration without typing internal IDs.",
+      "acceptance": [
+        "Implement bounded authorized directory/search APIs and console navigation from login through lab/project/dataset to existing release and curation screens.",
+        "Provide human-readable collaborator selection, effective-access explanation, scope/future-release distinction, expiry and revocation under the same backend contracts.",
+        "Include empty/denied/error/stale-session states, keyboard/focus behavior and leakage checks for titles, counts and suggestions; do not duplicate authority rules in the browser."
+      ],
+      "references": [
+        "modules/http/src/main/scala/sanctity/http/RepositoryHttp.scala",
+        "modules/http/src/main/resources/sanctity/ui/app.js"
+      ]
+    },
+    {
+      "key": "F06",
+      "title": "Qualify the two-lab institutional foundation journey",
+      "priority": 0,
+      "dependsOn": [
+        "F05"
+      ],
+      "required": true,
+      "tranche": "foundation",
+      "ownerRole": "Integration engineer with curator",
+      "outcome": "A retained end-to-end demonstration of sign-in, organization, sharing and offboarding across two labs.",
+      "acceptance": [
+        "Exercise real browser/HTTP/PostgreSQL with two labs, reader/contributor/steward roles, one external collaborator and a migrated preexisting dataset.",
+        "Demonstrate denied discovery, sharing/revocation, membership removal, principal disablement, concurrent role changes and stewardship handover while preserving historical releases and attribution.",
+        "Retain source-bound automated and human workflow/accessibility evidence with explicit not-run provider or screen-reader gates; completion of this tranche does not assert institutional readiness."
+      ],
+      "references": [
+        "scripts/check-console-backend.sh",
+        "docs/evidence/console/adoption.json",
+        "docs/institutional-readiness-plan.md#immediate-six-mote-foundation-tranche"
+      ]
+    },
+    {
+      "key": "O01",
+      "title": "Package an installable service with controlled upgrades",
+      "priority": 0,
+      "dependsOn": [],
+      "required": true,
+      "ownerRole": "Backend/operations engineer",
+      "outcome": "A clean institutional staging host can run a pinned Sanctity release without using sbt as the service manager.",
+      "acceptance": [
+        "Supply a versioned artifact/deployment manifest, validated configuration, TLS/origin and secret setup, process supervision and graceful shutdown.",
+        "Separate migration privileges/command from runtime database access; retain drift checks and provide upgrade failure/restore procedures and compatibility checks for old releases.",
+        "Rehearse clean installation and an upgrade from the existing schema with pinned sources/dependencies and retained results; do not claim hosted CI or deployment execution without receipts."
+      ],
+      "references": [
+        "modules/app/src/main/scala/sanctity/app/ApiServer.scala",
+        "modules/postgres/src/main/scala/sanctity/postgres/PostgresDatabase.scala",
+        "build.sbt"
+      ]
+    },
+    {
+      "key": "O02",
+      "title": "Make service health, storage limits and failures observable",
+      "priority": 0,
+      "dependsOn": [
+        "O01"
+      ],
+      "required": true,
+      "ownerRole": "Operations engineer with institutional operator",
+      "outcome": "Operators see and can respond to resource exhaustion, failed work and unavailable dependencies before data stewardship fails.",
+      "acceptance": [
+        "Provide distinct liveness/readiness including the closed recovery gate, redacted structured diagnostics, authorized audit inspection, useful metrics and tested alert delivery.",
+        "Account for accepted/staged/abandoned/backup storage; enforce capacity reservations and bounded queues/concurrency, including streaming response lifetimes and large inventory responses.",
+        "Exercise database outage, disk-full, failed/abandoned imports and cancellation; document escalation, safe service behavior and integrity scrub/repair procedures without enabling unqualified garbage collection."
+      ],
+      "references": [
+        "modules/app/src/main/scala/sanctity/app/ApiServer.scala",
+        "modules/objects/src/main/scala/sanctity/objects/FileBlobStore.scala",
+        "modules/application/src/main/scala/sanctity/application/DurableImports.scala"
+      ]
+    },
+    {
+      "key": "O03",
+      "title": "Preserve current authority independently and automate disaster recovery",
+      "priority": 0,
+      "dependsOn": [
+        "O01",
+        "F03",
+        "F04"
+      ],
+      "required": true,
+      "ownerRole": "Backend/operations engineer with institutional operator",
+      "outcome": "Catalog/blob loss cannot force recovery to trust stale permissions or credentials.",
+      "acceptance": [
+        "Design and implement an independently durable authority journal/checkpoint with sequence/completeness and authenticity verification, including memberships, stewardship and principal disablement; specify restrictive-change acknowledgment and replication-failure behavior.",
+        "Schedule verified off-host catalog/blob backups and rehearse restore with the source database unavailable; reconcile current policy, invalidate old credentials/sessions/leases and remain closed when evidence is incomplete.",
+        "Measure backup age/RPO and catalog/API versus full-blob-loss RTO; retain verifiable backup and recovery receipts. A digest or copy on the original host alone is insufficient."
+      ],
+      "references": [
+        "modules/postgres/src/main/scala/sanctity/postgres/PostgresRecovery.scala",
+        "scripts/backup-postgres.sh",
+        "scripts/restore-postgres.sh"
+      ]
+    },
+    {
+      "key": "O04",
+      "title": "Enforce quarantine, withdrawal and recovery lifecycle policy",
+      "priority": 0,
+      "dependsOn": [
+        "O03"
+      ],
+      "required": true,
+      "ownerRole": "Backend engineer with institutional data steward",
+      "outcome": "Withdrawal and any required erasure have explicit effects on current service and restored copies.",
+      "acceptance": [
+        "Implement durable quarantine/withdrawal controls and journal them independently; define current delivery, linked views, pending operations and derivative obligations without inferring permissions from provenance.",
+        "Document institution-specific retention, backup expiry, shared-blob reachability and any required physical-erasure procedure; keep automatic collection disabled unless separately qualified.",
+        "Back up, then withdraw/restrict data, lose the original host and restore: restricted content remains unavailable. Required erasure or source-evidence obligations that lack a qualified procedure block admission of affected data."
+      ],
+      "references": [
+        "docs/prd.md",
+        "modules/postgres/src/main/scala/sanctity/postgres/PostgresRecovery.scala"
+      ]
+    },
+    {
+      "key": "W01",
+      "title": "Complete authenticated intake and reproducible export workflows",
+      "priority": 1,
+      "dependsOn": [
+        "F05",
+        "O02"
+      ],
+      "required": true,
+      "ownerRole": "Backend and frontend engineers",
+      "outcome": "Curators can create and populate a dataset and researchers can obtain verified full exports through supported product workflows.",
+      "acceptance": [
+        "Expose authorized creation, approved staging intake and/or bounded resumable upload through durable operation contracts, with quotas and source-evidence isolation; reject arbitrary server paths.",
+        "Show scope, findings, progress and supported retry/cancel/resume actions; preserve atomic publication and allow mapping/metadata decisions without database edits.",
+        "Provide durable full-export planning, progress, verified delivery and interruption recovery under current authority; demonstrate complete browser/API journeys on supported native BIDS."
+      ],
+      "references": [
+        "modules/application/src/main/scala/sanctity/application/DurableImports.scala",
+        "modules/application/src/main/scala/sanctity/application/NativeRepository.scala",
+        "docs/http-api.md"
+      ]
+    },
+    {
+      "key": "W02",
+      "title": "Add project curation, release history and review work",
+      "priority": 1,
+      "dependsOn": [
+        "W01"
+      ],
+      "required": true,
+      "ownerRole": "Frontend/integration engineer with curator",
+      "outcome": "A project shows its datasets, responsibilities and outstanding review work in one coherent workflow.",
+      "acceptance": [
+        "Provide project overview, authorized dataset search and bounded inventory/history navigation, assignment/status/notes for curation tasks, and an activity trail.",
+        "Bind findings, reports and human review outcomes to exact releases; distinguish acceptance, automated checks and reviewed quality; new releases do not silently inherit approval.",
+        "Keep task/attachment/search visibility within underlying dataset authority; curator and researcher complete daily work without operator CLI or internal UUID entry."
+      ],
+      "references": [
+        "docs/vision.md",
+        "modules/http/src/main/resources/sanctity/ui/app.js"
+      ]
+    },
+    {
+      "key": "W03",
+      "title": "Integrate bounded image or QA report inspection when required",
+      "priority": 2,
+      "dependsOn": [
+        "W02"
+      ],
+      "required": false,
+      "ownerRole": "Frontend/integration engineer with scientist",
+      "outcome": "A selected visualization workflow consumes existing versioned data or reports through normal access contracts.",
+      "acceptance": [
+        "Choose one concrete review need with pilot users and integrate an existing viewer/report surface; do not add another numerical recipe.",
+        "Preserve exact release/result lineage and current authority on previews, thumbnails, caching and reports; isolate untrusted report content.",
+        "Qualify accessibility and realistic payload/resource behavior. SITE01 makes this a launch dependency only if the chosen beta requires it; otherwise retain as later work."
+      ],
+      "references": [
+        "docs/vision.md",
+        "docs/institutional-readiness-plan.md"
+      ]
+    },
+    {
+      "key": "Q01",
+      "title": "Qualify representative data and the institutional capacity envelope",
+      "priority": 0,
+      "dependsOn": [
+        "SITE01",
+        "F06",
+        "W02",
+        "O02"
+      ],
+      "required": true,
+      "ownerRole": "Backend engineer with scientist and operator",
+      "outcome": "A published supported envelope describes measured capacity and correct behavior on representative institutional data.",
+      "acceptance": [
+        "Use named permitted collections and independent expected results for import, curation, query, exact historical export and accounting; honor source/scientific support boundaries.",
+        "Measure realistic grants, concurrent readers/imports, large files, many files, revision growth, memory, latency and throughput; qualify pagination and the existing 10000-entry ceiling before enlarging it.",
+        "Retain workload/hardware/source identities and raw results; explicitly resolve applicable PRD targets or approved narrower beta scope rather than treating small fixture timings as an SLA."
+      ],
+      "references": [
+        "docs/evidence/query-scale-summary.json",
+        "docs/prd.md",
+        "modules/application/src/main/scala/sanctity/application/DurableImports.scala"
+      ]
+    },
+    {
+      "key": "Q02",
+      "title": "Close access review and human usability adoption gates",
+      "priority": 0,
+      "dependsOn": [
+        "Q01",
+        "O04"
+      ],
+      "required": true,
+      "ownerRole": "Independent reviewer and representative users",
+      "outcome": "The institutional collaboration and interface claims have independent and human acceptance evidence.",
+      "acceptance": [
+        "Review and exercise current role/action boundaries, denied discovery/counts, session/grant expiry, revocation, restricted source/report leakage and selected browser-session protections.",
+        "Have representative curators/researchers complete import, organization, correction/conflict recovery, sharing and retrieval; resolve blocking findings.",
+        "Complete actual screen-reader/keyboard evidence including CON-03; record reviewer, versions, source state, outcomes and unresolved limitations. Automated checks cannot stand in for missing human results."
+      ],
+      "references": [
+        "docs/evidence/console/adoption.json",
+        "docs/http-api.md"
+      ]
+    },
+    {
+      "key": "Q03",
+      "title": "Rehearse clean-host recovery and institutional operator handover",
+      "priority": 0,
+      "dependsOn": [
+        "SITE01",
+        "F06",
+        "Q01",
+        "O04"
+      ],
+      "required": true,
+      "ownerRole": "Institutional operator and service owner",
+      "outcome": "An operator can own a bounded institutional beta and recover it without the original engineer or server.",
+      "acceptance": [
+        "A different operator installs/upgrades the packaged release, diagnoses an injected fault and restores onto replacement infrastructure using the documented independent backup/policy sources.",
+        "Revoke access and withdraw data after backup, then lose the original host; verify current restrictions, exact retained exports and coherent pending work after recovery; meet accepted RPO/RTO.",
+        "Verify real alert/escalation delivery and support responsibilities, record beta observation criteria and runbook results, and identify any conditional source/visualization gate. Production cutover requires a separate service-owner decision."
+      ],
+      "references": [
+        "docs/institutional-readiness-plan.md#5-what-qualification-must-prove"
+      ]
+    },
+    {
+      "key": "C01",
+      "title": "Qualify the selected DICOM or XNAT source when adoption requires it",
+      "priority": 2,
+      "dependsOn": [
+        "SITE01",
+        "W01"
+      ],
+      "required": false,
+      "ownerRole": "Ingestion engineer and source curator",
+      "outcome": "Only the advertised source installation and acquisition profiles are claimed as qualified.",
+      "acceptance": [
+        "Survey the named XNAT installation/resources and/or DICOM collection, preserve restricted evidence, specify mappings and independent scientific fixtures, and record exclusions.",
+        "Rehearse interruption, source/output accounting and final reconciliation with the real permitted collection; conversion success alone is insufficient.",
+        "When SITE01 selects this source for beta, make this item a blocking program dependency; otherwise keep it distinct from native-BIDS beta and retain original migration-pilot obligations."
+      ],
+      "references": [
+        "modules/import-xnat/src/main/scala/sanctity/xnat/XnatApi.scala",
+        "modules/import-dicom/src/main/scala/sanctity/dicom/DicomImport.scala",
+        "docs/prd.md"
+      ]
+    }
+  ]
+}

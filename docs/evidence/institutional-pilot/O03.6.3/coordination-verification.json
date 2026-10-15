@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "status": "passed",
+  "at": "2026-10-15T04:02:29.036780+00:00",
+  "kind": "integrated-policy-and-parent-completion",
+  "completed": [
+    "O03.6.3",
+    "O03.6"
+  ],
+  "parent": "O03.6",
+  "parentStatus": "closed",
+  "counts": {
+    "requiredEpics": 8,
+    "conditionalEpics": 2,
+    "gates": 26,
+    "tasks": 85,
+    "requiredTasks": 79,
+    "conditionalTasks": 6,
+    "taskKinds": {
+      "engineering": 66,
+      "mixed": 7,
+      "institutional": 12
+    },
+    "totalNodesIncludingProgram": 122,
+    "closedTasks": 18,
+    "closedGates": 1,
+    "closedEpics": 0
+  },
+  "checks": {
+    "all122MoteCriteriaParentsDependenciesAndStatuses": "pass",
+    "parentAcceptanceUnchanged": true,
+    "acyclic": true,
+    "onlyO0363AndParentClosed": true,
+    "readyQueueMatchesGraph": true,
+    "preservedHistoricalReceiptInputs": 2395,
+    "allCurrentQualificationInputHashesMatch": true,
+    "historicalSourceIdentityPreserved": true,
+    "currentDocumentLinksResolved": 170,
+    "publishedTaskTablesMatch": true,
+    "moteDoctorAndFsck": "pass",
+    "activeCoreClaimsAndReservations": 0,
+    "unrelatedDoingWorkExcludedFromAudit": 7,
+    "diffWhitespace": "pass"
+  },
+  "nextReadyEngineering": [
+    "F02.3",
+    "F03.3",
+    "F03.4",
+    "F04.1",
+    "H03.1",
+    "O01.4",
+    "O02.1",
+    "O02.3"
+  ],
+  "recommendedFirstWork": [
+    "H03.1"
+  ],
+  "inputs": {
+    "docs/policy-process-qualification.md": "c35017ffaa87d487cdb24bfc21ea3690ec4e3b6c54d7a5305a55cd2b6b7305a7",
+    "docs/policy-catalog.md": "c9edc2fdfe50bdfeba18f16cdafa894c8d2502e5f6373bddf9a14e8a085e1b69",
+    "docs/policy-witness.md": "58bffc50405a9f4f32baf7689b1a8d60fe5983cfb8c1f61395117dcb97d2ccb5",
+    "docs/policy-transactions.md": "fc67fff0ec20444809a4eee09760d4539638eb19da8341d1887c0441a07f041e",
+    "docs/core-hardening-plan.md": "8ec79eb856956457949131ec49b96d08975f64e9ddd35d3376a7f663f8acb665",
+    "docs/institutional-pilot-epics.md": "9a624817bf915a9c1909e99bfa13e191a5f73b93a969776b98d799dd959a39fb",
+    "docs/implementation-plan.md": "4c6fe9a5b60aa18480e06e2d98839456ed0d34aa234fdd8d1eb36ec245088d14",
+    "docs/local-demo-plan.md": "d4f84a11e05aa6990258a63a3ed9c80ca07984a9d708a8094ebd263c52954223",
+    "docs/institutional-readiness-plan.md": "444d24114e41238bcc47bb1918eaea4d0023df9a61d116676bad576c0479ce58",
+    "docs/evidence/institutional-pilot/O03.6.3/receipt.json": "1fbf6ab2386d994e6a9d58e8c86538200c67681c6a64b6f028786e5a06fd797e",
+    "docs/institutional-readiness-backlog.json": "d742d31cbefda29c4f1d73221ed25e03608c88d96c354c49431e722d11038c3f",
+    "docs/evidence/institutional-readiness-motes.json": "a08826a91bfc7895c68a8cc6fe320b870f3f3412e4d0be5559fcc09f5cdc8d23",
+    "docs/evidence/institutional-pilot/O03.6.3/parent-acceptance-review.json": "b904f5e3a6996cd3fd732f2878d0368f2c76ff033b9b1bab308eaad7e213415f",
+    "docs/evidence/institutional-pilot/O03.6/receipt.json": "98988932883b255f0c059321aaa7a5e55871d1cb08387bed78a0957efd2a814d",
+    "docs/evidence/institutional-pilot/O03.6.3/before.zip": "528197a9073bec3a55b437f80bec88bbe06953704248be7169e499de5c05748e",
+    "docs/evidence/institutional-pilot/O03.6.3/coordination-verification.py": "839942d4dbcd3c7909a2110e96594afb682b12e2746855447e533738faef5616",
+    "docs/evidence/institutional-pilot-progress.json": "ef4f61f60950f8b5d458c9b7540894b228bc67ffe72e33558a66d9fe20b194f5",
+    "docs/evidence/institutional-pilot/O03.6.3/mote-states.json": "12d055952e01441d80a08154159ff02b49fa206f111ba5ce7431c53e9028a6ba"
+  },
+  "limitations": [
+    "Same Docker host/physical disk; no off-host persistence, physical power-loss or institutional approval claim.",
+    "Independent policy mode requires PostgreSQL 17 transaction_timeout; older versions refuse independent admission.",
+    "No barrier release, policy replay or organization restore: H03.1 and O03.7/O03.8 remain required.",
+    "Current nineteen authority kinds only; full identity/session/lifecycle and institutional qualification remain O03.2/O03.3/SITE01.",
+    "F03.4 retains continuous byte-stream and external-worker checks; this qualifies SQL admission and actual API authentication.",
+    "H04.2 retains scale/performance qualification; five-second SQL permits and the bounded finalization phase keep their documented availability limits.",
+    "Synthetic keys and data; the Docker/database operator is trusted. Test-only JDBC/after-force controls are separate from the service artifact.",
+    "All six core reviews and H00 remain open; no complete demo or institutional acceptance."
+  ]
+}

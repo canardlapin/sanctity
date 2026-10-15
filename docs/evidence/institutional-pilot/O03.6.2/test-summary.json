@@ -1,0 +1,23 @@
+{
+  "suites": {
+    "sanctity.policy.PolicyJournalSuite": 17,
+    "sanctity.policy.PolicyTransportSuite": 13,
+    "sanctity.policy.PolicyWireSuite": 19,
+    "sanctity.postgres.PersistenceSuite": 19,
+    "sanctity.app.ServiceConfigurationSuite": 9,
+    "sanctity.postgres.ConsoleSuite": 1,
+    "sanctity.postgres.CurrentAuthoritySuite": 44,
+    "sanctity.postgres.HttpSuite": 8,
+    "sanctity.postgres.OperationsSuite": 5,
+    "sanctity.postgres.OrganizationPersistenceSuite": 11,
+    "sanctity.postgres.PolicyIntegrationSuite": 21,
+    "sanctity.postgres.PolicyReceiptCompatibilitySuite": 3,
+    "sanctity.postgres.PostgresLifecycleSuite": 183,
+    "sanctity.postgres.ProcessingRecoverySuite": 3,
+    "sanctity.postgres.ServicePrivilegesSuite": 4,
+    "sanctity.postgres.TransactionSuite": 10,
+    "sanctity.app.OrganizationAuthoritySuite": 57,
+    "sanctity.app.OrganizationSuite": 14
+  },
+  "total": 441
+}

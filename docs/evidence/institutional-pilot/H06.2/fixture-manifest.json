@@ -1,0 +1,16 @@
+{
+  "baselineSha256": "2ae3efa92d344520dc9abae1ce1d6c879998a187cebe1897ce096b3ced6b432e",
+  "files": {
+    "blobs/objects/35/35de88077564d2970a501571dcc30c2cc70def58c252ead4bda889569e8214aa": "35de88077564d2970a501571dcc30c2cc70def58c252ead4bda889569e8214aa",
+    "blobs/objects/95/959225c3fbcfb8e1687c384d7a3178d1d665c466c9f64edd24aa71ba991e1628": "959225c3fbcfb8e1687c384d7a3178d1d665c466c9f64edd24aa71ba991e1628",
+    "blobs/objects/ae/ae7579813b9a9cefb1541b172fac9120c8858d9522e54ea0f4de3b15ec2c8a65": "ae7579813b9a9cefb1541b172fac9120c8858d9522e54ea0f4de3b15ec2c8a65",
+    "catalog.dump": "89fdbab3b49882c0b62c66c3241dbac0a03b162af18309a45eb970b19c0c8cce",
+    "oracle.json": "9fa0e0e2eab7d5fe13b12802cec35de6e07ff7ec59a7f4c3db7c1827ef1dfd4d",
+    "secrets.json": "4f1f300b596d904b55a3e398a24880298930f84eecfdcb0a77936e8df7fb8c5b",
+    "source/README": "959225c3fbcfb8e1687c384d7a3178d1d665c466c9f64edd24aa71ba991e1628",
+    "source/dataset_description.json": "ae7579813b9a9cefb1541b172fac9120c8858d9522e54ea0f4de3b15ec2c8a65"
+  },
+  "immutable": "freeze refuses an existing output directory",
+  "postgresImage": "postgres@sha256:b0f9560a2de083e2cc7382e75f808c7381a32852a7ec49117deedb300e552b24",
+  "schemaVersion": 1
+}

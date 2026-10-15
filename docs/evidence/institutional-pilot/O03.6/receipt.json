@@ -1,0 +1,203 @@
+{
+  "schemaVersion": 1,
+  "task": "O03.6",
+  "mote": "bd-01M4XPCN6RSRCS8CB96BR5Y8GY",
+  "status": "passed",
+  "at": "2026-10-15T04:02:01.646237+00:00",
+  "scope": "Independent durability and fencing for the currently implemented authority model only.",
+  "acceptance": [
+    {
+      "criterion": "Enumerate every authority-changing entry point in the current build: principal state, lab/project state, memberships and expiry, placement/custody, stewardship, independent and release-scoped grants, API credential issue/revocation and affected leases. Each supported mutation has an exact versioned event and atomic local policy/event/receipt commit; no supported write path bypasses the journal.",
+      "status": "passed",
+      "evidence": "The unchanged policy-transactions inventory names nineteen current producer kinds. PolicyIntegrationSuite exercises all nineteen against PostgreSQL/TLS, atomic event rollback, offboarding and local authorization; the 102 current integration regressions pass. O03.6.2 defines the atomic PolicySql boundary and credential operation identity.",
+      "evidencePaths": [
+        "docs/policy-transactions.md",
+        "docs/evidence/institutional-pilot/O03.6.3/TEST-sanctity.postgres.PolicyIntegrationSuite.xml",
+        "docs/evidence/institutional-pilot/O03.6.3/TEST-sanctity.postgres.CurrentAuthoritySuite.xml",
+        "docs/evidence/institutional-pilot/O03.6.2/receipt.json"
+      ]
+    },
+    {
+      "criterion": "Implement ADR004 using a separately permissioned service/store and independently retained trust bundle, authenticated transport, canonical signed records, contiguous journal order and installation/epoch binding. Fenced enrollment imports complete existing authority and tombstones, preserving all pre-enrollment restrictions; an empty witness or restored primary cannot establish currency.",
+      "status": "passed",
+      "evidence": "Signed TLS journal/store vectors and current regression pass. Separate primary/witness/operator UIDs, protected volumes, cross-mounted permission denials, separate SQL runtime role and independently held key bundles are observed. Restrictive enrollment retains revoked grants/credentials, inactive principals, lease status, immutable history and scientific identity; ENROLL record/head crashes resume the exact retained checkpoint.",
+      "evidencePaths": [
+        "docs/evidence/institutional-pilot/O03.6.3/process-attempt-04/receipt.json",
+        "docs/evidence/institutional-pilot/O03.6.3/TEST-sanctity.policy.PolicyJournalSuite.xml",
+        "docs/evidence/institutional-pilot/O03.6.3/TEST-sanctity.policy.PolicyTransportSuite.xml",
+        "docs/evidence/institutional-pilot/O03.6.1/receipt.json"
+      ]
+    },
+    {
+      "criterion": "Durably PREPARE the complete event before local commit, obtain verified remote COMMIT before completed success, and resolve retries by operation ID plus exact payload. An outage, lost response or unresolved intent cannot be reported as durable success or overtaken; restrictions already committed locally remain effective. Lost primary plus unresolved PREPARE leaves recovery closed as ADR004 requires.",
+      "status": "passed",
+      "evidence": "Eight primary transaction/receipt boundaries and PREPARE/COMMIT/ABORT record/head process kills demonstrate no false success, exact terminal reconciliation, live rollback proof and conservative restarted absence. Pending local revocation denies access, outage prevents overtaking, and a successor follows predecessor COMMIT. Actual primary database deletion retains acknowledged state or leaves unresolved PREPARE closed.",
+      "evidencePaths": [
+        "docs/evidence/institutional-pilot/O03.6.3/process-attempt-04/receipt.json",
+        "docs/evidence/institutional-pilot/O03.6.3/TEST-sanctity.postgres.PolicyIntegrationSuite.xml",
+        "docs/evidence/institutional-pilot/O03.6.3/TEST-sanctity.postgres.PolicyReceiptCompatibilitySuite.xml"
+      ]
+    },
+    {
+      "criterion": "Implement fresh current-head challenges, durable recovery barriers and writer fencing. Startup and runtime admission reject stale epochs/heads, with permits at most five seconds and bounded drain; changing only a restored database epoch cannot fence an old writer. Preserve current per-operation authorization checks.",
+      "status": "passed",
+      "evidence": "Fresh signed recovery barriers survive record/head kills and exact retries. The running admission client and actual packaged HTTP server are fenced with the local database epoch unchanged; restarted old service fails. The held backend transaction drains within the five-second permit plus recorded 0.25-second polling tolerance and its effects roll back. A separate actual stalled SQL acknowledgement insertion qualifies the unwrapped production finalizer: it drains within its own server-enforced five-second deadline plus recorded scheduling tolerance, returns pending and preserves the local restriction for exact resolution. Current authorization regression remains passing.",
+      "evidencePaths": [
+        "docs/evidence/institutional-pilot/O03.6.3/process-attempt-04/receipt.json",
+        "docs/evidence/institutional-pilot/O03.6.3/finalization-attempt-03/receipt.json",
+        "docs/evidence/institutional-pilot/O03.6.3/TEST-sanctity.postgres.PolicyIntegrationSuite.xml",
+        "docs/evidence/institutional-pilot/O03.6.3/TEST-sanctity.postgres.CurrentAuthoritySuite.xml",
+        "modules/postgres/src/main/scala/sanctity/postgres/PolicyBridge.scala"
+      ]
+    },
+    {
+      "criterion": "Expose a versioned supported-capability/event inventory and redacted durability/readiness diagnostics. Unsupported policy kinds or capability versions fail closed; adding identity/session/lifecycle producers requires explicit enrollment/upgrade integration, never silent omission. Keep legacy organization recovery blocked.",
+      "status": "passed",
+      "evidence": "The versioned capability inventory and redacted diagnostics are exercised by current source and package checks. Unknown capability/producer, valid alternate signing pin, foreign installation, empty witness and incompatible state refuse admission. Existing local event identities remain LocalOnly; pending/unknown/durable responses remain explicit. Legacy organization recovery stays blocked.",
+      "evidencePaths": [
+        "docs/evidence/institutional-pilot/O03.6.3/process-attempt-04/receipt.json",
+        "docs/evidence/institutional-pilot/O03.6.3/final-artifact/catalog-package/receipt.json",
+        "docs/evidence/institutional-pilot/O03.6.3/final-artifact/witness-package/receipt.json",
+        "docs/evidence/institutional-pilot/O03.6.3/TEST-sanctity.policy.PolicyWireSuite.xml",
+        "docs/policy-catalog.md"
+      ]
+    },
+    {
+      "criterion": "Exercise real independent connections/stores and process restarts at every prepare/local-commit/remote-commit/receipt boundary; verify exact retries, changed-payload rejection, duplicate/reordered events, gaps, foreign installation, tampering, key trust and stale-writer rejection. Local service separation claims component isolation only, not computer/disk-loss durability.",
+      "status": "passed",
+      "evidence": "Separate primary/witness JVMs run the SQL/fsync interruption matrix; exact/changed/reordered requests, gaps, tampering, signed unknown capability, foreign installation/trust, durable retries and stale writers are observed. Artifact/harness/source/configuration identities are bound. Same-host isolation does not qualify host/disk loss; identity/session and institutional obligations remain open.",
+      "evidencePaths": [
+        "docs/evidence/institutional-pilot/O03.6.3/process-attempt-04/receipt.json",
+        "docs/evidence/institutional-pilot/O03.6.3/process-attempt-04-procedure.py",
+        "docs/evidence/institutional-pilot/O03.6.3/harness-inputs.json"
+      ]
+    }
+  ],
+  "acceptanceUnchanged": true,
+  "components": [
+    "O03.6.1",
+    "O03.6.2",
+    "O03.6.3"
+  ],
+  "artifact": {
+    "path": "target/service-release-o0363-final-20261015/sanctity-0.1.0-SNAPSHOT.zip",
+    "sha256": "2a6324e498eef0ba278afc0ca6baada389305835235b9c861e85fc457177995e",
+    "bytes": 41044101
+  },
+  "verification": {
+    "distinctTests": 250,
+    "suites": {
+      "sanctity.postgres.PolicyReceiptCompatibilitySuite": 3,
+      "sanctity.postgres.CurrentAuthoritySuite": 44,
+      "sanctity.postgres.TransactionSuite": 10,
+      "sanctity.postgres.HttpSuite": 8,
+      "sanctity.postgres.OrganizationPersistenceSuite": 11,
+      "sanctity.postgres.ServicePrivilegesSuite": 4,
+      "sanctity.postgres.PolicyIntegrationSuite": 22,
+      "sanctity.postgres.PersistenceSuite": 19,
+      "sanctity.policy.PolicyTransportSuite": 13,
+      "sanctity.policy.PolicyWireSuite": 19,
+      "sanctity.policy.PolicyJournalSuite": 17,
+      "sanctity.app.ServiceConfigurationSuite": 9,
+      "sanctity.app.OrganizationSuite": 14,
+      "sanctity.app.OrganizationAuthoritySuite": 57
+    },
+    "distinctProcessCases": 33,
+    "caseNames": [
+      "acknowledged-primary-loss",
+      "altered-client-trust",
+      "barrier-running-service-and-permit-drain",
+      "bounded-finalization-drain",
+      "empty-witness-refusal",
+      "exact-retry-and-adversarial-wire",
+      "lost-primary-unresolved-prepare",
+      "packaged-http-barrier-fencing",
+      "pending-restriction-no-overtaking",
+      "primary-after-local-commit",
+      "primary-after-receipt-commit",
+      "primary-before-local-commit",
+      "primary-before-prepare",
+      "primary-before-receipt-commit",
+      "primary-before-receipt-insert",
+      "primary-lost-local-response",
+      "primary-lost-receipt-response",
+      "setup",
+      "store-capability",
+      "store-foreign",
+      "store-gap",
+      "store-payload",
+      "store-reorder",
+      "witness-abort-head",
+      "witness-abort-record",
+      "witness-commit-head",
+      "witness-commit-record",
+      "witness-enroll-head",
+      "witness-enroll-record",
+      "witness-prepare-head",
+      "witness-prepare-record",
+      "witness-recovery_barrier-head",
+      "witness-recovery_barrier-record"
+    ],
+    "primaryBoundaries": 8,
+    "witnessRecordAndHeadBoundaries": 10,
+    "packagedServiceChecks": 11,
+    "packagedWitnessChecks": 7,
+    "packagedCatalogChecks": 10,
+    "historicalUpgrade": {
+      "completedRetry": "same identity; newer head preserved",
+      "currentGrantDecisions": 8,
+      "driftAndNewerSchema": "refused without repair",
+      "exactHistoricalFiles": 4,
+      "historicalReleasesAndInterpretations": 2,
+      "historicalTablesUnchanged": 14,
+      "interruptedImport": "same operation; exact bytes; one acceptance across retries",
+      "oldBinaryRefusesV008": true,
+      "organizationBootstrap": "explicit reviewed mapping; same genesis on retry; private placement; legacy recovery fenced",
+      "organizationMigrationInterrupted": true,
+      "revokedCredential": "denied and historical row unchanged",
+      "runtimeProfile": "separate login"
+    },
+    "drainSeconds": 4.913771,
+    "finalizationDrainSeconds": 5.000123,
+    "finalizationMeasurement": "PostgreSQL transaction-timeout/disconnection timestamps; excludes Docker polling latency",
+    "finalizationSchedulingToleranceSeconds": 0.25,
+    "pollingToleranceSeconds": 0.25,
+    "packagedHttpBeforeAndAfterBarrier": [
+      200,
+      503
+    ],
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "counting": "Latest passing regression reports; 33 distinct process case names across the current-artifact matrix and finalizer runs. Repeated setup is counted once. Initial failed fixture attempts are retained, not counted as passes."
+  },
+  "verificationSource": "docs/evidence/institutional-pilot/O03.6.3/receipt.json",
+  "command": [
+    "python3",
+    "docs/evidence/institutional-pilot/O03.6.3/record-parent-evidence.py"
+  ],
+  "next": "H03.1 isolated backup automation; O03.7 restore remains blocked by H03.1. O03.8 and broader institutional gates remain open.",
+  "inputs": {
+    "docs/evidence/institutional-pilot/O03.6.1/receipt.json": "14fda14bf93f8b8e1cfb58da45641351c8625653af57161e7c38e84b45edf40d",
+    "docs/evidence/institutional-pilot/O03.6.2/receipt.json": "428b26687c94ef313641c72f93c03732fb8166a1eafc828b9a80ff920fcf5d5a",
+    "docs/evidence/institutional-pilot/O03.6.3/receipt.json": "1fbf6ab2386d994e6a9d58e8c86538200c67681c6a64b6f028786e5a06fd797e",
+    "docs/evidence/institutional-pilot/O03.6.3/parent-acceptance-review.json": "b904f5e3a6996cd3fd732f2878d0368f2c76ff033b9b1bab308eaad7e213415f",
+    "docs/evidence/institutional-pilot/O03.6.3/record-parent-evidence.py": "1fa56a9d844ddc5d2bd764618ae8f77694fe660b46b5ba05347b847af581edb4",
+    "docs/policy-transactions.md": "fc67fff0ec20444809a4eee09760d4539638eb19da8341d1887c0441a07f041e",
+    "docs/policy-witness.md": "58bffc50405a9f4f32baf7689b1a8d60fe5983cfb8c1f61395117dcb97d2ccb5",
+    "docs/policy-catalog.md": "c9edc2fdfe50bdfeba18f16cdafa894c8d2502e5f6373bddf9a14e8a085e1b69",
+    "docs/policy-process-qualification.md": "c35017ffaa87d487cdb24bfc21ea3690ec4e3b6c54d7a5305a55cd2b6b7305a7",
+    "docs/decisions/004-policy-durability.md": "bea04ec3757bc0d545d93a736f43a0e0719f9dd53cbdd4bba2aac554a04844f3",
+    "docs/institutional-readiness-backlog.json": "d742d31cbefda29c4f1d73221ed25e03608c88d96c354c49431e722d11038c3f",
+    "docs/evidence/institutional-readiness-motes.json": "a08826a91bfc7895c68a8cc6fe320b870f3f3412e4d0be5559fcc09f5cdc8d23"
+  },
+  "limitations": [
+    "Same Docker host/physical disk; no off-host persistence, physical power-loss or institutional approval claim.",
+    "Independent policy mode requires PostgreSQL 17 transaction_timeout; older versions refuse independent admission.",
+    "No barrier release, policy replay or organization restore: H03.1 and O03.7/O03.8 remain required.",
+    "Current nineteen authority kinds only; full identity/session/lifecycle and institutional qualification remain O03.2/O03.3/SITE01.",
+    "F03.4 retains continuous byte-stream and external-worker checks; this qualifies SQL admission and actual API authentication.",
+    "H04.2 retains scale/performance qualification; five-second SQL permits and the bounded finalization phase keep their documented availability limits.",
+    "Synthetic keys and data; the Docker/database operator is trusted. Test-only JDBC/after-force controls are separate from the service artifact."
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "status": "passed",
+  "profiles": [
+    {
+      "profile": "quick",
+      "deterministic": true,
+      "datasets": 6,
+      "files": 378,
+      "bytes": 12066322,
+      "releases": 18,
+      "materializedQuickBytesQueriesNiftiAndBoundaries": "pass"
+    },
+    {
+      "profile": "stress",
+      "deterministic": true,
+      "datasets": 24,
+      "files": 12072,
+      "bytes": 3197706588,
+      "releases": 480,
+      "materializedQuickBytesQueriesNiftiAndBoundaries": "not materialized; deterministic recipes checked"
+    }
+  ],
+  "budgetManifest": "consistent with ADR002",
+  "performanceQualified": false
+}

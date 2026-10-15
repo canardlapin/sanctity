@@ -1,0 +1,15 @@
+{
+  "sanctity.app.OrganizationAuthoritySuite": "57",
+  "sanctity.app.OrganizationSuite": "14",
+  "sanctity.app.ServiceConfigurationSuite": "9",
+  "sanctity.postgres.CurrentAuthoritySuite": "44",
+  "sanctity.postgres.OperationsSuite": "5",
+  "sanctity.postgres.PostgresLifecycleSuite": "183",
+  "sanctity.postgres.PolicyReceiptCompatibilitySuite": "2",
+  "sanctity.postgres.ProcessingRecoverySuite": "3",
+  "sanctity.postgres.OrganizationPersistenceSuite": "11",
+  "sanctity.postgres.HttpSuite": "8",
+  "sanctity.postgres.ConsoleSuite": "1",
+  "sanctity.postgres.ServicePrivilegesSuite": "4",
+  "sanctity.postgres.TransactionSuite": "10"
+}

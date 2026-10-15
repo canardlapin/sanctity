@@ -1,0 +1,26 @@
+# Linux systemd example; not installed or host-qualified by this repository.
+[Unit]
+Description=Sanctity repository
+After=network.target
+
+[Service]
+Type=simple
+User=sanctity
+Group=sanctity
+WorkingDirectory=/opt/sanctity/current
+EnvironmentFile=/etc/sanctity/service.env
+ExecStart=/opt/sanctity/current/bin/sanctity serve
+UMask=0077
+Restart=on-failure
+RestartSec=5
+KillSignal=SIGTERM
+KillMode=control-group
+TimeoutStopSec=20
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ReadWritePaths=/var/lib/sanctity
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,37 @@
+[
+  {
+    "case": "setup",
+    "status": "passed",
+    "checks": [
+      "complete restrictive enrollment",
+      "old history byte identity",
+      "revoked grant and credentials remain denied",
+      "leased intake/delivery state included without secrets",
+      "retired old SQL role",
+      "fresh least-privilege role",
+      "separate OS users and real cross-store permission denial"
+    ],
+    "elapsedSeconds": 65.89
+  },
+  {
+    "case": "bounded-finalization-drain",
+    "status": "passed",
+    "checks": [
+      "actual PostgreSQL acknowledgement insert stalled for twenty seconds",
+      "unwrapped production finalizer aborts transaction within its five-second deadline",
+      "caller receives pending and committed restriction remains effective",
+      "exact resolution adds one acknowledgement without repeating effects"
+    ],
+    "elapsedSeconds": 32.166,
+    "finalizationObserved": {
+      "backend": 409,
+      "transactionStartedAt": "2026-10-15T03:33:45.609786+00:00",
+      "queryStartedAt": "2026-10-15T03:33:45.842523+00:00",
+      "observedAt": "2026-10-15T03:33:46.002007+00:00"
+    },
+    "drainSeconds": 5.234214,
+    "samplingToleranceSeconds": 0.25,
+    "jdbcFaultWrapper": false,
+    "outcome": "pending"
+  }
+]

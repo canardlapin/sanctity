@@ -1,0 +1,45 @@
+{
+  "purpose": "Exact pre-core-hardening plan and progress inputs; preserves earlier receipt provenance as planning documents evolve.",
+  "files": [
+    {
+      "original": "docs/institutional-readiness-backlog.json",
+      "snapshot": "docs/evidence/core-hardening-baseline/docs/institutional-readiness-backlog.json",
+      "sha256": "848ec5a4b9556b0ff0306993b88c06727d158c748224d08ceb9b32ee14b1e9ea"
+    },
+    {
+      "original": "docs/evidence/institutional-readiness-motes.json",
+      "snapshot": "docs/evidence/core-hardening-baseline/docs/evidence/institutional-readiness-motes.json",
+      "sha256": "fb2b5ab19936f010f987f2b112d3a8e7bccbfcf90e3c2ad2015d1d70a38f318e"
+    },
+    {
+      "original": "docs/evidence/institutional-pilot-progress.json",
+      "snapshot": "docs/evidence/core-hardening-baseline/docs/evidence/institutional-pilot-progress.json",
+      "sha256": "f0a1484b5c737791ef8448cd4d340693dcc943f72e77191da56e2ecb5d6258a8"
+    },
+    {
+      "original": "docs/local-demo-plan.md",
+      "snapshot": "docs/evidence/core-hardening-baseline/docs/local-demo-plan.md",
+      "sha256": "a17c95185928ea5f98c2fffe8018ad288f98247f747257f8da20df003809dc02"
+    },
+    {
+      "original": "docs/institutional-pilot-epics.md",
+      "snapshot": "docs/evidence/core-hardening-baseline/docs/institutional-pilot-epics.md",
+      "sha256": "9b61b6b7b1c39042b28b08c0b148e8973d090e31d03d398cf9ead335c8dcf593"
+    },
+    {
+      "original": "docs/institutional-readiness-plan.md",
+      "snapshot": "docs/evidence/core-hardening-baseline/docs/institutional-readiness-plan.md",
+      "sha256": "9c743e58141647e2cb568aab6f8d57917665a41d38edf44cdf95e546ee46d446"
+    },
+    {
+      "original": "docs/implementation-plan.md",
+      "snapshot": "docs/evidence/core-hardening-baseline/docs/implementation-plan.md",
+      "sha256": "8de866d4999fcf64922ef4f2cf71d4a6ba8df236f1dff5a362ab690d34da9218"
+    },
+    {
+      "original": "README.md",
+      "snapshot": "docs/evidence/core-hardening-baseline/README.md",
+      "sha256": "3af72b5b87d04c9fa319276dcde890790b2e803ee06cc937933689a715a3235a"
+    }
+  ]
+}

@@ -14,7 +14,8 @@ import sanctity.kernel.*
 
 /** Public v1 workflow adapter. No arbitrary filesystem paths, blobs, manifests, or caller contexts are accepted. */
 final class RepositoryHttp[F[_]](
-    catalog: Catalog[F], repository: NativeRepository[F], authenticator: Authenticator[F]
+    catalog: Catalog[F], repository: NativeRepository[F], authenticator: Authenticator[F],
+    independentPolicy: Boolean = false
 )(using F: Async[F]) extends Http4sDsl[F]:
   import PublicJson as Out
   import RequestJson as In
@@ -26,8 +27,14 @@ final class RepositoryHttp[F[_]](
   private def json(value: Json, status: Status = Status.Ok): F[Response[F]] =
     F.pure(Response[F](status).withEntity(value.noSpaces).putHeaders(Header.Raw(CIString("Content-Type"), "application/json")))
   private def error(status: Status, code: String): F[Response[F]] = json(Json.obj("error" -> Json.fromString(code)), status)
+  private def policyAcknowledged(response: Response[F]): Response[F] =
+    response.putHeaders(Header.Raw(CIString("X-Sanctity-Policy-Durability"),if independentPolicy then "Durable" else "LocalOnly"))
   private def failure(p: Problem): F[Response[F]] = p match
     case Problem.Denied | _: Problem.NotFound => error(Status.NotFound, "not_found")
+    case Problem.PolicyPending(operation) =>
+      error(Status.ServiceUnavailable, "policy_pending:" + operation)
+    case Problem.PolicyOutcomeUnknown(operation) =>
+      error(Status.ServiceUnavailable, "policy_outcome_unknown:" + operation)
     case _: Problem.Conflict => error(Status.Conflict, "conflict")
     case _: Problem.Rejected => error(Status.UnprocessableEntity, "admission_rejected")
     case _: Problem.LimitExceeded => error(Status.PayloadTooLarge, "limit_exceeded")
@@ -107,10 +114,11 @@ final class RepositoryHttp[F[_]](
         names <- lift(In.get[Vector[String]](b, "actions"))
         actions <- lift(names.traverse(n => Action.values.find(_.toString == n).toRight(Problem.Unsupported("unknown action"))))
         grant <- checked(catalog.grant(ctx, dataset, recipient, release, actions.toSet))
-        result <- json(Out.grant(grant), Status.Created)
+        result <- json(Out.grant(grant), Status.Created).map(policyAcknowledged)
       yield result
     case DELETE -> Root / "v1" / "datasets" / d / "grants" / g =>
-      (id[DatasetTag](d), id[GrantTag](g)).tupled.flatMap((ds, grant) => checked(catalog.revoke(ctx, ds, grant))).as(Response[F](Status.NoContent))
+      (id[DatasetTag](d), id[GrantTag](g)).tupled.flatMap((ds, grant) => checked(catalog.revoke(ctx, ds, grant)))
+        .as(policyAcknowledged(Response[F](Status.NoContent)))
     case POST -> Root / "v1" / "selections" =>
       for
         b <- body(req)

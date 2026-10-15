@@ -1,0 +1,37 @@
+{
+  "files": [
+    {
+      "path": "docs/institutional-readiness-backlog.json",
+      "sha256": "fe3bef98e57e8e32fe7671bb1cb6181f5a48c84bb2dd81b8cb716cdbc1248890"
+    },
+    {
+      "path": "docs/evidence/institutional-readiness-motes.json",
+      "sha256": "5479a60dc48216de84c710e4fff00d600ebeaff243a1d8c24c55c673294a4b59"
+    },
+    {
+      "path": "docs/evidence/institutional-pilot-progress.json",
+      "sha256": "2033afeadfe0af0f0d97f665c5279af48a9df1f0afad608c8186bf7822c49548"
+    },
+    {
+      "path": "docs/core-hardening-plan.md",
+      "sha256": "3d5ee057dc8d1f4ae775d6d9f261fc6fae0bac732dc5da6d82be628a263dab09"
+    },
+    {
+      "path": "docs/institutional-pilot-epics.md",
+      "sha256": "54bad7a1fceaf56047a5b210bfc8326f0cf8c0640916bea32f7d9baa4cb2c38c"
+    },
+    {
+      "path": "docs/institutional-readiness-plan.md",
+      "sha256": "41eb7991b10728c60624afb8e49ac5c1c7df78d38841242506261a44daccfd2f"
+    },
+    {
+      "path": "docs/implementation-plan.md",
+      "sha256": "8b37f4c1129943452c7696483ee43065ba3cad63deaf886a66c195d099cce737"
+    },
+    {
+      "path": "docs/local-demo-plan.md",
+      "sha256": "e79190c5d360a98338e83782ee8d6ae2eb781b05b98919e5d6280038f4974d60"
+    }
+  ],
+  "archive": "docs/evidence/core-recovery-planning/prior-documents.zip"
+}

@@ -1,0 +1,9238 @@
+{
+  "status": "passed",
+  "crashWindowSequences": 1024,
+  "cases": [
+    "witness outage prevents unprepared local commit",
+    "locally effective revocation with replication outage stays unacknowledged and restore-closed",
+    "abort only before local commit on fenced live transaction; aborted intent does not change policy",
+    "duplicate preparation/finalization/response idempotent; same key with different intent refused",
+    "old scientific backup cannot restore grant, disabled identity or outgoing stewardship",
+    "fenced writer cannot commit/finalize or start a new intent",
+    "stale/foreign/tampered proofs, wrong nonce, missing suffix/middle, reorder/duplicate and unavailable current authority refused",
+    "counterexample retained: async-only acknowledgment resurrects a locally revoked grant"
+  ],
+  "windows": [
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "grant",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "revoke",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "disable",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "grant"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "revoke"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "disable"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "grant",
+        "transfer"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "grant"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "revoke"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "disable"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "revoke",
+        "transfer"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "grant"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "revoke"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "disable"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "disable",
+        "transfer"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "grant"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "revoke"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "disable"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 0,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 1,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 2,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 3,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 4,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 5,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 6,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 7,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 8,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 9,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 10,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 11,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 12,
+      "recovery": "closed"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 13,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 14,
+      "recovery": "exact-current-policy"
+    },
+    {
+      "sequence": [
+        "transfer",
+        "transfer",
+        "transfer"
+      ],
+      "completedSteps": 15,
+      "recovery": "exact-current-policy"
+    }
+  ],
+  "limits": [
+    "Finite abstract protocol model, not a proof over unbounded histories.",
+    "HMAC models authenticity only; Ed25519/TLS/keys and real durable I/O remain O03.2.",
+    "External writer fencing and non-rollback witness continuity are explicit assumptions, not inferred from signatures.",
+    "No deployed independent recovery or institutional physical-loss qualification."
+  ]
+}

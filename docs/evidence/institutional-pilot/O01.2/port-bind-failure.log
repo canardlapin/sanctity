@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "/Users/bbuchsbaum/code/scala/sanctity/scripts/check-service-package.py", line 290, in <module>
+    main()
+    ~~~~^^
+  File "/Users/bbuchsbaum/code/scala/sanctity/scripts/check-service-package.py", line 213, in main
+    rejected({})  # The bound port must fail, without echoing driver/configuration context.
+    ~~~~~~~~^^^^
+  File "/Users/bbuchsbaum/code/scala/sanctity/scripts/check-service-package.py", line 147, in rejected
+    check("Exception" not in combined and "at sanctity." not in combined, "raw startup exception escaped")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bbuchsbaum/code/scala/sanctity/scripts/check-service-package.py", line 28, in check
+    raise AssertionError(message)
+AssertionError: raw startup exception escaped

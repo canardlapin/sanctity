@@ -1,0 +1,124 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<testsuite hostname="BUC-GW01.local" name="sanctity.app.OrganizationAuthoritySuite" tests="57" errors="0" failures="0" skipped="0" time="2.168" timestamp="2026-10-14T14:21:56">
+          <properties>
+      <property name="java.specification.version" value="21"/><property name="sun.jnu.encoding" value="UTF-8"/><property name="sun.arch.data.model" value="64"/><property name="java.vendor.url" value="https://adoptium.net/"/><property name="sun.boot.library.path" value="/Users/bbuchsbaum/Library/Java/JavaVirtualMachines/temurin-21.0.12.1+1.jdk/Contents/Home/lib"/><property name="sun.java.command" value="/Users/bbuchsbaum/.local/share/sbt/1.13.0/bin/sbt-launch.jar app/testOnly sanctity.app.OrganizationAuthoritySuite sanctity.app.OrganizationSuite service/test integration/test"/><property name="jdk.debug" value="release"/><property name="java.specification.vendor" value="Oracle Corporation"/><property name="java.version.date" value="2026-08-18"/><property name="java.home" value="/Users/bbuchsbaum/Library/Java/JavaVirtualMachines/temurin-21.0.12.1+1.jdk/Contents/Home"/><property name="file.separator" value="/"/><property name="java.vm.compressedOopsMode" value="Zero based"/><property name="line.separator" value="
+"/><property name="java.vm.specification.vendor" value="Oracle Corporation"/><property name="java.specification.name" value="Java Platform API Specification"/><property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/><property name="java.runtime.version" value="21.0.12.1+1-LTS"/><property name="user.name" value="bbuchsbaum"/><property name="log4j.ignoreTCL" value="true"/><property name="file.encoding" value="UTF-8"/><property name="java.vendor.version" value="Temurin-21.0.12.1+1"/><property name="java.io.tmpdir" value="/var/folders/f8/k46hqpm95mn7ns9f7wxw88640000gp/T/"/><property name="java.version" value="21.0.12.1"/><property name="java.vm.specification.name" value="Java Virtual Machine Specification"/><property name="native.encoding" value="US-ASCII"/><property name="java.library.path" value="/Users/bbuchsbaum/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:."/><property name="stderr.encoding" value="US-ASCII"/><property name="java.vendor" value="Eclipse Adoptium"/><property name="scala.ext.dirs" value="/Users/bbuchsbaum/.sbt/1.0/java9-rt-ext-eclipse_adoptium_21_0_12_1"/><property name="sun.io.unicode.encoding" value="UnicodeBig"/><property name="socksNonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/><property name="java.class.path" value="/Users/bbuchsbaum/.local/share/sbt/1.13.0/bin/sbt-launch.jar"/><property name="java.vm.vendor" value="Eclipse Adoptium"/><property name="jline.shutdownhook" value="false"/><property name="user.timezone" value="America/Toronto"/><property name="java.vm.specification.version" value="21"/><property name="os.name" value="Mac OS X"/><property name="sun.java.launcher" value="SUN_STANDARD"/><property name="user.country" value="CA"/><property name="http.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/><property name="sun.cpu.endian" value="little"/><property name="user.home" value="/Users/bbuchsbaum"/><property name="user.language" value="en"/><property name="sbt.script" value="/Users/bbuchsbaum/.local/bin/sbt"/><property name="sbt.ipcsocket.tmpdir" value="/var/folders/f8/k46hqpm95mn7ns9f7wxw88640000gp/T/.sbt1b8b7ae4/ipcsocket"/><property name="swoval.tmpdir" value="/var/folders/f8/k46hqpm95mn7ns9f7wxw88640000gp/T/.sbt1b8b7ae4/swoval"/><property name="apple.awt.application.name" value="Boot"/><property name="jline.esc.timeout" value="0"/><property name="ftp.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/><property name="stdout.encoding" value="US-ASCII"/><property name="path.separator" value=":"/><property name="os.version" value="15.1.1"/><property name="jna.nosys" value="true"/><property name="java.runtime.name" value="OpenJDK Runtime Environment"/><property name="java.vm.name" value="OpenJDK 64-Bit Server VM"/><property name="java.vendor.url.bug" value="https://github.com/adoptium/adoptium-support/issues"/><property name="user.dir" value="/Users/bbuchsbaum/code/scala/sanctity"/><property name="os.arch" value="aarch64"/><property name="java.vm.info" value="mixed mode, sharing"/><property name="java.vm.version" value="21.0.12.1+1-LTS"/><property name="java.class.version" value="65.0"/>
+    </properties>
+          <testcase classname="sanctity.app.OrganizationAuthoritySuite" name="the retained corpus has exactly 38 unique, mapped cases" time="0.172">
+                      
+                    </testcase><testcase classname="sanctity.app.OrganizationAuthoritySuite" name="ADR002 A01: Active project reader and explicit dataset inheritance" time="0.199">
+                      
+                    </testcase><testcase classname="sanctity.app.OrganizationAuthoritySuite" name="ADR002 A02: Project participation alone cannot disclose an ExplicitOnly dataset" time="0.003">
+                      
+                    </testcase><testcase classname="sanctity.app.OrganizationAuthoritySuite" name="ADR002 A03: Names and counts use permitted rows only" time="0.007">
+                      
+                    </testcase><testcase classname="sanctity.app.OrganizationAuthoritySuite" name="ADR002 A04: Lab administration supplies no dataset read authority" time="0.001">
+                      
+                    </testcase><testcase classname="sanctity.app.OrganizationAuthoritySuite" name="ADR002 A05: Current lab admin can administer membership without data access" time="0.003">
+                      
+                    </testcase><testcase classname="sanctity.app.OrganizationAuthoritySuite" name="ADR002 A06: Project reader can retrieve retained historical bytes" time="0.004">
+                      
+                    </testcase><testcase classname="sanctity.app.OrganizationAuthoritySuite" name="ADR002 A07: Contributor bundle explicitly includes Propose" time="0.003">
+                      
+                    </testcase><testcase classname="sanctity.app.OrganizationAuthoritySuite" name="ADR002 A08: Proposing is distinct from acceptance" time="0.0">
+                      
+                    </testcase><testcase classname="sanctity.app.OrganizationAuthoritySuite" name="ADR002 A09: Contributing is distinct from sharing" time="0.0">
+                      
+                    </testcase><testcase classname="sanctity.app.OrganizationAuthoritySuite" name="ADR002 A10: Project steward can accept on an inheriting primary dataset" time="0.025">
+                      
+                    </testcase><testcase classname="sanctity.app.OrganizationAuthoritySuite" name="ADR002 A11: Project roles never inherit restricted source evidence" time="0.0">
+                      
+                    </testcase><testcase classname="sanctity.app.OrganizationAuthoritySuite" name="ADR002 A12: Explicit dataset stewardship authorizes its restricted evidence" time="0.02">
+                      
+                    </testcase><testcase classname="sanctity.app.OrganizationAuthoritySuite" name="ADR002 A13: Project stewardship cannot open a restricted dataset" time="0.0">
+                      
+                    </testcase><testcase classname="sanctity.app.OrganizationAuthoritySuite" name="ADR002 A14: Current guest sponsorship and independent exact-release grant" time="0.001">
+                      
+                    </testcase><testcase classname="sanctity.app.OrganizationAuthoritySuite" name="ADR002 A15: Fixed R1 grant cannot read R2" time="0.0">
+                      
+                    </testcase><testcase classname="sanctity.app.OrganizationAuthoritySuite" name="ADR002 A16: Fixed-release share cannot reveal the current head" time="0.002">
+                      
+                    </testcase><testcase classname="sanctity.app.OrganizationAuthoritySuite" name="ADR002 A17: Share label and exact release only; no parent project or newer release" time="0.004">
+                      
+                    </testcase><testcase classname="sanctity.app.OrganizationAuthoritySuite" name="ADR002 A18: Fixed-release grants are read-only" time="0.001">
+                      
+                    </testcase><testcase classname="sanctity.app.OrganizationAuthoritySuite" name="ADR002 A19: Expiry is exclusive at the boundary" time="0.001">
+                      
+                    </testcase><testcase classname="sanctity.app.OrganizationAuthoritySuite" name="ADR002 A20: Guest sponsorship is a prerequisite even for independent grants" time="0.0">
+                      
+                    </testcase><testcase classname="sanctity.app.OrganizationAuthoritySuite" name="ADR002 A21: Principal disablement overrides stewardship" time="0.001">
+                      
+                    </testcase><testcase classname="sanctity.app.OrganizationAuthoritySuite" name="ADR002 A22: Ending project participation ends inherited rights" time="0.0">
+                      
+                    </testcase><testcase classname="sanctity.app.OrganizationAuthoritySuite" name="ADR002 A23: Independent exact-release share survives project removal" time="0.001">
+                      
+                    </testcase><testcase classname="sanctity.app.OrganizationAuthoritySuite" name="ADR002 A24: Surviving R1 grant does not restore current-head visibility" time="0.001">
+                      
+                    </testcase><testcase classname="sanctity.app.OrganizationAuthoritySuite" name="ADR002 A25: Derived grant requires the original active participation ID" time="0.002">
+                      
+                    </testcase><testcase classname="sanctity.app.OrganizationAuthoritySuite" name="ADR002 A26: Optional project link supplies no access" time="0.0">
+                      
+                    </testcase><testcase classname="sanctity.app.OrganizationAuthoritySuite" name="ADR002 A27: Provenance supplies no access" time="0.001">
+                      
+                    </testcase><testcase classname="sanctity.app.OrganizationAuthoritySuite" name="ADR002 A28: A receipt rechecks current metadata authority" time="0.0">
+                      
+                    </testcase><testcase classname="sanctity.app.OrganizationAuthoritySuite" name="ADR002 A29: Materialized bytes and an old delivery plan are not bearer authority" time="0.0">
+                      
+                    </testcase><testcase classname="sanctity.app.OrganizationAuthoritySuite" name="ADR002 A30: An unauthorized constituent blocks the complete selection; no silent shrink" time="0.001">
+                      
+                    </testcase><testcase classname="sanctity.app.OrganizationAuthoritySuite" name="ADR002 A31: Readable inputs do not authorize output deposit" time="0.001">
+                      
+                    </testcase><testcase classname="sanctity.app.OrganizationAuthoritySuite" name="ADR002 A32: Output deposit checks current Propose, regardless of successful execution" time="0.0">
+                      
+                    </testcase><testcase classname="sanctity.app.OrganizationAuthoritySuite" name="ADR002 A33: Archival blocks writes even with an active contributor role" time="0.001">
+                      
+                    </testcase><testcase classname="sanctity.app.OrganizationAuthoritySuite" name="ADR002 A34: Archival preserves currently authorized reads" time="0.002">
+                      
+                    </testcase><testcase classname="sanctity.app.OrganizationAuthoritySuite" name="ADR002 A35: Issuer cannot grant evidence authority they do not hold" time="0.002">
+                      
+                    </testcase><testcase classname="sanctity.app.OrganizationAuthoritySuite" name="ADR002 A36: ReadContent does not imply source evidence" time="0.001">
+                      
+                    </testcase><testcase classname="sanctity.app.OrganizationAuthoritySuite" name="ADR002 A37: Independent grant survives issuer disablement while recipient and guest sponsorship remain active" time="0.001">
+                      
+                    </testcase><testcase classname="sanctity.app.OrganizationAuthoritySuite" name="ADR002 A38: Withdrawal overrides still-valid memberships" time="0.001">
+                      
+                    </testcase><testcase classname="sanctity.app.OrganizationAuthoritySuite" name="role/action matrix has no evidence inheritance, lab-admin bypass or implicit stewardship" time="0.167">
+                      
+                    </testcase><testcase classname="sanctity.app.OrganizationAuthoritySuite" name="disablement, unavailable admission and missing identity eligibility override every data basis" time="0.195">
+                      
+                    </testcase><testcase classname="sanctity.app.OrganizationAuthoritySuite" name="ExplicitOnly cannot widen inherited access and navigation links cannot authorize" time="0.342">
+                      
+                    </testcase><testcase classname="sanctity.app.OrganizationAuthoritySuite" name="narrowing grant actions or fixing a release never creates access" time="0.312">
+                      
+                    </testcase><testcase classname="sanctity.app.OrganizationAuthoritySuite" name="expiry denies at the exact boundary and never resurrects afterward" time="0.167">
+                      
+                    </testcase><testcase classname="sanctity.app.OrganizationAuthoritySuite" name="all named derived appointments must remain applicable; rejoining with a new ID is insufficient" time="0.004">
+                      
+                    </testcase><testcase classname="sanctity.app.OrganizationAuthoritySuite" name="membership-derived project roles expire while independent participation and grants survive" time="0.027">
+                      
+                    </testcase><testcase classname="sanctity.app.OrganizationAuthoritySuite" name="guests need verified current approval and finite appointments/grants within sponsorship expiry" time="0.005">
+                      
+                    </testcase><testcase classname="sanctity.app.OrganizationAuthoritySuite" name="issuer departure preserves independent shares but issuance requires every action and nondelegation" time="0.002">
+                      
+                    </testcase><testcase classname="sanctity.app.OrganizationAuthoritySuite" name="archive preserves reads and revocation, blocks new writes and grants; withdrawal overrides reads" time="0.002">
+                      
+                    </testcase><testcase classname="sanctity.app.OrganizationAuthoritySuite" name="unknown scopes and malformed references fail closed without historical-curator fallback" time="0.003">
+                      
+                    </testcase><testcase classname="sanctity.app.OrganizationAuthoritySuite" name="receipt, cached bytes, candidate evidence, provenance and processing preserve distinct prerequisites" time="0.01">
+                      
+                    </testcase><testcase classname="sanctity.app.OrganizationAuthoritySuite" name="self explanations separate surviving share and role bases without disclosing other identities" time="0.009">
+                      
+                    </testcase><testcase classname="sanctity.app.OrganizationAuthoritySuite" name="hidden datasets, links and grant recipients cannot change a permitted self explanation or directory" time="0.358">
+                      
+                    </testcase><testcase classname="sanctity.app.OrganizationAuthoritySuite" name="fixed shares and legacy metadata-only shares cannot enumerate projects, heads or hidden links" time="0.007">
+                      
+                    </testcase><testcase classname="sanctity.app.OrganizationAuthoritySuite" name="effective-access explanations include the earliest membership, role, share or sponsorship expiry" time="0.003">
+                      
+                    </testcase><testcase classname="sanctity.app.OrganizationAuthoritySuite" name="a quarantined or unknown current head cannot be disclosed through dataset-wide metadata rights" time="0.002">
+                      
+                    </testcase><testcase classname="sanctity.app.OrganizationAuthoritySuite" name="ending one participation cannot remove another independent role or share" time="0.091">
+                      
+                    </testcase>
+          <system-out><![CDATA[]]></system-out>
+          <system-err><![CDATA[]]></system-err>
+        </testsuite>

@@ -1,0 +1,351 @@
+[
+  {
+    "case": "setup",
+    "status": "passed",
+    "checks": [
+      "complete restrictive enrollment",
+      "old history byte identity",
+      "revoked grant and credentials remain denied",
+      "leased intake/delivery state included without secrets",
+      "retired old SQL role",
+      "fresh least-privilege role",
+      "separate OS users and real cross-store permission denial"
+    ],
+    "elapsedSeconds": 50.355
+  },
+  {
+    "case": "primary-before-prepare",
+    "status": "passed",
+    "checks": [
+      "kill or lost response at exact JDBC boundary",
+      "no false durable response",
+      "atomic local restriction/event",
+      "restart exact outcome or conservative refusal",
+      "no duplicate event"
+    ],
+    "elapsedSeconds": 17.332,
+    "localCommitted": false,
+    "journalKinds": [
+      "ENROLL"
+    ]
+  },
+  {
+    "case": "primary-before-local-commit",
+    "status": "passed",
+    "checks": [
+      "kill or lost response at exact JDBC boundary",
+      "no false durable response",
+      "atomic local restriction/event",
+      "restart exact outcome or conservative refusal",
+      "no duplicate event"
+    ],
+    "elapsedSeconds": 18.253,
+    "localCommitted": false,
+    "journalKinds": [
+      "ENROLL",
+      "PREPARE"
+    ]
+  },
+  {
+    "case": "primary-after-local-commit",
+    "status": "passed",
+    "checks": [
+      "kill or lost response at exact JDBC boundary",
+      "no false durable response",
+      "atomic local restriction/event",
+      "restart exact outcome or conservative refusal",
+      "no duplicate event"
+    ],
+    "elapsedSeconds": 24.069,
+    "localCommitted": true,
+    "journalKinds": [
+      "ENROLL",
+      "PREPARE"
+    ]
+  },
+  {
+    "case": "primary-lost-local-response",
+    "status": "passed",
+    "checks": [
+      "kill or lost response at exact JDBC boundary",
+      "no false durable response",
+      "atomic local restriction/event",
+      "restart exact outcome or conservative refusal",
+      "no duplicate event"
+    ],
+    "elapsedSeconds": 25.691,
+    "localCommitted": true,
+    "journalKinds": [
+      "ENROLL",
+      "PREPARE"
+    ]
+  },
+  {
+    "case": "primary-before-receipt-insert",
+    "status": "passed",
+    "checks": [
+      "kill or lost response at exact JDBC boundary",
+      "no false durable response",
+      "atomic local restriction/event",
+      "restart exact outcome or conservative refusal",
+      "no duplicate event"
+    ],
+    "elapsedSeconds": 26.009,
+    "localCommitted": true,
+    "journalKinds": [
+      "ENROLL",
+      "PREPARE",
+      "COMMIT"
+    ]
+  },
+  {
+    "case": "primary-before-receipt-commit",
+    "status": "passed",
+    "checks": [
+      "kill or lost response at exact JDBC boundary",
+      "no false durable response",
+      "atomic local restriction/event",
+      "restart exact outcome or conservative refusal",
+      "no duplicate event"
+    ],
+    "elapsedSeconds": 28.984,
+    "localCommitted": true,
+    "journalKinds": [
+      "ENROLL",
+      "PREPARE",
+      "COMMIT"
+    ]
+  },
+  {
+    "case": "primary-after-receipt-commit",
+    "status": "passed",
+    "checks": [
+      "kill or lost response at exact JDBC boundary",
+      "no false durable response",
+      "atomic local restriction/event",
+      "restart exact outcome or conservative refusal",
+      "no duplicate event"
+    ],
+    "elapsedSeconds": 43.548,
+    "localCommitted": true,
+    "journalKinds": [
+      "ENROLL",
+      "PREPARE",
+      "COMMIT"
+    ]
+  },
+  {
+    "case": "primary-lost-receipt-response",
+    "status": "passed",
+    "checks": [
+      "kill or lost response at exact JDBC boundary",
+      "no false durable response",
+      "atomic local restriction/event",
+      "restart exact outcome or conservative refusal",
+      "no duplicate event"
+    ],
+    "elapsedSeconds": 49.426,
+    "localCommitted": true,
+    "journalKinds": [
+      "ENROLL",
+      "PREPARE",
+      "COMMIT"
+    ]
+  },
+  {
+    "case": "witness-enroll-record",
+    "status": "passed",
+    "checks": [
+      "separate witness SIGKILL after forced record",
+      "response cannot report success",
+      "verified restart retains exact durable suffix",
+      "exact resumption or closed unresolved absence"
+    ],
+    "elapsedSeconds": 43.71,
+    "journalKinds": [
+      "ENROLL"
+    ]
+  },
+  {
+    "case": "witness-enroll-head",
+    "status": "passed",
+    "checks": [
+      "separate witness SIGKILL after forced head",
+      "response cannot report success",
+      "verified restart retains exact durable suffix",
+      "exact resumption or closed unresolved absence"
+    ],
+    "elapsedSeconds": 23.487,
+    "journalKinds": [
+      "ENROLL"
+    ]
+  },
+  {
+    "case": "witness-prepare-record",
+    "status": "passed",
+    "checks": [
+      "separate witness SIGKILL after forced record",
+      "response cannot report success",
+      "verified restart retains exact durable suffix",
+      "exact resumption or closed unresolved absence"
+    ],
+    "elapsedSeconds": 20.953,
+    "journalKinds": [
+      "ENROLL",
+      "PREPARE"
+    ]
+  },
+  {
+    "case": "witness-prepare-head",
+    "status": "passed",
+    "checks": [
+      "separate witness SIGKILL after forced head",
+      "response cannot report success",
+      "verified restart retains exact durable suffix",
+      "exact resumption or closed unresolved absence"
+    ],
+    "elapsedSeconds": 18.216,
+    "journalKinds": [
+      "ENROLL",
+      "PREPARE"
+    ]
+  },
+  {
+    "case": "witness-commit-record",
+    "status": "passed",
+    "checks": [
+      "separate witness SIGKILL after forced record",
+      "response cannot report success",
+      "verified restart retains exact durable suffix",
+      "exact resumption or closed unresolved absence"
+    ],
+    "elapsedSeconds": 26.294,
+    "journalKinds": [
+      "ENROLL",
+      "PREPARE",
+      "COMMIT"
+    ]
+  },
+  {
+    "case": "witness-commit-head",
+    "status": "passed",
+    "checks": [
+      "separate witness SIGKILL after forced head",
+      "response cannot report success",
+      "verified restart retains exact durable suffix",
+      "exact resumption or closed unresolved absence"
+    ],
+    "elapsedSeconds": 24.998,
+    "journalKinds": [
+      "ENROLL",
+      "PREPARE",
+      "COMMIT"
+    ]
+  },
+  {
+    "case": "witness-abort-record",
+    "status": "passed",
+    "checks": [
+      "separate witness SIGKILL after forced record",
+      "response cannot report success",
+      "verified restart retains exact durable suffix",
+      "exact resumption or closed unresolved absence"
+    ],
+    "elapsedSeconds": 17.437,
+    "journalKinds": [
+      "ENROLL",
+      "PREPARE",
+      "ABORT"
+    ]
+  },
+  {
+    "case": "witness-abort-head",
+    "status": "passed",
+    "checks": [
+      "separate witness SIGKILL after forced head",
+      "response cannot report success",
+      "verified restart retains exact durable suffix",
+      "exact resumption or closed unresolved absence"
+    ],
+    "elapsedSeconds": 18.844,
+    "journalKinds": [
+      "ENROLL",
+      "PREPARE",
+      "ABORT"
+    ]
+  },
+  {
+    "case": "witness-recovery_barrier-record",
+    "status": "passed",
+    "checks": [
+      "separate witness SIGKILL after forced record",
+      "response cannot report success",
+      "verified restart retains exact durable suffix",
+      "exact resumption or closed unresolved absence"
+    ],
+    "elapsedSeconds": 20.578,
+    "journalKinds": [
+      "ENROLL",
+      "RECOVERY_BARRIER"
+    ]
+  },
+  {
+    "case": "witness-recovery_barrier-head",
+    "status": "passed",
+    "checks": [
+      "separate witness SIGKILL after forced head",
+      "response cannot report success",
+      "verified restart retains exact durable suffix",
+      "exact resumption or closed unresolved absence"
+    ],
+    "elapsedSeconds": 20.604,
+    "journalKinds": [
+      "ENROLL",
+      "RECOVERY_BARRIER"
+    ]
+  },
+  {
+    "case": "exact-retry-and-adversarial-wire",
+    "status": "passed",
+    "checks": [
+      "separate writer exact terminal replay with unchanged heads",
+      "changed-payload",
+      "reordered-event",
+      "unknown-capability",
+      "foreign-installation"
+    ],
+    "elapsedSeconds": 10.141
+  },
+  {
+    "case": "pending-restriction-no-overtaking",
+    "status": "passed",
+    "checks": [
+      "locally committed revocation denies before acknowledgement",
+      "outage prevents overtaking",
+      "successor PREPARE follows predecessor COMMIT"
+    ],
+    "elapsedSeconds": 31.241
+  },
+  {
+    "case": "lost-primary-unresolved-prepare",
+    "status": "passed",
+    "checks": [
+      "actual primary database destroyed",
+      "fresh signed barrier obtained without primary",
+      "unresolved intent retained",
+      "old backup cannot authorize ABORT or reopen"
+    ],
+    "elapsedSeconds": 26.283
+  },
+  {
+    "case": "acknowledged-primary-loss",
+    "status": "passed",
+    "checks": [
+      "acknowledged policy survives actual primary database deletion",
+      "witness restart retains exact head",
+      "restored stale catalog refused"
+    ],
+    "elapsedSeconds": 22.768,
+    "acknowledgedHead": "0d99fd451ea59cb123cacd2ee1a73a2470f292b5cc014560122bb6dc3d75a850"
+  }
+]

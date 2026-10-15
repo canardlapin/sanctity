@@ -1,0 +1,45 @@
+{
+  "counts": {
+    "requiredEpics": 8,
+    "conditionalEpics": 2,
+    "gates": 26,
+    "tasks": 79,
+    "requiredTasks": 73,
+    "conditionalTasks": 6,
+    "taskKinds": {
+      "engineering": 60,
+      "institutional": 12,
+      "mixed": 7
+    },
+    "totalNodesIncludingProgram": 116,
+    "closedTasks": 10,
+    "closedGates": 1,
+    "closedEpics": 0
+  },
+  "checks": {
+    "acyclic": true,
+    "all116MoteSpecificationsParentsAndDependencies": "pass",
+    "allClosedReceiptsResolvedAgainstCurrentOrExactArchivedInputs": true,
+    "receiptInputHashesChecked": 225,
+    "packageSourceInventoryHashesChecked": 316,
+    "threePackageDigestsChecked": true,
+    "coreDependencyNodes": 73,
+    "localDemoDependencyNodes": 74,
+    "institutionalMixedExternalEngineeringBlockers": [],
+    "allInstitutionalMixedAndAreaReviewsRemainOpen": true,
+    "publishedTaskAndGateTablesMatch": true,
+    "currentDocumentLinksResolved": 157,
+    "moteDoctor": "pass",
+    "activeClaimsAndReservations": 0,
+    "diffWhitespace": "pass"
+  },
+  "nextReadyEngineering": [
+    "F02.2",
+    "F03.1",
+    "O01.4",
+    "O02.1",
+    "O02.3",
+    "O03.1"
+  ],
+  "archivedInputs": 20
+}

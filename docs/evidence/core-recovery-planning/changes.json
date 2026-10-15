@@ -1,0 +1,58 @@
+{
+  "kind": "planning-only",
+  "created": {
+    "O03.6": "bd-01M4XPCN6RSRCS8CB96BR5Y8GY",
+    "O03.7": "bd-01M4XPDDP01BGZJJ73Z32TFCC1",
+    "O03.8": "bd-01M4XPDEAPFG0QFQT27TWEKH41"
+  },
+  "amended": [
+    "F03.2",
+    "H03.1",
+    "O03.2",
+    "O03.4",
+    "O03.5",
+    "O03",
+    "H03"
+  ],
+  "coordinatorUpdates": [
+    "PROGRAM",
+    "EP9",
+    "EP4"
+  ],
+  "originalAcceptancePreserved": true,
+  "removedDependencies": [],
+  "recoveryPriority": {
+    "status": "planned; all recovery implementation remains open",
+    "reason": "Restore organization-enabled catalogs without resurrecting post-backup revocations; user approved making tested recovery the next core milestone.",
+    "orderedWork": [
+      "F03.1",
+      "F03.2",
+      "H03.1",
+      "O03.6",
+      "O03.7",
+      "F02.3",
+      "F03.3",
+      "F03.4",
+      "O03.8"
+    ],
+    "independentlyReady": [
+      "H03.1"
+    ],
+    "exit": "Packaged current-capability backup-change-isolate-restore succeeds with exact retained science, legitimate access and zero restored revoked permissions; corrupt/stale/unknown evidence stays closed.",
+    "fullIntegration": [
+      "O03.2",
+      "O03.4",
+      "O03.5",
+      "O04.1",
+      "O04.3",
+      "H03",
+      "H00"
+    ],
+    "deferredQualification": [
+      "O03.3",
+      "Q03.1"
+    ],
+    "orderingRule": "Schedule this sequence before browser workspace expansion; only true prerequisites are hard edges. Keep at most two compatible implementation tasks active. Future identity/session/lifecycle features must join the same journal and full restore qualification before final acceptance."
+  },
+  "priorDocuments": "docs/evidence/core-recovery-planning/prior-documents.zip"
+}

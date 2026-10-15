@@ -1,0 +1,22 @@
+{
+  "local-artifacts/compatibility/pre-core-20261014/corpus-v2/source/README": {
+    "sha256": "959225c3fbcfb8e1687c384d7a3178d1d665c466c9f64edd24aa71ba991e1628",
+    "inode": 145079643,
+    "mtimeNs": 1791988332646042181
+  },
+  "local-artifacts/compatibility/pre-core-20261014/corpus-v2/source/dataset_description.json": {
+    "sha256": "ae7579813b9a9cefb1541b172fac9120c8858d9522e54ea0f4de3b15ec2c8a65",
+    "inode": 145079642,
+    "mtimeNs": 1791988332645814431
+  },
+  "local-artifacts/compatibility/pre-core-20261014/corpus-v2/oracle.json": {
+    "sha256": "9fa0e0e2eab7d5fe13b12802cec35de6e07ff7ec59a7f4c3db7c1827ef1dfd4d",
+    "inode": 145079736,
+    "mtimeNs": 1791988352300012816
+  },
+  "local-artifacts/compatibility/pre-core-20261014/corpus-v2/manifest.json": {
+    "sha256": "4c3175c029633999c779d9d12ea4b829f8f09821af1d4fc7b8e429deeab5b5d1",
+    "inode": 145079737,
+    "mtimeNs": 1791988352300873319
+  }
+}

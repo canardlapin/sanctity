@@ -48,7 +48,12 @@ export SANCTITY_TEST_DISPOSABLE=1
 
 docker exec "$container" postgres --version | tee "$workspace/postgres-version.txt"
 printf '%s\n' "$image" > "$workspace/postgres-image.txt"
-sbt check 'integration/test' "app/runMain sanctity.app.PostgresDemo stage \"$workspace/demo\""
+if [[ -n "${SANCTITY_INTEGRATION_SUITES:-}" ]]; then
+  printf 'Selected integration suites: %s\n' "$SANCTITY_INTEGRATION_SUITES"
+  sbt check "integration/testOnly $SANCTITY_INTEGRATION_SUITES" "app/runMain sanctity.app.PostgresDemo stage \"$workspace/demo\""
+else
+  sbt check 'integration/test' "app/runMain sanctity.app.PostgresDemo stage \"$workspace/demo\""
+fi
 
 # Stop the server without a clean database shutdown, then start it on the same volume.
 docker kill --signal=KILL "$container" >/dev/null

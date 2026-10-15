@@ -1,0 +1,72 @@
+[info] welcome to sbt 1.10.5 (Eclipse Adoptium Java 21.0.12.1)
+[info] loading project definition from /Users/bbuchsbaum/code/scala/sanctity/project
+[info] loading settings for project root from build.sbt ...
+[info] loading settings for project bids4s-19f022d002f69292dec056eb0762b877438c47305cee6c176adf3e0f780e9146-build from plugins.sbt ...
+[info] loading project definition from /Users/bbuchsbaum/code/scala/sanctity/target/source-dependencies/bids4s-19f022d002f69292dec056eb0762b877438c47305cee6c176adf3e0f780e9146/project
+[info] loading settings for project root from build.sbt ...
+[info] resolving key references (17507 settings) ...
+[info] set current project to sanctity (in build file:/Users/bbuchsbaum/code/scala/sanctity/)
+Test run sanctity.postgres.PolicyIntegrationSuite started
+sanctity.postgres.PolicyIntegrationSuite: finished 79.895s
+Test run sanctity.postgres.PolicyIntegrationSuite finished: 0 failed, 0 ignored, 22 total 79.911s
+Test run sanctity.postgres.PolicyReceiptCompatibilitySuite started
+sanctity.postgres.PolicyReceiptCompatibilitySuite: finished 0.015s
+Test run sanctity.postgres.PolicyReceiptCompatibilitySuite finished: 0 failed, 0 ignored, 3 total 0.015s
+Test run sanctity.postgres.ServicePrivilegesSuite started
+sanctity.postgres.ServicePrivilegesSuite: finished 10.596s
+Test run sanctity.postgres.ServicePrivilegesSuite finished: 0 failed, 0 ignored, 4 total 10.597s
+Test run sanctity.postgres.OrganizationPersistenceSuite started
+sanctity.postgres.OrganizationPersistenceSuite: finished 20.471s
+Test run sanctity.postgres.OrganizationPersistenceSuite finished: 0 failed, 0 ignored, 11 total 20.471s
+Test run sanctity.postgres.CurrentAuthoritySuite started
+sanctity.postgres.CurrentAuthoritySuite: finished 74.172s
+Test run sanctity.postgres.CurrentAuthoritySuite finished: 0 failed, 0 ignored, 44 total 74.172s
+Test run sanctity.postgres.TransactionSuite started
+sanctity.postgres.TransactionSuite: finished 15.56s
+Test run sanctity.postgres.TransactionSuite finished: 0 failed, 0 ignored, 10 total 15.56s
+Import operation: 09cfa421-5656-4ed6-9ec1-7c701b5566d6
+{
+  "dataset" : "bbea3be7-0ccd-4859-bd9b-7c26293220bc",
+  "release" : "a60f9308-65ba-4f45-afb9-37d8239cdac8",
+  "operation" : "09cfa421-5656-4ed6-9ec1-7c701b5566d6"
+}
+Import operation: 09cfa421-5656-4ed6-9ec1-7c701b5566d6
+{
+  "dataset" : "bbea3be7-0ccd-4859-bd9b-7c26293220bc",
+  "release" : "a60f9308-65ba-4f45-afb9-37d8239cdac8",
+  "operation" : "09cfa421-5656-4ed6-9ec1-7c701b5566d6"
+}
+Credential bdf3ddf7-93c8-4fff-9f85-bf713a5ceb3c written to a new private file. Durability: LocalOnly. Expires: 2026-10-15T04:43:23.437806Z
+Credential revoked. Durability: LocalOnly.
+Test run sanctity.postgres.HttpSuite started
+sanctity.postgres.HttpSuite: finished 14.727s
+Test run sanctity.postgres.HttpSuite finished: 0 failed, 0 ignored, 8 total 14.727s
+[info] Passed: Total 102, Failed 0, Errors 0, Passed 102
+[success] Total time: 219 s (03:39), completed Oct 14, 2026, 11:43:24 p.m.
+Test run sanctity.app.ServiceConfigurationSuite started
+sanctity.app.ServiceConfigurationSuite: finished 5.081s
+Test run sanctity.app.ServiceConfigurationSuite finished: 0 failed, 0 ignored, 9 total 5.095s
+[info] Passed: Total 9, Failed 0, Errors 0, Passed 9
+[success] Total time: 7 s, completed Oct 14, 2026, 11:43:30 p.m.
+Test run sanctity.policy.PolicyJournalSuite started
+sanctity.policy.PolicyJournalSuite: finished 3.841s
+Test run sanctity.policy.PolicyJournalSuite finished: 0 failed, 0 ignored, 17 total 3.889s
+Test run sanctity.policy.PolicyWireSuite started
+sanctity.policy.PolicyWireSuite: finished 0.085s
+Test run sanctity.policy.PolicyWireSuite finished: 0 failed, 0 ignored, 19 total 0.085s
+Test run sanctity.policy.PolicyTransportSuite started
+sanctity.policy.PolicyTransportSuite: finished 88.327s
+Test run sanctity.policy.PolicyTransportSuite finished: 0 failed, 0 ignored, 13 total 88.327s
+Test run sanctity.postgres.PersistenceSuite started
+sanctity.postgres.PersistenceSuite: finished 0.756s
+Test run sanctity.postgres.PersistenceSuite finished: 0 failed, 0 ignored, 19 total 0.756s
+[info] Passed: Total 68, Failed 0, Errors 0, Passed 68
+[success] Total time: 94 s (01:34), completed Oct 14, 2026, 11:45:04 p.m.
+Test run sanctity.app.OrganizationAuthoritySuite started
+sanctity.app.OrganizationAuthoritySuite: finished 1.995s
+Test run sanctity.app.OrganizationAuthoritySuite finished: 0 failed, 0 ignored, 57 total 2.002s
+Test run sanctity.app.OrganizationSuite started
+sanctity.app.OrganizationSuite: finished 1.143s
+Test run sanctity.app.OrganizationSuite finished: 0 failed, 0 ignored, 14 total 1.143s
+[info] Passed: Total 71, Failed 0, Errors 0, Passed 71
+[success] Total time: 6 s, completed Oct 14, 2026, 11:45:10 p.m.

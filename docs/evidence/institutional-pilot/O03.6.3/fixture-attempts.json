@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "scope": "Fixture development attempts retained before final qualification; no passing acceptance inferred from incomplete attempts.",
+  "at": "2026-10-15T03:22:48.993389+00:00",
+  "attempts": [
+    {
+      "name": "compile-attempt-01",
+      "cause": "Test harness foreverM type parameter did not match cats-effect API.",
+      "resolution": "Corrected test-only loop type; later compile passed."
+    },
+    {
+      "name": "compile-attempt-02",
+      "cause": "Unused cats syntax import under fatal warnings.",
+      "resolution": "Removed unused test-only import; compile-attempt-03 passed."
+    },
+    {
+      "name": "fixture-attempt-01",
+      "cause": "Base image already defines operator group.",
+      "resolution": "Use dedicated policy_operator group for UID/GID 10003."
+    },
+    {
+      "name": "fixture-attempt-02",
+      "cause": "PostgreSQL readiness reached the temporary initialization socket.",
+      "resolution": "Wait for TCP readiness on 127.0.0.1."
+    },
+    {
+      "name": "fixture-attempt-03",
+      "cause": "Fixture issued a credential before registering the disabled-principal subject.",
+      "resolution": "Create the actual grant first so the subject exists."
+    },
+    {
+      "name": "process-attempt-01",
+      "cause": "Checkpoint decoder assumed padded base64 while the wire format is unpadded URL-safe base64.",
+      "resolution": "Use URL-safe decoder with computed padding."
+    },
+    {
+      "name": "process-attempt-02",
+      "passedCasesBeforeFailure": 23,
+      "cause": "Database-wide idle-transaction assertion raced with the intentionally running admission watcher. The preceding held-backend deadline, rollback and denied-admission assertions passed.",
+      "resolution": "Observe the held backend by PostgreSQL PID; retain admission observations, terminate watcher, then wait for whole-runtime transaction quiescence. Complete process-attempt-03 reruns all scenarios; no runtime or harness changes."
+    }
+  ],
+  "historicalOracleChanges": false,
+  "productionChangesInListedFixtureCorrections": false,
+  "additionalRuntimeFinding": {
+    "initialCandidate": "4099e1cdce2fdabf6dd061d9df2ba1d24160fc819f8367e17a9fdb9d650aa94c",
+    "observation": "Finalization attempt 01 exceeded polling limit; attempt 02 server logs showed statement timeout 5.234214 seconds into the phase. A running SQL statement survived the JDBC abort until its individual timeout.",
+    "resolution": "Add PostgreSQL 17 whole-transaction timeout using each phase remaining budget; final artifact requires renewed qualification.",
+    "fixedArtifact": "2a6324e498eef0ba278afc0ca6baada389305835235b9c861e85fc457177995e",
+    "fixedServerDeadlineSeconds": 5.000123,
+    "fixedEvidence": "docs/evidence/institutional-pilot/O03.6.3/finalization-attempt-03/server-timing.json"
+  }
+}

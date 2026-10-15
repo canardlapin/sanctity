@@ -1,0 +1,78 @@
+{
+  "schema": "sanctity.institutional-pilot-planning.v1",
+  "recordedAt": "2026-10-14T03:06:58.283282+00:00",
+  "status": "planning_complete_implementation_open",
+  "program": "bd-01M4W3ZN8Z16J30J8EYPWQERQC",
+  "counts": {
+    "requiredEpics": 6,
+    "conditionalEpics": 2,
+    "acceptanceGates": 18,
+    "requiredTasks": 59,
+    "conditionalTasks": 6,
+    "tasks": 65,
+    "totalOpenNodes": 92,
+    "taskKinds": {
+      "institutional": 12,
+      "engineering": 46,
+      "mixed": 7
+    }
+  },
+  "checks": {
+    "acyclic": true,
+    "requiredWorkReachableFromProgram": true,
+    "conditionalWorkExcludedUnlessActivated": true,
+    "originalProgramAndGateIdsPreserved": true,
+    "moteCriteriaEvidenceDependenciesAndParentsMatch": true,
+    "allNodesOpen": true,
+    "localLinksChecked": 27,
+    "backlogReferencePathsExist": true,
+    "gitDiffCheck": true,
+    "moteDoctorClean": true
+  },
+  "ready": [
+    "F01.1",
+    "O01.1",
+    "SITE01.1"
+  ],
+  "sourceComparison": {
+    "implementationAndVerificationInputsCompared": 330,
+    "changed": [],
+    "manifest": "target/bold-timing-final-source/manifest.json"
+  },
+  "artifacts": [
+    {
+      "path": "docs/institutional-pilot-epics.md",
+      "sha256": "06047354bdd4cd8a6f0fa4339c348a27c0c11bb0fa006d85088c83023d77d2fc"
+    },
+    {
+      "path": "docs/institutional-readiness-backlog.json",
+      "sha256": "8e249740f937f6522d8e02b8baf2e98ac98cbf74c5aa388733079a45b80cb93f"
+    },
+    {
+      "path": "docs/institutional-readiness-plan.md",
+      "sha256": "4980a53d9215b53b4d2bc54e89dda82203e17baf4cbc473cb8cceb66eb418373"
+    },
+    {
+      "path": "docs/implementation-plan.md",
+      "sha256": "ae5ba6973a421814aaed1336a45e17a27bd87baf10a9d2f955b953900874fe2f"
+    },
+    {
+      "path": "docs/evidence/institutional-readiness-motes.json",
+      "sha256": "7f2695002051cdaef3690e29975e0abf9f033705a374b140820453df83513277"
+    },
+    {
+      "path": "docs/evidence/institutional-readiness-backlog-v1.json",
+      "sha256": "25fa98c9ef2969b70ae088a0c21682914be782ad23744b79b1592b555b1f77a8"
+    },
+    {
+      "path": "docs/evidence/institutional-readiness-motes-v1.json",
+      "sha256": "fe4b9e92b23cc8303aff0b75feebdf4f858ec5abf232615be76b919f70d0f310"
+    }
+  ],
+  "limits": [
+    "Planning validation only; no application tests, security review, deployment or institutional qualification performed.",
+    "All engineering, acceptance and human-input work remains open.",
+    "Mote state and documents are local and uncommitted.",
+    "Conditional EP7/EP8 must be activated by SITE01.3 and added as blockers of both the program and Q03.3 when selected."
+  ]
+}

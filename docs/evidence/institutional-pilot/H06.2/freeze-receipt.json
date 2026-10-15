@@ -1,0 +1,17 @@
+{
+  "artifactSha256": "2ae3efa92d344520dc9abae1ce1d6c879998a187cebe1897ce096b3ced6b432e",
+  "fixture": "/Users/bbuchsbaum/code/scala/sanctity/local-artifacts/compatibility/pre-core-20261014/corpus-v2",
+  "fixtureManifestSha256": "4c3175c029633999c779d9d12ea4b829f8f09821af1d4fc7b8e429deeab5b5d1",
+  "mode": "freeze",
+  "observed": {
+    "frozen": true,
+    "historicalTables": 14,
+    "pendingAcquiredFiles": 2,
+    "releases": 2
+  },
+  "oracleSha256": "9fa0e0e2eab7d5fe13b12802cec35de6e07ff7ec59a7f4c3db7c1827ef1dfd4d",
+  "postgresImage": "postgres@sha256:b0f9560a2de083e2cc7382e75f808c7381a32852a7ec49117deedb300e552b24",
+  "postgresVersion": "postgres (PostgreSQL) 17.11",
+  "scope": "synthetic local upgrade; no source-loss/physical recovery claim",
+  "status": "passed"
+}

@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 1,
+  "at": "2026-10-14T17:36:36.597986+00:00",
+  "kind": "pure-authority-F03.1",
+  "status": "passed",
+  "completed": [
+    "F03.1"
+  ],
+  "taskReceipt": "docs/evidence/institutional-pilot/F03.1/receipt.json",
+  "counts": {
+    "requiredEpics": 8,
+    "conditionalEpics": 2,
+    "gates": 26,
+    "tasks": 82,
+    "requiredTasks": 76,
+    "conditionalTasks": 6,
+    "taskKinds": {
+      "engineering": 63,
+      "institutional": 12,
+      "mixed": 7
+    },
+    "totalNodesIncludingProgram": 119,
+    "closedTasks": 13,
+    "closedGates": 1,
+    "closedEpics": 0
+  },
+  "checks": {
+    "all119MoteCriteriaParentsDependenciesAndStatuses": "pass",
+    "acyclic": true,
+    "onlyF031Closed": true,
+    "readyQueueMatchesGraph": true,
+    "preservedHistoricalReceiptInputs": 742,
+    "allCurrentF031InputHashesMatch": true,
+    "adrFixtureUnchanged": true,
+    "currentDocumentLinksResolved": 125,
+    "publishedTaskTablesMatch": true,
+    "moteDoctorAndFsck": "pass",
+    "activeClaimsAndReservations": 0,
+    "diffWhitespace": "pass"
+  },
+  "verification": {
+    "command": "sbt 'app/testOnly sanctity.app.OrganizationAuthoritySuite sanctity.app.OrganizationSuite'",
+    "distinctTests": 71,
+    "authorityTests": 57,
+    "organizationRegressionTests": 14,
+    "adrCases": 38,
+    "propertyTests": 6,
+    "successfulTrialsPerProperty": 500,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "compilation": "kernel, generated BIDS build identity and app tests compiled; application/service dependencies loaded",
+    "fixtureSha256": "7a7351dc7d6334ca4f40918c9583db821b99e8b82d87cdf4ca30cd7d99566fd5"
+  },
+  "nextReadyEngineering": [
+    "F03.2",
+    "F04.1",
+    "H03.1",
+    "O01.4",
+    "O02.1",
+    "O02.3"
+  ],
+  "recommendedFirstWork": [
+    "F03.2"
+  ],
+  "inputs": {
+    "docs/organization-reference.md": "8f627b7062a9131ad4f79a8d218765ee23cf58f949334b01bfed263c9e5011a4",
+    "docs/core-hardening-plan.md": "c043ed502a9a0e678852aa1c84d435a6243eba94e98b3a51b60ffa1d30c6c965",
+    "docs/institutional-pilot-epics.md": "b1c0eea5c42ec82cc7421555484585606f32228e81509732f284d6a758957b65",
+    "docs/implementation-plan.md": "8b14e0f90052325a02743df79794851af566f87642bc46e832dfa4732f240db4",
+    "docs/local-demo-plan.md": "90cd263ed552d34ae4d6ee678a6ea55e8b3799dac617afe38ae5c5d8d44d1f6f",
+    "docs/institutional-readiness-plan.md": "a85580945d5ed1e9b95e0bb697d132acce485496ecf62c47af5b3c4f8569c20a",
+    "docs/evidence/institutional-pilot/F03.1/receipt.json": "3433976407ddf4ab6270b9ef1a0ae321016a571bc27032b539b4517335977095",
+    "docs/institutional-readiness-backlog.json": "9693c870476b4feb5d2d324081f49a7b6eed657a88bb80cd1171aee916f0611c",
+    "docs/evidence/institutional-readiness-motes.json": "791866690ee24451f31f0b821f984fde4013bd46bc200b7c180763ca26cb7c03",
+    "docs/evidence/core-authority-f031/prior-documents.zip": "8efb27f115293568d8755ed2163da6794da61777eab8d48d9d73b9fe8ae2c411",
+    "docs/evidence/core-authority-f031/prior-documents.json": "bd16923eab61086eed54e9e7fd8db3dc663cd84fc63f0257dd75a22aedf132ca",
+    "docs/evidence/core-authority-f031/verification-procedure.py": "a2b230b06f92525dc2c2bf5d8422cd13d412f64f17ea6619004b6b123eaa1522",
+    "docs/evidence/institutional-pilot-progress.json": "a3b7bb9b93213280268f415f08745063665a2c290d2674ce8977b9905d451c0f",
+    "docs/evidence/core-authority-f031/mote-states.json": "8dc2a9540905e398581f3023fb6e57071436b230709966e675f4f718471e14ad"
+  },
+  "limitations": [
+    "Pure rule and projection semantics only; no claim of SQL/HTTP/current-session or browser enforcement.",
+    "PolicyAdmission and complete eligibility/current state are trusted adapter inputs; F03.2 must supply them under its authoritative transaction guard.",
+    "Permission is explicitly adapted from the unchanged legacy Action/Grant contract; no silent new wire action or persisted grant migration.",
+    "No actual stream/heartbeat, performance, independent witness, recovery or institutional qualification.",
+    "Map scans are reference semantics, not measured bounded database queries.",
+    "Existing packaged receipts remain historical evidence for their exact sources/artifacts; no new package built or qualified.",
+    "Organization-aware recovery is still unimplemented; O03.6-O03.8 remain open.",
+    "All six core reviews and H00 remain open; no local-demo or institutional acceptance."
+  ]
+}

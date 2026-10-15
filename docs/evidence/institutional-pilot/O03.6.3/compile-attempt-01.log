@@ -1,0 +1,19 @@
+[info] welcome to sbt 1.10.5 (Eclipse Adoptium Java 21.0.12.1)
+[info] loading project definition from /Users/bbuchsbaum/code/scala/sanctity/project
+[info] loading settings for project root from build.sbt ...
+[info] loading settings for project bids4s-19f022d002f69292dec056eb0762b877438c47305cee6c176adf3e0f780e9146-build from plugins.sbt ...
+[info] loading project definition from /Users/bbuchsbaum/code/scala/sanctity/target/source-dependencies/bids4s-19f022d002f69292dec056eb0762b877438c47305cee6c176adf3e0f780e9146/project
+[info] loading settings for project root from build.sbt ...
+[info] resolving key references (17507 settings) ...
+[info] set current project to sanctity (in build file:/Users/bbuchsbaum/code/scala/sanctity/)
+[info] compiling 1 Scala source to /Users/bbuchsbaum/code/scala/sanctity/modules/integration/target/scala-3.3.8/test-classes ...
+[error] -- Error: /Users/bbuchsbaum/code/scala/sanctity/modules/integration/src/test/scala/sanctity/postgres/PolicyProcessQualification.scala:163:88 
+[error] 160 |          (IO.realTimeInstant.flatMap { at => original.checkOrganizationReady.attempt.flatMap { result => IO.blocking {
+[error] 161 |            val line = obj("at" -> str(at.toString),"admitted" -> Json.fromBoolean(result.isRight)).noSpaces+"\n"
+[error] 162 |            Files.writeString(root.resolve("watch.jsonl"),line,StandardOpenOption.CREATE,StandardOpenOption.APPEND); ()
+[error] 163 |          } } } *> IO.sleep(scala.concurrent.duration.DurationInt(100).millis)).foreverM[Json]
+[error]     |          ^
+[error]     |          method foreverM in class IO does not take type parameters
+[error] one error found
+[error] (integration / Test / compileIncremental) Compilation failed
+[error] Total time: 12 s, completed Oct 14, 2026, 10:45:05 p.m.

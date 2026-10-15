@@ -1,17 +1,63 @@
 # Sanctity implementation plan
 
-Version 0.18 — real-backend console rehearsal\
-Updated 13 October 2026
+Version 0.22 — recovery foundations before browser workspace expansion\
+Updated 14 October 2026
 
 Build complete scientific lifecycles around immutable accepted states, current authority, and one acceptance protocol. The [PRD](prd.md) remains the product contract; this plan distinguishes executable slices from full pilot qualification.
 
-**Current priority:** scientific-core development, following the user's 7 October direction. The [scientific workstream](scientific-core.md) advances explicit relationships, companion resolution, image/table consistency and coherent materialization. Institutional identity and additional service features follow this work; their broader pilot requirements remain open.
+**Current priority:** deliver the [core repository vision](vision.md) through labs,
+projects, institutional identity, complete user workflows and dependable operations.
+First prove a [reliable local installation and guided demonstration](local-demo-plan.md)
+on the product owner's computer, with a guide suitable for seeking institutional
+interest. No institutional pilot has been approved.
+The [institutional readiness plan](institutional-readiness-plan.md) assesses the current
+implementation; the [granular pilot epics](institutional-pilot-epics.md) define the
+next tasks, acceptance gates and mote dependencies. They supersede
+the earlier priority on further scientific expansion. Preserve scientific guarantees
+and fix supported-data defects; additional numerical recipes are deferred.
+
+The first tranche completes F01's [organization](decisions/001-institutional-organization.md),
+[authority](decisions/002-institutional-authority.md) and
+[migration/offboarding](decisions/003-institutional-lifecycle.md) contracts, with 38
+reusable authorization scenarios, and O01.1's [Java service distribution](service-distribution.md).
+The [six-area core-hardening plan](core-hardening-plan.md) now governs delivery:
+EP9 reuses existing work, adds eight engineering tasks and coordinates six area
+reviews plus one integrated release. T1 is complete: protected configuration, checked
+reference organization records, runtime/migration database roles, a preserved and
+executed old/current compatibility corpus, and frozen workload/budget oracles.
+[Execution receipts](evidence/core-hardening-t1/receipt.json) identify exact evidence.
+The first T2 slice completes O03.1's policy durability contract and F02.2's PostgreSQL
+organization migration, with [candidate-specific evidence](evidence/core-hardening-t2/receipt.json).
+F03.1's pure policy matrix now passes all 38 ADR cases, six 500-case properties and
+the focused 71-test run, with [retained evidence](evidence/institutional-pilot/F03.1/receipt.json).
+F03.2 now enforces that model in PostgreSQL and joins organization/grant/credential
+history in one local transaction; see [its evidence](evidence/institutional-pilot/F03.2/receipt.json)
+and [mutation inventory](policy-transactions.md). O03.6.1 now supplies the
+[qualified standalone witness](evidence/institutional-pilot/O03.6.1/receipt.json).
+O03.6.2 adds [qualified catalog enrollment, synchronous acknowledgment and bounded admission](evidence/institutional-pilot/O03.6.2/receipt.json),
+with an [operator guide](policy-catalog.md). O03.6.3 now passes the
+[integrated process qualification](evidence/institutional-pilot/O03.6.3/receipt.json),
+and all six unchanged [O03.6 parent criteria](evidence/institutional-pilot/O03.6/receipt.json)
+are complete. Next is H03.1 verified backup automation; it still blocks O03.7.
+Organization-aware
+recovery remains unavailable until the subsequent restore work is qualified.
+Prioritize H03.1, then O03.7/O03.8 restore and source-isolation qualification
+before browser workspace expansion; F02.3/F03.3/F03.4 provide its administration and
+access prerequisites. Existing O03.2/O03.4/O03.5 retain full identity/session coverage.
+Explicit stewardship and exact grants already govern migrated data; inherited roles,
+public administration and independent recovery remain open. All six area reviews and
+institutional readiness remain open.
+
+The work-package evidence and original pilot phases below remain useful history and
+requirements. Their completion is not implied by the new institutional-beta plan;
+the broader original pilot gates, source qualification and production cutover remain
+separate obligations. Use the core-hardening plan for current engineering order and review cadence.
 
 The native and PostgreSQL slices now extend across the four requested areas: scientific queries, scientific views, durable operations/recovery, and initial DICOM/XNAT adapters. The authority prerequisite is implemented through durable principals and action-specific dataset/fixed-release grants. [README](../README.md) documents runnable commands and supported profiles.
 
 | Work package | Implemented evidence | Remaining qualification |
 | --- | --- | --- |
-| WP-02 | Scala 3.3.8; Cats Effect 3.5.7; FS2 3.11.0; http4s 0.23.30; verified complete bids4s source pin, source fingerprints, isolated build runner and CI workflow | Published upstream release, hosted CI execution and deployment packaging |
+| WP-02 | Scala 3.3.8; Cats Effect 3.5.7; FS2 3.11.0; http4s 0.23.30; verified complete bids4s source pin, source fingerprints, isolated build runner and CI workflow | Published upstream release, hosted CI execution and deployment qualification (O01.1 packaging is complete) |
 | WP-03 | Checked IDs/paths/manifests, immutable evidence, pure admission/authority rules, scoped queries, versioned relationship graphs/closure/impact, projections, simultaneous file edits, bound change receipts and leases | Real fixture/domain review and scale |
 | WP-04 | Versioned inheritance/origins, strict JSON/participant TSV, explicit query interpretation identity, B0/IntendedFor evidence, inherited DWI/BOLD companions, typed selection evidence, DWI gradient/header and strict event/timing checks, reference/scans repair planning and old/new dependency scope, explicit registry/rule context, declared-version separation, profile adoption, historical decoding, pinned example/validator comparison, independent MRI header observations and phasediff plus phase1/phase2 magnitude families | Full official-schema interpretation, broader dependency profiles and representative conformance corpus |
 | WP-05 | Streamed/verified immutable bytes, flushes, retained evidence, isolated full exports | Reclamation, filesystem/power-loss qualification, representative corpus |
@@ -27,7 +73,9 @@ The native and PostgreSQL slices now extend across the four requested areas: sci
 
 The current implementation represents a prepared view as an ordinary release in a separate dataset, accompanied by projection evidence. This reuses acceptance, immutable interpretation, export, custody and grants. A saved query remains a separate frozen selection. Source disclosure authority is required for a separately shared projected release; recipients can read that release without source access. Private processing bundles use a distinct activity kind and require their creator to retain current access to the fixed source; they cannot acquire independent sharing grants.
 
-Current tranche: [coherent analysis inputs plan, motes and scientific boundaries](analysis-input-plan.md).
+The subsequent F01 contracts, O01.1 service artifact and L01.1 demo contract are
+complete. Current engineering follows [EP9 and its ordered tranches](core-hardening-plan.md);
+the [epic and task guide](institutional-pilot-epics.md) retains later institutional work.
 
 ### Console baseline and adoption
 
@@ -113,7 +161,6 @@ failure shows that one is necessary. Reopen design review only for such evidence
 or a deliberately expanded workflow.
 
 ### Verification record
-
 
 The coherent-analysis-input tranche's final gate on **13 October 2026** passed
 **414 Sanctity tests**: **265 ordinary and 149 PostgreSQL**, including **122 shared

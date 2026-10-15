@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "status": "passed",
+  "artifactSha256": "30982234266ccf8495f4d96d6a456356926c01a302758e57c19f49317d9fa538",
+  "checks": [
+    "explicit-init-with-protected-external-trust",
+    "existing-store-refuses-reinitialization",
+    "unenrolled-store-is-not-ready-and-diagnostics-are-redacted",
+    "unsafe-permissions-symlinks-and-unknown-config-rejected",
+    "packaged-loopback-mutual-tls-current-challenge-without-catalog-configuration",
+    "packaged-process-restart-verifies-store",
+    "corrupt-head-fails-closed-with-redacted-error"
+  ],
+  "configuration": {
+    "installation": "5c4ffebd-23dd-4cc9-8ec0-9b35c296d894",
+    "fileMode": "0600",
+    "directoryMode": "0700",
+    "host": "127.0.0.1",
+    "tls": "TLSv1.3",
+    "certificateFingerprints": {
+      "server": "198b1006a4646f501b79186acfefc1b348ab72b9e018a60ae91e596dc15af28f",
+      "writer": "1092da7541b3daa45d26df022cfbe9d55c9903ad5441c794df5f4267d28d4f91",
+      "recovery": "d5f6bcf3a3420e5d5d2c252da6ac54f1c96832b8e85c99117a21848883dca319"
+    },
+    "configurationSha256": "2867a5493a2dbb835e676b949abf1a1dc6ff880b7571b32cfa267e4b813989e2",
+    "signingPublicSha256": "06e3fd8fda29bb60ab59557de61edb0aecdb231134be30e75b455f8e1b792fa9",
+    "signingFixture": "RFC8032 test vector 1; public known test key, never deployment material"
+  },
+  "signatureVerification": "Ed25519 verification is qualified in source-bound PolicyWireSuite and PolicyTransportSuite; this package smoke checks the signed response envelope and TLS binding.",
+  "limitations": [
+    "No catalog enrollment or SQL adapter exercised.",
+    "No separate operating-system accounts, off-host or physical power-loss qualification."
+  ]
+}

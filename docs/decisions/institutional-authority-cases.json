@@ -1,0 +1,670 @@
+{
+  "schemaVersion": 1,
+  "contract": "ADR-002-v1",
+  "purpose": "Design decision corpus to translate into F03 rules/PostgreSQL/HTTP tests; not executed authorization evidence",
+  "fixtureSymbols": "Readable aliases replace typed IDs; every case starts from baseline independently. Changes are explicit scenario operations, not an implemented policy DSL.",
+  "baseline": {
+    "clock": "2026-10-14T12:00:00Z",
+    "principals": {
+      "alice": {
+        "active": true,
+        "roles": [
+          "admin:L-A",
+          "steward:P-memory",
+          "datasetSteward:D-open",
+          "datasetSteward:D-restricted"
+        ]
+      },
+      "bob": {
+        "active": true,
+        "roles": [
+          "member:L-B",
+          "reader:P-memory"
+        ]
+      },
+      "carol": {
+        "active": true,
+        "roles": [
+          "admin:L-A"
+        ]
+      },
+      "dan": {
+        "active": true,
+        "roles": [
+          "contributor:P-memory"
+        ]
+      },
+      "eve": {
+        "active": true,
+        "guestSponsorshipExpiresAt": "2026-11-01T00:00:00Z",
+        "roles": []
+      },
+      "sam": {
+        "active": true,
+        "roles": [
+          "steward:P-memory"
+        ]
+      },
+      "outsider": {
+        "active": true,
+        "roles": [
+          "reader:P-methods"
+        ]
+      }
+    },
+    "projects": {
+      "P-memory": {
+        "owningLab": "L-A",
+        "state": "active"
+      },
+      "P-methods": {
+        "owningLab": "L-B",
+        "state": "active",
+        "links": [
+          "D-open"
+        ]
+      }
+    },
+    "datasets": {
+      "D-open": {
+        "primaryProject": "P-memory",
+        "accessMode": "ProjectMembers",
+        "head": "R2",
+        "releases": [
+          "R1",
+          "R2"
+        ]
+      },
+      "D-restricted": {
+        "primaryProject": "P-memory",
+        "accessMode": "ExplicitOnly",
+        "head": "R2",
+        "releases": [
+          "R1",
+          "R2"
+        ]
+      }
+    },
+    "grants": {
+      "G-eve-r1": {
+        "recipient": "eve",
+        "dataset": "D-restricted",
+        "release": "R1",
+        "actions": [
+          "Discover",
+          "ReadMetadata",
+          "ReadContent"
+        ],
+        "basis": "independent",
+        "expiresAt": "2026-10-20T00:00:00Z"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "A01",
+      "actor": "bob",
+      "action": "Discover",
+      "target": "D-open",
+      "changes": [],
+      "expected": {
+        "allow": true,
+        "reason": "Active project reader and explicit dataset inheritance"
+      }
+    },
+    {
+      "id": "A02",
+      "actor": "bob",
+      "action": "Discover",
+      "target": "D-restricted",
+      "changes": [],
+      "expected": {
+        "allow": false,
+        "reason": "Project participation alone cannot disclose an ExplicitOnly dataset"
+      }
+    },
+    {
+      "id": "A03",
+      "actor": "bob",
+      "action": "ListDatasets",
+      "target": "P-memory",
+      "changes": [],
+      "expected": {
+        "allow": true,
+        "reason": "Names and counts use permitted rows only",
+        "visible": {
+          "datasets": [
+            "D-open"
+          ],
+          "count": 1
+        }
+      }
+    },
+    {
+      "id": "A04",
+      "actor": "carol",
+      "action": "ReadMetadata",
+      "target": "D-open",
+      "changes": [],
+      "expected": {
+        "allow": false,
+        "reason": "Lab administration supplies no dataset read authority"
+      },
+      "release": "R2"
+    },
+    {
+      "id": "A05",
+      "actor": "carol",
+      "action": "ManageLabMembership",
+      "target": "L-A",
+      "changes": [],
+      "expected": {
+        "allow": true,
+        "reason": "Current lab admin can administer membership without data access"
+      }
+    },
+    {
+      "id": "A06",
+      "actor": "bob",
+      "action": "ReadContent",
+      "target": "D-open",
+      "changes": [],
+      "expected": {
+        "allow": true,
+        "reason": "Project reader can retrieve retained historical bytes"
+      },
+      "release": "R1"
+    },
+    {
+      "id": "A07",
+      "actor": "dan",
+      "action": "Propose",
+      "target": "D-open",
+      "changes": [],
+      "expected": {
+        "allow": true,
+        "reason": "Contributor bundle explicitly includes Propose"
+      }
+    },
+    {
+      "id": "A08",
+      "actor": "dan",
+      "action": "Accept",
+      "target": "D-open",
+      "changes": [],
+      "expected": {
+        "allow": false,
+        "reason": "Proposing is distinct from acceptance"
+      }
+    },
+    {
+      "id": "A09",
+      "actor": "dan",
+      "action": "ManageAccess",
+      "target": "D-open",
+      "changes": [],
+      "expected": {
+        "allow": false,
+        "reason": "Contributing is distinct from sharing"
+      }
+    },
+    {
+      "id": "A10",
+      "actor": "sam",
+      "action": "Accept",
+      "target": "D-open",
+      "changes": [],
+      "expected": {
+        "allow": true,
+        "reason": "Project steward can accept on an inheriting primary dataset"
+      }
+    },
+    {
+      "id": "A11",
+      "actor": "sam",
+      "action": "ReadEvidence",
+      "target": "D-open",
+      "changes": [],
+      "expected": {
+        "allow": false,
+        "reason": "Project roles never inherit restricted source evidence"
+      },
+      "release": "R1"
+    },
+    {
+      "id": "A12",
+      "actor": "alice",
+      "action": "ReadEvidence",
+      "target": "D-restricted",
+      "changes": [],
+      "expected": {
+        "allow": true,
+        "reason": "Explicit dataset stewardship authorizes its restricted evidence"
+      },
+      "release": "R1"
+    },
+    {
+      "id": "A13",
+      "actor": "sam",
+      "action": "ManageAccess",
+      "target": "D-restricted",
+      "changes": [],
+      "expected": {
+        "allow": false,
+        "reason": "Project stewardship cannot open a restricted dataset"
+      }
+    },
+    {
+      "id": "A14",
+      "actor": "eve",
+      "action": "ReadContent",
+      "target": "D-restricted",
+      "changes": [],
+      "expected": {
+        "allow": true,
+        "reason": "Current guest sponsorship and independent exact-release grant"
+      },
+      "release": "R1"
+    },
+    {
+      "id": "A15",
+      "actor": "eve",
+      "action": "ReadMetadata",
+      "target": "D-restricted",
+      "changes": [],
+      "expected": {
+        "allow": false,
+        "reason": "Fixed R1 grant cannot read R2"
+      },
+      "release": "R2"
+    },
+    {
+      "id": "A16",
+      "actor": "eve",
+      "action": "ReadHead",
+      "target": "D-restricted",
+      "changes": [],
+      "expected": {
+        "allow": false,
+        "reason": "Fixed-release share cannot reveal the current head"
+      }
+    },
+    {
+      "id": "A17",
+      "actor": "eve",
+      "action": "ListSharedReleases",
+      "target": "self",
+      "changes": [],
+      "expected": {
+        "allow": true,
+        "reason": "Share label and exact release only; no parent project or newer release",
+        "visible": {
+          "shares": [
+            "D-restricted/R1"
+          ],
+          "parentProjects": [],
+          "currentHeads": []
+        }
+      }
+    },
+    {
+      "id": "A18",
+      "actor": "eve",
+      "action": "Accept",
+      "target": "D-restricted",
+      "changes": [],
+      "expected": {
+        "allow": false,
+        "reason": "Fixed-release grants are read-only"
+      },
+      "release": "R1"
+    },
+    {
+      "id": "A19",
+      "actor": "eve",
+      "action": "ReadContent",
+      "target": "D-restricted",
+      "changes": [
+        {
+          "clock": "2026-10-20T00:00:00Z"
+        }
+      ],
+      "expected": {
+        "allow": false,
+        "reason": "Expiry is exclusive at the boundary"
+      },
+      "release": "R1"
+    },
+    {
+      "id": "A20",
+      "actor": "eve",
+      "action": "ReadContent",
+      "target": "D-restricted",
+      "changes": [
+        {
+          "endGuestSponsorship": "eve"
+        }
+      ],
+      "expected": {
+        "allow": false,
+        "reason": "Guest sponsorship is a prerequisite even for independent grants"
+      },
+      "release": "R1"
+    },
+    {
+      "id": "A21",
+      "actor": "alice",
+      "action": "Accept",
+      "target": "D-open",
+      "changes": [
+        {
+          "disablePrincipal": "alice"
+        }
+      ],
+      "expected": {
+        "allow": false,
+        "reason": "Principal disablement overrides stewardship"
+      }
+    },
+    {
+      "id": "A22",
+      "actor": "bob",
+      "action": "ReadContent",
+      "target": "D-open",
+      "changes": [
+        {
+          "endParticipation": [
+            "bob",
+            "P-memory"
+          ]
+        }
+      ],
+      "expected": {
+        "allow": false,
+        "reason": "Ending project participation ends inherited rights"
+      },
+      "release": "R1"
+    },
+    {
+      "id": "A23",
+      "actor": "bob",
+      "action": "ReadContent",
+      "target": "D-open",
+      "changes": [
+        {
+          "addGrant": {
+            "recipient": "bob",
+            "dataset": "D-open",
+            "release": "R1",
+            "actions": [
+              "ReadMetadata",
+              "ReadContent"
+            ],
+            "basis": "independent"
+          }
+        },
+        {
+          "endParticipation": [
+            "bob",
+            "P-memory"
+          ]
+        }
+      ],
+      "expected": {
+        "allow": true,
+        "reason": "Independent exact-release share survives project removal"
+      },
+      "release": "R1"
+    },
+    {
+      "id": "A24",
+      "actor": "bob",
+      "action": "ReadHead",
+      "target": "D-open",
+      "changes": [
+        {
+          "addGrant": {
+            "recipient": "bob",
+            "dataset": "D-open",
+            "release": "R1",
+            "actions": [
+              "ReadMetadata",
+              "ReadContent"
+            ],
+            "basis": "independent"
+          }
+        },
+        {
+          "endParticipation": [
+            "bob",
+            "P-memory"
+          ]
+        }
+      ],
+      "expected": {
+        "allow": false,
+        "reason": "Surviving R1 grant does not restore current-head visibility"
+      }
+    },
+    {
+      "id": "A25",
+      "actor": "bob",
+      "action": "ReadContent",
+      "target": "D-open",
+      "changes": [
+        {
+          "replaceRoleWithDerivedGrant": {
+            "recipient": "bob",
+            "dataset": "D-open",
+            "release": "R1",
+            "actions": [
+              "ReadContent"
+            ],
+            "requiresParticipation": "membership-bob-v1"
+          }
+        },
+        {
+          "endParticipationId": "membership-bob-v1"
+        },
+        {
+          "rejoinWithoutRoleOrGrant": "membership-bob-v2"
+        }
+      ],
+      "expected": {
+        "allow": false,
+        "reason": "Derived grant requires the original active participation ID"
+      },
+      "release": "R1"
+    },
+    {
+      "id": "A26",
+      "actor": "outsider",
+      "action": "ReadContent",
+      "target": "D-open",
+      "changes": [],
+      "expected": {
+        "allow": false,
+        "reason": "Optional project link supplies no access"
+      },
+      "release": "R1"
+    },
+    {
+      "id": "A27",
+      "actor": "outsider",
+      "action": "TraverseProvenance",
+      "target": "D-restricted",
+      "changes": [],
+      "expected": {
+        "allow": false,
+        "reason": "Provenance supplies no access"
+      },
+      "release": "R1"
+    },
+    {
+      "id": "A28",
+      "actor": "bob",
+      "action": "ReplayAcceptanceReceipt",
+      "target": "D-open",
+      "changes": [
+        {
+          "endParticipation": [
+            "bob",
+            "P-memory"
+          ]
+        }
+      ],
+      "expected": {
+        "allow": false,
+        "reason": "A receipt rechecks current metadata authority"
+      },
+      "release": "R1"
+    },
+    {
+      "id": "A29",
+      "actor": "bob",
+      "action": "DeliverCachedChunk",
+      "target": "D-open",
+      "changes": [
+        {
+          "endParticipation": [
+            "bob",
+            "P-memory"
+          ]
+        }
+      ],
+      "expected": {
+        "allow": false,
+        "reason": "Materialized bytes and an old delivery plan are not bearer authority"
+      },
+      "release": "R1"
+    },
+    {
+      "id": "A30",
+      "actor": "bob",
+      "action": "ReadFrozenSelection",
+      "target": "D-open + D-restricted",
+      "changes": [],
+      "expected": {
+        "allow": false,
+        "reason": "An unauthorized constituent blocks the complete selection; no silent shrink"
+      },
+      "release": "R1"
+    },
+    {
+      "id": "A31",
+      "actor": "bob",
+      "action": "StartRun",
+      "target": "D-open -> D-restricted",
+      "changes": [],
+      "expected": {
+        "allow": false,
+        "reason": "Readable inputs do not authorize output deposit"
+      },
+      "release": "R1"
+    },
+    {
+      "id": "A32",
+      "actor": "dan",
+      "action": "DepositRunOutput",
+      "target": "D-open",
+      "changes": [
+        {
+          "endParticipation": [
+            "dan",
+            "P-memory"
+          ]
+        }
+      ],
+      "expected": {
+        "allow": false,
+        "reason": "Output deposit checks current Propose, regardless of successful execution"
+      }
+    },
+    {
+      "id": "A33",
+      "actor": "dan",
+      "action": "Propose",
+      "target": "D-open",
+      "changes": [
+        {
+          "archiveProject": "P-memory"
+        }
+      ],
+      "expected": {
+        "allow": false,
+        "reason": "Archival blocks writes even with an active contributor role"
+      }
+    },
+    {
+      "id": "A34",
+      "actor": "bob",
+      "action": "ReadContent",
+      "target": "D-open",
+      "changes": [
+        {
+          "archiveProject": "P-memory"
+        }
+      ],
+      "expected": {
+        "allow": true,
+        "reason": "Archival preserves currently authorized reads"
+      },
+      "release": "R1"
+    },
+    {
+      "id": "A35",
+      "actor": "sam",
+      "action": "GrantReadEvidence",
+      "target": "D-open",
+      "changes": [],
+      "expected": {
+        "allow": false,
+        "reason": "Issuer cannot grant evidence authority they do not hold"
+      }
+    },
+    {
+      "id": "A36",
+      "actor": "eve",
+      "action": "ReadEvidence",
+      "target": "D-restricted",
+      "changes": [],
+      "expected": {
+        "allow": false,
+        "reason": "ReadContent does not imply source evidence"
+      },
+      "release": "R1"
+    },
+    {
+      "id": "A37",
+      "actor": "eve",
+      "action": "ReadContent",
+      "target": "D-restricted",
+      "changes": [
+        {
+          "disablePrincipal": "alice"
+        }
+      ],
+      "expected": {
+        "allow": true,
+        "reason": "Independent grant survives issuer disablement while recipient and guest sponsorship remain active"
+      },
+      "release": "R1"
+    },
+    {
+      "id": "A38",
+      "actor": "bob",
+      "action": "ReadContent",
+      "target": "D-open",
+      "changes": [
+        {
+          "withdrawDataset": "D-open"
+        }
+      ],
+      "expected": {
+        "allow": false,
+        "reason": "Withdrawal overrides still-valid memberships"
+      },
+      "release": "R1"
+    }
+  ]
+}

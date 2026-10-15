@@ -1,0 +1,21 @@
+Traceback (most recent call last):
+  File "/Users/bbuchsbaum/code/scala/sanctity/scripts/check-upgrade-compatibility.py", line 369, in <module>
+    main()
+    ~~~~^^
+  File "/Users/bbuchsbaum/code/scala/sanctity/scripts/check-upgrade-compatibility.py", line 357, in main
+    receipt["observed"] = freeze(f, fixture) if args.mode == "freeze" else verify(f, fixture, args.modern)
+                                                                           ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bbuchsbaum/code/scala/sanctity/scripts/check-upgrade-compatibility.py", line 281, in verify
+    f.restore(fixture / "catalog.dump")
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bbuchsbaum/code/scala/sanctity/scripts/check-upgrade-compatibility.py", line 182, in restore
+    run(["docker", "exec", "-i", self.container, "pg_restore", "-U", "compat", "-d", "compat", "--exit-on-error"], input=path.read_bytes())
+    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bbuchsbaum/code/scala/sanctity/scripts/check-upgrade-compatibility.py", line 65, in run
+    require(result.returncode == 0, "fixture subprocess failed: " + Path(args[0]).name + ": " + detail[:1500])
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bbuchsbaum/code/scala/sanctity/scripts/check-upgrade-compatibility.py", line 46, in require
+    raise AssertionError(message)
+AssertionError: fixture subprocess failed: docker: pg_restore: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: No such file or directory
+	Is the server running locally and accepting connections on that socket?
+

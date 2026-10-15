@@ -1,0 +1,39 @@
+[info] welcome to sbt 1.10.5 (Eclipse Adoptium Java 21.0.12.1)
+[info] loading project definition from /Users/bbuchsbaum/code/scala/sanctity/project
+[info] loading settings for project root from build.sbt ...
+[info] loading settings for project bids4s-19f022d002f69292dec056eb0762b877438c47305cee6c176adf3e0f780e9146-build from plugins.sbt ...
+[info] loading project definition from /Users/bbuchsbaum/code/scala/sanctity/target/source-dependencies/bids4s-19f022d002f69292dec056eb0762b877438c47305cee6c176adf3e0f780e9146/project
+[info] loading settings for project root from build.sbt ...
+[info] resolving key references (17507 settings) ...
+[info] set current project to sanctity (in build file:/Users/bbuchsbaum/code/scala/sanctity/)
+[info] compiling 1 Scala source to /Users/bbuchsbaum/code/scala/sanctity/modules/service/target/scala-3.3.8/test-classes ...
+[info] done compiling
+Test run sanctity.app.ServiceConfigurationSuite started
+sanctity.app.ServiceConfigurationSuite: finished 3.197s
+Test run sanctity.app.ServiceConfigurationSuite finished: 0 failed, 0 ignored, 9 total 3.204s
+[info] Passed: Total 9, Failed 0, Errors 0, Passed 9
+[success] Total time: 9 s, completed Oct 14, 2026, 9:49:36 a.m.
+[info] compiling 1 Scala source to /Users/bbuchsbaum/code/scala/sanctity/modules/integration/target/scala-3.3.8/test-classes ...
+[info] done compiling
+Test run sanctity.postgres.OperationsSuite started
+sanctity.postgres.OperationsSuite: finished 5.493s
+Test run sanctity.postgres.OperationsSuite finished: 0 failed, 0 ignored, 5 total 5.5s
+Import operation: b595e0ea-a81b-4661-ab24-08ce7ddb6745
+{
+  "dataset" : "c7e66f0b-40d9-46d2-bc0b-ccaad1e4f17a",
+  "release" : "db2269b6-8280-4e8e-b60e-6964838597c7",
+  "operation" : "b595e0ea-a81b-4661-ab24-08ce7ddb6745"
+}
+Import operation: b595e0ea-a81b-4661-ab24-08ce7ddb6745
+{
+  "dataset" : "c7e66f0b-40d9-46d2-bc0b-ccaad1e4f17a",
+  "release" : "db2269b6-8280-4e8e-b60e-6964838597c7",
+  "operation" : "b595e0ea-a81b-4661-ab24-08ce7ddb6745"
+}
+Credential 05d04a3c-b117-49ee-a870-c2efb50bae63 written to a new private file. Expires: 2026-10-14T14:49:50.740569Z
+Credential revoked.
+Test run sanctity.postgres.HttpSuite started
+sanctity.postgres.HttpSuite: finished 5.701s
+Test run sanctity.postgres.HttpSuite finished: 0 failed, 0 ignored, 8 total 5.701s
+[info] Passed: Total 13, Failed 0, Errors 0, Passed 13
+[success] Total time: 14 s, completed Oct 14, 2026, 9:49:51 a.m.

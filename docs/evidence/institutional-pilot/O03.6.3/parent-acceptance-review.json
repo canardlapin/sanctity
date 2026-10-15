@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 1,
+  "status": "passed",
+  "task": "O03.6",
+  "scope": "Only currently implemented authority; all six original criteria retained verbatim",
+  "criteria": [
+    {
+      "criterion": "Enumerate every authority-changing entry point in the current build: principal state, lab/project state, memberships and expiry, placement/custody, stewardship, independent and release-scoped grants, API credential issue/revocation and affected leases. Each supported mutation has an exact versioned event and atomic local policy/event/receipt commit; no supported write path bypasses the journal.",
+      "status": "passed",
+      "evidence": "The unchanged policy-transactions inventory names nineteen current producer kinds. PolicyIntegrationSuite exercises all nineteen against PostgreSQL/TLS, atomic event rollback, offboarding and local authorization; the 102 current integration regressions pass. O03.6.2 defines the atomic PolicySql boundary and credential operation identity.",
+      "evidencePaths": [
+        "docs/policy-transactions.md",
+        "docs/evidence/institutional-pilot/O03.6.3/TEST-sanctity.postgres.PolicyIntegrationSuite.xml",
+        "docs/evidence/institutional-pilot/O03.6.3/TEST-sanctity.postgres.CurrentAuthoritySuite.xml",
+        "docs/evidence/institutional-pilot/O03.6.2/receipt.json"
+      ]
+    },
+    {
+      "criterion": "Implement ADR004 using a separately permissioned service/store and independently retained trust bundle, authenticated transport, canonical signed records, contiguous journal order and installation/epoch binding. Fenced enrollment imports complete existing authority and tombstones, preserving all pre-enrollment restrictions; an empty witness or restored primary cannot establish currency.",
+      "status": "passed",
+      "evidence": "Signed TLS journal/store vectors and current regression pass. Separate primary/witness/operator UIDs, protected volumes, cross-mounted permission denials, separate SQL runtime role and independently held key bundles are observed. Restrictive enrollment retains revoked grants/credentials, inactive principals, lease status, immutable history and scientific identity; ENROLL record/head crashes resume the exact retained checkpoint.",
+      "evidencePaths": [
+        "docs/evidence/institutional-pilot/O03.6.3/process-attempt-04/receipt.json",
+        "docs/evidence/institutional-pilot/O03.6.3/TEST-sanctity.policy.PolicyJournalSuite.xml",
+        "docs/evidence/institutional-pilot/O03.6.3/TEST-sanctity.policy.PolicyTransportSuite.xml",
+        "docs/evidence/institutional-pilot/O03.6.1/receipt.json"
+      ]
+    },
+    {
+      "criterion": "Durably PREPARE the complete event before local commit, obtain verified remote COMMIT before completed success, and resolve retries by operation ID plus exact payload. An outage, lost response or unresolved intent cannot be reported as durable success or overtaken; restrictions already committed locally remain effective. Lost primary plus unresolved PREPARE leaves recovery closed as ADR004 requires.",
+      "status": "passed",
+      "evidence": "Eight primary transaction/receipt boundaries and PREPARE/COMMIT/ABORT record/head process kills demonstrate no false success, exact terminal reconciliation, live rollback proof and conservative restarted absence. Pending local revocation denies access, outage prevents overtaking, and a successor follows predecessor COMMIT. Actual primary database deletion retains acknowledged state or leaves unresolved PREPARE closed.",
+      "evidencePaths": [
+        "docs/evidence/institutional-pilot/O03.6.3/process-attempt-04/receipt.json",
+        "docs/evidence/institutional-pilot/O03.6.3/TEST-sanctity.postgres.PolicyIntegrationSuite.xml",
+        "docs/evidence/institutional-pilot/O03.6.3/TEST-sanctity.postgres.PolicyReceiptCompatibilitySuite.xml"
+      ]
+    },
+    {
+      "criterion": "Implement fresh current-head challenges, durable recovery barriers and writer fencing. Startup and runtime admission reject stale epochs/heads, with permits at most five seconds and bounded drain; changing only a restored database epoch cannot fence an old writer. Preserve current per-operation authorization checks.",
+      "status": "passed",
+      "evidence": "Fresh signed recovery barriers survive record/head kills and exact retries. The running admission client and actual packaged HTTP server are fenced with the local database epoch unchanged; restarted old service fails. The held backend transaction drains within the five-second permit plus recorded 0.25-second polling tolerance and its effects roll back. A separate actual stalled SQL acknowledgement insertion qualifies the unwrapped production finalizer: it drains within its own server-enforced five-second deadline plus recorded scheduling tolerance, returns pending and preserves the local restriction for exact resolution. Current authorization regression remains passing.",
+      "evidencePaths": [
+        "docs/evidence/institutional-pilot/O03.6.3/process-attempt-04/receipt.json",
+        "docs/evidence/institutional-pilot/O03.6.3/finalization-attempt-03/receipt.json",
+        "docs/evidence/institutional-pilot/O03.6.3/TEST-sanctity.postgres.PolicyIntegrationSuite.xml",
+        "docs/evidence/institutional-pilot/O03.6.3/TEST-sanctity.postgres.CurrentAuthoritySuite.xml",
+        "modules/postgres/src/main/scala/sanctity/postgres/PolicyBridge.scala"
+      ]
+    },
+    {
+      "criterion": "Expose a versioned supported-capability/event inventory and redacted durability/readiness diagnostics. Unsupported policy kinds or capability versions fail closed; adding identity/session/lifecycle producers requires explicit enrollment/upgrade integration, never silent omission. Keep legacy organization recovery blocked.",
+      "status": "passed",
+      "evidence": "The versioned capability inventory and redacted diagnostics are exercised by current source and package checks. Unknown capability/producer, valid alternate signing pin, foreign installation, empty witness and incompatible state refuse admission. Existing local event identities remain LocalOnly; pending/unknown/durable responses remain explicit. Legacy organization recovery stays blocked.",
+      "evidencePaths": [
+        "docs/evidence/institutional-pilot/O03.6.3/process-attempt-04/receipt.json",
+        "docs/evidence/institutional-pilot/O03.6.3/final-artifact/catalog-package/receipt.json",
+        "docs/evidence/institutional-pilot/O03.6.3/final-artifact/witness-package/receipt.json",
+        "docs/evidence/institutional-pilot/O03.6.3/TEST-sanctity.policy.PolicyWireSuite.xml",
+        "docs/policy-catalog.md"
+      ]
+    },
+    {
+      "criterion": "Exercise real independent connections/stores and process restarts at every prepare/local-commit/remote-commit/receipt boundary; verify exact retries, changed-payload rejection, duplicate/reordered events, gaps, foreign installation, tampering, key trust and stale-writer rejection. Local service separation claims component isolation only, not computer/disk-loss durability.",
+      "status": "passed",
+      "evidence": "Separate primary/witness JVMs run the SQL/fsync interruption matrix; exact/changed/reordered requests, gaps, tampering, signed unknown capability, foreign installation/trust, durable retries and stale writers are observed. Artifact/harness/source/configuration identities are bound. Same-host isolation does not qualify host/disk loss; identity/session and institutional obligations remain open.",
+      "evidencePaths": [
+        "docs/evidence/institutional-pilot/O03.6.3/process-attempt-04/receipt.json",
+        "docs/evidence/institutional-pilot/O03.6.3/process-attempt-04-procedure.py",
+        "docs/evidence/institutional-pilot/O03.6.3/harness-inputs.json"
+      ]
+    }
+  ],
+  "matrix": "docs/evidence/institutional-pilot/O03.6.3/process-attempt-04",
+  "packagedApi": "docs/evidence/institutional-pilot/O03.6.3/process-attempt-04",
+  "unchangedAcceptance": true,
+  "openObligations": [
+    "H03.1",
+    "O03.7",
+    "O03.8",
+    "O03.2",
+    "O03.3",
+    "SITE01",
+    "F03.4",
+    "H04.2"
+  ]
+}

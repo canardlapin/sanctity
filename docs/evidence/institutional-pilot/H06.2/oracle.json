@@ -1,0 +1,278 @@
+{
+  "baselineSha256": "2ae3efa92d344520dc9abae1ce1d6c879998a187cebe1897ce096b3ced6b432e",
+  "completedImport": {
+    "dataset": "43d3728f-12da-4b9a-9642-e5e618c8eace",
+    "operation": "310428b7-ce56-4476-a45a-1891907344f5",
+    "release": "4baa047a-8459-43c6-bd5e-ecdce004a138"
+  },
+  "dataset": "43d3728f-12da-4b9a-9642-e5e618c8eace",
+  "decisions": [
+    [
+      "fixed",
+      0,
+      "release",
+      200
+    ],
+    [
+      "fixed",
+      0,
+      "file",
+      200
+    ],
+    [
+      "fixed",
+      1,
+      "release",
+      404
+    ],
+    [
+      "metadata",
+      0,
+      "release",
+      200
+    ],
+    [
+      "metadata",
+      1,
+      "release",
+      200
+    ],
+    [
+      "metadata",
+      1,
+      "file",
+      404
+    ],
+    [
+      "revoked",
+      0,
+      "release",
+      404
+    ],
+    [
+      "revoked",
+      1,
+      "file",
+      404
+    ]
+  ],
+  "grants": {
+    "fixed": {
+      "actions": [
+        "ReadContent",
+        "ReadMetadata"
+      ],
+      "dataset": "43d3728f-12da-4b9a-9642-e5e618c8eace",
+      "id": "43a55810-5e23-4862-ad5f-61eb4747933e",
+      "recipient": "37f01aab-0609-4252-801e-8538674d459f",
+      "release": "4baa047a-8459-43c6-bd5e-ecdce004a138"
+    },
+    "metadata": {
+      "actions": [
+        "ReadMetadata"
+      ],
+      "dataset": "43d3728f-12da-4b9a-9642-e5e618c8eace",
+      "id": "efe7d661-24f5-4d33-a1d5-986edc6247b9",
+      "recipient": "b1015d75-9136-41e3-9be9-061302de9e88",
+      "release": null
+    },
+    "revoked": {
+      "actions": [
+        "ReadContent",
+        "ReadMetadata"
+      ],
+      "dataset": "43d3728f-12da-4b9a-9642-e5e618c8eace",
+      "id": "d208b924-20ec-451f-be36-9d68eb9f3b74",
+      "recipient": "b41b74ab-8505-41e4-82ae-9606c5d02ee0",
+      "release": null
+    }
+  },
+  "head": "9e9c14c8-ee74-4cae-bb73-1af88b3a2a30",
+  "historical": {
+    "acceptance_receipt": "c6654149104881256cc1557da4eed82ee2aff26307fdf05c35ba6de4fc52dfb9",
+    "access_grant": "187b7bc32e24c54151904980b5c494302d44697f6a3aa7d719aadf144e997dfb",
+    "acquired_file": "677d9d9e15ae6b5a6c303d833e65b2c994342dc9dde88d37c224be2b4ddbdb43",
+    "api_credential": "f67a2270047736abacb58b0f96f3b612da3bdc336d5d2e5b0653cf4f0bee68ae",
+    "assessment": "07adf828b56e44ff38e77f7ae4c7406177d27985d8d0e78cb83afc6386827c5d",
+    "audit": "84f42d1267844d4aa871b781a27c2e89d95651cede029530bc2c70d4ca62bd03",
+    "candidate": "ac7d64e9038310cd9e5c77e49a479509ce454267a7824f7740205fe56df1217a",
+    "credential_audit": "cc14668beb0886d6a521d7677d8033067b94a2e78221290add3ccb570799eac5",
+    "import_operation": "4749f6ca93b34733ea4f0e18945c3a2bd5b024ae67dda34f1a054e287ea137a5",
+    "interpretation": "b53bee0fc3cad4e405bfa69278d95a04498a0bc486d325fb54e22ace00b8ff3b",
+    "manifest": "6551bc98863ac5a10f0bc890020b74ebbb8b5c3bb66a28d12919d42c186f2a8b",
+    "outbox": "4db8be33de4bccc63eb28164506dfadaa96b1d25fbf239fa4cc4fc0b99be7908",
+    "policy_audit": "0a2fb08eac85c95c1859a18b00a524b2948dfdb907a7644e0cbfd51dab1c5526",
+    "release": "206fc6990314c7a4f623fde139500ce727124d01e0ca67ac50a791f9553d610b"
+  },
+  "pendingFiles": {
+    "README": {
+      "sha256": "959225c3fbcfb8e1687c384d7a3178d1d665c466c9f64edd24aa71ba991e1628",
+      "size": 44
+    },
+    "dataset_description.json": {
+      "sha256": "ae7579813b9a9cefb1541b172fac9120c8858d9522e54ea0f4de3b15ec2c8a65",
+      "size": 77
+    }
+  },
+  "pendingImport": {
+    "candidate_id": null,
+    "dataset_id": "1f0a4794-6103-42cd-ab2a-d97acf4bc2cd",
+    "id": "74ef2e2d-a980-4235-949d-a6f52506f5cf",
+    "lease_token": "85d79623-33ee-4fcd-9dc1-42bd36eab182",
+    "lease_until": "2026-10-14T14:33:28.839449+00:00",
+    "receipt": null
+  },
+  "pendingOutbox": [
+    {
+      "event_type": "ReleaseAccepted",
+      "release_id": "4baa047a-8459-43c6-bd5e-ecdce004a138",
+      "sequence": 1
+    },
+    {
+      "event_type": "ReleaseAccepted",
+      "release_id": "9e9c14c8-ee74-4cae-bb73-1af88b3a2a30",
+      "sequence": 2
+    }
+  ],
+  "principals": {
+    "fixed": "37f01aab-0609-4252-801e-8538674d459f",
+    "metadata": "b1015d75-9136-41e3-9be9-061302de9e88",
+    "owner": "72fc66a4-04aa-400f-8c10-5145c22fb50c",
+    "revoked": "b41b74ab-8505-41e4-82ae-9606c5d02ee0"
+  },
+  "releases": [
+    {
+      "exportManifestSha256": "fb1a3e8baa90744131638d3cd1b57b17c085d78da1ccf3ddcc9a55e49e5ae6f8",
+      "files": {
+        "README": {
+          "sha256": "959225c3fbcfb8e1687c384d7a3178d1d665c466c9f64edd24aa71ba991e1628",
+          "size": 44
+        },
+        "dataset_description.json": {
+          "sha256": "ae7579813b9a9cefb1541b172fac9120c8858d9522e54ea0f4de3b15ec2c8a65",
+          "size": 77
+        }
+      },
+      "id": "4baa047a-8459-43c6-bd5e-ecdce004a138",
+      "representation": {
+        "acceptedAt": "2026-10-14T14:32:14.801448Z",
+        "assessment": {
+          "admissible": true,
+          "checks": [],
+          "findings": [],
+          "id": "4b5f32e021ba83aaa6c4c13f381b8d2a767b11164fc051dcaa8d8129ce1484c0",
+          "policy": "reference-admission-v10"
+        },
+        "coverage": "Context-selected bids4s names and JSON inheritance; basic description/timing checks. Strict participant TSV and scoped query facts. Explicit NIfTI B0 fieldmap groups and IntendedFor links. Inherited DWI gradients and BOLD event companions. DWI gradient parsing, scalar NIfTI-1/2 header counts and versioned norm checks. Strict selected BOLD event tables, explicit regular/variable timing context and contextual warnings. Phase-difference and phase1/phase2 magnitude families with exact echo-time origins. Bounded MRI dimensions, units, coded transform structure and TR/header comparison; discrepancies remain observations. Multi-echo BOLD families, exact functional SBRef companions and local event stimulus references. Every-BOLD volume and slice timing with declared NIfTI slice-axis evidence. No HED validation, anatomical alignment, gradient orientation, gzip payload or full BIDS conformance validation.",
+        "entries": [
+          {
+            "kind": "file",
+            "path": "README",
+            "size": 44
+          },
+          {
+            "kind": "file",
+            "path": "dataset_description.json",
+            "size": 77
+          }
+        ],
+        "interpretation": "460cad26a47eba480d05fdc5f91e4d3d4df273f9d9cba638ab952b8bc143cb5e",
+        "manifest": "8953409eef31733611e9659a4e35c6dd5b09839f901fb3725b12eb8a1964aab1",
+        "parent": null,
+        "profile": "native-reference-v11",
+        "ref": {
+          "dataset": "43d3728f-12da-4b9a-9642-e5e618c8eace",
+          "release": "4baa047a-8459-43c6-bd5e-ecdce004a138"
+        },
+        "relationships": {
+          "evidenceVersion": 3,
+          "links": [],
+          "version": "bids-mri-relationships-v7"
+        }
+      }
+    },
+    {
+      "exportManifestSha256": "e93d61b80f50cd6cdfab53e3874d9ba6b9dde7bd6924c8cc8d25719dbf025666",
+      "files": {
+        "README": {
+          "sha256": "959225c3fbcfb8e1687c384d7a3178d1d665c466c9f64edd24aa71ba991e1628",
+          "size": 44
+        },
+        "dataset_description.json": {
+          "sha256": "35de88077564d2970a501571dcc30c2cc70def58c252ead4bda889569e8214aa",
+          "size": 77
+        }
+      },
+      "id": "9e9c14c8-ee74-4cae-bb73-1af88b3a2a30",
+      "representation": {
+        "acceptedAt": "2026-10-14T14:32:19.524901Z",
+        "assessment": {
+          "admissible": true,
+          "checks": [],
+          "findings": [],
+          "id": "cf76d6bfdbd75271ecad7617c5c4ad7376d6afa91be9f144a2ebd781757fed9f",
+          "policy": "reference-admission-v10"
+        },
+        "coverage": "Context-selected bids4s names and JSON inheritance; basic description/timing checks. Strict participant TSV and scoped query facts. Explicit NIfTI B0 fieldmap groups and IntendedFor links. Inherited DWI gradients and BOLD event companions. DWI gradient parsing, scalar NIfTI-1/2 header counts and versioned norm checks. Strict selected BOLD event tables, explicit regular/variable timing context and contextual warnings. Phase-difference and phase1/phase2 magnitude families with exact echo-time origins. Bounded MRI dimensions, units, coded transform structure and TR/header comparison; discrepancies remain observations. Multi-echo BOLD families, exact functional SBRef companions and local event stimulus references. Every-BOLD volume and slice timing with declared NIfTI slice-axis evidence. No HED validation, anatomical alignment, gradient orientation, gzip payload or full BIDS conformance validation.",
+        "entries": [
+          {
+            "kind": "file",
+            "path": "README",
+            "size": 44
+          },
+          {
+            "kind": "file",
+            "path": "dataset_description.json",
+            "size": 77
+          }
+        ],
+        "interpretation": "bf5accd4f4d73325658026181bfd4bd297894c88c4943670881d491594fa29be",
+        "manifest": "cf0f018c8b79dfcae26ce74604f739f70e16ee3528369defc5d699c1263f8599",
+        "parent": "4baa047a-8459-43c6-bd5e-ecdce004a138",
+        "profile": "native-reference-v11",
+        "ref": {
+          "dataset": "43d3728f-12da-4b9a-9642-e5e618c8eace",
+          "release": "9e9c14c8-ee74-4cae-bb73-1af88b3a2a30"
+        },
+        "relationships": {
+          "evidenceVersion": 3,
+          "links": [],
+          "version": "bids-mri-relationships-v7"
+        }
+      }
+    }
+  ],
+  "revokedCredential": "61664fa1-95ae-4ce7-b0b6-b68b1a905d1f",
+  "schema": [
+    {
+      "checksum": "a510a4648518f2024df8c05d1bf0192d5d4129a3638bf63dfb75af813f11501e",
+      "version": 1
+    },
+    {
+      "checksum": "aed0db6f5fca8bbd88ba92ec5000e24ef2778895cb49aef69e5843e30c38a05d",
+      "version": 2
+    },
+    {
+      "checksum": "ca778f6d8f3890691fa3686fba0c4d47f58d5593e25ac721830335679a56d847",
+      "version": 3
+    },
+    {
+      "checksum": "de165af5df8f754beafefa82d5984429ba07aaec1abdfee0208c7c2e0394407a",
+      "version": 4
+    },
+    {
+      "checksum": "9546855eaf12f5199fd0c5d9282fb5f3d1d744381af9efe613a61a4e48568a09",
+      "version": 5
+    },
+    {
+      "checksum": "3fed2e68d87075317dd2dafe04677437ba88443bd215e7b6dce303b8a1834e3d",
+      "version": 6
+    },
+    {
+      "checksum": "71b33c04d51a17bbc0719325bcd06ca5bd532886269994b43e1d81b536c1d4d8",
+      "version": 7
+    }
+  ],
+  "source": "/Users/bbuchsbaum/code/scala/sanctity/local-artifacts/compatibility/pre-core-20261014/corpus-v2/source",
+  "version": 1
+}

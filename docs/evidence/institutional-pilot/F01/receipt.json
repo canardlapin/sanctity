@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "gate": "F01",
+  "status": "passed",
+  "kind": "engineering-contract-integration-review",
+  "at": "2026-10-14T12:09:16.124741+00:00",
+  "reviewer": "codex-institutional-build (engineering self-review; no human/institutional approval implied)",
+  "children": [
+    "F01.1",
+    "F01.2",
+    "F01.3"
+  ],
+  "acceptance": [
+    {
+      "criterion": "Write an ADR and role/action matrix covering lab membership, project participation, dataset placement, discovery, source evidence, fixed-release sharing, grant expiry, principal disablement and stewardship transfer.",
+      "result": "pass",
+      "evidence": "ADRs 001-003 and 38-case authority corpus"
+    },
+    {
+      "criterion": "Define link-versus-authority behavior, independent versus membership-derived grants and last-steward recovery without rewriting scientific identities.",
+      "result": "pass",
+      "evidence": "ADR 001 placement/link boundaries, ADR 002 grant lineage, ADR 003 last-steward recovery"
+    },
+    {
+      "criterion": "Specify public API and migration examples for existing datasets/curators; keep proposals clear where institution-specific inputs are outstanding.",
+      "result": "pass",
+      "evidence": "ADR 001 resource/API table and ADR 003 legacy migration example; SITE01-dependent choices explicitly open"
+    }
+  ],
+  "crossContractReview": [
+    "One primary project and explicit inheritance controls agree across organization, policy and migration.",
+    "Project/lab administration never supplies an implicit restricted dataset or source-evidence bypass.",
+    "Migration preserves existing principal IDs, revoked credentials, fixed-release scopes and historical attribution.",
+    "Full principal disablement overrides all access and remains possible for the last steward.",
+    "Current authority remains separate from immutable releases, stored receipts and provenance.",
+    "Atomic generations/idempotency and independent-policy recovery obligations have identified implementation owners."
+  ],
+  "checks": {
+    "localLinksResolved": 8,
+    "childReceiptInputHashes": "pass",
+    "authorityCases": 38
+  },
+  "inputs": {
+    "docs/decisions/001-institutional-organization.md": "7b993b58aabdc74d71d09aaf21a51c6db09431ecce32e41141ce277ddf8add82",
+    "docs/decisions/002-institutional-authority.md": "0b1ddb971b4c306bb87d404fd114d2ff48fb055dd7a4279c07ebcf35be04d3eb",
+    "docs/decisions/003-institutional-lifecycle.md": "12b0dc70b7ef65590bc420dd49330dde5e8c3149593bb930295531d951e525a2",
+    "docs/decisions/institutional-authority-cases.json": "7a7351dc7d6334ca4f40918c9583db821b99e8b82d87cdf4ca30cd7d99566fd5",
+    "docs/evidence/institutional-pilot/F01.1/receipt.json": "4073cdc126884e00bebd25d2a769f623dff6a0c503afa8042b9eb6dcee654fcb",
+    "docs/evidence/institutional-pilot/F01.2/receipt.json": "63e0eb00115efc3a6e21ffa50472e582a88d1579119916558cfa4ce1c0016bb8",
+    "docs/evidence/institutional-pilot/F01.3/receipt.json": "a5bdf921355c5b4f7a340a10b503bb07deb8d0cf9598d22f2666eb40374eedcf"
+  },
+  "limits": [
+    "Design gate only; F02/F03/F04 organization and authority runtime is not implemented by these ADRs.",
+    "SITE01 institution/provider/approver names are still unknown.",
+    "Independent access review, provider qualification, screen-reader adoption and operator recovery remain open."
+  ]
+}

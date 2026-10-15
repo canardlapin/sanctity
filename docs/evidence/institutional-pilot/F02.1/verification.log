@@ -1,0 +1,50 @@
+[info] welcome to sbt 1.10.5 (Eclipse Adoptium Java 21.0.12.1)
+[info] loading project definition from /Users/bbuchsbaum/code/scala/sanctity/project
+[info] loading settings for project root from build.sbt ...
+[info] loading settings for project bids4s-19f022d002f69292dec056eb0762b877438c47305cee6c176adf3e0f780e9146-build from plugins.sbt ...
+[info] loading project definition from /Users/bbuchsbaum/code/scala/sanctity/target/source-dependencies/bids4s-19f022d002f69292dec056eb0762b877438c47305cee6c176adf3e0f780e9146/project
+[info] loading settings for project root from build.sbt ...
+[info] resolving key references (17507 settings) ...
+[info] set current project to sanctity (in build file:/Users/bbuchsbaum/code/scala/sanctity/)
+[info] compiling 1 Scala source to /Users/bbuchsbaum/code/scala/sanctity/modules/kernel/target/scala-3.3.8/classes ...
+[info] done compiling
+Test run sanctity.kernel.ContentCheckSuite started
+sanctity.kernel.ContentCheckSuite: finished 0.081s
+Test run sanctity.kernel.ContentCheckSuite finished: 0 failed, 0 ignored, 5 total 0.088s
+Test run sanctity.kernel.RelationshipSuite started
+sanctity.kernel.RelationshipSuite: finished 0.052s
+Test run sanctity.kernel.RelationshipSuite finished: 0 failed, 0 ignored, 10 total 0.052s
+Test run sanctity.kernel.SemanticContextSuite started
+sanctity.kernel.SemanticContextSuite: finished 0.016s
+Test run sanctity.kernel.SemanticContextSuite finished: 0 failed, 0 ignored, 3 total 0.016s
+Test run sanctity.kernel.ProjectionSuite started
+sanctity.kernel.ProjectionSuite: finished 0.015s
+Test run sanctity.kernel.ProjectionSuite finished: 0 failed, 0 ignored, 4 total 0.015s
+Test run sanctity.kernel.PublicationSuite started
+sanctity.kernel.PublicationSuite: finished 0.006s
+Test run sanctity.kernel.PublicationSuite finished: 0 failed, 0 ignored, 4 total 0.006s
+Test run sanctity.kernel.KernelSuite started
+sanctity.kernel.KernelSuite: finished 0.096s
+Test run sanctity.kernel.KernelSuite finished: 0 failed, 0 ignored, 9 total 0.096s
+Test run sanctity.kernel.QuerySuite started
+sanctity.kernel.QuerySuite: finished 0.004s
+Test run sanctity.kernel.QuerySuite finished: 0 failed, 0 ignored, 3 total 0.004s
+Test run sanctity.kernel.FileEditsSuite started
+sanctity.kernel.FileEditsSuite: finished 0.006s
+Test run sanctity.kernel.FileEditsSuite finished: 0 failed, 0 ignored, 3 total 0.006s
+Test run sanctity.kernel.ProcessingContractSuite started
+sanctity.kernel.ProcessingContractSuite: finished 0.009s
+Test run sanctity.kernel.ProcessingContractSuite finished: 0 failed, 0 ignored, 6 total 0.009s
+[info] Passed: Total 47, Failed 0, Errors 0, Passed 47
+[success] Total time: 5 s, completed Oct 14, 2026, 10:05:10 a.m.
+[info] compiling 1 Scala source to /Users/bbuchsbaum/code/scala/sanctity/modules/application/target/scala-3.3.8/classes ...
+[info] done compiling
+[info] compiling 1 Scala source to /Users/bbuchsbaum/code/scala/sanctity/modules/bids/target/scala-3.3.8/classes ...
+[info] done compiling
+[info] compiling 1 Scala source to /Users/bbuchsbaum/code/scala/sanctity/modules/app/target/scala-3.3.8/test-classes ...
+[info] done compiling
+Test run sanctity.app.OrganizationSuite started
+sanctity.app.OrganizationSuite: finished 0.604s
+Test run sanctity.app.OrganizationSuite finished: 0 failed, 0 ignored, 14 total 0.617s
+[info] Passed: Total 14, Failed 0, Errors 0, Passed 14
+[success] Total time: 6 s, completed Oct 14, 2026, 10:05:15 a.m.

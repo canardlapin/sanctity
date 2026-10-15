@@ -1,0 +1,58 @@
+[info] welcome to sbt 1.10.5 (Eclipse Adoptium Java 21.0.12.1)
+[info] loading project definition from /Users/bbuchsbaum/code/scala/sanctity/project
+[info] loading settings for project root from build.sbt ...
+[info] loading settings for project bids4s-19f022d002f69292dec056eb0762b877438c47305cee6c176adf3e0f780e9146-build from plugins.sbt ...
+[info] loading project definition from /Users/bbuchsbaum/code/scala/sanctity/target/source-dependencies/bids4s-19f022d002f69292dec056eb0762b877438c47305cee6c176adf3e0f780e9146/project
+[info] loading settings for project root from build.sbt ...
+[info] resolving key references (17507 settings) ...
+[info] set current project to sanctity (in build file:/Users/bbuchsbaum/code/scala/sanctity/)
+[success] Total time: 0 s, completed Oct 14, 2026, 3:20:34 p.m.
+[success] Total time: 0 s, completed Oct 14, 2026, 3:20:34 p.m.
+[success] Total time: 0 s, completed Oct 14, 2026, 3:20:34 p.m.
+[success] Total time: 0 s, completed Oct 14, 2026, 3:20:34 p.m.
+[success] Total time: 0 s, completed Oct 14, 2026, 3:20:34 p.m.
+[success] Total time: 0 s, completed Oct 14, 2026, 3:20:34 p.m.
+[success] Total time: 0 s, completed Oct 14, 2026, 3:20:34 p.m.
+[info] compiling 19 Scala sources to /Users/bbuchsbaum/code/scala/sanctity/modules/kernel/target/scala-3.3.8/classes ...
+[info] done compiling
+[info] compiling 14 Scala sources to /Users/bbuchsbaum/code/scala/sanctity/modules/application/target/scala-3.3.8/classes ...
+[info] done compiling
+[info] compiling 4 Scala sources to /Users/bbuchsbaum/code/scala/sanctity/modules/objects/target/scala-3.3.8/classes ...
+[info] compiling 4 Scala sources to /Users/bbuchsbaum/code/scala/sanctity/modules/http/target/scala-3.3.8/classes ...
+[info] compiling 16 Scala sources to /Users/bbuchsbaum/code/scala/sanctity/modules/bids/target/scala-3.3.8/classes ...
+[info] compiling 17 Scala sources to /Users/bbuchsbaum/code/scala/sanctity/modules/postgres/target/scala-3.3.8/classes ...
+[info] done compiling
+[info] done compiling
+[info] done compiling
+[info] done compiling
+[info] compiling 8 Scala sources to /Users/bbuchsbaum/code/scala/sanctity/modules/service/target/scala-3.3.8/classes ...
+[info] done compiling
+[success] Total time: 53 s, completed Oct 14, 2026, 3:21:28 p.m.
+{"artifact": "/Users/bbuchsbaum/code/scala/sanctity/target/service-release-o0361-final-20261014/sanctity-0.1.0-SNAPSHOT.zip", "sha256": "591addecc2c4b65c07d29c33f6600443d6dbe56319f0fa5cbacfa70bc83a1517", "dependencies": 49}
+{"status": "passed", "checks": 7, "artifactSha256": "591addecc2c4b65c07d29c33f6600443d6dbe56319f0fa5cbacfa70bc83a1517"}
+{
+  "schemaVersion": 1,
+  "artifact": "sanctity-0.1.0-SNAPSHOT.zip",
+  "artifactSha256": "591addecc2c4b65c07d29c33f6600443d6dbe56319f0fa5cbacfa70bc83a1517",
+  "postgresImage": "postgres@sha256:b0f9560a2de083e2cc7382e75f808c7381a32852a7ec49117deedb300e552b24",
+  "checks": [
+    "exact payload/dependency digests, runtime resources, licenses and module exclusion",
+    "Java-only launcher with spaces, no source/build-tool PATH, version/help and invalid command",
+    "invalid database/secret/origin/port/storage settings fail closed with canary-free diagnostics",
+    "packaged SQL migrations applied and repeated successfully",
+    "runtime cannot migrate/bootstrap/issue credentials/capture policy; privileged login cannot serve",
+    "trusted create, private credential issuance and native import from packaged resources",
+    "unbootstrapped startup denied; private reviewed organization preview and idempotent bootstrap",
+    "live port collision and Host/Origin checks resist forwarded-header substitution",
+    "live console, anonymous denial, authenticated identity, accepted head and byte-exact HTTP delivery",
+    "legacy policy capture refused after organization bootstrap; live credential revocation",
+    "packaged SIGTERM/SIGKILL restart preserves exact accepted release/bytes and credential revocation"
+  ],
+  "status": "passed",
+  "scope": "Synthetic single-host Java-only packaged runtime; not institutional qualification",
+  "manifestSha256": "829d5121c5ce47f799790787b7d86406141997f90d3da5fd17a673b9d3547b4c",
+  "sourceInventorySha256": "2ce131ca9d502a188e18fe5f7d419b986228c3f8757225bbc1594e8925ee796e",
+  "runtimeJarCount": 49,
+  "versionOutput": "Sanctity 0.1.0-SNAPSHOT (Scala 3.3.8; Java 21+)",
+  "postgresVersion": "postgres (PostgreSQL) 17.11"
+}

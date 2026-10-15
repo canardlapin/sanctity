@@ -1,0 +1,165 @@
+{
+  "version": "sanctity-engineering-v1",
+  "seed": 104729,
+  "status": "frozen targets; not a measured performance pass",
+  "generator": "scripts/generate-engineering-workload.py",
+  "contracts": [
+    "docs/decisions/001-institutional-organization.md",
+    "docs/decisions/002-institutional-authority.md",
+    "docs/core-hardening-plan.md"
+  ],
+  "hostBaseline": {
+    "model": "Mac14,12",
+    "architecture": "arm64",
+    "logicalCpus": 10,
+    "memoryBytes": 34359738368,
+    "os": "Darwin 24.1.0",
+    "java": "Temurin 21.0.12.1+1",
+    "docker": "28.1.1 linux/aarch64 overlayfs",
+    "dockerVmLogicalCpus": 10,
+    "dockerVmMemoryBytes": 8218034176,
+    "recorded": "2026-10-14",
+    "storage": "local APFS SSD; record volume/free bytes and Docker volume filesystem at each run; disk throughput not prequalified"
+  },
+  "runResources": {
+    "service": "native packaged Java 21, dedicated process; no other Sanctity qualification running",
+    "javaToolOptions": "-Xms256m -Xmx2g -XX:MaxDirectMemorySize=256m",
+    "postgresImage": "postgres@sha256:b0f9560a2de083e2cc7382e75f808c7381a32852a7ec49117deedb300e552b24",
+    "postgresContainer": {
+      "cpus": 2,
+      "memoryBytes": 2147483648,
+      "maxConnections": 20,
+      "sharedBuffersBytes": 268435456,
+      "workMemBytes": 4194304
+    },
+    "runtimeConnectionPool": 4,
+    "storageQuotaBytes": 68719476736,
+    "minimumFreeBeforeRunBytes": 85899345920,
+    "storageSafetyReserveBytes": 8589934592,
+    "source": "new private root; synthetic files only",
+    "measurement": "capture JVM RSS/heap/direct buffers, Docker stats, pg_stat_activity/stat_statements/plans, filesystem reserves, queue/stream counters at 1 Hz"
+  },
+  "budgets": {
+    "warmP95Milliseconds": {
+      "directoryPage100": 300,
+      "inventoryPage100": 500,
+      "historyPage100": 500,
+      "queryPage100": 1000,
+      "metadataExplanation": 500,
+      "shareRevokeAcknowledgment": 500,
+      "intakeAdmission": 500,
+      "exportAdmission": 500,
+      "firstDownloadByte": 750
+    },
+    "processColdP95Milliseconds": {
+      "directoryPage100": 1000,
+      "inventoryPage100": 1500,
+      "historyPage100": 1500,
+      "queryPage100": 2500,
+      "metadataExplanation": 1500,
+      "firstDownloadByte": 2000
+    },
+    "steadyThroughputRequestsPerSecond": {
+      "quick": 10,
+      "stress": 25
+    },
+    "jvmMaxRssBytes": 3221225472,
+    "postgresContainerMaxBytes": 2147483648,
+    "activeRuntimeDbConnections": 4,
+    "httpControlInFlight": 8,
+    "queuedControlRequests": 32,
+    "activeDownloadStreams": 4,
+    "queuedDownloadRequests": 8,
+    "activeImports": 2,
+    "queuedImports": 8,
+    "activeExports": 2,
+    "queuedExports": 8,
+    "maxControlResponseBytes": 1048576,
+    "perStreamBufferBytes": 1048576,
+    "queueOverflowRejectMilliseconds": 500,
+    "clientCancelResourceReleaseMilliseconds": 2000,
+    "shutdownDeadlineMilliseconds": 10000,
+    "streamPermissionRecheckMaxChunkBytes": 65536,
+    "streamPermissionRecheckMaxMilliseconds": 5000,
+    "backgroundAuthorityHeartbeatMilliseconds": 5000,
+    "reservationSafetyReserveBytes": 8589934592,
+    "leakedReservationsAfterRetry": 0,
+    "correctnessMismatches": 0,
+    "unexpected5xxOrTimeouts": 0,
+    "overLimitIntakeEntries": 10001,
+    "intakeEntryCeiling": 10000
+  },
+  "sampling": {
+    "warmupSeconds": 120,
+    "steadyStateSeconds": 600,
+    "independentWarmRuns": 3,
+    "minSamplesPerOrdinaryOperationPerRun": 1000,
+    "minSamplesPerPersonaPerOperation": 100,
+    "quantile": "nearest-rank p95 over every admitted request; retain full raw samples and refused/timeout counts separately",
+    "coldCycles": 20,
+    "coldDefinition": "new JVM + new PostgreSQL process from identical seeded snapshot; host/VM filesystem cache may be warm and must be labelled process-cold",
+    "filesystemCold": "separate optional run only when cache eviction or fresh VM/volume is actually demonstrated; no claim from process restart",
+    "writeSamplesPerRun": 100,
+    "coldSamplesPerOperation": 20,
+    "saturationSeconds": 120,
+    "abortCondition": "any integrity or disclosure mismatch immediately fails qualification; retain failing state and samples",
+    "durationRule": "Continue until both duration and every required sample minimum are met; inadequate samples fail, never substitute a lower-rate class.",
+    "personaRule": "Measure eligible persona/operation pairs; measure deliberate denials separately with the same latency/error accounting."
+  },
+  "mixPercent": {
+    "directory": 20,
+    "inventory": 15,
+    "history": 10,
+    "query": 20,
+    "metadata": 15,
+    "shareRevoke": 5,
+    "intake": 5,
+    "export": 5,
+    "downloads": 5
+  },
+  "concurrency": {
+    "quick": {
+      "readers": 4,
+      "writers": 1,
+      "imports": 1,
+      "exports": 1,
+      "slowDownloads": 2
+    },
+    "stress": {
+      "readers": 16,
+      "writers": 2,
+      "imports": 2,
+      "exports": 2,
+      "slowDownloads": 4
+    },
+    "slowClientBytesPerSecond": 32768,
+    "slowClientHoldSeconds": 120,
+    "slowClientCancelAtSeconds": 30,
+    "oversubscribeFactor": 2
+  },
+  "historyGrowth": {
+    "initial": {
+      "quick": 3,
+      "stress": 20
+    },
+    "sampledMutations": "each run continues history without modifying frozen historical releases; reset from same seed between independent runs"
+  },
+  "correctness": {
+    "identityMapping": "bind logical dataset/Rn labels to returned immutable IDs while seeding; compare oracle content/queries/actions, never learn expected answers from service results",
+    "authority": "explicit fixture answers follow ADR002; primary placement/inheritance, linked-without-access, fixed R1, metadata-only, archival, revocation/expiry/disabled principals",
+    "query": "T1w; Siemens AND participant age >= 40; exact path sets and authorized totals, page ordering lexicographic(dataset,path)",
+    "history": "only dataset_description changes per revision; historical bytes and query hits stable",
+    "boundary": "exact 10000 source entries includes directories; 10001 refuses before durable operation/managed bytes; never split automatically",
+    "cursor": "cross-user, tamper, expiry, cross-query, and revocation after first page deny without cached rows/counts",
+    "export": "canonical JSON mapping(path -> {sha256,size}) digest; archives additionally compare decoded entries, no dependence on archive timestamp/header bytes"
+  },
+  "changeControl": {
+    "ownerMotes": [
+      "H04.1",
+      "Q01.2",
+      "H04.2"
+    ],
+    "rule": "Any reduction of corpus, sampling, scope or budget requires a new version, reason, old/new comparison, mote note and full affected requalification; preserve prior failures.",
+    "institutional": "Q01.1/Q01.3 qualify permitted institutional corpus and accepted targets separately."
+  }
+}

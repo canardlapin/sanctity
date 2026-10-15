@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "status": "passed",
+  "artifactSha256": "4099e1cdce2fdabf6dd061d9df2ba1d24160fc819f8367e17a9fdb9d650aa94c",
+  "harnessSha256": "3c11c04875392825f29869b3dfe40d75553a849ce817f5140071b4fecf328a35",
+  "cases": [
+    {
+      "case": "setup",
+      "status": "passed",
+      "checks": [
+        "complete restrictive enrollment",
+        "old history byte identity",
+        "revoked grant and credentials remain denied",
+        "leased intake/delivery state included without secrets",
+        "retired old SQL role",
+        "fresh least-privilege role",
+        "separate OS users and real cross-store permission denial"
+      ],
+      "elapsedSeconds": 65.89
+    },
+    {
+      "case": "bounded-finalization-drain",
+      "status": "passed",
+      "checks": [
+        "actual PostgreSQL acknowledgement insert stalled for twenty seconds",
+        "unwrapped production finalizer aborts transaction within its five-second deadline",
+        "caller receives pending and committed restriction remains effective",
+        "exact resolution adds one acknowledgement without repeating effects"
+      ],
+      "elapsedSeconds": 32.166,
+      "finalizationObserved": {
+        "backend": 409,
+        "transactionStartedAt": "2026-10-15T03:33:45.609786+00:00",
+        "queryStartedAt": "2026-10-15T03:33:45.842523+00:00",
+        "observedAt": "2026-10-15T03:33:46.002007+00:00"
+      },
+      "drainSeconds": 5.234214,
+      "samplingToleranceSeconds": 0.25,
+      "jdbcFaultWrapper": false,
+      "outcome": "pending"
+    }
+  ],
+  "configuration": {
+    "installation": "82023143-4d11-4cb3-a822-b7663095054f",
+    "baseImage": "eclipse-temurin@sha256:000fd431958bc81a24abe1e8e5f0f0fd3ae365a594bd50aadb20696805f9408c",
+    "fixtureImageId": "sha256:b15c7b100c0fbdf863ad03a07c919efc60b511473c41a3057fbf883419fea2fa",
+    "postgresImage": "postgres@sha256:b0f9560a2de083e2cc7382e75f808c7381a32852a7ec49117deedb300e552b24",
+    "uids": {
+      "witness": 10001,
+      "primary": 10002,
+      "operator": 10003
+    },
+    "fileMode": "0600",
+    "directoryMode": "0700",
+    "readOnlyRootFilesystem": true,
+    "separateNamedVolumes": true,
+    "crossMountedStoreAccess": "read/write denied in both directions",
+    "writerHasRecoveryOrSigningPrivateKey": false,
+    "certificateFingerprints": {
+      "server": "f77156a8d374d5da20081551e444f023cd75724658477b5e47369c666dd7662d",
+      "writer": "bf0374265b2b8d37dc806511bf7ccb40d469c36c936d1b511659330e6a862c7a",
+      "recovery": "ccce7c81857c120a1426a482b58dbeee636f3ba98acc1578213a31d0fa641284"
+    },
+    "witnessConfigurationSha256": "2f20a3f621910c05de1a59d6d6689ab98c4d6e5c09a481b9451f4dd8ef3dda0d",
+    "signingPublicSha256": "06e3fd8fda29bb60ab59557de61edb0aecdb231134be30e75b455f8e1b792fa9",
+    "checkpointSha256": "b9efd5a230b7c69e6d30b2efc385d2ae19a014db3bd972a72065f2fd7c23688a",
+    "scientificHistorySha256": "bd701068448cad7588f182144f9f13822d964b47df624adcbe1a11559e504719",
+    "signingFixture": "Known RFC8032 vector 1; synthetic only",
+    "java": "openjdk version \"21.0.12.1\" 2026-08-18 LTS\nOpenJDK Runtime Environment Temurin-21.0.12.1+1 (build 21.0.12.1+1-LTS)\nOpenJDK 64-Bit Server VM Temurin-21.0.12.1+1 (build 21.0.12.1+1-LTS, mixed mode, sharing)",
+    "postgres": {
+      "version": "PostgreSQL 17.11 on aarch64-unknown-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit",
+      "fsync": "on",
+      "synchronousCommit": "on",
+      "fullPageWrites": "on"
+    }
+  },
+  "procedureSha256": "d096b5f55e2d905afa00d837532a45998355ac2cd44648eac457989d52b369fa",
+  "fixtureProcedureSha256": "f6b182925112d01aad6aa5e565b1088ca1daa16ae0b3fa1041664347533c1deb",
+  "scope": "Bounded acknowledgement finalization after local commit, with actual stalled SQL and the unwrapped production transaction strategy.",
+  "limitations": [
+    "Same-host synthetic fixture; no host/disk-loss or organization restore qualification."
+  ]
+}
