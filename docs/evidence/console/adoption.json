@@ -1,18 +1,18 @@
 {
   "schema": "sanctity.console-adoption.v1",
-  "recordedAt": "2026-10-13T21:21:35.540Z",
+  "recordedAt": "2026-10-15T15:04:41.000Z",
   "status": "pending_manual_accessibility",
   "adopted": false,
   "baseline": {
     "name": "v4g",
     "revision": "a1420b0edc6cad06af069ad63a71a9876ef4ac31"
   },
-  "integratedBackendRevision": "cb082feaf5edb62c2cce30c06cb0367e30e2470d",
-  "browserHarnessRevision": "4b6208470caf6615076a433924c27adf8be23753",
+  "integratedBackendRevision": "c9930e2218bf8de508b5a8972e7540be3741c6c2",
+  "browserHarnessRevision": "c9930e2218bf8de508b5a8972e7540be3741c6c2",
   "gates": {
     "CON-01": {
       "status": "complete",
-      "result": "80 original artifacts recovered and hashed; current 59 behavior assertions, 27 UI configurations, six layout checks and syntax checks pass. Seven new regressions reproduce on v4f. Three adapted legacy assertions are separately classified."
+      "result": "80 original artifacts recovered and hashed; current 70 behavior assertions (59 v4g plus 11 for event, behavioural and DWI gradient corrections and unconfirmed policy outcomes), 27 UI configurations, six layout checks and syntax checks pass. Seven new regressions reproduce on v4f; the 11 later probes are recorded on v4f without being required. Three adapted legacy assertions are separately classified."
     },
     "CON-02": {
       "status": "complete",
@@ -20,7 +20,7 @@
     },
     "CON-03": {
       "status": "awaiting_human_result",
-      "result": "Native attempt recorded: macOS Accessibility and Screen Recording permissions unavailable; no usable VoiceOver control/output. Ten browser-walkthrough observations pass, including accepted concurrent-edit preservation; this does not close the screen-reader gate."
+      "result": "Native attempt recorded: macOS Accessibility and Screen Recording permissions unavailable; no usable VoiceOver control/output. Ten browser-walkthrough observations pass, including accepted concurrent-edit preservation; this does not close the screen-reader gate. The runbook now has seven tasks, adding an events-table correction (blocked row, paired row changes, phone reading order)."
     },
     "CON-04": {
       "status": "prepared_pending_CON-03",
@@ -28,7 +28,7 @@
     },
     "CON-05": {
       "status": "complete",
-      "result": "Real browser/HTTP/PostgreSQL rehearsal passes all eight scenarios plus independent SQL verification after browser/server shutdown. Two authenticated editors recover from a 409 while preserving FlipAngle 60; subject-level acceptance, frozen selection and fixed-release grant/revocation are verified."
+      "result": "Real browser/HTTP/PostgreSQL rehearsal passes all nine scenarios plus independent SQL verification after browser/server shutdown (five releases and acceptance receipts). Two authenticated editors recover from a 409 while preserving FlipAngle 60; a malformed events onset is blocked with its row marked, corrected onsets are accepted and become the head; subject-level acceptance, frozen selection and fixed-release grant/revocation are verified."
     }
   },
   "evidence": {
@@ -36,13 +36,13 @@
       "sha256": "ef98db0a5870960f0727ad48e234c690e1dbd4fed0eb1e631706340cce8a8e08"
     },
     "browser/receipt.json": {
-      "sha256": "7bfcf54cd67dc0db150d4f8b47d57e22165df473cbd8215c9d746c81d55ec35e"
+      "sha256": "4378881e1b1a252733d49b107db2144a1e55390f3b38092c3876b14d38166a4e"
     },
     "browser/current.log": {
-      "sha256": "3fcd321a559e9e7b5e51a48a361b186cf5fe6af1c86f2a3a7c836194e72b422e"
+      "sha256": "4d2f7d0c0e259c66d4f5c311e7fdfbc462aa229fb128bc82b3a1c2eb1bc5f19b"
     },
     "browser/v4f.log": {
-      "sha256": "32ac782d8ae65074151cd0b6302ba0876c4c659b79598639df9bebb2a03bce84"
+      "sha256": "65624df4b19f649b57f223b8c846e611179a9e5417b7037ba6a34f82e24f84bd"
     },
     "postgres.json": {
       "sha256": "2704d760b05f8d345d9774b674c4ea78142769ec0fc07a7260e868ac3fb9ac11"
@@ -63,22 +63,22 @@
       "sha256": "bf014574927b0822c84a68b389e4e2d10ab61fc2cf0604902bc49f5359c9f2ee"
     },
     "backend/receipt.json": {
-      "sha256": "ca57e8fbc3a7ecfefa347c70a1c71c3f4a4603d20b57fa36b6a6d03bfcc533e6"
+      "sha256": "2423b72ecf7dbca00ede02e2c9d00ac6888eeaa3ef0b6a7de25991294e6755a9"
     },
     "backend/browser.json": {
-      "sha256": "b0f242fd29f04d0c6ff428c4b5a8a4512611e090270a89b54b4e780609df61e2"
+      "sha256": "1ea729a97c7fe647ac8e7bbe8ddd0af2ff1501c48a0a9faf6fb7b8c8b671c886"
     },
     "backend/persistence.json": {
-      "sha256": "a388dab9660ce4e023794b69a1b02c5a60698c1d346d1189d818c2b85a6c9cb3"
+      "sha256": "95bdf0fca3387368d33b4eca843b7fd88536a6aa0758dd09458c271efd054155"
     },
     "backend/backend.log": {
-      "sha256": "e0d131e7a2c2ffeb3f1ab6af658168e43332ce8df8e61cced02179ec0bba46d5"
+      "sha256": "98b9dd350a0580df111bbdeb1f29bd1059620008dec11de0f6de63732eb8feeb"
     },
     "backend/browser.log": {
-      "sha256": "4c3a06a112eded56ad4a4b91c36bbd2297f461557614af036b98d639a4195f2a"
+      "sha256": "4fd8943785e0c5bdf71dc70c951957bdfce1da1a2fdb0a7a84e324c78196e3b0"
     }
   },
-  "sourceState": "The original browser/backend receipts retain their recorded source bindings. The real-backend rehearsal used production sources unchanged from 082a5db; backend/receipt.json binds those sources and the new rehearsal/CI files by SHA-256. The new harness was tested before committing.",
+  "sourceState": "browser/receipt.json binds the four console sources, identical to integratedBackendRevision. backend/receipt.json binds 153 production and harness files by SHA-256; it ran on that revision plus uncommitted backend work in the same tree (organization authority, policy witness, service module), so roughly 50 of those hashes name files not yet committed. Re-run scripts/check-console-backend.sh once that work is committed to bind the rehearsal to a clean revision.",
   "limits": [
     "The original browser regression gate uses demo transport. The additional headless rehearsal uses real authenticated HTTP/PostgreSQL and an imported invented fixture; it is not representative-data qualification.",
     "No real screen-reader qualification or iOS/mobile screen-reader claim.",
@@ -86,7 +86,6 @@
     "This receipt does not close G2, institutional identity, scientific or production pilot qualification."
   ],
   "deferred": [
-    "phone preview layout",
     "correction column balance",
     "query export and age column",
     "principal-ID discovery guidance"

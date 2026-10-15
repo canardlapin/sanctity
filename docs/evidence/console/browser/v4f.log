@@ -45,7 +45,7 @@ behaviour tr-mismatch-key-facts: PASS Authored RepetitionTime 1.5 s Header volum
 behaviour subject-sidecar-inherits: PASS {"files":["sub-04/func/sub-04_task-rest_bold.nii.gz"],"tag":"Resolved"}
 behaviour inert-sidecar-warns: PASS The new sidecar changes no file’s effective metadata. BIDS inheritance applies it only to 
 behaviour dot-json-refused: PASS {"msg":"Name the sidecar after the files it applies to, such as sub-02_task-nback_bold.json.","inv":"true","head":false}
-behaviour grant-revoke-visible-mobile: PASS {"left":29,"right":361,"vw":390,"label":"Revoke grant 80936ea3","overflow":0}
+behaviour grant-revoke-visible-mobile: PASS {"left":29,"right":361,"vw":390,"label":"Revoke grant ed0291a7","overflow":0}
 behaviour selection-readable-mobile: PASS {"session":false,"tallest":36,"overflow":0}
 behaviour fold-follows-viewport: FAIL 0 → 1
 behaviour actions-error-described: PASS {"desc":["g-act-err"],"focus":"act-ReadMetadata"}
@@ -57,4 +57,15 @@ behaviour row-lists-readable: FAIL 378.0 s; review timing alignment rows listed 
 behaviour odd-path-refused task-nback_bold.json/x.json: FAIL {"head":true}
 behaviour odd-path-refused sub-03/ .json: FAIL {"head":true}
 behaviour resize-keeps-focus: FAIL {"focus":"","value":""}
-behaviour failures: 10
+behaviour companion-correction-offered: FAIL threw: page.click: Timeout 30000ms exceeded.
+behaviour table-tab-separator: FAIL {"tail":"\n412.0","focus":"c-reason","left":""}
+behaviour table-width-refused: FAIL {"msg":"The replacement is not valid JSON: Unexpected token 'o', \"onset\tdura\"... is not valid JSON","inv":"true","posts":0}
+behaviour table-correction-accepted: FAIL threw: page.waitForSelector: Timeout 5000ms exceeded.
+behaviour table-blocked-row-marked: FAIL threw: page.waitForSelector: Timeout 5000ms exceeded.
+behaviour beh-correction-checked: FAIL threw: page.waitForFunction: Timeout 5000ms exceeded.
+behaviour gradient-correction-checked: FAIL threw: page.waitForSelector: Timeout 5000ms exceeded.
+behaviour table-carried-no-lost-update: FAIL threw: page.evaluate: Error: invalid_request
+behaviour table-preview-mobile: FAIL threw: page.waitForSelector: Timeout 5000ms exceeded.
+behaviour policy-unknown-revoke: FAIL {"alert":"Grant 11d835a4 was not revoked. Request failed (policy_outcome_unknown:4f6c2a1e-8b3d-4e7a-","table":"11d835a4 6c1d8e2a Release 9d4b2e61 Read metadata Revoke","open":true}
+behaviour policy-pending-grant: FAIL {"alert":"Request failed (policy_pending:4f6c2a1e-8b3d-4e7a-9c05-2d1e7f9a3b68).","rows":0}
+behaviour failures: 21

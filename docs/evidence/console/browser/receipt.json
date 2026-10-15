@@ -1,21 +1,23 @@
 {
-  "date": "2026-10-13T15:47:29.248Z",
-  "baseRevision": "4b6208470caf6615076a433924c27adf8be23753",
+  "date": "2026-10-15T15:02:28.529Z",
+  "baseRevision": "ffc117d79a70ef1b26f17a094d5cbcae50c0149b",
   "sourceTreeDirty": true,
   "sourceSha256": {
     "index.html": "3098e794d6a8fbb68b1dacc0b29481040579267ec75d36696de17e4c7f230cfa",
-    "app.css": "3834f94d9646970715a107d1c335820fed0fe0e2fa1a23df34c50d0db3d1f30e",
-    "app.js": "d81dae6481afc151516a7fcc55cde8adde1a93a8e0f9a0c6720f446cecd3999d",
-    "demo.js": "cc6ebcd860a7f77660acd105bc41c717c5d6b3457b4ffad307dd89f93ef81b1b"
+    "app.css": "acfe74252d8d2768782a5b8021df04d7b5bbd724d55be3bd1374cbca5a651893",
+    "app.js": "62b524147dfe3b82da172698ec9df0d37f0fbef0c4ed5a079806695c801f15d2",
+    "demo.js": "a7d5832e1a3daca799ac3f1d32e4479edf338a6191ef99e82bd03f8515b55f48"
   },
   "harnessSha256": {
-    "tests/console/checks/behaviour.js": "b72c4317e214e167a51ddba6208f85da23056b5aba0241e92c7a91178b1f3eb0",
+    "tests/console/checks/behaviour.js": "1e3b46469f60670d2c029cd7ee524edd2e7e1af3b6f959d224b22051b70e3308",
     "tests/console/checks/run.sh": "94d02803b67ec5333355f467ff4f4d78ff628c6762a618a063b131f2ad6ddb51",
     "tests/console/checks/ui.js": "50e093b8193d9ebbaf48cc71011d195884e52158d49a13ce2b32f322046d3321",
     "tests/console/hillclimb.json": "034376b5a2805b00e053219cf00c3616a931fbf7e7ca02470db2a61cbd0b01cd",
     "tests/console/package-lock.json": "d412e0048c2a25b127e7899f7bb9659f00b384b4ec1b39a62ef3381a94bf48dc",
     "tests/console/package.json": "e79f8a369226e302444aaba12014cefaaf954303f840a36922cc763c61afa85d",
-    "tests/console/run.js": "5492f0a960424ad3c2ae5bba3c6b88ea159f0c7b5c44babca52e8140623216c4",
+    "tests/console/rehearsal-receipt.js": "883487637017a53ea4a927ad422c55b917261262e7f6b577408e2ef9dea4a7f3",
+    "tests/console/rehearsal.js": "a24782ab170fd351c8579a5a2ef697515f96f7af8e37055a86e996990e538ea1",
+    "tests/console/run.js": "15be54567c7b7b120eab1f992b85d69cf37801845f2ba091eae0bde8135f6233",
     "tests/console/scripts/checks/cls.js": "1209f86da9cc58029d8de92a62672ea0daeb30ceb925e7b8ad6f236082f26112",
     "tests/console/scripts/lib.js": "c1d9be681f2e8de9d88f4bebfa4ef80b85d6eca0777023671d7afe1c451f85b5",
     "tests/console/serve.js": "9810e1adc51990ab6a371f44e7ca96b24a6474a602f082fb581f0fa98f5deb74",
@@ -54,7 +56,7 @@
     "current": {
       "exitCode": 0,
       "log": "current.log",
-      "sha256": "3fcd321a559e9e7b5e51a48a361b186cf5fe6af1c86f2a3a7c836194e72b422e",
+      "sha256": "4d2f7d0c0e259c66d4f5c311e7fdfbc462aa229fb128bc82b3a1c2eb1bc5f19b",
       "assertions": [
         {
           "name": "no-inline-style c-4f18-a5d9-0e6c1b2f8a73",
@@ -290,6 +292,50 @@
         },
         {
           "name": "resize-keeps-focus",
+          "result": "PASS"
+        },
+        {
+          "name": "companion-correction-offered",
+          "result": "PASS"
+        },
+        {
+          "name": "table-tab-separator",
+          "result": "PASS"
+        },
+        {
+          "name": "table-width-refused",
+          "result": "PASS"
+        },
+        {
+          "name": "table-correction-accepted",
+          "result": "PASS"
+        },
+        {
+          "name": "table-blocked-row-marked",
+          "result": "PASS"
+        },
+        {
+          "name": "beh-correction-checked",
+          "result": "PASS"
+        },
+        {
+          "name": "gradient-correction-checked",
+          "result": "PASS"
+        },
+        {
+          "name": "table-carried-no-lost-update",
+          "result": "PASS"
+        },
+        {
+          "name": "table-preview-mobile",
+          "result": "PASS"
+        },
+        {
+          "name": "policy-unknown-revoke",
+          "result": "PASS"
+        },
+        {
+          "name": "policy-pending-grant",
           "result": "PASS"
         }
       ]
@@ -297,7 +343,7 @@
     "v4f": {
       "exitCode": 1,
       "log": "v4f.log",
-      "sha256": "32ac782d8ae65074151cd0b6302ba0876c4c659b79598639df9bebb2a03bce84",
+      "sha256": "65624df4b19f649b57f223b8c846e611179a9e5417b7037ba6a34f82e24f84bd",
       "assertions": [
         {
           "name": "no-inline-style c-4f18-a5d9-0e6c1b2f8a73",
@@ -533,6 +579,50 @@
         },
         {
           "name": "resize-keeps-focus",
+          "result": "FAIL"
+        },
+        {
+          "name": "companion-correction-offered",
+          "result": "FAIL"
+        },
+        {
+          "name": "table-tab-separator",
+          "result": "FAIL"
+        },
+        {
+          "name": "table-width-refused",
+          "result": "FAIL"
+        },
+        {
+          "name": "table-correction-accepted",
+          "result": "FAIL"
+        },
+        {
+          "name": "table-blocked-row-marked",
+          "result": "FAIL"
+        },
+        {
+          "name": "beh-correction-checked",
+          "result": "FAIL"
+        },
+        {
+          "name": "gradient-correction-checked",
+          "result": "FAIL"
+        },
+        {
+          "name": "table-carried-no-lost-update",
+          "result": "FAIL"
+        },
+        {
+          "name": "table-preview-mobile",
+          "result": "FAIL"
+        },
+        {
+          "name": "policy-unknown-revoke",
+          "result": "FAIL"
+        },
+        {
+          "name": "policy-pending-grant",
           "result": "FAIL"
         }
       ]
@@ -549,26 +639,61 @@
       "row-lists-readable"
     ],
     "actualFailures": [
+      "beh-correction-checked",
       "blocked-preview-error-first",
       "carried-draft-no-lost-update",
+      "companion-correction-offered",
       "fold-follows-viewport",
+      "gradient-correction-checked",
       "grouped-mismatch-key-facts",
       "head-keeps-draft",
       "mobile-tree-folds",
       "odd-path-refused sub-03/ .json",
       "odd-path-refused task-nback_bold.json/x.json",
+      "policy-pending-grant",
+      "policy-unknown-revoke",
       "resize-keeps-focus",
-      "row-lists-readable"
+      "row-lists-readable",
+      "table-blocked-row-marked",
+      "table-carried-no-lost-update",
+      "table-correction-accepted",
+      "table-preview-mobile",
+      "table-tab-separator",
+      "table-width-refused"
     ],
     "versionSpecificAssertions": {
       "mobile-tree-folds": "v4g tests .tree-fold-bar / #release-tree; v4f used a details/summary fold",
       "fold-follows-viewport": "v4g tests the CSS fold structure introduced after v4f",
       "head-keeps-draft": "v4g expects the new “is restored” notice; v4f used “carried over”"
     },
+    "postV4gAssertions": [
+      "companion-correction-offered",
+      "table-tab-separator",
+      "table-width-refused",
+      "table-correction-accepted",
+      "table-blocked-row-marked",
+      "beh-correction-checked",
+      "gradient-correction-checked",
+      "table-carried-no-lost-update",
+      "table-preview-mobile",
+      "policy-unknown-revoke",
+      "policy-pending-grant"
+    ],
     "extraFailures": [
+      "beh-correction-checked",
+      "companion-correction-offered",
       "fold-follows-viewport",
+      "gradient-correction-checked",
       "head-keeps-draft",
-      "mobile-tree-folds"
+      "mobile-tree-folds",
+      "policy-pending-grant",
+      "policy-unknown-revoke",
+      "table-blocked-row-marked",
+      "table-carried-no-lost-update",
+      "table-correction-accepted",
+      "table-preview-mobile",
+      "table-tab-separator",
+      "table-width-refused"
     ],
     "passed": true
   },

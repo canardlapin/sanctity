@@ -1,7 +1,7 @@
 {
   "schema": "sanctity.console-backend-browser.v1",
-  "startedAt": "2026-10-13T21:21:30.061Z",
-  "finishedAt": "2026-10-13T21:21:34.843Z",
+  "startedAt": "2026-10-15T15:03:16.576Z",
+  "finishedAt": "2026-10-15T15:03:40.391Z",
   "browser": "131.0.6778.33",
   "headless": true,
   "fixture": "invented BIDS data with real NIfTI headers; ordinary import and acceptance",
@@ -36,6 +36,11 @@
       "detail": "Two authenticated sessions produce a real 409. Reapplication preserves FlipAngle 60 and EchoTime 0.031; historical sidecars and frozen selection stay unchanged."
     },
     {
+      "name": "table-correction",
+      "passed": true,
+      "detail": "A malformed onset is blocked with its row marked; corrected onsets clear the window warning, are accepted and become the head without disturbing the sidecar."
+    },
+    {
       "name": "fixed-release-grant",
       "passed": true,
       "detail": "Recipient reads granted release and bytes after Escape cancels revocation; dataset head and ungranted historical release remain hidden."
@@ -52,15 +57,15 @@
     }
   ],
   "persisted": {
-    "selection": "1a75f97cd242a324925fc5c396353455a28abeea77a34eb2ffd681909e0e64c0",
-    "head": "216268a8-5622-490d-a5a3-393f6ccd14cc",
-    "staleCandidate": "32a34014-30f8-446a-8ad7-2f5fc935d4e4",
-    "grant": "ce0e67f3-79fb-4b1e-8407-cf7614ea486a"
+    "selection": "fad3b4b68faf39e428e7652b59364b7484479cc951ee09c26d90e494cb229ca6",
+    "head": "38fa869c-e0af-4120-88ac-1b0b7c36b514",
+    "staleCandidate": "d0feff8a-36b4-4ea6-b572-ef6af4f8549b",
+    "grant": "e2235452-d0cb-4e35-a807-cb3bfd1df388"
   },
   "servedUiSha256": {
     "index.html": "3098e794d6a8fbb68b1dacc0b29481040579267ec75d36696de17e4c7f230cfa",
-    "app.js": "d81dae6481afc151516a7fcc55cde8adde1a93a8e0f9a0c6720f446cecd3999d",
-    "app.css": "3834f94d9646970715a107d1c335820fed0fe0e2fa1a23df34c50d0db3d1f30e"
+    "app.js": "62b524147dfe3b82da172698ec9df0d37f0fbef0c4ed5a079806695c801f15d2",
+    "app.css": "acfe74252d8d2768782a5b8021df04d7b5bbd724d55be3bd1374cbca5a651893"
   },
   "requests": [
     {
@@ -75,22 +80,22 @@
     },
     {
       "method": "GET",
-      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/aa87f8ba-d134-45d6-8e6e-a21308e226ed",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61/releases/07d65691-0273-4c78-8cc1-922469a524f2",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/aa87f8ba-d134-45d6-8e6e-a21308e226ed/file",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61/releases/07d65691-0273-4c78-8cc1-922469a524f2/file",
       "status": 200
     },
     {
@@ -100,67 +105,67 @@
     },
     {
       "method": "GET",
-      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/aa87f8ba-d134-45d6-8e6e-a21308e226ed",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61/releases/07d65691-0273-4c78-8cc1-922469a524f2",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/aa87f8ba-d134-45d6-8e6e-a21308e226ed/file",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61/releases/07d65691-0273-4c78-8cc1-922469a524f2/file",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/aa87f8ba-d134-45d6-8e6e-a21308e226ed/metadata",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61/releases/07d65691-0273-4c78-8cc1-922469a524f2/metadata",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61",
       "status": 200
     },
     {
       "method": "POST",
-      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/aa87f8ba-d134-45d6-8e6e-a21308e226ed/corrections",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61/releases/07d65691-0273-4c78-8cc1-922469a524f2/corrections",
       "status": 201
     },
     {
       "method": "GET",
-      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61",
       "status": 200
     },
     {
       "method": "POST",
-      "path": "/v1/candidates/51e5c1f3-cbaf-4178-9397-13c43211e1c1/accept",
+      "path": "/v1/candidates/15e7a619-38e5-417b-b218-5aaaa7b41c55/accept",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/aa87f8ba-d134-45d6-8e6e-a21308e226ed",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61/releases/07d65691-0273-4c78-8cc1-922469a524f2",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/2737e118-51f9-4d7e-a5da-97c38ee19b3d",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61/releases/1a99162d-bdaa-459a-a734-299793a9bdfa",
       "status": 200
     },
     {
@@ -170,27 +175,27 @@
     },
     {
       "method": "GET",
-      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/2737e118-51f9-4d7e-a5da-97c38ee19b3d",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61/releases/1a99162d-bdaa-459a-a734-299793a9bdfa",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/2737e118-51f9-4d7e-a5da-97c38ee19b3d/file",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61/releases/1a99162d-bdaa-459a-a734-299793a9bdfa/file",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/aa87f8ba-d134-45d6-8e6e-a21308e226ed",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61/releases/07d65691-0273-4c78-8cc1-922469a524f2",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/2737e118-51f9-4d7e-a5da-97c38ee19b3d/metadata",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61/releases/1a99162d-bdaa-459a-a734-299793a9bdfa/metadata",
       "status": 200
     },
     {
@@ -200,127 +205,127 @@
     },
     {
       "method": "GET",
-      "path": "/v1/selections/1a75f97cd242a324925fc5c396353455a28abeea77a34eb2ffd681909e0e64c0",
+      "path": "/v1/selections/fad3b4b68faf39e428e7652b59364b7484479cc951ee09c26d90e494cb229ca6",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/2737e118-51f9-4d7e-a5da-97c38ee19b3d/file",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61/releases/1a99162d-bdaa-459a-a734-299793a9bdfa/file",
       "status": 200
     },
     {
       "method": "POST",
-      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/2737e118-51f9-4d7e-a5da-97c38ee19b3d/corrections",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61/releases/1a99162d-bdaa-459a-a734-299793a9bdfa/corrections",
       "status": 201
     },
     {
       "method": "GET",
-      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/2737e118-51f9-4d7e-a5da-97c38ee19b3d",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61/releases/1a99162d-bdaa-459a-a734-299793a9bdfa",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/2737e118-51f9-4d7e-a5da-97c38ee19b3d/file",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61/releases/1a99162d-bdaa-459a-a734-299793a9bdfa/file",
       "status": 200
     },
     {
       "method": "POST",
-      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/2737e118-51f9-4d7e-a5da-97c38ee19b3d/corrections",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61/releases/1a99162d-bdaa-459a-a734-299793a9bdfa/corrections",
       "status": 201
     },
     {
       "method": "GET",
-      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61",
       "status": 200
     },
     {
       "method": "POST",
-      "path": "/v1/candidates/d7e59082-e1db-4965-9e55-19beb1f8655a/accept",
+      "path": "/v1/candidates/c8f29f98-95c0-4d0a-bd7b-e605b2a891f6/accept",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/2737e118-51f9-4d7e-a5da-97c38ee19b3d",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61/releases/1a99162d-bdaa-459a-a734-299793a9bdfa",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/a9a2f250-18ff-48ce-9795-e7fd4f175253",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61/releases/c3aa7fe8-24a8-4d07-ad3c-56b6e3c759d5",
       "status": 200
     },
     {
       "method": "POST",
-      "path": "/v1/candidates/32a34014-30f8-446a-8ad7-2f5fc935d4e4/accept",
+      "path": "/v1/candidates/d0feff8a-36b4-4ea6-b572-ef6af4f8549b/accept",
       "status": 409
     },
     {
       "method": "GET",
-      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/a9a2f250-18ff-48ce-9795-e7fd4f175253",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61/releases/c3aa7fe8-24a8-4d07-ad3c-56b6e3c759d5",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/a9a2f250-18ff-48ce-9795-e7fd4f175253/file",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61/releases/c3aa7fe8-24a8-4d07-ad3c-56b6e3c759d5/file",
       "status": 200
     },
     {
       "method": "POST",
-      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/a9a2f250-18ff-48ce-9795-e7fd4f175253/corrections",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61/releases/c3aa7fe8-24a8-4d07-ad3c-56b6e3c759d5/corrections",
       "status": 201
     },
     {
       "method": "GET",
-      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61",
       "status": 200
     },
     {
       "method": "POST",
-      "path": "/v1/candidates/3f63cf7a-126e-4aff-8a58-ed1577751e8d/accept",
+      "path": "/v1/candidates/f25a6b7c-1cf2-44b7-b3d7-41a0c2952016/accept",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/a9a2f250-18ff-48ce-9795-e7fd4f175253",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61/releases/c3aa7fe8-24a8-4d07-ad3c-56b6e3c759d5",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/216268a8-5622-490d-a5a3-393f6ccd14cc",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61/releases/2484c0f5-3f96-47cf-9964-c27205143108",
       "status": 200
     },
     {
@@ -330,42 +335,132 @@
     },
     {
       "method": "GET",
-      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/216268a8-5622-490d-a5a3-393f6ccd14cc",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61/releases/2484c0f5-3f96-47cf-9964-c27205143108",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/216268a8-5622-490d-a5a3-393f6ccd14cc/file",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61/releases/2484c0f5-3f96-47cf-9964-c27205143108/file",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/a9a2f250-18ff-48ce-9795-e7fd4f175253",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61/releases/c3aa7fe8-24a8-4d07-ad3c-56b6e3c759d5",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/2737e118-51f9-4d7e-a5da-97c38ee19b3d",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61/releases/1a99162d-bdaa-459a-a734-299793a9bdfa",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/aa87f8ba-d134-45d6-8e6e-a21308e226ed",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61/releases/07d65691-0273-4c78-8cc1-922469a524f2",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/216268a8-5622-490d-a5a3-393f6ccd14cc/metadata",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61/releases/2484c0f5-3f96-47cf-9964-c27205143108/metadata",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61/releases/2484c0f5-3f96-47cf-9964-c27205143108/file",
       "status": 200
     },
     {
       "method": "POST",
-      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/grants",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61/releases/2484c0f5-3f96-47cf-9964-c27205143108/corrections",
+      "status": 201
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61/releases/2484c0f5-3f96-47cf-9964-c27205143108/corrections",
+      "status": 201
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/v1/candidates/50b651a9-e901-4f1f-9956-905eb3af05f4/accept",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61/releases/2484c0f5-3f96-47cf-9964-c27205143108",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61/releases/38fa869c-e0af-4120-88ac-1b0b7c36b514",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61/releases/c3aa7fe8-24a8-4d07-ad3c-56b6e3c759d5",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61/releases/38fa869c-e0af-4120-88ac-1b0b7c36b514/file",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61/releases/1a99162d-bdaa-459a-a734-299793a9bdfa",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61/releases/07d65691-0273-4c78-8cc1-922469a524f2",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61/releases/38fa869c-e0af-4120-88ac-1b0b7c36b514/metadata",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61/releases/38fa869c-e0af-4120-88ac-1b0b7c36b514/file",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61/grants",
       "status": 201
     },
     {
@@ -375,32 +470,32 @@
     },
     {
       "method": "GET",
-      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61",
       "status": 404
     },
     {
       "method": "GET",
-      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/216268a8-5622-490d-a5a3-393f6ccd14cc",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61/releases/38fa869c-e0af-4120-88ac-1b0b7c36b514",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/216268a8-5622-490d-a5a3-393f6ccd14cc/file",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61/releases/38fa869c-e0af-4120-88ac-1b0b7c36b514/file",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/a9a2f250-18ff-48ce-9795-e7fd4f175253",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61/releases/2484c0f5-3f96-47cf-9964-c27205143108",
       "status": 404
     },
     {
       "method": "GET",
-      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/216268a8-5622-490d-a5a3-393f6ccd14cc/metadata",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61/releases/38fa869c-e0af-4120-88ac-1b0b7c36b514/metadata",
       "status": 200
     },
     {
       "method": "DELETE",
-      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/grants/ce0e67f3-79fb-4b1e-8407-cf7614ea486a",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61/grants/e2235452-d0cb-4e35-a807-cb3bfd1df388",
       "status": 204
     },
     {
@@ -410,17 +505,17 @@
     },
     {
       "method": "GET",
-      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/216268a8-5622-490d-a5a3-393f6ccd14cc",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61/releases/38fa869c-e0af-4120-88ac-1b0b7c36b514/file",
       "status": 404
     },
     {
       "method": "GET",
-      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61",
       "status": 404
     },
     {
       "method": "GET",
-      "path": "/v1/datasets/0d1a5018-695c-4ef4-ac6a-6830515fb018/releases/216268a8-5622-490d-a5a3-393f6ccd14cc/file",
+      "path": "/v1/datasets/f2aa55b6-2914-4251-aa86-70ce2c5e1a61/releases/38fa869c-e0af-4120-88ac-1b0b7c36b514",
       "status": 404
     }
   ],

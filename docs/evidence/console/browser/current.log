@@ -38,7 +38,7 @@ behaviour tab-keeps-file: PASS #/d/b7e3c1d2-5a4f-4e8b-9c21-6f0a3d9e8b14/r/9d4b2e
 behaviour no-stale-preview: PASS
 behaviour no-delegation-offer: PASS
 behaviour exact-decimal: PASS {"releases":[{"dataset":"b7e3c1d2-5a4f-4e8b-9c21-6f0a3d9e8b14","release":"9d4b2e61-7a3c-4f18-a5d9-0e6c1b2f8a73"}],"participants":{"op":"fieldAtLeast","name":"ag
-behaviour mobile-inspector-visible: PASS inspector top 176
+behaviour mobile-inspector-visible: PASS inspector top 177
 behaviour no-double-click-revoke: PASS deletes 0
 behaviour escape-cancels-revoke: PASS
 behaviour dropdown-switch-keeps-preview: PASS
@@ -52,7 +52,7 @@ behaviour single-revoke-request: PASS deletes 1
 behaviour revoked-grant-recorded: PASS
 behaviour enter-adds-release: PASS {"h":"#/d/b7e3c1d2-5a4f-4e8b-9c21-6f0a3d9e8b14/query?release=9d4b2e61-7a3c-4f18-a5d9-0e6c1b2f8a73","added":true}
 behaviour pager-focus: PASS pager-prev
-behaviour assessment-compact-390: PASS height 1642
+behaviour assessment-compact-390: PASS height 1786
 behaviour receipt-identity-verified: PASS matches 3
 behaviour blocked-line-flagged: PASS
 behaviour finding-cause-shown: PASS why lines 2
@@ -73,7 +73,7 @@ behaviour tr-mismatch-key-facts: PASS Authored RepetitionTime 1.5 s Header volum
 behaviour subject-sidecar-inherits: PASS {"files":["sub-04/func/sub-04_task-rest_bold.nii.gz"],"tag":"Resolved"}
 behaviour inert-sidecar-warns: PASS The new sidecar changes no file’s effective metadata. BIDS inheritance applies it only to 
 behaviour dot-json-refused: PASS {"msg":"Name the sidecar after the files it applies to, such as sub-02_task-nback_bold.json.","inv":"true","head":false}
-behaviour grant-revoke-visible-mobile: PASS {"left":29,"right":361,"vw":390,"label":"Revoke grant ed128507","overflow":0}
+behaviour grant-revoke-visible-mobile: PASS {"left":29,"right":361,"vw":390,"label":"Revoke grant af9ac854","overflow":0}
 behaviour selection-readable-mobile: PASS {"session":false,"tallest":36,"overflow":0}
 behaviour fold-follows-viewport: PASS 1 → 0
 behaviour actions-error-described: PASS {"desc":["g-act-err"],"focus":"act-ReadMetadata"}
@@ -85,6 +85,17 @@ behaviour row-lists-readable: PASS 78.0 s; review timing alignment rows listed b
 behaviour odd-path-refused task-nback_bold.json/x.json: PASS {"inv":"true","head":false}
 behaviour odd-path-refused sub-03/ .json: PASS {"inv":"true","head":false}
 behaviour resize-keeps-focus: PASS {"focus":"tree-filter","value":"nback"}
+behaviour companion-correction-offered: PASS {"link":1,"groups":["Sidecars","Event and behavioural tables","DWI gradients"],"selected":"sub-03/func/sub-03_task-nback_run-1_events.tsv"}
+behaviour table-tab-separator: PASS {"tail":"412.0\t","focus":"c-text","left":"c-reason"}
+behaviour table-width-refused: PASS {"msg":"Row 7 has 1 column; the header has 3. Separate columns with tabs, not spaces.","inv":"true","posts":0}
+behaviour table-correction-accepted: PASS {"first":"Table change","focused":"preview-head","rows":["49","50","50","51","51"],"chg":4,"spoken":true,"gap":true,"meta":false,"tag":"Resolved","accept":true,"matches":3,"step":"3Accepted"}
+behaviour table-blocked-row-marked: PASS {"seal":"Not admissible","flagged":["10"],"sr":"Changed to, blocked by a finding","first":"EventsNumber","accept":true,"hint":true,"why":"NewEventsNumberBlocks acceptanceexpected bounded decimal seconds or n/a row 10 column 1Re-checked because sub-03/func/sub-03_task-nback_run-1_events.tsv is an input of bids-events-content-v1. Changed:"}
+behaviour beh-correction-checked: PASS {"first":"BehaviouralResponseTime","flagged":["3"]}
+behaviour gradient-correction-checked: PASS {"head":"Gradient change","first":"DwiBvalCount","msg":"64 b-values for 65 image volumes"}
+behaviour table-carried-no-lost-update: PASS {"note":true,"earlier":true,"colleague":true,"mine":false}
+behaviour table-preview-mobile: PASS {"overflow":0,"table":true,"focused":"preview-head","changeFirst":true,"seen":true}
+behaviour policy-unknown-revoke: PASS {"alert":"Grant fe197885: revocation not confirmed. Outcome unknown. The repository cannot tell whet","table":"fe197885 6c1d8e2a Release 9d4b2e61 Read metadata Revoke","open":true}
+behaviour policy-pending-grant: PASS {"alert":"Not confirmed. An access change is recorded but its independent policy acknowledgement is pending (operation 4f6c2a1e-8b","rows":0}
 behaviour failures: 0
 layout shift current/release.html @390: initial-shift-sum=0.0000 -> PASS
 layout shift current/release.html @1440: initial-shift-sum=0.0000 -> PASS

@@ -3,6 +3,7 @@ PASS metadata-and-relationships
 PASS subject-sidecar
 PASS frozen-query
 PASS concurrent-correction
+PASS table-correction
 PASS fixed-release-grant
 PASS revocation
 PASS transport
