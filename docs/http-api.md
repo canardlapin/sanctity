@@ -162,6 +162,12 @@ A correction request has exactly these fields:
 
 It produces a durable draft and candidate. Inspect `candidate.assessment`, `metadataChanges` and `relationshipChanges` (including changed direct dependency paths), then accept using the candidate ID and a stable idempotency key. Retrying acceptance returns the same receipt. Retrying correction preparation creates another draft; preparation is not claimed to be idempotent.
 
+The same endpoint also accepts complete replacements of supported `_beh.tsv`,
+`_events.tsv`, DWI `.bval` and `.bvec` documents. The outer request remains JSON;
+`text` contains the TSV or gradient text. The repository re-assesses the supported
+document and its dependants before acceptance. Behavioural study coverage and
+limits are defined by the [behavioural profile](behavioural-profile.md).
+
 A fixed-release read grant:
 
 ```json
@@ -223,8 +229,8 @@ The current engineering priority is the [scientific core](scientific-core.md). A
 
 Protocol reference: [RFC 6750 bearer-token usage](https://www.rfc-editor.org/rfc/rfc6750). The adapter uses the [http4s 0.23 DSL](https://http4s.org/v0.23/docs/dsl.html); the application pins 0.23.30.
 
-Release relationship evidence distinguishes JSON field declarations from companion-selection rules. Companion evidence includes the selected path, matching entities and applicable hierarchy; `evidenceVersion` identifies the encoding. Companion writes currently use the application API only.
+Release relationship evidence distinguishes JSON field declarations from companion-selection rules. Companion evidence includes the selected path, matching entities and applicable hierarchy; `evidenceVersion` identifies the encoding. Supported companion replacements use the corrections endpoint or the application API.
 
-Candidate and release assessments include `checks`: each exposes a versioned rule, target, exact input roles/paths/digests/sizes, observed facts and findings. DWI checks expose gradient counts, header facts and numeric policy. These observations are separate from authored/effective metadata; empty historical checks mean no such recorded assessment. Companion corrections still use the application API.
+Candidate and release assessments include `checks`: each exposes a versioned rule, target, exact input roles/paths/digests/sizes, observed facts and findings. DWI checks expose gradient counts, header facts and numeric policy. These observations are separate from authored/effective metadata; empty historical checks mean no such recorded assessment.
 
-The event profile uses the same assessment `checks` representation: table/image/metadata inputs, event and missing-value counts, effective timing fields with origins, and regular/variable/unavailable timing context. `EventsOutsideWindow` and unavailable-context findings are warnings; table syntax/value errors and inconsistent supplied timing block admission. Companion edits continue through the application API.
+The MRI event profile uses the same assessment `checks` representation: table/image/metadata inputs, event and missing-value counts, effective timing fields with origins, and regular/variable/unavailable timing context. `EventsOutsideWindow` and unavailable-context findings are warnings; table syntax/value errors and inconsistent supplied timing block admission. Behavioural event checks use table/metadata evidence without inventing an image or acquisition clock.

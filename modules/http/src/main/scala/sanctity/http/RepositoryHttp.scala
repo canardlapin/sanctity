@@ -84,7 +84,8 @@ final class RepositoryHttp[F[_]](
         text <- lift(In.get[String](b, "text"))
         reason <- lift(In.get[String](b, "reason"))
         _ <- lift(Either.cond(reason.length <= 2000, (), Problem.LimitExceeded("reason exceeds 2000 characters")))
-        preview <- checked(repository.correctMetadata(ctx, at, p, text, reason))
+        preview <- checked(if p.fileName.endsWith(".json") then repository.correctMetadata(ctx, at, p, text, reason)
+          else repository.correctCompanion(ctx, at, p, text, reason))
         result <- json(Out.preview(preview), Status.Created)
       yield result
     case GET -> Root / "v1" / "candidates" / c =>

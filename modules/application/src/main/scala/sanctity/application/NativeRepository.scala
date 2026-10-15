@@ -50,7 +50,7 @@ final class NativeRepository[F[_]](
   /** Bounded authored companion edit; scientific selection is reassessed through ordinary admission. */
   def correctCompanion(ctx: AccessContext, base: ReleaseRef, path: RelPath, text: String, reason: String): F[Either[Problem, Preview]] =
     val name = path.fileName
-    val supported = Vector("dwi.bval", "dwi.bvec", "events.tsv").exists(s => name == s || name.endsWith("_" + s))
+    val supported = Vector("dwi.bval", "dwi.bvec", "events.tsv", "beh.tsv").exists(s => name == s || name.endsWith("_" + s))
     correctDocument(ctx, base, path, text, reason, supported)
 
   private def correctDocument(ctx: AccessContext, base: ReleaseRef, path: RelPath, text: String, reason: String,

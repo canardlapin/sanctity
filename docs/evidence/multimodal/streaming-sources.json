@@ -1,0 +1,13 @@
+{
+  "modules/application/src/main/scala/sanctity/application/ScientificViews.scala": "c4d91fde5aaff3905b256bc2f1e5561da879508db9a6d6f83810dbe64bdd7ba9",
+  "modules/application/src/main/scala/sanctity/application/StreamedViewFile.scala": "72d8eec599ee4c41d4c8512cef7293955adf6dffcce15d8734025b5bf4204b84",
+  "modules/bids/src/main/scala/sanctity/bids/StreamingTsv.scala": "de57f8ae6bc491879bbc77889e84b7e7b3bc02c2f8e660ff509c8fe47cd70b1d",
+  "modules/bids/src/main/scala/sanctity/bids/StrictGzip.scala": "aaff0d5f3d483943368a80f099b642188e92388b6af1a9e1f583e331d2d7714f",
+  "modules/app/src/main/scala/sanctity/app/StreamingTableProbe.scala": "db48b68b3df1c5503e8f05d331eb354cad595f782c663e438a115ff7d4ff04ab",
+  "modules/app/src/test/scala/sanctity/app/StreamingTsvSuite.scala": "8727aa7efad3d439b9a150ff95be9a6a2b014035a8b90c2346236bf53def4202",
+  "modules/app/src/test/scala/sanctity/app/StreamingViewSuite.scala": "8fc43dda4bc726a354713b8a59e6eedb01f1d2a520d217f86983a2f57c7be5c9",
+  "modules/integration/src/test/scala/sanctity/postgres/StreamingPersistenceSuite.scala": "0d7565f7c63b9afb647df95ec65da775f073342a44198dd3929ffee838219b75",
+  "scripts/check-streaming-tables.py": "0ba801ab7bf66d15dea6bfe7a2f47b72ed47bd55c476b77089c8b2fed3f5aee4",
+  "docs/workloads/streaming-tables-v1.json": "072ad8e47bdb6bc8f22e03f6b521ba7cd3c4ef53ba276dd4be04a7ab16d06ea5",
+  ".github/workflows/scientific-core.yml": "f6a6a3fd56980f4c06c67c22466be570e00b5f467a2c56a3278b4b33ecfd9c81"
+}

@@ -1,0 +1,79 @@
+{
+  "recordedAtUtc": "2026-10-15T02:39:45.565967+00:00",
+  "scope": "T01 streaming table foundation and application protocol; full multimodal milestones remain open",
+  "build": "sha256:59a16fb4dd112372725cf87741794d36a280e6120811ff930a45ea4dec3a0be1",
+  "sources": "streaming-sources.json",
+  "sourceTreeDirty": true,
+  "ordinary": {
+    "command": "JDK_JAVA_OPTIONS=-XX:ActiveProcessorCount=4 sbt check",
+    "passed": 507,
+    "log": {
+      "path": "target/multimodal-streaming-postgres-final.log",
+      "sha256": "3f6d8806c84e20d3eb16ab82f6d556c5d00f630f199ff0b9a6c2f8cf9c4e2e5a"
+    }
+  },
+  "isolatedSource": {
+    "command": "JDK_JAVA_OPTIONS=-XX:ActiveProcessorCount=4 bash scripts/check-clean-source.sh",
+    "passed": 507,
+    "workspace": "target/clean-source.TJrxyJ",
+    "finalSourceHashesAndBuildIdentityVerified": true,
+    "log": {
+      "path": "target/multimodal-streaming-clean-source-final.log",
+      "sha256": "9d19b322e37384497b73421e129d70adcd6764c43fffdb1aa4a739a3c03b5c99"
+    }
+  },
+  "postgres": {
+    "command": "JDK_JAVA_OPTIONS=-XX:ActiveProcessorCount=4 SANCTITY_INTEGRATION_SUITES=sanctity.postgres.StreamingPersistenceSuite bash scripts/check-postgres.sh",
+    "passed": 7,
+    "log": {
+      "path": "target/multimodal-streaming-postgres-final.log",
+      "sha256": "3f6d8806c84e20d3eb16ab82f6d556c5d00f630f199ff0b9a6c2f8cf9c4e2e5a"
+    }
+  },
+  "crashRestore": {
+    "passed": true,
+    "workspace": "target/postgres-check.IuLK18",
+    "scope": "Existing full crash/retry and coordinated backup/restore rehearsal, including subsequent access revocation; not a new 1 GiB view crash workload"
+  },
+  "streamingResource": {
+    "passed": true,
+    "receipt": "streaming-resource.json",
+    "command": "JDK_JAVA_OPTIONS=-XX:ActiveProcessorCount=4 python3 target/clean-source.TJrxyJ/scripts/check-streaming-tables.py --workdir target/streaming-resource-final",
+    "log": {
+      "path": "target/multimodal-streaming-resource-final.log",
+      "sha256": "549cfb2c78070882792fdaa60b4ef14519bb4da2a89280dd53a26156c06b85ab"
+    },
+    "incrementalPeakGrowthKiB": 28336
+  },
+  "priorAttempts": "streaming-attempts.json",
+  "initialResourceFailure": "streaming-resource-initial.json",
+  "limits": [
+    "2 GiB encoded and decoded per scan",
+    "100M data rows, 256 columns",
+    "64 KiB unescaped field, 1 MiB source row",
+    "64 retained diagnostics, 5 min scan",
+    "single GZIP member, 16 KiB header",
+    "2 GiB/generated file, 8 GiB streamed view outputs"
+  ],
+  "verifiedCases": [
+    "strict TSV/UTF-8 and exact boundaries",
+    "lexical values, missingness and source column order",
+    "late GZIP CRC/size/truncation failures",
+    "bounded diagnostics and timeout",
+    "source I/O failure propagation",
+    "zero/partial read refusal and source digest verification",
+    "receipt-bound large generated blob, acceptance, export and reimport",
+    "path collision refusal before I/O",
+    "simulated sink failure cleanup",
+    "live source revocation",
+    "cancellation with bytes on disk, cleanup within 2 seconds"
+  ],
+  "remaining": [
+    "P01/F03/F05 broader profile and disclosure prerequisites remain open",
+    "Physiology and eye-tracking naming/metadata/clock interpretation, curation and UI",
+    "Logical recording and query contracts",
+    "EEG and MEG readers/profiles",
+    "Complete service resource and crash/recovery workloads",
+    "Official conformance and acquired-study/scientific-review gates"
+  ]
+}

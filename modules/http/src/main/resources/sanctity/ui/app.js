@@ -517,7 +517,7 @@
       h('div', { class: 'stack s6 grow' }, h('span', { class: 'eyebrow' }, entry ? [k ? k.toUpperCase() + ' · ' : '', h('span', { class: 'nocaps' }, bytes(entry.size))] : 'Not in this release'),
         h('h2', { class: 'path' }, pathText(p)), status),
       h('div', { class: 'row nowrap' },
-        k === 'json' ? h('a', { class: 'btn sm', href: '#/d/' + enc(d) + '/r/' + enc(r) + '/correct?path=' + enc(p) }, I.edit(), 'Correct') : null,
+        (k === 'json' || /_(beh|events)\.tsv$/.test(p)) ? h('a', { class: 'btn sm', href: '#/d/' + enc(d) + '/r/' + enc(r) + '/correct?path=' + enc(p) }, I.edit(), 'Correct') : null,
         k === 'nii' && entry && !rel.entries.some(e => e.path === stem(p) + '.json') ? h('a', { class: 'btn sm', href: '#/d/' + enc(d) + '/r/' + enc(r) + '/correct?path=' + enc(stem(p) + '.json'),
           title: 'Add ' + stem(p).split('/').pop() + '.json to override inherited values for this image' }, I.plus(), 'Add sidecar') : null,
         entry ? h('button', { class: 'btn sm', type: 'button', onclick: download }, I.down(), 'Download') : null)));
@@ -733,7 +733,7 @@
     if (my !== generation) return;
     c.stale = !!headId && headId !== r && !c.receipt;
     c.headId = headId;
-    const sidecars = rel.entries.filter(e => e.kind === 'file' && e.path.endsWith('.json')).map(e => e.path);
+    const sidecars = rel.entries.filter(e => e.kind === 'file' && (e.path.endsWith('.json') || /_(beh|events)\.tsv$/.test(e.path))).map(e => e.path);
     const files = rel.entries.filter(e => e.kind === 'file').map(e => e.path);
     // A requested path that is not in the release is a new sidecar.
     if (c.path && !c.preview && !c.receipt && !files.includes(c.path)) { c.newMode = true; c.newPath = c.path; }
@@ -743,7 +743,7 @@
         h('span', { class: 'n', 'aria-hidden': 'true' }, i + 1 < step ? I.check() : String(i + 1)), h('span', { class: 't' }, t))));
     const head = h('div', { class: 'page-head' }, h('div', { class: 'stack s10' },
       h('div', { class: 'crumbs' }, h('a', { href: relHash(d, r, c.path ? { path: c.path } : null) }, 'Release ', short(r)), I.chev(), h('span', {}, 'Correction')),
-      h('h1', {}, c.path ? (c.newMode ? 'Add ' : 'Correct ') + c.path.split('/').pop() : 'Propose a metadata correction'),
+      h('h1', {}, c.path ? (c.newMode ? 'Add ' : 'Correct ') + c.path.split('/').pop() : 'Propose a correction'),
       h('p', { class: 'lead' }, 'Prepared against this exact release and assessed like any import. It becomes the dataset head only when someone with accept authority accepts it.')));
     const staleNote = c.stale ? h('div', { class: 'notice warn row between' }, h('span', {}, 'Release ' + short(r) + ' is not the current dataset head, so a correction prepared here could not be accepted.'),
       h('a', { class: 'btn sm', href: '#/d/' + enc(d) + '/r/' + enc(headId) + '/correct' + (c.path ? '?path=' + enc(c.path) : '') }, 'Correct the current head')) : null;
@@ -791,7 +791,7 @@
       if (c.newMode) { c.original = ''; restoreDraft(''); text.value = c.text; return; }
       text.value = ''; text.placeholder = 'Loading current content…';
       try { const t = await getFileText(d, r, p); if (c.path !== p) return; c.original = t; restoreDraft(t); text.value = c.text || t; text.placeholder = ''; }
-      catch (e) { text.placeholder = explain(e) + ' Paste the complete corrected JSON.'; }
+      catch (e) { text.placeholder = explain(e) + ' Paste the complete corrected document.'; }
     };
     const submit = async ev => {
       ev.preventDefault();
@@ -800,9 +800,11 @@
       if (c.newMode) { c.path = newPath.value.trim(); c.original = ''; }
       c.text = text.value; c.reason = reason.value.trim();
       const problems = [], invalid = new Set();
-      const pathProblem = c.newMode ? sidecarPathProblem(c.path, files) : !c.path ? 'Choose the sidecar to correct.' : null;
+      const pathProblem = c.newMode ? sidecarPathProblem(c.path, files) : !c.path ? 'Choose the document to correct.' : null;
       if (pathProblem) { problems.push(pathProblem); if (c.newMode) invalid.add(newPath); }
-      try { JSON.parse(c.text); } catch (x) { problems.push('The ' + (c.newMode ? 'content' : 'replacement') + ' is not valid JSON: ' + x.message); invalid.add(text); }
+      if (c.path.endsWith('.json')) {
+        try { JSON.parse(c.text); } catch (x) { problems.push('The ' + (c.newMode ? 'content' : 'replacement') + ' is not valid JSON: ' + x.message); invalid.add(text); }
+      } else if (!c.text.trim()) { problems.push('Provide the complete replacement table.'); invalid.add(text); }
       if (!c.reason) { problems.push('Give a reason. It is recorded with the candidate.'); invalid.add(reason); }
       if (c.reason.length > 2000) { problems.push('Keep the reason to 2000 characters or fewer.'); invalid.add(reason); }
       if (!c.newMode && c.original != null && c.text === c.original) { problems.push('The content is unchanged.'); invalid.add(text); }
@@ -823,13 +825,13 @@
     };
     const card = h('form', { class: 'split', onsubmit: submit, novalidate: true },
       h('div', { class: 'card pad stack s16' },
-        h('div', { class: 'field' }, h('label', { for: 'c-path' }, 'Sidecar'),
+        h('div', { class: 'field' }, h('label', { for: 'c-path' }, 'Document'),
           h('select', { class: 'input mono', id: 'c-path', fk: 'c-path', onchange: ev => {
             const v = ev.target.value; c.drafts = { ...(c.drafts || {}), [c.newMode ? NEW_SIDECAR : c.path]: c.text };
             c.newMode = v === NEW_SIDECAR; c.path = c.newMode ? (c.newPath || '') : v; c.text = (c.drafts || {})[v] || ''; c.original = null; focusKey = c.newMode ? 'c-new' : 'c-path';
             go('#/d/' + enc(d) + '/r/' + enc(r) + '/correct' + (c.path ? '?path=' + enc(c.path) : ''), true);
           } },
-            h('option', { value: '' }, 'Choose a JSON file…'), sidecars.map(s => h('option', { value: s, selected: !c.newMode && s === c.path }, s)),
+            h('option', { value: '' }, 'Choose a JSON or table file…'), sidecars.map(s => h('option', { value: s, selected: !c.newMode && s === c.path }, s)),
             h('option', { value: NEW_SIDECAR, selected: !!c.newMode }, 'New sidecar…'))),
         c.newMode ? h('div', { class: 'field' }, h('label', { for: 'c-new' }, 'New sidecar path'),
           newPath = h('input', { class: 'input mono', id: 'c-new', fk: 'c-new', value: c.newPath || '', autocomplete: 'off', spellcheck: 'false', placeholder: 'sub-02/func/sub-02_task-nback_run-1_bold.json', 'aria-describedby': 'c-new-hint c-errors',

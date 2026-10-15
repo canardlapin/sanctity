@@ -14,6 +14,14 @@ trait ViewCompiler:
   def plan(source: Release, selection: FrozenSelection, profile: DisclosureProfile,
       documents: Map[RelPath, String] = Map.empty): Either[Problem, ProjectionPlan]
 
+  /** Large generated tables use the same immutable source and receipt as documents.
+    * Read only through the supplied, authorized and verified source function.
+    */
+  def streams[F[_]: Async](source: Release, selection: FrozenSelection, profile: DisclosureProfile,
+      documents: Map[RelPath, String], read: Entry.File => Stream[F, Byte]): Either[Problem, Vector[StreamedViewFile[F]]] =
+    val _ = (source, selection, profile, documents, read, Async[F])
+    Right(Vector.empty)
+
 /** A view becomes an ordinary assessed release with its own grants and custody.
   * Source disclosure authority is required at preparation AND final acceptance.
   */
@@ -66,6 +74,23 @@ final class ScientificViews[F[_]: Async](
       _ <- Checked.lift[F, Unit](Either.cond(plan.generated.forall(_._2.getBytes(StandardCharsets.UTF_8).length <= 4L * 1024 * 1024) &&
         plan.generated.foldLeft(BigInt(0))((n, v) => n + v._2.getBytes(StandardCharsets.UTF_8).length) <= 32L * 1024 * 1024,
         (), Problem.LimitExceeded("view generated documents exceed the 4 MiB/32 MiB profile")))
+      authorize = catalog.check(ctx, source.dataset, Action.ReadContent, Some(source.release)).flatMap(Checked.lift[F, Unit]) *>
+        catalog.check(ctx, destination, Action.Propose).flatMap(Checked.lift[F, Unit]) *>
+        (if privateUse then Async[F].unit else catalog.check(ctx, source.dataset, Action.ManageAccess).flatMap(Checked.lift[F, Unit]))
+      reads <- cats.effect.Ref.of[F, (Long, Long, Set[RelPath])]((0L, 0L, Set.empty))
+      read = (file: Entry.File) =>
+        if !release.manifest.byPath.get(file.path).contains(file) then
+          Stream.raiseError[F](Failure(Problem.Integrity("streamed view read is outside the source manifest")))
+        else Stream.exec(reads.update((started, completed, paths) => (started + 1, completed, paths))) ++
+          ViewStream.verified(store.read(file.blob).chunkN(ViewStream.ChunkSize).evalTap(_ => authorize).unchunks, file.blob) ++
+          Stream.exec(reads.update((started, completed, paths) => (started, completed + 1, paths + file.path)))
+      streams <- Checked.lift[F, Vector[StreamedViewFile[F]]](compiler.streams(release, selection, profile, documents, read))
+      outputPaths = plan.retained.map(_.path) ++ plan.generated.map(_._1) ++ streams.map(_.path)
+      _ <- Checked.lift[F, Unit](Either.cond(outputPaths.nonEmpty && outputPaths.size <= 10000 &&
+        outputPaths.map(_.collisionKey).distinct.size == outputPaths.size &&
+        plan.steps.map(_.output).toSet == outputPaths.toSet && plan.steps.map(_.output).distinct.size == plan.steps.size &&
+        plan.evidence.generated.toSet == (plan.generated.map(_._1) ++ streams.map(_.path)).toSet,
+        (), Problem.InvalidManifest("view outputs, generated paths and receipt steps must agree without collisions")))
       retained <- plan.retained.traverse { file =>
         // Localizing one inherited companion to several acquisitions creates distinct artifacts sharing bytes.
         if release.manifest.byPath.get(file.path).contains(file) then Async[F].pure(file)
@@ -77,7 +102,26 @@ final class ScientificViews[F[_]: Async](
           blob <- store.put(Stream.emits(text.getBytes(StandardCharsets.UTF_8)).covary[F])
         yield Entry.File(path, id, blob)
       }
-      files = retained ++ generated
+      total <- cats.effect.Ref.of[F, Long](0L)
+      streamed <- streams.traverse { output =>
+        for
+          id <- ids.next[ArtifactTag]
+          blob <- store.put(ViewStream.bounded(output.bytes, ViewStream.FileLimit).chunks.evalTap { chunk =>
+            authorize *> total.updateAndGet(n => Math.addExact(n, chunk.size.toLong)).flatMap { size =>
+              Checked.lift[F, Unit](Either.cond(size <= ViewStream.TotalLimit, (), Problem.LimitExceeded("streamed view outputs exceed 8 GiB")))
+            }
+          }.unchunks)
+        yield Entry.File(output.path, id, blob)
+      }
+      completed <- reads.get
+      streamedPaths = streams.map(_.path).toSet
+      streamedInputs = plan.steps.filter(s => streamedPaths(s.output)).flatMap(_.inputs).map(_.path).toSet -- documents.keySet
+      declaredInputs = plan.steps.flatMap(_.inputs).map(_.path).toSet
+      _ <- Checked.lift[F, Unit](Either.cond(completed._1 == completed._2 && streamedInputs.subsetOf(completed._3) &&
+        completed._3.subsetOf(declaredInputs), (),
+        Problem.Integrity("streamed view input did not reach verified EOF")))
+      _ <- authorize
+      files = retained ++ generated ++ streamed
       directories = files.flatMap { file =>
         Iterator.iterate(file.path.parent)(_.flatMap(_.parent)).takeWhile(_.nonEmpty).flatten.toVector
       }.distinct.map(Entry.Directory.apply)

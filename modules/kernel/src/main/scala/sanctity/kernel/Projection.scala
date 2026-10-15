@@ -5,11 +5,15 @@ package sanctity.kernel
   */
 final case class DisclosureProfile(participantFields: Set[String], metadataFields: Set[String],
     eventFields: Option[Set[String]] = None, sessionFields: Set[String] = Set.empty,
-    scanFields: Set[String] = Set.empty):
+    scanFields: Set[String] = Set.empty, behaviouralFields: Option[Set[String]] = None):
   val id: Digest =
     def fields(values: Set[String]): Vector[String] = Vector(values.size.toString) ++ values.toVector.sorted
     val original = fields(participantFields) ++ fields(metadataFields)
-    if eventFields.isEmpty && sessionFields.isEmpty && scanFields.isEmpty then
+    if behaviouralFields.nonEmpty then
+      Digest.framed("sanctity.scientific-view.v3", original ++ Vector(eventFields.fold("absent")(_ => "present")) ++
+        eventFields.toVector.flatMap(fields) ++ fields(sessionFields) ++ fields(scanFields) ++
+        Vector("behavioural", "present") ++ behaviouralFields.toVector.flatMap(fields))
+    else if eventFields.isEmpty && sessionFields.isEmpty && scanFields.isEmpty then
       Digest.framed("sanctity.mri-view.v1", original)
     else Digest.framed("sanctity.mri-view.v2", original ++ Vector(eventFields.fold("absent")(_ => "present")) ++
       eventFields.toVector.flatMap(fields) ++ fields(sessionFields) ++ fields(scanFields))

@@ -1,0 +1,113 @@
+{
+  "recordedAtUtc": "2026-10-15T11:34:45.270907+00:00",
+  "scope": "Scoped behavioural BIDS and streaming implementation isolated from pre-existing MRI, policy, organization and service-distribution work",
+  "baseline": "eff6e100ea3a2101809e366578e47d07375c2f00",
+  "candidateDirectory": "target/multimodal-commit.dr66evmt",
+  "build": "sha256:93dfb8ec08558cf39f272adacadd6ec79fc18f0430d867701384d6160dd339bb",
+  "entryPoints": [
+    "modules/app/src/main/scala/sanctity/app/ApiServer.scala",
+    "modules/app/src/main/scala/sanctity/app/RepositoryCli.scala"
+  ],
+  "assembly": "Entry-point wiring is committed at baseline app paths. The pending service-module relocation and unrelated shared-file hunks remain outside the commit.",
+  "checks": {
+    "passed": 164,
+    "projection": 4,
+    "behaviouralAndStreaming": 38,
+    "existingLifecycleIncludingMriSubsets": 122,
+    "focusedLog": {
+      "path": "target/multimodal-commit-check.log",
+      "sha256": "778497e2c45d889341e77e636e4fa273faff3350b112f4617660f71157d02713"
+    },
+    "lifecycleLog": {
+      "path": "target/multimodal-commit-lifecycle.log",
+      "sha256": "adfc2206731bd121c6248d79bdc398605510a93696ffacb5a92009ccffab54a8"
+    }
+  },
+  "integration": {
+    "compiled": true,
+    "executedOnScopedCandidate": false,
+    "log": {
+      "path": "target/multimodal-commit-integration-compile.log",
+      "sha256": "71135739e67852f922ffcc9c0cf2c333657318f9705acba7a6a6151b1ae0b05f"
+    }
+  },
+  "finalCompilation": {
+    "passed": true,
+    "log": {
+      "path": "target/multimodal-commit-final-compile.log",
+      "sha256": "94cb47810642a9140d3b1e9587094d13b1dd01f8cb7c241718a226f4d5eb34dc"
+    }
+  },
+  "formattingOnlyAfterTests": [
+    "Removed one extra EOF blank line from BehaviouralChecks.scala, BoundedBidsText.scala and RepositoryBidsContext.scala; final sources recompiled successfully"
+  ],
+  "fixtureBytes": "Acquired TSV bytes remain exact; scoped .gitattributes disables text conversion and recognizes CRLF endings.",
+  "historicalReceipts": "Other multimodal qualification receipts retain their original dirty-working-tree scope and source fingerprints; they are not presented as execution on this narrower commit.",
+  "files": {
+    ".gitattributes": "1d2969aa6d37c1d1e42b2447f416320b59962e36620f3223275cf5879d42a09b",
+    ".github/workflows/scientific-core.yml": "12fd8f5dbce5c0e636d1f207272ff93b856731aa3830d9cd8e48c6a0c77d9851",
+    "README.md": "84955807734282f62e1d70dd7a1712d177a7b58c091616e9a815d017abfb6080",
+    "docs/behavioural-profile.md": "4d1c6c535723f653cf9ab2166ffa29b5ba20c8530ba9e83ecd5ec3965339426b",
+    "docs/evidence/multimodal/behavioural-independent.json": "3a968b2f02976413a193950adf9918a9ffce6358da9de93b844087d5b1987a48",
+    "docs/evidence/multimodal/behavioural-verification.json": "fb0649762b291016aefabdd2f41aa68038948e38fc27a021a9a0fbddfb88fdfb",
+    "docs/evidence/multimodal/console-receipt.json": "0589ff167d147880f36f9ef9449c753d15f3e222d8eb80f194de2f7aca893ae4",
+    "docs/evidence/multimodal/implementation-sources.json": "52d88f009124858a8f5644eff50f92f48f61810fca4a2946172607346f6d9c20",
+    "docs/evidence/multimodal/mote-map.json": "7bfadbbf4ef6e55f9b247544f6e6edf730b1f62dc07b35cfeeb895544c7b45c1",
+    "docs/evidence/multimodal/streaming-attempts.json": "690a074ae70720abd0fce8de1775b2cc8c5e99fef5209f012e7f5ae3b7ef70fa",
+    "docs/evidence/multimodal/streaming-resource-initial.json": "c6a9391e6949e6082f2584f8fa3e87090cf7b85cf232e369666440ec9be3af1b",
+    "docs/evidence/multimodal/streaming-resource.json": "db00defc3db0b054c06e5afb824237575d285a7e2eef4dfb421424d54d381c2d",
+    "docs/evidence/multimodal/streaming-sources.json": "bddce5dd3077b0d7d899bbf0d4e68e43b40feb14756e32543a8c7752467c64bc",
+    "docs/evidence/multimodal/streaming-verification.json": "07bd02afc299f26fddbd0abe4ebd2282f53a229d6aa4712470d525b6d5e14b47",
+    "docs/http-api.md": "cb43ad71f73cf879ab08f17343c30815692971d3f498111101b4fd83671ba078",
+    "docs/multimodal-bids-plan.md": "c46cddaff954a7ec1d22d0145743a80f6bba9942a01d6583b916c2a8fdcd56a8",
+    "docs/streaming-tables.md": "84d11cc40a0c40f83b7121b59aeb4867220b39b8bcc3c05cbdae3e7f9c534a86",
+    "docs/workloads/streaming-tables-v1.json": "072ad8e47bdb6bc8f22e03f6b521ba7cd3c4ef53ba276dd4be04a7ab16d06ea5",
+    "modules/app/src/main/scala/sanctity/app/ApiServer.scala": "c44cbf6c73b9d59eaa4c8aa765507a18103df24bf244bc0b02eb7e06200edf12",
+    "modules/app/src/main/scala/sanctity/app/BehaviouralDemo.scala": "92ed4158753d6672e778e2a645c2b325758feac66370352957db4b7f91527f8f",
+    "modules/app/src/main/scala/sanctity/app/RepositoryCli.scala": "6a9cc14da07a7e3e03f6bab706f6f0e22750e40b4f34cd2756f052ae058469d0",
+    "modules/app/src/main/scala/sanctity/app/StreamingTableProbe.scala": "db48b68b3df1c5503e8f05d331eb354cad595f782c663e438a115ff7d4ff04ab",
+    "modules/app/src/test/resources/multimodal-conformance/face-behavioural/README.md": "bd4c6f12ef35f73a200dfd5f9532acca8898ab470bd00605bf7980532a031427",
+    "modules/app/src/test/resources/multimodal-conformance/face-behavioural/dataset/dataset_description.json": "e3b52c50d845ae9aacf4b60d607b0cbc816bed235c37431241baa0f1ee6b3019",
+    "modules/app/src/test/resources/multimodal-conformance/face-behavioural/dataset/stimuli/f024.bmp": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "modules/app/src/test/resources/multimodal-conformance/face-behavioural/dataset/stimuli/f038.bmp": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "modules/app/src/test/resources/multimodal-conformance/face-behavioural/dataset/stimuli/f045.bmp": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "modules/app/src/test/resources/multimodal-conformance/face-behavioural/dataset/stimuli/f081.bmp": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "modules/app/src/test/resources/multimodal-conformance/face-behavioural/dataset/stimuli/f123.bmp": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "modules/app/src/test/resources/multimodal-conformance/face-behavioural/dataset/stimuli/f135.bmp": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "modules/app/src/test/resources/multimodal-conformance/face-behavioural/dataset/stimuli/u021.bmp": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "modules/app/src/test/resources/multimodal-conformance/face-behavioural/dataset/stimuli/u052.bmp": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "modules/app/src/test/resources/multimodal-conformance/face-behavioural/dataset/sub-002/ses-1/beh/sub-002_ses-1_task-FaceRecognition_beh.tsv": "ef11198d6f4c148c2f004a1dbd25e6c199555355cfd1ca78a6ea0232349642b2",
+    "modules/app/src/test/resources/multimodal-conformance/face-behavioural/dataset/task-FaceRecognition_beh.json": "58449931070112abadb1c530c49130ea826cd84712db6d3a38265861f7777d12",
+    "modules/app/src/test/resources/multimodal-conformance/face-behavioural/originals/dataset_description.json": "e3b52c50d845ae9aacf4b60d607b0cbc816bed235c37431241baa0f1ee6b3019",
+    "modules/app/src/test/resources/multimodal-conformance/face-behavioural/originals/sub-002/ses-1/beh/sub-002_ses-1_task-FaceRecognition_beh.tsv": "3f8c35b5ce8406372ba8169221f8852f17cf0f482aaf164037a674bd561183f2",
+    "modules/app/src/test/resources/multimodal-conformance/face-behavioural/originals/task-FaceRecognition_beh.json": "58449931070112abadb1c530c49130ea826cd84712db6d3a38265861f7777d12",
+    "modules/app/src/test/resources/multimodal-conformance/face-behavioural/source.json": "93c647b16e181f7aab8636d54a2d8c515f4249a09e011138b1e09b78befe8fe6",
+    "modules/app/src/test/scala/sanctity/app/BehaviouralResourceSuite.scala": "a099cc91eb4667ac854f34c76d41383f6995680c0873367f221addbc938ace28",
+    "modules/app/src/test/scala/sanctity/app/BehaviouralSuite.scala": "eae8f0b182bf14447b0b9875e59ebaad362768365e4ec9e20e13c8593b7248ae",
+    "modules/app/src/test/scala/sanctity/app/StreamingTsvSuite.scala": "8727aa7efad3d439b9a150ff95be9a6a2b014035a8b90c2346236bf53def4202",
+    "modules/app/src/test/scala/sanctity/app/StreamingViewSuite.scala": "8fc43dda4bc726a354713b8a59e6eedb01f1d2a520d217f86983a2f57c7be5c9",
+    "modules/application/src/main/scala/sanctity/application/NativeRepository.scala": "7412b27ed13500516380500e66827d12c1813271f4906f6ab906e48d8a9ce852",
+    "modules/application/src/main/scala/sanctity/application/ScientificViews.scala": "c4d91fde5aaff3905b256bc2f1e5561da879508db9a6d6f83810dbe64bdd7ba9",
+    "modules/application/src/main/scala/sanctity/application/StreamedViewFile.scala": "72d8eec599ee4c41d4c8512cef7293955adf6dffcce15d8734025b5bf4204b84",
+    "modules/bids/src/main/scala/sanctity/bids/BehaviouralChecks.scala": "fc528ef5b1f7578a471be4f093596478cd912cfebdbc791fcdb21feae0c9e4c0",
+    "modules/bids/src/main/scala/sanctity/bids/BehaviouralEdits.scala": "71783ec70b38b0a394ffd1199138838ec273fce18298e6ea23373620f15ff81d",
+    "modules/bids/src/main/scala/sanctity/bids/BehaviouralViewCompiler.scala": "b35b8d5c032f1cb328133d9b23a66e59ca43a737f0102840ed5cb147939f6eb5",
+    "modules/bids/src/main/scala/sanctity/bids/BidsChangeCompiler.scala": "068317d09a6fad82387fd5c0a942afd2dce08326bd69b0601f3b1f267e73735c",
+    "modules/bids/src/main/scala/sanctity/bids/BoundedBidsText.scala": "7e8f9f2725bc7a5ed62b5375aa16ef3eee47586b389edc2806d6e0902f9ae6e9",
+    "modules/bids/src/main/scala/sanctity/bids/MriViewCompiler.scala": "05e8fd6bb7a651663363fdd2c7b5b4cbed472b253e0372cdce05f3fe89c426a8",
+    "modules/bids/src/main/scala/sanctity/bids/RepositoryBidsContext.scala": "e118e15373bec62465aa9af5275baff6a073fff91ac885c0844328bf0d3c52df",
+    "modules/bids/src/main/scala/sanctity/bids/RepositoryBidsInterpreter.scala": "7a70fb5f8c65fa157547c932367be78892b36e6ff083fc83bdc37419695e4de0",
+    "modules/bids/src/main/scala/sanctity/bids/StreamingTsv.scala": "de57f8ae6bc491879bbc77889e84b7e7b3bc02c2f8e660ff509c8fe47cd70b1d",
+    "modules/bids/src/main/scala/sanctity/bids/StrictGzip.scala": "aaff0d5f3d483943368a80f099b642188e92388b6af1a9e1f583e331d2d7714f",
+    "modules/bids/src/main/scala/sanctity/bids/SummaryProjection.scala": "b4a35630b438833906d0c7bef8d2b19c57771e538b6f8de29135183ed4b35358",
+    "modules/http/src/main/resources/sanctity/ui/app.js": "2e9cf8a543ae5f06d98cf06b9d9d78239b7d6c1d004d0bc87660226ba4006dd5",
+    "modules/http/src/main/scala/sanctity/http/RepositoryHttp.scala": "799dbecb63680a6a135a86a2b2d07c4f10dd75247f2b826c5bd228c64a967538",
+    "modules/integration/src/test/scala/sanctity/postgres/BehaviouralPersistenceSuite.scala": "c684c967e895891ab228b1171e19b9309546fa7adf5fb9f65449b29ce5666a1e",
+    "modules/integration/src/test/scala/sanctity/postgres/StreamingPersistenceSuite.scala": "0d7565f7c63b9afb647df95ec65da775f073342a44198dd3929ffee838219b75",
+    "modules/kernel/src/main/scala/sanctity/kernel/Projection.scala": "f217cda4407e0c00ff61834953fc226418380347a22b497a0b1a44ff457e94b1",
+    "modules/kernel/src/test/scala/sanctity/kernel/ProjectionSuite.scala": "4d03ee7ebabf140625ef36a10a18c38955c8836bf05cfe794b8d1f7124b23f24",
+    "scripts/check-behavioural.py": "57255582b69e039af2bbf68cb0297a531805290eff8195a7d55adbd879ccdbec",
+    "scripts/check-postgres.sh": "c5de560632b9d72e62a29fbe7586f6f551cd152c83774030f7ba8986197a8573",
+    "scripts/check-streaming-tables.py": "0ba801ab7bf66d15dea6bfe7a2f47b72ed47bd55c476b77089c8b2fed3f5aee4"
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "schema": "sanctity-streaming-table-initial-attempt-v1",
+  "passed": false,
+  "recordedAt": "2026-10-15T02:17:57.839415+00:00",
+  "command": "python3 scripts/check-streaming-tables.py --workdir target/streaming-resource-v1",
+  "jvmOptions": [
+    "-Xms64m",
+    "-Xmx160m",
+    "-XX:MaxDirectMemorySize=64m"
+  ],
+  "contentVerificationPassed": true,
+  "incrementalMemoryBudgetPassed": true,
+  "peakGrowthMemoryBudgetPassed": false,
+  "reportedPeakGrowthMiB": 94.7,
+  "maximumPeakGrowthMiB": 64,
+  "reportedIncrementalPeakMiB": [
+    70.6,
+    126.4
+  ],
+  "measurementPrecision": "RSS values retained here are the rounded terminal values; initial per-case raw RSS samples were not retained.",
+  "results": [
+    {
+      "probe": "streaming-table-probe-v1",
+      "tableRule": "sanctity-streaming-tsv-v1",
+      "java": "21.0.12.1+1-LTS",
+      "build": "sha256:090952e4c1db83fe4c78632c023fdfd1a52e7338885e75ea03e180dd0360b296",
+      "rows": 2097152,
+      "decodedBytes": 134217728,
+      "invalidValues": 0,
+      "seconds": 17.722955583,
+      "inputSha256": "4a7900352416e4a8ad6eddd19d298b703566590609137c96a731a8d54d2076c8",
+      "inputBytes": 973240,
+      "outputSha256": "d0e9e7fa33f56dfaebe2cead320f1b9a234733ce17e3a781a3c8c6d88c8550c8",
+      "outputBytes": 366236,
+      "receipt": "6eb3929e46dfb606e6caf602c35c7ed47e18d235815c15e8b5c05dc18450b1e5",
+      "receiptMatchesOutput": true
+    },
+    {
+      "probe": "streaming-table-probe-v1",
+      "tableRule": "sanctity-streaming-tsv-v1",
+      "java": "21.0.12.1+1-LTS",
+      "build": "sha256:090952e4c1db83fe4c78632c023fdfd1a52e7338885e75ea03e180dd0360b296",
+      "rows": 16777216,
+      "decodedBytes": 1073741824,
+      "invalidValues": 0,
+      "seconds": 140.72532175,
+      "inputSha256": "c8bf3b421d80363e568544557df4571a3e94a4080fb7f90bcd9354c3ef80858b",
+      "inputBytes": 7784885,
+      "outputSha256": "df062bb4afa67c34693c0d568163632e8fec31248a99a63986a6f95deda93795",
+      "outputBytes": 2929533,
+      "receipt": "d72c899e163bb54b2977f952de9319653a83e0ff9ce46698937f93120986a884",
+      "receiptMatchesOutput": true
+    }
+  ],
+  "logSha256": "22517d1c8ebef7e475374888eb64200bc7c82a71a0873289bb4fe011351211ff",
+  "nextAttempt": "Fixed, pre-touched 128 MiB heap and four active processors. Preserve every per-case memory report and the final gate outcome."
+}

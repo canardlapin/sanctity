@@ -1,0 +1,83 @@
+{
+  "checker": "behavioural-export-oracle-v1",
+  "python": "3.13.4",
+  "fixtureKind": "synthetic",
+  "source": {
+    "dataset_description.json": {
+      "sha256": "1d13d2990534f85ca8996ac5502ae089c201995df7d01c441dc95354294ab16c",
+      "size": 97
+    },
+    "participants.json": {
+      "sha256": "4e028413cf41633c359e861fecbc9ce226dc6b2d8f4f2fe52814c160b37bdebd",
+      "size": 64
+    },
+    "participants.tsv": {
+      "sha256": "e01974659bb6239af3e107568493eaf137131f9a9f99133d3b460325d4524c88",
+      "size": 49
+    },
+    "stimuli/cat.txt": {
+      "sha256": "89c34aad2dd416814e08ef6a42ef6b941e819f84514f2a38098263c7c44063f4",
+      "size": 19
+    },
+    "sub-01/beh/sub-01_task-choice_beh.json": {
+      "sha256": "ae65d2845a250693492f320b44fec4cc6242e17368bf905559867ae1fa6d67eb",
+      "size": 135
+    },
+    "sub-01/beh/sub-01_task-choice_beh.tsv": {
+      "sha256": "9339e6a35060d65329e72d9c23121491d42e9bd921d2896a4e634fde1297d9df",
+      "size": 108
+    },
+    "sub-01/beh/sub-01_task-choice_events.json": {
+      "sha256": "8bbf01f9fc2a1020f27d0c9d2d4b23eb9a40fa6c7698a02f0817566c98df4a47",
+      "size": 39
+    },
+    "sub-01/beh/sub-01_task-choice_events.tsv": {
+      "sha256": "16ef5c7bccedd0e6fc7ed8000d3f0f6b601fe342ddaeb01ed401045157d487c4",
+      "size": 48
+    }
+  },
+  "subset": {
+    "dataset_description.json": {
+      "sha256": "347912febccdffd49b4f741cf45c07b8577736cedd45877154cc7af2c3df5c57",
+      "size": 119
+    },
+    "participants.json": {
+      "sha256": "ee438f32aa59d30a36feca407180757d8bd1fabf0f50592396094f75d8f8f1dd",
+      "size": 41
+    },
+    "participants.tsv": {
+      "sha256": "464e878d4043f3589adb9c3be71c7d3906e41f77372874910edd320a69a18e79",
+      "size": 29
+    },
+    "stimuli/cat.txt": {
+      "sha256": "89c34aad2dd416814e08ef6a42ef6b941e819f84514f2a38098263c7c44063f4",
+      "size": 19
+    },
+    "sub-01/beh/sub-01_task-choice_beh.json": {
+      "sha256": "f84d25b49e40cbf82eb7e05679495739a0fa1566afd60a98ac3d931b46b1efed",
+      "size": 132
+    },
+    "sub-01/beh/sub-01_task-choice_beh.tsv": {
+      "sha256": "17cb770f4b49f437d9aae349a727460fa14d7ecff44884d20f7e066903e108fe",
+      "size": 81
+    },
+    "sub-01/beh/sub-01_task-choice_events.json": {
+      "sha256": "d95cac6c40a66d86e62f8337cf7230e008c06c0c9264a953837e5191f0fadeb1",
+      "size": 56
+    },
+    "sub-01/beh/sub-01_task-choice_events.tsv": {
+      "sha256": "16ef5c7bccedd0e6fc7ed8000d3f0f6b601fe342ddaeb01ed401045157d487c4",
+      "size": 48
+    }
+  },
+  "checks": [
+    "full-bytes-and-directories",
+    "subset-membership",
+    "lexical-values-and-missingness",
+    "events",
+    "participant-projection",
+    "dictionary-disclosure",
+    "description",
+    "stimulus-bytes"
+  ]
+}

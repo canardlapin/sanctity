@@ -51,6 +51,9 @@ final class ProjectionSuite extends FunSuite:
   test("legacy disclosure identity remains stable while each new table mask binds identity") {
     val old = DisclosureProfile(Set("age"), Set("TaskName"))
     assertEquals(old.id, Digest.framed("sanctity.mri-view.v1", Vector("1", "age", "1", "TaskName")))
-    Vector(old.copy(eventFields = Some(Set.empty)), old.copy(sessionFields = Set("age")), old.copy(scanFields = Set("acq_time")))
+    Vector(old.copy(eventFields = Some(Set.empty)), old.copy(sessionFields = Set("age")), old.copy(scanFields = Set("acq_time")),
+      old.copy(behaviouralFields = Some(Set.empty)), old.copy(behaviouralFields = Some(Set("response_time"))))
       .foreach(p => assertNotEquals(p.id, old.id))
+    assertNotEquals(old.copy(behaviouralFields = Some(Set("response_time"))).id,
+      old.copy(eventFields = Some(Set("response_time"))).id)
   }

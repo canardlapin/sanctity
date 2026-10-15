@@ -1,0 +1,582 @@
+{
+  "date": "2026-10-15T00:12:52.424Z",
+  "baseRevision": "eff6e100ea3a2101809e366578e47d07375c2f00",
+  "sourceTreeDirty": true,
+  "sourceSha256": {
+    "index.html": "3098e794d6a8fbb68b1dacc0b29481040579267ec75d36696de17e4c7f230cfa",
+    "app.css": "3834f94d9646970715a107d1c335820fed0fe0e2fa1a23df34c50d0db3d1f30e",
+    "app.js": "2e9cf8a543ae5f06d98cf06b9d9d78239b7d6c1d004d0bc87660226ba4006dd5",
+    "demo.js": "cc6ebcd860a7f77660acd105bc41c717c5d6b3457b4ffad307dd89f93ef81b1b"
+  },
+  "harnessSha256": {
+    "tests/console/checks/behaviour.js": "b72c4317e214e167a51ddba6208f85da23056b5aba0241e92c7a91178b1f3eb0",
+    "tests/console/checks/run.sh": "94d02803b67ec5333355f467ff4f4d78ff628c6762a618a063b131f2ad6ddb51",
+    "tests/console/checks/ui.js": "50e093b8193d9ebbaf48cc71011d195884e52158d49a13ce2b32f322046d3321",
+    "tests/console/hillclimb.json": "034376b5a2805b00e053219cf00c3616a931fbf7e7ca02470db2a61cbd0b01cd",
+    "tests/console/package-lock.json": "d412e0048c2a25b127e7899f7bb9659f00b384b4ec1b39a62ef3381a94bf48dc",
+    "tests/console/package.json": "e79f8a369226e302444aaba12014cefaaf954303f840a36922cc763c61afa85d",
+    "tests/console/rehearsal-receipt.js": "6ec294fafe935d9b415c7e3de4b884133000a73d533d49e46b9f872703db226f",
+    "tests/console/rehearsal.js": "35956d72a2830767d022d390360d916b25664a95606c5c9490d6270617192179",
+    "tests/console/run.js": "5492f0a960424ad3c2ae5bba3c6b88ea159f0c7b5c44babca52e8140623216c4",
+    "tests/console/scripts/checks/cls.js": "1209f86da9cc58029d8de92a62672ea0daeb30ceb925e7b8ad6f236082f26112",
+    "tests/console/scripts/lib.js": "c1d9be681f2e8de9d88f4bebfa4ef80b85d6eca0777023671d7afe1c451f85b5",
+    "tests/console/serve.js": "9810e1adc51990ab6a371f44e7ca96b24a6474a602f082fb581f0fa98f5deb74",
+    "tests/console/specimens/drive.js": "a6ae2f189e98713d95242a1c8e549c72bca7d57239d43a4d5b506b0dc0f62bbd",
+    "tests/console/specimens/specs.json": "ae4e6034fe41575ef53bf9b5db354fa34579795068c54e1624ddd40630a1d0ac",
+    "tests/console/voiceover-conflict.js": "47e028fc8d3c39f3e6d19fe00a72595a327778b26987cde22d582cc5cf0e8523",
+    "scripts/check-console.sh": "674b99dfa548fee42194d0a82adc344543df69520a8ee4e5f7c6988405f58864"
+  },
+  "platform": "darwin 24.1.0 arm64",
+  "node": "v24.21.0",
+  "playwright": "1.49.1",
+  "axe": "4.10.2",
+  "browser": {
+    "engine": "chromium",
+    "version": "131.0.6778.33"
+  },
+  "uiViewports": [
+    {
+      "width": 1440,
+      "height": 900,
+      "scheme": "light"
+    },
+    {
+      "width": 390,
+      "height": 900,
+      "scheme": "light"
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "scheme": "dark"
+    }
+  ],
+  "behaviourViewports": "1440x900 default; explicit 390x844 and resize cases in checks/behaviour.js",
+  "checks": {
+    "current": {
+      "exitCode": 0,
+      "log": "current.log",
+      "sha256": "d84b8c831bd67cb9013bc15993bc60106df49bce3feff929a33fb053305d3b49",
+      "assertions": [
+        {
+          "name": "no-inline-style c-4f18-a5d9-0e6c1b2f8a73",
+          "result": "PASS"
+        },
+        {
+          "name": "no-inline-style c-4f18-a5d9-0e6c1b2f8a73",
+          "result": "PASS"
+        },
+        {
+          "name": "no-inline-style 5d9-0e6c1b2f8a73/correct",
+          "result": "PASS"
+        },
+        {
+          "name": "no-inline-style 9c21-6f0a3d9e8b14/access",
+          "result": "PASS"
+        },
+        {
+          "name": "no-inline-style #/",
+          "result": "PASS"
+        },
+        {
+          "name": "focus-after-folder",
+          "result": "PASS"
+        },
+        {
+          "name": "focus-after-file",
+          "result": "PASS"
+        },
+        {
+          "name": "tab-arrow-focus",
+          "result": "PASS"
+        },
+        {
+          "name": "tab-keeps-file",
+          "result": "PASS"
+        },
+        {
+          "name": "no-stale-preview",
+          "result": "PASS"
+        },
+        {
+          "name": "no-delegation-offer",
+          "result": "PASS"
+        },
+        {
+          "name": "exact-decimal",
+          "result": "PASS"
+        },
+        {
+          "name": "mobile-inspector-visible",
+          "result": "PASS"
+        },
+        {
+          "name": "no-double-click-revoke",
+          "result": "PASS"
+        },
+        {
+          "name": "escape-cancels-revoke",
+          "result": "PASS"
+        },
+        {
+          "name": "dropdown-switch-keeps-preview",
+          "result": "PASS"
+        },
+        {
+          "name": "access-no-release-scope",
+          "result": "PASS"
+        },
+        {
+          "name": "compact-digest-chips",
+          "result": "PASS"
+        },
+        {
+          "name": "mobile-diff-readable",
+          "result": "PASS"
+        },
+        {
+          "name": "back-to-edit-focus",
+          "result": "PASS"
+        },
+        {
+          "name": "non-head-correction-warned",
+          "result": "PASS"
+        },
+        {
+          "name": "no-route-race",
+          "result": "PASS"
+        },
+        {
+          "name": "single-revoke-request",
+          "result": "PASS"
+        },
+        {
+          "name": "revoked-grant-recorded",
+          "result": "PASS"
+        },
+        {
+          "name": "enter-adds-release",
+          "result": "PASS"
+        },
+        {
+          "name": "pager-focus",
+          "result": "PASS"
+        },
+        {
+          "name": "assessment-compact-390",
+          "result": "PASS"
+        },
+        {
+          "name": "receipt-identity-verified",
+          "result": "PASS"
+        },
+        {
+          "name": "blocked-line-flagged",
+          "result": "PASS"
+        },
+        {
+          "name": "finding-cause-shown",
+          "result": "PASS"
+        },
+        {
+          "name": "inspector-header-check",
+          "result": "PASS"
+        },
+        {
+          "name": "no-false-resolved",
+          "result": "PASS"
+        },
+        {
+          "name": "no-grant-leak",
+          "result": "PASS"
+        },
+        {
+          "name": "check-inputs-named",
+          "result": "PASS"
+        },
+        {
+          "name": "add-sidecar-resolves",
+          "result": "PASS"
+        },
+        {
+          "name": "new-finding-moved-facts",
+          "result": "PASS"
+        },
+        {
+          "name": "row-findings-grouped",
+          "result": "PASS"
+        },
+        {
+          "name": "fieldmap-direction",
+          "result": "PASS"
+        },
+        {
+          "name": "access-round-trip-fresh",
+          "result": "PASS"
+        },
+        {
+          "name": "mobile-tree-folds",
+          "result": "PASS"
+        },
+        {
+          "name": "new-sidecar-path-validated",
+          "result": "PASS"
+        },
+        {
+          "name": "edited-new-path-kept",
+          "result": "PASS"
+        },
+        {
+          "name": "grouped-rows-listed",
+          "result": "PASS"
+        },
+        {
+          "name": "tr-mismatch-key-facts",
+          "result": "PASS"
+        },
+        {
+          "name": "subject-sidecar-inherits",
+          "result": "PASS"
+        },
+        {
+          "name": "inert-sidecar-warns",
+          "result": "PASS"
+        },
+        {
+          "name": "dot-json-refused",
+          "result": "PASS"
+        },
+        {
+          "name": "grant-revoke-visible-mobile",
+          "result": "PASS"
+        },
+        {
+          "name": "selection-readable-mobile",
+          "result": "PASS"
+        },
+        {
+          "name": "fold-follows-viewport",
+          "result": "PASS"
+        },
+        {
+          "name": "actions-error-described",
+          "result": "PASS"
+        },
+        {
+          "name": "head-keeps-draft",
+          "result": "PASS"
+        },
+        {
+          "name": "carried-draft-no-lost-update",
+          "result": "PASS"
+        },
+        {
+          "name": "grouped-mismatch-key-facts",
+          "result": "PASS"
+        },
+        {
+          "name": "blocked-preview-error-first",
+          "result": "PASS"
+        },
+        {
+          "name": "row-lists-readable",
+          "result": "PASS"
+        },
+        {
+          "name": "odd-path-refused task-nback_bold.json/x.json",
+          "result": "PASS"
+        },
+        {
+          "name": "odd-path-refused sub-03/ .json",
+          "result": "PASS"
+        },
+        {
+          "name": "resize-keeps-focus",
+          "result": "PASS"
+        }
+      ]
+    },
+    "v4f": {
+      "exitCode": 1,
+      "log": "v4f.log",
+      "sha256": "524b7a9d04dd23413b054f6a013f2d90588cdacca2059be1d526ff86bba141dc",
+      "assertions": [
+        {
+          "name": "no-inline-style c-4f18-a5d9-0e6c1b2f8a73",
+          "result": "PASS"
+        },
+        {
+          "name": "no-inline-style c-4f18-a5d9-0e6c1b2f8a73",
+          "result": "PASS"
+        },
+        {
+          "name": "no-inline-style 5d9-0e6c1b2f8a73/correct",
+          "result": "PASS"
+        },
+        {
+          "name": "no-inline-style 9c21-6f0a3d9e8b14/access",
+          "result": "PASS"
+        },
+        {
+          "name": "no-inline-style #/",
+          "result": "PASS"
+        },
+        {
+          "name": "focus-after-folder",
+          "result": "PASS"
+        },
+        {
+          "name": "focus-after-file",
+          "result": "PASS"
+        },
+        {
+          "name": "tab-arrow-focus",
+          "result": "PASS"
+        },
+        {
+          "name": "tab-keeps-file",
+          "result": "PASS"
+        },
+        {
+          "name": "no-stale-preview",
+          "result": "PASS"
+        },
+        {
+          "name": "no-delegation-offer",
+          "result": "PASS"
+        },
+        {
+          "name": "exact-decimal",
+          "result": "PASS"
+        },
+        {
+          "name": "mobile-inspector-visible",
+          "result": "PASS"
+        },
+        {
+          "name": "no-double-click-revoke",
+          "result": "PASS"
+        },
+        {
+          "name": "escape-cancels-revoke",
+          "result": "PASS"
+        },
+        {
+          "name": "dropdown-switch-keeps-preview",
+          "result": "PASS"
+        },
+        {
+          "name": "access-no-release-scope",
+          "result": "PASS"
+        },
+        {
+          "name": "compact-digest-chips",
+          "result": "PASS"
+        },
+        {
+          "name": "mobile-diff-readable",
+          "result": "PASS"
+        },
+        {
+          "name": "back-to-edit-focus",
+          "result": "PASS"
+        },
+        {
+          "name": "non-head-correction-warned",
+          "result": "PASS"
+        },
+        {
+          "name": "no-route-race",
+          "result": "PASS"
+        },
+        {
+          "name": "single-revoke-request",
+          "result": "PASS"
+        },
+        {
+          "name": "revoked-grant-recorded",
+          "result": "PASS"
+        },
+        {
+          "name": "enter-adds-release",
+          "result": "PASS"
+        },
+        {
+          "name": "pager-focus",
+          "result": "PASS"
+        },
+        {
+          "name": "assessment-compact-390",
+          "result": "PASS"
+        },
+        {
+          "name": "receipt-identity-verified",
+          "result": "PASS"
+        },
+        {
+          "name": "blocked-line-flagged",
+          "result": "PASS"
+        },
+        {
+          "name": "finding-cause-shown",
+          "result": "PASS"
+        },
+        {
+          "name": "inspector-header-check",
+          "result": "PASS"
+        },
+        {
+          "name": "no-false-resolved",
+          "result": "PASS"
+        },
+        {
+          "name": "no-grant-leak",
+          "result": "PASS"
+        },
+        {
+          "name": "check-inputs-named",
+          "result": "PASS"
+        },
+        {
+          "name": "add-sidecar-resolves",
+          "result": "PASS"
+        },
+        {
+          "name": "new-finding-moved-facts",
+          "result": "PASS"
+        },
+        {
+          "name": "row-findings-grouped",
+          "result": "PASS"
+        },
+        {
+          "name": "fieldmap-direction",
+          "result": "PASS"
+        },
+        {
+          "name": "access-round-trip-fresh",
+          "result": "PASS"
+        },
+        {
+          "name": "mobile-tree-folds",
+          "result": "FAIL"
+        },
+        {
+          "name": "new-sidecar-path-validated",
+          "result": "PASS"
+        },
+        {
+          "name": "edited-new-path-kept",
+          "result": "PASS"
+        },
+        {
+          "name": "grouped-rows-listed",
+          "result": "PASS"
+        },
+        {
+          "name": "tr-mismatch-key-facts",
+          "result": "PASS"
+        },
+        {
+          "name": "subject-sidecar-inherits",
+          "result": "PASS"
+        },
+        {
+          "name": "inert-sidecar-warns",
+          "result": "PASS"
+        },
+        {
+          "name": "dot-json-refused",
+          "result": "PASS"
+        },
+        {
+          "name": "grant-revoke-visible-mobile",
+          "result": "PASS"
+        },
+        {
+          "name": "selection-readable-mobile",
+          "result": "PASS"
+        },
+        {
+          "name": "fold-follows-viewport",
+          "result": "FAIL"
+        },
+        {
+          "name": "actions-error-described",
+          "result": "PASS"
+        },
+        {
+          "name": "head-keeps-draft",
+          "result": "FAIL"
+        },
+        {
+          "name": "carried-draft-no-lost-update",
+          "result": "FAIL"
+        },
+        {
+          "name": "grouped-mismatch-key-facts",
+          "result": "FAIL"
+        },
+        {
+          "name": "blocked-preview-error-first",
+          "result": "FAIL"
+        },
+        {
+          "name": "row-lists-readable",
+          "result": "FAIL"
+        },
+        {
+          "name": "odd-path-refused task-nback_bold.json/x.json",
+          "result": "FAIL"
+        },
+        {
+          "name": "odd-path-refused sub-03/ .json",
+          "result": "FAIL"
+        },
+        {
+          "name": "resize-keeps-focus",
+          "result": "FAIL"
+        }
+      ]
+    }
+  },
+  "differential": {
+    "expectedFailures": [
+      "blocked-preview-error-first",
+      "carried-draft-no-lost-update",
+      "grouped-mismatch-key-facts",
+      "odd-path-refused sub-03/ .json",
+      "odd-path-refused task-nback_bold.json/x.json",
+      "resize-keeps-focus",
+      "row-lists-readable"
+    ],
+    "actualFailures": [
+      "blocked-preview-error-first",
+      "carried-draft-no-lost-update",
+      "fold-follows-viewport",
+      "grouped-mismatch-key-facts",
+      "head-keeps-draft",
+      "mobile-tree-folds",
+      "odd-path-refused sub-03/ .json",
+      "odd-path-refused task-nback_bold.json/x.json",
+      "resize-keeps-focus",
+      "row-lists-readable"
+    ],
+    "versionSpecificAssertions": {
+      "mobile-tree-folds": "v4g tests .tree-fold-bar / #release-tree; v4f used a details/summary fold",
+      "fold-follows-viewport": "v4g tests the CSS fold structure introduced after v4f",
+      "head-keeps-draft": "v4g expects the new \u201cis restored\u201d notice; v4f used \u201ccarried over\u201d"
+    },
+    "extraFailures": [
+      "fold-follows-viewport",
+      "head-keeps-draft",
+      "mobile-tree-folds"
+    ],
+    "passed": true
+  },
+  "passed": true,
+  "limits": [
+    "Synthetic demo transport; PostgreSQL contracts are qualified separately.",
+    "axe/keyboard/layout checks are not a real VoiceOver test."
+  ]
+}

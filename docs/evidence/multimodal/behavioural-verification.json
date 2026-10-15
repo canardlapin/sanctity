@@ -1,0 +1,70 @@
+{
+  "recordedAtUtc": "2026-10-15T00:42:09.412123+00:00",
+  "scope": "Bounded behavioural implementation slice; complete multimodal roadmap remains open",
+  "sources": "implementation-sources.json",
+  "sourceTreeDirty": true,
+  "ordinary": {
+    "command": "sbt check",
+    "passed": 489,
+    "log": "target/multimodal-behavioural-postgres.log"
+  },
+  "isolatedSource": {
+    "command": "bash scripts/check-clean-source.sh",
+    "passed": 489,
+    "log": "target/multimodal-clean-source.log",
+    "workspace": "target/clean-source.FQ5VED",
+    "finalProductionHashesVerified": true
+  },
+  "broadPostgres": {
+    "command": "bash scripts/check-postgres.sh",
+    "total": 308,
+    "passed": 307,
+    "failed": 1,
+    "log": "target/multimodal-postgres.log",
+    "failure": "New HTTP fixture applied a string body after JSON headers; corrected request construction and retested below"
+  },
+  "behaviouralPostgres": {
+    "command": "SANCTITY_INTEGRATION_SUITES=sanctity.postgres.BehaviouralPersistenceSuite bash scripts/check-postgres.sh",
+    "passed": 16,
+    "log": "target/multimodal-behavioural-postgres.log",
+    "latestAcquiredExcerptIncluded": true
+  },
+  "crashRestore": {
+    "passed": true,
+    "workspace": "target/postgres-check.tBXEaN",
+    "cases": [
+      "crash/retry receipt identity",
+      "exact historical science and exports",
+      "restore gate closure",
+      "current policy reconciliation",
+      "revoked guest denial",
+      "legitimate curator access"
+    ]
+  },
+  "independentExport": {
+    "passed": 8,
+    "receipt": "behavioural-independent.json",
+    "fixtureKind": "synthetic"
+  },
+  "acquiredExcerpt": {
+    "rows": 8,
+    "sourceManifest": "../../../modules/app/src/test/resources/multimodal-conformance/face-behavioural/source.json",
+    "license": "CC0",
+    "stimuli": "eight upstream empty placeholders; no image-display qualification"
+  },
+  "console": {
+    "command": "node tests/console/run.js",
+    "requiredGatePassed": true,
+    "receipt": "console-receipt.json",
+    "exploratoryFailures": 10,
+    "fullBrowserModalityJourneyQualified": false
+  },
+  "remaining": [
+    "official validator comparison",
+    "complete acquired-study/browser qualification",
+    "generalized compound recordings and datatype queries",
+    "large physiology/eye-tracking streams",
+    "EEG and MEG readers/profiles",
+    "full combined release gate"
+  ]
+}

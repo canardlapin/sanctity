@@ -1,0 +1,2 @@
+# Preserve acquired fixture bytes, including their original CRLF record endings.
+modules/app/src/test/resources/multimodal-conformance/**/*.tsv -text whitespace=cr-at-eol

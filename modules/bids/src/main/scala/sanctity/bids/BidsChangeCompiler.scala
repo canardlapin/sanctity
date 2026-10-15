@@ -15,7 +15,8 @@ final class BidsChangeCompiler(bidsContext: BidsContext = BidsContext.Default) e
   private val parser = new JawnParser(maxValueSize = Some(4 * 1024 * 1024), allowDuplicateKeys = false)
   private val printer = Printer.spaces2.copy(sortKeys = true)
   private val unsupportedReferences = Set("Sources", "RawSources", "AssociatedEmptyRoom", "M0Scan", "DatasetLinks")
-  private val suffixes = Set("T1w", "T2w", "bold", "dwi", "epi", "events", "phasediff", "phase1", "phase2", "magnitude1", "magnitude2")
+  private val suffixes = Set("T1w", "T2w", "bold", "dwi", "epi", "events", "phasediff", "phase1", "phase2", "magnitude1", "magnitude2") ++
+    (if bidsContext.name == RepositoryBidsContext.Behavioural.name then Set("beh") else Set.empty[String])
   private val extensions = Set("nii", "nii.gz", "json", "bval", "bvec", "tsv")
 
   private def require(ok: Boolean, detail: String): Either[Problem, Unit] =
@@ -26,10 +27,12 @@ final class BidsChangeCompiler(bidsContext: BidsContext = BidsContext.Default) e
       _ <- require(source.interpretation.profile.context.contains(BidsInterpreter.describe(bidsContext)),
         "source interpretation context differs from the compiler; explicitly reinterpret before transforming")
       _ <- FileEdits.applyTo(source.manifest, edits)
-      _ <- require(source.interpretation.relationships.exists(_.version == BidsInterpreter.RelationshipVersion) &&
+      _ <- require(source.interpretation.relationships.exists(g => g.version == BidsInterpreter.RelationshipVersion ||
+        (bidsContext.name == RepositoryBidsContext.Behavioural.name && g.version == BehaviouralChecks.GraphVersion)) &&
         source.interpretation.artifacts.forall(_.datasetRoot.isEmpty) &&
         !source.manifest.files.exists(f => f.path.fileName == "dataset_description.json" && f.path.parent.nonEmpty),
         "file edits require the current single raw dataset relationship profile")
+      _ <- if bidsContext.name == RepositoryBidsContext.Behavioural.name then BehaviouralEdits.validate(source, edits, bidsContext) else Right(())
       _ <- source.interpretation.relationships.toVector.flatMap(_.relationships).filter(_.kind == "bids.multi-echo-bold").traverse_ { r =>
         val members = (r.to :+ r.from).toSet
         val affected = edits.filter(e => members(e.source))
@@ -75,7 +78,9 @@ final class BidsChangeCompiler(bidsContext: BidsContext = BidsContext.Default) e
 
   def documents(source: Release, edits: Vector[FileEdit]): Either[Problem, Vector[RelPath]] =
     context(source, edits).map { mapping =>
-      val events = source.interpretation.relationships.toVector.flatMap(_.relationships).filter(_.kind == "bids.task-events").flatMap(_.to).toSet
+      val events = source.interpretation.relationships.toVector.flatMap(_.relationships)
+        .filter(r => Set("bids.task-events", BehaviouralChecks.EventsKind)(r.kind)).flatMap(_.to).toSet ++
+        source.interpretation.facts.filter(_.suffix == "beh").map(_.path)
       source.manifest.files.filter(f => mapping.getOrElse(f.path, Some(f.path)).nonEmpty && !f.path.value.startsWith("stimuli/") &&
         (f.path.fileName.endsWith(".json") || f.path.fileName.endsWith("_scans.tsv") ||
           (mapping.keys.exists(_.value.startsWith("stimuli/")) && events(f.path))))

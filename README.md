@@ -6,6 +6,13 @@ A **release** fixes content, scientific interpretation, and admission evidence. 
 
 [Product requirements](docs/prd.md), [implementation plan and evidence](docs/implementation-plan.md), [design baseline](docs/design-baseline.md), [decision record](docs/decisions-and-evidence.md), and [bids4s integration](docs/bids4s-integration.md) describe the broader product and remaining qualification.
 
+The [multimodal BIDS plan](docs/multimodal-bids-plan.md) defines phased behavioural,
+eye-tracking, EEG and MEG support, with dependencies and acceptance criteria.
+Its first [behavioural profile](docs/behavioural-profile.md) implements bounded
+tables, events/stimuli, assessed correction and coherent scientific subsets.
+The [streaming table foundation](docs/streaming-tables.md) provides bounded large
+TSV/GZIP assessment and projection for the next physiology and eye-tracking work.
+
 Current work prioritizes the [scientific core](docs/scientific-core.md): explicit acquisition relationships, companion files, image/table consistency and coherent BIDS materialization.
 
 ## Implemented slices
@@ -54,7 +61,7 @@ The pinned application baseline is Scala 3.3.8, Cats Effect 3.5.7, FS2 3.11.0, h
 | --- | --- |
 | `kernel` | Identities, manifests, evidence, admission, authority rules, scoped query algebra, frozen selections, projection and lease values |
 | `application` | Capability interfaces, reference catalog, native lifecycle, view preparation, durable import coordination |
-| `bids` | bids4s interpretation, inherited metadata, strict participant tables, supported MRI view compiler |
+| `bids` | bids4s interpretation, inherited metadata, strict tables, bounded MRI and behavioural view compilers |
 | `objects` | Immutable filesystem bytes, verification, inventory, isolated exports, bounded process resources |
 | `postgres` | Incremental checked migrations, catalog transactions, SQL queries, grants, operations, delivery leases, recovery |
 | `import-dicom` | Pinned conversion, explicit versioned mapping, output accounting, source evidence |

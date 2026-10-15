@@ -1,0 +1,47 @@
+{
+  "recordedAtUtc": "2026-10-15T02:27:16.765686+00:00",
+  "scope": "Retained intermediate verification attempts; final results are recorded separately",
+  "runnerAttempt": {
+    "outcome": "stopped",
+    "reason": "sbt fork handshake stalled before remaining suites started; reran with four active JVM processors",
+    "log": {
+      "path": "target/multimodal-streaming-check.log",
+      "sha256": "ed56274ae419b4e3dc43c00808c84ebb69d3333056cbc99f53ca0edd1eb8f419"
+    },
+    "childThreads": {
+      "path": "target/multimodal-streaming-check-threads.txt",
+      "sha256": "b55877717461bdd6155d5035a279750676fd7a54ecf72ef046c23430ea6ad406"
+    },
+    "parentThreads": {
+      "path": "target/multimodal-streaming-check-parent-threads.txt",
+      "sha256": "fe986e25c0f421bb4da80791ff90c27ef4fdad82ce48446c2689df9fdfa808c5"
+    }
+  },
+  "firstCompletedOrdinary": {
+    "passed": 507,
+    "log": {
+      "path": "target/multimodal-streaming-postgres.log",
+      "sha256": "76f8a9caff389e51990c621218f63c7b1c6d77ee9394b7a2dcb5a3620ded8b8b"
+    }
+  },
+  "firstPostgres": {
+    "total": 7,
+    "passed": 6,
+    "failed": 1,
+    "failure": "Full large-file round trip exceeded the default munit 30-second test deadline. Shared suite now has a two-minute deadline; the two-second cancellation assertion remains unchanged.",
+    "log": {
+      "path": "target/multimodal-streaming-postgres.log",
+      "sha256": "76f8a9caff389e51990c621218f63c7b1c6d77ee9394b7a2dcb5a3620ded8b8b"
+    }
+  },
+  "firstIsolatedSource": {
+    "passed": 507,
+    "workspace": "target/clean-source.MDJjIB",
+    "log": {
+      "path": "target/multimodal-streaming-clean-source.log",
+      "sha256": "dfa991130c28a9b18a7917ea9f2458f6789e0f3b02fec12bf7cfbd8cafde3778"
+    }
+  },
+  "subsequentGuard": "Require every streamed receipt input to be fully read (or supplied as a bounded document), including the zero-length-read case. Rerun ordinary, PostgreSQL and clean-source verification for this final guard.",
+  "resourceAttempt": "streaming-resource-initial.json"
+}

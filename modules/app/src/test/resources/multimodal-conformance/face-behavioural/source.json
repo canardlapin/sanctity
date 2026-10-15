@@ -1,0 +1,154 @@
+{
+  "sourceRepository": "https://github.com/bids-standard/bids-examples",
+  "sourceRevision": "5e00d47b6f1db106dda1b776d5243eb41b4cb95b",
+  "sourceDataset": "eeg_ds003645s_hed_demo",
+  "license": "CC0",
+  "licenseEvidence": "originals/dataset_description.json",
+  "acquisitionReference": "https://doi.org/10.1038/sdata.2015.1",
+  "kind": "acquired behavioural response table in the official example corpus; signal and stimulus files are placeholders",
+  "sources": [
+    {
+      "path": "dataset_description.json",
+      "url": "https://raw.githubusercontent.com/bids-standard/bids-examples/5e00d47b6f1db106dda1b776d5243eb41b4cb95b/eeg_ds003645s_hed_demo/dataset_description.json",
+      "sha256": "e3b52c50d845ae9aacf4b60d607b0cbc816bed235c37431241baa0f1ee6b3019",
+      "size": 1808
+    },
+    {
+      "path": "task-FaceRecognition_beh.json",
+      "url": "https://raw.githubusercontent.com/bids-standard/bids-examples/5e00d47b6f1db106dda1b776d5243eb41b4cb95b/eeg_ds003645s_hed_demo/task-FaceRecognition_beh.json",
+      "sha256": "58449931070112abadb1c530c49130ea826cd84712db6d3a38265861f7777d12",
+      "size": 816
+    },
+    {
+      "path": "sub-002/ses-1/beh/sub-002_ses-1_task-FaceRecognition_beh.tsv",
+      "url": "https://raw.githubusercontent.com/bids-standard/bids-examples/5e00d47b6f1db106dda1b776d5243eb41b4cb95b/eeg_ds003645s_hed_demo/sub-002/ses-1/beh/sub-002_ses-1_task-FaceRecognition_beh.tsv",
+      "sha256": "3f8c35b5ce8406372ba8169221f8852f17cf0f482aaf164037a674bd561183f2",
+      "size": 5370
+    },
+    {
+      "path": "stimuli/f123.bmp",
+      "url": "https://raw.githubusercontent.com/bids-standard/bids-examples/5e00d47b6f1db106dda1b776d5243eb41b4cb95b/eeg_ds003645s_hed_demo/stimuli/f123.bmp",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "kind": "empty placeholder in source corpus"
+    },
+    {
+      "path": "stimuli/f045.bmp",
+      "url": "https://raw.githubusercontent.com/bids-standard/bids-examples/5e00d47b6f1db106dda1b776d5243eb41b4cb95b/eeg_ds003645s_hed_demo/stimuli/f045.bmp",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "kind": "empty placeholder in source corpus"
+    },
+    {
+      "path": "stimuli/f135.bmp",
+      "url": "https://raw.githubusercontent.com/bids-standard/bids-examples/5e00d47b6f1db106dda1b776d5243eb41b4cb95b/eeg_ds003645s_hed_demo/stimuli/f135.bmp",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "kind": "empty placeholder in source corpus"
+    },
+    {
+      "path": "stimuli/u021.bmp",
+      "url": "https://raw.githubusercontent.com/bids-standard/bids-examples/5e00d47b6f1db106dda1b776d5243eb41b4cb95b/eeg_ds003645s_hed_demo/stimuli/u021.bmp",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "kind": "empty placeholder in source corpus"
+    },
+    {
+      "path": "stimuli/f038.bmp",
+      "url": "https://raw.githubusercontent.com/bids-standard/bids-examples/5e00d47b6f1db106dda1b776d5243eb41b4cb95b/eeg_ds003645s_hed_demo/stimuli/f038.bmp",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "kind": "empty placeholder in source corpus"
+    },
+    {
+      "path": "stimuli/u052.bmp",
+      "url": "https://raw.githubusercontent.com/bids-standard/bids-examples/5e00d47b6f1db106dda1b776d5243eb41b4cb95b/eeg_ds003645s_hed_demo/stimuli/u052.bmp",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "kind": "empty placeholder in source corpus"
+    },
+    {
+      "path": "stimuli/f081.bmp",
+      "url": "https://raw.githubusercontent.com/bids-standard/bids-examples/5e00d47b6f1db106dda1b776d5243eb41b4cb95b/eeg_ds003645s_hed_demo/stimuli/f081.bmp",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "kind": "empty placeholder in source corpus"
+    },
+    {
+      "path": "stimuli/f024.bmp",
+      "url": "https://raw.githubusercontent.com/bids-standard/bids-examples/5e00d47b6f1db106dda1b776d5243eb41b4cb95b/eeg_ds003645s_hed_demo/stimuli/f024.bmp",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "kind": "empty placeholder in source corpus"
+    }
+  ],
+  "transformations": [
+    {
+      "operation": "prefix-rows",
+      "input": "sub-002/ses-1/beh/sub-002_ses-1_task-FaceRecognition_beh.tsv",
+      "retainedRows": 8,
+      "output": "sub-002/ses-1/beh/sub-002_ses-1_task-FaceRecognition_beh.tsv",
+      "preserveLexicalBytes": true
+    },
+    {
+      "operation": "dependency-selection",
+      "retainedStimuli": [
+        "f123.bmp",
+        "f045.bmp",
+        "f135.bmp",
+        "u021.bmp",
+        "f038.bmp",
+        "u052.bmp",
+        "f081.bmp",
+        "f024.bmp"
+      ],
+      "omitted": "all unselected behavioural rows, all other modalities and unrelated companions"
+    }
+  ],
+  "fixtureFiles": {
+    "dataset_description.json": {
+      "sha256": "e3b52c50d845ae9aacf4b60d607b0cbc816bed235c37431241baa0f1ee6b3019",
+      "size": 1808
+    },
+    "stimuli/f024.bmp": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "stimuli/f038.bmp": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "stimuli/f045.bmp": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "stimuli/f081.bmp": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "stimuli/f123.bmp": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "stimuli/f135.bmp": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "stimuli/u021.bmp": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "stimuli/u052.bmp": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "sub-002/ses-1/beh/sub-002_ses-1_task-FaceRecognition_beh.tsv": {
+      "sha256": "ef11198d6f4c148c2f004a1dbd25e6c199555355cfd1ca78a6ea0232349642b2",
+      "size": 182
+    },
+    "task-FaceRecognition_beh.json": {
+      "sha256": "58449931070112abadb1c530c49130ea826cd84712db6d3a38265861f7777d12",
+      "size": 816
+    }
+  }
+}

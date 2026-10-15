@@ -1,0 +1,82 @@
+{
+  "schema": "sanctity-streaming-table-resource-v1",
+  "passed": true,
+  "host": {
+    "system": "Darwin",
+    "release": "24.1.0",
+    "machine": "arm64"
+  },
+  "measuredAtUnix": 1792031858.373756,
+  "rssSampleSeconds": 0.1,
+  "peakGrowthRssKiB": -2896,
+  "jvmOptions": [
+    "-Xms128m",
+    "-Xmx128m",
+    "-XX:+AlwaysPreTouch",
+    "-XX:ActiveProcessorCount=4",
+    "-XX:MaxDirectMemorySize=64m"
+  ],
+  "scope": "One warmed standalone JVM; no child reader. sbt and Python are build/probe orchestrators excluded from runtime aggregate. Not a complete service or multimodal qualification.",
+  "results": [
+    {
+      "probe": "streaming-table-probe-v1",
+      "tableRule": "sanctity-streaming-tsv-v1",
+      "java": "21.0.12.1+1-LTS",
+      "build": "sha256:59a16fb4dd112372725cf87741794d36a280e6120811ff930a45ea4dec3a0be1",
+      "availableProcessors": 4,
+      "heapCommittedBytes": 134217728,
+      "heapUsedBytes": 67045872,
+      "rows": 2097152,
+      "decodedBytes": 134217728,
+      "invalidValues": 0,
+      "seconds": 27.068559708,
+      "inputSha256": "4a7900352416e4a8ad6eddd19d298b703566590609137c96a731a8d54d2076c8",
+      "inputBytes": 973240,
+      "outputSha256": "d0e9e7fa33f56dfaebe2cead320f1b9a234733ce17e3a781a3c8c6d88c8550c8",
+      "outputBytes": 366236,
+      "receipt": "77fa7b78c5f079a16ff61d5c8ed4fe6a220b02a4818c6f5da56f9c0da7287582",
+      "receiptMatchesOutput": true,
+      "memory": {
+        "workerPid": 44933,
+        "baselineRssKiB": 303008,
+        "peakRssKiB": 318128,
+        "samples": 210,
+        "incrementalPeakRssKiB": 15120,
+        "readerPeakRssKiB": 0,
+        "runtimeAggregatePeakRssKiB": 318128
+      },
+      "independentlyCheckedOutputBytes": 125829120,
+      "incrementalMemoryBudgetPassed": true
+    },
+    {
+      "probe": "streaming-table-probe-v1",
+      "tableRule": "sanctity-streaming-tsv-v1",
+      "java": "21.0.12.1+1-LTS",
+      "build": "sha256:59a16fb4dd112372725cf87741794d36a280e6120811ff930a45ea4dec3a0be1",
+      "availableProcessors": 4,
+      "heapCommittedBytes": 134217728,
+      "heapUsedBytes": 23958904,
+      "rows": 16777216,
+      "decodedBytes": 1073741824,
+      "invalidValues": 0,
+      "seconds": 144.073333792,
+      "inputSha256": "c8bf3b421d80363e568544557df4571a3e94a4080fb7f90bcd9354c3ef80858b",
+      "inputBytes": 7784885,
+      "outputSha256": "df062bb4afa67c34693c0d568163632e8fec31248a99a63986a6f95deda93795",
+      "outputBytes": 2929533,
+      "receipt": "d02bda11a5bed56efe70d492da2e870d5e012892a43fdae0bfc800a1bffda0f5",
+      "receiptMatchesOutput": true,
+      "memory": {
+        "workerPid": 49599,
+        "baselineRssKiB": 271776,
+        "peakRssKiB": 315232,
+        "samples": 1013,
+        "incrementalPeakRssKiB": 43456,
+        "readerPeakRssKiB": 0,
+        "runtimeAggregatePeakRssKiB": 315232
+      },
+      "independentlyCheckedOutputBytes": 1006632960,
+      "incrementalMemoryBudgetPassed": true
+    }
+  ]
+}

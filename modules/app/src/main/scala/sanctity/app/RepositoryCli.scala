@@ -3,7 +3,7 @@ package sanctity.app
 import cats.effect.{ExitCode, IO, IOApp}
 import io.circe.Json
 import sanctity.application.*
-import sanctity.bids.BidsInterpreter
+import sanctity.bids.RepositoryBidsInterpreter
 import sanctity.kernel.*
 import sanctity.objects.{FileBlobStore, NativeDirectorySource}
 import sanctity.postgres.{DatabaseConfig, PostgresDatabase}
@@ -45,7 +45,7 @@ object RepositoryCli extends IOApp:
           d <- id[DatasetTag](dataset)
           k <- Checked.lift[IO, IdempotencyKey](IdempotencyKey.from(key))
           store <- FileBlobStore.open[IO](Path.of(storage))
-          repo = new NativeRepository[IO](catalog, store, new BidsInterpreter[IO](store), ids)
+          repo = new NativeRepository[IO](catalog, store, new RepositoryBidsInterpreter[IO](store), ids)
           imports = new DurableImports[IO](catalog, db.journal(ids), store, repo, ids)
           native = new NativeDirectorySource[IO](Path.of(source).toAbsolutePath.normalize())
           op <- checked(imports.begin(AccessContext(p), d, k, native))

@@ -5,7 +5,7 @@ import cats.effect.std.Semaphore
 import com.comcast.ip4s.{Host, Port}
 import org.http4s.ember.server.EmberServerBuilder
 import sanctity.application.{Checked, IdSource, NativeRepository}
-import sanctity.bids.BidsInterpreter
+import sanctity.bids.RepositoryBidsInterpreter
 import sanctity.http.{ConsoleAssets, RepositoryHttp}
 import sanctity.kernel.Problem
 import sanctity.objects.FileBlobStore
@@ -26,7 +26,7 @@ object ApiServer extends IOApp.Simple:
           store <- FileBlobStore.open[IO](Path.of(storage))
           ids = IdSource.random[IO]
           catalog = db.catalog(ids)
-          repository = new NativeRepository[IO](catalog, store, new BidsInterpreter[IO](store), ids)
+          repository = new NativeRepository[IO](catalog, store, new RepositoryBidsInterpreter[IO](store), ids)
           api = new RepositoryHttp[IO](catalog, repository, db.credentials(ids))
           slots <- Semaphore[IO](8)
           _ <- EmberServerBuilder.default[IO].withHost(Host.fromString("127.0.0.1").get).withPort(port)

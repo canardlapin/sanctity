@@ -1,0 +1,23 @@
+{
+  "modules/bids/src/main/scala/sanctity/bids/RepositoryBidsContext.scala": "e2780d784a2be8fc66db769a8e6ce095fbb50a33f1435dccbffab10d7882512a",
+  "modules/bids/src/main/scala/sanctity/bids/RepositoryBidsInterpreter.scala": "7a70fb5f8c65fa157547c932367be78892b36e6ff083fc83bdc37419695e4de0",
+  "modules/bids/src/main/scala/sanctity/bids/BehaviouralChecks.scala": "aa110eb79fec6cdf68337cafccab0d7e5ba46dc9c57f5bb1c116a0428786d160",
+  "modules/bids/src/main/scala/sanctity/bids/BoundedBidsText.scala": "dd4275deeeb736a7a73900414c33d6e21d6bc6c9695ad544c80c0435c245fd4d",
+  "modules/bids/src/main/scala/sanctity/bids/BehaviouralViewCompiler.scala": "b35b8d5c032f1cb328133d9b23a66e59ca43a737f0102840ed5cb147939f6eb5",
+  "modules/bids/src/main/scala/sanctity/bids/BehaviouralEdits.scala": "71783ec70b38b0a394ffd1199138838ec273fce18298e6ea23373620f15ff81d",
+  "modules/bids/src/main/scala/sanctity/bids/SummaryProjection.scala": "b4a35630b438833906d0c7bef8d2b19c57771e538b6f8de29135183ed4b35358",
+  "modules/application/src/main/scala/sanctity/application/NativeRepository.scala": "7412b27ed13500516380500e66827d12c1813271f4906f6ab906e48d8a9ce852",
+  "modules/kernel/src/main/scala/sanctity/kernel/Projection.scala": "f217cda4407e0c00ff61834953fc226418380347a22b497a0b1a44ff457e94b1",
+  "modules/bids/src/main/scala/sanctity/bids/MriViewCompiler.scala": "f463451211c211e62a2443eea351f79623b2506dd5ca50964a9f8e5e50594612",
+  "modules/bids/src/main/scala/sanctity/bids/BidsChangeCompiler.scala": "f52864c093dfbedc9465dc23bf526641119313649819cb8c53a3eb14fc87563e",
+  "modules/http/src/main/scala/sanctity/http/RepositoryHttp.scala": "f39cb01613a8a3fdfd6e660cc83932ea75638c3723215a78f433c2230293ce52",
+  "modules/http/src/main/resources/sanctity/ui/app.js": "2e9cf8a543ae5f06d98cf06b9d9d78239b7d6c1d004d0bc87660226ba4006dd5",
+  "modules/service/src/main/scala/sanctity/app/ApiServer.scala": "809b781a7028abf2bc5e3b6abf4b26c04d5c0591fbbbb8d91c9dac1274c7066f",
+  "modules/service/src/main/scala/sanctity/app/RepositoryCli.scala": "cc541b63456a8fe86b829568c80c062f5b3879e532b0ee9d7f0a10f7402bf83a",
+  "modules/app/src/main/scala/sanctity/app/BehaviouralDemo.scala": "92ed4158753d6672e778e2a645c2b325758feac66370352957db4b7f91527f8f",
+  "modules/app/src/test/scala/sanctity/app/BehaviouralSuite.scala": "eae8f0b182bf14447b0b9875e59ebaad362768365e4ec9e20e13c8593b7248ae",
+  "modules/app/src/test/scala/sanctity/app/BehaviouralResourceSuite.scala": "a099cc91eb4667ac854f34c76d41383f6995680c0873367f221addbc938ace28",
+  "modules/integration/src/test/scala/sanctity/postgres/BehaviouralPersistenceSuite.scala": "c684c967e895891ab228b1171e19b9309546fa7adf5fb9f65449b29ce5666a1e",
+  "scripts/check-behavioural.py": "57255582b69e039af2bbf68cb0297a531805290eff8195a7d55adbd879ccdbec",
+  "scripts/check-postgres.sh": "c5de560632b9d72e62a29fbe7586f6f551cd152c83774030f7ba8986197a8573"
+}
