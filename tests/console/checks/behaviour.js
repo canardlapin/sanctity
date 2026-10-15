@@ -520,6 +520,59 @@ const DS = 'b7e3c1d2-5a4f-4e8b-9c21-6f0a3d9e8b14', R3 = '9d4b2e61-7a3c-4f18-a5d9
       const st = await p.evaluate(() => ({ alert: (document.querySelector('main [role=alert]') || {}).textContent || '', rows: document.querySelectorAll('table.data tbody tr').length }));
       done(/Not confirmed/.test(st.alert) && st.alert.includes(OP) && /Do not repeat/.test(st.alert) && st.rows === 0, JSON.stringify({ ...st, alert: st.alert.slice(0, 120) }));
     });
+    // 62. Fix is offered where one correctable document can address a finding, and nowhere else.
+    const assessAt = `#/d/${DS}/r/${R3}?tab=assessment`;
+    await guarded('fix-offered-where-editable', async (o, done) => {
+      const [, p] = await o(assessAt); await p.waitForSelector('.finding', { timeout: 5000 });
+      const st = await p.evaluate(() => ({ fixes: [...document.querySelectorAll('button.fix')].map(b => b.getAttribute('aria-label')),
+        transform: [...document.querySelectorAll('.finding')].filter(f => /MriTransformUnavailable/.test(f.textContent)).map(f => !!f.querySelector('button.fix')) }));
+      done(st.fixes.length === 2 && st.fixes.some(x => /edit sub-03\/func\/sub-03_task-nback_run-1_events\.tsv$/.test(x)) && st.fixes.some(x => /add sub-04\/func\/sub-04_task-rest_bold\.json$/.test(x))
+        && st.transform.length > 0 && st.transform.every(x => !x), JSON.stringify(st));
+    });
+    // 63. A TR mismatch fix adds the run's sidecar with the header spacing, states the authored value, and resolves the finding.
+    await guarded('fix-tr-suggests-sidecar', async (o, done) => {
+      const [, p] = await o(assessAt); await p.waitForSelector('button.fix', { timeout: 5000 });
+      await p.click('button.fix[aria-label$="sub-04_task-rest_bold.json"]'); await loaded(p);
+      const ed = await p.evaluate(() => ({ h1: document.querySelector('h1').textContent, path: (document.querySelector('#c-new') || {}).value, text: document.querySelector('#c-text').value,
+        note: (document.querySelector('.fix-note') || {}).textContent || '', reason: document.querySelector('#c-reason').value, focus: document.activeElement.id,
+        cancel: (document.querySelector('form a.btn.ghost') || {}).getAttribute('href') }));
+      const okEdit = /^Add sub-04_task-rest_bold\.json$/.test(ed.h1) && ed.path === 'sub-04/func/sub-04_task-rest_bold.json' && JSON.parse(ed.text).RepetitionTime === 2
+        && /1\.5/.test(ed.note) && /header volume spacing/.test(ed.note) && ed.reason === '' && ed.focus === 'c-text' && /tab=assessment$/.test(ed.cancel);
+      await prepare(p, 'probe: scanner protocol gives TR 2 s');
+      const tag = await p.evaluate(() => { const f = [...document.querySelectorAll('.finding')].find(x => /MriRepetitionTimeMismatch/.test(x.textContent) && /sub-04_task-rest/.test(x.textContent)); return f ? (f.querySelector('.tag.delta') || {}).textContent : 'absent'; });
+      const accept = await p.evaluate(() => !document.querySelector('[data-fk="accept"]').disabled);
+      done(okEdit && /resolved/i.test(tag) && accept, JSON.stringify({ ...ed, note: ed.note.slice(0, 90), tag, accept }));
+    });
+    // 64. A table fix opens the named table with its first flagged row selected.
+    await guarded('fix-events-selects-row', async (o, done) => {
+      const [, p] = await o(assessAt); await p.waitForSelector('button.fix', { timeout: 5000 });
+      await p.click('button.fix[aria-label$="events.tsv"]'); await loaded(p); await p.waitForTimeout(100);
+      const st = await p.evaluate(() => { const t = document.querySelector('#c-text');
+        return { sel: t.value.slice(t.selectionStart, t.selectionEnd), line: t.value.slice(0, t.selectionStart).split('\n').length, scrolled: t.scrollTop > 0,
+          note: (document.querySelector('.fix-note') || {}).textContent || '', focus: document.activeElement.id }; });
+      done(st.line === 50 && /^405\.75\t/.test(st.sel) && st.scrolled && /Rows 50, 51/.test(st.note) && st.focus === 'c-text', JSON.stringify(st));
+    });
+    // 65. The inspector offers the same Fix; an earlier release offers none and points to the head.
+    await guarded('fix-in-inspector-head-only', async (o, done) => {
+      const img = 'sub-04/func/sub-04_task-rest_bold.nii.gz';
+      const [, p] = await o(`#/d/${DS}/r/${R3}?path=${encodeURIComponent(img)}`); await p.waitForSelector('.inspector .finding', { timeout: 5000 });
+      const head = await p.$$eval('.inspector button.fix', bs => bs.map(b => b.getAttribute('aria-label')));
+      const earlier = await p.evaluate(() => (document.querySelector('.lineage a.node:not([aria-current])') || {}).getAttribute('href'));
+      await p.evaluate(h => { location.hash = h.replace(/\?.*$/, '') + '?path=' + encodeURIComponent('sub-04/func/sub-04_task-rest_bold.nii.gz'); }, earlier);
+      await p.waitForFunction(() => /This is an earlier release/.test(document.body.textContent) && document.querySelector('.inspector .finding'), null, { timeout: 5000 });
+      const old = await p.$$eval('.inspector button.fix', bs => bs.length);
+      done(head.length === 1 && /add sub-04\/func\/sub-04_task-rest_bold\.json$/.test(head[0]) && old === 0, JSON.stringify({ head, earlier, old }));
+    });
+    // 66. Identical effective-metadata changes across files read as one change with the files listed under it.
+    await guarded('metadata-changes-grouped', async (o, done) => {
+      const [, p] = await o(`#/d/${DS}/r/${R3}/correct?path=task-nback_bold.json`); await loaded(p);
+      await p.fill('#c-text', (await p.inputValue('#c-text')).replace('"FlipAngle": 52', '"FlipAngle": 60')); await prepare(p);
+      const st = await p.evaluate(() => ({ entries: document.querySelectorAll('ul.changes > li.change').length, summary: (document.querySelector('.change-files summary') || {}).textContent || '',
+        files: [...document.querySelectorAll('.change-files .change-path')].map(e => e.textContent), rows: document.querySelectorAll('.change-row').length,
+        chip: (document.querySelector('[data-fk="preview-head"]').closest('section').querySelector('.chip') || {}).textContent }));
+      done(st.entries === 1 && /^4 files with the same change/.test(st.summary) && st.files.length === 4 && st.files.every(f => /_task-nback_run-1_bold\.nii\.gz$/.test(f)) && st.rows === 1 && st.chip === '4 files affected',
+        JSON.stringify({ ...st, files: st.files.length }));
+    });
   } finally { await b.close(); }
   console.log(`behaviour failures: ${bad}`);
   process.exitCode = bad ? 1 : 0;

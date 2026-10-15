@@ -417,17 +417,20 @@
 
     const panel = h('div', { id: 'panel', role: 'tabpanel', 'aria-labelledby': 'tab-' + tab });
     const openFile = p => { focusKey = 'f:' + p; go(relHash(d, r, { path: p })); };
-    if (tab === 'assessment') panel.append(assessmentPanel(a, openFile));
+    // Fixes are prepared against the head; an earlier release offers none (it points to the head instead).
+    const filePaths = files.map(e => e.path);
+    const fixFor = isHead ? fixControl(d, r, filePaths, a.checks, () => relHash(d, r, { tab: 'assessment' })) : null;
+    if (tab === 'assessment') panel.append(assessmentPanel(a, openFile, fixFor));
     else if (tab === 'relationships') panel.append(relationshipsPanel(links, openFile));
     const identity = h('div', { class: 'row identity', role: 'group', 'aria-label': 'Release identity' },
       h('span', { class: 'meta-item' }, 'Manifest ', hashChip(rel.manifest, 'manifest digest')),
       h('span', { class: 'meta-item' }, 'Interpretation ', hashChip(rel.interpretation, 'interpretation digest')),
       h('span', { class: 'meta-item' }, 'Assessment ', hashChip(a.id, 'assessment digest')));
     page(ctx, 'release', head, notHead, h('div', { class: 'strip' }, lineageNav, identity), tabBar, panel);
-    if (tab === 'files') filesPanel(panel, d, r, rel, selected, my);
+    if (tab === 'files') filesPanel(panel, d, r, rel, selected, my, isHead);
   }
 
-  function filesPanel(panel, d, r, rel, selected, my) {
+  function filesPanel(panel, d, r, rel, selected, my, isHead) {
     const tree = buildTree(rel.entries);
     const findingsByPath = new Map();
     rel.assessment.findings.forEach(f => f.path && findingsByPath.set(f.path, (findingsByPath.get(f.path) || 0) + 1));
@@ -501,10 +504,10 @@
     }
     if (state.scrollInspector && narrow()) inspector.scrollIntoView({ block: 'start' });
     state.scrollInspector = false;
-    inspectFile(inspector, d, r, rel, selected, my);
+    inspectFile(inspector, d, r, rel, selected, my, isHead);
   }
 
-  async function inspectFile(box, d, r, rel, p, my) {
+  async function inspectFile(box, d, r, rel, p, my, isHead) {
     const entry = rel.entries.find(e => e.path === p);
     const k = fileKind(p);
     const links = (rel.relationships ? rel.relationships.links : []).filter(l => l.from === p || l.to.includes(p));
@@ -543,7 +546,8 @@
     const [meta, text] = await Promise.allSettled([k === 'json' ? Promise.resolve(null) : getMetadata(d, r, p), isText ? getFileText(d, r, p) : Promise.resolve(null)]);
     if (my !== generation) return;
     const section = (title, ...body) => h('section', { class: 'section' }, h('h3', { class: 'overline' }, title), ...body);
-    if (findings.length) box.append(section('Findings', findingList(findings, false, null, null, null, keyFacts(rel.assessment.checks))));
+    const fixFor = isHead ? fixControl(d, r, rel.entries.filter(e => e.kind === 'file').map(e => e.path), rel.assessment.checks, () => relHash(d, r, { path: p })) : null;
+    if (findings.length) box.append(section('Findings', findingList(findings, false, null, null, null, keyFacts(rel.assessment.checks), fixFor)));
     const noMeta = meta.status === 'rejected' && meta.reason instanceof ApiError && meta.reason.code === 'not_found';
     if (k !== 'json' && !(noMeta && k !== 'nii')) {
       const m = meta.value;
@@ -614,7 +618,37 @@
     const got = spec.filter(([, k]) => k in x).map(([label, k, unit]) => [label, x[k], unit]);
     return got.length ? got : null;
   };
-  function findingList(findings, withPath = true, open, tags, why, detail) {
+  // ---------- fixing a finding ----------
+  // Fix is offered only where editing one correctable document can address the finding: the document the finding names
+  // (rows flagged for tables), or, for a TR mismatch on an image, the image's own sidecar set to the recorded header spacing.
+  // Findings about image headers, limits, missing companions or unsupported data have no such edit and only open the file.
+  const NO_DOCUMENT_FIX = /LimitExceeded$|^EventsImage|^EventsVolumeCount$|^EventsTimingUnavailable$|^Companion(Unsupported|Missing)/;
+  function fixIntent(f, files, checks) {
+    if (!f.path) return null;
+    if (f.code === 'MriRepetitionTimeMismatch') {
+      const c = checks.find(k => k.target === f.path && k.findings.some(x => x.code === f.code));
+      const x = c ? flatFacts(c.facts) : {};
+      if (typeof x.temporalSpacingSeconds !== 'number') return null;
+      const side = stem(f.path) + '.json';
+      return { code: f.code, path: side, add: !files.includes(side), set: { RepetitionTime: x.temporalSpacingSeconds },
+        was: x['timingMetadata.RepetitionTime.value'], basis: 'the header volume spacing', rows: [] };
+    }
+    if (NO_DOCUMENT_FIX.test(f.code) || !docKind(f.path) || !files.includes(f.path)) return null;
+    return { code: f.code, path: f.path, add: false, rows: positionsOf([f], 'row').map(Number) };
+  }
+  // One Fix control for a path's findings; rows from every finding on that path are flagged together.
+  const fixControl = (d, r, files, checks, back) => xs => {
+    const fx = xs.map(f => fixIntent(f, files, checks)).find(Boolean);
+    if (!fx) return null;
+    fx.rows = [...new Set(xs.flatMap(f => (fixIntent(f, files, checks) || { rows: [] }).rows))].sort((a, b) => a - b);
+    return h('button', { class: 'btn sm fix', type: 'button', fk: 'fix:' + xs[0].code + ':' + xs[0].path, 'aria-label': 'Fix: ' + (fx.add ? 'add ' : 'edit ') + fx.path,
+      onclick: () => {
+        state.correction = { key: uuid(), base: d + '/' + r, path: fx.path, original: null, text: '', reason: '', preview: null, receipt: null, draft: null, fix: fx, back: back(xs[0]) };
+        focusKey = 'c-text';
+        go('#/d/' + enc(d) + '/r/' + enc(r) + '/correct?path=' + enc(fx.path));
+      } }, I.edit(), 'Fix');
+  };
+  function findingList(findings, withPath = true, open, tags, why, detail, fixFor) {
     const groups = new Map();
     for (const f of findings) { const k = f.code + '|' + f.severity + '|' + messageShape(f.message) + '|' + (tags ? tags(f) : ''); groups.set(k, [...(groups.get(k) || []), f]); }
     return h('ul', { class: 'findings' }, [...groups.values()].map(fs => {
@@ -631,13 +665,15 @@
       const where = [...paths].map(([p, xs]) => h('span', { class: 'where-row' },
         open ? h('button', { class: 'where linkish', type: 'button', onclick: () => open(p) }, pathText(p)) : h('span', { class: 'where' }, pathText(p)),
         many && at(xs) ? h('span', { class: 'where-n' }, at(xs)) : null,
-        !shared && factsOf.get(p) ? factList(factsOf.get(p), ' inline') : null));
+        !shared && factsOf.get(p) ? factList(factsOf.get(p), ' inline') : null,
+        fixFor ? fixFor(xs) : null));
       return h('li', { class: 'finding ' + f.severity },
         h('span', { class: 'sev', title: f.severity }, f.severity === 'Error' ? I.err() : I.warn()),
         h('div', { class: 'stack s4' },
           h('div', { class: 'row' }, tag ? h('span', { class: 'tag delta ' + tag.toLowerCase().replace(/\s+/g, '-') }, tag) : null,
             h('span', { class: 'code' }, f.code), fs.length > 1 ? h('span', { class: 'count' }, plural(fs.length, 'occurrence')) : null,
-            h('span', { class: 'sev-label' }, f.severity === 'Error' ? 'Blocks acceptance' : 'Recorded warning')),
+            h('span', { class: 'sev-label' }, f.severity === 'Error' ? 'Blocks acceptance' : 'Recorded warning'),
+            fixFor && !withPath ? fixFor(fs) : null),
           h('p', { class: 'msg' }, many ? groupMessage(fs).replace(/\b(rows|columns) \d+(?:, \d+)*(?: and \d+ more)?/g, '$1 listed by file') : groupMessage(fs)),
           shared ? factList(shared) : null,
           why && why(f) ? h('p', { class: 'why' }, why(f)) : null,
@@ -647,7 +683,7 @@
     }));
   }
 
-  function assessmentPanel(a, open) {
+  function assessmentPanel(a, open, fixFor) {
     const errors = a.findings.filter(f => f.severity === 'Error');
     const warnings = a.findings.filter(f => f.severity !== 'Error');
     return h('div', { class: 'split' },
@@ -660,7 +696,7 @@
             h('div', { class: errors.length ? 'err' : '' }, h('b', {}, errors.length), h('span', {}, errors.length === 1 ? 'error' : 'errors')),
             h('div', { class: warnings.length ? 'warn' : '' }, h('b', {}, warnings.length), h('span', {}, warnings.length === 1 ? 'warning' : 'warnings')),
             h('div', {}, h('b', {}, a.checks.length), h('span', {}, 'content checks')))),
-        a.findings.length ? findingList([...errors, ...warnings], true, open, null, null, keyFacts(a.checks)) : h('p', { class: 'card empty' }, 'No findings. Every assessed rule passed.')),
+        a.findings.length ? findingList([...errors, ...warnings], true, open, null, null, keyFacts(a.checks), fixFor) : h('p', { class: 'card empty' }, 'No findings. Every assessed rule passed.')),
       h('section', { class: 'stack' }, h('h2', { class: 'overline' }, 'Content checks'),
         a.checks.length ? checksList(a.checks, open) :
           h('p', { class: 'card empty' }, 'No content checks recorded.')));
@@ -823,12 +859,39 @@
           h('pre', { class: 'code linediff', tabindex: '0' }, diff.map(([op, line]) => h('span', { class: 'ln ' + (op === '+' ? 'add' : op === '-' ? 'del' : '') },
             h('span', { class: 'op', 'aria-hidden': 'true' }, op), h('span', { class: 'sr-only' }, op === '+' ? 'added: ' : op === '-' ? 'removed: ' : ''), line, '\n')))) : null));
     };
+    // A Fix arrives with a suggestion: a field set from recorded facts, merged into the current sidecar, or the rows to revisit.
+    const fx = c.fix && c.fix.path === c.path ? c.fix : null;
+    const fixNote = h('div', { class: 'stack s8' });
+    const applyFix = current => {
+      if (!fx) return;
+      if (fx.set && !c.text) {
+        let doc = {};
+        if (current) { try { doc = JSON.parse(current); } catch { return; } }
+        c.text = JSON.stringify({ ...doc, ...fx.set }, null, 2) + '\n';
+      }
+      const field = fx.set && Object.keys(fx.set)[0];
+      fixNote.replaceChildren(h('div', { class: 'notice fix-note stack s4', fk: 'fix-note' },
+        h('p', {}, h('b', {}, 'Suggested fix for ', h('span', { class: 'mono' }, fx.code), '. '),
+          fx.set ? [fx.add ? 'Adds this sidecar for this run only, setting ' : 'Sets ', h('span', { class: 'mono' }, field), ' to ', valueNode(field, fx.set[field]),
+            ', ' + fx.basis + (fx.was != null ? '; the authored value is ' : '.'), fx.was != null ? [valueNode(field, fx.was), '.'] : null]
+            : fx.rows.length ? 'Rows ' + listPositions(fx.rows) + ' are flagged; the first is selected in the editor.' : 'Edit the document and prepare the preview.'),
+        fx.set ? h('p', { class: 'small' }, 'Check the value against the acquisition record before preparing the preview; nothing changes until the candidate is accepted.') : null));
+    };
+    // Select the first flagged row of a table so the edit starts where the finding points.
+    const selectRow = () => {
+      if (!fx || !fx.rows.length || !text.value) return;
+      const lines = text.value.split('\n'), n = fx.rows[0] - 1;
+      if (n < 0 || n >= lines.length) return;
+      const start = lines.slice(0, n).reduce((x, l) => x + l.length + 1, 0);
+      text.setSelectionRange(start, start + lines[n].length);
+      setTimeout(() => { const lh = parseFloat(getComputedStyle(text).lineHeight) || 20; text.scrollTop = Math.max(0, (n - 2) * lh); }, 0);
+    };
     const load = async p => {
       c.path = p; c.original = null;
       if (!p) { text.value = ''; return; }
       if (c.newMode) { c.original = ''; restoreDraft(''); text.value = c.text; return; }
       text.value = ''; text.placeholder = 'Loading current content…';
-      try { const t = await getFileText(d, r, p); if (c.path !== p) return; c.original = t; restoreDraft(t); text.value = c.text || t; text.placeholder = ''; }
+      try { const t = await getFileText(d, r, p); if (c.path !== p) return; c.original = t; restoreDraft(t); applyFix(t); text.value = c.text || t; text.placeholder = ''; selectRow(); }
       catch (e) { text.placeholder = explain(e) + ' Paste the complete corrected document.'; }
     };
     const submit = async ev => {
@@ -867,6 +930,7 @@
     };
     const card = h('form', { class: 'split', onsubmit: submit, novalidate: true },
       h('div', { class: 'card pad stack s16' },
+        fx ? fixNote : null,
         h('div', { class: 'field' }, h('label', { for: 'c-path' }, 'Document'),
           h('select', { class: 'input mono', id: 'c-path', fk: 'c-path', onchange: ev => {
             const v = ev.target.value; c.drafts = { ...(c.drafts || {}), [c.newMode ? NEW_SIDECAR : c.path]: c.text };
@@ -893,7 +957,7 @@
         draftNote,
         err = h('div', { class: 'stack', id: 'c-errors' }),
         h('div', { class: 'row end' },
-          h('a', { class: 'btn ghost', href: relHash(d, r, c.path && !c.newMode ? { path: c.path } : null) }, 'Cancel'),
+          h('a', { class: 'btn ghost', href: c.back || relHash(d, r, c.path && !c.newMode ? { path: c.path } : null) }, 'Cancel'),
           submitBtn = h('button', { class: 'btn primary', type: 'submit', disabled: c.stale }, 'Prepare preview'))),
       h('aside', { class: 'stack s14 explainer' },
         h('h2', { class: 'overline' }, 'What happens next'),
@@ -902,7 +966,7 @@
             : 'It re-reads the ' + DOC[kind][0] + ' and re-runs the checks that use it, then the other admission checks.',
            'You review every changed value and finding before anything is accepted.', 'Acceptance is atomic and safe to retry. This release never changes.']
             .map(t => h('li', {}, t)))));
-    if (c.newMode) { c.original = ''; restoreDraft(''); text.value = c.text || ''; }
+    if (c.newMode) { c.original = ''; restoreDraft(''); applyFix(''); text.value = c.text || ''; }
     else if (c.path) await load(c.path);
     return card;
   }
@@ -967,6 +1031,16 @@
       h('tbody', {}, out)))];
   }
 
+  // Files whose effective-metadata changes are identical (same fields, values and sources) are shown once, with the files
+  // listed under it, so an edit inherited by many runs reads as one change.
+  function groupChanges(byPath) {
+    const groups = new Map();
+    for (const [path, fs] of byPath) {
+      const k = JSON.stringify(fs.map(f => [f.name, f.before, f.after]));
+      groups.set(k, [[...(groups.has(k) ? groups.get(k)[0] : []), path], fs]);
+    }
+    return [...groups.values()];
+  }
   function previewCard(d, r, c, base) {
     const p = c.preview, cand = p.candidate, a = cand.assessment;
     const before = new Set((base ? base.assessment.findings : []).map(findingKey));
@@ -1067,8 +1141,10 @@
     const metaSection = kind === 'json' || byPath.size ? h('section', { class: 'card pad stack s12' },
           h('div', { class: 'row between' }, h('h2', headProps('meta'), 'Effective metadata changes'),
             h('span', { class: 'chip' }, byPath.size + (byPath.size === 1 ? ' file affected' : ' files affected'))),
-          byPath.size ? h('ul', { class: 'changes' }, [...byPath].map(([path, fs]) => h('li', { class: 'change' },
-            h('p', { class: 'change-path mono' }, pathText(path)),
+          byPath.size ? h('ul', { class: 'changes' }, groupChanges(byPath).map(([paths, fs]) => h('li', { class: 'change' },
+            paths.length === 1 ? h('p', { class: 'change-path mono' }, pathText(paths[0]))
+              : h('details', { class: 'change-files' }, h('summary', {}, h('b', {}, plural(paths.length, 'file')), ' with the same change'),
+                h('ul', { class: 'plain' }, paths.map(x => h('li', { class: 'change-path mono' }, pathText(x))))),
             h('dl', { class: 'change-fields' }, fs.map(f => h('div', { class: 'change-row' },
               h('dt', { class: 'k' }, f.name),
               h('dd', { class: 'before' }, h('span', { class: 'sr-only' }, 'before: '), val(f.name, f.before)),

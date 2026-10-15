@@ -17,11 +17,12 @@ dependencies, builds specimens from current UI sources and writes logs plus a
 source-hashed receipt under `target/console-check.*/`. The original
 [review evidence](evidence/console/recovery-manifest.json) remains unchanged.
 These checks use synthetic fixtures; the PostgreSQL runner separately executes
-ConsoleSuite against the real HTTP/backend contracts. Eleven later probes cover
+ConsoleSuite against the real HTTP/backend contracts. Sixteen later probes cover
 event, behavioural and DWI gradient corrections (row-level preview, blocked rows,
-tab entry, lost-update protection) and unconfirmed `policy_pending` /
-`policy_outcome_unknown` grant and revoke outcomes. The v4f build predates these
-features, so the receipt records their v4f outcomes without requiring them.
+tab entry, lost-update protection), unconfirmed `policy_pending` /
+`policy_outcome_unknown` grant and revoke outcomes, fixing a finding from where it
+is reported, and grouped metadata changes in the preview. The v4f build predates
+these features, so the receipt records their v4f outcomes without requiring them.
 
 Run `bash scripts/check-console-backend.sh` for the complete browser-to-backend
 rehearsal. It requires Docker, Node and the existing Java/sbt build prerequisites;
