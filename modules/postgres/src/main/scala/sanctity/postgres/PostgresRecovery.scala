@@ -26,10 +26,14 @@ final class PostgresRecovery[F[_]: Async] private[postgres](xa: Transactor[F]):
   import Records.{lift, uuid}
   import JsonCodecs.given
 
+  private def legacyOnly: doobie.ConnectionIO[Unit] = OrganizationSql.guard(false).flatMap(enabled =>
+    lift(Either.cond(!enabled, (), Problem.Conflict("legacy policy recovery cannot cover organization authority; ADR004 recovery required"))))
+
   def capturePolicy: F[PolicySnapshot] =
     (for
       _ <- sql"SET TRANSACTION ISOLATION LEVEL REPEATABLE READ".update.run
       _ <- OperationsSql.active
+      _ <- legacyOnly
       timestamp <- sql"SELECT clock_timestamp()".query[Timestamp].unique
       rows <- sql"SELECT id,custodian,curator FROM dataset ORDER BY id".query[(UUID, UUID, UUID)].to[Vector]
       grants <- sql"SELECT id,dataset_id,recipient,release_id,actions FROM access_grant WHERE revoked_at IS NULL"
@@ -63,6 +67,7 @@ final class PostgresRecovery[F[_]: Async] private[postgres](xa: Transactor[F]):
         _ <- (for
           gate <- sql"SELECT recovery_required FROM repository_state WHERE singleton=TRUE FOR UPDATE".query[Boolean].unique
           _ <- Records.require(gate, "recovery gate changed during verification")
+          _ <- legacyOnly
           restored <- sql"SELECT id FROM dataset ORDER BY id FOR UPDATE".query[UUID].to[Vector]
           _ <- Records.require(restored.forall(id => snapshot.custody.exists(c => uuid(c.dataset) == id)),
             "current policy snapshot does not cover all restored datasets")

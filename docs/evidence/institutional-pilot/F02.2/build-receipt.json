@@ -1,0 +1,21 @@
+{
+  "artifact": "sanctity-0.1.0-SNAPSHOT.zip",
+  "buildCommand": [
+    "sbt",
+    "kernel/clean",
+    "application/clean",
+    "bids/clean",
+    "objects/clean",
+    "postgres/clean",
+    "http/clean",
+    "service/clean",
+    "service/inputs"
+  ],
+  "bytes": 40329188,
+  "java": "openjdk version \"21.0.12.1\" 2026-08-18 LTS\nOpenJDK Runtime Environment Temurin-21.0.12.1+1 (build 21.0.12.1+1-LTS)\nOpenJDK 64-Bit Server VM Temurin-21.0.12.1+1 (build 21.0.12.1+1-LTS, mixed mode, sharing)",
+  "manifestSha256": "950395de9ff721ab649f04f88dd9095148bbd7122cfde5fe5e2855f7133faece",
+  "sameInputZipRepeatability": "pass",
+  "schemaVersion": 1,
+  "sha256": "a3249283b989b492bc2097307bbc6028fb3c9cc00c9c86b85d332127a0c52642",
+  "sourceInventorySha256": "8c0d3cf1bcb7df1f60e3256c6aa52aff61ef3f96f7806259f201347ec6d55a5e"
+}

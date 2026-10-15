@@ -1,0 +1,162 @@
+{
+  "schemaVersion": 1,
+  "at": "2026-10-14T13:25:00.868343+00:00",
+  "kind": "core-hardening-planning-validation",
+  "status": "passed",
+  "program": "bd-01M4W3ZN8Z16J30J8EYPWQERQC",
+  "coreEpic": "bd-01M4X8M8Y18BD586KA2AD1BMH9",
+  "counts": {
+    "requiredEpics": 8,
+    "conditionalEpics": 2,
+    "gates": 26,
+    "tasks": 79,
+    "requiredTasks": 73,
+    "conditionalTasks": 6,
+    "taskKinds": {
+      "engineering": 60,
+      "institutional": 12,
+      "mixed": 7
+    },
+    "totalNodesIncludingProgram": 116,
+    "closedTasks": 5,
+    "closedGates": 1,
+    "closedEpics": 0
+  },
+  "created": {
+    "EP9": "bd-01M4X8M8Y18BD586KA2AD1BMH9",
+    "H01": "bd-01M4X8M9386WG7Z2RW1J2C2RBB",
+    "H02": "bd-01M4X8M986VW0MMZ2S4AQDC58C",
+    "H03": "bd-01M4X8M9CTMTKZHBKG8T9E8EDS",
+    "H04": "bd-01M4X8M9GWYPFKAAZVHK760RSN",
+    "H05": "bd-01M4X8M9N0FV6ANAHVQ147KJNE",
+    "H06": "bd-01M4X8M9S1X431HCYR55D69QA5",
+    "H00": "bd-01M4X8M9WZPHVERYB9VPD23XD3",
+    "H02.1": "bd-01M4X8MA2FP4M6X4A50CBSTPZ4",
+    "H03.1": "bd-01M4X8MA9J2FXA82A9RVB85YD9",
+    "H03.2": "bd-01M4X8MAJJN8C3ZKDHM164G25X",
+    "H04.1": "bd-01M4X8MAT0FE5J2NXNWK4ZXTH8",
+    "H04.2": "bd-01M4X8MAYAJRT50TKYR5JCP7R4",
+    "H06.1": "bd-01M4X8MB2G63FDYPV1DPX759X1",
+    "H06.2": "bd-01M4X8MB6FF93SWENVA4256H33",
+    "H00.1": "bd-01M4X8MBBKMP0RS48N087RQ72A"
+  },
+  "amendedExisting": [
+    "L01.5",
+    "L01.6",
+    "F02.2",
+    "F03.2",
+    "F03.3",
+    "F03.4",
+    "O01.2",
+    "O01.3",
+    "O01.4",
+    "O02.2",
+    "O02.3",
+    "O02.4",
+    "O02.6",
+    "O03.3",
+    "O03.4",
+    "O03.5",
+    "O04.2",
+    "O04.3",
+    "W01.5",
+    "W02.1",
+    "W02.2",
+    "Q01.2",
+    "Q01.3",
+    "Q03.1",
+    "Q03.3"
+  ],
+  "completedBeforeAndAfter": [
+    "F01",
+    "F01.1",
+    "F01.2",
+    "F01.3",
+    "L01.1",
+    "O01.1"
+  ],
+  "nextReadyEngineering": [
+    "F02.1",
+    "H04.1",
+    "H06.2",
+    "O01.2",
+    "O01.3"
+  ],
+  "procedure": [
+    "Compare every current mote title, priority, criterion, reference, parent and dependency with canonical backlog.",
+    "Traverse all dependency edges for cycles, engineering-only paths, required/conditional reachability, risk and tranche coverage.",
+    "Resolve closed receipts against unchanged current source/evidence or exact prior planning snapshots; verify packaged artifact and full retained source inventory.",
+    "Check published table equality and local document links, mote doctor/in-flight and git diff --check."
+  ],
+  "checks": {
+    "acyclic": true,
+    "allMoteTitlesPrioritiesCriteriaReferencesParentsAndDependencies": "pass",
+    "existingIdsAndClosedStatesPreserved": true,
+    "closedReceiptProvenance": "current files or exact archived planning baseline; receipts untouched",
+    "closedReceiptInputHashesChecked": 41,
+    "serviceSourceInventoryHashesChecked": 100,
+    "packagedArtifactDigestUnchanged": true,
+    "coreDependencyNodes": 73,
+    "localDemoDependencyNodes": 74,
+    "coreAndLocalInstitutionalMixedExternalBlockers": [],
+    "allInstitutionalAndMixedTasksStillOpen": true,
+    "allRequiredTasksReachable": true,
+    "conditionalTasksExcludedUnlessActivated": true,
+    "sixAreasAndRiskControlsCovered": true,
+    "everyOpenCoreImplementationTaskScheduled": true,
+    "currentDocumentLinksResolved": 155,
+    "publishedTaskAndCoreGateTablesMatch": true,
+    "moteDoctor": true,
+    "activeClaimsAndReservations": 0,
+    "diffWhitespace": "pass"
+  },
+  "archivedReceiptInputs": [
+    {
+      "task": "L01.1",
+      "original": "docs/local-demo-plan.md",
+      "resolvedSnapshot": "docs/evidence/core-hardening-baseline/docs/local-demo-plan.md",
+      "sha256": "a17c95185928ea5f98c2fffe8018ad288f98247f747257f8da20df003809dc02"
+    },
+    {
+      "task": "L01.1",
+      "original": "docs/institutional-readiness-backlog.json",
+      "resolvedSnapshot": "docs/evidence/core-hardening-baseline/docs/institutional-readiness-backlog.json",
+      "sha256": "848ec5a4b9556b0ff0306993b88c06727d158c748224d08ceb9b32ee14b1e9ea"
+    },
+    {
+      "task": "L01.1",
+      "original": "docs/evidence/institutional-readiness-motes.json",
+      "resolvedSnapshot": "docs/evidence/core-hardening-baseline/docs/evidence/institutional-readiness-motes.json",
+      "sha256": "fb2b5ab19936f010f987f2b112d3a8e7bccbfcf90e3c2ad2015d1d70a38f318e"
+    }
+  ],
+  "applicationTestsRunThisPlanningTurn": false,
+  "priorApplicationEvidence": {
+    "receipt": "docs/evidence/institutional-pilot/O01.1/receipt.json",
+    "ordinaryTests": 469,
+    "postgresTests": 210,
+    "status": "retained prior evidence; no new application test claim"
+  },
+  "inputs": {
+    "README.md": "9cb5f84a23312e1669989fe2b3090215436c2ed740f8d5cb0c6a70494da8f5a2",
+    "docs/core-hardening-plan.md": "7f4bd83ec1dd91d72f41fb58e8069a8e50ced0c73d8f9b715ab555c21aa5c0df",
+    "docs/local-demo-plan.md": "9748e57ab37d188d478a4afffa9d115f1cf05930906c890d2244000de978c45b",
+    "docs/institutional-pilot-epics.md": "fa774fc27b34e19166d207c86b2d59a98e9ea88eae04610627c7158755879d7a",
+    "docs/institutional-readiness-plan.md": "1e2535910912e01473b226622000b2a3b2568ded12ef9719e62276d2fc831d79",
+    "docs/implementation-plan.md": "4c4b275ff6464db38c7b3c9062cf29b0cf7210781bbe12d925efc42f4b4d0a47",
+    "docs/service-distribution.md": "6c2d2d6c8b36279cb9123a95b7e203358966a74e59d83a1c84f7705ca755237e",
+    "docs/decisions/001-institutional-organization.md": "7b993b58aabdc74d71d09aaf21a51c6db09431ecce32e41141ce277ddf8add82",
+    "docs/decisions/002-institutional-authority.md": "0b1ddb971b4c306bb87d404fd114d2ff48fb055dd7a4279c07ebcf35be04d3eb",
+    "docs/decisions/003-institutional-lifecycle.md": "12b0dc70b7ef65590bc420dd49330dde5e8c3149593bb930295531d951e525a2",
+    "docs/institutional-readiness-backlog.json": "fe3bef98e57e8e32fe7671bb1cb6181f5a48c84bb2dd81b8cb716cdbc1248890",
+    "docs/evidence/institutional-readiness-motes.json": "5479a60dc48216de84c710e4fff00d600ebeaff243a1d8c24c55c673294a4b59",
+    "docs/evidence/core-hardening-mote-changes.json": "b2734dcb4fa621a5ac1d81e99fdc6dc61493fb9ad5fc8c63d0b119248cb5b3f4",
+    "docs/evidence/core-hardening-baseline/manifest.json": "fa89351e8e32f7a1317b1db5efcd2d15bd4e63d44158c1631f657a80a03fffb1"
+  },
+  "limitations": [
+    "Planning and coordination only; none of the new implementation or acceptance motes is complete.",
+    "No retained local demonstration or institutional qualification is claimed.",
+    "Same-host source isolation will not qualify physical host/disk loss.",
+    "Mote and repository changes remain local and uncommitted."
+  ]
+}

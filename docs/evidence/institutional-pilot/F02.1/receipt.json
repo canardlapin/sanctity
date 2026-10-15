@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "task": "F02.1",
+  "status": "passed",
+  "kind": "checked-organization-and-reference-transition-contracts",
+  "at": "2026-10-14T14:07:52.289892+00:00",
+  "commands": [
+    "sbt 'kernel/test' 'app/testOnly sanctity.app.OrganizationSuite'",
+    "git diff --check"
+  ],
+  "acceptance": [
+    {
+      "criterion": "Implement checked lab/project/membership/placement values with stable identities and explicit ownership/role provenance.",
+      "result": "pass",
+      "evidence": "OrganizationSuite; verification.log; docs/organization-reference.md"
+    },
+    {
+      "criterion": "Enforce the agreed state invariants, expected generations and archival rules in a reference catalog; do not embed organization state in immutable releases.",
+      "result": "pass",
+      "evidence": "OrganizationSuite; verification.log; docs/organization-reference.md"
+    },
+    {
+      "criterion": "Reject invalid/orphaned references, unauthorized transitions and stale writes with stable problem outcomes.",
+      "result": "pass",
+      "evidence": "OrganizationSuite; verification.log; docs/organization-reference.md"
+    }
+  ],
+  "observed": {
+    "kernelTests": 47,
+    "organizationTests": 14,
+    "invalidValues": "Unicode code-point limits, controls/unpaired surrogate, blank names and generation overflow rejected",
+    "atomicity": "unauthorized/orphaned/duplicate/stale/conflicting-intent changes have no partial state or audit; concurrent writers have one winner",
+    "authority": "separate operator/lab/project/dataset scopes, current retry reauthorization, exact membership basis and non-resurrection, expiry at deadline, last-steward and disablement recovery needs",
+    "archival": "multiple distinct active leases fenced, creation denied while archived, parent reopen ordering, retained attribution and placements",
+    "historicalIdentity": "registered scientific datasets/custody/curator IDs unchanged by organization changes"
+  },
+  "inputs": {
+    "modules/kernel/src/main/scala/sanctity/kernel/Organization.scala": "9602ac723593bc31a5b662d6caf8b03086fd5dc9323dbe8bad1b8fa76eec4da8",
+    "modules/application/src/main/scala/sanctity/application/ReferenceOrganizationCatalog.scala": "23c63c137e7bbbf94db16b11371531b963afdd3b128308660a9dc06bcd59fa04",
+    "modules/app/src/test/scala/sanctity/app/OrganizationSuite.scala": "2cb5cf817d9e8a25b78ce77ec62685b5f791c3823a3a7a6c93652092a7593c82",
+    "docs/organization-reference.md": "a67a35ec185ac7359f9cc55acacf296649f279114d2d7f1286f971bd13d1ff65",
+    "build.sbt": "95d8707d4d784f26383056af4582fcc1790e4e0ec221401dde8dad9ac8d4ee95",
+    "docs/decisions/001-institutional-organization.md": "7b993b58aabdc74d71d09aaf21a51c6db09431ecce32e41141ce277ddf8add82",
+    "docs/decisions/002-institutional-authority.md": "0b1ddb971b4c306bb87d404fd114d2ff48fb055dd7a4279c07ebcf35be04d3eb",
+    "docs/decisions/003-institutional-lifecycle.md": "12b0dc70b7ef65590bc420dd49330dde5e8c3149593bb930295531d951e525a2",
+    "docs/evidence/institutional-pilot/F02.1/verification.log": "785d6b2564396b36c5afd01af478561681f4e06efc824e9807de36d714445879",
+    "docs/evidence/institutional-pilot/F02.1/source-snapshot.zip": "6073c9d06caf17df76cb904683c46bfe1b7ae5cf4077c9f9e37a2c93d2393c49"
+  },
+  "limits": [
+    "In-memory contract only; no PostgreSQL migration or public organizational API yet.",
+    "Production dataset authorization remains the existing implementation until F03; these checks do not establish the 38-case integrated authority gate.",
+    "Atomic scientific creation/placement and real durable lease joins belong to F02.2; approved moves, atomic stewardship transfer and public commands remain F02.3.",
+    "Verified institutional identities/guest sponsorship remain F04; navigation disclosure remains F05.",
+    "No institutional workload, user or pilot acceptance claim."
+  ]
+}

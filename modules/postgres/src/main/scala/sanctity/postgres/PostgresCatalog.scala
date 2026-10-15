@@ -30,31 +30,88 @@ final class PostgresCatalog[F[_]] private[postgres] (
   def check(ctx: AccessContext, dataset: DatasetId, action: Action, release: Option[ReleaseId] = None): F[Either[Problem, Unit]] =
     run(authorize(ctx, uuid(dataset), false, action, release).void)
 
+  /** Stable grant IDs bind retries to the entire intent. Legacy callers still receive their
+    * unchanged action set; discovery/evidence are never inferred during migration.
+    */
+  def grantPolicy(ctx: AccessContext, grant: OrganizationAuthority.PolicyGrant): F[Either[Problem, OrganizationAuthority.PolicyGrant]] =
+    run(for
+      _ <- OperationsSql.active
+      enabled <- OrganizationSql.guard(true)
+      _ <- lift(Either.cond(enabled, (), Problem.Conflict("organization bootstrap required")))
+      result <- putGrant(ctx,grant)
+    yield result)
+
   def grant(ctx: AccessContext, dataset: DatasetId, recipient: PrincipalId, release: Option[ReleaseId], actions: Set[Action]): F[Either[Problem, Grant]] =
     ids.next[GrantTag].flatMap { id => run {
       for
-        _ <- authorize(ctx, uuid(dataset), true, Action.ManageAccess)
-        _ <- lift(Authority.validate(release, actions))
-        _ <- release.traverse_ { r =>
-          sql"SELECT EXISTS(SELECT 1 FROM release WHERE id=${uuid(r)} AND dataset_id=${uuid(dataset)})".query[Boolean].unique
-            .flatMap(found => lift(Either.cond(found, (), Problem.Denied)))
-        }
-        _ <- sql"INSERT INTO principal(id) VALUES (${uuid(recipient)}) ON CONFLICT DO NOTHING".update.run
-        _ <- sql"""INSERT INTO access_grant(id,dataset_id,recipient,release_id,actions)
-          VALUES (${uuid(id)},${uuid(dataset)},${uuid(recipient)},${release.map(uuid)},${actions.toList.map(_.toString).sorted})""".update.run
-        _ <- sql"""INSERT INTO policy_audit(dataset_id,actor,grant_id,action) VALUES
-          (${uuid(dataset)},${uuid(ctx.principal)},${uuid(id)},'Granted')""".update.run
-      yield Grant(id, dataset, recipient, release, actions)
+        _ <- lift(Authority.validate(release,actions))
+        now <- OrganizationSql.now
+        legacy = Grant(id,dataset,recipient,release,actions)
+        _ <- putGrant(ctx, OrganizationAuthority.PolicyGrant.legacy(legacy,now,OrganizationGeneration.initial).copy(issuer=Some(ctx.principal)))
+      yield legacy
     }}
 
-  def revoke(ctx: AccessContext, dataset: DatasetId, grant: GrantId): F[Either[Problem, Unit]] = run {
+  private def putGrant(ctx: AccessContext, grant: OrganizationAuthority.PolicyGrant): ConnectionIO[OrganizationAuthority.PolicyGrant] =
+    import OrganizationAuthority.*
+    import OrganizationCodecs.given
+    import io.circe.syntax.*
     for
-      _ <- authorize(ctx, uuid(dataset), true, Action.ManageAccess)
-      changed <- sql"""UPDATE access_grant SET revoked_at=COALESCE(revoked_at,clock_timestamp())
-        WHERE id=${uuid(grant)} AND dataset_id=${uuid(dataset)}""".update.run
-      _ <- lift(Either.cond(changed == 1, (), Problem.Denied))
-      _ <- sql"""INSERT INTO policy_audit(dataset_id,actor,grant_id,action) VALUES
-        (${uuid(dataset)},${uuid(ctx.principal)},${uuid(grant)},'Revoked')""".update.run
+      _ <- OperationsSql.active
+      enabled <- OrganizationSql.guard(true)
+      _ <- CredentialSql.check(ctx)
+      _ <- lift(Either.cond(grant.createdAt.getNano % 1000 == 0 && grant.expiresAt.forall(_.getNano % 1000 == 0), (),
+        Problem.Unsupported("grant timestamps require microsecond precision")))
+      _ <- lift(Either.cond(grant.generation == OrganizationGeneration.initial && grant.issuer.contains(ctx.principal) && !grant.revoked && validGrantShape(grant), (), Problem.Denied))
+      _ <- if enabled then ().pure[ConnectionIO] else authorize(ctx,uuid(grant.scope.dataset),true,Action.ManageAccess).void
+      state <- PolicySql.load
+      now <- OrganizationSql.now
+      // Legacy API admits a named local principal, not a verified institutional identity.
+      person = OrganizationPrincipal(grant.recipient,OrganizationName.from("Local principal").toOption.get,true,OrganizationGeneration.initial,now)
+      created = Option.when(!state.principals.contains(grant.recipient))(person)
+      proposed = created.fold(state)(p => state.copy(principals=state.principals.updated(p.id,p),eligibility=state.eligibility.updated(p.id,Eligibility.Local)))
+      _ <- if enabled then lift(Either.cond(OrganizationAuthority.permits(proposed,PolicyAdmission(ctx.principal,true,None),Request.IssueGrant(grant),now), (), Problem.Denied)) else ().pure[ConnectionIO]
+      existing = state.grants.get(grant.id)
+      _ <- lift(Either.cond(existing.forall(_ == grant), (), Problem.Conflict("grant ID belongs to another intent or was revoked")))
+      _ <- if existing.nonEmpty then ().pure[ConnectionIO] else
+        PolicySql.commit(ctx.principal,"grant:"+grant.id.render,grant.id.render,"GrantIssued",
+          Json.obj("principalCreated" -> created.asJson,"before" -> Json.Null,"after" -> grant.asJson)) {
+          for
+            _ <- created.traverse_(p => sql"""INSERT INTO principal(id,label,created_at) VALUES
+              (${uuid(p.id)},${p.label.value},${Timestamp.from(p.createdAt)})""".update.run)
+            basis = grant.basis match { case GrantBasis.Independent => "Independent"; case _ => "Derived" }
+            payload = JsonCodecs.encode(grant.basis)
+            _ <- sql"""INSERT INTO access_grant(id,dataset_id,recipient,release_id,actions,issuer,created_at,expires_at,basis,basis_payload,generation)
+              VALUES(${uuid(grant.id)},${uuid(grant.scope.dataset)},${uuid(grant.recipient)},${grant.scope.release.map(uuid)},
+                ${grant.actions.toList.map(_.toString).sorted},${grant.issuer.map(uuid)},${Timestamp.from(grant.createdAt)},
+                ${grant.expiresAt.map(Timestamp.from)},$basis,$payload::jsonb,${grant.generation.value})""".update.run
+            _ <- sql"""INSERT INTO policy_audit(dataset_id,actor,grant_id,action) VALUES
+              (${uuid(grant.scope.dataset)},${uuid(ctx.principal)},${uuid(grant.id)},'Granted')""".update.run
+          yield ()
+        }
+    yield grant
+
+  def revoke(ctx: AccessContext, dataset: DatasetId, grant: GrantId): F[Either[Problem, Unit]] = run {
+    import OrganizationAuthority.*
+    import OrganizationCodecs.given
+    import io.circe.syntax.*
+    for
+      _ <- OperationsSql.active
+      enabled <- OrganizationSql.guard(true)
+      _ <- CredentialSql.check(ctx)
+      shares <- PolicySql.grants
+      before <- lift(shares.find(g => g.id == grant && g.scope.dataset == dataset).toRight(Problem.Denied))
+      _ <- if enabled then PolicySql.check(ctx,Request.RevokeGrant(grant)) else authorize(ctx,uuid(dataset),true,Action.ManageAccess).void
+      _ <- if before.revoked then ().pure[ConnectionIO] else for
+        generation <- lift(OrganizationGeneration.from(before.generation.value + 1))
+        after = before.copy(revoked=true,generation=generation)
+        at <- OrganizationSql.now
+        _ <- PolicySql.commit(ctx.principal,"grant:"+grant.render,"revoke:"+grant.render,"GrantRevoked",
+          Json.obj("before" -> before.asJson,"after" -> after.asJson,"revokedAt" -> at.asJson)) {
+          sql"UPDATE access_grant SET revoked_at=${Timestamp.from(at)},generation=${generation.value} WHERE id=${uuid(grant)}".update.run *>
+          sql"""INSERT INTO policy_audit(dataset_id,actor,grant_id,action) VALUES
+            (${uuid(dataset)},${uuid(ctx.principal)},${uuid(grant)},'Revoked')""".update.run.void
+        }
+      yield ()
     yield ()
   }
 
@@ -182,11 +239,16 @@ final class PostgresCatalog[F[_]] private[postgres] (
   def create(ctx: AccessContext, custodian: CustodianId): F[Dataset] =
     ids.next[DatasetTag].flatMap { id =>
       val dataset = Dataset(id, custodian, ctx.principal, None)
-      run((OperationsSql.active *> CredentialSql.check(ctx) *> sql"INSERT INTO principal(id) VALUES (${uuid(ctx.principal)}) ON CONFLICT DO NOTHING".update.run *> sql"INSERT INTO dataset (id,custodian,curator) VALUES (${uuid(id)},${uuid(custodian)},${uuid(ctx.principal)})"
+      run((OperationsSql.active *> OrganizationSql.guard(true).flatMap(enabled =>
+        lift(Either.cond(!enabled, (), Problem.Conflict("use atomic organization dataset creation")))) *> CredentialSql.check(ctx) *> sql"INSERT INTO principal(id) VALUES (${uuid(ctx.principal)}) ON CONFLICT DO NOTHING".update.run *> sql"INSERT INTO dataset (id,custodian,curator) VALUES (${uuid(id)},${uuid(custodian)},${uuid(ctx.principal)})"
         .update.run).as(dataset)).flatMap(Checked.lift[F, Dataset])
     }
 
-  def dataset(ctx: AccessContext, id: DatasetId): F[Either[Problem, Dataset]] = run(authorize(ctx, uuid(id), false))
+  def dataset(ctx: AccessContext, id: DatasetId): F[Either[Problem, Dataset]] = run(for
+      dataset <- authorize(ctx,uuid(id),false)
+      enabled <- OrganizationSql.guard(false)
+      _ <- if enabled then PolicySql.check(ctx,OrganizationAuthority.Request.ReadHead(id)) else ().pure[ConnectionIO]
+    yield dataset)
 
   def draft(ctx: AccessContext, dataset: DatasetId, base: Option[ReleaseId], manifest: Manifest, activity: Activity): F[Either[Problem, Draft]] =
     ids.next[DraftTag].flatMap { id => run {
@@ -309,6 +371,11 @@ final class PostgresCatalog[F[_]] private[postgres] (
             case Some(receipt) => receipt.pure[ConnectionIO]
             case None =>
               for
+                // The first successful response discloses the new receipt too. Require
+                // metadata rights covering the future release before committing science.
+                enabled <- OrganizationSql.guard(false)
+                _ <- if enabled then PolicySql.check(ctx,OrganizationAuthority.Request.Data(
+                  OrganizationAuthority.DataScope(dataset.id),OrganizationAuthority.Permission.ReadMetadata)) else ().pure[ConnectionIO]
                 _ <- OperationsSql.fenceCandidate(row.id, lease)
                 candidate <- hydrateCandidate(row)
                 draftRow <- fetchDraft(row.draft)
@@ -399,6 +466,8 @@ final class PostgresCatalog[F[_]] private[postgres] (
 
   private def lockScopes(scopes: Vector[(DatasetId, Action, Option[ReleaseId])], write: Boolean): ConnectionIO[Unit] =
     for
+      _ <- OperationsSql.active
+      _ <- OrganizationSql.guard(false)
       dependencies <- scopes.traverse((id, _, release) => privateSource(uuid(id), release))
       ids = (scopes.map(_._1) ++ dependencies.flatten.map(_.dataset)).distinct.sortBy(_.render)
       lock = if write then Fragment.const("FOR UPDATE") else Fragment.const("FOR SHARE")
@@ -416,21 +485,32 @@ final class PostgresCatalog[F[_]] private[postgres] (
     val lock = if write then Fragment.const("FOR UPDATE") else Fragment.const("FOR SHARE")
     for
       _ <- OperationsSql.active
+      organized <- OrganizationSql.guard(false)
       _ <- CredentialSql.check(ctx)
       _ <- lockScopes(Vector((Id[DatasetTag](id), action, release)), write)
       row <- (fr"SELECT id,custodian,curator,head FROM dataset WHERE id=$id" ++ lock)
         .query[(UUID, UUID, UUID, Option[UUID])].option.flatMap(v => lift(v.toRight(Problem.Denied)))
       (datasetId, custodian, curator, head) = row
       dataset = Dataset(Id[DatasetTag](datasetId), Id[CustodianTag](custodian), Id[PrincipalTag](curator), head.map(Id[ReleaseTag].apply))
-      grants <- sql"""SELECT id,recipient,release_id,actions FROM access_grant
-        WHERE dataset_id=$id AND recipient=${uuid(ctx.principal)} AND revoked_at IS NULL"""
-        .query[(UUID, UUID, Option[UUID], List[String])].to[Vector]
-      decoded <- grants.traverse { (grant, recipient, fixed, actions) =>
-        actions.traverse(a => lift(Action.values.find(_.toString == a).toRight(Problem.Integrity("unknown grant action"))))
-          .map(as => Grant(Id[GrantTag](grant), dataset.id, Id[PrincipalTag](recipient), fixed.map(Id[ReleaseTag].apply), as.toSet))
-      }
-      _ <- lift(Either.cond(Authority.permits(dataset, decoded, ctx, action, release) ||
-        (allowAccept && Authority.permits(dataset, decoded, ctx, Action.Accept, release)), (), Problem.Denied))
+      _ <- if organized then for
+        allowed <- PolicySql.permits(ctx, OrganizationAuthority.Request.Data(
+          OrganizationAuthority.DataScope(dataset.id,release),OrganizationAuthority.Permission.fromLegacy(action)))
+        alternate <- if allowAccept then PolicySql.permits(ctx,OrganizationAuthority.Request.Data(
+          OrganizationAuthority.DataScope(dataset.id,release),OrganizationAuthority.Permission.Accept)) else false.pure[ConnectionIO]
+        _ <- lift(Either.cond(allowed || alternate, (), Problem.Denied))
+      yield ()
+      else for
+        grants <- sql"""SELECT id,recipient,release_id,actions FROM access_grant
+          WHERE dataset_id=$id AND recipient=${uuid(ctx.principal)} AND revoked_at IS NULL
+            AND (expires_at IS NULL OR expires_at>clock_timestamp())"""
+          .query[(UUID,UUID,Option[UUID],List[String])].to[Vector]
+        decoded <- grants.traverse { (grant,recipient,fixed,actions) =>
+          actions.traverse(a => lift(Action.values.find(_.toString == a).toRight(Problem.Integrity("unknown legacy action"))))
+            .map(as => Grant(Id[GrantTag](grant),dataset.id,Id[PrincipalTag](recipient),fixed.map(Id[ReleaseTag].apply),as.toSet))
+        }
+        _ <- lift(Either.cond(Authority.permits(dataset,decoded,ctx,action,release) ||
+          (allowAccept && Authority.permits(dataset,decoded,ctx,Action.Accept,release)), (), Problem.Denied))
+      yield ()
       _ <- release.orElse(dataset.head).traverse_ { selected =>
         sql"SELECT c.activity::text FROM release r JOIN candidate c ON c.id=r.candidate_id WHERE r.dataset_id=$id AND r.id=${uuid(selected)}"
           .query[String].option.flatMap(_.traverse_(payload => lift(JsonCodecs.decode[Activity](payload)).flatMap { activity =>
@@ -512,11 +592,16 @@ final class PostgresCatalog[F[_]] private[postgres] (
       JOIN release r ON r.id=a.release_id WHERE a.dataset_id=${row.dataset}
       AND a.principal=${uuid(ctx.principal)} AND a.idempotency_key=${key.value}"""
       .query[(UUID, UUID, Timestamp)].option.flatMap {
-        case Some((candidate, _, _)) if candidate != row.id => lift(Left(Problem.Conflict("idempotency key was used for another candidate")))
-        case value => value.map { (_, release, at) =>
-          AcceptanceReceipt(ReleaseRef(Id[DatasetTag](row.dataset), Id[ReleaseTag](release)), Id[CandidateTag](row.id), key, at.toInstant)
-        }.pure[ConnectionIO]
+        case None => none[AcceptanceReceipt].pure[ConnectionIO]
+        case Some((candidate, release, at)) =>
+          val receipt = AcceptanceReceipt(ReleaseRef(Id[DatasetTag](row.dataset),Id[ReleaseTag](release)),Id[CandidateTag](row.id),key,at.toInstant)
+          for
+            enabled <- OrganizationSql.guard(false)
+            _ <- if enabled then PolicySql.check(ctx,OrganizationAuthority.Request.Receipt(receipt.release)) else ().pure[ConnectionIO]
+            _ <- lift(Either.cond(candidate == row.id, (), Problem.Conflict("idempotency key was used for another candidate")))
+          yield Some(receipt)
       }
+
 
 private object PostgresCatalog:
   final case class DraftRow(id: UUID, dataset: UUID, base: Option[UUID], generation: Long, manifest: String, activity: String, accepted: Option[UUID])

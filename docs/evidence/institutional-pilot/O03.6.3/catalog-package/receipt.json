@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "status": "passed",
+  "artifactSha256": "4099e1cdce2fdabf6dd061d9df2ba1d24160fc819f8367e17a9fdb9d650aa94c",
+  "checks": [
+    "packaged-closed-enrollment-and-signed-currentness",
+    "missing-independent-trust-refuses-admission",
+    "protected-writer-config-and-redacted-readiness",
+    "credential-file-follows-verified-independent-commit",
+    "retained-issuance-id-does-not-duplicate-and-random-issuance-is-refused",
+    "public-grant-and-revoke-explicitly-report-durable-acknowledgement",
+    "fresh-runtime-login-authenticates-and-revocation-denies-current-access",
+    "unsafe-writer-config-permissions-and-aliases-refused",
+    "organization-legacy-recovery-remains-closed",
+    "witness-outage-refuses-new-admission"
+  ],
+  "postgresImage": "postgres@sha256:b0f9560a2de083e2cc7382e75f808c7381a32852a7ec49117deedb300e552b24",
+  "scope": "Synthetic local engineering; actual packaged service, TLS witness and disposable PostgreSQL",
+  "limitations": [
+    "No institutional approval or off-host persistence qualification.",
+    "No organization replay or restored catalog reopening."
+  ]
+}

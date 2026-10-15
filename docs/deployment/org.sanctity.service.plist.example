@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- Optional macOS user-agent template. Fill absolute paths; not loaded automatically. -->
+<plist version="1.0"><dict>
+  <key>Label</key><string>org.sanctity.service</string>
+  <key>ProgramArguments</key><array>
+    <string>/ABSOLUTE/INSTALL/bin/sanctity</string><string>serve</string>
+  </array>
+  <key>WorkingDirectory</key><string>/ABSOLUTE/INSTALL</string>
+  <key>EnvironmentVariables</key><dict>
+    <key>JAVA_HOME</key><string>/ABSOLUTE/JAVA21/HOME</string>
+    <key>SANCTITY_JDBC_URL</key><string>jdbc:postgresql://127.0.0.1:5432/sanctity</string>
+    <key>SANCTITY_DB_USER</key><string>sanctity_runtime</string>
+    <key>SANCTITY_DB_PASSWORD_FILE</key><string>/ABSOLUTE/PRIVATE/database-password</string>
+    <key>SANCTITY_STORAGE</key><string>/ABSOLUTE/PRIVATE/blobs</string>
+    <key>SANCTITY_HTTP_PORT</key><string>8080</string>
+    <key>SANCTITY_SHUTDOWN_SECONDS</key><string>10</string>
+  </dict>
+  <key>Umask</key><integer>63</integer>
+  <key>ExitTimeOut</key><integer>20</integer>
+  <key>KeepAlive</key><dict><key>SuccessfulExit</key><false/></dict>
+  <key>RunAtLoad</key><false/>
+  <key>StandardOutPath</key><string>/ABSOLUTE/PRIVATE/service.log</string>
+  <key>StandardErrorPath</key><string>/ABSOLUTE/PRIVATE/service-error.log</string>
+</dict></plist>

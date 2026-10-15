@@ -1,0 +1,16 @@
+Traceback (most recent call last):
+  File "/Users/bbuchsbaum/code/scala/sanctity/scripts/check-service-package.py", line 290, in <module>
+    main()
+    ~~~~^^
+  File "/Users/bbuchsbaum/code/scala/sanctity/scripts/check-service-package.py", line 166, in main
+    cli("migrate")
+    ~~~^^^^^^^^^^^
+  File "/Users/bbuchsbaum/code/scala/sanctity/scripts/check-service-package.py", line 111, in cli
+    return command([str(launch), *arguments], cwd=runtime, env=env)
+  File "/Users/bbuchsbaum/code/scala/sanctity/scripts/check-service-package.py", line 52, in command
+    return subprocess.run(argv, check=True, capture_output=True, text=True, timeout=120, **kwargs).stdout.strip()
+           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bbuchsbaum/homebrew/Cellar/python@3.13/3.13.4/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 577, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['/var/folders/f8/k46hqpm95mn7ns9f7wxw88640000gp/T/sanctity packaged runtime xq8yqg_2/sanctity-0.1.0-SNAPSHOT/bin/sanctity', 'migrate']' returned non-zero exit status 1.

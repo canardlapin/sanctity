@@ -1,0 +1,30 @@
+[
+  {
+    "case": "setup",
+    "status": "passed",
+    "checks": [
+      "complete restrictive enrollment",
+      "old history byte identity",
+      "revoked grant and credentials remain denied",
+      "leased intake/delivery state included without secrets",
+      "retired old SQL role",
+      "fresh least-privilege role",
+      "separate OS users and real cross-store permission denial"
+    ],
+    "elapsedSeconds": 82.457
+  },
+  {
+    "case": "packaged-http-barrier-fencing",
+    "status": "passed",
+    "checks": [
+      "real packaged API accepts valid bearer before barrier",
+      "same running API returns 503 after barrier",
+      "local epoch unchanged",
+      "restarted packaged API refuses stale writer"
+    ],
+    "elapsedSeconds": 29.326,
+    "beforeStatus": 200,
+    "afterStatus": 503,
+    "classpath": "artifact lib jars only; no qualification harness on service classpath"
+  }
+]

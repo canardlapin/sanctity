@@ -1,0 +1,3 @@
+passed setup
+passed bounded-finalization-drain
+{"status": "passed", "cases": 2, "finalizationDrainSeconds": 5.234214}

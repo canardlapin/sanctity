@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "task": "O03.1",
+  "status": "passed",
+  "at": "2026-10-14T15:05:10.560217+00:00",
+  "kind": "policy-durability-protocol-and-adversarial-model",
+  "acceptance": [
+    {
+      "criterion": "Specify the independent failure domain, ordered policy events/checkpoints, authenticity and completeness checks, and the trusted recovery authority.",
+      "result": "pass"
+    },
+    {
+      "criterion": "Define the commit/acknowledgment protocol for grants, revocations, disablement and stewardship changes, including every crash/replication-failure window; no acknowledged restrictive change can disappear on restore.",
+      "result": "pass"
+    },
+    {
+      "criterion": "Define closed-service behavior when currency cannot be proved and distinguish scientific-data RPO from policy/lifecycle durability.",
+      "result": "pass"
+    }
+  ],
+  "commands": [
+    "python3 scripts/check-policy-protocol.py --output target/policy-protocol-v1"
+  ],
+  "observed": {
+    "interruptionPositionsAcrossThreeEventSequences": 1024,
+    "adversarialGroups": 8,
+    "rejectedAlternative": "local commit/ack then async replication can resurrect a revoked grant after primary loss",
+    "review": "engineering adversarial review before persistence work; trust/fencing assumptions and unresolved-intent availability cost explicit"
+  },
+  "handoff": {
+    "F02.2": "single principal registry, transactional organization policy revision/event/receipt; local-only durability must be explicit; fence legacy recovery",
+    "F03.2": "join policy lock, current authorization and event/receipt in same transaction",
+    "O03.2": "implement independent PREPARE/COMMIT/ABORT witness, current challenge/barrier, key and epoch custody, and real fault matrix"
+  },
+  "inputs": {
+    "docs/decisions/004-policy-durability.md": "28079484c94542f91f36936f809a5f06b1439df106f4e6361ab121b23b0f48d1",
+    "scripts/check-policy-protocol.py": "8b6e45ebd481040e3e4bb7b789ccda56f60294ef893bc0607486c4de5f5871e3",
+    "docs/decisions/003-institutional-lifecycle.md": "12b0dc70b7ef65590bc420dd49330dde5e8c3149593bb930295531d951e525a2",
+    "modules/postgres/src/main/scala/sanctity/postgres/PostgresRecovery.scala": "83013d62eca92b8a835e0df8595b537597a286578c1ac31c2b32515abcf0351b",
+    "scripts/backup-postgres.sh": "2116269edced2c675e2e72eeb6e4c6a9e587648052f52667fb099f5581d4d732",
+    "scripts/restore-postgres.sh": "d4b72e6099a4014167f22c8bd17a156f2f5900508b18d31ded1573bce7853b95",
+    "docs/evidence/institutional-pilot/O03.1/model-results.json": "5e84b9834ad6ab5a71eff66c45317ebd0d7298273dcadafbe2690e03148ab95c",
+    "docs/evidence/institutional-pilot/O03.1/source-snapshot.zip": "57ce669548e21ef5b6ed19d82b08df9ce37ab8b0594387a34a03d243e0f0f696",
+    "docs/evidence/institutional-pilot/O03.1/verification.log": "844a88e0b336761ceb65b24acaaf89a8a129b78740edfc85e049d1f615d48b6b"
+  },
+  "limits": [
+    "Finite abstract protocol model, not a proof over unbounded histories.",
+    "HMAC models authenticity only; Ed25519/TLS/keys and real durable I/O remain O03.2.",
+    "External writer fencing and non-rollback witness continuity are explicit assumptions, not inferred from signatures.",
+    "No deployed independent recovery or institutional physical-loss qualification.",
+    "No institution/operator approval inferred; actual independent medium and approvers remain O03.3/SITE01.",
+    "Unresolved intent after primary loss keeps recovery unavailable until a separately reviewed resolution protocol exists."
+  ]
+}

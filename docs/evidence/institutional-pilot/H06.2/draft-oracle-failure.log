@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "/Users/bbuchsbaum/code/scala/sanctity/scripts/check-upgrade-compatibility.py", line 368, in <module>
+    main()
+    ~~~~^^
+  File "/Users/bbuchsbaum/code/scala/sanctity/scripts/check-upgrade-compatibility.py", line 356, in main
+    receipt["observed"] = freeze(f, fixture) if args.mode == "freeze" else verify(f, fixture, args.modern)
+                                                                           ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bbuchsbaum/code/scala/sanctity/scripts/check-upgrade-compatibility.py", line 302, in verify
+    require(f.http(path, tokens[principal])[0] == expected, "current allow/deny decision changed")
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bbuchsbaum/code/scala/sanctity/scripts/check-upgrade-compatibility.py", line 46, in require
+    raise AssertionError(message)
+AssertionError: current allow/deny decision changed

@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "status": "passed",
+  "at": "2026-10-14T23:12:35.862971+00:00",
+  "kind": "catalog-integration-completion",
+  "completed": [
+    "O03.6.2"
+  ],
+  "parent": "O03.6",
+  "parentStatus": "open",
+  "counts": {
+    "requiredEpics": 8,
+    "conditionalEpics": 2,
+    "gates": 26,
+    "tasks": 85,
+    "requiredTasks": 79,
+    "conditionalTasks": 6,
+    "taskKinds": {
+      "engineering": 66,
+      "mixed": 7,
+      "institutional": 12
+    },
+    "totalNodesIncludingProgram": 122,
+    "closedTasks": 16,
+    "closedGates": 1,
+    "closedEpics": 0
+  },
+  "checks": {
+    "all122MoteCriteriaParentsDependenciesAndStatuses": "pass",
+    "parentAcceptanceUnchanged": true,
+    "acyclic": true,
+    "onlyO0362Closed": true,
+    "readyQueueMatchesGraph": true,
+    "preservedHistoricalReceiptInputs": 1680,
+    "allCurrentCatalogInputHashesMatch": true,
+    "historicalSourceIdentityPreserved": true,
+    "currentDocumentLinksResolved": 151,
+    "publishedTaskTablesMatch": true,
+    "moteDoctorAndFsck": "pass",
+    "activeClaimsAndReservations": 0,
+    "diffWhitespace": "pass"
+  },
+  "nextReadyEngineering": [
+    "F02.3",
+    "F03.3",
+    "F03.4",
+    "F04.1",
+    "H03.1",
+    "O01.4",
+    "O02.1",
+    "O02.3",
+    "O03.6.3"
+  ],
+  "recommendedFirstWork": [
+    "O03.6.3"
+  ],
+  "inputs": {
+    "docs/policy-catalog.md": "4e3aa73d9426e6b1da18384ccb5d7acf9e5ef28bbb1ae9df9879cc02cd023e22",
+    "docs/policy-witness.md": "99666bdba518ded47e2d083ae0740743a2c34d8e810cb1c06f2a2d02c61d6f83",
+    "docs/policy-transactions.md": "fd0f7aa85104b244b6d7f24d3dae0271bb203b869fc878fdc6ea58b3856a5305",
+    "docs/core-hardening-plan.md": "8ca7acb21b42ecc684d894e9c6154c516e694e9758e4129b613110c815a636d6",
+    "docs/institutional-pilot-epics.md": "73264d9f03e403029ae957ca77daa45f9ccc3f70079917a8f65451b54d5458dc",
+    "docs/implementation-plan.md": "ad3f3fc81e96ad5901a4a3a67e6a26ffa864e6c2877e3fb9deccbdd1769b1259",
+    "docs/local-demo-plan.md": "f45c7e963965f797a492baa7fc2ecf965e5eaf025a61b9537a06047f84671120",
+    "docs/institutional-readiness-plan.md": "31b9d2a9dd98b0502da36229fc1f7caf762aa2be1f1b45fece3e74bd1578a56e",
+    "docs/evidence/institutional-pilot/O03.6.2/receipt.json": "428b26687c94ef313641c72f93c03732fb8166a1eafc828b9a80ff920fcf5d5a",
+    "docs/institutional-readiness-backlog.json": "d742d31cbefda29c4f1d73221ed25e03608c88d96c354c49431e722d11038c3f",
+    "docs/evidence/institutional-readiness-motes.json": "a08826a91bfc7895c68a8cc6fe320b870f3f3412e4d0be5559fcc09f5cdc8d23",
+    "docs/evidence/institutional-pilot/O03.6.2/before-coordination.zip": "716daf141647ba908787798cf0c2c3b87dd0b9d54742b001ea11bb20789ceec8",
+    "docs/evidence/institutional-pilot/O03.6.2/before.zip": "24c47e4795616bc4b539120e20b5f891e824da1eb356bb82156524bcdd90e6cb",
+    "docs/evidence/institutional-pilot/O03.6.2/coordination-verification.py": "20c3a0cb40b19f77b9bc00ce75cf5f8aef74f457b4ab3465f8dc325d69cbc224",
+    "docs/evidence/institutional-pilot-progress.json": "6b1669efc177df621337c48770c13c8f19975220588f5b0bab1081d9d4b995ee",
+    "docs/evidence/institutional-pilot/O03.6.2/mote-states.json": "58a6242ca74b123f8b2629d65ffea15a0bcb9d111b9e91dc682c5b1a8e138527"
+  },
+  "limitations": [
+    "O03.6.3 integrated crash/fencing qualification and unchanged O03.6 parent acceptance remain open. Organization replay and restore O03.7/O03.8 remain unavailable; legacy recovery still refuses initialized catalogs.",
+    "Local synthetic PostgreSQL/TLS/process evidence does not qualify separate OS accounts, off-host persistence, physical power loss, institutional identity or institutional deployment approval.",
+    "No key rotation, barrier release or heuristic resolution of a prepared event absent from a restarted/restored catalog. Uncertain absence stays closed.",
+    "Enrollment and runtime admission refuse nondefault guest eligibility/lifecycle and unsupported producers. Full identity/session/sponsorship/retention/hold work remains open.",
+    "Full-state authority/checkpoint loading and acknowledgement verification are correctness baselines. The 1 MiB event, 4 MiB checkpoint and 8 MiB wire limits refuse oversize state; institutional scale/performance remains unqualified.",
+    "SQL admission is bounded; complete byte-stream and external-worker heartbeat coverage remains F03.4. Privileged database operators are trusted; the service requires a fresh ordinary SQL login after enrollment.",
+    "All six core reviews and H00 remain open; no complete demo or institutional acceptance."
+  ]
+}

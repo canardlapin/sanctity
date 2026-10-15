@@ -1,0 +1,18 @@
+Traceback (most recent call last):
+  File "/Users/bbuchsbaum/code/scala/sanctity/scripts/check-policy-processes.py", line 439, in <module>
+    if __name__=='__main__':main()
+                            ~~~~^^
+  File "/Users/bbuchsbaum/code/scala/sanctity/scripts/check-policy-processes.py", line 425, in main
+    with Fixture(artifact,harness,output,Path(temporary).resolve()) as f:
+         ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bbuchsbaum/code/scala/sanctity/scripts/check-policy-processes.py", line 43, in __enter__
+    self.build();self.start();self.prepare();return self
+    ~~~~~~~~~~^^
+  File "/Users/bbuchsbaum/code/scala/sanctity/scripts/check-policy-processes.py", line 68, in build
+    p=docker('build','--label','io.sanctity.purpose=policy-process-qualification','-t',self.image,build,timeout=180)
+  File "/Users/bbuchsbaum/code/scala/sanctity/scripts/check-policy-processes.py", line 32, in docker
+    def docker(*args, **kwargs): return run(['docker',*args],**kwargs)
+                                        ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bbuchsbaum/code/scala/sanctity/scripts/check-policy-processes.py", line 29, in run
+    raise RuntimeError('qualification subprocess failed: '+str(args[0])+' (exit '+str(p.returncode)+')')
+RuntimeError: qualification subprocess failed: docker (exit 1)

@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "task": "L01.1",
+  "status": "passed",
+  "kind": "local-engineering-contract-review",
+  "at": "2026-10-14T12:21:25.766315+00:00",
+  "reviewer": "codex-institutional-build (engineering self-review; user supplied local-first direction, no institutional approval)",
+  "userDirection": "First installation on the user\u2019s computer; engineering reliability, a solid demonstration and guides before seeking institutional buy-in.",
+  "procedure": [
+    "Reviewed the local runtime/root/port/credential/lifecycle boundaries against the existing packaged service and pending O01.2-O01.4 work.",
+    "Specified synthetic two-lab/guest data, approved native staging and the eight-step real repository story.",
+    "Traversed all L01 dependencies after replacing W01.2\u2019s institutional intake prerequisite with the local engineering contract."
+  ],
+  "acceptance": [
+    {
+      "criterion": "Record the local runtime, loopback/security/storage boundaries, synthetic fixture budget and guarded lifecycle/reset requirements without provisioning a persistent service implicitly.",
+      "result": "pass",
+      "evidence": "docs/local-demo-plan.md Immediate scope and Acceptance work"
+    },
+    {
+      "criterion": "Select approved native-BIDS staging as the engineering intake baseline and specify the two-lab/guest guided repository story and exact observable outcomes.",
+      "result": "pass",
+      "evidence": "docs/local-demo-plan.md Demonstration data and identity; The guided story"
+    },
+    {
+      "criterion": "Identify existing implementation dependencies and later institutional gates; local data/provider choices cannot masquerade as institutional acceptance or block independent engineering.",
+      "result": "pass",
+      "evidence": "docs/local-demo-plan.md Delivery order; canonical graph contains 45 local dependency nodes and zero institutional/mixed/external-input blockers"
+    }
+  ],
+  "dependencyCheck": {
+    "nodesIncludingLocalGate": 45,
+    "institutionalMixedOrExternalInputBlockers": []
+  },
+  "inputs": {
+    "docs/local-demo-plan.md": "a17c95185928ea5f98c2fffe8018ad288f98247f747257f8da20df003809dc02",
+    "docs/institutional-readiness-backlog.json": "848ec5a4b9556b0ff0306993b88c06727d158c748224d08ceb9b32ee14b1e9ea",
+    "docs/evidence/institutional-readiness-motes.json": "fb2b5ab19936f010f987f2b112d3a8e7bccbfcf90e3c2ad2015d1d70a38f318e",
+    "docs/service-distribution.md": "6c2d2d6c8b36279cb9123a95b7e203358966a74e59d83a1c84f7705ca755237e"
+  },
+  "limits": [
+    "The contract is complete; L01.2-L01.6 actual local installation, full demo, reliability rehearsal and final guides remain open.",
+    "The packaged smoke left no persistent demo service or database running.",
+    "No institution, data approval, provider or human/operator acceptance has been invented."
+  ]
+}

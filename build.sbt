@@ -86,14 +86,38 @@ lazy val http = project.in(file("modules/http")).dependsOn(application).settings
     "io.circe" %% "circe-jawn" % "0.14.10"
   )
 )
-lazy val integration = project.in(file("modules/integration")).dependsOn(app % "compile->compile;test->test,compile").settings(common).settings(
+lazy val integration = project.in(file("modules/integration")).dependsOn(app % "compile->compile;test->test,compile", postgres % "test->test").settings(common).settings(
   Test / parallelExecution := false
 )
-lazy val app = project.in(file("modules/app")).dependsOn(bids, objects, postgres, importDicom, importXnat, http, processingMri).settings(common).settings(
+lazy val service = project.in(file("modules/service")).dependsOn(bids, objects, postgres, http).settings(common).settings(
+  Compile / mainClass := Some("sanctity.app.ServiceMain"),
+  Compile / resourceGenerators += Def.task {
+    val output = (Compile / resourceManaged).value / "sanctity/service-build.properties"
+    IO.write(output, "version=" + version.value + "\nscala=" + scalaVersion.value + "\njavaMinimum=21\n")
+    Seq(output)
+  }.taskValue,
+  ServiceDistribution.inputs := {
+    require(!sys.props.contains("sanctity.bids4s.path"), "service distributions require the verified vendored bids4s source")
+    val internal = Seq(
+      (kernel / Compile / classDirectory).value -> (kernel / Compile / packageBin).value,
+      (application / Compile / classDirectory).value -> (application / Compile / packageBin).value,
+      (bids / Compile / classDirectory).value -> (bids / Compile / packageBin).value,
+      (objects / Compile / classDirectory).value -> (objects / Compile / packageBin).value,
+      (postgres / Compile / classDirectory).value -> (postgres / Compile / packageBin).value,
+      (http / Compile / classDirectory).value -> (http / Compile / packageBin).value,
+      (Compile / classDirectory).value -> (Compile / packageBin).value,
+      (bids4sCore / Compile / classDirectory).value -> (bids4sCore / Compile / packageBin).value
+    )
+    ServiceDistribution.write((LocalRootProject / baseDirectory).value, target.value,
+      (Runtime / fullClasspath).value.map(_.data), internal, (update).value,
+      (bids4sCore / Compile / packageBin).value, version.value, scalaVersion.value, sbtVersion.value)
+  }
+)
+lazy val app = project.in(file("modules/app")).dependsOn(service, importDicom, importXnat, processingMri).settings(common).settings(
   Compile / run / fork := true,
   Compile / mainClass := Some("sanctity.app.Demo")
 )
-lazy val root = project.in(file(".")).aggregate(kernel, application, bids, objects, postgres, importDicom, importXnat, http, processingMri, app).settings(
+lazy val root = project.in(file(".")).aggregate(kernel, application, bids, objects, postgres, importDicom, importXnat, http, processingMri, service, app).settings(
   name := "sanctity",
   publish / skip := true
 )

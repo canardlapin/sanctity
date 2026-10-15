@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "task": "F01.2",
+  "status": "passed",
+  "kind": "engineering-design-review",
+  "at": "2026-10-14T12:02:38.049952+00:00",
+  "reviewer": "codex-institutional-build (engineering self-review; not institutional approval)",
+  "procedure": [
+    "Compared the role/action matrix with existing nondelegable grants and fixed-release constraints.",
+    "Traced each of 38 concrete scenarios through current-principal, lifecycle, role/grant applicability and projection rules.",
+    "Parsed the reusable JSON corpus and checked unique case IDs and the 12 allow / 26 deny distribution.",
+    "Integration review corrected the issuer-offboarding example to emergency disablement and confirmed migration extends the existing principal table."
+  ],
+  "acceptance": [
+    {
+      "criterion": "Provide a matrix for lab administration, project reader/contributor/steward, explicit dataset/release grants, restricted evidence and external collaborators.",
+      "result": "pass",
+      "evidence": "ADR 002 Actions and roles; Grant contract"
+    },
+    {
+      "criterion": "Separate proposing, accepting and sharing; specify independent versus membership-derived grants, expiry, principal disablement, and lab-admin limits.",
+      "result": "pass",
+      "evidence": "ADR 002 Grant contract; Decision order and disclosure"
+    },
+    {
+      "criterion": "Enumerate allow/deny cases for directory names/counts, current heads, historical releases, receipts, deliveries and runs; project/provenance links alone cannot grant access.",
+      "result": "pass",
+      "evidence": "ADR 002 Historical and continuing work; cases A01-A38"
+    }
+  ],
+  "caseCount": 38,
+  "inputs": {
+    "docs/decisions/001-institutional-organization.md": "7b993b58aabdc74d71d09aaf21a51c6db09431ecce32e41141ce277ddf8add82",
+    "docs/decisions/002-institutional-authority.md": "0b1ddb971b4c306bb87d404fd114d2ff48fb055dd7a4279c07ebcf35be04d3eb",
+    "docs/decisions/institutional-authority-cases.json": "7a7351dc7d6334ca4f40918c9583db821b99e8b82d87cdf4ca30cd7d99566fd5",
+    "modules/kernel/src/main/scala/sanctity/kernel/Authority.scala": "137b767d53a1883c74cb4193911db37c7125676b59e2f9fa4fe477d5b143805c"
+  },
+  "limitations": [
+    "Design cases are reviewed expectations, not passing runtime authorization tests.",
+    "F03 must implement and test these rules, including revocation boundaries.",
+    "Independent access review and actual provider acceptance remain open."
+  ]
+}

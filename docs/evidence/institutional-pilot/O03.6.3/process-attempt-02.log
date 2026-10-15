@@ -1,0 +1,34 @@
+passed setup
+passed primary-before-prepare
+passed primary-before-local-commit
+passed primary-after-local-commit
+passed primary-lost-local-response
+passed primary-before-receipt-insert
+passed primary-before-receipt-commit
+passed primary-after-receipt-commit
+passed primary-lost-receipt-response
+passed witness-enroll-record
+passed witness-enroll-head
+passed witness-prepare-record
+passed witness-prepare-head
+passed witness-commit-record
+passed witness-commit-head
+passed witness-abort-record
+passed witness-abort-head
+passed witness-recovery_barrier-record
+passed witness-recovery_barrier-head
+passed exact-retry-and-adversarial-wire
+passed pending-restriction-no-overtaking
+passed lost-primary-unresolved-prepare
+passed acknowledged-primary-loss
+Traceback (most recent call last):
+  File "/Users/bbuchsbaum/code/scala/sanctity/scripts/check-policy-processes.py", line 446, in <module>
+    self.reset('store-'+alteration);self.helper('revoke',role='primary');self.witness_stop()
+                ^^^^^^
+  File "/Users/bbuchsbaum/code/scala/sanctity/scripts/check-policy-processes.py", line 440, in main
+    log=docker('logs',name,check=False)
+                             ^^^^^^^^^^
+  File "/Users/bbuchsbaum/code/scala/sanctity/scripts/check-policy-processes.py", line 392, in fencing
+    assert self.sql("SELECT count(*) FROM pg_stat_activity WHERE datname=current_database() AND usename='new_runtime' AND state='idle in transaction'")=='0'
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

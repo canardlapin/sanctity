@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "at": "2026-10-14T18:43:26.029534+00:00",
+  "kind": "transaction-authority-F03.2",
+  "status": "passed",
+  "completed": [
+    "F03.2"
+  ],
+  "taskReceipt": "docs/evidence/institutional-pilot/F03.2/receipt.json",
+  "counts": {
+    "requiredEpics": 8,
+    "conditionalEpics": 2,
+    "gates": 26,
+    "tasks": 82,
+    "requiredTasks": 76,
+    "conditionalTasks": 6,
+    "taskKinds": {
+      "engineering": 63,
+      "institutional": 12,
+      "mixed": 7
+    },
+    "totalNodesIncludingProgram": 119,
+    "closedTasks": 14,
+    "closedGates": 1,
+    "closedEpics": 0
+  },
+  "checks": {
+    "all119MoteCriteriaParentsDependenciesAndStatuses": "pass",
+    "acyclic": true,
+    "onlyF032Closed": true,
+    "readyQueueMatchesGraph": true,
+    "preservedHistoricalReceiptInputs": 1121,
+    "allCurrentF032InputHashesMatch": true,
+    "adrFixtureUnchanged": true,
+    "currentDocumentLinksResolved": 138,
+    "publishedTaskTablesMatch": true,
+    "moteDoctorAndFsck": "pass",
+    "activeClaimsAndReservations": 0,
+    "diffWhitespace": "pass"
+  },
+  "verification": {
+    "distinctTests": 351,
+    "referenceAuthorityTests": 57,
+    "referenceOrganizationTests": 14,
+    "serviceTests": 9,
+    "allPostgresIntegrationTests": 271,
+    "currentAuthorityTests": 44,
+    "legacyReceiptCodecTests": 2,
+    "adrCases": 38,
+    "propertyTests": 6,
+    "successfulTrialsPerProperty": 500,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "packagedChecks": 11,
+    "fixtureSha256": "7a7351dc7d6334ca4f40918c9583db821b99e8b82d87cdf4ca30cd7d99566fd5",
+    "historicalCompatibility": "V009 candidate passes the unchanged corpus-v2 oracle; old V007 binary refuses the upgrade",
+    "migrationFailure": "Interrupted populated V007 upgrade rolls back after first V008 ALTER; all historical hashes retained; retry applies V008 and V009",
+    "legacySourceIdentity": "original source file hashes, inode and mtime unchanged; source remains available (not source-loss recovery)"
+  },
+  "nextReadyEngineering": [
+    "F02.3",
+    "F03.3",
+    "F03.4",
+    "F04.1",
+    "H03.1",
+    "O01.4",
+    "O02.1",
+    "O02.3",
+    "O03.6"
+  ],
+  "recommendedFirstWork": [
+    "O03.6"
+  ],
+  "inputs": {
+    "docs/policy-transactions.md": "a132b24eb575e740909ce696545637b9d4bd443e66b61f163b0da15ad30c8735",
+    "docs/organization-reference.md": "39e92fbc8f935f4527972cce6a27980a7a7eb0568d2342a1ff8fc9161445a7d1",
+    "docs/core-hardening-plan.md": "adc8b316a62a322cc486fbe631397c5143e633f0c947ff4aa4f64a9f8136dfc7",
+    "docs/institutional-pilot-epics.md": "2b4bf451e36b3e44cf61dd2793c20a1bd7481c90c57da36e28b84814927aa263",
+    "docs/implementation-plan.md": "764d783599e7d11e8080e9f0bcc257167215a4785e5b30a2da718aa9059f4a40",
+    "docs/local-demo-plan.md": "ef7441703eeb991ae78ac675fd281350c0cd6edbb00b343c949a3aea010da38b",
+    "docs/institutional-readiness-plan.md": "a85580945d5ed1e9b95e0bb697d132acce485496ecf62c47af5b3c4f8569c20a",
+    "docs/evidence/institutional-pilot/F03.2/receipt.json": "cbd406bcc82c39f51cba7dddc9737242a0f6d44c54c6d3770d875184b8f21333",
+    "docs/institutional-readiness-backlog.json": "9693c870476b4feb5d2d324081f49a7b6eed657a88bb80cd1171aee916f0611c",
+    "docs/evidence/institutional-readiness-motes.json": "791866690ee24451f31f0b821f984fde4013bd46bc200b7c180763ca26cb7c03",
+    "docs/evidence/core-authority-f032/prior-documents.zip": "f5e2561bae0052aebf00059a60ef289c032b20b8121ec82e6dd8476d510ff9cb",
+    "docs/evidence/core-authority-f032/prior-documents.json": "e04c200608117fe7470014281eb7406ad00113041cf0356e7f78bd79dfff5864",
+    "docs/evidence/core-authority-f032/verification-procedure.py": "3163eaf0b5f61e60aee61c52b120be71558844081ff3a18bad95becca22117a6",
+    "docs/evidence/institutional-pilot-progress.json": "212afb9bb9ebf73fd414c8a1b880036c5805e4bb061534dd9ac844139731b16f",
+    "docs/evidence/core-authority-f032/mote-states.json": "0b874e4c02a4b37e3c9062a7821b45911b6d82295c0567a62463ca64f0682b02"
+  },
+  "limitations": [
+    "Organization events are local engineering durability only. O03.6 witness, O03.7 restore and O03.8 source-isolation rehearsal remain open; legacy recovery still refuses initialized catalogs.",
+    "The local event encoding/chain is versioned and retained, not a qualified RFC8785/Ed25519 witness protocol. No off-host or physical machine/disk-loss proof.",
+    "Policy and organization retry loading still scans complete state. Institutional-scale query/latency qualification remains H04.",
+    "Public disclosure/effective-access projections and continuous stream/worker admission remain F03.3/F03.4; organization administration remains F02.3. The SQL matrix tests the trusted adapter, not all public endpoint projections. Receipt reads retain the prior Accept check alongside metadata authority; candidate reads retain the prior Propose-or-Accept path pending F03.3.",
+    "Eligibility and lifecycle storage inputs are exercised by trusted SQL fixtures; browser identity, guest sponsorship and lifecycle administration remain F04/O04.",
+    "Local principals and operator DB logins are engineering identities, not verified institutional identities. Runtime/schema owner are trusted service/operator boundaries.",
+    "Legacy Action/Grant HTTP shapes remain unchanged; expanded permissions and grant lineage currently use the typed PostgreSQL adapter.",
+    "Current credential issuance has no client-selected retry key or replayable secret response; inspect/revoke ambiguous local issuance before reissuing.",
+    "No institutional acceptance, complete demo/guide, six-area review or integrated H00 qualification is claimed.",
+    "Organization-aware recovery is still unimplemented; O03.6-O03.8 remain open.",
+    "All six core reviews and H00 remain open; no local-demo or institutional acceptance."
+  ]
+}

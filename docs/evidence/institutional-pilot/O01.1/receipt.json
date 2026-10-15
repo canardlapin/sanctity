@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 1,
+  "task": "O01.1",
+  "status": "passed",
+  "kind": "artifact-build-and-runtime-qualification",
+  "at": "2026-10-14T12:11:21.335554+00:00",
+  "artifact": {
+    "path": "target/service-release-20261014/sanctity-0.1.0-SNAPSHOT.zip",
+    "sha256": "2ae3efa92d344520dc9abae1ce1d6c879998a187cebe1897ce096b3ced6b432e",
+    "bytes": 39860924,
+    "version": "0.1.0-SNAPSHOT",
+    "runtimeJars": 49,
+    "sourceInventorySha256": "b841f70bba24ace8dd0edfe5b554c48efeeff7b7a32b54e7b7a5ee53d3a37f4e",
+    "bids4sSourceSha256": "19f022d002f69292dec056eb0762b877438c47305cee6c176adf3e0f780e9146"
+  },
+  "commands": [
+    "python3 scripts/package-service.py --output target/service-release-20261014",
+    "python3 scripts/check-service-package.py target/service-release-20261014/sanctity-0.1.0-SNAPSHOT.zip --output target/service-smoke-20261014",
+    "scripts/check-postgres.sh",
+    "git diff --check"
+  ],
+  "acceptance": [
+    {
+      "criterion": "Package the API/console, migration and trusted operator entry points with the verified bids4s pin and necessary runtime resources.",
+      "result": "pass",
+      "evidence": "build-receipt.json, artifact-manifest.json, smoke-receipt.json: service/console/SQL/operator resources and verified source pin"
+    },
+    {
+      "criterion": "Record artifact digest, application/dependency versions and licenses; launch in a clean runtime environment without a sibling source checkout.",
+      "result": "pass",
+      "evidence": "artifact-manifest.json/source-inventory.json record exact versions, digests and licenses; isolated Java-only runtime smoke passed"
+    },
+    {
+      "criterion": "Keep development demos and optional analysis tools outside the required service startup path; document Java/runtime prerequisites.",
+      "result": "pass",
+      "evidence": "Seven first-party service modules only; no demo/test/Python/analysis JAR payload; docs/service-distribution.md states runtime prerequisites"
+    }
+  ],
+  "observed": {
+    "packageSmoke": [
+      "exact payload/dependency digests, runtime resources, licenses and module exclusion",
+      "Java-only launcher with spaces, no source/build-tool PATH, version/help and invalid command",
+      "packaged SQL migrations applied and repeated successfully",
+      "trusted create, private credential issuance and native import from packaged resources",
+      "live console, anonymous denial, authenticated identity, accepted head and byte-exact HTTP delivery",
+      "packaged policy capture and live credential revocation"
+    ],
+    "sameInputZipRepeatability": "pass",
+    "regressionTests": 679,
+    "ordinaryTests": 469,
+    "postgresTests": 210,
+    "crashRetryAndClosedRestoreWithRevocation": "pass",
+    "sourceInventoryStillMatchesAfterTests": true,
+    "diffWhitespace": "pass"
+  },
+  "environment": {
+    "java": "openjdk version \"21.0.12.1\" 2026-08-18 LTS\nOpenJDK Runtime Environment Temurin-21.0.12.1+1 (build 21.0.12.1+1-LTS)\nOpenJDK 64-Bit Server VM Temurin-21.0.12.1+1 (build 21.0.12.1+1-LTS, mixed mode, sharing)",
+    "scala": "3.3.8",
+    "sbt": "1.10.5",
+    "postgres": "postgres (PostgreSQL) 17.11",
+    "postgresImage": "postgres@sha256:b0f9560a2de083e2cc7382e75f808c7381a32852a7ec49117deedb300e552b24",
+    "runtimeIsolation": "Fresh temporary directory with spaces, only java/dirname on PATH, no Scala/sbt/Python/source checkout"
+  },
+  "fixtureScope": "Synthetic metadata/README native dataset for artifact smoke; existing synthetic lifecycle, scientific, HTTP and transaction fixtures for regression. No institution data or live provider.",
+  "inputs": {
+    "build.sbt": "95d8707d4d784f26383056af4582fcc1790e4e0ec221401dde8dad9ac8d4ee95",
+    "project/ServiceDistribution.scala": "46b3e6b3fe67f2d81b5e7e319e7ab14a723c61551b61f1b6c34ead6e581ca1cc",
+    "scripts/package-service.py": "4471e9ff1e73e6cb1fcdb59c3713d21add84a7b694f334f7cc1cc65804ecdf65",
+    "scripts/check-service-package.py": "39aeef4bb123bfa3835a1d5960b002f0fd09b9c86f56e6382e7c26f5d1a7772d",
+    "docs/service-distribution.md": "6c2d2d6c8b36279cb9123a95b7e203358966a74e59d83a1c84f7705ca755237e",
+    "modules/service/src/main/scala/sanctity/app/ApiServer.scala": "7d526c9276f60c9e815da08ccb7a7531290779f770001db4b925078df7cbb807",
+    "modules/service/src/main/scala/sanctity/app/MigrationCli.scala": "157db84d3e63c262ea7d56f40ec77ab681b8f9fad1e39ce6f805bb60f8bc0f95",
+    "modules/service/src/main/scala/sanctity/app/RecoveryCli.scala": "ee8865f6f13af98e261885567d819711a014078b83fff4f4ed4f3c0f045dd682",
+    "modules/service/src/main/scala/sanctity/app/RepositoryCli.scala": "f2c91175691989a56fbc2abf3955ab9b90917b949654c132d57d38ac0fe6d4a9",
+    "modules/service/src/main/scala/sanctity/app/ServiceMain.scala": "749f1fcf4cfd90e40752cea68e129f90f8a4851f7ad7d87c74eed5379a345118",
+    "docs/evidence/institutional-pilot/O01.1/artifact-manifest.json": "691b0f1f08e0febf92acfa8d847bb3a65101450cfbea1152e5ce8c8dcac24d92",
+    "docs/evidence/institutional-pilot/O01.1/build-receipt.json": "3cfcad0cebe435ac81fcec4c2d9363c7b2224b5a381ce22183029df0414d5283",
+    "docs/evidence/institutional-pilot/O01.1/build.log": "3329b46095b6621a0e0a6d7ac122adc3a877500bc0a99fd6df5fc99006999358",
+    "docs/evidence/institutional-pilot/O01.1/regression.log": "46d43f9a1da6601e36054334d852db7ca7bebeb8f67a4d61c29d0590f079d005",
+    "docs/evidence/institutional-pilot/O01.1/smoke-receipt.json": "ef5b170958e44a0741fdeb4f9cec5ec3d8edb84b0f851330bd005f587ed12b40",
+    "docs/evidence/institutional-pilot/O01.1/source-inventory.json": "b841f70bba24ace8dd0edfe5b554c48efeeff7b7a32b54e7b7a5ee53d3a37f4e"
+  },
+  "limits": [
+    "Service-module packaging is implemented; deployment validation/TLS templates, privilege separation and upgrade CI remain O01.2-O01.4.",
+    "This is an internal SNAPSHOT artifact pinned by digest; Sanctity license is undeclared (NOASSERTION), and no public release is implied.",
+    "The build verifies deterministic ZIP packaging for identical JAR inputs, not independent cross-machine compiler reproducibility.",
+    "Recovery regression used separately captured current policy from a surviving source; independent lost-host recovery remains O03.",
+    "Local packaged runtime qualification does not replace institutional operator/provider/accessibility/load acceptance."
+  ],
+  "buildIssueResolved": "Repository-wide clean deletes the vendored extraction under target; packaging now cleans only its seven first-party modules. The corrected build and runtime smoke passed."
+}

@@ -1,0 +1,8 @@
+{
+  "postgres": "PostgreSQL 17.11 on aarch64-unknown-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit",
+  "fsync": "on",
+  "synchronousCommit": "on",
+  "fullPageWrites": "on",
+  "isolation": "read committed",
+  "timezone": "UTC"
+}

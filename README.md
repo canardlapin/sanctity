@@ -13,7 +13,18 @@ tables, events/stimuli, assessed correction and coherent scientific subsets.
 The [streaming table foundation](docs/streaming-tables.md) provides bounded large
 TSV/GZIP assessment and projection for the next physiology and eye-tracking work.
 
-Current work prioritizes the [scientific core](docs/scientific-core.md): explicit acquisition relationships, companion files, image/table consistency and coherent BIDS materialization.
+Current delivery planning follows the [core vision](docs/vision.md) and
+[institutional readiness assessment](docs/institutional-readiness-plan.md): labs,
+projects, current access, complete curator workflows, and an operable, recoverable
+service. The existing [scientific core](docs/scientific-core.md) remains the integrity
+foundation; additional numerical processing is deferred. Institutional readiness
+has not yet been established.
+
+The immediate milestone is a [reliable local installation and guided demo](docs/local-demo-plan.md)
+on the product owner's computer, with documentation to support later institutional
+discussions. Institutional approval is not assumed. The [six-area core-hardening
+plan](docs/core-hardening-plan.md), coordinated by meta-epic EP9 in mote, sets the
+engineering order, acceptance criteria and integrated release review.
 
 ## Implemented slices
 
@@ -30,9 +41,24 @@ Current work prioritizes the [scientific core](docs/scientific-core.md): explici
 | DICOM | Pinned real converter, bounded/cancellable process lifetime, retained source/diagnostic evidence, explicit output mapping and exclusions |
 | XNAT | Authenticated API streams, explicit resource inventories, experiment pagination, checksums, source-change checks, matching resource ZIP import |
 | HTTP and operator CLI | Revocable principal credentials, release/metadata inspection, correction and acceptance, fixed-release grants, frozen queries, guarded file streams, resumable local import |
-| Browser console | Release/file inspection, metadata origins, findings/relationships, sidecar correction and conflict recovery, frozen queries and access actions over the same API; [v4g adoption gates](docs/implementation-plan.md#console-baseline-and-adoption) remain open |
+| Service distribution | Pinned Java runtime artifact with API/console, migrations and trusted operator commands; source/dependency/digest/license inventory and disposable PostgreSQL install smoke |
+| Browser console | Release/file inspection, metadata origins, findings/relationships, sidecar correction and conflict recovery, frozen queries and access actions over the same API; [bounded console adoption](docs/implementation-plan.md#console-baseline-and-adoption) is recorded, with screen-reader use unverified |
 
 These are bounded implementations with executable evidence. Institutional identity integration, full conformance, representative scientific qualification, production migration and performance remain open.
+
+The [service distribution guide](docs/service-distribution.md) explains packaging
+and running the service with Java 21, PostgreSQL and managed storage. Deployment
+configuration and separate runtime/migration database roles are implemented and tested.
+The [historical compatibility fixture](docs/upgrade-compatibility.md) passes old/current
+package comparisons; full release-job and future-migration qualification remain open.
+The [organization model](docs/organization-reference.md) now persists labs/projects,
+membership, private placement and explicit stewardship in PostgreSQL. Reviewed legacy
+migration preserves historical payloads and exact grants. Current-authority enforcement
+and the independent policy witness are implemented and qualified under
+[ADR004](docs/decisions/004-policy-durability.md). Verified backup automation and
+organization-aware restoration remain open; see the [recovery order](docs/core-hardening-plan.md).
+[Workload budgets](docs/engineering-workload.md) are frozen targets,
+with performance measurement still pending.
 
 ## Build and native demonstration
 
@@ -68,7 +94,8 @@ The pinned application baseline is Scala 3.3.8, Cats Effect 3.5.7, FS2 3.11.0, h
 | `processing-mri` | Header QC and temporal image statistics through one durable local runner; payload qualification, image derivative admission and resumable collection |
 | `import-xnat` | Qualified resource references, HTTP acquisition, pagination, declared ZIP export import |
 | `http` | Authenticated workflow routes, strict request grammar, explicit public JSON representations |
-| `app` | Assembly, API server, operator/import/credential/recovery CLI, demonstrations and shared tests |
+| `service` | Packaged API/console server, migration and trusted operator/import/credential/recovery entry points |
+| `app` | Development demonstrations, optional adapters/processing assembly and shared tests |
 | `integration` | Disposable PostgreSQL transaction, worker, recovery-gate and lifecycle tests |
 
 Start at [NativeRepository](modules/application/src/main/scala/sanctity/application/NativeRepository.scala), [Catalog](modules/application/src/main/scala/sanctity/application/Capabilities.scala), [ScientificViews](modules/application/src/main/scala/sanctity/application/ScientificViews.scala), and [DurableImports](modules/application/src/main/scala/sanctity/application/DurableImports.scala).

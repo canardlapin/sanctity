@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "task": "H06.2",
+  "status": "passed",
+  "at": "2026-10-14T14:39:58.769981+00:00",
+  "artifact": {
+    "baseline": "local-artifacts/compatibility/pre-core-20261014/sanctity-0.1.0-SNAPSHOT.zip",
+    "baselineSha256": "2ae3efa92d344520dc9abae1ce1d6c879998a187cebe1897ce096b3ced6b432e",
+    "candidate": "target/service-release-o013-20261014/sanctity-0.1.0-SNAPSHOT.zip",
+    "candidateSha256": "aea44b7eaef4d50c6ec773ba0313a974a2e11f63a680c29a3442f34859772cf8"
+  },
+  "fixture": "local-artifacts/compatibility/pre-core-20261014/corpus-v2",
+  "acceptance": [
+    {
+      "criterion": "Retain an immutable baseline package identity and synthetic catalog/blob snapshot with multiple accepted releases, interpretations, fixed/dataset grants, revoked credentials, audit/receipts and recoverable pending work; protect required fixture binaries/source inputs from ordinary target cleanup.",
+      "result": "pass"
+    },
+    {
+      "criterion": "Record independent expected release/content/interpretation IDs, old/new export hashes, current allow/deny decisions, operation outcomes and schema checksums; an upgrade must not regenerate its own expected answers.",
+      "result": "pass"
+    },
+    {
+      "criterion": "Provide an executable upgrade/cross-version compatibility harness and run its baseline checks now, including drift/downgrade and interrupted migration fixtures where supported. F02.2/O01.4 execute candidate-specific comparisons when migrations exist; H00 rechecks the final candidate. Schema and interpretation changes must never silently rewrite historical meaning.",
+      "result": "pass"
+    }
+  ],
+  "commands": [
+    "python3 scripts/check-upgrade-compatibility.py freeze --artifact local-artifacts/compatibility/pre-core-20261014/sanctity-0.1.0-SNAPSHOT.zip --fixture local-artifacts/compatibility/pre-core-20261014/corpus-v2 --output target/compatibility-freeze-v2",
+    "python3 scripts/check-upgrade-compatibility.py verify --artifact local-artifacts/compatibility/pre-core-20261014/sanctity-0.1.0-SNAPSHOT.zip --fixture local-artifacts/compatibility/pre-core-20261014/corpus-v2 --output target/compatibility-old-v3",
+    "python3 scripts/check-upgrade-compatibility.py verify --modern --artifact target/service-release-o013-20261014/sanctity-0.1.0-SNAPSHOT.zip --fixture local-artifacts/compatibility/pre-core-20261014/corpus-v2 --output target/compatibility-current-v2"
+  ],
+  "observed": {
+    "completedRetry": "same identity; newer head preserved",
+    "currentGrantDecisions": 8,
+    "driftAndNewerSchema": "refused without repair",
+    "exactHistoricalFiles": 4,
+    "historicalReleasesAndInterpretations": 2,
+    "historicalTablesUnchanged": 14,
+    "interruptedImport": "same operation; exact bytes; one acceptance across retries",
+    "revokedCredential": "denied and historical row unchanged",
+    "runtimeProfile": "separate login"
+  },
+  "migrationInterruptionEvidence": "docs/evidence/institutional-pilot/O01.3/receipt.json (actual backend termination, DDL rollback and explicit retry; exact source retained there)",
+  "inputs": {
+    "scripts/check-upgrade-compatibility.py": "2a508a02e594fe00385e6b30dd1bfc474c627778dc3bf61ff71cb1a2f026a322",
+    "docs/upgrade-compatibility.md": "6addd06e4ede74aae9693f2c71973777d950a67fa2b5b91dc8cd5423482fcb1a",
+    "docs/evidence/institutional-pilot/H06.2/baseline-package-manifest.json": "8b397e104ccf0a3e0ad83dc150230a17c1ea585befc4c24c2c22d7b55bf5c9a1",
+    "docs/evidence/institutional-pilot/H06.2/baseline-source-inventory.json": "b841f70bba24ace8dd0edfe5b554c48efeeff7b7a32b54e7b7a5ee53d3a37f4e",
+    "docs/evidence/institutional-pilot/H06.2/candidate-receipt.json": "bd47765d69de7c1793e4c502485203e9d27c82669459a19add339dc3a209c89e",
+    "docs/evidence/institutional-pilot/H06.2/candidate-service.log": "d649607530e49d01afa1f036c20a06ab82d8deb0f24dc969e00d1a277370e27f",
+    "docs/evidence/institutional-pilot/H06.2/draft-oracle-failure.log": "6067ec822a5ba2b778b731a42df30e80fdaf3af86b995351072e17e4e15211d2",
+    "docs/evidence/institutional-pilot/H06.2/fixture-manifest.json": "4c3175c029633999c779d9d12ea4b829f8f09821af1d4fc7b8e429deeab5b5d1",
+    "docs/evidence/institutional-pilot/H06.2/freeze-receipt.json": "808525bbd01b29f6c5427359aca86608e502d86b3aaa32e5e0af8c68072e2f8c",
+    "docs/evidence/institutional-pilot/H06.2/initial-readiness-failure.log": "70ea0f581e8ceaf82f50131fbbefbd880984d2a59c60211cecd6d72221c79c0e",
+    "docs/evidence/institutional-pilot/H06.2/old-receipt.json": "614cba97318b2766d2a08cdf870879dfe15c781407e7519f19df40ef0b25caf8",
+    "docs/evidence/institutional-pilot/H06.2/old-service.log": "ad3dcc94415236c73aa5e12feda35d69d8313ca292895def2e93104d90951d1a",
+    "docs/evidence/institutional-pilot/H06.2/oracle.json": "9fa0e0e2eab7d5fe13b12802cec35de6e07ff7ec59a7f4c3db7c1827ef1dfd4d",
+    "docs/evidence/institutional-pilot/H06.2/source-snapshot.zip": "068da45109a04c2b9477de78fe4824a511af6693f2a1d4a90c59be648a1341a3"
+  },
+  "failuresFixed": [
+    "First draft expected 403 rather than documented non-disclosing 404; draft remains retained and is not the accepted oracle. New corpus-v2 frozen with old binary and predeclared 404 checks.",
+    "Wait for PostgreSQL TCP readiness, avoiding the temporary initialization socket."
+  ],
+  "limits": [
+    "Same-host native source inventory depends on canonical path/inode/mtime; source retained. No source-independent or physical recovery claim.",
+    "Future F02.2/O01.4 migrations must run their own comparisons; H00 rechecks final candidate. SQL V001\u2013V007 unchanged in current comparison.",
+    "No hosted CI, mixed-version writers or in-place downgrade qualification.",
+    "Revoked token expires normally; historical revoked row/hash remains independently compared after expiry.",
+    "Fixture contains synthetic private credentials/dump locally; only safe oracle/manifests retained in repository evidence."
+  ]
+}

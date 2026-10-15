@@ -1,0 +1,38 @@
+[info] welcome to sbt 1.10.5 (Eclipse Adoptium Java 21.0.12.1)
+[info] loading project definition from /Users/bbuchsbaum/code/scala/sanctity/project
+[info] loading settings for project root from build.sbt ...
+[info] loading settings for project bids4s-19f022d002f69292dec056eb0762b877438c47305cee6c176adf3e0f780e9146-build from plugins.sbt ...
+[info] loading project definition from /Users/bbuchsbaum/code/scala/sanctity/target/source-dependencies/bids4s-19f022d002f69292dec056eb0762b877438c47305cee6c176adf3e0f780e9146/project
+[info] loading settings for project root from build.sbt ...
+[info] resolving key references (17507 settings) ...
+[info] set current project to sanctity (in build file:/Users/bbuchsbaum/code/scala/sanctity/)
+[info] compiling 2 Scala sources to /Users/bbuchsbaum/code/scala/sanctity/modules/postgres/target/scala-3.3.8/classes ...
+[info] done compiling
+[info] compiling 1 Scala source to /Users/bbuchsbaum/code/scala/sanctity/modules/service/target/scala-3.3.8/classes ...
+[info] done compiling
+[info] compiling 2 Scala sources to /Users/bbuchsbaum/code/scala/sanctity/modules/service/target/scala-3.3.8/classes ...
+[info] done compiling
+[info] compiling 1 Scala source to /Users/bbuchsbaum/code/scala/sanctity/modules/integration/target/scala-3.3.8/test-classes ...
+[info] done compiling
+org.postgresql.util.PSQLException: This connection has been closed.
+	at org.postgresql.jdbc.PgConnection.checkClosed(PgConnection.java:1050)
+	at org.postgresql.jdbc.PgConnection.rollback(PgConnection.java:1057)
+	at com.zaxxer.hikari.pool.ProxyConnection.close(ProxyConnection.java:250)
+	at blocking @ sanctity.postgres.PostgresFixture$.resource$$anonfun$2$$anonfun$1(PostgresFixture.scala:25)
+	at flatMap @ doobie.WeakAsync$$anon$1.flatMap(WeakAsync.scala:30)
+	at tailRecM$$anonfun$1 @ doobie.util.transactor$Transactor$$anon$4.apply$$anonfun$3(transactor.scala:169)
+	at flatMap @ doobie.WeakAsync$$anon$1.flatMap(WeakAsync.scala:30)
+	at tailRecM$$anonfun$1 @ doobie.util.transactor$Transactor$$anon$4.apply$$anonfun$3(transactor.scala:169)
+	at blocking @ sanctity.postgres.PostgresFixture$.resource$$anonfun$2$$anonfun$1(PostgresFixture.scala:25)
+	at flatMap @ doobie.WeakAsync$$anon$1.flatMap(WeakAsync.scala:30)
+	at tailRecM$$anonfun$1 @ doobie.util.transactor$Transactor$$anon$4.apply$$anonfun$3(transactor.scala:169)
+	at uncancelable @ doobie.WeakAsync$$anon$1.uncancelable(WeakAsync.scala:38)
+	at flatMap @ doobie.WeakAsync$$anon$1.flatMap(WeakAsync.scala:30)
+	at tailRecM$$anonfun$1 @ doobie.util.transactor$Transactor$$anon$4.apply$$anonfun$3(transactor.scala:169)
+	at flatMap @ doobie.WeakAsync$$anon$1.flatMap(WeakAsync.scala:30)
+	at tailRecM$$anonfun$1 @ doobie.util.transactor$Transactor$$anon$4.apply$$anonfun$3(transactor.scala:169)
+Test run sanctity.postgres.PolicyIntegrationSuite started
+sanctity.postgres.PolicyIntegrationSuite: finished 107.274s
+Test run sanctity.postgres.PolicyIntegrationSuite finished: 0 failed, 0 ignored, 16 total 107.317s
+[info] Passed: Total 16, Failed 0, Errors 0, Passed 16
+[success] Total time: 178 s (02:58), completed Oct 14, 2026, 6:28:14 p.m.

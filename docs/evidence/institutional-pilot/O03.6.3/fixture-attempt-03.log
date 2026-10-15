@@ -1,0 +1,17 @@
+Traceback (most recent call last):
+  File "/Users/bbuchsbaum/code/scala/sanctity/scripts/check-policy-processes.py", line 441, in <module>
+    if __name__=='__main__':main()
+                            ~~~~^^
+  File "/Users/bbuchsbaum/code/scala/sanctity/scripts/check-policy-processes.py", line 427, in main
+    with Fixture(artifact,harness,output,Path(temporary).resolve()) as f:
+         ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bbuchsbaum/code/scala/sanctity/scripts/check-policy-processes.py", line 44, in __enter__
+    self.build();self.start();self.prepare();return self
+                              ~~~~~~~~~~~~^^
+  File "/Users/bbuchsbaum/code/scala/sanctity/scripts/check-policy-processes.py", line 182, in prepare
+    self.fixture=self.helper('setup')
+                 ~~~~~~~~~~~^^^^^^^^^
+  File "/Users/bbuchsbaum/code/scala/sanctity/scripts/check-policy-processes.py", line 127, in helper
+    assert (p.returncode==0 and result['ok']) if ok else (p.returncode!=0 and not result['ok']),(action,result)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ('setup', {'ok': False, 'outcome': 'denied', 'type': 'Failure'})

@@ -1,0 +1,94 @@
+[info] welcome to sbt 1.10.5 (Eclipse Adoptium Java 21.0.12.1)
+[info] loading project definition from /Users/bbuchsbaum/code/scala/sanctity/project
+[info] loading settings for project root from build.sbt ...
+[info] loading settings for project bids4s-19f022d002f69292dec056eb0762b877438c47305cee6c176adf3e0f780e9146-build from plugins.sbt ...
+[info] loading project definition from /Users/bbuchsbaum/code/scala/sanctity/target/source-dependencies/bids4s-19f022d002f69292dec056eb0762b877438c47305cee6c176adf3e0f780e9146/project
+[info] loading settings for project root from build.sbt ...
+[info] resolving key references (17507 settings) ...
+[info] set current project to sanctity (in build file:/Users/bbuchsbaum/code/scala/sanctity/)
+[info] compiling 2 Scala sources to /Users/bbuchsbaum/code/scala/sanctity/modules/postgres/target/scala-3.3.8/classes ...
+[info] done compiling
+[info] compiling 1 Scala source to /Users/bbuchsbaum/code/scala/sanctity/modules/integration/target/scala-3.3.8/test-classes ...
+[info] done compiling
+Test run sanctity.postgres.CurrentAuthoritySuite started
+sanctity.postgres.CurrentAuthoritySuite: finished 102.033s
+Test run sanctity.postgres.CurrentAuthoritySuite finished: 0 failed, 0 ignored, 44 total 102.053s
+Test run sanctity.postgres.OperationsSuite started
+sanctity.postgres.OperationsSuite: finished 18.807s
+Test run sanctity.postgres.OperationsSuite finished: 0 failed, 0 ignored, 5 total 18.807s
+Test run sanctity.postgres.PostgresLifecycleSuite started
+sanctity.postgres.PostgresLifecycleSuite: finished 1185.147s
+Test run sanctity.postgres.PostgresLifecycleSuite finished: 0 failed, 0 ignored, 183 total 1185.148s
+Test run sanctity.postgres.PolicyReceiptCompatibilitySuite started
+sanctity.postgres.PolicyReceiptCompatibilitySuite: finished 0.006s
+Test run sanctity.postgres.PolicyReceiptCompatibilitySuite finished: 0 failed, 0 ignored, 3 total 0.006s
+Test run sanctity.postgres.ProcessingRecoverySuite started
+sanctity.postgres.ProcessingRecoverySuite: finished 40.039s
+Test run sanctity.postgres.ProcessingRecoverySuite finished: 0 failed, 0 ignored, 3 total 40.04s
+Test run sanctity.postgres.PolicyIntegrationSuite started
+sanctity.postgres.PolicyIntegrationSuite: finished 64.488s
+Test run sanctity.postgres.PolicyIntegrationSuite finished: 0 failed, 0 ignored, 19 total 64.488s
+Test run sanctity.postgres.OrganizationPersistenceSuite started
+sanctity.postgres.OrganizationPersistenceSuite: finished 20.513s
+Test run sanctity.postgres.OrganizationPersistenceSuite finished: 0 failed, 0 ignored, 11 total 20.514s
+Import operation: 7887eb3b-41c3-4443-94ed-16d9cce53b82
+{
+  "dataset" : "b9f5139b-f58a-49c5-b496-69009ca572df",
+  "release" : "371595c9-2238-46f9-9c02-395d95fa37f0",
+  "operation" : "7887eb3b-41c3-4443-94ed-16d9cce53b82"
+}
+Import operation: 7887eb3b-41c3-4443-94ed-16d9cce53b82
+{
+  "dataset" : "b9f5139b-f58a-49c5-b496-69009ca572df",
+  "release" : "371595c9-2238-46f9-9c02-395d95fa37f0",
+  "operation" : "7887eb3b-41c3-4443-94ed-16d9cce53b82"
+}
+Credential 86e2c057-9cfc-4c0d-a932-3edea48bd4a1 written to a new private file. Expires: 2026-10-14T23:54:44.976251Z
+Credential revoked.
+Test run sanctity.postgres.HttpSuite started
+sanctity.postgres.HttpSuite: finished 19.111s
+Test run sanctity.postgres.HttpSuite finished: 0 failed, 0 ignored, 8 total 19.111s
+Test run sanctity.postgres.ConsoleSuite started
+sanctity.postgres.ConsoleSuite: finished 3.621s
+Test run sanctity.postgres.ConsoleSuite finished: 0 failed, 0 ignored, 1 total 3.621s
+Test run sanctity.postgres.ServicePrivilegesSuite started
+sanctity.postgres.ServicePrivilegesSuite: finished 8.954s
+Test run sanctity.postgres.ServicePrivilegesSuite finished: 0 failed, 0 ignored, 4 total 8.954s
+Test run sanctity.postgres.TransactionSuite started
+sanctity.postgres.TransactionSuite: finished 19.83s
+Test run sanctity.postgres.TransactionSuite finished: 0 failed, 0 ignored, 10 total 19.83s
+[info] Passed: Total 291, Failed 0, Errors 0, Passed 291
+[success] Total time: 1547 s (25:47), completed Oct 14, 2026, 6:55:18 p.m.
+[info] compiling 3 Scala sources to /Users/bbuchsbaum/code/scala/sanctity/modules/postgres/target/scala-3.3.8/classes ...
+[info] compiling 1 Scala source to /Users/bbuchsbaum/code/scala/sanctity/modules/http/target/scala-3.3.8/classes ...
+[info] done compiling
+[info] done compiling
+[info] compiling 2 Scala sources to /Users/bbuchsbaum/code/scala/sanctity/modules/service/target/scala-3.3.8/classes ...
+[info] done compiling
+Test run sanctity.app.ServiceConfigurationSuite started
+sanctity.app.ServiceConfigurationSuite: finished 6.767s
+Test run sanctity.app.ServiceConfigurationSuite finished: 0 failed, 0 ignored, 9 total 6.806s
+[info] Passed: Total 9, Failed 0, Errors 0, Passed 9
+[success] Total time: 32 s, completed Oct 14, 2026, 6:55:50 p.m.
+Test run sanctity.policy.PolicyJournalSuite started
+sanctity.policy.PolicyJournalSuite: finished 3.08s
+Test run sanctity.policy.PolicyJournalSuite finished: 0 failed, 0 ignored, 17 total 3.1s
+Test run sanctity.policy.PolicyWireSuite started
+sanctity.policy.PolicyWireSuite: finished 0.114s
+Test run sanctity.policy.PolicyWireSuite finished: 0 failed, 0 ignored, 19 total 0.114s
+Test run sanctity.policy.PolicyTransportSuite started
+sanctity.policy.PolicyTransportSuite: finished 80.329s
+Test run sanctity.policy.PolicyTransportSuite finished: 0 failed, 0 ignored, 13 total 80.329s
+Test run sanctity.postgres.PersistenceSuite started
+sanctity.postgres.PersistenceSuite: finished 0.503s
+Test run sanctity.postgres.PersistenceSuite finished: 0 failed, 0 ignored, 19 total 0.503s
+[info] Passed: Total 68, Failed 0, Errors 0, Passed 68
+[success] Total time: 85 s (01:25), completed Oct 14, 2026, 6:57:15 p.m.
+Test run sanctity.app.OrganizationAuthoritySuite started
+sanctity.app.OrganizationAuthoritySuite: finished 1.15s
+Test run sanctity.app.OrganizationAuthoritySuite finished: 0 failed, 0 ignored, 57 total 1.159s
+Test run sanctity.app.OrganizationSuite started
+sanctity.app.OrganizationSuite: finished 0.707s
+Test run sanctity.app.OrganizationSuite finished: 0 failed, 0 ignored, 14 total 0.708s
+[info] Passed: Total 71, Failed 0, Errors 0, Passed 71
+[success] Total time: 4 s, completed Oct 14, 2026, 6:57:18 p.m.

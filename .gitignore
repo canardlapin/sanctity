@@ -6,3 +6,6 @@ project/project/
 .idea/
 .DS_Store
 node_modules/
+
+# Locally retained compatibility artifacts; manifests live in docs/evidence.
+local-artifacts/

@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "task": "H04.1",
+  "status": "passed",
+  "at": "2026-10-14T14:39:58.769981+00:00",
+  "qualification": "workload/oracle/budget definition only; performance NOT qualified",
+  "acceptance": [
+    {
+      "criterion": "Create reproducible quick and stress corpus specifications with exact expected scientific/disclosure results, labs/projects, dataset/file/history counts, realistic metadata sizes and concurrent reader/writer/intake/export scenarios.",
+      "result": "pass"
+    },
+    {
+      "criterion": "Record machine/container/JDK/DB resources and numeric p95 latency, memory, connection, queue, stream, storage-reserve and cancellation budgets before qualification; separate cold/warm runs and state a minimum sampling procedure.",
+      "result": "pass"
+    },
+    {
+      "criterion": "Include the 10000-entry boundary and refusal above supported limits, long-lived downloads, skewed/hidden data and cursor misuse. Scope is synthetic engineering; any budget/corpus reduction requires a recorded reason and requalification, not silent benchmark tuning.",
+      "result": "pass"
+    }
+  ],
+  "commands": [
+    "python3 scripts/generate-engineering-workload.py quick --output target/workload-quick-v2 --materialize",
+    "python3 scripts/generate-engineering-workload.py quick --output target/workload-quick-repeat-v2",
+    "python3 scripts/generate-engineering-workload.py stress --output target/workload-stress-v1",
+    "python3 scripts/generate-engineering-workload.py stress --output target/workload-stress-repeat-v1",
+    "python3 /private/tmp/sanctity-h041-verify.py (retained as verification-procedure.py)"
+  ],
+  "observed": {
+    "status": "passed",
+    "profiles": [
+      {
+        "profile": "quick",
+        "deterministic": true,
+        "datasets": 6,
+        "files": 378,
+        "bytes": 12066322,
+        "releases": 18,
+        "materializedQuickBytesQueriesNiftiAndBoundaries": "pass"
+      },
+      {
+        "profile": "stress",
+        "deterministic": true,
+        "datasets": 24,
+        "files": 12072,
+        "bytes": 3197706588,
+        "releases": 480,
+        "materializedQuickBytesQueriesNiftiAndBoundaries": "not materialized; deterministic recipes checked"
+      }
+    ],
+    "budgetManifest": "consistent with ADR002",
+    "performanceQualified": false
+  },
+  "inputs": {
+    "scripts/generate-engineering-workload.py": "f605f821b5ffa9f6b6e1ae24ee998f523148ce7c51ffa28c34079589c5fb72da",
+    "docs/engineering-workload.md": "b6509b04bc46e6229e13b227801a173f569a2637bd9c0f1f330400fa4dd6b14a",
+    "docs/workloads/engineering-v1.json": "9b8189577896c9505fb757a94f2bd46aec4edc8f56ebb6271123627b309e0610",
+    "docs/evidence/institutional-pilot/H04.1/quick-generation.json": "8d261a8e4e2df370d9acf44b51a56d977d326f1953840b28fe280a3d82fcfe7a",
+    "docs/evidence/institutional-pilot/H04.1/quick-manifest.json": "303c41c10c7ffdce13e90f6d6197ab2ebe9f5aa40138515cca2a6f7eb6b3fbb2",
+    "docs/evidence/institutional-pilot/H04.1/quick-oracle.zip": "1ac7cce67da92775fce166947316356e3eb53c00388a0cea41fef6c75a809e51",
+    "docs/evidence/institutional-pilot/H04.1/source-snapshot.zip": "41bda847627e6a44ef59f6bc852ecd955cae33a1c423cadb3b3e8db2834724cf",
+    "docs/evidence/institutional-pilot/H04.1/stress-generation.json": "86533b184c245d1c8d3fa1ed70793de98b0a0c592ace75cb198854ba1c51464e",
+    "docs/evidence/institutional-pilot/H04.1/stress-manifest.json": "8889bce18bc93810f7b0c8aa5ef6d4b4d5dbb5185ebb06b1ba30fe246b6b8e5e",
+    "docs/evidence/institutional-pilot/H04.1/stress-oracle.zip": "76fd809bc1769ce405ae89cfb31a5503460acbf6c06a19413f608d47d06cd74c",
+    "docs/evidence/institutional-pilot/H04.1/verification-procedure.py": "de380ea2b33659faa4b354fa936536c7e992ae1c67ad6cc4bc2be897ee72f724",
+    "docs/evidence/institutional-pilot/H04.1/verification.json": "0e87dd7d0530df611de0c66d9d4ea45141ae865ea389ea6fa76672288acd9641"
+  },
+  "limits": [
+    "No service workload/latency or budget pass; Q01.2 implements the runner, H04.2 measures and fixes.",
+    "Quick source/slow stream materialized and independently parsed/hashed; stress recipes generated twice but 3.2 GB source not materialized.",
+    "Proposed container/queue/storage limits are acceptance configuration, not observed current enforcement.",
+    "Process-cold is distinct from filesystem-cold; actual filesystem cache isolation remains separately measured.",
+    "Q01.1/Q01.3 retain institutional corpus and target acceptance."
+  ]
+}

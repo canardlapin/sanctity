@@ -1,0 +1,10 @@
+{
+  "purpose": "Preserve pre-hardening binary and exact source before configuration/organization changes; populated database corpus and H06.2 qualification still pending.",
+  "artifact": "local-artifacts/compatibility/pre-core-20261014/sanctity-0.1.0-SNAPSHOT.zip",
+  "source": "local-artifacts/compatibility/pre-core-20261014/source.zip",
+  "files": {
+    "sanctity-0.1.0-SNAPSHOT.zip": "2ae3efa92d344520dc9abae1ce1d6c879998a187cebe1897ce096b3ced6b432e",
+    "source-inventory.json": "b841f70bba24ace8dd0edfe5b554c48efeeff7b7a32b54e7b7a5ee53d3a37f4e",
+    "source.zip": "ff6717ff0df6de77f6ac14b2ed0acac27eff6d6e9a46b85c9d19af8c32793836"
+  }
+}

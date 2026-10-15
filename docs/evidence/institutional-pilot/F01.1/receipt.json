@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "task": "F01.1",
+  "status": "passed",
+  "kind": "engineering-design-review",
+  "at": "2026-10-14T11:59:08.623386+00:00",
+  "reviewer": "codex-institutional-build (engineering self-review; not institutional approval)",
+  "procedure": [
+    "Compared ADR resources with current Dataset, Release, Grant and AccessContext definitions.",
+    "Walked two labs, a shared project, a restricted dataset and a fixed historical share through creation, archival and reassignment.",
+    "Checked that each mutable transition has authority, concurrency and audit preconditions; traced implementation ownership to F02/F03."
+  ],
+  "acceptance": [
+    {
+      "criterion": "Define stable lab/project identifiers, display metadata, one primary project per dataset, optional links without authority, and independent custody.",
+      "result": "pass",
+      "evidence": "ADR Decision and Resources and state"
+    },
+    {
+      "criterion": "Show examples with two labs, one shared project, one restricted dataset and historical releases; no change to release/content identity or cross-study participant merging.",
+      "result": "pass",
+      "evidence": "ADR Two-lab example"
+    },
+    {
+      "criterion": "Specify creation, archival and reassignment semantics and concurrency preconditions; document required API resources and exclusions.",
+      "result": "pass",
+      "evidence": "ADR Creation, archival and reassignment; Public API contract to implement"
+    }
+  ],
+  "negativeCases": [
+    "An optional project link cannot grant access.",
+    "A project reader cannot discover an ExplicitOnly dataset without a separate grant.",
+    "A stale move preview cannot commit after project membership changes.",
+    "Matching sub-01 labels do not merge people."
+  ],
+  "inputs": {
+    "docs/decisions/001-institutional-organization.md": "7b993b58aabdc74d71d09aaf21a51c6db09431ecce32e41141ce277ddf8add82",
+    "docs/vision.md": "c1e51e9d940923c9aa3f7bcc20a1344f840d82a2b1db5cfd597e63e46df0d5fa",
+    "modules/kernel/src/main/scala/sanctity/kernel/Authority.scala": "137b767d53a1883c74cb4193911db37c7125676b59e2f9fa4fe477d5b143805c",
+    "modules/kernel/src/main/scala/sanctity/kernel/Lifecycle.scala": "1a557c5ad1807caa2b5d4071d71a86321c437f2820e944441b5a2b5b7584cedc"
+  },
+  "limitations": [
+    "Design baseline only; organizational runtime behavior remains F02-F06.",
+    "No named institution or human acceptance is claimed.",
+    "F01.2 and F01.3 supply the linked authority and lifecycle contracts before F01 gate review."
+  ]
+}

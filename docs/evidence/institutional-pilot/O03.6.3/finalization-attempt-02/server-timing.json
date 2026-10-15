@@ -1,0 +1,18 @@
+{
+  "observed": {
+    "backend": 409,
+    "transactionStartedAt": "2026-10-15T03:33:45.609786+00:00",
+    "queryStartedAt": "2026-10-15T03:33:45.842523+00:00",
+    "observedAt": "2026-10-15T03:33:46.002007+00:00"
+  },
+  "observedDrainSeconds": 5.440485,
+  "serverMessages": [
+    "2026-10-15 03:33:50.844 UTC [409] ERROR:  canceling statement due to statement timeout",
+    "2026-10-15 03:33:50.844 UTC [409] CONTEXT:  SQL statement \"SELECT pg_sleep(20)\"",
+    "2026-10-15 03:33:50.844 UTC [409] STATEMENT:  INSERT INTO policy_acknowledgement(event_id,certificate) VALUES($1::uuid,$2::jsonb) ON CONFLICT(event_id) DO NOTHING",
+    "2026-10-15 03:33:50.844 UTC [409] LOG:  could not send data to client: Broken pipe",
+    "2026-10-15 03:33:50.844 UTC [409] FATAL:  connection to client lost",
+    "2026-10-15 03:33:50.844 UTC [409] LOG:  disconnection: session time: 0:00:06.898 user=new_runtime database=case1 host=172.20.0.3 port=49868"
+  ],
+  "serverDisconnectSeconds": 5.234214
+}

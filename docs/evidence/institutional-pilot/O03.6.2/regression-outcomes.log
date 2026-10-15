@@ -1,0 +1,49 @@
+[info] welcome to sbt 1.10.5 (Eclipse Adoptium Java 21.0.12.1)
+[info] loading project definition from /Users/bbuchsbaum/code/scala/sanctity/project
+[info] loading settings for project root from build.sbt ...
+[info] loading settings for project bids4s-19f022d002f69292dec056eb0762b877438c47305cee6c176adf3e0f780e9146-build from plugins.sbt ...
+[info] loading project definition from /Users/bbuchsbaum/code/scala/sanctity/target/source-dependencies/bids4s-19f022d002f69292dec056eb0762b877438c47305cee6c176adf3e0f780e9146/project
+[info] loading settings for project root from build.sbt ...
+[info] resolving key references (17507 settings) ...
+[info] set current project to sanctity (in build file:/Users/bbuchsbaum/code/scala/sanctity/)
+[info] compiling 4 Scala sources to /Users/bbuchsbaum/code/scala/sanctity/modules/integration/target/scala-3.3.8/test-classes ...
+[info] done compiling
+Test run sanctity.postgres.PolicyIntegrationSuite started
+sanctity.postgres.PolicyIntegrationSuite: finished 72.997s
+Test run sanctity.postgres.PolicyIntegrationSuite finished: 0 failed, 0 ignored, 21 total 73.005s
+Import operation: 67b3777a-1338-41f4-a424-cda4de0266af
+{
+  "dataset" : "82f2de7e-3207-408a-a1d6-29a72176e4b6",
+  "release" : "bcb7e80d-a1ff-4fb3-a781-72c37b7778af",
+  "operation" : "67b3777a-1338-41f4-a424-cda4de0266af"
+}
+Import operation: 67b3777a-1338-41f4-a424-cda4de0266af
+{
+  "dataset" : "82f2de7e-3207-408a-a1d6-29a72176e4b6",
+  "release" : "bcb7e80d-a1ff-4fb3-a781-72c37b7778af",
+  "operation" : "67b3777a-1338-41f4-a424-cda4de0266af"
+}
+Credential aa8238d2-3853-45b4-a33d-5092f70cff49 written to a new private file. Durability: LocalOnly. Expires: 2026-10-14T23:59:58.380220Z
+Credential revoked. Durability: LocalOnly.
+Test run sanctity.postgres.HttpSuite started
+sanctity.postgres.HttpSuite: finished 17.146s
+Test run sanctity.postgres.HttpSuite finished: 0 failed, 0 ignored, 8 total 17.146s
+Test run sanctity.postgres.CurrentAuthoritySuite started
+sanctity.postgres.CurrentAuthoritySuite: finished 67.959s
+Test run sanctity.postgres.CurrentAuthoritySuite finished: 0 failed, 0 ignored, 44 total 67.959s
+Test run sanctity.postgres.ServicePrivilegesSuite started
+sanctity.postgres.ServicePrivilegesSuite: finished 7.15s
+Test run sanctity.postgres.ServicePrivilegesSuite finished: 0 failed, 0 ignored, 4 total 7.15s
+Test run sanctity.postgres.TransactionSuite started
+sanctity.postgres.TransactionSuite: finished 17.415s
+Test run sanctity.postgres.TransactionSuite finished: 0 failed, 0 ignored, 10 total 17.415s
+Test run sanctity.postgres.OrganizationPersistenceSuite started
+sanctity.postgres.OrganizationPersistenceSuite: finished 21.131s
+Test run sanctity.postgres.OrganizationPersistenceSuite finished: 0 failed, 0 ignored, 11 total 21.131s
+[info] Passed: Total 98, Failed 0, Errors 0, Passed 98
+[success] Total time: 246 s (04:06), completed Oct 14, 2026, 7:01:52 p.m.
+Test run sanctity.app.ServiceConfigurationSuite started
+sanctity.app.ServiceConfigurationSuite: finished 8.473s
+Test run sanctity.app.ServiceConfigurationSuite finished: 0 failed, 0 ignored, 9 total 8.494s
+[info] Passed: Total 9, Failed 0, Errors 0, Passed 9
+[success] Total time: 12 s, completed Oct 14, 2026, 7:02:05 p.m.

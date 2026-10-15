@@ -1,0 +1,9 @@
+{
+  "installation": "00000000-0000-0000-0000-000000000001",
+  "endpoint": "https://localhost:9443/v1/policy",
+  "identityStore": "/protected/sanctity-policy/writer.p12",
+  "identityPasswordFile": "/protected/sanctity-policy/writer-password",
+  "trustStore": "/protected/sanctity-policy/anchors.p12",
+  "trustPasswordFile": "/protected/sanctity-policy/anchors-password",
+  "signingPublic": "/protected/sanctity-policy/witness-signing-public.der"
+}

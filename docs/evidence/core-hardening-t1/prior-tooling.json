@@ -1,0 +1,7 @@
+{
+  "path": "scripts/check-service-package.py",
+  "sha256": "39aeef4bb123bfa3835a1d5960b002f0fd09b9c86f56e6382e7c26f5d1a7772d",
+  "receipt": "docs/evidence/institutional-pilot/O01.1/receipt.json",
+  "provenance": "Recovered by reversing documented O01.2 edits from its exact archived script; independently matched the already-existing O01.1 receipt SHA-256. Earlier build inventory omitted this non-build qualification script. Prior receipt untouched; original old artifact/full build source were already preserved.",
+  "archive": "docs/evidence/core-hardening-t1/prior-tooling.zip"
+}

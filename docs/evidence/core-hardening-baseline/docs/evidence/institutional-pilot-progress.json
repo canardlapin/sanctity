@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 3,
+  "at": "2026-10-14T12:23:26.588037+00:00",
+  "program": "bd-01M4W3ZN8Z16J30J8EYPWQERQC",
+  "immediateMilestone": {
+    "key": "EP0",
+    "mote": "bd-01M4X5M9TGQV4QYWRASHCZQV0V",
+    "contract": "docs/local-demo-plan.md",
+    "institutionalApproval": "not present; later gate"
+  },
+  "counts": {
+    "requiredEpics": 7,
+    "conditionalEpics": 2,
+    "gates": 19,
+    "tasks": 71,
+    "requiredTasks": 65,
+    "totalNodesIncludingProgram": 100,
+    "closedTasks": 5,
+    "closedGates": 1,
+    "closedEpics": 0
+  },
+  "completed": [
+    "F01",
+    "F01.1",
+    "F01.2",
+    "F01.3",
+    "L01.1",
+    "O01.1"
+  ],
+  "nextReadyEngineering": [
+    "F02.1",
+    "O01.2",
+    "O01.3"
+  ],
+  "checks": {
+    "acyclic": true,
+    "allMoteTitlesPrioritiesCriteriaReferencesParentsAndDependencies": "pass",
+    "closedReceiptInputsMatchCurrentFiles": "pass",
+    "localDemoDependencyNodes": 45,
+    "localInstitutionalMixedExternalBlockers": [],
+    "allInstitutionalAndMixedTasksStillOpen": true,
+    "currentDocumentLinksResolved": 138,
+    "moteDoctor": true
+  },
+  "regression": {
+    "receipt": "docs/evidence/institutional-pilot/O01.1/receipt.json",
+    "ordinaryTests": 469,
+    "postgresTests": 210,
+    "packagedRuntimeSmoke": "pass",
+    "crashRetryAndRestoreRevocation": "pass"
+  },
+  "scopeChange": "Added EP0/L01 with six tasks. SITE01.1 now follows the local demo. W01.2 uses the local native-staging contract; SITE01.3 later records and blocks any institution-required additional transport. Existing IDs retained.",
+  "inputs": {
+    "README.md": "3af72b5b87d04c9fa319276dcde890790b2e803ee06cc937933689a715a3235a",
+    "docs/local-demo-plan.md": "a17c95185928ea5f98c2fffe8018ad288f98247f747257f8da20df003809dc02",
+    "docs/institutional-pilot-epics.md": "9b61b6b7b1c39042b28b08c0b148e8973d090e31d03d398cf9ead335c8dcf593",
+    "docs/institutional-readiness-plan.md": "9c743e58141647e2cb568aab6f8d57917665a41d38edf44cdf95e546ee46d446",
+    "docs/implementation-plan.md": "8de866d4999fcf64922ef4f2cf71d4a6ba8df236f1dff5a362ab690d34da9218",
+    "docs/service-distribution.md": "6c2d2d6c8b36279cb9123a95b7e203358966a74e59d83a1c84f7705ca755237e",
+    "docs/decisions/001-institutional-organization.md": "7b993b58aabdc74d71d09aaf21a51c6db09431ecce32e41141ce277ddf8add82",
+    "docs/decisions/002-institutional-authority.md": "0b1ddb971b4c306bb87d404fd114d2ff48fb055dd7a4279c07ebcf35be04d3eb",
+    "docs/decisions/003-institutional-lifecycle.md": "12b0dc70b7ef65590bc420dd49330dde5e8c3149593bb930295531d951e525a2",
+    "docs/institutional-readiness-backlog.json": "848ec5a4b9556b0ff0306993b88c06727d158c748224d08ceb9b32ee14b1e9ea",
+    "docs/evidence/institutional-readiness-motes.json": "fb2b5ab19936f010f987f2b112d3a8e7bccbfcf90e3c2ad2015d1d70a38f318e"
+  },
+  "limitations": [
+    "Only organizational design, service packaging and local-demo specification are complete in this tranche.",
+    "No retained local instance or completed guided demo exists yet; L01.2-L01.6 remain open.",
+    "Local simulated identity/data and automated tests do not replace institutional/provider/human/operator acceptance.",
+    "Changes and mote operations remain uncommitted in the shared workspace."
+  ]
+}

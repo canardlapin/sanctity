@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "artifact": "sanctity-0.1.0-SNAPSHOT.zip",
+  "artifactSha256": "d3150b7dbba28426224d844787c78b016925bca1787edadb800a2095d22d222a",
+  "postgresImage": "postgres@sha256:b0f9560a2de083e2cc7382e75f808c7381a32852a7ec49117deedb300e552b24",
+  "checks": [
+    "exact payload/dependency digests, runtime resources, licenses and module exclusion",
+    "Java-only launcher with spaces, no source/build-tool PATH, version/help and invalid command",
+    "invalid database/secret/origin/port/storage settings fail closed with canary-free diagnostics",
+    "packaged SQL migrations applied and repeated successfully",
+    "trusted create, private credential issuance and native import from packaged resources",
+    "live port collision and Host/Origin checks resist forwarded-header substitution",
+    "live console, anonymous denial, authenticated identity, accepted head and byte-exact HTTP delivery",
+    "packaged policy capture and live credential revocation",
+    "packaged SIGTERM/SIGKILL restart preserves exact accepted release/bytes and credential revocation"
+  ],
+  "status": "passed",
+  "scope": "Synthetic single-host Java-only packaged runtime; not institutional qualification",
+  "manifestSha256": "d9e0908d615827cc9740e64f1597a95c8343bc4d67752419a98218f53aab6644",
+  "sourceInventorySha256": "15a877ff03421e1dd09bb58508db15373888ddea4977f837e1f318f68b5d01b0",
+  "runtimeJarCount": 49,
+  "versionOutput": "Sanctity 0.1.0-SNAPSHOT (Scala 3.3.8; Java 21+)",
+  "postgresVersion": "postgres (PostgreSQL) 17.11"
+}

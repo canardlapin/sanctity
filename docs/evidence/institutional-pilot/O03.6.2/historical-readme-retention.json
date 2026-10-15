@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "status": "passed",
+  "at": "2026-10-14T23:12:27.794926+00:00",
+  "purpose": "Retain exact historical documentation bytes referenced by the T2 coordination receipt; no test oracle or product source is regenerated.",
+  "sourceReceipt": "docs/evidence/core-hardening-t2/receipt.json",
+  "sourceReceiptSha256": "8e04b0a1cfb2aa88c59ecc7742c62cfe79626483d07662baa9ef2c581265a085",
+  "sourcePath": "README.md",
+  "historicalSha256": "13dfe081b87b63c62f2708dc6b063ba5baabd487e1dcd71a1d2a544dc4123849",
+  "currentSha256": "a6716abc5fd5cc015669c584f95f9f4b8b4d7a4398d0987ff9e0ab16e3bc2423",
+  "currentPreserved": true,
+  "method": "A copy of the current README with only the newer multimodal-plan paragraph removed exactly matches the previously recorded SHA256. The current README is unchanged.",
+  "archive": "docs/evidence/institutional-pilot/O03.6.2/before-readme.zip",
+  "archiveSha256": "2379533c0ccc745536bdafcd33e144126dd1440818595be980e15fb01da2182d",
+  "implementationReceiptUnchanged": "428b26687c94ef313641c72f93c03732fb8166a1eafc828b9a80ff920fcf5d5a"
+}

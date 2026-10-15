@@ -1,0 +1,4 @@
+passed scripts/check-service-package.py
+passed scripts/check-policy-witness-package.py
+passed scripts/check-policy-catalog-package.py
+passed scripts/check-upgrade-compatibility.py

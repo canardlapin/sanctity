@@ -1,0 +1,3500 @@
+{
+  "schema": "sanctity.institutional-readiness-backlog.v3",
+  "date": "2026-10-14",
+  "status": "engineering-in-progress; local demonstration before institutional pilot",
+  "plan": "docs/institutional-readiness-plan.md",
+  "vision": "docs/vision.md",
+  "guide": "docs/institutional-pilot-epics.md",
+  "deploymentModel": "One institution hosting several labs and selected external collaborators (user-confirmed)",
+  "program": {
+    "title": "Deliver a governed and recoverable institutional repository beta",
+    "priority": 0,
+    "outcome": "Meet the lab/project repository promise within an explicitly accepted institutional scope.",
+    "completion": "All seven required epics and all conditional epics activated by SITE01.3 pass with retained, source-bound evidence. EP0 first proves the local installation and guided demonstration. Q03.3 later records a named institutional pilot go/no-go. No production source cutover follows from either milestone.",
+    "required": [
+      "EP0",
+      "EP1",
+      "EP2",
+      "EP3",
+      "EP4",
+      "EP5",
+      "EP6"
+    ],
+    "requiredGates": [
+      "L01",
+      "SITE01",
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F06",
+      "O01",
+      "O02",
+      "O03",
+      "O04",
+      "W01",
+      "W02",
+      "Q01",
+      "Q02",
+      "Q03"
+    ]
+  },
+  "definitionOfDone": [
+    "Deliver the stated behavior, satisfy every acceptance criterion and retain the stated evidence; a failed/not-run criterion remains open.",
+    "Use existing scientific acceptance, identity, authority and durable-operation contracts. Preserve unrelated work and exact historical releases.",
+    "Exercise relevant positive, negative, concurrency, failure and compatibility scenarios; run the suites appropriate to changed boundaries, not unrelated tests by rote.",
+    "Record commands/procedures, actual outcomes, source/artifact/configuration identity and limits. Do not substitute synthetic/provider-mock/automated-accessibility evidence for a required institutional or human result.",
+    "A gate is an integration/evidence review, not duplicate implementation work. Epic/program closure requires their gates and a current dependency check.",
+    "Scope new implementation to a reviewable change; if discovery makes a leaf too broad, split it into blocking child work before claiming completion.",
+    "Institutional tasks record missing information and accountable roles without inventing acceptance or sending unsolicited messages.",
+    "Conditional epics require an explicit SITE01.3 scope decision. Deferred does not mean implemented; activate blockers before commencing selected conditional work."
+  ],
+  "epics": [
+    {
+      "key": "EP0",
+      "title": "Reliable local installation and guided repository demonstration",
+      "required": true,
+      "gates": [
+        "L01"
+      ],
+      "outcome": "Run a reliable, repeatable repository demonstration on the product owner’s computer, with guides and evidence suitable for seeking institutional interest.",
+      "acceptance": [
+        "A packaged local installation has protected configuration, distinct runtime/migration roles, predictable start/stop/restart and a guarded demo-only reset.",
+        "A seeded two-lab/guest browser journey demonstrates real discovery, intake, correction, exact history/retrieval, sharing, revocation and project review work.",
+        "A repeatable failure/restart rehearsal and an artifact-matched quickstart/presenter/researcher guide support an honest institutional discussion; local evidence does not imply institutional approval."
+      ],
+      "priority": 0,
+      "dependsOn": [
+        "L01"
+      ],
+      "ownerRole": "Product/backend/frontend engineers with local operator"
+    },
+    {
+      "key": "EP1",
+      "title": "Labs, projects and a usable collaboration workspace",
+      "required": true,
+      "gates": [
+        "F01",
+        "F02",
+        "F05",
+        "F06"
+      ],
+      "outcome": "A lab steward and researcher can find, organize and share their projects without internal IDs or database assistance.",
+      "acceptance": [
+        "The organizational contract and migration preserve existing scientific releases and attribution.",
+        "Authorized project discovery and collaboration screens work across two labs; unauthorized names/counts and revoked access remain hidden.",
+        "The two-lab browser/API/PostgreSQL journey and historical-data migration have retained passing evidence."
+      ],
+      "priority": 0,
+      "dependsOn": [
+        "F01",
+        "F02",
+        "F05",
+        "F06"
+      ],
+      "ownerRole": "Technical lead with relevant acceptance owner"
+    },
+    {
+      "key": "EP2",
+      "title": "Institutional identity and current permissions",
+      "required": true,
+      "gates": [
+        "F03",
+        "F04"
+      ],
+      "outcome": "Institutional and approved external identities receive only their current, explicit authority.",
+      "acceptance": [
+        "Membership, stewardship, principal disablement and expiring grants are evaluated consistently at every boundary, including long-running work.",
+        "One real institutional identity provider and the chosen browser-session design are qualified; email matching never links identities.",
+        "Offboarding, revoked/expired sessions, stale contexts and fixed-release boundaries pass positive and negative tests."
+      ],
+      "priority": 0,
+      "dependsOn": [
+        "F03",
+        "F04"
+      ],
+      "ownerRole": "Technical lead with relevant acceptance owner"
+    },
+    {
+      "key": "EP3",
+      "title": "Installable and observable institutional service",
+      "required": true,
+      "gates": [
+        "O01",
+        "O02"
+      ],
+      "outcome": "An operator can install, upgrade, monitor and bound a supported service.",
+      "acceptance": [
+        "A versioned artifact installs on a clean host with separate migration/runtime privileges and documented configuration.",
+        "Health, diagnostic, audit, resource and alert surfaces support real operator actions without disclosing secrets or private scientific metadata.",
+        "Database outage, storage exhaustion, interruption and upgrades preserve accepted state within the supported envelope."
+      ],
+      "priority": 0,
+      "dependsOn": [
+        "O01",
+        "O02"
+      ],
+      "ownerRole": "Technical lead with relevant acceptance owner"
+    },
+    {
+      "key": "EP4",
+      "title": "Durable storage, withdrawal and independent recovery",
+      "required": true,
+      "gates": [
+        "O03",
+        "O04"
+      ],
+      "outcome": "Loss of the original host does not lose the declared recoverable data or resurrect revoked access and withdrawals.",
+      "acceptance": [
+        "Catalog/blob backups and independently durable current policy/lifecycle history survive the declared failure domains.",
+        "Restore remains closed on missing, stale, incomplete or unauthenticated policy evidence and invalidates old sessions, credentials and leases.",
+        "Revocation/withdrawal after backup, shared references, integrity damage and total-host-loss recovery have measured results; erasure obligations have an enforced admission boundary."
+      ],
+      "priority": 0,
+      "dependsOn": [
+        "O03",
+        "O04"
+      ],
+      "ownerRole": "Technical lead with relevant acceptance owner"
+    },
+    {
+      "key": "EP5",
+      "title": "Complete intake, curation, export and project work",
+      "required": true,
+      "gates": [
+        "W01",
+        "W02"
+      ],
+      "outcome": "Curators and researchers complete everyday repository work through supported product workflows.",
+      "acceptance": [
+        "Governed creation, approved intake, review/acceptance, retry/cancel and verified export work without direct database edits.",
+        "Project tasks, notes, release history and review status are usable and obey data permissions.",
+        "Every review/result identifies exact releases; failed or partial operations cannot appear completed or scientifically accepted."
+      ],
+      "priority": 0,
+      "dependsOn": [
+        "W01",
+        "W02"
+      ],
+      "ownerRole": "Technical lead with relevant acceptance owner"
+    },
+    {
+      "key": "EP6",
+      "title": "Institutional pilot evidence and operator handover",
+      "required": true,
+      "gates": [
+        "SITE01",
+        "Q01",
+        "Q02",
+        "Q03"
+      ],
+      "outcome": "A named institution can make an evidence-backed decision to run a bounded pilot.",
+      "acceptance": [
+        "The service owner accepts source/data boundaries, capacity, recovery objectives, responsibilities and any conditional integrations.",
+        "Representative correctness/load evidence, independent access review, actual user/accessibility results and operator-led recovery meet that scope.",
+        "A recorded pilot go/no-go distinguishes open blockers from accepted limits; primary-repository migration remains a separate decision."
+      ],
+      "priority": 0,
+      "dependsOn": [
+        "SITE01",
+        "Q01",
+        "Q02",
+        "Q03"
+      ],
+      "ownerRole": "Institutional service owner"
+    },
+    {
+      "key": "EP7",
+      "title": "Qualify the selected DICOM or XNAT source",
+      "required": false,
+      "gates": [
+        "C01"
+      ],
+      "outcome": "The institution's required source collection is imported with explicit scientific coverage and complete accounting.",
+      "acceptance": [
+        "Activate only when SITE01 selects this source for the pilot and adds the epic as a program blocker.",
+        "Named source inventory, reviewed mapping/fixtures and restricted-evidence handling are qualified.",
+        "A representative interrupted import and reconciliation leave no unexplained source objects or silent scientific transformations."
+      ],
+      "priority": 2,
+      "dependsOn": [
+        "C01"
+      ],
+      "ownerRole": "Technical lead with relevant acceptance owner"
+    },
+    {
+      "key": "EP8",
+      "title": "Integrate a bounded visualization or QA report workflow",
+      "required": false,
+      "gates": [
+        "W03"
+      ],
+      "outcome": "Researchers inspect an existing image/report workflow under the repository's ordinary authority and lineage contracts.",
+      "acceptance": [
+        "Activate only when SITE01 records the needed workflow and adds the epic as a program blocker.",
+        "The integration consumes versioned inputs/results without introducing a new analysis method or general scheduler.",
+        "Current permissions, untrusted report isolation, large-payload behavior and accessibility are qualified."
+      ],
+      "priority": 2,
+      "dependsOn": [
+        "W03"
+      ],
+      "ownerRole": "Technical lead with relevant acceptance owner"
+    }
+  ],
+  "items": [
+    {
+      "key": "L01",
+      "title": "Qualify the local installation, demo and institutional discussion pack",
+      "priority": 0,
+      "dependsOn": [
+        "L01.1",
+        "L01.2",
+        "L01.3",
+        "L01.4",
+        "L01.5",
+        "L01.6"
+      ],
+      "required": true,
+      "tranche": "local-demonstration",
+      "ownerRole": "Engineering lead with local product owner",
+      "outcome": "A working local installation and guided repository story are ready to show before institutional pilot discussions.",
+      "acceptance": [
+        "Review the exact artifact, local configuration, synthetic seed and install/start/stop/reset receipts; no implicit remote exposure or unguarded deletion is allowed.",
+        "Complete the normal browser repository journey and repeated restart/interruption qualification with exact historical retrieval and current denial after revocation.",
+        "Verify the commands/screenshots/guides against that artifact and distinguish local engineering evidence from all still-open institutional acceptance gates."
+      ],
+      "references": [
+        "docs/local-demo-plan.md",
+        "docs/service-distribution.md"
+      ],
+      "kind": "acceptance-gate",
+      "epic": "EP0",
+      "closure": "Review all child receipts against this local demonstration outcome. Do not close institutional/provider/accessibility/operator acceptance gates based on this local result."
+    },
+    {
+      "key": "SITE01",
+      "title": "Define institutional beta scope, owners and acceptance envelope",
+      "priority": 0,
+      "dependsOn": [
+        "SITE01.1",
+        "SITE01.2",
+        "SITE01.3"
+      ],
+      "required": true,
+      "ownerRole": "Product owner with institutional operator and curator",
+      "outcome": "A named deployment brief replacing planning assumptions with the selected institution's actual needs.",
+      "acceptance": [
+        "Record hosting, identity provider and external-collaborator model, data classification, permitted source collections, retention/withdrawal obligations and support hours.",
+        "Name acceptance owners and record capacity, growth, availability and recovery targets, distinguishing scientific-data RPO from restrictive-policy durability.",
+        "Explicitly reconcile beta scope with PRD targets and original pilot gates; if DICOM/XNAT or visualization is essential, make C01/W03 a dependency of program completion. Unavailable real inputs remain open; do not invent acceptance."
+      ],
+      "references": [
+        "docs/institutional-readiness-plan.md#1-what-we-can-responsibly-stand-up",
+        "docs/prd.md"
+      ],
+      "kind": "acceptance-gate",
+      "epic": "EP6",
+      "previousDependsOn": [],
+      "closure": "Review all child evidence against these integration criteria. Children closing does not automatically close this gate. Required human/institutional evidence must be observed, never inferred from automated tests."
+    },
+    {
+      "key": "F01",
+      "title": "Specify lab, project, role and offboarding contracts",
+      "priority": 0,
+      "dependsOn": [
+        "F01.1",
+        "F01.2",
+        "F01.3"
+      ],
+      "required": true,
+      "tranche": "foundation",
+      "ownerRole": "Backend lead with product owner",
+      "outcome": "A small organizational model with explicit authority and a migration path from the existing curator model.",
+      "acceptance": [
+        "Write an ADR and role/action matrix covering lab membership, project participation, dataset placement, discovery, source evidence, fixed-release sharing, grant expiry, principal disablement and stewardship transfer.",
+        "Define link-versus-authority behavior, independent versus membership-derived grants and last-steward recovery without rewriting scientific identities.",
+        "Specify public API and migration examples for existing datasets/curators; keep proposals clear where institution-specific inputs are outstanding."
+      ],
+      "references": [
+        "docs/vision.md",
+        "modules/kernel/src/main/scala/sanctity/kernel/Authority.scala",
+        "modules/kernel/src/main/scala/sanctity/kernel/Lifecycle.scala",
+        "docs/decisions/001-institutional-organization.md",
+        "docs/decisions/002-institutional-authority.md",
+        "docs/decisions/003-institutional-lifecycle.md",
+        "docs/decisions/institutional-authority-cases.json"
+      ],
+      "kind": "acceptance-gate",
+      "epic": "EP1",
+      "previousDependsOn": [],
+      "closure": "Review all child evidence against these integration criteria. Children closing does not automatically close this gate. Required human/institutional evidence must be observed, never inferred from automated tests."
+    },
+    {
+      "key": "F02",
+      "title": "Persist governed labs, projects and memberships",
+      "priority": 0,
+      "dependsOn": [
+        "F02.1",
+        "F02.2",
+        "F02.3"
+      ],
+      "required": true,
+      "tranche": "foundation",
+      "ownerRole": "Backend engineer",
+      "outcome": "Reference and PostgreSQL catalogs support durable organizational records and controlled administration.",
+      "acceptance": [
+        "Add checked migrations and application contracts for labs/projects, membership, project dataset placement and human-readable metadata; preserve existing release IDs and attribution.",
+        "Migrate old curator/dataset records explicitly and provide audited stewardship transfer; no default public workspace or accidental access widening.",
+        "Prove reference/PostgreSQL agreement, concurrent updates, authorized administration, upgrade preservation and denial of unauthorized membership changes."
+      ],
+      "references": [
+        "modules/application/src/main/scala/sanctity/application/Capabilities.scala",
+        "modules/postgres/src/main/scala/sanctity/postgres/PostgresDatabase.scala"
+      ],
+      "kind": "acceptance-gate",
+      "epic": "EP1",
+      "previousDependsOn": [
+        "F01"
+      ],
+      "closure": "Review all child evidence against these integration criteria. Children closing does not automatically close this gate. Required human/institutional evidence must be observed, never inferred from automated tests."
+    },
+    {
+      "key": "F03",
+      "title": "Enforce current memberships, principal state and expiring access",
+      "priority": 0,
+      "dependsOn": [
+        "F03.1",
+        "F03.2",
+        "F03.3",
+        "F03.4"
+      ],
+      "required": true,
+      "tranche": "foundation",
+      "ownerRole": "Backend engineer",
+      "outcome": "Every repository access path reflects current organizational authority, with explainable effective access.",
+      "acceptance": [
+        "Replace permanent curator bypass with governed stewardship and enforce principal disablement, membership removal and grant expiry transactionally.",
+        "Apply authority to directory listings/counts, dataset/release reads, queries, preparations, acceptance/retries/receipts, downloads and run input/destination use; preserve bounded disclosure and fixed-release semantics.",
+        "Add authorized effective-access inspection and negative fixtures for cross-lab leakage, independent grants, concurrent policy changes and stale contexts; ensure continuing delivery rechecks the declared policy bound."
+      ],
+      "references": [
+        "modules/kernel/src/main/scala/sanctity/kernel/Authority.scala",
+        "modules/postgres/src/main/scala/sanctity/postgres/PostgresCatalog.scala",
+        "modules/integration/src/test/scala/sanctity/postgres/HttpSuite.scala"
+      ],
+      "kind": "acceptance-gate",
+      "epic": "EP2",
+      "previousDependsOn": [
+        "F02"
+      ],
+      "closure": "Review all child evidence against these integration criteria. Children closing does not automatically close this gate. Required human/institutional evidence must be observed, never inferred from automated tests."
+    },
+    {
+      "key": "F04",
+      "title": "Implement institutional sign-in and browser-session lifecycle",
+      "priority": 0,
+      "dependsOn": [
+        "F04.1",
+        "F04.2",
+        "F04.3",
+        "F04.4"
+      ],
+      "required": true,
+      "tranche": "foundation",
+      "ownerRole": "Backend/integration engineer with identity administrator",
+      "outcome": "One institutional identity provider authenticates stable principals with a usable and revocable browser session.",
+      "acceptance": [
+        "Use verified provider subject bindings; cover approved external collaborators, account disablement/recovery, expiry and logout without email-only identity merging.",
+        "Define session storage/transport, origin and request protections, secret rotation and current authorization; retain explicit service credentials rather than conferring arbitrary caller identity.",
+        "Qualify provider errors, invalid/stale sessions and contract behavior in automated fixtures; retain a selected-provider staging rehearsal before beta qualification. Missing real provider access stays an explicit open gate."
+      ],
+      "references": [
+        "modules/application/src/main/scala/sanctity/application/Authentication.scala",
+        "docs/http-api.md"
+      ],
+      "kind": "acceptance-gate",
+      "epic": "EP2",
+      "previousDependsOn": [
+        "F01"
+      ],
+      "closure": "Review all child evidence against these integration criteria. Children closing does not automatically close this gate. Required human/institutional evidence must be observed, never inferred from automated tests."
+    },
+    {
+      "key": "F05",
+      "title": "Deliver authorized lab and project discovery in the console",
+      "priority": 0,
+      "dependsOn": [
+        "F05.1",
+        "F05.2",
+        "F05.3"
+      ],
+      "required": true,
+      "tranche": "foundation",
+      "ownerRole": "Frontend/integration engineer",
+      "outcome": "A signed-in user finds permitted projects/datasets and manages collaboration without typing internal IDs.",
+      "acceptance": [
+        "Implement bounded authorized directory/search APIs and console navigation from login through lab/project/dataset to existing release and curation screens.",
+        "Provide human-readable collaborator selection, effective-access explanation, scope/future-release distinction, expiry and revocation under the same backend contracts.",
+        "Include empty/denied/error/stale-session states, keyboard/focus behavior and leakage checks for titles, counts and suggestions; do not duplicate authority rules in the browser."
+      ],
+      "references": [
+        "modules/http/src/main/scala/sanctity/http/RepositoryHttp.scala",
+        "modules/http/src/main/resources/sanctity/ui/app.js"
+      ],
+      "kind": "acceptance-gate",
+      "epic": "EP1",
+      "previousDependsOn": [
+        "F03",
+        "F04"
+      ],
+      "closure": "Review all child evidence against these integration criteria. Children closing does not automatically close this gate. Required human/institutional evidence must be observed, never inferred from automated tests."
+    },
+    {
+      "key": "F06",
+      "title": "Qualify the two-lab institutional foundation journey",
+      "priority": 0,
+      "dependsOn": [
+        "F06.1",
+        "F06.2"
+      ],
+      "required": true,
+      "tranche": "foundation",
+      "ownerRole": "Integration engineer with curator",
+      "outcome": "A retained end-to-end demonstration of sign-in, organization, sharing and offboarding across two labs.",
+      "acceptance": [
+        "Exercise real browser/HTTP/PostgreSQL with two labs, reader/contributor/steward roles, one external collaborator and a migrated preexisting dataset.",
+        "Demonstrate denied discovery, sharing/revocation, membership removal, principal disablement, concurrent role changes and stewardship handover while preserving historical releases and attribution.",
+        "Retain source-bound automated and human workflow/accessibility evidence with explicit not-run provider or screen-reader gates; completion of this tranche does not assert institutional readiness."
+      ],
+      "references": [
+        "scripts/check-console-backend.sh",
+        "docs/evidence/console/adoption.json",
+        "docs/institutional-readiness-plan.md#immediate-six-mote-foundation-tranche"
+      ],
+      "kind": "acceptance-gate",
+      "epic": "EP1",
+      "previousDependsOn": [
+        "F05"
+      ],
+      "closure": "Review all child evidence against these integration criteria. Children closing does not automatically close this gate. Required human/institutional evidence must be observed, never inferred from automated tests."
+    },
+    {
+      "key": "O01",
+      "title": "Package an installable service with controlled upgrades",
+      "priority": 0,
+      "dependsOn": [
+        "O01.1",
+        "O01.2",
+        "O01.3",
+        "O01.4"
+      ],
+      "required": true,
+      "ownerRole": "Backend/operations engineer",
+      "outcome": "A clean institutional staging host can run a pinned Sanctity release without using sbt as the service manager.",
+      "acceptance": [
+        "Supply a versioned artifact/deployment manifest, validated configuration, TLS/origin and secret setup, process supervision and graceful shutdown.",
+        "Separate migration privileges/command from runtime database access; retain drift checks and provide upgrade failure/restore procedures and compatibility checks for old releases.",
+        "Rehearse clean installation and an upgrade from the existing schema with pinned sources/dependencies and retained results; do not claim hosted CI or deployment execution without receipts."
+      ],
+      "references": [
+        "modules/service/src/main/scala/sanctity/app/ApiServer.scala",
+        "modules/postgres/src/main/scala/sanctity/postgres/PostgresDatabase.scala",
+        "build.sbt"
+      ],
+      "kind": "acceptance-gate",
+      "epic": "EP3",
+      "previousDependsOn": [],
+      "closure": "Review all child evidence against these integration criteria. Children closing does not automatically close this gate. Required human/institutional evidence must be observed, never inferred from automated tests."
+    },
+    {
+      "key": "O02",
+      "title": "Make service health, storage limits and failures observable",
+      "priority": 0,
+      "dependsOn": [
+        "O02.1",
+        "O02.2",
+        "O02.3",
+        "O02.4",
+        "O02.5",
+        "O02.6"
+      ],
+      "required": true,
+      "ownerRole": "Operations engineer with institutional operator",
+      "outcome": "Operators see and can respond to resource exhaustion, failed work and unavailable dependencies before data stewardship fails.",
+      "acceptance": [
+        "Provide distinct liveness/readiness including the closed recovery gate, redacted structured diagnostics, authorized audit inspection, useful metrics and tested alert delivery.",
+        "Account for accepted/staged/abandoned/backup storage; enforce capacity reservations and bounded queues/concurrency, including streaming response lifetimes and large inventory responses.",
+        "Exercise database outage, disk-full, failed/abandoned imports and cancellation; document escalation, safe service behavior and integrity scrub/repair procedures without enabling unqualified garbage collection."
+      ],
+      "references": [
+        "modules/service/src/main/scala/sanctity/app/ApiServer.scala",
+        "modules/objects/src/main/scala/sanctity/objects/FileBlobStore.scala",
+        "modules/application/src/main/scala/sanctity/application/DurableImports.scala"
+      ],
+      "kind": "acceptance-gate",
+      "epic": "EP3",
+      "previousDependsOn": [
+        "O01"
+      ],
+      "closure": "Review all child evidence against these integration criteria. Children closing does not automatically close this gate. Required human/institutional evidence must be observed, never inferred from automated tests."
+    },
+    {
+      "key": "O03",
+      "title": "Preserve current authority independently and automate disaster recovery",
+      "priority": 0,
+      "dependsOn": [
+        "O03.1",
+        "O03.2",
+        "O03.3",
+        "O03.4",
+        "O03.5"
+      ],
+      "required": true,
+      "ownerRole": "Backend/operations engineer with institutional operator",
+      "outcome": "Catalog/blob loss cannot force recovery to trust stale permissions or credentials.",
+      "acceptance": [
+        "Design and implement an independently durable authority journal/checkpoint with sequence/completeness and authenticity verification, including memberships, stewardship and principal disablement; specify restrictive-change acknowledgment and replication-failure behavior.",
+        "Schedule verified off-host catalog/blob backups and rehearse restore with the source database unavailable; reconcile current policy, invalidate old credentials/sessions/leases and remain closed when evidence is incomplete.",
+        "Measure backup age/RPO and catalog/API versus full-blob-loss RTO; retain verifiable backup and recovery receipts. A digest or copy on the original host alone is insufficient."
+      ],
+      "references": [
+        "modules/postgres/src/main/scala/sanctity/postgres/PostgresRecovery.scala",
+        "scripts/backup-postgres.sh",
+        "scripts/restore-postgres.sh"
+      ],
+      "kind": "acceptance-gate",
+      "epic": "EP4",
+      "previousDependsOn": [
+        "O01",
+        "F03",
+        "F04"
+      ],
+      "closure": "Review all child evidence against these integration criteria. Children closing does not automatically close this gate. Required human/institutional evidence must be observed, never inferred from automated tests."
+    },
+    {
+      "key": "O04",
+      "title": "Enforce quarantine, withdrawal and recovery lifecycle policy",
+      "priority": 0,
+      "dependsOn": [
+        "O04.1",
+        "O04.2",
+        "O04.3"
+      ],
+      "required": true,
+      "ownerRole": "Backend engineer with institutional data steward",
+      "outcome": "Withdrawal and any required erasure have explicit effects on current service and restored copies.",
+      "acceptance": [
+        "Implement durable quarantine/withdrawal controls and journal them independently; define current delivery, linked views, pending operations and derivative obligations without inferring permissions from provenance.",
+        "Document institution-specific retention, backup expiry, shared-blob reachability and any required physical-erasure procedure; keep automatic collection disabled unless separately qualified.",
+        "Back up, then withdraw/restrict data, lose the original host and restore: restricted content remains unavailable. Required erasure or source-evidence obligations that lack a qualified procedure block admission of affected data."
+      ],
+      "references": [
+        "docs/prd.md",
+        "modules/postgres/src/main/scala/sanctity/postgres/PostgresRecovery.scala"
+      ],
+      "kind": "acceptance-gate",
+      "epic": "EP4",
+      "previousDependsOn": [
+        "O03"
+      ],
+      "closure": "Review all child evidence against these integration criteria. Children closing does not automatically close this gate. Required human/institutional evidence must be observed, never inferred from automated tests."
+    },
+    {
+      "key": "W01",
+      "title": "Complete authenticated intake and reproducible export workflows",
+      "priority": 1,
+      "dependsOn": [
+        "W01.1",
+        "W01.2",
+        "W01.3",
+        "W01.4",
+        "W01.5",
+        "W01.6"
+      ],
+      "required": true,
+      "ownerRole": "Backend and frontend engineers",
+      "outcome": "Curators can create and populate a dataset and researchers can obtain verified full exports through supported product workflows.",
+      "acceptance": [
+        "Expose authorized creation, approved staging intake and/or bounded resumable upload through durable operation contracts, with quotas and source-evidence isolation; reject arbitrary server paths.",
+        "Show scope, findings, progress and supported retry/cancel/resume actions; preserve atomic publication and allow mapping/metadata decisions without database edits.",
+        "Provide durable full-export planning, progress, verified delivery and interruption recovery under current authority; demonstrate complete browser/API journeys on supported native BIDS."
+      ],
+      "references": [
+        "modules/application/src/main/scala/sanctity/application/DurableImports.scala",
+        "modules/application/src/main/scala/sanctity/application/NativeRepository.scala",
+        "docs/http-api.md"
+      ],
+      "kind": "acceptance-gate",
+      "epic": "EP5",
+      "previousDependsOn": [
+        "F05",
+        "O02"
+      ],
+      "closure": "Review all child evidence against these integration criteria. Children closing does not automatically close this gate. Required human/institutional evidence must be observed, never inferred from automated tests."
+    },
+    {
+      "key": "W02",
+      "title": "Add project curation, release history and review work",
+      "priority": 1,
+      "dependsOn": [
+        "W02.1",
+        "W02.2",
+        "W02.3",
+        "W02.4"
+      ],
+      "required": true,
+      "ownerRole": "Frontend/integration engineer with curator",
+      "outcome": "A project shows its datasets, responsibilities and outstanding review work in one coherent workflow.",
+      "acceptance": [
+        "Provide project overview, authorized dataset search and bounded inventory/history navigation, assignment/status/notes for curation tasks, and an activity trail.",
+        "Bind findings, reports and human review outcomes to exact releases; distinguish acceptance, automated checks and reviewed quality; new releases do not silently inherit approval.",
+        "Keep task/attachment/search visibility within underlying dataset authority; curator and researcher complete daily work without operator CLI or internal UUID entry."
+      ],
+      "references": [
+        "docs/vision.md",
+        "modules/http/src/main/resources/sanctity/ui/app.js"
+      ],
+      "kind": "acceptance-gate",
+      "epic": "EP5",
+      "previousDependsOn": [
+        "W01"
+      ],
+      "closure": "Review all child evidence against these integration criteria. Children closing does not automatically close this gate. Required human/institutional evidence must be observed, never inferred from automated tests."
+    },
+    {
+      "key": "W03",
+      "title": "Integrate bounded image or QA report inspection when required",
+      "priority": 2,
+      "dependsOn": [
+        "W03.1",
+        "W03.2",
+        "W03.3"
+      ],
+      "required": false,
+      "ownerRole": "Frontend/integration engineer with scientist",
+      "outcome": "A selected visualization workflow consumes existing versioned data or reports through normal access contracts.",
+      "acceptance": [
+        "Choose one concrete review need with pilot users and integrate an existing viewer/report surface; do not add another numerical recipe.",
+        "Preserve exact release/result lineage and current authority on previews, thumbnails, caching and reports; isolate untrusted report content.",
+        "Qualify accessibility and realistic payload/resource behavior. SITE01 makes this a launch dependency only if the chosen beta requires it; otherwise retain as later work."
+      ],
+      "references": [
+        "docs/vision.md",
+        "docs/institutional-readiness-plan.md"
+      ],
+      "kind": "acceptance-gate",
+      "epic": "EP8",
+      "previousDependsOn": [
+        "W02"
+      ],
+      "closure": "Review all child evidence against these integration criteria. Children closing does not automatically close this gate. Required human/institutional evidence must be observed, never inferred from automated tests."
+    },
+    {
+      "key": "Q01",
+      "title": "Qualify representative data and the institutional capacity envelope",
+      "priority": 0,
+      "dependsOn": [
+        "Q01.1",
+        "Q01.2",
+        "Q01.3"
+      ],
+      "required": true,
+      "ownerRole": "Backend engineer with scientist and operator",
+      "outcome": "A published supported envelope describes measured capacity and correct behavior on representative institutional data.",
+      "acceptance": [
+        "Use named permitted collections and independent expected results for import, curation, query, exact historical export and accounting; honor source/scientific support boundaries.",
+        "Measure realistic grants, concurrent readers/imports, large files, many files, revision growth, memory, latency and throughput; qualify pagination and the existing 10000-entry ceiling before enlarging it.",
+        "Retain workload/hardware/source identities and raw results; explicitly resolve applicable PRD targets or approved narrower beta scope rather than treating small fixture timings as an SLA."
+      ],
+      "references": [
+        "docs/evidence/query-scale-summary.json",
+        "docs/prd.md",
+        "modules/application/src/main/scala/sanctity/application/DurableImports.scala"
+      ],
+      "kind": "acceptance-gate",
+      "epic": "EP6",
+      "previousDependsOn": [
+        "SITE01",
+        "F06",
+        "W02",
+        "O02"
+      ],
+      "closure": "Review all child evidence against these integration criteria. Children closing does not automatically close this gate. Required human/institutional evidence must be observed, never inferred from automated tests."
+    },
+    {
+      "key": "Q02",
+      "title": "Close access review and human usability adoption gates",
+      "priority": 0,
+      "dependsOn": [
+        "Q02.1",
+        "Q02.2",
+        "Q02.3"
+      ],
+      "required": true,
+      "ownerRole": "Independent reviewer and representative users",
+      "outcome": "The institutional collaboration and interface claims have independent and human acceptance evidence.",
+      "acceptance": [
+        "Review and exercise current role/action boundaries, denied discovery/counts, session/grant expiry, revocation, restricted source/report leakage and selected browser-session protections.",
+        "Have representative curators/researchers complete import, organization, correction/conflict recovery, sharing and retrieval; resolve blocking findings.",
+        "Complete actual screen-reader/keyboard evidence including CON-03; record reviewer, versions, source state, outcomes and unresolved limitations. Automated checks cannot stand in for missing human results."
+      ],
+      "references": [
+        "docs/evidence/console/adoption.json",
+        "docs/http-api.md"
+      ],
+      "kind": "acceptance-gate",
+      "epic": "EP6",
+      "previousDependsOn": [
+        "Q01",
+        "O04"
+      ],
+      "closure": "Review all child evidence against these integration criteria. Children closing does not automatically close this gate. Required human/institutional evidence must be observed, never inferred from automated tests."
+    },
+    {
+      "key": "Q03",
+      "title": "Rehearse clean-host recovery and institutional operator handover",
+      "priority": 0,
+      "dependsOn": [
+        "Q03.1",
+        "Q03.2",
+        "Q03.3"
+      ],
+      "required": true,
+      "ownerRole": "Institutional operator and service owner",
+      "outcome": "An operator can own a bounded institutional beta and recover it without the original engineer or server.",
+      "acceptance": [
+        "A different operator installs/upgrades the packaged release, diagnoses an injected fault and restores onto replacement infrastructure using the documented independent backup/policy sources.",
+        "Revoke access and withdraw data after backup, then lose the original host; verify current restrictions, exact retained exports and coherent pending work after recovery; meet accepted RPO/RTO.",
+        "Verify real alert/escalation delivery and support responsibilities, record beta observation criteria and runbook results, and identify any conditional source/visualization gate. Production cutover requires a separate service-owner decision."
+      ],
+      "references": [
+        "docs/institutional-readiness-plan.md#5-what-qualification-must-prove"
+      ],
+      "kind": "acceptance-gate",
+      "epic": "EP6",
+      "previousDependsOn": [
+        "SITE01",
+        "F06",
+        "Q01",
+        "O04"
+      ],
+      "closure": "Review all child evidence against these integration criteria. Children closing does not automatically close this gate. Required human/institutional evidence must be observed, never inferred from automated tests."
+    },
+    {
+      "key": "C01",
+      "title": "Qualify the selected DICOM or XNAT source when adoption requires it",
+      "priority": 2,
+      "dependsOn": [
+        "C01.1",
+        "C01.2",
+        "C01.3"
+      ],
+      "required": false,
+      "ownerRole": "Ingestion engineer and source curator",
+      "outcome": "Only the advertised source installation and acquisition profiles are claimed as qualified.",
+      "acceptance": [
+        "Survey the named XNAT installation/resources and/or DICOM collection, preserve restricted evidence, specify mappings and independent scientific fixtures, and record exclusions.",
+        "Rehearse interruption, source/output accounting and final reconciliation with the real permitted collection; conversion success alone is insufficient.",
+        "When SITE01 selects this source for beta, make this item a blocking program dependency; otherwise keep it distinct from native-BIDS beta and retain original migration-pilot obligations."
+      ],
+      "references": [
+        "modules/import-xnat/src/main/scala/sanctity/xnat/XnatApi.scala",
+        "modules/import-dicom/src/main/scala/sanctity/dicom/DicomImport.scala",
+        "docs/prd.md"
+      ],
+      "kind": "acceptance-gate",
+      "epic": "EP7",
+      "previousDependsOn": [
+        "SITE01",
+        "W01"
+      ],
+      "closure": "Review all child evidence against these integration criteria. Children closing does not automatically close this gate. Required human/institutional evidence must be observed, never inferred from automated tests."
+    }
+  ],
+  "tasks": [
+    {
+      "key": "L01.1",
+      "gate": "L01",
+      "title": "Specify the local installation and demonstration contract",
+      "dependsOn": [
+        "F01"
+      ],
+      "scope": "Set an engineering target on the product owner’s computer without assuming institutional approval.",
+      "acceptance": [
+        "Record the local runtime, loopback/security/storage boundaries, synthetic fixture budget and guarded lifecycle/reset requirements without provisioning a persistent service implicitly.",
+        "Select approved native-BIDS staging as the engineering intake baseline and specify the two-lab/guest guided repository story and exact observable outcomes.",
+        "Identify existing implementation dependencies and later institutional gates; local data/provider choices cannot masquerade as institutional acceptance or block independent engineering."
+      ],
+      "verification": "Reviewed local engineering contract and a dependency-graph check proving the demo has no institutional or mixed-input blockers.",
+      "kind": "engineering",
+      "externalInputs": [],
+      "epic": "EP0",
+      "required": true,
+      "priority": 0,
+      "ownerRole": "Product/backend/frontend engineer with local operator",
+      "references": [
+        "docs/local-demo-plan.md",
+        "docs/service-distribution.md",
+        "docs/decisions/001-institutional-organization.md"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/L01.1/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "L01.2",
+      "gate": "L01",
+      "title": "Install and manage a retained local demonstration instance",
+      "dependsOn": [
+        "L01.1",
+        "O01.4"
+      ],
+      "scope": "Provide packaged-service workstation tooling with isolated state and predictable lifecycle.",
+      "acceptance": [
+        "Implement install/check/start/status/stop commands using the pinned artifact and PostgreSQL image, private configuration, distinct migration/runtime roles and loopback-only ports; report the retained instance root without credentials.",
+        "Reject occupied ports, existing/unowned roots, invalid prerequisites and unsafe permissions before starting; preserve accepted data across stop/restart and avoid touching unrelated processes or volumes.",
+        "Provide an explicit demo-only reset guarded by instance identity and root ownership; qualify fresh install, repeated lifecycle commands and refusal to reset arbitrary paths."
+      ],
+      "verification": "Actual local install receipt with artifact/configuration/machine identity, private-file/port/privilege checks, restart hashes and guarded-reset negative cases.",
+      "kind": "engineering",
+      "externalInputs": [],
+      "epic": "EP0",
+      "required": true,
+      "priority": 0,
+      "ownerRole": "Product/backend/frontend engineer with local operator",
+      "references": [
+        "docs/local-demo-plan.md",
+        "docs/service-distribution.md",
+        "docs/decisions/001-institutional-organization.md"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/L01.2/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "L01.3",
+      "gate": "L01",
+      "title": "Seed the local two-lab demo and verified test-provider accounts",
+      "dependsOn": [
+        "L01.2",
+        "F06.1"
+      ],
+      "scope": "Reuse the organization fixture and real authentication/authority paths for a deterministic local demo.",
+      "acceptance": [
+        "Provision the versioned synthetic seed for two labs/projects, shared and restricted datasets, exact historical releases and steward/contributor/reader/guest accounts with retained content and identity mappings.",
+        "Configure a loopback local test provider through F04’s real browser-session adapter; no forged principal/header bypass or manual privileged database edits are part of ordinary user flows.",
+        "Repeated seed application is idempotent or explicitly conflicts; demonstrate each role’s permitted/denied visibility and that institutional configuration rejects the demo issuer/accounts."
+      ],
+      "verification": "Seed manifest, real browser/API/PostgreSQL account assertions, replay tests and demo-configuration rejection evidence.",
+      "kind": "engineering",
+      "externalInputs": [],
+      "epic": "EP0",
+      "required": true,
+      "priority": 0,
+      "ownerRole": "Product/backend/frontend engineer with local operator",
+      "references": [
+        "docs/local-demo-plan.md",
+        "docs/service-distribution.md",
+        "docs/decisions/001-institutional-organization.md"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/L01.3/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "L01.4",
+      "gate": "L01",
+      "title": "Complete the guided local repository demonstration",
+      "dependsOn": [
+        "L01.3",
+        "F06.2",
+        "W01",
+        "W02"
+      ],
+      "scope": "Make the vision visible through complete ordinary researcher and curator workflows.",
+      "acceptance": [
+        "Run the 10–15 minute scripted story: discover a project, create/intake data, inspect findings/metadata, retrieve exact data, propose/review/accept a correction and demonstrate unchanged historical bytes.",
+        "Show a fixed-release guest share, hidden restricted data/current head, revocation in a stale browser context, and release-bound review tasks/notes using real implemented screens.",
+        "Retain actual screenshots and step-to-role/action/hash mappings, measure presentation time and fix demo-blocking usability gaps; unavailable features remain visibly open rather than simulated."
+      ],
+      "verification": "Artifact-bound presenter run with screenshot/step manifest, allow/deny assertions and byte-equivalence checks.",
+      "kind": "engineering",
+      "externalInputs": [],
+      "epic": "EP0",
+      "required": true,
+      "priority": 0,
+      "ownerRole": "Product/backend/frontend engineer with local operator",
+      "references": [
+        "docs/local-demo-plan.md",
+        "docs/service-distribution.md",
+        "docs/decisions/001-institutional-organization.md"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/L01.4/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "L01.5",
+      "gate": "L01",
+      "title": "Qualify repeated local demo installation and failure recovery",
+      "dependsOn": [
+        "L01.4"
+      ],
+      "scope": "Prove that the demonstrable product is repeatable and survives expected workstation failures.",
+      "acceptance": [
+        "Run the full browser story successfully from three fresh local roots using the same pinned artifact/seed, recording actual machine, versions and timings.",
+        "Exercise warm service/database restart, interrupted intake/export and database unavailability; accepted identities/bytes remain correct, incomplete work cannot claim completion and retries cannot duplicate acceptance.",
+        "Exercise revoked/stale accounts and hidden names/counts during the rehearsals; retain redacted logs and automated keyboard/accessibility evidence with explicit human/institutional gaps."
+      ],
+      "verification": "Repeatable local qualification runner and retained three-run plus failure-case receipts with independent catalog and byte assertions.",
+      "kind": "engineering",
+      "externalInputs": [],
+      "epic": "EP0",
+      "required": true,
+      "priority": 0,
+      "ownerRole": "Product/backend/frontend engineer with local operator",
+      "references": [
+        "docs/local-demo-plan.md",
+        "docs/service-distribution.md",
+        "docs/decisions/001-institutional-organization.md"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/L01.5/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "L01.6",
+      "gate": "L01",
+      "title": "Publish the local quickstart, user guide and institutional discussion pack",
+      "dependsOn": [
+        "L01.5"
+      ],
+      "scope": "Prepare reviewable repository documentation for demonstrating value and discussing a later pilot; no external messages or publication are implied.",
+      "acceptance": [
+        "Write an artifact-matched local quickstart, prerequisite/account/data inventory, start/stop/reset instructions, troubleshooting and teardown; rehearse every command from a fresh environment.",
+        "Provide a presenter narrative and researcher/curator guide using actual qualified screenshots and normal product tasks, with a clean demonstration reset and reproducible example outputs.",
+        "Prepare a concise architecture/access/recovery/evidence/limits pack and pilot discussion questions; clearly separate local engineering results from missing institutional approval, data permission, real-provider and human/operator acceptance."
+      ],
+      "verification": "Guide-only clean-environment rehearsal, checked command/link/screenshot inventory and versioned discussion pack with local acceptance evidence.",
+      "kind": "engineering",
+      "externalInputs": [],
+      "epic": "EP0",
+      "required": true,
+      "priority": 0,
+      "ownerRole": "Product/backend/frontend engineer with local operator",
+      "references": [
+        "docs/local-demo-plan.md",
+        "docs/service-distribution.md",
+        "docs/decisions/001-institutional-organization.md"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/L01.6/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "SITE01.1",
+      "gate": "SITE01",
+      "title": "Name the pilot institution, service owner and acceptance roles",
+      "dependsOn": [
+        "L01"
+      ],
+      "scope": "After the local demonstration is ready, identify the real pilot sponsor and accountable staff through explicitly authorized institutional discussions; no institution has approved a pilot yet.",
+      "acceptance": [
+        "Record the institution and named service owner, curator, operator, identity contact and independent access reviewer; confirmation must come from those people, not inferred availability.",
+        "Confirm the one-institution/multiple-labs/external-collaborator model and document support hours, escalation ownership and permission to use the selected staging environment.",
+        "Keep unanswered assignments explicitly open; engineering work using the recorded default model can continue independently."
+      ],
+      "verification": "Retain an owner/decision register with dates and evidence of acceptance; redact contact or account details where required.",
+      "kind": "institutional",
+      "externalInputs": [
+        "Institutional sponsor and accountable staff"
+      ],
+      "epic": "EP6",
+      "required": true,
+      "priority": 2,
+      "ownerRole": "Product owner with institutional operator and curator",
+      "references": [
+        "docs/institutional-readiness-plan.md#1-what-we-can-responsibly-stand-up",
+        "docs/prd.md",
+        "docs/local-demo-plan.md"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/SITE01.1/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "SITE01.2",
+      "gate": "SITE01",
+      "title": "Inventory pilot data, infrastructure and lifecycle constraints",
+      "dependsOn": [
+        "SITE01.1"
+      ],
+      "scope": "Establish the collections and operational boundaries the beta must serve.",
+      "acceptance": [
+        "Record allowed data classification, source formats, projected labs/users/datasets/files/bytes and growth; name representative collections and permitted fixture handling.",
+        "Identify identity provider, guest-account mechanism, storage filesystem, backup failure domain, network/TLS boundary and deployment resources without storing secrets in the repository.",
+        "Record source-evidence restrictions, withdrawal/retention/erasure obligations and proposed intake method; unsupported obligations are launch blockers for the affected data."
+      ],
+      "verification": "Retain a versioned deployment/data brief and representative inventory summary reviewed by the curator and operator.",
+      "kind": "institutional",
+      "externalInputs": [
+        "Permitted collection survey",
+        "Identity and infrastructure details"
+      ],
+      "epic": "EP6",
+      "required": true,
+      "priority": 0,
+      "ownerRole": "Product owner with institutional operator and curator",
+      "references": [
+        "docs/institutional-readiness-plan.md#1-what-we-can-responsibly-stand-up",
+        "docs/prd.md"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/SITE01.2/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "SITE01.3",
+      "gate": "SITE01",
+      "title": "Set pilot targets and activate only required integrations",
+      "dependsOn": [
+        "SITE01.2"
+      ],
+      "scope": "Turn institutional needs into explicit launch criteria and dependency changes.",
+      "acceptance": [
+        "Record accepted load/memory/latency targets, recovery point/time objectives, revocation bound and support envelope; reconcile deviations from existing PRD targets explicitly.",
+        "Compare the institution’s required intake with the local native-staging baseline and add explicit blocking remediation for missing modes. Record native-BIDS versus DICOM/XNAT and visualization choices. Add required EP7/EP8 to both program and Q03.3 dependencies; deferred scope is not implementation.",
+        "Publish the required-evidence matrix and distinguish permission to run a limited beta from a future primary-repository cutover."
+      ],
+      "verification": "Named owner/curator/operator acceptance of the scope matrix plus a checked mote dependency diff.",
+      "kind": "institutional",
+      "externalInputs": [
+        "Institutional acceptance of targets and pilot scope"
+      ],
+      "epic": "EP6",
+      "required": true,
+      "priority": 0,
+      "ownerRole": "Product owner with institutional operator and curator",
+      "references": [
+        "docs/institutional-readiness-plan.md#1-what-we-can-responsibly-stand-up",
+        "docs/prd.md",
+        "docs/local-demo-plan.md"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/SITE01.3/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "F01.1",
+      "gate": "F01",
+      "title": "Specify lab, project and dataset identity boundaries",
+      "dependsOn": [],
+      "scope": "Write the minimal organizational model before extending storage and APIs.",
+      "acceptance": [
+        "Define stable lab/project identifiers, display metadata, one primary project per dataset, optional links without authority, and independent custody.",
+        "Show examples with two labs, one shared project, one restricted dataset and historical releases; no change to release/content identity or cross-study participant merging.",
+        "Specify creation, archival and reassignment semantics and concurrency preconditions; document required API resources and exclusions."
+      ],
+      "verification": "Reviewed ADR/domain examples and a resource/state table referenced by subsequent implementation tasks.",
+      "kind": "engineering",
+      "externalInputs": [],
+      "epic": "EP1",
+      "required": true,
+      "priority": 0,
+      "ownerRole": "Backend lead with product owner",
+      "references": [
+        "docs/vision.md",
+        "modules/kernel/src/main/scala/sanctity/kernel/Authority.scala",
+        "modules/kernel/src/main/scala/sanctity/kernel/Lifecycle.scala",
+        "docs/decisions/001-institutional-organization.md"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/F01.1/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "F01.2",
+      "gate": "F01",
+      "title": "Specify role actions and current-access decisions",
+      "dependsOn": [
+        "F01.1"
+      ],
+      "scope": "Define the permission model that pure rules and persistence must implement.",
+      "acceptance": [
+        "Provide a matrix for lab administration, project reader/contributor/steward, explicit dataset/release grants, restricted evidence and external collaborators.",
+        "Separate proposing, accepting and sharing; specify independent versus membership-derived grants, expiry, principal disablement, and lab-admin limits.",
+        "Enumerate allow/deny cases for directory names/counts, current heads, historical releases, receipts, deliveries and runs; project/provenance links alone cannot grant access."
+      ],
+      "verification": "Versioned action matrix with concrete positive/negative examples reusable as authorization fixtures.",
+      "kind": "engineering",
+      "externalInputs": [],
+      "epic": "EP1",
+      "required": true,
+      "priority": 0,
+      "ownerRole": "Backend lead with product owner",
+      "references": [
+        "docs/vision.md",
+        "modules/kernel/src/main/scala/sanctity/kernel/Authority.scala",
+        "modules/kernel/src/main/scala/sanctity/kernel/Lifecycle.scala",
+        "docs/decisions/002-institutional-authority.md",
+        "docs/decisions/institutional-authority-cases.json"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/F01.2/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "F01.3",
+      "gate": "F01",
+      "title": "Specify offboarding, migration and stewardship recovery",
+      "dependsOn": [
+        "F01.2"
+      ],
+      "scope": "Resolve lifecycle edge cases and compatibility before implementation.",
+      "acceptance": [
+        "Define an audited last-steward transfer/recovery path and distinguish removal of one membership from full principal disablement.",
+        "Describe how existing curator/dataset/API-credential records migrate without widening access, losing attribution or orphaning data.",
+        "Specify expected generations, idempotency/conflict behavior and how policy changes enter the later independent recovery journal; identify the single migration authority."
+      ],
+      "verification": "ADR with an old-to-new migration example, concurrent offboarding scenario and failure/recovery cases.",
+      "kind": "engineering",
+      "externalInputs": [],
+      "epic": "EP1",
+      "required": true,
+      "priority": 0,
+      "ownerRole": "Backend lead with product owner",
+      "references": [
+        "docs/vision.md",
+        "modules/kernel/src/main/scala/sanctity/kernel/Authority.scala",
+        "modules/kernel/src/main/scala/sanctity/kernel/Lifecycle.scala",
+        "docs/decisions/003-institutional-lifecycle.md"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/F01.3/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "F02.1",
+      "gate": "F02",
+      "title": "Implement organization records and reference-catalog transitions",
+      "dependsOn": [
+        "F01"
+      ],
+      "scope": "Add the minimal portable records and reference implementation.",
+      "acceptance": [
+        "Implement checked lab/project/membership/placement values with stable identities and explicit ownership/role provenance.",
+        "Enforce the agreed state invariants, expected generations and archival rules in a reference catalog; do not embed organization state in immutable releases.",
+        "Reject invalid/orphaned references, unauthorized transitions and stale writes with stable problem outcomes."
+      ],
+      "verification": "Focused state-transition and reference-catalog contract tests covering invalid and concurrent updates.",
+      "kind": "engineering",
+      "externalInputs": [],
+      "epic": "EP1",
+      "required": true,
+      "priority": 0,
+      "ownerRole": "Backend engineer",
+      "references": [
+        "modules/application/src/main/scala/sanctity/application/Capabilities.scala",
+        "modules/postgres/src/main/scala/sanctity/postgres/PostgresDatabase.scala",
+        "docs/decisions/001-institutional-organization.md",
+        "docs/decisions/003-institutional-lifecycle.md"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/F02.1/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "F02.2",
+      "gate": "F02",
+      "title": "Migrate PostgreSQL organization records and legacy datasets",
+      "dependsOn": [
+        "F02.1"
+      ],
+      "scope": "Persist the organizational model and support upgrades from the current schema.",
+      "acceptance": [
+        "Add checksum-checked incremental migrations and required indexes/constraints; migrate existing datasets and curators through explicit governed records.",
+        "Preserve release IDs, content, historical actor attribution and existing fixed-release access; bootstrap placement remains private and auditable.",
+        "Prove migration retry, transaction rollback and concurrent record updates; new writes round-trip identically to reference semantics."
+      ],
+      "verification": "Disposable-PostgreSQL upgrade fixture from the existing schema plus shared catalog tests and exact historical-export comparison.",
+      "kind": "engineering",
+      "externalInputs": [],
+      "epic": "EP1",
+      "required": true,
+      "priority": 0,
+      "ownerRole": "Backend engineer",
+      "references": [
+        "modules/application/src/main/scala/sanctity/application/Capabilities.scala",
+        "modules/postgres/src/main/scala/sanctity/postgres/PostgresDatabase.scala",
+        "docs/decisions/001-institutional-organization.md",
+        "docs/decisions/003-institutional-lifecycle.md"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/F02.2/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "F02.3",
+      "gate": "F02",
+      "title": "Expose governed organization and stewardship administration",
+      "dependsOn": [
+        "F02.2",
+        "F03.2"
+      ],
+      "scope": "Provide application/API commands for organizational changes with a limited operator bootstrap.",
+      "acceptance": [
+        "Support authorized lab/project creation, membership updates, dataset placement and stewardship transfer with clear public errors and audit records.",
+        "Enforce current authority and expected generations on every mutation; retries cannot duplicate membership or perform a second transfer.",
+        "A trusted bootstrap can establish the first steward; ordinary users cannot exploit that path, remove the last steward silently or grant themselves wider access."
+      ],
+      "verification": "Real API/PostgreSQL tests for bootstrap boundary, denied mutation, response-loss retry and concurrent stewardship changes.",
+      "kind": "engineering",
+      "externalInputs": [],
+      "epic": "EP1",
+      "required": true,
+      "priority": 0,
+      "ownerRole": "Backend engineer",
+      "references": [
+        "modules/application/src/main/scala/sanctity/application/Capabilities.scala",
+        "modules/postgres/src/main/scala/sanctity/postgres/PostgresDatabase.scala",
+        "docs/decisions/001-institutional-organization.md",
+        "docs/decisions/002-institutional-authority.md",
+        "docs/decisions/003-institutional-lifecycle.md"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/F02.3/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "F03.1",
+      "gate": "F03",
+      "title": "Implement pure role and effective-access evaluation",
+      "dependsOn": [
+        "F02.1"
+      ],
+      "scope": "Translate the agreed permission matrix into one reusable authorization model.",
+      "acceptance": [
+        "Return supported action/scope decisions from current principal, membership, stewardship and grant state; disabled principals always fail.",
+        "Preserve fixed-release grants and independent grant provenance; expiry uses a supplied clock and boundary values are defined.",
+        "Produce an authorized explanation of effective access without exposing hidden grant recipients or datasets; lab administration does not imply blanket data access."
+      ],
+      "verification": "Table-driven matrix and law/property cases for narrowing, expiry, link non-authority and independent memberships.",
+      "kind": "engineering",
+      "externalInputs": [],
+      "epic": "EP2",
+      "required": true,
+      "priority": 0,
+      "ownerRole": "Backend engineer",
+      "references": [
+        "modules/kernel/src/main/scala/sanctity/kernel/Authority.scala",
+        "modules/postgres/src/main/scala/sanctity/postgres/PostgresCatalog.scala",
+        "modules/integration/src/test/scala/sanctity/postgres/HttpSuite.scala",
+        "docs/decisions/002-institutional-authority.md",
+        "docs/decisions/institutional-authority-cases.json"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/F03.1/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "F03.2",
+      "gate": "F03",
+      "title": "Enforce organizational authority inside PostgreSQL transactions",
+      "dependsOn": [
+        "F03.1",
+        "F02.2"
+      ],
+      "scope": "Remove the perpetual curator bypass and make policy changes serialize correctly with repository actions.",
+      "acceptance": [
+        "Persist and evaluate current membership/stewardship/grant expiry and principal state inside authoritative transactions.",
+        "A context obtained before offboarding cannot accept, grant, resume publication or retrieve a protected receipt afterward; policy writes leave durable audit events.",
+        "Reference and SQL decisions agree; migrate old curator powers explicitly and retain successful idempotent acceptance semantics without returning unauthorized receipts."
+      ],
+      "verification": "Independent-connection race tests, reference/SQL matrix comparison and regression of the existing transaction and HTTP authority suites.",
+      "kind": "engineering",
+      "externalInputs": [],
+      "epic": "EP2",
+      "required": true,
+      "priority": 0,
+      "ownerRole": "Backend engineer",
+      "references": [
+        "modules/kernel/src/main/scala/sanctity/kernel/Authority.scala",
+        "modules/postgres/src/main/scala/sanctity/postgres/PostgresCatalog.scala",
+        "modules/integration/src/test/scala/sanctity/postgres/HttpSuite.scala",
+        "docs/decisions/002-institutional-authority.md",
+        "docs/decisions/003-institutional-lifecycle.md",
+        "docs/decisions/institutional-authority-cases.json"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/F03.2/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "F03.3",
+      "gate": "F03",
+      "title": "Apply disclosure and effective-access rules to read surfaces",
+      "dependsOn": [
+        "F03.2"
+      ],
+      "scope": "Audit existing reads and supply reusable scoped predicates for new directory APIs.",
+      "acceptance": [
+        "Scope metadata/content reads, query predicates/results/counts, head/history/candidate/receipt lookup and collaborator suggestions by current authority.",
+        "Fixed-release recipients cannot discover a newer head; denied predicates/counts/errors do not reveal excluded data.",
+        "Provide authorized grant/effective-access inspection, including why access exists and expiry, without exposing unrelated identities or source evidence."
+      ],
+      "verification": "Cross-lab canary fixtures and negative API/query cases that compare visible responses as hidden data changes.",
+      "kind": "engineering",
+      "externalInputs": [],
+      "epic": "EP2",
+      "required": true,
+      "priority": 0,
+      "ownerRole": "Backend engineer",
+      "references": [
+        "modules/kernel/src/main/scala/sanctity/kernel/Authority.scala",
+        "modules/postgres/src/main/scala/sanctity/postgres/PostgresCatalog.scala",
+        "modules/integration/src/test/scala/sanctity/postgres/HttpSuite.scala",
+        "docs/decisions/002-institutional-authority.md",
+        "docs/decisions/institutional-authority-cases.json"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/F03.3/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "F03.4",
+      "gate": "F03",
+      "title": "Recheck offboarding and expiry during delivery and processing",
+      "dependsOn": [
+        "F03.2"
+      ],
+      "scope": "Extend current policy to long-lived operations and retained processing contracts.",
+      "acceptance": [
+        "Reauthorize ongoing file delivery, resumed work and cached result reuse against principal state, membership and grant expiry within the declared bound.",
+        "Separate source-input use from destination deposit/acceptance for existing runs; loss of one cannot silently confer the other.",
+        "Exercise expiry/revocation during reads and work, including stale contexts and restored credentials; preserve truthful partial/failure state and existing accepted history."
+      ],
+      "verification": "Controlled-clock and real-stream tests plus existing run/recovery regressions, with a measured maximum recheck interval.",
+      "kind": "engineering",
+      "externalInputs": [],
+      "epic": "EP2",
+      "required": true,
+      "priority": 0,
+      "ownerRole": "Backend engineer",
+      "references": [
+        "modules/kernel/src/main/scala/sanctity/kernel/Authority.scala",
+        "modules/postgres/src/main/scala/sanctity/postgres/PostgresCatalog.scala",
+        "modules/integration/src/test/scala/sanctity/postgres/HttpSuite.scala",
+        "docs/decisions/002-institutional-authority.md",
+        "docs/decisions/003-institutional-lifecycle.md",
+        "docs/decisions/institutional-authority-cases.json"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/F03.4/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "F04.1",
+      "gate": "F04",
+      "title": "Add verified institutional identity bindings and provider configuration",
+      "dependsOn": [
+        "F01.3",
+        "F02.2"
+      ],
+      "scope": "Establish stable provider subjects without conflating login and authorization.",
+      "acceptance": [
+        "Persist a unique verified issuer/subject-to-principal binding; reject identity collisions and automatic email-only account linking.",
+        "Validate provider/trust configuration and secret references; document approved external/guest identity onboarding and a controlled account-recovery path.",
+        "Authentication supplies a trusted context while current repository rules determine authority; old service credentials keep their documented separate lifecycle."
+      ],
+      "verification": "Identity-binding migration tests and simulated-provider cases for changed email, duplicate bindings and invalid configuration.",
+      "kind": "engineering",
+      "externalInputs": [],
+      "epic": "EP2",
+      "required": true,
+      "priority": 0,
+      "ownerRole": "Backend/integration engineer with identity administrator",
+      "references": [
+        "modules/application/src/main/scala/sanctity/application/Authentication.scala",
+        "docs/http-api.md",
+        "docs/decisions/003-institutional-lifecycle.md",
+        "docs/decisions/002-institutional-authority.md"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/F04.1/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "F04.2",
+      "gate": "F04",
+      "title": "Implement institutional browser sign-in and secure sessions",
+      "dependsOn": [
+        "F04.1",
+        "F03.2"
+      ],
+      "scope": "Complete one provider adapter and browser authentication transport.",
+      "acceptance": [
+        "Validate the chosen login protocol's issuer, audience, replay/redirect and expiry constraints using a maintained adapter with pinned configuration.",
+        "Issue bounded server-controlled sessions with the required cookie/transport/origin protections, login/logout endpoints and redacted errors; credentials never appear in URLs or normal logs.",
+        "Protect authenticated mutations under the chosen session design and continue to authorize transactions against current principal/policy state."
+      ],
+      "verification": "Protocol-negative fixtures, real HTTP/browser session tests and secret-canary checks; document the selected protocol and security boundaries.",
+      "kind": "engineering",
+      "externalInputs": [],
+      "epic": "EP2",
+      "required": true,
+      "priority": 0,
+      "ownerRole": "Backend/integration engineer with identity administrator",
+      "references": [
+        "modules/application/src/main/scala/sanctity/application/Authentication.scala",
+        "docs/http-api.md"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/F04.2/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "F04.3",
+      "gate": "F04",
+      "title": "Implement guest admission, session revocation and account offboarding",
+      "dependsOn": [
+        "F04.2",
+        "F03.4"
+      ],
+      "scope": "Make institutional and external account lifecycle understandable and enforceable.",
+      "acceptance": [
+        "Approved external onboarding produces a verified binding and explicit authorized membership/grant, never access based solely on an invitation email.",
+        "Logout, administrative disablement, expiry and account recovery invalidate applicable sessions; stale browser tabs and in-flight requests cannot bypass the policy.",
+        "Record attributable lifecycle events and safe recovery steps; account recovery cannot silently restore removed grants or weaken provider assurance."
+      ],
+      "verification": "End-to-end guest admission, stolen/stale session, disabled-steward and account-recovery negative tests.",
+      "kind": "engineering",
+      "externalInputs": [],
+      "epic": "EP2",
+      "required": true,
+      "priority": 0,
+      "ownerRole": "Backend/integration engineer with identity administrator",
+      "references": [
+        "modules/application/src/main/scala/sanctity/application/Authentication.scala",
+        "docs/http-api.md"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/F04.3/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "F04.4",
+      "gate": "F04",
+      "title": "Qualify the selected real institutional identity provider",
+      "dependsOn": [
+        "F04.3",
+        "SITE01.2",
+        "O01.4"
+      ],
+      "scope": "Verify the deployed identity integration with the institution rather than substituting a mock-provider result.",
+      "acceptance": [
+        "Exercise real staff and approved guest sign-in, logout, expiry, deactivation and provider outage in the protected staging deployment.",
+        "Verify redirect/cookie/origin configuration, institution-side offboarding and secret rotation without committing live credentials.",
+        "Identity administrator records provider/configuration versions, observed outcomes and remaining limits; missing access remains an open qualification item."
+      ],
+      "verification": "Redacted source/configuration-bound staging receipt with identity-administrator acceptance.",
+      "kind": "institutional",
+      "externalInputs": [
+        "Real staging identity provider",
+        "Staff and guest test accounts"
+      ],
+      "epic": "EP2",
+      "required": true,
+      "priority": 0,
+      "ownerRole": "Backend/integration engineer with identity administrator",
+      "references": [
+        "modules/application/src/main/scala/sanctity/application/Authentication.scala",
+        "docs/http-api.md"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/F04.4/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "F05.1",
+      "gate": "F05",
+      "title": "Expose bounded authorized lab, project and dataset directories",
+      "dependsOn": [
+        "F02.3",
+        "F03.3"
+      ],
+      "scope": "Add discovery APIs so users no longer need to know dataset UUIDs.",
+      "acceptance": [
+        "List and search accessible labs/projects/datasets with stable bounded pagination, readable labels and correct empty/error states.",
+        "Apply authority to names, counts, filters, ordering and suggestions; define live-directory cursor behavior under concurrent membership or catalog changes.",
+        "Recheck policy on later pages and omit no records silently from a purported frozen result; directory discovery must not expose unauthorized heads or private evidence."
+      ],
+      "verification": "API/PostgreSQL pagination, query-plan and hidden-data canary tests, including policy changes between pages.",
+      "kind": "engineering",
+      "externalInputs": [],
+      "epic": "EP1",
+      "required": true,
+      "priority": 0,
+      "ownerRole": "Frontend/integration engineer",
+      "references": [
+        "modules/http/src/main/scala/sanctity/http/RepositoryHttp.scala",
+        "modules/http/src/main/resources/sanctity/ui/app.js"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/F05.1/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "F05.2",
+      "gate": "F05",
+      "title": "Build institutional login and lab/project navigation in the console",
+      "dependsOn": [
+        "F05.1",
+        "F04.3"
+      ],
+      "scope": "Connect real sign-in and discovery to the existing release/curation experience.",
+      "acceptance": [
+        "Navigate login → authorized labs/projects → datasets → existing release screens using human-readable names and durable URLs.",
+        "Handle no memberships, empty projects, expired sessions, denied/stale links and operational failures with useful recovery actions.",
+        "Preserve keyboard/focus behavior and responsive navigation; use production APIs without a second browser authority model."
+      ],
+      "verification": "Real browser/API/PostgreSQL journeys and keyboard/layout checks against staff and guest fixtures.",
+      "kind": "engineering",
+      "externalInputs": [],
+      "epic": "EP1",
+      "required": true,
+      "priority": 0,
+      "ownerRole": "Frontend/integration engineer",
+      "references": [
+        "modules/http/src/main/scala/sanctity/http/RepositoryHttp.scala",
+        "modules/http/src/main/resources/sanctity/ui/app.js"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/F05.2/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "F05.3",
+      "gate": "F05",
+      "title": "Build collaborator, sharing and effective-access screens",
+      "dependsOn": [
+        "F05.2",
+        "F03.3"
+      ],
+      "scope": "Allow stewards to understand and administer collaboration without internal-ID entry.",
+      "acceptance": [
+        "Select authorized people/roles, inspect effective permissions and distinguish project-derived access from independent grants.",
+        "Preview exact fixed-release versus future-release scope, expiry and disclosure before sharing; show resulting access and revoke through ordinary APIs.",
+        "Handle concurrent role changes and stale forms without accidental escalation; users lacking management powers cannot see private administrative data."
+      ],
+      "verification": "Browser workflows for grant, expiry, revoke and stewardship transfer, plus denied recipient discovery and stale-form tests.",
+      "kind": "engineering",
+      "externalInputs": [],
+      "epic": "EP1",
+      "required": true,
+      "priority": 0,
+      "ownerRole": "Frontend/integration engineer",
+      "references": [
+        "modules/http/src/main/scala/sanctity/http/RepositoryHttp.scala",
+        "modules/http/src/main/resources/sanctity/ui/app.js"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/F05.3/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "F06.1",
+      "gate": "F06",
+      "title": "Create the reusable two-lab institutional workflow fixture",
+      "dependsOn": [
+        "F05",
+        "F03.4"
+      ],
+      "scope": "Qualify the foundation through a realistic automated journey and retained fixture.",
+      "acceptance": [
+        "Seed two labs, reader/contributor/steward roles, a guest, restricted and shared projects, and a dataset upgraded from the current schema.",
+        "Exercise sign-in, discovery, metadata curation, exact old/new release retrieval, sharing and revocation over real browser/API/PostgreSQL.",
+        "Bind receipt to sources and seed; separate simulated-provider behavior from the real-provider receipt in F04.4."
+      ],
+      "verification": "Repeatable browser/backend rehearsal with independent SQL assertions and historical-export hashes.",
+      "kind": "engineering",
+      "externalInputs": [],
+      "epic": "EP1",
+      "required": true,
+      "priority": 0,
+      "ownerRole": "Integration engineer with curator",
+      "references": [
+        "scripts/check-console-backend.sh",
+        "docs/evidence/console/adoption.json",
+        "docs/institutional-readiness-plan.md#immediate-six-mote-foundation-tranche"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/F06.1/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "F06.2",
+      "gate": "F06",
+      "title": "Qualify foundation races, offboarding and disclosure boundaries",
+      "dependsOn": [
+        "F06.1"
+      ],
+      "scope": "Prove the collaboration journey survives concurrent state and authority changes.",
+      "acceptance": [
+        "Race membership changes, last-steward transfer and acceptance/retry; show no lost scientific edits or unauthorized surviving control.",
+        "Exercise hidden project/dataset names, counts, saved selections, suggestions, cached contexts and active streams after offboarding.",
+        "Retain keyboard/automated accessibility results and list remaining human gates; no mocked identity or automated accessibility result closes F04.4 or Q02.3."
+      ],
+      "verification": "Source-bound adversarial integration report with exact allow/deny assertions and unresolved qualification labels.",
+      "kind": "engineering",
+      "externalInputs": [],
+      "epic": "EP1",
+      "required": true,
+      "priority": 0,
+      "ownerRole": "Integration engineer with curator",
+      "references": [
+        "scripts/check-console-backend.sh",
+        "docs/evidence/console/adoption.json",
+        "docs/institutional-readiness-plan.md#immediate-six-mote-foundation-tranche"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/F06.2/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "O01.1",
+      "gate": "O01",
+      "title": "Build a pinned installable Sanctity service artifact",
+      "dependsOn": [],
+      "scope": "Provide a reproducible release artifact instead of requiring sbt to supervise the service.",
+      "acceptance": [
+        "Package the API/console, migration and trusted operator entry points with the verified bids4s pin and necessary runtime resources.",
+        "Record artifact digest, application/dependency versions and licenses; launch in a clean runtime environment without a sibling source checkout.",
+        "Keep development demos and optional analysis tools outside the required service startup path; document Java/runtime prerequisites."
+      ],
+      "verification": "Clean artifact-build/install smoke receipt and reproducible source/dependency identity.",
+      "kind": "engineering",
+      "externalInputs": [],
+      "epic": "EP3",
+      "required": true,
+      "priority": 0,
+      "ownerRole": "Backend/operations engineer",
+      "references": [
+        "modules/service/src/main/scala/sanctity/app/ApiServer.scala",
+        "modules/postgres/src/main/scala/sanctity/postgres/PostgresDatabase.scala",
+        "build.sbt",
+        "docs/service-distribution.md",
+        "scripts/package-service.py",
+        "scripts/check-service-package.py"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/O01.1/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "O01.2",
+      "gate": "O01",
+      "title": "Validate deployment configuration and protected service startup",
+      "dependsOn": [
+        "O01.1"
+      ],
+      "scope": "Supply a minimal supported deployment profile for staging and later pilot operation.",
+      "acceptance": [
+        "Validate database/storage/port/proxy/secret settings before serving; omit secrets from errors and ordinary process diagnostics.",
+        "Provide loopback/proxy or equivalent protected-origin configuration, TLS termination guidance, filesystem ownership and process supervision.",
+        "Graceful shutdown stops new work, drains or safely checkpoints bounded in-flight work and leaves leases recoverable after forced termination."
+      ],
+      "verification": "Clean-host configuration matrix and terminate/restart smoke tests under the deployment profile.",
+      "kind": "engineering",
+      "externalInputs": [],
+      "epic": "EP3",
+      "required": true,
+      "priority": 0,
+      "ownerRole": "Backend/operations engineer",
+      "references": [
+        "modules/service/src/main/scala/sanctity/app/ApiServer.scala",
+        "modules/postgres/src/main/scala/sanctity/postgres/PostgresDatabase.scala",
+        "build.sbt",
+        "docs/service-distribution.md"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/O01.2/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "O01.3",
+      "gate": "O01",
+      "title": "Separate schema migration from least-privilege runtime access",
+      "dependsOn": [
+        "O01.1"
+      ],
+      "scope": "Make schema changes an explicit operator action without weakening drift checks.",
+      "acceptance": [
+        "Provide a privileged migration command and a runtime role that cannot create/alter schema or administer unrelated data.",
+        "Server startup checks compatible schema/checksums and refuses incompatible or recovery-closed states; it does not silently perform privileged DDL.",
+        "Define upgrade backup/restore and downgrade policy; interrupted migrations preserve a known compatible state or fail closed."
+      ],
+      "verification": "PostgreSQL privilege tests, checksum/version failure tests and upgrade interruption fixtures.",
+      "kind": "engineering",
+      "externalInputs": [],
+      "epic": "EP3",
+      "required": true,
+      "priority": 0,
+      "ownerRole": "Backend/operations engineer",
+      "references": [
+        "modules/service/src/main/scala/sanctity/app/ApiServer.scala",
+        "modules/postgres/src/main/scala/sanctity/postgres/PostgresDatabase.scala",
+        "build.sbt",
+        "docs/service-distribution.md"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/O01.3/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "O01.4",
+      "gate": "O01",
+      "title": "Exercise packaged install, upgrade and release evidence in CI",
+      "dependsOn": [
+        "O01.2",
+        "O01.3"
+      ],
+      "scope": "Make the supported service lifecycle repeatable beyond a developer machine.",
+      "acceptance": [
+        "Rehearse installation and upgrade from the current schema using only the packaged artifact and documented configuration.",
+        "Verify old releases/exports and current access after upgrade; failed deployment can be recovered with the documented procedure.",
+        "Add repeatable CI jobs and retain actual run evidence before claiming execution; configuration alone is recorded as pending, not passed."
+      ],
+      "verification": "Clean-host and executed CI receipts with artifact/source hashes, upgrade results and any unavailable hosted-run gate.",
+      "kind": "engineering",
+      "externalInputs": [],
+      "epic": "EP3",
+      "required": true,
+      "priority": 0,
+      "ownerRole": "Backend/operations engineer",
+      "references": [
+        "modules/service/src/main/scala/sanctity/app/ApiServer.scala",
+        "modules/postgres/src/main/scala/sanctity/postgres/PostgresDatabase.scala",
+        "build.sbt",
+        "docs/service-distribution.md",
+        "scripts/check-service-package.py"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/O01.4/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "O02.1",
+      "gate": "O02",
+      "title": "Expose liveness, readiness and redacted request diagnostics",
+      "dependsOn": [
+        "O01.2"
+      ],
+      "scope": "Give operators a truthful service-health boundary and traceable failures.",
+      "acceptance": [
+        "Distinguish process liveness from readiness of database, required storage and recovery gate; readiness never opens access during reconciliation.",
+        "Emit bounded structured diagnostics and correlation IDs for request/operation failure without tokens, source identifiers or scientific metadata leakage.",
+        "Define health endpoint exposure and probe limits; controlled dependency outage changes readiness and leaves a useful protected diagnostic."
+      ],
+      "verification": "Health-state integration tests and synthetic secret/source canaries in logs and public errors.",
+      "kind": "engineering",
+      "externalInputs": [],
+      "epic": "EP3",
+      "required": true,
+      "priority": 0,
+      "ownerRole": "Operations engineer with institutional operator",
+      "references": [
+        "modules/service/src/main/scala/sanctity/app/ApiServer.scala",
+        "modules/objects/src/main/scala/sanctity/objects/FileBlobStore.scala",
+        "modules/application/src/main/scala/sanctity/application/DurableImports.scala"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/O02.1/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "O02.2",
+      "gate": "O02",
+      "title": "Add operational metrics and tested alert delivery",
+      "dependsOn": [
+        "O02.1"
+      ],
+      "scope": "Make capacity, work backlogs and failed backups visible to operators.",
+      "acceptance": [
+        "Measure database/pool pressure, request/stream concurrency, operation/lease backlog, storage use, integrity failures and backup/journal lag with bounded label cardinality.",
+        "Configure warning/critical thresholds and an escalation destination from the deployment profile; alert payloads contain no private data.",
+        "Inject each launch-critical condition and verify actual alert delivery/acknowledgment; dashboard existence alone does not qualify alerting."
+      ],
+      "verification": "Metric fixtures plus redacted staging alert/ack receipts; named operator validates escalation.",
+      "kind": "mixed",
+      "externalInputs": [
+        "Institutional alert destination for final delivery check"
+      ],
+      "epic": "EP3",
+      "required": true,
+      "priority": 0,
+      "ownerRole": "Operations engineer with institutional operator",
+      "references": [
+        "modules/service/src/main/scala/sanctity/app/ApiServer.scala",
+        "modules/objects/src/main/scala/sanctity/objects/FileBlobStore.scala",
+        "modules/application/src/main/scala/sanctity/application/DurableImports.scala"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/O02.2/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "O02.3",
+      "gate": "O02",
+      "title": "Enforce admission limits across requests, streams and background work",
+      "dependsOn": [
+        "O01.2"
+      ],
+      "scope": "Bound service resources for concurrent use, including response body lifetimes.",
+      "acceptance": [
+        "Define explicit limits and acquisition/release lifetimes for request preparation, streaming delivery, imports, database work and background queues.",
+        "A slow client cannot escape streaming limits or starve all metadata requests; cancellations and disconnects release capacity.",
+        "Reject excess work with stable retryable outcomes and bounded memory; accepted publication remains atomic under saturation."
+      ],
+      "verification": "Saturation, slow-client, disconnect and cancellation tests with measured active slots/queues and memory.",
+      "kind": "engineering",
+      "externalInputs": [],
+      "epic": "EP3",
+      "required": true,
+      "priority": 0,
+      "ownerRole": "Operations engineer with institutional operator",
+      "references": [
+        "modules/service/src/main/scala/sanctity/app/ApiServer.scala",
+        "modules/objects/src/main/scala/sanctity/objects/FileBlobStore.scala",
+        "modules/application/src/main/scala/sanctity/application/DurableImports.scala"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/O02.3/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "O02.4",
+      "gate": "O02",
+      "title": "Account for storage and reserve capacity before intake",
+      "dependsOn": [
+        "O02.3"
+      ],
+      "scope": "Prevent staged and retained data from filling the managed volume unexpectedly.",
+      "acceptance": [
+        "Account separately for staged, accepted, abandoned and backup bytes without double-counting content-addressed objects.",
+        "Reserve bounded capacity for accepted intake/export work and release reservations on completion/cancel/recovery; concurrent writers cannot oversubscribe the declared budget.",
+        "Refuse new work before crossing the safety reserve and emit actionable alerts; retain existing accepted bytes and keep unqualified reclamation disabled."
+      ],
+      "verification": "Concurrent reservation, restart reconciliation and low-space/disk-full tests with inventory/accounting checks.",
+      "kind": "engineering",
+      "externalInputs": [],
+      "epic": "EP3",
+      "required": true,
+      "priority": 0,
+      "ownerRole": "Operations engineer with institutional operator",
+      "references": [
+        "modules/service/src/main/scala/sanctity/app/ApiServer.scala",
+        "modules/objects/src/main/scala/sanctity/objects/FileBlobStore.scala",
+        "modules/application/src/main/scala/sanctity/application/DurableImports.scala"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/O02.4/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "O02.5",
+      "gate": "O02",
+      "title": "Expose protected audit and failed-operation inspection",
+      "dependsOn": [
+        "F03.3",
+        "O02.1"
+      ],
+      "scope": "Let authorized operators diagnose work and policy changes through supported interfaces.",
+      "acceptance": [
+        "Provide bounded filters/pages for audit events, operation attempts/checkpoints and actionable failures with actor/time/correlation attribution.",
+        "Separate operator diagnostics and source evidence from researcher-facing errors and project activity.",
+        "Enforce current inspection permissions and redact secrets/private payloads; retry/cancel actions identify exact operations and follow their supported transitions."
+      ],
+      "verification": "API/CLI operator journey, pagination and unauthorized/canary disclosure tests.",
+      "kind": "engineering",
+      "externalInputs": [],
+      "epic": "EP3",
+      "required": true,
+      "priority": 0,
+      "ownerRole": "Operations engineer with institutional operator",
+      "references": [
+        "modules/service/src/main/scala/sanctity/app/ApiServer.scala",
+        "modules/objects/src/main/scala/sanctity/objects/FileBlobStore.scala",
+        "modules/application/src/main/scala/sanctity/application/DurableImports.scala"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/O02.5/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "O02.6",
+      "gate": "O02",
+      "title": "Qualify service faults and operator integrity procedures",
+      "dependsOn": [
+        "O02.2",
+        "O02.4",
+        "O02.5"
+      ],
+      "scope": "Exercise real resource and dependency failures within the deployment profile.",
+      "acceptance": [
+        "Inject disk exhaustion, database outage, stuck/expired work, terminated streams and restarted service; accepted state stays coherent and progress truthful.",
+        "Provide a bounded integrity scrub and a documented quarantine/repair path using a known-good backup; never rewrite accepted content silently.",
+        "Record alerts, resource recovery and operator actions; failure tests meet the declared environment's storage/durability boundary, with untested power-loss behavior stated."
+      ],
+      "verification": "Fault matrix, source-bound logs and operator runbook rehearsal with exact retained-export checks.",
+      "kind": "engineering",
+      "externalInputs": [],
+      "epic": "EP3",
+      "required": true,
+      "priority": 0,
+      "ownerRole": "Operations engineer with institutional operator",
+      "references": [
+        "modules/service/src/main/scala/sanctity/app/ApiServer.scala",
+        "modules/objects/src/main/scala/sanctity/objects/FileBlobStore.scala",
+        "modules/application/src/main/scala/sanctity/application/DurableImports.scala"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/O02.6/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "O03.1",
+      "gate": "O03",
+      "title": "Specify policy-journal durability and recovery trust",
+      "dependsOn": [
+        "F01.3",
+        "O01.2"
+      ],
+      "scope": "Define what survives host loss and how restore proves policy currency.",
+      "acceptance": [
+        "Specify the independent failure domain, ordered policy events/checkpoints, authenticity and completeness checks, and the trusted recovery authority.",
+        "Define the commit/acknowledgment protocol for grants, revocations, disablement and stewardship changes, including every crash/replication-failure window; no acknowledged restrictive change can disappear on restore.",
+        "Define closed-service behavior when currency cannot be proved and distinguish scientific-data RPO from policy/lifecycle durability."
+      ],
+      "verification": "Protocol ADR with failure-point table and executable-model or adversarial sequence examples reviewed before persistence work.",
+      "kind": "engineering",
+      "externalInputs": [],
+      "epic": "EP4",
+      "required": true,
+      "priority": 0,
+      "ownerRole": "Backend/operations engineer with institutional operator",
+      "references": [
+        "modules/postgres/src/main/scala/sanctity/postgres/PostgresRecovery.scala",
+        "scripts/backup-postgres.sh",
+        "scripts/restore-postgres.sh",
+        "docs/decisions/003-institutional-lifecycle.md"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/O03.1/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "O03.2",
+      "gate": "O03",
+      "title": "Persist and replicate independent authority history",
+      "dependsOn": [
+        "O03.1",
+        "F03.2",
+        "F04.3"
+      ],
+      "scope": "Implement the recoverable authority stream without treating ordinary outbox delivery as a durability guarantee.",
+      "acceptance": [
+        "Capture agreed authority transitions with monotonic identity, attributable intent and idempotent replication to the configured independent store.",
+        "Enforce the specified acknowledgment/fail-closed behavior under journal outage and recover in-flight changes without accepting stale checkpoints.",
+        "Retain verified checkpoints and replay membership, stewardship, disablement and expiring grants; protect journal data and expose replication lag without secrets."
+      ],
+      "verification": "Fault injection before/after each local/remote durability boundary, reordered/duplicate events, missing suffixes and tampered-checkpoint tests.",
+      "kind": "engineering",
+      "externalInputs": [],
+      "epic": "EP4",
+      "required": true,
+      "priority": 0,
+      "ownerRole": "Backend/operations engineer with institutional operator",
+      "references": [
+        "modules/postgres/src/main/scala/sanctity/postgres/PostgresRecovery.scala",
+        "scripts/backup-postgres.sh",
+        "scripts/restore-postgres.sh"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/O03.2/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "O03.3",
+      "gate": "O03",
+      "title": "Automate verified off-host catalog and blob backups",
+      "dependsOn": [
+        "O03.1",
+        "O01.2"
+      ],
+      "scope": "Turn existing backup scripts into a monitored, recoverable backup process.",
+      "acceptance": [
+        "Capture a catalog/blob-consistent set with manifests, integrity hashes, versions and required policy checkpoint references; incomplete copies never appear successful.",
+        "Schedule copying to the selected independent backup medium with documented access/encryption controls, retention and capacity; qualify interruption/retry and ongoing writes.",
+        "Record successful backup time, age and verification results for alerts; corrupted or missing objects invalidate the bundle."
+      ],
+      "verification": "Automated backup/retry/corruption fixtures plus an actual selected-medium receipt before institutional handover.",
+      "kind": "mixed",
+      "externalInputs": [
+        "Institutional backup medium for final qualification"
+      ],
+      "epic": "EP4",
+      "required": true,
+      "priority": 0,
+      "ownerRole": "Backend/operations engineer with institutional operator",
+      "references": [
+        "modules/postgres/src/main/scala/sanctity/postgres/PostgresRecovery.scala",
+        "scripts/backup-postgres.sh",
+        "scripts/restore-postgres.sh"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/O03.3/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "O03.4",
+      "gate": "O03",
+      "title": "Restore a closed service with verified current authority",
+      "dependsOn": [
+        "O03.2",
+        "O03.3"
+      ],
+      "scope": "Reconcile catalog, bytes and authoritative current policy on replacement infrastructure.",
+      "acceptance": [
+        "Restore into a new target and keep readiness/access closed until blob integrity, journal authenticity/continuity and policy currency are verified.",
+        "Replay current organization, disablement, custody and grants; invalidate restored browser sessions, API credentials and worker leases before reopening.",
+        "Reject stale/truncated/tampered policy evidence and document recovery when the independent authority is unavailable; retries must not partially reopen the service."
+      ],
+      "verification": "Closed-gate API/worker tests, replay/rollback cases and exact release/export comparison on a fresh database/storage target.",
+      "kind": "engineering",
+      "externalInputs": [],
+      "epic": "EP4",
+      "required": true,
+      "priority": 0,
+      "ownerRole": "Backend/operations engineer with institutional operator",
+      "references": [
+        "modules/postgres/src/main/scala/sanctity/postgres/PostgresRecovery.scala",
+        "scripts/backup-postgres.sh",
+        "scripts/restore-postgres.sh"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/O03.4/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "O03.5",
+      "gate": "O03",
+      "title": "Automate total-host-loss and revoked-access recovery exercises",
+      "dependsOn": [
+        "O03.4"
+      ],
+      "scope": "Prove recovery no longer needs the original authoritative database to survive.",
+      "acceptance": [
+        "Back up, then change membership/revoke access/disable a principal; make the original host/database inaccessible and restore from independent sources.",
+        "Verify old sessions and lost permissions remain unusable, retained release bytes/history remain exact and pending work is safely reacquired.",
+        "Measure catalog/API recovery and full-byte recovery separately, plus observed data loss; retain environment and raw timing evidence without substituting simulated timestamps."
+      ],
+      "verification": "Repeatable host-loss rehearsal with network isolation of the source, independent authorization assertions and recovery measurements.",
+      "kind": "engineering",
+      "externalInputs": [],
+      "epic": "EP4",
+      "required": true,
+      "priority": 0,
+      "ownerRole": "Backend/operations engineer with institutional operator",
+      "references": [
+        "modules/postgres/src/main/scala/sanctity/postgres/PostgresRecovery.scala",
+        "scripts/backup-postgres.sh",
+        "scripts/restore-postgres.sh"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/O03.5/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "O04.1",
+      "gate": "O04",
+      "title": "Implement quarantine and withdrawal as current lifecycle controls",
+      "dependsOn": [
+        "O03.2",
+        "F03.3"
+      ],
+      "scope": "Make restricted or withdrawn data unavailable through every repository-mediated path.",
+      "acceptance": [
+        "Persist attributable quarantine/withdrawal decisions in the independently durable lifecycle history with explicit scope, reason visibility and supported reversal rules.",
+        "Apply lifecycle restrictions to metadata/content, searches/counts, views, exports, reports and pending operations; preserve historical scientific records without serving withdrawn bytes.",
+        "Require a governed decision for dependent/shared outputs instead of inferring permission from provenance; withdrawal races cannot publish or deliver prohibited data."
+      ],
+      "verification": "Current-policy and stream/publication race tests across raw, projected and derivative fixtures.",
+      "kind": "engineering",
+      "externalInputs": [],
+      "epic": "EP4",
+      "required": true,
+      "priority": 0,
+      "ownerRole": "Backend engineer with institutional data steward",
+      "references": [
+        "docs/prd.md",
+        "modules/postgres/src/main/scala/sanctity/postgres/PostgresRecovery.scala"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/O04.1/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "O04.2",
+      "gate": "O04",
+      "title": "Implement retention accounting and the required erasure boundary",
+      "dependsOn": [
+        "O04.1",
+        "O03.3",
+        "SITE01.2"
+      ],
+      "scope": "Make storage retention and institution-specific deletion obligations explicit and enforceable.",
+      "acceptance": [
+        "Inventory references from releases, staging, derivatives, shared blobs and backups; never remove a blob still required by an allowed retained reference.",
+        "Implement the selected retention/hold/backup-expiry policy and operator status/reporting; automatic GC remains disabled unless its races are separately qualified.",
+        "For a required physical-erasure case, prove the procedure across live and backup copies or block admission of that data class; logical withdrawal alone is never labeled physical deletion."
+      ],
+      "verification": "Reachability and shared-content fixtures, backup-expiry checks, and a data-steward-approved erasure or exclusion procedure.",
+      "kind": "mixed",
+      "externalInputs": [
+        "Institutional retention and erasure requirements"
+      ],
+      "epic": "EP4",
+      "required": true,
+      "priority": 0,
+      "ownerRole": "Backend engineer with institutional data steward",
+      "references": [
+        "docs/prd.md",
+        "modules/postgres/src/main/scala/sanctity/postgres/PostgresRecovery.scala"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/O04.2/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "O04.3",
+      "gate": "O04",
+      "title": "Prove withdrawal survives backup replay and interrupted recovery",
+      "dependsOn": [
+        "O04.2",
+        "O03.5"
+      ],
+      "scope": "Close the lifecycle gap in disaster recovery.",
+      "acceptance": [
+        "Back up, withdraw data and alter a shared/derived disclosure decision, then lose the original host; restored service preserves all current restrictions.",
+        "Interrupted journal replay or integrity verification cannot partially open access; audit and task/report surfaces do not reveal withdrawn content.",
+        "Demonstrate the agreed disposition for physically deleted, retained-under-hold and unsupported-erasure data without inventing recovered availability."
+      ],
+      "verification": "Adversarial disaster/withdrawal report with exact access assertions, missing-byte cases and accepted lifecycle decisions.",
+      "kind": "engineering",
+      "externalInputs": [],
+      "epic": "EP4",
+      "required": true,
+      "priority": 0,
+      "ownerRole": "Backend engineer with institutional data steward",
+      "references": [
+        "docs/prd.md",
+        "modules/postgres/src/main/scala/sanctity/postgres/PostgresRecovery.scala"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/O04.3/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "W01.1",
+      "gate": "W01",
+      "title": "Expose authorized dataset creation and intake registration",
+      "dependsOn": [
+        "F02.3",
+        "F03.3",
+        "O02.4"
+      ],
+      "scope": "Allow a curator to begin repository work inside an authorized project.",
+      "acceptance": [
+        "Create datasets with project placement, custody and stewardship through validated application/API commands; denied users cannot allocate uncontrolled storage or ownership.",
+        "Register an approved intake source/profile with declared scope and idempotency, never an arbitrary server filesystem path or credential-bearing URL.",
+        "Retried requests identify the same intent or report conflict; partial registration remains inspectable and cannot create an accepted release."
+      ],
+      "verification": "API/PostgreSQL creation and response-loss tests with path/source-canary and quota denial cases.",
+      "kind": "engineering",
+      "externalInputs": [],
+      "epic": "EP5",
+      "required": true,
+      "priority": 1,
+      "ownerRole": "Backend and frontend engineers",
+      "references": [
+        "modules/application/src/main/scala/sanctity/application/DurableImports.scala",
+        "modules/application/src/main/scala/sanctity/application/NativeRepository.scala",
+        "docs/http-api.md"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/W01.1/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "W01.2",
+      "gate": "W01",
+      "title": "Implement bounded and resumable native staging intake",
+      "dependsOn": [
+        "W01.1",
+        "L01.1"
+      ],
+      "scope": "Deliver approved native-BIDS staging through bounded authenticated workflows for the local engineering baseline; later institutional intake extensions require explicit additional work.",
+      "acceptance": [
+        "Implement L01.1’s approved native-BIDS staging through opaque registered source IDs, with explicit file count/size/type limits and source identity; browser callers never submit arbitrary filesystem paths.",
+        "Reject traversal, symlinks/unsafe names, changed sources, duplicate/conflicting chunks or unverified bytes as applicable to the chosen mode.",
+        "Resume after interruption with current authorization and capacity reservations; cancel/expiry reclaim only eligible staging and never accepted blobs."
+      ],
+      "verification": "Interrupted large-file/many-file transport fixtures, digest/size checks, source-change tests and measured staging resource use.",
+      "kind": "engineering",
+      "externalInputs": [],
+      "epic": "EP5",
+      "required": true,
+      "priority": 1,
+      "ownerRole": "Backend and frontend engineers",
+      "references": [
+        "modules/application/src/main/scala/sanctity/application/DurableImports.scala",
+        "modules/application/src/main/scala/sanctity/application/NativeRepository.scala",
+        "docs/http-api.md",
+        "docs/local-demo-plan.md"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/W01.2/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "W01.3",
+      "gate": "W01",
+      "title": "Expose durable import status, retry and cancellation",
+      "dependsOn": [
+        "W01.2"
+      ],
+      "scope": "Make existing import journal and publication contracts usable through the product API.",
+      "acceptance": [
+        "Provide authorized bounded operation status with declared inventory, stage, progress, findings, attempts, candidate and accepted receipt links.",
+        "Implement supported retry/resume/cancel transitions with lease fencing; an expired worker cannot checkpoint or publish after a replacement.",
+        "Keep acquisition, preparation and acceptance distinct; lost responses and changed sources return truthful existing outcomes rather than duplicate releases."
+      ],
+      "verification": "Real API/worker interruption, lease-expiry, response-loss and concurrent cancel/accept tests.",
+      "kind": "engineering",
+      "externalInputs": [],
+      "epic": "EP5",
+      "required": true,
+      "priority": 1,
+      "ownerRole": "Backend and frontend engineers",
+      "references": [
+        "modules/application/src/main/scala/sanctity/application/DurableImports.scala",
+        "modules/application/src/main/scala/sanctity/application/NativeRepository.scala",
+        "docs/http-api.md"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/W01.3/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "W01.4",
+      "gate": "W01",
+      "title": "Build the intake and curation workbench",
+      "dependsOn": [
+        "W01.3",
+        "F05.2"
+      ],
+      "scope": "Let a curator review incoming data and accept a complete assessed candidate.",
+      "acceptance": [
+        "Support project/dataset creation, chosen intake mode, progress, actionable findings and source/mapping context permitted to the user.",
+        "Show exact candidate/impact and explicit acceptance; resolve existing supported metadata corrections without hidden database edits.",
+        "Handle resume, cancellation, stale candidates and concurrent correction without discarding accepted colleague changes or presenting partial intake as success."
+      ],
+      "verification": "Browser/API/PostgreSQL curator journey with interrupted intake, blocked findings and concurrent correction.",
+      "kind": "engineering",
+      "externalInputs": [],
+      "epic": "EP5",
+      "required": true,
+      "priority": 1,
+      "ownerRole": "Backend and frontend engineers",
+      "references": [
+        "modules/application/src/main/scala/sanctity/application/DurableImports.scala",
+        "modules/application/src/main/scala/sanctity/application/NativeRepository.scala",
+        "docs/http-api.md"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/W01.4/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "W01.5",
+      "gate": "W01",
+      "title": "Implement durable full-export planning and verified delivery",
+      "dependsOn": [
+        "F03.4",
+        "O02.4",
+        "W01.1"
+      ],
+      "scope": "Expose reproducible full BIDS retrieval as a recoverable product operation.",
+      "acceptance": [
+        "Freeze exact retained releases/manifests and the caller's declared export scope; materialize isolated copies with path/byte verification.",
+        "Provide bounded progress, retrieval and retry/resume semantics under current authority, leases and storage limits; no partial bundle is labeled complete.",
+        "Define expiry/cancellation and revoked-access behavior for materializations, including cached exports and large interrupted delivery; preserve accepted source bytes."
+      ],
+      "verification": "Export/re-import or exact tree/hash oracle, lost-response and revoked/resumed delivery tests with memory/capacity measurements.",
+      "kind": "engineering",
+      "externalInputs": [],
+      "epic": "EP5",
+      "required": true,
+      "priority": 1,
+      "ownerRole": "Backend and frontend engineers",
+      "references": [
+        "modules/application/src/main/scala/sanctity/application/DurableImports.scala",
+        "modules/application/src/main/scala/sanctity/application/NativeRepository.scala",
+        "docs/http-api.md"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/W01.5/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "W01.6",
+      "gate": "W01",
+      "title": "Build export retrieval and operation recovery in the console",
+      "dependsOn": [
+        "W01.4",
+        "W01.5"
+      ],
+      "scope": "Complete the researcher journey from selected release to verified usable files.",
+      "acceptance": [
+        "Start export from a permitted exact release, inspect scope/progress/size and retrieve the completed artifact with its verification receipt.",
+        "Make errors, expired delivery, cancellation and supported resumption understandable; revocation removes access to cached or completed delivery.",
+        "Keep release history and operation state navigable by names/links; users finish the journey without operator commands."
+      ],
+      "verification": "Real browser/backend export journey, interrupted delivery and expiry/revocation scenarios, with downloaded-tree verification.",
+      "kind": "engineering",
+      "externalInputs": [],
+      "epic": "EP5",
+      "required": true,
+      "priority": 1,
+      "ownerRole": "Backend and frontend engineers",
+      "references": [
+        "modules/application/src/main/scala/sanctity/application/DurableImports.scala",
+        "modules/application/src/main/scala/sanctity/application/NativeRepository.scala",
+        "docs/http-api.md"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/W01.6/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "W02.1",
+      "gate": "W02",
+      "title": "Page release inventories and history without loading whole responses",
+      "dependsOn": [
+        "F03.3",
+        "F05.1"
+      ],
+      "scope": "Make dataset inspection bounded and useful at the declared scale.",
+      "acceptance": [
+        "Provide bounded inventory and release-history APIs with explicit release identity, stable ordering and documented cursor semantics.",
+        "Avoid whole-inventory serialization/loading on each page where it would violate the budget; preserve exact historical metadata and current access on every page.",
+        "Handle hidden/withdrawn resources, concurrent new releases and cursor misuse without duplicates, silent scope changes or disclosure."
+      ],
+      "verification": "Pagination correctness and measured memory/query behavior across large inventories and many retained revisions.",
+      "kind": "engineering",
+      "externalInputs": [],
+      "epic": "EP5",
+      "required": true,
+      "priority": 1,
+      "ownerRole": "Frontend/integration engineer with curator",
+      "references": [
+        "docs/vision.md",
+        "modules/http/src/main/resources/sanctity/ui/app.js"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/W02.1/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "W02.2",
+      "gate": "W02",
+      "title": "Persist assigned curation tasks, notes and review state",
+      "dependsOn": [
+        "F02.3",
+        "F03.3"
+      ],
+      "scope": "Add minimal project work management tied to repository objects.",
+      "acceptance": [
+        "Support task assignment/status/notes with checked concurrency, attributable activity and exact dataset/release references when relevant.",
+        "Separate operational task completion from scientific acceptance and quality review; old verdicts remain bound to the reviewed release.",
+        "Apply current underlying permissions to task titles, notes, notifications/activity and attachments; cross-project references confer no access."
+      ],
+      "verification": "Shared catalog/API state tests for stale edits, release changes, reassignment, withdrawal and hidden-note canaries.",
+      "kind": "engineering",
+      "externalInputs": [],
+      "epic": "EP5",
+      "required": true,
+      "priority": 1,
+      "ownerRole": "Frontend/integration engineer with curator",
+      "references": [
+        "docs/vision.md",
+        "modules/http/src/main/resources/sanctity/ui/app.js"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/W02.2/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "W02.3",
+      "gate": "W02",
+      "title": "Build project overview and the curation work queue",
+      "dependsOn": [
+        "W02.1",
+        "W02.2",
+        "W01.4"
+      ],
+      "scope": "Give labs a coherent daily workspace for datasets, responsibilities and outstanding work.",
+      "acceptance": [
+        "Show permitted datasets, intake/review status, assigned tasks and recent activity with bounded search/filtering and useful empty states.",
+        "Navigate to exact releases, findings and outstanding actions; support assignment and status changes without duplicate browser business rules.",
+        "Distinguish failed work, unsupported data, unreviewed data and reviewed releases; concurrent changes and revoked permissions remain understandable."
+      ],
+      "verification": "Representative browser/backend task-assignment and curation workflows plus keyboard, empty/error and denial cases.",
+      "kind": "engineering",
+      "externalInputs": [],
+      "epic": "EP5",
+      "required": true,
+      "priority": 1,
+      "ownerRole": "Frontend/integration engineer with curator",
+      "references": [
+        "docs/vision.md",
+        "modules/http/src/main/resources/sanctity/ui/app.js"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/W02.3/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "W02.4",
+      "gate": "W02",
+      "title": "Show release-bound checks, reports and human review outcomes",
+      "dependsOn": [
+        "W02.3"
+      ],
+      "scope": "Make quality and provenance visible without expanding numerical analysis.",
+      "acceptance": [
+        "Display existing assessment findings and authorized report/result metadata with exact input/output release and tool evidence where available.",
+        "Record human review separately from automated checks; a new release visibly leaves the old review historical and requires an explicit new review.",
+        "Protect report links and review notes with current authority; no success badge implies full BIDS conformance or scientific quality beyond the recorded evidence."
+      ],
+      "verification": "Old/new release review tests, report access/withdrawal tests and curator walkthrough of findings versus human judgment.",
+      "kind": "engineering",
+      "externalInputs": [],
+      "epic": "EP5",
+      "required": true,
+      "priority": 1,
+      "ownerRole": "Frontend/integration engineer with curator",
+      "references": [
+        "docs/vision.md",
+        "modules/http/src/main/resources/sanctity/ui/app.js"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/W02.4/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "Q01.1",
+      "gate": "Q01",
+      "title": "Build a permitted representative corpus and correctness oracle",
+      "dependsOn": [
+        "SITE01.2",
+        "F01"
+      ],
+      "scope": "Replace synthetic-only confidence with independently reviewed institutional examples.",
+      "acceptance": [
+        "Select permitted datasets representing the pilot's actual profiles, sizes, malformed/unsupported cases and source-evidence restrictions; retain public or synthetic substitutes for reproducible CI where private data cannot be committed.",
+        "Record source identity, preservation expectations, independent metadata/mapping judgments and exact old/new export expectations.",
+        "Document advertised coverage and exclusions with scientific/curator review; conversion success or the repository's own interpretation is not its sole oracle."
+      ],
+      "verification": "Versioned corpus/support manifest and independently reviewed expectations, with private-data handling recorded.",
+      "kind": "mixed",
+      "externalInputs": [
+        "Permitted representative collection",
+        "Curator/scientific review"
+      ],
+      "epic": "EP6",
+      "required": true,
+      "priority": 0,
+      "ownerRole": "Backend engineer with scientist and operator",
+      "references": [
+        "docs/evidence/query-scale-summary.json",
+        "docs/prd.md",
+        "modules/application/src/main/scala/sanctity/application/DurableImports.scala"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/Q01.1/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "Q01.2",
+      "gate": "Q01",
+      "title": "Build repeatable institutional workload and failure harnesses",
+      "dependsOn": [
+        "SITE01.3",
+        "F06",
+        "W02.1",
+        "O02.3"
+      ],
+      "scope": "Measure complete authorized workflows at the pilot envelope.",
+      "acceptance": [
+        "Exercise realistic labs/roles/grants, concurrent readers and writers, import/export, selective discovery/query, revision growth and long-lived downloads.",
+        "Record hardware, dataset/workload seed, cache conditions, sample counts, latency distributions, memory, bytes and database contention; include authorization and response cost.",
+        "Automate interruption, expiry, queue pressure and limit-exceeded cases while retaining correctness oracles; do not increase the 10000-entry ceiling without a qualified implementation change."
+      ],
+      "verification": "Reproducible harness and sample source-bound reports with calibration of counters/timing and demonstrated failure detection.",
+      "kind": "engineering",
+      "externalInputs": [],
+      "epic": "EP6",
+      "required": true,
+      "priority": 0,
+      "ownerRole": "Backend engineer with scientist and operator",
+      "references": [
+        "docs/evidence/query-scale-summary.json",
+        "docs/prd.md",
+        "modules/application/src/main/scala/sanctity/application/DurableImports.scala"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/Q01.2/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "Q01.3",
+      "gate": "Q01",
+      "title": "Qualify and publish the supported pilot capacity envelope",
+      "dependsOn": [
+        "Q01.1",
+        "Q01.2",
+        "W01",
+        "W02",
+        "O02"
+      ],
+      "scope": "Establish the actual supported limits instead of reporting development timings as an SLA.",
+      "acceptance": [
+        "Run representative correctness/load scenarios on the selected staging hardware, including large individual files, many files and repeated revisions.",
+        "Meet SITE01 targets or obtain an explicit narrower accepted scope; required correctness/authority failures cannot be waived for speed, and unresolved failures receive blocking remediation motes.",
+        "Publish measured import/file/history/concurrency limits, resource settings and raw results; record whether original PRD targets remain outstanding."
+      ],
+      "verification": "Accepted capacity/support report, raw benchmark evidence and a zero-open-blocker check for required scenarios.",
+      "kind": "mixed",
+      "externalInputs": [
+        "Selected staging hardware",
+        "Operator/curator acceptance of measured scope"
+      ],
+      "epic": "EP6",
+      "required": true,
+      "priority": 0,
+      "ownerRole": "Backend engineer with scientist and operator",
+      "references": [
+        "docs/evidence/query-scale-summary.json",
+        "docs/prd.md",
+        "modules/application/src/main/scala/sanctity/application/DurableImports.scala"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/Q01.3/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "Q02.1",
+      "gate": "Q02",
+      "title": "Obtain independent review of access and disclosure boundaries",
+      "dependsOn": [
+        "F06",
+        "F04.4",
+        "W02",
+        "O04"
+      ],
+      "scope": "Validate the actual institutional attack and disclosure surfaces independently.",
+      "acceptance": [
+        "Review the role/action matrix against implementation, including browser sessions, guest onboarding, lab-admin powers, uploads, operators and trusted internal capabilities.",
+        "Exercise denied discovery/counts, stale grants/sessions, offboarding, restricted-source/report leakage and revocation during long operations.",
+        "Retain reviewer findings and resolve blocking issues through linked remediation motes with rerun evidence; do not self-certify missing independent review."
+      ],
+      "verification": "Named independent reviewer report, reproduction cases and resolved-blocker evidence bound to the candidate release.",
+      "kind": "institutional",
+      "externalInputs": [
+        "Independent access/security reviewer"
+      ],
+      "epic": "EP6",
+      "required": true,
+      "priority": 0,
+      "ownerRole": "Independent reviewer and representative users",
+      "references": [
+        "docs/evidence/console/adoption.json",
+        "docs/http-api.md"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/Q02.1/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "Q02.2",
+      "gate": "Q02",
+      "title": "Have curators and researchers complete pilot workflows",
+      "dependsOn": [
+        "W02",
+        "F04.4",
+        "SITE01.3"
+      ],
+      "scope": "Validate that the product meets its daily lab/repository promise.",
+      "acceptance": [
+        "Representative users perform sign-in, project/dataset discovery, intake, correction/conflict recovery, work assignment/review, sharing/revocation and exact retrieval.",
+        "Record assistance required, task success, confusing states and blocking findings; routine workflows must not require database access, developer intervention or manual UUID lookup.",
+        "Resolve adoption blockers with linked fixes and repeat the affected tasks; clearly identify any approved pilot limitation."
+      ],
+      "verification": "Named-user task results with versions/source identity, observations and accepted limitation/fix disposition.",
+      "kind": "institutional",
+      "externalInputs": [
+        "Representative curator, researcher and lab steward"
+      ],
+      "epic": "EP6",
+      "required": true,
+      "priority": 0,
+      "ownerRole": "Independent reviewer and representative users",
+      "references": [
+        "docs/evidence/console/adoption.json",
+        "docs/http-api.md"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/Q02.2/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "Q02.3",
+      "gate": "Q02",
+      "title": "Close keyboard and actual screen-reader adoption gaps",
+      "dependsOn": [
+        "W02",
+        "F05"
+      ],
+      "scope": "Qualify the full pilot workflow for accessibility, including the existing open console gate.",
+      "acceptance": [
+        "Run the existing CON-03 scenarios and new login/directory/task/intake/export screens with actual supported screen-reader/browser combinations and keyboard-only navigation.",
+        "Record focus order, announcements, error recovery, tables/dialogs and narrow-layout behavior; distinguish unsupported or not-run combinations from passes.",
+        "Fix blocking issues and retain human retest evidence; automated axe/browser checks cannot substitute for actual assistive-technology use."
+      ],
+      "verification": "Tester/date/OS/browser/screen-reader versions, source-bound task matrix and resolved findings; update console adoption only when its gates pass.",
+      "kind": "institutional",
+      "externalInputs": [
+        "Human assistive-technology tester"
+      ],
+      "epic": "EP6",
+      "required": true,
+      "priority": 0,
+      "ownerRole": "Independent reviewer and representative users",
+      "references": [
+        "docs/evidence/console/adoption.json",
+        "docs/http-api.md"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/Q02.3/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "Q03.1",
+      "gate": "Q03",
+      "title": "Rehearse install, upgrade and disaster recovery with an operator",
+      "dependsOn": [
+        "O01",
+        "O02",
+        "O04",
+        "F04.4",
+        "Q01",
+        "SITE01.3"
+      ],
+      "scope": "Have an operator who did not implement the service follow the supported runbooks.",
+      "acceptance": [
+        "Install and upgrade a packaged release, diagnose an injected operational fault and restore onto replacement infrastructure without the original host.",
+        "Include revocation and withdrawal after backup, current-session invalidation, retained-byte integrity and recovery of pending work.",
+        "Measure accepted RPO/RTO and document assistance or missing procedures; close only after runbook defects are fixed and affected steps repeated."
+      ],
+      "verification": "Named operator walkthrough, artifact/configuration identities, raw recovery timings and exact access/export assertions.",
+      "kind": "institutional",
+      "externalInputs": [
+        "Institutional operator",
+        "Replacement host and independent backup sources"
+      ],
+      "epic": "EP6",
+      "required": true,
+      "priority": 0,
+      "ownerRole": "Institutional operator and service owner",
+      "references": [
+        "docs/institutional-readiness-plan.md#5-what-qualification-must-prove"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/Q03.1/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "Q03.2",
+      "gate": "Q03",
+      "title": "Exercise staging operation, support and escalation ownership",
+      "dependsOn": [
+        "Q03.1",
+        "Q02",
+        "Q01"
+      ],
+      "scope": "Show that a named team can sustain the service, not just install it once.",
+      "acceptance": [
+        "Run the agreed staging observation period with representative authorized activity and at least one scheduled backup cycle, integrity check and operator incident/recovery exercise.",
+        "Verify real alert receipt, incident ownership, secret/credential rotation and support escalation with the people on the service roster.",
+        "Record monitoring/backup history, incidents and remediation; unowned alerts, unexplained data loss and unmet recovery objectives block pilot acceptance."
+      ],
+      "verification": "Observation-period log, alert/escalation acknowledgments and operator/service-owner acceptance.",
+      "kind": "institutional",
+      "externalInputs": [
+        "Institutional support roster",
+        "Agreed observation period"
+      ],
+      "epic": "EP6",
+      "required": true,
+      "priority": 0,
+      "ownerRole": "Institutional operator and service owner",
+      "references": [
+        "docs/institutional-readiness-plan.md#5-what-qualification-must-prove"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/Q03.2/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "Q03.3",
+      "gate": "Q03",
+      "title": "Assemble evidence and record the institutional pilot go or no-go",
+      "dependsOn": [
+        "SITE01",
+        "EP0",
+        "EP1",
+        "EP2",
+        "EP3",
+        "EP4",
+        "EP5",
+        "Q01",
+        "Q02",
+        "Q03.2"
+      ],
+      "scope": "Make pilot readiness a deliberate evidence-backed decision.",
+      "acceptance": [
+        "Verify every required epic/gate and any EP7/EP8 activated by SITE01 is complete; reconcile the dependency graph against the accepted scope.",
+        "Bind the release artifact, configuration, support matrix, capacity, identity/access, user/accessibility and recovery evidence; no stale-source receipt or not-run human result counts as passed.",
+        "Named service owner, curator and operator record go/no-go, accepted limits, support ownership and rollback/recovery plan; a go authorizes only the bounded pilot, not primary-repository source cutover."
+      ],
+      "verification": "Versioned pilot acceptance manifest and named decision; program remains open on missing decisions or required evidence.",
+      "kind": "institutional",
+      "externalInputs": [
+        "Named pilot acceptance owners"
+      ],
+      "epic": "EP6",
+      "required": true,
+      "priority": 0,
+      "ownerRole": "Institutional operator and service owner",
+      "references": [
+        "docs/institutional-readiness-plan.md#5-what-qualification-must-prove"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/Q03.3/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "C01.1",
+      "gate": "C01",
+      "title": "Survey the selected DICOM or XNAT source and account for scope",
+      "dependsOn": [
+        "SITE01.3"
+      ],
+      "scope": "Activated-source work only: define exactly what the pilot must preserve or convert.",
+      "acceptance": [
+        "Verify SITE01 selected EP7 and made it a launch dependency before implementation starts.",
+        "Inventory the named installation/export/collection, object classes, custom resources, identifiers and access restrictions; record supported, excluded and unresolved scope.",
+        "Choose representative permitted fixtures and independent mapping/conversion reviewers; source credentials and identifying evidence stay outside ordinary repository docs."
+      ],
+      "verification": "Curator-reviewed source/support inventory and restricted-evidence plan.",
+      "kind": "institutional",
+      "externalInputs": [
+        "EP7 activated in accepted scope",
+        "Named source access and review"
+      ],
+      "epic": "EP7",
+      "required": false,
+      "priority": 2,
+      "ownerRole": "Ingestion engineer and source curator",
+      "references": [
+        "modules/import-xnat/src/main/scala/sanctity/xnat/XnatApi.scala",
+        "modules/import-dicom/src/main/scala/sanctity/dicom/DicomImport.scala",
+        "docs/prd.md"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/C01.1/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "C01.2",
+      "gate": "C01",
+      "title": "Qualify source mappings and supported conversion profiles",
+      "dependsOn": [
+        "C01.1",
+        "W01.3"
+      ],
+      "scope": "Implement only the source/profile gaps required by the chosen collection.",
+      "acceptance": [
+        "Define versioned explicit mappings and source/output dispositions; qualify representative metadata/geometry and supplied auxiliaries against independent expectations.",
+        "Preserve originals, conversion/mapping evidence and exclusions under the required authority; ambiguous or unsupported acquisitions produce actionable findings.",
+        "Create a separate bounded remediation mote for each discovered adapter/profile defect; the gate stays open until advertised coverage passes."
+      ],
+      "verification": "Pinned converter/adapter fixture report, reviewed expectations and complete source-to-output reconciliation.",
+      "kind": "engineering",
+      "externalInputs": [],
+      "epic": "EP7",
+      "required": false,
+      "priority": 2,
+      "ownerRole": "Ingestion engineer and source curator",
+      "references": [
+        "modules/import-xnat/src/main/scala/sanctity/xnat/XnatApi.scala",
+        "modules/import-dicom/src/main/scala/sanctity/dicom/DicomImport.scala",
+        "docs/prd.md"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/C01.2/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "C01.3",
+      "gate": "C01",
+      "title": "Rehearse interrupted migration and final source reconciliation",
+      "dependsOn": [
+        "C01.2",
+        "W01",
+        "O04"
+      ],
+      "scope": "Prove the actual selected import path is usable without authorizing a production cutover.",
+      "acceptance": [
+        "Import a representative permitted scope, interrupt transfer/conversion/publication and resume with exact accounting and current access.",
+        "Compare observed source before/after the rehearsal; every in-scope object has a successful terminal disposition or an explicitly accepted exclusion, with no unexplained omissions.",
+        "Curator records scientific/support limitations and a source-retention/reconciliation plan; the source is not removed or switched by completing this rehearsal."
+      ],
+      "verification": "Real-source rehearsal receipt with inventory hashes, dispositions, independent scientific review and recovery outcomes.",
+      "kind": "institutional",
+      "externalInputs": [
+        "Permitted source collection and curator"
+      ],
+      "epic": "EP7",
+      "required": false,
+      "priority": 2,
+      "ownerRole": "Ingestion engineer and source curator",
+      "references": [
+        "modules/import-xnat/src/main/scala/sanctity/xnat/XnatApi.scala",
+        "modules/import-dicom/src/main/scala/sanctity/dicom/DicomImport.scala",
+        "docs/prd.md"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/C01.3/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "W03.1",
+      "gate": "W03",
+      "title": "Select one pilot visualization or QA report contract",
+      "dependsOn": [
+        "SITE01.3"
+      ],
+      "scope": "Activated-visualization work only: choose a concrete review need and bounded integration.",
+      "acceptance": [
+        "Verify SITE01 selected EP8 and made it a launch dependency before implementation starts.",
+        "Specify one image/report workflow, supported formats and payload limits, user actions and exact release/result lineage.",
+        "Define current-authority checks, untrusted rendering isolation and accessibility expectations; exclude new numerical recipes and general workflow scheduling."
+      ],
+      "verification": "User-reviewed workflow/adapter contract and hostile-report/threat cases.",
+      "kind": "mixed",
+      "externalInputs": [
+        "EP8 activated in accepted scope",
+        "Pilot user review need"
+      ],
+      "epic": "EP8",
+      "required": false,
+      "priority": 2,
+      "ownerRole": "Frontend/integration engineer with scientist",
+      "references": [
+        "docs/vision.md",
+        "docs/institutional-readiness-plan.md"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/W03.1/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "W03.2",
+      "gate": "W03",
+      "title": "Integrate the selected viewer or report surface",
+      "dependsOn": [
+        "W03.1",
+        "W02.4"
+      ],
+      "scope": "Consume existing repository data/results through approved interfaces.",
+      "acceptance": [
+        "Render only the selected supported profile and retain exact input/result/tool references; unsupported content has an explicit usable state.",
+        "Enforce current access on content, thumbnails, cache reuse and report assets; isolate untrusted active content and prevent arbitrary external-resource retrieval.",
+        "Preserve bounded memory/request behavior and clear loading/error/revocation states without creating another scientific acceptance path."
+      ],
+      "verification": "Viewer/report integration tests, malicious-content canaries and permission/cache fixtures.",
+      "kind": "engineering",
+      "externalInputs": [],
+      "epic": "EP8",
+      "required": false,
+      "priority": 2,
+      "ownerRole": "Frontend/integration engineer with scientist",
+      "references": [
+        "docs/vision.md",
+        "docs/institutional-readiness-plan.md"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/W03.2/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    },
+    {
+      "key": "W03.3",
+      "gate": "W03",
+      "title": "Qualify visualization authority, resources and usability",
+      "dependsOn": [
+        "W03.2",
+        "Q01.1"
+      ],
+      "scope": "Prove the selected visualization works on representative data without weakening the repository.",
+      "acceptance": [
+        "Exercise large supported payloads, denial/revocation during viewing, expired caches, withdrawn results and hostile report contents.",
+        "Measure the agreed resource envelope and retain exact source/result bindings; incorrect or partial render cannot imply successful quality review.",
+        "Users and an accessibility tester complete the selected review journey; resolve blocking findings before EP8 can qualify."
+      ],
+      "verification": "Representative viewer/report performance and disclosure results plus named human usability/accessibility evidence.",
+      "kind": "mixed",
+      "externalInputs": [
+        "Representative reviewers and accessibility tester"
+      ],
+      "epic": "EP8",
+      "required": false,
+      "priority": 2,
+      "ownerRole": "Frontend/integration engineer with scientist",
+      "references": [
+        "docs/vision.md",
+        "docs/institutional-readiness-plan.md"
+      ],
+      "evidence": {
+        "receipt": "docs/evidence/institutional-pilot/W03.3/receipt.json",
+        "requiredFields": [
+          "exact source/artifact and configuration identity",
+          "commands or human procedure and observed outcomes",
+          "fixtures/data scope and environment",
+          "acceptance-criterion results, negative cases and limitations",
+          "reviewer/acceptance evidence when the task requires institutional input"
+        ]
+      }
+    }
+  ],
+  "immediateMilestone": {
+    "key": "EP0",
+    "environment": "Product owner local macOS computer; packaged service, loopback PostgreSQL, managed local storage, synthetic data and a local test identity provider",
+    "approvalStatus": "No institutional approval; no named institution assumed",
+    "contract": "docs/local-demo-plan.md",
+    "institutionalQualification": "Later SITE01/F04.4/Q01-Q03 gates remain open"
+  }
+}

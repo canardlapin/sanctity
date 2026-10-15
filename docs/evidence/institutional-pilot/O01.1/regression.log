@@ -1,0 +1,250 @@
+postgres (PostgreSQL) 17.11
+[info] welcome to sbt 1.10.5 (Eclipse Adoptium Java 21.0.12.1)
+[info] loading project definition from /Users/bbuchsbaum/code/scala/sanctity/project
+[info] loading settings for project root from build.sbt ...
+[info] loading settings for project bids4s-19f022d002f69292dec056eb0762b877438c47305cee6c176adf3e0f780e9146-build from plugins.sbt ...
+[info] loading project definition from /Users/bbuchsbaum/code/scala/sanctity/target/source-dependencies/bids4s-19f022d002f69292dec056eb0762b877438c47305cee6c176adf3e0f780e9146/project
+[info] loading settings for project root from build.sbt ...
+[info] resolving key references (17507 settings) ...
+[info] set current project to sanctity (in build file:/Users/bbuchsbaum/code/scala/sanctity/)
+[info] compiling 3 Scala sources to /Users/bbuchsbaum/code/scala/sanctity/modules/import-xnat/target/scala-3.3.8/classes ...
+[info] compiling 11 Scala sources to /Users/bbuchsbaum/code/scala/sanctity/modules/processing-mri/target/scala-3.3.8/classes ...
+[info] compiling 1 Scala source to /Users/bbuchsbaum/code/scala/sanctity/modules/import-dicom/target/scala-3.3.8/classes ...
+[info] done compiling
+[info] done compiling
+[info] done compiling
+[info] compiling 12 Scala sources to /Users/bbuchsbaum/code/scala/sanctity/modules/app/target/scala-3.3.8/classes ...
+[info] done compiling
+[success] Total time: 9 s, completed Oct 14, 2026, 8:02:53 a.m.
+[info] compiling 9 Scala sources to /Users/bbuchsbaum/code/scala/sanctity/modules/kernel/target/scala-3.3.8/test-classes ...
+[info] compiling 2 Scala sources to /Users/bbuchsbaum/code/scala/sanctity/modules/http/target/scala-3.3.8/test-classes ...
+[info] compiling 1 Scala source to /Users/bbuchsbaum/code/scala/sanctity/modules/postgres/target/scala-3.3.8/test-classes ...
+[info] compiling 29 Scala sources to /Users/bbuchsbaum/code/scala/sanctity/modules/app/target/scala-3.3.8/test-classes ...
+[info] done compiling
+[info] done compiling
+[info] done compiling
+Test run sanctity.postgres.PersistenceSuite started
+sanctity.postgres.PersistenceSuite: finished 0.509s
+Test run sanctity.postgres.PersistenceSuite finished: 0 failed, 0 ignored, 19 total 0.531s
+Test run sanctity.http.RequestJsonSuite started
+sanctity.http.RequestJsonSuite: finished 0.26s
+Test run sanctity.http.RequestJsonSuite finished: 0 failed, 0 ignored, 2 total 0.273s
+Test run sanctity.http.ConsoleAssetsSuite started
+sanctity.http.ConsoleAssetsSuite: finished 0.702s
+Test run sanctity.http.ConsoleAssetsSuite finished: 0 failed, 0 ignored, 3 total 0.702s
+Test run sanctity.kernel.ContentCheckSuite started
+sanctity.kernel.ContentCheckSuite: finished 0.088s
+Test run sanctity.kernel.ContentCheckSuite finished: 0 failed, 0 ignored, 5 total 0.099s
+Test run sanctity.kernel.RelationshipSuite started
+sanctity.kernel.RelationshipSuite: finished 0.098s
+Test run sanctity.kernel.RelationshipSuite finished: 0 failed, 0 ignored, 10 total 0.098s
+Test run sanctity.kernel.SemanticContextSuite started
+sanctity.kernel.SemanticContextSuite: finished 0.024s
+Test run sanctity.kernel.SemanticContextSuite finished: 0 failed, 0 ignored, 3 total 0.024s
+Test run sanctity.kernel.ProjectionSuite started
+sanctity.kernel.ProjectionSuite: finished 0.03s
+Test run sanctity.kernel.ProjectionSuite finished: 0 failed, 0 ignored, 4 total 0.03s
+Test run sanctity.kernel.PublicationSuite started
+sanctity.kernel.PublicationSuite: finished 0.017s
+Test run sanctity.kernel.PublicationSuite finished: 0 failed, 0 ignored, 4 total 0.018s
+Test run sanctity.kernel.KernelSuite started
+sanctity.kernel.KernelSuite: finished 0.135s
+Test run sanctity.kernel.KernelSuite finished: 0 failed, 0 ignored, 9 total 0.135s
+Test run sanctity.kernel.QuerySuite started
+sanctity.kernel.QuerySuite: finished 0.012s
+Test run sanctity.kernel.QuerySuite finished: 0 failed, 0 ignored, 3 total 0.012s
+Test run sanctity.kernel.FileEditsSuite started
+sanctity.kernel.FileEditsSuite: finished 0.013s
+Test run sanctity.kernel.FileEditsSuite finished: 0 failed, 0 ignored, 3 total 0.013s
+Test run sanctity.kernel.ProcessingContractSuite started
+sanctity.kernel.ProcessingContractSuite: finished 0.027s
+Test run sanctity.kernel.ProcessingContractSuite finished: 0 failed, 0 ignored, 6 total 0.028s
+[info] Passed: Total 5, Failed 0, Errors 0, Passed 5
+[info] Passed: Total 19, Failed 0, Errors 0, Passed 19
+[info] Passed: Total 47, Failed 0, Errors 0, Passed 47
+[info] done compiling
+Test run sanctity.app.QueryOracleSuite started
+sanctity.app.QueryOracleSuite: finished 0.068s
+Test run sanctity.app.QueryOracleSuite finished: 0 failed, 0 ignored, 1 total 0.079s
+Test run sanctity.app.MriConformanceSuite started
+sanctity.app.MriConformanceSuite: finished 0.179s
+Test run sanctity.app.MriConformanceSuite finished: 0 failed, 0 ignored, 17 total 0.181s
+Test run sanctity.app.ProcessSuite started
+sanctity.app.ProcessSuite: finished 0.447s
+Test run sanctity.app.ProcessSuite finished: 0 failed, 0 ignored, 3 total 0.448s
+Test run sanctity.app.NiftiGeometrySuite started
+sanctity.app.NiftiGeometrySuite: finished 0.033s
+Test run sanctity.app.NiftiGeometrySuite finished: 0 failed, 0 ignored, 19 total 0.033s
+Test run sanctity.app.BoldTimingLifecycleSuite started
+sanctity.app.BoldTimingLifecycleSuite: finished 1.256s
+Test run sanctity.app.BoldTimingLifecycleSuite finished: 0 failed, 0 ignored, 9 total 1.256s
+Test run sanctity.app.PhasePairConformanceSuite started
+sanctity.app.PhasePairConformanceSuite: finished 0.035s
+Test run sanctity.app.PhasePairConformanceSuite finished: 0 failed, 0 ignored, 17 total 0.035s
+Test run sanctity.app.CalibrationInputSuite started
+sanctity.app.CalibrationInputSuite: finished 30.176s
+Test run sanctity.app.CalibrationInputSuite finished: 0 failed, 0 ignored, 56 total 30.176s
+Test run sanctity.app.MriHeaderChecksSuite started
+sanctity.app.MriHeaderChecksSuite: finished 0.009s
+Test run sanctity.app.MriHeaderChecksSuite finished: 0 failed, 0 ignored, 4 total 0.009s
+Test run sanctity.app.MultiEchoTemporalSuite started
+sanctity.app.MultiEchoTemporalSuite: finished 13.342s
+Test run sanctity.app.MultiEchoTemporalSuite finished: 0 failed, 0 ignored, 20 total 13.342s
+Test run sanctity.app.BoldTimingSuite started
+sanctity.app.BoldTimingSuite: finished 0.038s
+Test run sanctity.app.BoldTimingSuite finished: 0 failed, 0 ignored, 36 total 0.039s
+Test run sanctity.app.ConformanceSuite started
+sanctity.app.ConformanceSuite: finished 0.069s
+Test run sanctity.app.ConformanceSuite finished: 0 failed, 0 ignored, 8 total 0.069s
+Test run sanctity.app.XnatSuite started
+sanctity.app.XnatSuite: finished 0.723s
+Test run sanctity.app.XnatSuite finished: 0 failed, 0 ignored, 4 total 0.723s
+Test run sanctity.app.AcquiredCalibrationSuite started
+sanctity.app.AcquiredCalibrationSuite: finished 0.249s
+Test run sanctity.app.AcquiredCalibrationSuite finished: 0 failed, 0 ignored, 3 total 0.249s
+Test run sanctity.app.PayloadSuite started
+sanctity.app.PayloadSuite: finished 1.346s
+Test run sanctity.app.PayloadSuite finished: 0 failed, 0 ignored, 4 total 1.346s
+Test run sanctity.app.TemporalSuite started
+sanctity.app.TemporalSuite: finished 2.716s
+Test run sanctity.app.TemporalSuite finished: 0 failed, 0 ignored, 4 total 2.716s
+Test run sanctity.app.DwiContentChecksSuite started
+sanctity.app.DwiContentChecksSuite: finished 0.016s
+Test run sanctity.app.DwiContentChecksSuite finished: 0 failed, 0 ignored, 5 total 0.016s
+Test run sanctity.app.LifecycleSuite started
+sanctity.app.LifecycleSuite: finished 67.092s
+Test run sanctity.app.LifecycleSuite finished: 0 failed, 0 ignored, 183 total 67.092s
+Test run sanctity.app.EventContentChecksSuite started
+sanctity.app.EventContentChecksSuite: finished 0.008s
+Test run sanctity.app.EventContentChecksSuite finished: 0 failed, 0 ignored, 5 total 0.008s
+[info] Passed: Total 398, Failed 0, Errors 0, Passed 398
+[success] Total time: 127 s (02:07), completed Oct 14, 2026, 8:05:00 a.m.
+[info] compiling 1 Scala source to /Users/bbuchsbaum/code/scala/sanctity/modules/integration/target/scala-3.3.8/test-classes ...
+[info] done compiling
+Test run sanctity.postgres.OperationsSuite started
+sanctity.postgres.OperationsSuite: finished 3.974s
+Test run sanctity.postgres.OperationsSuite finished: 0 failed, 0 ignored, 5 total 3.981s
+Test run sanctity.postgres.PostgresLifecycleSuite started
+sanctity.postgres.PostgresLifecycleSuite: finished 194.728s
+Test run sanctity.postgres.PostgresLifecycleSuite finished: 0 failed, 0 ignored, 183 total 194.729s
+Test run sanctity.postgres.ProcessingRecoverySuite started
+sanctity.postgres.ProcessingRecoverySuite: finished 4.236s
+Test run sanctity.postgres.ProcessingRecoverySuite finished: 0 failed, 0 ignored, 3 total 4.236s
+Import operation: 45d7b177-f9f2-43ae-a5fc-60e41038ddb4
+{
+  "dataset" : "bcc7e6e2-be0c-496a-9337-dee3babfba20",
+  "release" : "c16ea670-d186-4b3e-af92-38e42c294858",
+  "operation" : "45d7b177-f9f2-43ae-a5fc-60e41038ddb4"
+}
+Import operation: 45d7b177-f9f2-43ae-a5fc-60e41038ddb4
+{
+  "dataset" : "bcc7e6e2-be0c-496a-9337-dee3babfba20",
+  "release" : "c16ea670-d186-4b3e-af92-38e42c294858",
+  "operation" : "45d7b177-f9f2-43ae-a5fc-60e41038ddb4"
+}
+Credential 366cdbf9-9cf8-4e17-a337-29f5f2432f89 written to a new private file. Expires: 2026-10-14T13:08:28.578938Z
+Credential revoked.
+Test run sanctity.postgres.HttpSuite started
+sanctity.postgres.HttpSuite: finished 3.578s
+Test run sanctity.postgres.HttpSuite finished: 0 failed, 0 ignored, 8 total 3.579s
+Test run sanctity.postgres.ConsoleSuite started
+sanctity.postgres.ConsoleSuite: finished 0.819s
+Test run sanctity.postgres.ConsoleSuite finished: 0 failed, 0 ignored, 1 total 0.82s
+Test run sanctity.postgres.TransactionSuite started
+sanctity.postgres.TransactionSuite: finished 3.86s
+Test run sanctity.postgres.TransactionSuite finished: 0 failed, 0 ignored, 10 total 3.86s
+[info] Passed: Total 210, Failed 0, Errors 0, Passed 210
+[success] Total time: 213 s (03:33), completed Oct 14, 2026, 8:08:33 a.m.
+[info] running (fork) sanctity.app.PostgresDemo stage /Users/bbuchsbaum/code/scala/sanctity/target/postgres-check.UtkGMS/demo
+[info] Staged durable correction 46a55c1b-145a-4d9e-a630-a1df55239dcd in schema sanctity_demo.
+[info] Workspace: /Users/bbuchsbaum/code/scala/sanctity/target/postgres-check.UtkGMS/demo
+[info] The process can now exit; resume uses persisted preparation.
+[success] Total time: 2 s, completed Oct 14, 2026, 8:08:36 a.m.
+[info] welcome to sbt 1.10.5 (Eclipse Adoptium Java 21.0.12.1)
+[info] loading project definition from /Users/bbuchsbaum/code/scala/sanctity/project
+[info] loading settings for project root from build.sbt ...
+[info] loading settings for project bids4s-19f022d002f69292dec056eb0762b877438c47305cee6c176adf3e0f780e9146-build from plugins.sbt ...
+[info] loading project definition from /Users/bbuchsbaum/code/scala/sanctity/target/source-dependencies/bids4s-19f022d002f69292dec056eb0762b877438c47305cee6c176adf3e0f780e9146/project
+[info] loading settings for project root from build.sbt ...
+[info] resolving key references (17507 settings) ...
+[info] set current project to sanctity (in build file:/Users/bbuchsbaum/code/scala/sanctity/)
+[info] running (fork) sanctity.app.PostgresDemo resume /Users/bbuchsbaum/code/scala/sanctity/target/postgres-check.UtkGMS/demo
+[info] Durable PostgreSQL lifecycle demonstration
+[info] Schema: sanctity_demo
+[info] Initial release: 0f8168b3-a962-4a71-93d2-425ae748029a
+[info] Accepted release: ceee3838-8c66-4bc2-8378-aedccadd7b39
+[info] Candidate: 46a55c1b-145a-4d9e-a630-a1df55239dcd
+[info] Accepted at: 2026-10-14T12:08:47.603342Z
+[info] RepetitionTime: 1.5 -> 1.8; historical interpretation retained.
+[info] Both releases exported with verified bytes; retry returned its original receipt.
+[info] Exports: /Users/bbuchsbaum/code/scala/sanctity/target/postgres-check.UtkGMS/demo/exports-9439082865510303229
+[info] Authority: explicit demonstration principal, not institutional authentication.
+[success] Total time: 3 s, completed Oct 14, 2026, 8:08:47 a.m.
+[info] running (fork) sanctity.app.PostgresDemo resume /Users/bbuchsbaum/code/scala/sanctity/target/postgres-check.UtkGMS/demo
+[info] Durable PostgreSQL lifecycle demonstration
+[info] Schema: sanctity_demo
+[info] Initial release: 0f8168b3-a962-4a71-93d2-425ae748029a
+[info] Accepted release: ceee3838-8c66-4bc2-8378-aedccadd7b39
+[info] Candidate: 46a55c1b-145a-4d9e-a630-a1df55239dcd
+[info] Accepted at: 2026-10-14T12:08:47.603342Z
+[info] RepetitionTime: 1.5 -> 1.8; historical interpretation retained.
+[info] Both releases exported with verified bytes; retry returned its original receipt.
+[info] Exports: /Users/bbuchsbaum/code/scala/sanctity/target/postgres-check.UtkGMS/demo/exports-390586506395773826
+[info] Authority: explicit demonstration principal, not institutional authentication.
+[success] Total time: 2 s, completed Oct 14, 2026, 8:08:49 a.m.
+[info] welcome to sbt 1.10.5 (Eclipse Adoptium Java 21.0.12.1)
+[info] loading project definition from /Users/bbuchsbaum/code/scala/sanctity/project
+[info] loading settings for project root from build.sbt ...
+[info] loading settings for project bids4s-19f022d002f69292dec056eb0762b877438c47305cee6c176adf3e0f780e9146-build from plugins.sbt ...
+[info] loading project definition from /Users/bbuchsbaum/code/scala/sanctity/target/source-dependencies/bids4s-19f022d002f69292dec056eb0762b877438c47305cee6c176adf3e0f780e9146/project
+[info] loading settings for project root from build.sbt ...
+[info] resolving key references (17507 settings) ...
+[info] set current project to sanctity (in build file:/Users/bbuchsbaum/code/scala/sanctity/)
+[info] running (fork) sanctity.app.RecoveryDemo grant /Users/bbuchsbaum/code/scala/sanctity/target/postgres-check.UtkGMS/demo
+[success] Total time: 2 s, completed Oct 14, 2026, 8:08:57 a.m.
+Backup complete: /Users/bbuchsbaum/code/scala/sanctity/target/postgres-check.UtkGMS/backup
+[info] welcome to sbt 1.10.5 (Eclipse Adoptium Java 21.0.12.1)
+[info] loading project definition from /Users/bbuchsbaum/code/scala/sanctity/project
+[info] loading settings for project root from build.sbt ...
+[info] loading settings for project bids4s-19f022d002f69292dec056eb0762b877438c47305cee6c176adf3e0f780e9146-build from plugins.sbt ...
+[info] loading project definition from /Users/bbuchsbaum/code/scala/sanctity/target/source-dependencies/bids4s-19f022d002f69292dec056eb0762b877438c47305cee6c176adf3e0f780e9146/project
+[info] loading settings for project root from build.sbt ...
+[info] resolving key references (17507 settings) ...
+[info] set current project to sanctity (in build file:/Users/bbuchsbaum/code/scala/sanctity/)
+[info] running (fork) sanctity.app.RecoveryDemo revoke /Users/bbuchsbaum/code/scala/sanctity/target/postgres-check.UtkGMS/demo
+[info] Current curator can read; revoked guest remains denied.
+[success] Total time: 2 s, completed Oct 14, 2026, 8:09:06 a.m.
+[info] running (fork) sanctity.app.RecoveryCli capture-policy /Users/bbuchsbaum/code/scala/sanctity/target/postgres-check.UtkGMS/current-policy.json
+[info] Captured policy digest: ebaf0d8602ddee56aaf530cdfe79dc19ce0220b2114a14728c0b05828aad535c
+[success] Total time: 1 s, completed Oct 14, 2026, 8:09:07 a.m.
+Restored with access CLOSED. Reconcile trusted current policy and verify blobs before serving.
+[info] welcome to sbt 1.10.5 (Eclipse Adoptium Java 21.0.12.1)
+[info] loading project definition from /Users/bbuchsbaum/code/scala/sanctity/project
+[info] loading settings for project root from build.sbt ...
+[info] loading settings for project bids4s-19f022d002f69292dec056eb0762b877438c47305cee6c176adf3e0f780e9146-build from plugins.sbt ...
+[info] loading project definition from /Users/bbuchsbaum/code/scala/sanctity/target/source-dependencies/bids4s-19f022d002f69292dec056eb0762b877438c47305cee6c176adf3e0f780e9146/project
+[info] loading settings for project root from build.sbt ...
+[info] resolving key references (17507 settings) ...
+[info] set current project to sanctity (in build file:/Users/bbuchsbaum/code/scala/sanctity/)
+[info] running (fork) sanctity.app.RecoveryDemo closed /Users/bbuchsbaum/code/scala/sanctity/target/postgres-check.UtkGMS/restored
+[success] Total time: 2 s, completed Oct 14, 2026, 8:09:16 a.m.
+[info] running (fork) sanctity.app.RecoveryCli reconcile /Users/bbuchsbaum/code/scala/sanctity/target/postgres-check.UtkGMS/current-policy.json ebaf0d8602ddee56aaf530cdfe79dc19ce0220b2114a14728c0b05828aad535c /Users/bbuchsbaum/code/scala/sanctity/target/postgres-check.UtkGMS/restored/storage
+[info] Recovery reconciled; blob verification passed and current authority applied.
+[success] Total time: 1 s, completed Oct 14, 2026, 8:09:18 a.m.
+[info] running (fork) sanctity.app.RecoveryDemo verify /Users/bbuchsbaum/code/scala/sanctity/target/postgres-check.UtkGMS/restored
+[info] Current curator can read; revoked guest remains denied.
+[success] Total time: 1 s, completed Oct 14, 2026, 8:09:19 a.m.
+[info] running (fork) sanctity.app.PostgresDemo resume /Users/bbuchsbaum/code/scala/sanctity/target/postgres-check.UtkGMS/restored
+[info] Durable PostgreSQL lifecycle demonstration
+[info] Schema: sanctity_demo
+[info] Initial release: 0f8168b3-a962-4a71-93d2-425ae748029a
+[info] Accepted release: ceee3838-8c66-4bc2-8378-aedccadd7b39
+[info] Candidate: 46a55c1b-145a-4d9e-a630-a1df55239dcd
+[info] Accepted at: 2026-10-14T12:08:47.603342Z
+[info] RepetitionTime: 1.5 -> 1.8; historical interpretation retained.
+[info] Both releases exported with verified bytes; retry returned its original receipt.
+[info] Exports: /Users/bbuchsbaum/code/scala/sanctity/target/postgres-check.UtkGMS/restored/exports-14548216882878481142
+[info] Authority: explicit demonstration principal, not institutional authentication.
+[success] Total time: 2 s, completed Oct 14, 2026, 8:09:21 a.m.
+Coordinated restore retained scientific releases and preserved subsequent revocation.
+PostgreSQL integration and crash/retry demonstration passed. Evidence: /Users/bbuchsbaum/code/scala/sanctity/target/postgres-check.UtkGMS

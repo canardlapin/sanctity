@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "task": "F01.3",
+  "status": "passed",
+  "kind": "engineering-design-review",
+  "at": "2026-10-14T12:05:29.093808+00:00",
+  "reviewer": "codex-institutional-build (engineering self-review; not institutional approval)",
+  "procedure": [
+    "Traced membership removal, guest offboarding, principal disablement and last-steward recovery separately.",
+    "Compared the D7/C2/P9/G3/K8 migration example with existing dataset, grant, credential, immutable release and migration-lock contracts.",
+    "Walked concurrent removal, stale move approval, lost transfer response and policy-replication failure scenarios; checked F02.2 is the single migration owner.",
+    "Integration review corrected the issuer-offboarding example to emergency disablement and confirmed migration extends the existing principal table."
+  ],
+  "acceptance": [
+    {
+      "criterion": "Define an audited last-steward transfer/recovery path and distinguish removal of one membership from full principal disablement.",
+      "result": "pass",
+      "evidence": "ADR 003 Offboarding operations; Last steward and emergency recovery"
+    },
+    {
+      "criterion": "Describe how existing curator/dataset/API-credential records migrate without widening access, losing attribution or orphaning data.",
+      "result": "pass",
+      "evidence": "ADR 003 One migration authority and D7 example"
+    },
+    {
+      "criterion": "Specify expected generations, idempotency/conflict behavior and how policy changes enter the later independent recovery journal; identify the single migration authority.",
+      "result": "pass",
+      "evidence": "ADR 003 Generations, concurrency and idempotency; Independent policy journal contract"
+    }
+  ],
+  "negativeCases": [
+    "Disabling the last steward cannot be blocked by the ordinary stewardship invariant.",
+    "A revoked legacy credential remains revoked after migration.",
+    "A historical curator field cannot bypass new disablement or stewardship transfer.",
+    "A stale move approval or changed idempotency payload cannot commit.",
+    "Old independently signed policy without a current trusted checkpoint cannot reopen a restored service."
+  ],
+  "inputs": {
+    "docs/decisions/001-institutional-organization.md": "7b993b58aabdc74d71d09aaf21a51c6db09431ecce32e41141ce277ddf8add82",
+    "docs/decisions/002-institutional-authority.md": "0b1ddb971b4c306bb87d404fd114d2ff48fb055dd7a4279c07ebcf35be04d3eb",
+    "docs/decisions/003-institutional-lifecycle.md": "12b0dc70b7ef65590bc420dd49330dde5e8c3149593bb930295531d951e525a2",
+    "modules/kernel/src/main/scala/sanctity/kernel/Authority.scala": "137b767d53a1883c74cb4193911db37c7125676b59e2f9fa4fe477d5b143805c",
+    "modules/kernel/src/main/scala/sanctity/kernel/Lifecycle.scala": "1a557c5ad1807caa2b5d4071d71a86321c437f2820e944441b5a2b5b7584cedc",
+    "modules/postgres/src/main/scala/sanctity/postgres/PostgresDatabase.scala": "2b123b878cc446ce42b140e4b9614c5fc959e8147efcb46a3a91fbf6f58a36a7"
+  },
+  "limitations": [
+    "Contract only; F02.2 owns the actual migration and F03/F04 enforcement.",
+    "Actual recovery approvers and durability objectives remain SITE01 decisions.",
+    "Independent policy replication and closed-service restore qualification remain O03."
+  ]
+}

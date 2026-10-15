@@ -1,0 +1,90 @@
+--- a/modules/postgres/src/main/scala/sanctity/postgres/PolicyBridge.scala
++++ b/modules/postgres/src/main/scala/sanctity/postgres/PolicyBridge.scala
+@@ -50,6 +50,15 @@
+       expires = System.nanoTime() + TimeUnit.SECONDS.toNanos(5)
+       deadline = Some(timer.schedule(new Runnable { def run(): Unit = expire(c) },5,TimeUnit.SECONDS))
+     def valid(): Unit = requireOpen(!expired && System.nanoTime() < expires,"policy admission expired")
++    def boundServer(c: Connection): Unit =
++      valid()
++      val remaining = TimeUnit.NANOSECONDS.toMillis(expires-System.nanoTime())
++      requireOpen(remaining > 0,"policy admission expired")
++      // Closing a JDBC socket does not immediately interrupt a running server
++      // statement. PostgreSQL 17 must also terminate the whole phase transaction,
++      // including time spent between statements or waiting on the witness.
++      update(c,s"SET LOCAL transaction_timeout='${remaining}ms'")
++      valid()
+ 
+   private def session(c: Connection): Session = sessions.synchronized {
+     Option(sessions.get(c)).getOrElse(throw Failure(Problem.Operational("trusted policy transaction required")))
+@@ -144,6 +153,7 @@
+       if s.current.isEmpty then
+         s.arm(c)
+         try
++          s.boundServer(c)
+           call(s,"CURRENT",obj())
+           matches(c,s)
+           verifyAcknowledgements(c,s)
+@@ -228,6 +238,7 @@
+       val finalizer = new Session(s.trust,s.evict)
+       finalizer.arm(c)
+       try
++        finalizer.boundServer(c)
+         update(c,"SET LOCAL statement_timeout='5s'")
+         update(c,"SET LOCAL idle_in_transaction_session_timeout='5s'")
+         lock(c)
+@@ -250,6 +261,7 @@
+       val resolver = new Session(s.trust,s.evict)
+       resolver.arm(c)
+       try
++        resolver.boundServer(c)
+         update(c,"SET LOCAL statement_timeout='5s'")
+         update(c,"SET LOCAL idle_in_transaction_session_timeout='5s'")
+         lock(c)
+--- a/modules/integration/src/test/scala/sanctity/postgres/PolicyIntegrationSuite.scala
++++ b/modules/integration/src/test/scala/sanctity/postgres/PolicyIntegrationSuite.scala
+@@ -216,6 +216,32 @@
+     yield () }
+   }
+ 
++  test("expired admission drains a running server query after earlier work consumed its budget") {
++    fixture() { e =>
++      val backend = new java.util.concurrent.atomic.AtomicInteger()
++      val work = OrganizationSql.guard(false) *> doobie.free.connection.raw { c =>
++        backend.set(PolicyBridge.rows(c,"SELECT pg_backend_pid()")(_.getInt(1)).head)
++        val statement = c.createStatement()
++        try
++          statement.execute("SELECT pg_sleep(2)")
++          statement.execute("SELECT pg_sleep(20)")
++          ()
++        finally statement.close()
++      }
++      for
++        result <- work.transact(e.db.transactor).attempt
++        _ = assert(result.isLeft)
++        _ = assert(backend.get() > 0)
++        // Client abort can win the small race with the server deadline. It must
++        // not leave the second query alive for its own fresh five-second timeout.
++        _ <- IO.sleep(100.millis)
++        active <- e.query(sql"SELECT count(*) FROM pg_stat_activity WHERE pid=${backend.get()} AND xact_start IS NOT NULL".query[Long].unique)
++        _ = assertEquals(active,0L)
++        _ <- e.db.checkOrganizationReady
++      yield ()
++    }
++  }
++
+   test("unsupported lifecycle and eligibility are refused at enrollment and live admission") {
+     fixture(false) { e => for
+       _ <- e.sql("UPDATE dataset SET authority_lifecycle='Quarantined'")
+--- a/docs/service-distribution.md
++++ b/docs/service-distribution.md
+@@ -5,7 +5,9 @@
+ 21 or newer, a POSIX shell (including `dirname`), PostgreSQL and writable managed
+ storage. Java 21 is the currently tested runtime; newer Java versions require
+ qualification. No Scala, sbt, Python or source checkout is required to run it.
+-The current qualification uses PostgreSQL 17. Startup validates private storage,
++The current qualification uses PostgreSQL 17. Independent policy mode requires its
++transaction timeout to enforce server-side admission and finalization deadlines;
++older servers refuse independent admission. Startup validates private storage,
+ database credentials and the explicit origin before opening a listener. Configuration,
+ proxy, supervision and separate database-role templates are included. The retained historical corpus qualifies the V008 organization cutover; the complete
+ installation/upgrade rehearsal remains O01.4.

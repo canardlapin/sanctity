@@ -1,0 +1,16 @@
+-- DBA-reviewed provisioning for a NEW dedicated database named sanctity.
+-- Connect to that database first; never apply PUBLIC privilege changes to a shared service database.
+-- This script deliberately contains no passwords. Use your DBA's secure role credential procedure.
+DO $$ BEGIN
+  IF current_database() <> 'sanctity' THEN RAISE EXCEPTION 'Connect to the dedicated sanctity database'; END IF;
+END $$;
+CREATE ROLE sanctity_migrator LOGIN NOINHERIT NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION NOBYPASSRLS;
+CREATE ROLE sanctity_runtime LOGIN NOINHERIT NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION NOBYPASSRLS;
+REVOKE CREATE,TEMPORARY ON DATABASE sanctity FROM PUBLIC;
+REVOKE CREATE ON SCHEMA public FROM PUBLIC;
+GRANT CONNECT,CREATE ON DATABASE sanctity TO sanctity_migrator;
+GRANT CONNECT ON DATABASE sanctity TO sanctity_runtime;
+-- Set both passwords interactively with psql \password ROLE, or your approved secret-management tool.
+-- As sanctity_migrator, run: bin/sanctity migrate --runtime-role sanctity_runtime
+-- Then switch to the runtime credential file before: bin/sanctity serve
+-- Restrict the runtime login to this database in pg_hba.conf; do not reuse it for other applications.

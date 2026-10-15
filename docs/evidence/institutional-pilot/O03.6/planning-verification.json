@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "status": "passed",
+  "at": "2026-10-14T19:24:40.165411+00:00",
+  "kind": "witness-split-and-component-completion",
+  "completed": [
+    "O03.6.1"
+  ],
+  "parent": "O03.6",
+  "parentStatus": "open",
+  "counts": {
+    "requiredEpics": 8,
+    "conditionalEpics": 2,
+    "gates": 26,
+    "tasks": 85,
+    "requiredTasks": 79,
+    "conditionalTasks": 6,
+    "taskKinds": {
+      "engineering": 66,
+      "mixed": 7,
+      "institutional": 12
+    },
+    "totalNodesIncludingProgram": 122,
+    "closedTasks": 15,
+    "closedGates": 1,
+    "closedEpics": 0
+  },
+  "checks": {
+    "all122MoteCriteriaParentsDependenciesAndStatuses": "pass",
+    "parentAcceptanceUnchanged": true,
+    "acyclic": true,
+    "onlyO0361Closed": true,
+    "readyQueueMatchesGraph": true,
+    "preservedHistoricalReceiptInputs": 1296,
+    "allCurrentWitnessInputHashesMatch": true,
+    "historicalSourceIdentityPreserved": true,
+    "currentDocumentLinksResolved": 139,
+    "publishedTaskTablesMatch": true,
+    "moteDoctorAndFsck": "pass",
+    "activeClaimsAndReservations": 0,
+    "diffWhitespace": "pass"
+  },
+  "nextReadyEngineering": [
+    "F02.3",
+    "F03.3",
+    "F03.4",
+    "F04.1",
+    "H03.1",
+    "O01.4",
+    "O02.1",
+    "O02.3",
+    "O03.6.2"
+  ],
+  "recommendedFirstWork": [
+    "O03.6.2"
+  ],
+  "inputs": {
+    "docs/policy-witness.md": "6cf413f03c93e1e8dc51fa313c9948b406a79514833c78426d1691d05aab949d",
+    "docs/policy-transactions.md": "8780ac395211521c284f591701c288e0c457a3c44322c5dda944536583194e2a",
+    "docs/core-hardening-plan.md": "2aa3ca585a56e67cf0abc6368a7a078d70e006efdabc0c0fddcb09a897f5a80d",
+    "docs/institutional-pilot-epics.md": "7a025021e0c14034c5c554f72d7112085740841d82d31c247b475386864111a8",
+    "docs/implementation-plan.md": "92b267dc138b944c762445b557bc311fb7de47178857cad2696d938cac408391",
+    "docs/local-demo-plan.md": "ad066ec99eec377ed20dbd998e11e2259df674f4b58a099076225dddd0cbcf41",
+    "docs/institutional-readiness-plan.md": "31b9d2a9dd98b0502da36229fc1f7caf762aa2be1f1b45fece3e74bd1578a56e",
+    "docs/evidence/institutional-pilot/O03.6.1/receipt.json": "14fda14bf93f8b8e1cfb58da45641351c8625653af57161e7c38e84b45edf40d",
+    "docs/institutional-readiness-backlog.json": "d742d31cbefda29c4f1d73221ed25e03608c88d96c354c49431e722d11038c3f",
+    "docs/evidence/institutional-readiness-motes.json": "a08826a91bfc7895c68a8cc6fe320b870f3f3412e4d0be5559fcc09f5cdc8d23",
+    "docs/evidence/institutional-pilot/O03.6/pre-split-plan.zip": "b4b08f53f08c74e8bbf832953423a3108dc6ce3656c46b57a1a36fcef58368aa",
+    "docs/evidence/institutional-pilot/O03.6/pre-split-extra-documents.zip": "b83235a23a9509427815a50d1395643a708a4449ad7c8cb93429f057cb591db1",
+    "docs/evidence/institutional-pilot/O03.6/split-motes.json": "b67e5309288e7b2cdecee7423f8957c40aaaaddc638e9e09d3d3903bfd0b5e9b",
+    "docs/evidence/institutional-pilot/O03.6/verification-procedure.py": "c69925bf73c6580586bd8bb508647f55b9d4603d80022ef59a1ba21d5aa12f04",
+    "docs/evidence/institutional-pilot-progress.json": "79b6fc1b5d5ce90e5b20875d41ebdd79e70a539bf3c27bc264b5ccea1e199a40",
+    "docs/evidence/institutional-pilot/O03.6/mote-states.json": "4217372b834ef51a791e10dedc6d6de6d1dc979d6946bf4b6357df9580cd5829"
+  },
+  "limitations": [
+    "Catalog receipts remain LocalOnly. This witness is not yet connected to PolicySql.commit; complete fenced enrollment, pending acknowledgments and startup/runtime admission remain O03.6.2.",
+    "Parent O03.6 and the integrated failure matrix O03.6.3 remain open. Organization-aware restore O03.7/O03.8 is unavailable; legacy recovery still refuses initialized catalogs.",
+    "Separate local processes and synthetic TLS identities prove component separation, file protection and restart behavior only. No separate operating-system account, physical power-loss, separate disk or host-loss qualification.",
+    "Checkpoint bytes are opaque at this boundary; the catalog adapter must prove complete current authority/tombstones/history and reject unsupported nondefault eligibility/lifecycle state. Synthetic checkpoints do not qualify real enrollment.",
+    "Barrier denies subsequent witness requests; catalog permit expiry, bounded drain and independent old-service fencing are not yet integrated.",
+    "No key rotation or barrier release/reopen endpoint. Loss/rollback of all trusted continuity has no automatic recovery path.",
+    "Full-history in-memory replay and 1 MiB event / 4 MiB checkpoint / 8 MiB wire limits are a correctness baseline; larger workloads require explicit qualified extension.",
+    "No browser identity/session/lifecycle producer integration or institutional acceptance is claimed.",
+    "All six core reviews and H00 remain open; no complete demo or institutional acceptance."
+  ]
+}

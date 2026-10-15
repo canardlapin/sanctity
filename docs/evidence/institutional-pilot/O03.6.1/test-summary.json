@@ -1,0 +1,15 @@
+{
+  "command": [
+    "sbt",
+    "postgres/test",
+    "service/test"
+  ],
+  "suites": {
+    "sanctity.policy.PolicyJournalSuite": 17,
+    "sanctity.policy.PolicyTransportSuite": 13,
+    "sanctity.policy.PolicyWireSuite": 19,
+    "sanctity.postgres.PersistenceSuite": 19,
+    "sanctity.app.ServiceConfigurationSuite": 9
+  },
+  "total": 77
+}

@@ -1,0 +1,1026 @@
+{
+  "application": "Sanctity",
+  "bids4sSourceSha256": "19f022d002f69292dec056eb0762b877438c47305cee6c176adf3e0f780e9146",
+  "dependencies": [
+    {
+      "embeddedNotices": [],
+      "licenses": [
+        {
+          "name": "NOASSERTION",
+          "reason": "Sanctity has no repository license declaration"
+        }
+      ],
+      "module": "io.github.canardlapin:service_3-0.1.0-SNAPSHOT.jar",
+      "path": "lib/service_3-0.1.0-SNAPSHOT.jar",
+      "sha256": "76cfa1806f48193f8b08f87ee8d017f74f494f16bd7530d72ed682687de2b227"
+    },
+    {
+      "embeddedNotices": [],
+      "licenses": [
+        {
+          "name": "NOASSERTION",
+          "reason": "Sanctity has no repository license declaration"
+        }
+      ],
+      "module": "io.github.canardlapin:bids_3-0.1.0-SNAPSHOT.jar",
+      "path": "lib/bids_3-0.1.0-SNAPSHOT.jar",
+      "sha256": "52ca18b2f5ebe8c7833b6bf84dc20b9683442a2cb815b9f3ffd52e2b9656868a"
+    },
+    {
+      "embeddedNotices": [],
+      "licenses": [
+        {
+          "name": "NOASSERTION",
+          "reason": "Sanctity has no repository license declaration"
+        }
+      ],
+      "module": "io.github.canardlapin:application_3-0.1.0-SNAPSHOT.jar",
+      "path": "lib/application_3-0.1.0-SNAPSHOT.jar",
+      "sha256": "523903eee9c8479326ce07cb26b7cc015a8f467e39e4a108d05c71afb77ab69d"
+    },
+    {
+      "embeddedNotices": [],
+      "licenses": [
+        {
+          "name": "NOASSERTION",
+          "reason": "Sanctity has no repository license declaration"
+        }
+      ],
+      "module": "io.github.canardlapin:kernel_3-0.1.0-SNAPSHOT.jar",
+      "path": "lib/kernel_3-0.1.0-SNAPSHOT.jar",
+      "sha256": "5d74725426170fc99f2760a18dd1c4febe3e34d1d146d836ec6fea6b83755aa8"
+    },
+    {
+      "embeddedNotices": [],
+      "licenses": [
+        {
+          "file": "licenses/bids4s-LICENSE",
+          "name": "Apache-2.0"
+        }
+      ],
+      "module": "bids4s-source:19f022d002f69292dec056eb0762b877438c47305cee6c176adf3e0f780e9146",
+      "path": "lib/bids4s_3-0.1.0-SNAPSHOT.jar",
+      "sha256": "b26885b41c3a38a437e78cac12cc1e1b15e9eac820edc738f226866f2ca8a4a1"
+    },
+    {
+      "embeddedNotices": [],
+      "licenses": [
+        {
+          "name": "NOASSERTION",
+          "reason": "Sanctity has no repository license declaration"
+        }
+      ],
+      "module": "io.github.canardlapin:objects_3-0.1.0-SNAPSHOT.jar",
+      "path": "lib/objects_3-0.1.0-SNAPSHOT.jar",
+      "sha256": "64ee4810c57d7a39d0beb31699378349a7a99339588fa6f45e831b38b2a52f8a"
+    },
+    {
+      "embeddedNotices": [],
+      "licenses": [
+        {
+          "name": "NOASSERTION",
+          "reason": "Sanctity has no repository license declaration"
+        }
+      ],
+      "module": "io.github.canardlapin:postgres_3-0.1.0-SNAPSHOT.jar",
+      "path": "lib/postgres_3-0.1.0-SNAPSHOT.jar",
+      "sha256": "499f454724a790bdd61d6a518c15fd5206640d1ec053f79d9bdb73fe506c51d4"
+    },
+    {
+      "embeddedNotices": [],
+      "licenses": [
+        {
+          "name": "NOASSERTION",
+          "reason": "Sanctity has no repository license declaration"
+        }
+      ],
+      "module": "io.github.canardlapin:http_3-0.1.0-SNAPSHOT.jar",
+      "path": "lib/http_3-0.1.0-SNAPSHOT.jar",
+      "sha256": "3a3762e6dbdaf4ae46a6f15075f11a76a3522192e774eb2d6a85c6fbf10f9e67"
+    },
+    {
+      "embeddedNotices": [],
+      "licenses": [
+        {
+          "name": "Apache-2.0",
+          "url": "https://www.apache.org/licenses/LICENSE-2.0"
+        }
+      ],
+      "module": "org.scala-lang:scala3-library_3:3.3.8",
+      "path": "lib/scala3-library_3-3.3.8.jar",
+      "sha256": "2c6eace9158df8ee4485a06128a479d968c1ebfc83ae9b1a394b58429f0d1492"
+    },
+    {
+      "embeddedNotices": [],
+      "licenses": [
+        {
+          "name": "Apache-2.0",
+          "url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "module": "io.circe:circe-jawn_3:0.14.10",
+      "path": "lib/circe-jawn_3-0.14.10.jar",
+      "sha256": "e7d6dc2323e5961154f8e3f60669c5dd33ffdb3d95cc3f2fb2ed44d8adcf9877"
+    },
+    {
+      "embeddedNotices": [],
+      "licenses": [
+        {
+          "name": "MIT",
+          "url": "http://opensource.org/licenses/MIT"
+        }
+      ],
+      "module": "co.fs2:fs2-io_3:3.11.0",
+      "path": "lib/fs2-io_3-3.11.0.jar",
+      "sha256": "888eb4d3d06f371cf14b1c1d74e880f769f374ae3e338299579ed62d840879f9"
+    },
+    {
+      "embeddedNotices": [],
+      "licenses": [
+        {
+          "name": "MIT",
+          "url": "https://opensource.org/licenses/MIT"
+        }
+      ],
+      "module": "org.tpolecat:doobie-core_3:1.0.0-RC6",
+      "path": "lib/doobie-core_3-1.0.0-RC6.jar",
+      "sha256": "66394db97b1ada6ae488021dd46637f38771da0a7a521076ee20da3aa55704ed"
+    },
+    {
+      "embeddedNotices": [],
+      "licenses": [
+        {
+          "name": "MIT",
+          "url": "https://opensource.org/licenses/MIT"
+        }
+      ],
+      "module": "org.tpolecat:doobie-hikari_3:1.0.0-RC6",
+      "path": "lib/doobie-hikari_3-1.0.0-RC6.jar",
+      "sha256": "9e7ea9217c6033bfa2ca2c995eee4df748d765754996ac4fe5e3a65012938abc"
+    },
+    {
+      "embeddedNotices": [],
+      "licenses": [
+        {
+          "name": "MIT",
+          "url": "https://opensource.org/licenses/MIT"
+        }
+      ],
+      "module": "org.tpolecat:doobie-postgres_3:1.0.0-RC6",
+      "path": "lib/doobie-postgres_3-1.0.0-RC6.jar",
+      "sha256": "635d8f7bbfc08fca235e3a0c3cfff5bcd912fe3d586b10f1b60aa4391a821f41"
+    },
+    {
+      "embeddedNotices": [
+        {
+          "file": "licenses/embedded/postgresql-42.7.14.jar/75d4817c230af39c.txt",
+          "jarEntry": "META-INF/LICENSE"
+        },
+        {
+          "file": "licenses/embedded/postgresql-42.7.14.jar/bbb28fd987eb1aa2.txt",
+          "jarEntry": "META-INF/licenses/com.ongres.scram/scram-client-3.2/META-INF/LICENSE"
+        },
+        {
+          "file": "licenses/embedded/postgresql-42.7.14.jar/6ec4d95655a348bd.txt",
+          "jarEntry": "META-INF/licenses/com.ongres.scram/scram-common-3.2/META-INF/LICENSE"
+        },
+        {
+          "file": "licenses/embedded/postgresql-42.7.14.jar/29990e9c865733c0.txt",
+          "jarEntry": "META-INF/licenses/com.ongres.stringprep/saslprep-2.2/META-INF/LICENSE"
+        },
+        {
+          "file": "licenses/embedded/postgresql-42.7.14.jar/3291120d526c76a4.txt",
+          "jarEntry": "META-INF/licenses/com.ongres.stringprep/stringprep-2.2/META-INF/LICENSE"
+        }
+      ],
+      "licenses": [
+        {
+          "name": "BSD-2-Clause",
+          "url": "https://jdbc.postgresql.org/about/license.html"
+        }
+      ],
+      "module": "org.postgresql:postgresql:42.7.14",
+      "path": "lib/postgresql-42.7.14.jar",
+      "sha256": "73914527305a40cce504b0d3d90b23caf565136912d607ae8ae7c5895512332c"
+    },
+    {
+      "embeddedNotices": [],
+      "licenses": [
+        {
+          "name": "Apache-2.0",
+          "url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "module": "io.circe:circe-generic_3:0.14.10",
+      "path": "lib/circe-generic_3-0.14.10.jar",
+      "sha256": "fd70f9b1ccfb7f0ccc2780fc4e002b28d70a849af238d505801edfb51141df63"
+    },
+    {
+      "embeddedNotices": [
+        {
+          "file": "licenses/embedded/slf4j-nop-2.0.16.jar/81144c5ecac4fd43.txt",
+          "jarEntry": "META-INF/LICENSE.txt"
+        }
+      ],
+      "licenses": [
+        {
+          "name": "MIT License",
+          "url": "http://www.opensource.org/licenses/mit-license.php"
+        }
+      ],
+      "module": "org.slf4j:slf4j-nop:2.0.16",
+      "path": "lib/slf4j-nop-2.0.16.jar",
+      "sha256": "deca6c04ed35515a0a911fa44c0e836bee92c0c59d2e8fa9bab8ffbc464a9ba7"
+    },
+    {
+      "embeddedNotices": [],
+      "licenses": [
+        {
+          "name": "Apache-2.0",
+          "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
+        }
+      ],
+      "module": "org.http4s:http4s-dsl_3:0.23.30",
+      "path": "lib/http4s-dsl_3-0.23.30.jar",
+      "sha256": "8af054935e619393963e895e910f03e1412e41bf9c4d20fa7516e2b015f7faac"
+    },
+    {
+      "embeddedNotices": [],
+      "licenses": [
+        {
+          "name": "Apache-2.0",
+          "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
+        }
+      ],
+      "module": "org.http4s:http4s-ember-server_3:0.23.30",
+      "path": "lib/http4s-ember-server_3-0.23.30.jar",
+      "sha256": "a57679249288bad573a07d23e424c28b26f489a9d25bf1301e51f36e6fd63d74"
+    },
+    {
+      "embeddedNotices": [
+        {
+          "file": "licenses/embedded/scala-library-2.13.18.jar/c693279643b8cd5d.txt",
+          "jarEntry": "LICENSE"
+        },
+        {
+          "file": "licenses/embedded/scala-library-2.13.18.jar/dfb14fbb9e7d0952.txt",
+          "jarEntry": "NOTICE"
+        }
+      ],
+      "licenses": [
+        {
+          "name": "Apache-2.0",
+          "url": "https://www.apache.org/licenses/LICENSE-2.0"
+        }
+      ],
+      "module": "org.scala-lang:scala-library:2.13.18",
+      "path": "lib/scala-library-2.13.18.jar",
+      "sha256": "4e85d96ff7bc7dc627985523c3541b9917aaa08e956391380c42db21a2c4e5a0"
+    },
+    {
+      "embeddedNotices": [],
+      "licenses": [
+        {
+          "name": "Apache-2.0",
+          "url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "module": "org.typelevel:cats-effect_3:3.5.7",
+      "path": "lib/cats-effect_3-3.5.7.jar",
+      "sha256": "9d4edc074ad768e8c899d5d5a322765eed3180eb06cbc24a0ac8d6743f194e70"
+    },
+    {
+      "embeddedNotices": [],
+      "licenses": [
+        {
+          "name": "MIT",
+          "url": "http://opensource.org/licenses/MIT"
+        }
+      ],
+      "module": "co.fs2:fs2-core_3:3.11.0",
+      "path": "lib/fs2-core_3-3.11.0.jar",
+      "sha256": "2bca13377269f33a575bf69d7e84af5b912431566062ad8459bbedc9ed539d3a"
+    },
+    {
+      "embeddedNotices": [],
+      "licenses": [
+        {
+          "name": "MIT",
+          "url": "https://opensource.org/licenses/MIT"
+        }
+      ],
+      "module": "org.typelevel:cats-core_3:2.12.0",
+      "path": "lib/cats-core_3-2.12.0.jar",
+      "sha256": "db8754981281215078991aa8228562e806d845ebe8441f6c538ef9e85b4560a4"
+    },
+    {
+      "embeddedNotices": [],
+      "licenses": [
+        {
+          "name": "Apache-2.0",
+          "url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "module": "io.circe:circe-core_3:0.14.10",
+      "path": "lib/circe-core_3-0.14.10.jar",
+      "sha256": "587332f06f6120113013079445157f6cd129ab6dd22cf56e078b5d3e7e3b789a"
+    },
+    {
+      "embeddedNotices": [],
+      "licenses": [
+        {
+          "name": "MIT",
+          "url": "http://opensource.org/licenses/MIT"
+        }
+      ],
+      "module": "org.typelevel:jawn-parser_3:1.6.0",
+      "path": "lib/jawn-parser_3-1.6.0.jar",
+      "sha256": "7eda53af568b548938472ca55d235c310f9fcf5262c1e4847185ce6655aa6cd1"
+    },
+    {
+      "embeddedNotices": [
+        {
+          "file": "licenses/embedded/ip4s-core_3-3.6.0.jar/c693279643b8cd5d.txt",
+          "jarEntry": "LICENSE"
+        },
+        {
+          "file": "licenses/embedded/ip4s-core_3-3.6.0.jar/dfb14fbb9e7d0952.txt",
+          "jarEntry": "NOTICE"
+        }
+      ],
+      "licenses": [
+        {
+          "name": "Apache-2.0",
+          "url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "module": "com.comcast:ip4s-core_3:3.6.0",
+      "path": "lib/ip4s-core_3-3.6.0.jar",
+      "sha256": "09dcf6cb50ec95aa818feec6ed88512631c1edc40e8cba40fe1f76e12b97620c"
+    },
+    {
+      "embeddedNotices": [],
+      "licenses": [
+        {
+          "name": "MIT",
+          "url": "https://opensource.org/licenses/MIT"
+        }
+      ],
+      "module": "org.tpolecat:doobie-free_3:1.0.0-RC6",
+      "path": "lib/doobie-free_3-1.0.0-RC6.jar",
+      "sha256": "4acfea33746dee98ca5c139cf805f0d6fc153455d4b507b10c001771d150da90"
+    },
+    {
+      "embeddedNotices": [],
+      "licenses": [
+        {
+          "name": "MIT",
+          "url": "http://opensource.org/licenses/MIT"
+        }
+      ],
+      "module": "org.tpolecat:typename_3:1.1.0",
+      "path": "lib/typename_3-1.1.0.jar",
+      "sha256": "1453786a549aa33ebf7f999d8b2476fe5dd737236d193d28e1c8a0d515364f1f"
+    },
+    {
+      "embeddedNotices": [],
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "module": "com.zaxxer:HikariCP:5.1.0",
+      "path": "lib/HikariCP-5.1.0.jar",
+      "sha256": "a47a6ee62379694ee52c30036f0931b72f9aee2a801d590341ed82bd839e2134"
+    },
+    {
+      "embeddedNotices": [
+        {
+          "file": "licenses/embedded/slf4j-api-2.0.16.jar/81144c5ecac4fd43.txt",
+          "jarEntry": "META-INF/LICENSE.txt"
+        }
+      ],
+      "licenses": [
+        {
+          "name": "MIT License",
+          "url": "http://www.opensource.org/licenses/mit-license.php"
+        }
+      ],
+      "module": "org.slf4j:slf4j-api:2.0.16",
+      "path": "lib/slf4j-api-2.0.16.jar",
+      "sha256": "a12578dde1ba00bd9b816d388a0b879928d00bab3c83c240f7013bf4196c579a"
+    },
+    {
+      "embeddedNotices": [
+        {
+          "file": "licenses/embedded/checker-qual-3.55.1.jar/81144c5ecac4fd43.txt",
+          "jarEntry": "META-INF/LICENSE.txt"
+        }
+      ],
+      "licenses": [
+        {
+          "name": "The MIT License",
+          "url": "https://opensource.org/licenses/MIT"
+        }
+      ],
+      "module": "org.checkerframework:checker-qual:3.55.1",
+      "path": "lib/checker-qual-3.55.1.jar",
+      "sha256": "857658c8bdcbff794949a8d9922f88d63ee3751c203c7cd7d21ea97f9e745288"
+    },
+    {
+      "embeddedNotices": [],
+      "licenses": [
+        {
+          "name": "Apache-2.0",
+          "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
+        }
+      ],
+      "module": "org.http4s:http4s-core_3:0.23.30",
+      "path": "lib/http4s-core_3-0.23.30.jar",
+      "sha256": "9ace2ced7ea65c2ac0d862aa9629c78cc821e816ec458fdfcc7a14f3883b5566"
+    },
+    {
+      "embeddedNotices": [],
+      "licenses": [
+        {
+          "name": "Apache-2.0",
+          "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
+        }
+      ],
+      "module": "org.http4s:http4s-ember-core_3:0.23.30",
+      "path": "lib/http4s-ember-core_3-0.23.30.jar",
+      "sha256": "dc7b112b8a5d30189c94420cbeb9aef6d5ba6ee5f8ad8dfcf4264c384ad007f5"
+    },
+    {
+      "embeddedNotices": [],
+      "licenses": [
+        {
+          "name": "Apache-2.0",
+          "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
+        }
+      ],
+      "module": "org.http4s:http4s-server_3:0.23.30",
+      "path": "lib/http4s-server_3-0.23.30.jar",
+      "sha256": "5c1a708eb5022a3361fb534da4cb043b1be5e9cb4b657cd3d227c45b5096655b"
+    },
+    {
+      "embeddedNotices": [],
+      "licenses": [
+        {
+          "name": "Apache-2.0",
+          "url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "module": "org.typelevel:log4cats-slf4j_3:2.7.0",
+      "path": "lib/log4cats-slf4j_3-2.7.0.jar",
+      "sha256": "0f2666c2e7adc151cb0d244fbbc7150976417395a7fecd02b3adfc705ad44993"
+    },
+    {
+      "embeddedNotices": [],
+      "licenses": [
+        {
+          "name": "Apache-2.0",
+          "url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "module": "org.typelevel:cats-effect-kernel_3:3.5.7",
+      "path": "lib/cats-effect-kernel_3-3.5.7.jar",
+      "sha256": "35aa6f5eb539c3fa293c5e80d0650112dac3586ea95d927f248edb84898b3dd2"
+    },
+    {
+      "embeddedNotices": [],
+      "licenses": [
+        {
+          "name": "Apache-2.0",
+          "url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "module": "org.typelevel:cats-effect-std_3:3.5.7",
+      "path": "lib/cats-effect-std_3-3.5.7.jar",
+      "sha256": "c6487f9895113049b1a6ecc035e74a05b710e0258c00d14f2d9894ab8a5d6a6e"
+    },
+    {
+      "embeddedNotices": [],
+      "licenses": [
+        {
+          "name": "BSD-3-Clause",
+          "url": "https://github.com/scodec/scodec-bits/blob/main/LICENSE"
+        }
+      ],
+      "module": "org.scodec:scodec-bits_3:1.1.38",
+      "path": "lib/scodec-bits_3-1.1.38.jar",
+      "sha256": "991eef38a019893ed65d77d8d8ef16b85ffad799ed27d5f0ccb547337fc96c6d"
+    },
+    {
+      "embeddedNotices": [],
+      "licenses": [
+        {
+          "name": "MIT",
+          "url": "https://opensource.org/licenses/MIT"
+        }
+      ],
+      "module": "org.typelevel:cats-kernel_3:2.12.0",
+      "path": "lib/cats-kernel_3-2.12.0.jar",
+      "sha256": "5aa57d0c906b4c6e4575e5548f4ea7523a2c4140424b7df92239162a0ca17f77"
+    },
+    {
+      "embeddedNotices": [],
+      "licenses": [
+        {
+          "name": "Apache-2.0",
+          "url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "module": "io.circe:circe-numbers_3:0.14.10",
+      "path": "lib/circe-numbers_3-0.14.10.jar",
+      "sha256": "eab3fa2de4f239e7095fbc1141ee484db6446e7a2f3d7598d20080296f4ba125"
+    },
+    {
+      "embeddedNotices": [],
+      "licenses": [
+        {
+          "name": "Apache-2.0",
+          "url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "module": "org.typelevel:literally_3:1.1.0",
+      "path": "lib/literally_3-1.1.0.jar",
+      "sha256": "2cb14cd4bd97b1f7303c7dc5b3b8ff6faa3fbc84ce2f0916288d219b8d9c140d"
+    },
+    {
+      "embeddedNotices": [],
+      "licenses": [
+        {
+          "name": "MIT",
+          "url": "https://opensource.org/licenses/MIT"
+        }
+      ],
+      "module": "org.typelevel:cats-free_3:2.12.0",
+      "path": "lib/cats-free_3-2.12.0.jar",
+      "sha256": "2777d49541e6085ab997fa22c42499be76356ce51774fec3d04a3fc8b15a5d54"
+    },
+    {
+      "embeddedNotices": [],
+      "licenses": [
+        {
+          "name": "Apache-2.0",
+          "url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "module": "org.typelevel:case-insensitive_3:1.4.2",
+      "path": "lib/case-insensitive_3-1.4.2.jar",
+      "sha256": "f9ce1cefe06ee46817d869b95076ffe3d1be92f57ed992455049a4acfe4e1adb"
+    },
+    {
+      "embeddedNotices": [],
+      "licenses": [
+        {
+          "name": "MIT",
+          "url": "https://opensource.org/licenses/MIT"
+        }
+      ],
+      "module": "org.typelevel:cats-parse_3:1.0.0",
+      "path": "lib/cats-parse_3-1.0.0.jar",
+      "sha256": "b5ff31340c9e7342d897a6e3ecc08f745a79d637c68eded8fe18c932cb387b2d"
+    },
+    {
+      "embeddedNotices": [],
+      "licenses": [
+        {
+          "name": "Apache-2.0",
+          "url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "module": "org.http4s:http4s-crypto_3:0.2.4",
+      "path": "lib/http4s-crypto_3-0.2.4.jar",
+      "sha256": "e7e755e7930915a0845066eab830c29e6c625f0d27d7202433191d3de8c174ce"
+    },
+    {
+      "embeddedNotices": [],
+      "licenses": [
+        {
+          "name": "MIT",
+          "url": "http://opensource.org/licenses/MIT"
+        }
+      ],
+      "module": "org.typelevel:vault_3:3.6.0",
+      "path": "lib/vault_3-3.6.0.jar",
+      "sha256": "a840f24f59648b401d5614361ffb20ba28be0906369eded68d73c62e645de491"
+    },
+    {
+      "embeddedNotices": [],
+      "licenses": [
+        {
+          "name": "Apache License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "module": "org.log4s:log4s_3:1.10.0",
+      "path": "lib/log4s_3-1.10.0.jar",
+      "sha256": "52b0c46f8dace5258cdc2e6e48797408a6f45d751c75d27db58df8409000d580"
+    },
+    {
+      "embeddedNotices": [],
+      "licenses": [
+        {
+          "name": "Apache-2.0",
+          "url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "module": "org.typelevel:log4cats-core_3:2.7.0",
+      "path": "lib/log4cats-core_3-2.7.0.jar",
+      "sha256": "b072934ccc16e797a4cfa0edbba029a4fcf24f77e55026276b511ec0f6160c43"
+    },
+    {
+      "embeddedNotices": [],
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "module": "com.twitter:hpack:1.0.2",
+      "path": "lib/hpack-1.0.2.jar",
+      "sha256": "19cd635d439053c9359d4715741a9c11a175ab96581d884f0b1675c841f2003e"
+    }
+  ],
+  "files": {
+    "README.md": {
+      "bytes": 17300,
+      "mode": "0644",
+      "sha256": "d87edacd6287f28c92e974961921e17168ca7377593bf5572c4b2e15a4ec917c"
+    },
+    "bin/sanctity": {
+      "bytes": 264,
+      "mode": "0755",
+      "sha256": "f8c6b5e973ef76ba7ae5243085e5fa959dcddb8207ffd1029dbcbbb43389639d"
+    },
+    "deployment/database-roles.sql.example": {
+      "bytes": 1210,
+      "mode": "0644",
+      "sha256": "2434563cf783a3d0bec5b0d50d7dfe198873401d4432b26537f0e0610dcc4d93"
+    },
+    "deployment/migration.env.example": {
+      "bytes": 272,
+      "mode": "0644",
+      "sha256": "3d0628a7a3dd2b88cd701efeee18e5967697c97b71487b4a1ea1b191b3b84f88"
+    },
+    "deployment/nginx.conf.example": {
+      "bytes": 1103,
+      "mode": "0644",
+      "sha256": "aa23160dda0d78463c9ac7516e6b708d09b3ee4e8aae9a98c9e9fefac43681e4"
+    },
+    "deployment/org.sanctity.service.plist.example": {
+      "bytes": 1413,
+      "mode": "0644",
+      "sha256": "1b6ab740b85bf40681ae08f99ef42d8fbd18bbe49ac08354d03b664cb662c005"
+    },
+    "deployment/policy-client.json.example": {
+      "bytes": 447,
+      "mode": "0644",
+      "sha256": "99a317f9ccb09548089f58451f16b71e83f1ab755d0bfdfa6fa7fecd577cdc78"
+    },
+    "deployment/sanctity.service.example": {
+      "bytes": 570,
+      "mode": "0644",
+      "sha256": "76bca0f69cd257ced0547f869e9eee3c27febda6653cd212dcc47ce526e2b63a"
+    },
+    "deployment/service.env.example": {
+      "bytes": 912,
+      "mode": "0644",
+      "sha256": "b4f8e49677d8561d2e21b5889bc5dbe0e39629d25797f84d4ff032c145761bb7"
+    },
+    "lib/HikariCP-5.1.0.jar": {
+      "bytes": 161840,
+      "mode": "0644",
+      "sha256": "a47a6ee62379694ee52c30036f0931b72f9aee2a801d590341ed82bd839e2134"
+    },
+    "lib/application_3-0.1.0-SNAPSHOT.jar": {
+      "bytes": 427870,
+      "mode": "0644",
+      "sha256": "523903eee9c8479326ce07cb26b7cc015a8f467e39e4a108d05c71afb77ab69d"
+    },
+    "lib/bids4s_3-0.1.0-SNAPSHOT.jar": {
+      "bytes": 1422263,
+      "mode": "0644",
+      "sha256": "b26885b41c3a38a437e78cac12cc1e1b15e9eac820edc738f226866f2ca8a4a1"
+    },
+    "lib/bids_3-0.1.0-SNAPSHOT.jar": {
+      "bytes": 487546,
+      "mode": "0644",
+      "sha256": "52ca18b2f5ebe8c7833b6bf84dc20b9683442a2cb815b9f3ffd52e2b9656868a"
+    },
+    "lib/case-insensitive_3-1.4.2.jar": {
+      "bytes": 25943,
+      "mode": "0644",
+      "sha256": "f9ce1cefe06ee46817d869b95076ffe3d1be92f57ed992455049a4acfe4e1adb"
+    },
+    "lib/cats-core_3-2.12.0.jar": {
+      "bytes": 6983105,
+      "mode": "0644",
+      "sha256": "db8754981281215078991aa8228562e806d845ebe8441f6c538ef9e85b4560a4"
+    },
+    "lib/cats-effect-kernel_3-3.5.7.jar": {
+      "bytes": 1284090,
+      "mode": "0644",
+      "sha256": "35aa6f5eb539c3fa293c5e80d0650112dac3586ea95d927f248edb84898b3dd2"
+    },
+    "lib/cats-effect-std_3-3.5.7.jar": {
+      "bytes": 687586,
+      "mode": "0644",
+      "sha256": "c6487f9895113049b1a6ecc035e74a05b710e0258c00d14f2d9894ab8a5d6a6e"
+    },
+    "lib/cats-effect_3-3.5.7.jar": {
+      "bytes": 759733,
+      "mode": "0644",
+      "sha256": "9d4edc074ad768e8c899d5d5a322765eed3180eb06cbc24a0ac8d6743f194e70"
+    },
+    "lib/cats-free_3-2.12.0.jar": {
+      "bytes": 362251,
+      "mode": "0644",
+      "sha256": "2777d49541e6085ab997fa22c42499be76356ce51774fec3d04a3fc8b15a5d54"
+    },
+    "lib/cats-kernel_3-2.12.0.jar": {
+      "bytes": 1594558,
+      "mode": "0644",
+      "sha256": "5aa57d0c906b4c6e4575e5548f4ea7523a2c4140424b7df92239162a0ca17f77"
+    },
+    "lib/cats-parse_3-1.0.0.jar": {
+      "bytes": 540195,
+      "mode": "0644",
+      "sha256": "b5ff31340c9e7342d897a6e3ecc08f745a79d637c68eded8fe18c932cb387b2d"
+    },
+    "lib/checker-qual-3.55.1.jar": {
+      "bytes": 241885,
+      "mode": "0644",
+      "sha256": "857658c8bdcbff794949a8d9922f88d63ee3751c203c7cd7d21ea97f9e745288"
+    },
+    "lib/circe-core_3-0.14.10.jar": {
+      "bytes": 1849923,
+      "mode": "0644",
+      "sha256": "587332f06f6120113013079445157f6cd129ab6dd22cf56e078b5d3e7e3b789a"
+    },
+    "lib/circe-generic_3-0.14.10.jar": {
+      "bytes": 6268,
+      "mode": "0644",
+      "sha256": "fd70f9b1ccfb7f0ccc2780fc4e002b28d70a849af238d505801edfb51141df63"
+    },
+    "lib/circe-jawn_3-0.14.10.jar": {
+      "bytes": 35957,
+      "mode": "0644",
+      "sha256": "e7d6dc2323e5961154f8e3f60669c5dd33ffdb3d95cc3f2fb2ed44d8adcf9877"
+    },
+    "lib/circe-numbers_3-0.14.10.jar": {
+      "bytes": 20988,
+      "mode": "0644",
+      "sha256": "eab3fa2de4f239e7095fbc1141ee484db6446e7a2f3d7598d20080296f4ba125"
+    },
+    "lib/doobie-core_3-1.0.0-RC6.jar": {
+      "bytes": 1001396,
+      "mode": "0644",
+      "sha256": "66394db97b1ada6ae488021dd46637f38771da0a7a521076ee20da3aa55704ed"
+    },
+    "lib/doobie-free_3-1.0.0-RC6.jar": {
+      "bytes": 4465060,
+      "mode": "0644",
+      "sha256": "4acfea33746dee98ca5c139cf805f0d6fc153455d4b507b10c001771d150da90"
+    },
+    "lib/doobie-hikari_3-1.0.0-RC6.jar": {
+      "bytes": 39690,
+      "mode": "0644",
+      "sha256": "9e7ea9217c6033bfa2ca2c995eee4df748d765754996ac4fe5e3a65012938abc"
+    },
+    "lib/doobie-postgres_3-1.0.0-RC6.jar": {
+      "bytes": 1404481,
+      "mode": "0644",
+      "sha256": "635d8f7bbfc08fca235e3a0c3cfff5bcd912fe3d586b10f1b60aa4391a821f41"
+    },
+    "lib/fs2-core_3-3.11.0.jar": {
+      "bytes": 1619840,
+      "mode": "0644",
+      "sha256": "2bca13377269f33a575bf69d7e84af5b912431566062ad8459bbedc9ed539d3a"
+    },
+    "lib/fs2-io_3-3.11.0.jar": {
+      "bytes": 842416,
+      "mode": "0644",
+      "sha256": "888eb4d3d06f371cf14b1c1d74e880f769f374ae3e338299579ed62d840879f9"
+    },
+    "lib/hpack-1.0.2.jar": {
+      "bytes": 29339,
+      "mode": "0644",
+      "sha256": "19cd635d439053c9359d4715741a9c11a175ab96581d884f0b1675c841f2003e"
+    },
+    "lib/http4s-core_3-0.23.30.jar": {
+      "bytes": 3317492,
+      "mode": "0644",
+      "sha256": "9ace2ced7ea65c2ac0d862aa9629c78cc821e816ec458fdfcc7a14f3883b5566"
+    },
+    "lib/http4s-crypto_3-0.2.4.jar": {
+      "bytes": 74152,
+      "mode": "0644",
+      "sha256": "e7e755e7930915a0845066eab830c29e6c625f0d27d7202433191d3de8c174ce"
+    },
+    "lib/http4s-dsl_3-0.23.30.jar": {
+      "bytes": 286138,
+      "mode": "0644",
+      "sha256": "8af054935e619393963e895e910f03e1412e41bf9c4d20fa7516e2b015f7faac"
+    },
+    "lib/http4s-ember-core_3-0.23.30.jar": {
+      "bytes": 649056,
+      "mode": "0644",
+      "sha256": "dc7b112b8a5d30189c94420cbeb9aef6d5ba6ee5f8ad8dfcf4264c384ad007f5"
+    },
+    "lib/http4s-ember-server_3-0.23.30.jar": {
+      "bytes": 168558,
+      "mode": "0644",
+      "sha256": "a57679249288bad573a07d23e424c28b26f489a9d25bf1301e51f36e6fd63d74"
+    },
+    "lib/http4s-server_3-0.23.30.jar": {
+      "bytes": 939886,
+      "mode": "0644",
+      "sha256": "5c1a708eb5022a3361fb534da4cb043b1be5e9cb4b657cd3d227c45b5096655b"
+    },
+    "lib/http_3-0.1.0-SNAPSHOT.jar": {
+      "bytes": 147638,
+      "mode": "0644",
+      "sha256": "3a3762e6dbdaf4ae46a6f15075f11a76a3522192e774eb2d6a85c6fbf10f9e67"
+    },
+    "lib/ip4s-core_3-3.6.0.jar": {
+      "bytes": 278828,
+      "mode": "0644",
+      "sha256": "09dcf6cb50ec95aa818feec6ed88512631c1edc40e8cba40fe1f76e12b97620c"
+    },
+    "lib/jawn-parser_3-1.6.0.jar": {
+      "bytes": 130942,
+      "mode": "0644",
+      "sha256": "7eda53af568b548938472ca55d235c310f9fcf5262c1e4847185ce6655aa6cd1"
+    },
+    "lib/kernel_3-0.1.0-SNAPSHOT.jar": {
+      "bytes": 1174144,
+      "mode": "0644",
+      "sha256": "5d74725426170fc99f2760a18dd1c4febe3e34d1d146d836ec6fea6b83755aa8"
+    },
+    "lib/literally_3-1.1.0.jar": {
+      "bytes": 4081,
+      "mode": "0644",
+      "sha256": "2cb14cd4bd97b1f7303c7dc5b3b8ff6faa3fbc84ce2f0916288d219b8d9c140d"
+    },
+    "lib/log4cats-core_3-2.7.0.jar": {
+      "bytes": 197276,
+      "mode": "0644",
+      "sha256": "b072934ccc16e797a4cfa0edbba029a4fcf24f77e55026276b511ec0f6160c43"
+    },
+    "lib/log4cats-slf4j_3-2.7.0.jar": {
+      "bytes": 36662,
+      "mode": "0644",
+      "sha256": "0f2666c2e7adc151cb0d244fbbc7150976417395a7fecd02b3adfc705ad44993"
+    },
+    "lib/log4s_3-1.10.0.jar": {
+      "bytes": 76219,
+      "mode": "0644",
+      "sha256": "52b0c46f8dace5258cdc2e6e48797408a6f45d751c75d27db58df8409000d580"
+    },
+    "lib/objects_3-0.1.0-SNAPSHOT.jar": {
+      "bytes": 65657,
+      "mode": "0644",
+      "sha256": "64ee4810c57d7a39d0beb31699378349a7a99339588fa6f45e831b38b2a52f8a"
+    },
+    "lib/postgres_3-0.1.0-SNAPSHOT.jar": {
+      "bytes": 852971,
+      "mode": "0644",
+      "sha256": "499f454724a790bdd61d6a518c15fd5206640d1ec053f79d9bdb73fe506c51d4"
+    },
+    "lib/postgresql-42.7.14.jar": {
+      "bytes": 1221004,
+      "mode": "0644",
+      "sha256": "73914527305a40cce504b0d3d90b23caf565136912d607ae8ae7c5895512332c"
+    },
+    "lib/scala-library-2.13.18.jar": {
+      "bytes": 5940741,
+      "mode": "0644",
+      "sha256": "4e85d96ff7bc7dc627985523c3541b9917aaa08e956391380c42db21a2c4e5a0"
+    },
+    "lib/scala3-library_3-3.3.8.jar": {
+      "bytes": 1254536,
+      "mode": "0644",
+      "sha256": "2c6eace9158df8ee4485a06128a479d968c1ebfc83ae9b1a394b58429f0d1492"
+    },
+    "lib/scodec-bits_3-1.1.38.jar": {
+      "bytes": 381644,
+      "mode": "0644",
+      "sha256": "991eef38a019893ed65d77d8d8ef16b85ffad799ed27d5f0ccb547337fc96c6d"
+    },
+    "lib/service_3-0.1.0-SNAPSHOT.jar": {
+      "bytes": 144705,
+      "mode": "0644",
+      "sha256": "76cfa1806f48193f8b08f87ee8d017f74f494f16bd7530d72ed682687de2b227"
+    },
+    "lib/slf4j-api-2.0.16.jar": {
+      "bytes": 69435,
+      "mode": "0644",
+      "sha256": "a12578dde1ba00bd9b816d388a0b879928d00bab3c83c240f7013bf4196c579a"
+    },
+    "lib/slf4j-nop-2.0.16.jar": {
+      "bytes": 4982,
+      "mode": "0644",
+      "sha256": "deca6c04ed35515a0a911fa44c0e836bee92c0c59d2e8fa9bab8ffbc464a9ba7"
+    },
+    "lib/typename_3-1.1.0.jar": {
+      "bytes": 10858,
+      "mode": "0644",
+      "sha256": "1453786a549aa33ebf7f999d8b2476fe5dd737236d193d28e1c8a0d515364f1f"
+    },
+    "lib/vault_3-3.6.0.jar": {
+      "bytes": 38382,
+      "mode": "0644",
+      "sha256": "a840f24f59648b401d5614361ffb20ba28be0906369eded68d73c62e645de491"
+    },
+    "licenses/bids4s-LICENSE": {
+      "bytes": 11358,
+      "mode": "0644",
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    },
+    "licenses/embedded/checker-qual-3.55.1.jar/81144c5ecac4fd43.txt": {
+      "bytes": 1126,
+      "mode": "0644",
+      "sha256": "e90eaa08dea089df10f2bf7f9dba63a5f6237c01562c4741e2e86773e78582d5"
+    },
+    "licenses/embedded/ip4s-core_3-3.6.0.jar/c693279643b8cd5d.txt": {
+      "bytes": 11357,
+      "mode": "0644",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    "licenses/embedded/ip4s-core_3-3.6.0.jar/dfb14fbb9e7d0952.txt": {
+      "bytes": 3178,
+      "mode": "0644",
+      "sha256": "49b8a96facd8425e51e9ef27aec668c8ead6ae16abda30466fb59be83414adc8"
+    },
+    "licenses/embedded/postgresql-42.7.14.jar/29990e9c865733c0.txt": {
+      "bytes": 1269,
+      "mode": "0644",
+      "sha256": "5c49fc155ebccd206277e0d1f424aadbf365f0a9ccfb54d400d728a375d523f9"
+    },
+    "licenses/embedded/postgresql-42.7.14.jar/3291120d526c76a4.txt": {
+      "bytes": 1269,
+      "mode": "0644",
+      "sha256": "5c49fc155ebccd206277e0d1f424aadbf365f0a9ccfb54d400d728a375d523f9"
+    },
+    "licenses/embedded/postgresql-42.7.14.jar/6ec4d95655a348bd.txt": {
+      "bytes": 1269,
+      "mode": "0644",
+      "sha256": "7c89807167a03a92d2fbfc936aff4f87d8ce31434637381c89e38282c8c99198"
+    },
+    "licenses/embedded/postgresql-42.7.14.jar/75d4817c230af39c.txt": {
+      "bytes": 1708,
+      "mode": "0644",
+      "sha256": "08bb580d3cb8f9a4a05f008466a294fdb019e0e177d03a035d46f1eb94077de5"
+    },
+    "licenses/embedded/postgresql-42.7.14.jar/bbb28fd987eb1aa2.txt": {
+      "bytes": 1269,
+      "mode": "0644",
+      "sha256": "7c89807167a03a92d2fbfc936aff4f87d8ce31434637381c89e38282c8c99198"
+    },
+    "licenses/embedded/scala-library-2.13.18.jar/c693279643b8cd5d.txt": {
+      "bytes": 11357,
+      "mode": "0644",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    "licenses/embedded/scala-library-2.13.18.jar/dfb14fbb9e7d0952.txt": {
+      "bytes": 634,
+      "mode": "0644",
+      "sha256": "50ce10d50898ba07e632c8913b34098521416d6eed480d44edca93bd92344a45"
+    },
+    "licenses/embedded/slf4j-api-2.0.16.jar/81144c5ecac4fd43.txt": {
+      "bytes": 1178,
+      "mode": "0644",
+      "sha256": "4e7f90c86ab51278228bce153122f1d8df30149d13ce9ef524c8444a84c32dcc"
+    },
+    "licenses/embedded/slf4j-nop-2.0.16.jar/81144c5ecac4fd43.txt": {
+      "bytes": 1178,
+      "mode": "0644",
+      "sha256": "4e7f90c86ab51278228bce153122f1d8df30149d13ce9ef524c8444a84c32dcc"
+    },
+    "metadata/bids4s-source.json": {
+      "bytes": 17857,
+      "mode": "0644",
+      "sha256": "d421c420bdb2e6b82862a133b6862f6a9bfbcdc34aa26d7d5db3a52c2c5b44c1"
+    },
+    "metadata/source.json": {
+      "bytes": 17725,
+      "mode": "0644",
+      "sha256": "b3ab5664567ae0a56e4ea9c7d2ca162308f4981c92a7abb4de31dfe18b12f824"
+    }
+  },
+  "javaMinimum": 21,
+  "limits": [
+    "Internal development distribution; Sanctity license remains unspecified.",
+    "Identical inputs produce identical ZIP bytes; independent compiler reproducibility is not claimed.",
+    "Install/upgrade configuration and least-privilege runtime qualification remain O01.2-O01.4."
+  ],
+  "sbtVersion": "1.10.5",
+  "scalaVersion": "3.3.8",
+  "schemaVersion": 1,
+  "sourceInventorySha256": "b3ab5664567ae0a56e4ea9c7d2ca162308f4981c92a7abb4de31dfe18b12f824",
+  "version": "0.1.0-SNAPSHOT"
+}

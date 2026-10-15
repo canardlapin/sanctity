@@ -1,0 +1,56 @@
+[info] welcome to sbt 1.10.5 (Eclipse Adoptium Java 21.0.12.1)
+[info] loading project definition from /Users/bbuchsbaum/code/scala/sanctity/project
+[info] loading settings for project root from build.sbt ...
+[info] loading settings for project bids4s-19f022d002f69292dec056eb0762b877438c47305cee6c176adf3e0f780e9146-build from plugins.sbt ...
+[info] loading project definition from /Users/bbuchsbaum/code/scala/sanctity/target/source-dependencies/bids4s-19f022d002f69292dec056eb0762b877438c47305cee6c176adf3e0f780e9146/project
+[info] loading settings for project root from build.sbt ...
+[info] resolving key references (17507 settings) ...
+[info] set current project to sanctity (in build file:/Users/bbuchsbaum/code/scala/sanctity/)
+[info] compiling 1 Scala source to /Users/bbuchsbaum/code/scala/sanctity/modules/integration/target/scala-3.3.8/test-classes ...
+[info] done compiling
+Test run sanctity.postgres.PolicyIntegrationSuite started
+==> X sanctity.postgres.PolicyIntegrationSuite.fenced enrollment captures complete current state and preserves original history 9.178s sanctity.policy.PolicyFailure: store-path
+==> X sanctity.postgres.PolicyIntegrationSuite.all nineteen supported mutation classes receive exact independent COMMIT acknowledgements 2.283s sanctity.policy.PolicyFailure: store-path
+==> X sanctity.postgres.PolicyIntegrationSuite.failed event insertion rolls back effects and proves live ABORT without a committed event 1.842s sanctity.policy.PolicyFailure: store-path
+==> X sanctity.postgres.PolicyIntegrationSuite.lost PREPARE response leaves no local effects and cannot abort from restarted absence 1.657s sanctity.policy.PolicyFailure: store-path
+==> X sanctity.postgres.PolicyIntegrationSuite.lost COMMIT acknowledgement preserves local restriction and resolves without repeating effects 1.174s sanctity.policy.PolicyFailure: store-path
+==> X sanctity.postgres.PolicyIntegrationSuite.credential issuance with lost acknowledgement never duplicates a retained operation ID 1.101s sanctity.policy.PolicyFailure: store-path
+==> X sanctity.postgres.PolicyIntegrationSuite.barrier fences the running service even if local epoch and heads are unchanged 1.518s sanctity.policy.PolicyFailure: store-path
+==> X sanctity.postgres.PolicyIntegrationSuite.absolute five-second admission expires an idle transaction and rolls it back 1.444s sanctity.policy.PolicyFailure: store-path
+==> X sanctity.postgres.PolicyIntegrationSuite.unsupported lifecycle and eligibility are refused at enrollment and live admission 1.6s sanctity.policy.PolicyFailure: store-path
+==> X sanctity.postgres.PolicyIntegrationSuite.missing independent trust and a restored older local head both fail admission 1.637s sanctity.policy.PolicyFailure: store-path
+==> X sanctity.postgres.PolicyIntegrationSuite.enrollment retires the old runtime login and a fresh least-privilege login can acknowledge grant changes 1.822s sanctity.policy.PolicyFailure: store-path
+==> X sanctity.postgres.PolicyIntegrationSuite.lost enrollment response stays closed and resumes with the exact retained checkpoint 1.838s sanctity.policy.PolicyFailure: store-path
+==> X sanctity.postgres.PolicyIntegrationSuite.unsupported historical producer prevents enrollment without a partial fence 1.353s sanctity.policy.PolicyFailure: store-path
+==> X sanctity.postgres.PolicyIntegrationSuite.stored acknowledgement signatures are verified before trusting a durable receipt 1.829s sanctity.policy.PolicyFailure: store-path
+==> X sanctity.postgres.PolicyIntegrationSuite.locally committed pending restriction governs reads and blocks overtaking until witness resolution 1.668s sanctity.policy.PolicyFailure: store-path
+sanctity.postgres.PolicyIntegrationSuite: finished 56.674s
+Test run sanctity.postgres.PolicyIntegrationSuite finished: 15 failed, 0 ignored, 15 total 56.802s
+Test run sanctity.postgres.PolicyReceiptCompatibilitySuite started
+sanctity.postgres.PolicyReceiptCompatibilitySuite: finished 0.111s
+Test run sanctity.postgres.PolicyReceiptCompatibilitySuite finished: 0 failed, 0 ignored, 3 total 0.111s
+Test run sanctity.postgres.ServicePrivilegesSuite started
+sanctity.postgres.ServicePrivilegesSuite: finished 14.128s
+Test run sanctity.postgres.ServicePrivilegesSuite finished: 0 failed, 0 ignored, 4 total 14.129s
+Test run sanctity.postgres.OrganizationPersistenceSuite started
+sanctity.postgres.OrganizationPersistenceSuite: finished 27.609s
+Test run sanctity.postgres.OrganizationPersistenceSuite finished: 0 failed, 0 ignored, 11 total 27.609s
+Test run sanctity.postgres.CurrentAuthoritySuite started
+sanctity.postgres.CurrentAuthoritySuite: finished 92.512s
+Test run sanctity.postgres.CurrentAuthoritySuite finished: 0 failed, 0 ignored, 44 total 92.514s
+Test run sanctity.postgres.TransactionSuite started
+sanctity.postgres.TransactionSuite: finished 31.26s
+Test run sanctity.postgres.TransactionSuite finished: 0 failed, 0 ignored, 10 total 31.264s
+[error] Failed: Total 87, Failed 15, Errors 0, Passed 72
+[error] Failed tests:
+[error] 	sanctity.postgres.PolicyIntegrationSuite
+[error] (integration / Test / testOnly) sbt.TestsFailedException: Tests unsuccessful
+[error] Total time: 261 s (04:21), completed Oct 14, 2026, 6:23:57 p.m.
+Traceback (most recent call last):
+  File "/Users/bbuchsbaum/code/scala/sanctity/docs/evidence/institutional-pilot/O03.6.2/regression-procedure.py", line 14, in <module>
+    subprocess.run(['sbt','integration/testOnly sanctity.postgres.PolicyIntegrationSuite sanctity.postgres.PolicyReceiptCompatibilitySuite sanctity.postgres.ServicePrivilegesSuite sanctity.postgres.OrganizationPersistenceSuite sanctity.postgres.CurrentAuthoritySuite sanctity.postgres.TransactionSuite','service/test','postgres/test'],env=env,check=True)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bbuchsbaum/homebrew/Cellar/python@3.13/3.13.4/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 577, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['sbt', 'integration/testOnly sanctity.postgres.PolicyIntegrationSuite sanctity.postgres.PolicyReceiptCompatibilitySuite sanctity.postgres.ServicePrivilegesSuite sanctity.postgres.OrganizationPersistenceSuite sanctity.postgres.CurrentAuthoritySuite sanctity.postgres.TransactionSuite', 'service/test', 'postgres/test']' returned non-zero exit status 1.

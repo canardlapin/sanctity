@@ -98,6 +98,8 @@ enum Problem:
   case LimitExceeded(detail: String)
   case Integrity(detail: String)
   case Operational(detail: String)
+  case PolicyPending(operation: String)
+  case PolicyOutcomeUnknown(operation: String)
 
   def message: String = this match
     case InvalidIdentifier(value) => s"Invalid identifier: $value"
@@ -110,4 +112,6 @@ enum Problem:
     case Unsupported(detail) => s"Unsupported: $detail"
     case LimitExceeded(detail) => s"Limit exceeded: $detail"
     case Integrity(detail) => s"Integrity failure: $detail"
+    case PolicyPending(operation) => s"Policy operation $operation is locally effective; independent acknowledgement is pending"
+    case PolicyOutcomeUnknown(operation) => s"Policy operation $operation has an unknown outcome; resolve it before retrying"
     case Operational(detail) => s"Operation failed: $detail"

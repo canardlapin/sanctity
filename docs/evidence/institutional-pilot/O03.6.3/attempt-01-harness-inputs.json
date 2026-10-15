@@ -1,0 +1,4 @@
+{
+  "modules/integration/src/test/scala/sanctity/postgres/PolicyProcessQualification.scala": "5941c4f1b7cc14f52326543851753f4f6000b8def08538b0a6f3e4d1851129e0",
+  "modules/integration/src/test/scala/sanctity/policy/PolicyProcessWitness.scala": "1d9a0877436f9567fec683dafcc4e1136ecb610bb44d11e2218db5f8c4fe76d5"
+}

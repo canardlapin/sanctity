@@ -1,0 +1,22 @@
+Traceback (most recent call last):
+  File "/Users/bbuchsbaum/code/scala/sanctity/scripts/check-policy-processes.py", line 440, in <module>
+    if __name__=='__main__':main()
+                            ~~~~^^
+  File "/Users/bbuchsbaum/code/scala/sanctity/scripts/check-policy-processes.py", line 426, in main
+    with Fixture(artifact,harness,output,Path(temporary).resolve()) as f:
+         ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bbuchsbaum/code/scala/sanctity/scripts/check-policy-processes.py", line 43, in __enter__
+    self.build();self.start();self.prepare();return self
+                 ~~~~~~~~~~^^
+  File "/Users/bbuchsbaum/code/scala/sanctity/scripts/check-policy-processes.py", line 82, in start
+    self.sql("CREATE ROLE old_runtime LOGIN NOINHERIT PASSWORD 'disposable_runtime_only'; CREATE ROLE new_runtime LOGIN NOINHERIT PASSWORD 'disposable_runtime_only'; REVOKE CREATE,TEMPORARY ON DATABASE fixture FROM PUBLIC; REVOKE CREATE ON SCHEMA public FROM PUBLIC;",schema=False)
+    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bbuchsbaum/code/scala/sanctity/scripts/check-policy-processes.py", line 101, in sql
+    return docker('exec','-i',self.containers['pg'],'psql','-X','-qAt','-v','ON_ERROR_STOP=1','-U','fixture','-d',db or self.database,data=data).stdout.decode().strip()
+           ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bbuchsbaum/code/scala/sanctity/scripts/check-policy-processes.py", line 32, in docker
+    def docker(*args, **kwargs): return run(['docker',*args],**kwargs)
+                                        ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bbuchsbaum/code/scala/sanctity/scripts/check-policy-processes.py", line 29, in run
+    raise RuntimeError('qualification subprocess failed: '+str(args[0])+' (exit '+str(p.returncode)+')')
+RuntimeError: qualification subprocess failed: docker (exit 2)
