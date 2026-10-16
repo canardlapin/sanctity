@@ -37,7 +37,8 @@ object ApiServer extends ProtectedIOApp:
           ids = IdSource.random[IO]
           catalog = db.catalog(ids)
           repository = new NativeRepository[IO](catalog, store, new RepositoryBidsInterpreter[IO](store), ids)
-          api = new RepositoryHttp[IO](catalog, repository, db.credentials(ids), independentPolicy=sys.env.contains("SANCTITY_POLICY_CONFIG"))
+          api = new RepositoryHttp[IO](catalog, repository, db.credentials(ids), independentPolicy=sys.env.contains("SANCTITY_POLICY_CONFIG"),
+            organization=Some(db.organization))
           slots <- Semaphore[IO](8)
           protectedApp = ProtectedOrigin(ConsoleAssets.withApi(api.app), config.authority, config.publicOrigin)
           _ <- server(config.port, protectedApp.mapF(response => slots.permit.use(_ => response)), config.shutdownTimeout)

@@ -7,7 +7,7 @@ import doobie.implicits.*
 import doobie.postgres.implicits.*
 import io.circe.{Decoder, Encoder, Json, Printer}
 import io.circe.syntax.*
-import sanctity.application.{OrganizationMigration, ReferenceOrganizationCatalog}
+import sanctity.application.{OrganizationMigration, OrganizationService, ReferenceOrganizationCatalog}
 import sanctity.kernel.*
 import java.sql.Timestamp
 import java.time.Instant
@@ -16,7 +16,7 @@ import java.util.UUID
 /** Organization administration. Governed commands are public through F02.3; snapshots and leases stay trusted.
   * LocalOnly receipts explicitly do not acknowledge independent policy durability.
   */
-final class PostgresOrganizationCatalog[F[_]: Async] private[postgres](db: PostgresDatabase[F]):
+final class PostgresOrganizationCatalog[F[_]: Async] private[postgres](db: PostgresDatabase[F]) extends OrganizationService[F]:
   import Records.{lift, uuid}
   import JsonCodecs.given
   import OrganizationCodecs.given
@@ -26,6 +26,44 @@ final class PostgresOrganizationCatalog[F[_]: Async] private[postgres](db: Postg
 
   private[sanctity] def snapshot: F[Snapshot] =
     (OperationsSql.active *> OrganizationSql.guard(false) *> load).transact(xa)
+
+  /** Organization reads for the public API: current authority decides both visibility and roster disclosure. */
+  private def view[A](ctx: AccessContext)(f: (Snapshot, OrganizationAuthority.State, OrganizationAuthority.PolicyAdmission, Instant) => Either[Problem, A]): F[Either[Problem, A]] =
+    OperationsSql.run(xa) { for
+      _ <- OperationsSql.active
+      enabled <- OrganizationSql.guard(false)
+      _ <- lift(Either.cond(enabled, (), Problem.Conflict("organization bootstrap required")))
+      _ <- CredentialSql.check(ctx)
+      s <- load
+      state <- PolicySql.load
+      now <- OrganizationSql.now
+      value <- lift(f(s, state, OrganizationAuthority.PolicyAdmission(ctx.principal, true, None), now))
+    yield value }
+
+  def lab(ctx: AccessContext, id: LabId): F[Either[Problem, OrganizationService.LabView]] = view(ctx) { (s, state, a, now) =>
+    import OrganizationAuthority.{permits, Request}
+    for
+      _ <- Either.cond(permits(state, a, Request.DiscoverLab(id), now), (), Problem.Denied)
+      lab <- s.labs.get(id).toRight(Problem.Denied)
+    yield OrganizationService.LabView(lab, Option.when(permits(state, a, Request.ManageLabMembership(id), now))(
+      s.memberships.values.filter(_.lab == id).toVector.sortBy(m => (m.createdAt, m.id.render))))
+  }
+
+  def project(ctx: AccessContext, id: ProjectId): F[Either[Problem, OrganizationService.ProjectView]] = view(ctx) { (s, state, a, now) =>
+    import OrganizationAuthority.{permits, Request}
+    for
+      _ <- Either.cond(permits(state, a, Request.DiscoverProject(id), now), (), Problem.Denied)
+      project <- s.projects.get(id).toRight(Problem.Denied)
+    yield OrganizationService.ProjectView(project, Option.when(permits(state, a, Request.ManageProject(id), now))(
+      s.participations.values.filter(_.project == id).toVector.sortBy(r => (r.createdAt, r.id.render))))
+  }
+
+  def placement(ctx: AccessContext, dataset: DatasetId): F[Either[Problem, OrganizationService.PlacementView]] = view(ctx) { (s, _, _, _) =>
+    for
+      _ <- Either.cond(s.steward(dataset, ctx.principal), (), Problem.Denied)
+      placement <- s.placements.get(dataset).toRight(Problem.Denied)
+    yield OrganizationService.PlacementView(placement, s.stewardships.values.filter(_.dataset == dataset).toVector.sortBy(x => (x.createdAt, x.id.render)))
+  }
 
   def inheritanceImpact(ctx: AccessContext, dataset: DatasetId): F[Either[Problem, OrganizationAccessImpact]] = OperationsSql.run(xa) {
     for

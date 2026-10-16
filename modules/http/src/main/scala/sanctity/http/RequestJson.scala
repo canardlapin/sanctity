@@ -38,6 +38,29 @@ private[http] object RequestJson:
     Either.cond(j.asObject.exists(_.keys.forall(allowed)), (), invalid)
   def get[A: Decoder](j: Json, name: String): Either[Problem, A] = j.hcursor.get[A](name).leftMap(_ => invalid)
   def id[A](j: Json, name: String): Either[Problem, Id[A]] = get[String](j, name).flatMap(Id.parse[A])
+  /** Expected generations keyed "kind:id", e.g. {"lab:UUID": 3, "project:UUID": 1}; every value a positive generation. */
+  def expected(j: Json): Either[Problem, Map[OrganizationRef, OrganizationGeneration]] =
+    j.hcursor.downField("expected").focus.flatMap(_.asObject).toRight(invalid).flatMap(_.toVector.traverse { (key, value) =>
+      for
+        n <- value.asNumber.flatMap(_.toLong).toRight(invalid)
+        generation <- OrganizationGeneration.from(n).leftMap(_ => invalid)
+        ref <- key.split(":", 2) match
+          case Array("principal", v) => Id.parse[PrincipalTag](v).map(OrganizationRef.Principal(_))
+          case Array("lab", v) => Id.parse[LabTag](v).map(OrganizationRef.Lab(_))
+          case Array("project", v) => Id.parse[ProjectTag](v).map(OrganizationRef.Project(_))
+          case Array("membership", v) => Id.parse[LabMembershipTag](v).map(OrganizationRef.Membership(_))
+          case Array("participation", v) => Id.parse[ProjectParticipationTag](v).map(OrganizationRef.Participation(_))
+          case Array("placement", v) => Id.parse[DatasetTag](v).map(OrganizationRef.Placement(_))
+          case Array("stewardship", v) => Id.parse[DatasetStewardshipTag](v).map(OrganizationRef.Stewardship(_))
+          case Array("link", v) => Id.parse[ProjectDatasetLinkTag](v).map(OrganizationRef.Link(_))
+          case _ => Left(invalid)
+      yield ref -> generation
+    }.map(_.toMap))
+  def name(j: Json): Either[Problem, OrganizationName] = get[String](j, "name").flatMap(OrganizationName.from(_).leftMap(_ => invalid))
+  def description(j: Json): Either[Problem, OrganizationDescription] =
+    get[Option[String]](j, "description").flatMap(d => OrganizationDescription.from(d.getOrElse("")).leftMap(_ => invalid))
+  def expiry(j: Json): Either[Problem, Option[java.time.Instant]] =
+    get[Option[String]](j, "expiresAt").flatMap(_.traverse(t => Try(java.time.Instant.parse(t)).toEither.leftMap(_ => invalid)))
   def ref(j: Json): Either[Problem, ReleaseRef] =
     for
       _ <- fields(j, Set("dataset", "release"))

@@ -88,6 +88,46 @@ private[http] object PublicJson:
   def receipt(r: AcceptanceReceipt): Json = Json.obj("ref" -> ref(r.release), "candidate" -> text(r.candidate.render),
     "key" -> text(r.key.value), "acceptedAt" -> text(r.at.toString))
   private def instant(i: java.time.Instant): Json = text(i.toString)
+  private def lower(e: Any): Json = text(e.toString.toLowerCase)
+  def organizationRef(r: OrganizationRef): String = r match
+    case OrganizationRef.Principal(id) => "principal:" + id.render
+    case OrganizationRef.Lab(id) => "lab:" + id.render
+    case OrganizationRef.Project(id) => "project:" + id.render
+    case OrganizationRef.Membership(id) => "membership:" + id.render
+    case OrganizationRef.Participation(id) => "participation:" + id.render
+    case OrganizationRef.Placement(id) => "placement:" + id.render
+    case OrganizationRef.Stewardship(id) => "stewardship:" + id.render
+    case OrganizationRef.Link(id) => "link:" + id.render
+  /** Durability is stated as recorded: LocalOnly, Pending or Durable (a verified independent COMMIT). */
+  def organizationReceipt(r: OrganizationReceipt, created: Json): Json = Json.obj("sequence" -> Json.fromLong(r.sequence),
+    "key" -> text(r.key.value), "at" -> instant(r.at), "durability" -> text(r.durability.toString),
+    "affected" -> Json.arr(r.affected.toVector.map(organizationRef).sorted.map(text)*), "created" -> created)
+  def membership(m: LabMembership): Json = Json.obj("id" -> text(m.id.render), "lab" -> text(m.lab.render),
+    "principal" -> text(m.principal.render), "role" -> lower(m.role), "status" -> lower(m.status),
+    "expiresAt" -> opt(m.expiresAt)(instant), "generation" -> Json.fromLong(m.generation.value))
+  def participation(r: ProjectParticipation): Json = Json.obj("id" -> text(r.id.render), "project" -> text(r.project.render),
+    "principal" -> text(r.principal.render), "role" -> lower(r.role), "basis" -> (r.basis match
+      case ParticipationBasis.Independent => text("independent")
+      case ParticipationBasis.Membership(id) => Json.obj("membership" -> text(id.render))),
+    "status" -> lower(r.status), "expiresAt" -> opt(r.expiresAt)(instant), "generation" -> Json.fromLong(r.generation.value))
+  def lab(v: sanctity.application.OrganizationService.LabView): Json = Json.obj("id" -> text(v.lab.id.render),
+    "name" -> text(v.lab.name.value), "description" -> text(v.lab.description.value), "status" -> lower(v.lab.status),
+    "generation" -> Json.fromLong(v.lab.generation.value), "roster" -> opt(v.roster)(ms => Json.arr(ms.map(membership)*)))
+  def project(v: sanctity.application.OrganizationService.ProjectView): Json = Json.obj("id" -> text(v.project.id.render),
+    "lab" -> text(v.project.lab.render), "name" -> text(v.project.name.value), "description" -> text(v.project.description.value),
+    "status" -> lower(v.project.status), "generation" -> Json.fromLong(v.project.generation.value),
+    "roster" -> opt(v.roster)(rs => Json.arr(rs.map(participation)*)))
+  def placement(v: sanctity.application.OrganizationService.PlacementView): Json = Json.obj(
+    "dataset" -> text(v.placement.dataset.render), "project" -> text(v.placement.project.render),
+    "policy" -> text(v.placement.policy.toString), "generation" -> Json.fromLong(v.placement.generation.value),
+    "stewards" -> Json.arr(v.stewards.map(x => Json.obj("id" -> text(x.id.render), "principal" -> text(x.principal.render),
+      "status" -> lower(x.status), "generation" -> Json.fromLong(x.generation.value)))*))
+  /** The access-impact preview a steward confirms; its digest binds the confirmation to exactly this content. */
+  def impact(i: OrganizationAccessImpact): Json = Json.obj("project" -> text(i.project.render),
+    "generation" -> Json.fromLong(i.generation.value), "recipients" -> Json.arr(i.recipients.toVector.sortBy(_._1.render)
+      .map((p, role) => Json.obj("principal" -> text(p.render), "role" -> lower(role)))*))
+  def impactDigest(i: OrganizationAccessImpact): String =
+    Digest.bytes(impact(i).printWith(io.circe.Printer.noSpaces.copy(sortKeys = true)).getBytes(java.nio.charset.StandardCharsets.UTF_8)).value
   /** A steward's grant list: recipients and exact scope/actions, never issuer identities. */
   def grants(gs: Vector[OrganizationAuthority.GrantView]): Json = Json.obj("grants" -> Json.arr(gs.map { v =>
     val g = v.grant

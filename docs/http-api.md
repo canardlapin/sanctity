@@ -216,6 +216,43 @@ for a release without a parent; otherwise it compares files with the parent
 release, with exact counts and at most 200 paths per group. It lists paths only,
 never digests or source labels.
 
+## Organization administration
+
+Governed organization commands (F02.3) run as the authenticated principal. Each is
+authorized by the shared decision function in the same transaction as its record
+changes, its policy event and its retry receipt.
+
+| Method and path | Who | Result |
+| --- | --- | --- |
+| `GET /v1/labs/{lab}` | Lab member | Lab record and generation; `roster` (memberships) for lab administrators only |
+| `GET /v1/projects/{project}` | Project participant or owning-lab administrator | Project record and generation; `roster` (participations) for project stewards only |
+| `GET /v1/datasets/{dataset}/placement` | Explicit dataset steward | Primary project, access policy, generation and stewardship appointments |
+| `GET /v1/datasets/{dataset}/inheritance` | Explicit dataset steward | Recipients whose project roles would apply under `ProjectMembers`, with a `digest` |
+| `POST /v1/labs/{lab}/rename`, `.../archive` | Lab administrator | Rename (`name`, `description`) or archive/unarchive (`archived`) |
+| `POST /v1/labs/{lab}/projects` | Lab administrator | New project with an initial steward (`steward`, default the caller); 201 with `created.project` |
+| `POST /v1/labs/{lab}/members`, `/v1/memberships/{id}/end` | Lab administrator | Appoint (`principal`, `role` member/admin, optional `expiresAt`) or end a membership |
+| `POST /v1/projects/{project}/rename`, `.../archive` | Project steward | Rename or archive/unarchive |
+| `POST /v1/projects/{project}/participants`, `/v1/participations/{id}/end` | Project steward | Appoint (`principal`, `role` reader/contributor/steward, optional `membership` basis and `expiresAt`) or end a role |
+| `POST /v1/datasets/{dataset}/stewards`, `/v1/stewardships/{id}/end` | Explicit dataset steward | Appoint or end explicit stewardship; the last eligible steward cannot be removed |
+| `POST /v1/datasets/{dataset}/inheritance` | Explicit dataset steward | Set `policy`, confirming `previewDigest` from the preview just reviewed |
+
+Every mutation needs an `Idempotency-Key` header and an `expected` object naming the
+current generation of every record the command depends on, keyed `kind:id`
+(`lab`, `project`, `membership`, `participation`, `placement`, `stewardship`):
+
+```json
+{"name": "Imaging methods", "expected": {"lab:LAB_UUID": 3}}
+```
+
+A missing key or `expected` object is answered with 428 `precondition_required`.
+Stale or missing generations, a reused key with a different request, an
+access-impact preview that no longer matches, and last-steward or archive refusals
+are 409. Unknown records and principals without authority receive the same 404.
+Server-minted identifiers derive from the caller, the parent record and the key, so
+retrying after a lost response returns the original receipt and identifiers. A
+receipt states its durability as recorded: `LocalOnly`, `Pending` or `Durable`.
+Lab creation and principal disablement remain operator commands.
+
 A correction request has exactly these fields:
 
 ```json

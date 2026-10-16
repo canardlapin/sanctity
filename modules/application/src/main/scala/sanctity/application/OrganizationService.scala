@@ -1,0 +1,23 @@
+package sanctity.application
+
+import sanctity.kernel.*
+
+/** Governed organization administration as the public API sees it (F02.3). Reads are projected by current authority
+  * (ADR 002); every mutation is authorized by the shared decision function in the same transaction as its effects,
+  * its event and its retry receipt. Snapshot and lease access stay trusted adapter methods, not part of this surface.
+  */
+trait OrganizationService[F[_]]:
+  def execute(ctx: AccessContext, request: OrganizationMutation): F[Either[Problem, OrganizationReceipt]]
+  /** Recipients whose roles would gain dataset actions under ProjectMembers; current explicit stewards only. */
+  def inheritanceImpact(ctx: AccessContext, dataset: DatasetId): F[Either[Problem, OrganizationAccessImpact]]
+  def lab(ctx: AccessContext, id: LabId): F[Either[Problem, OrganizationService.LabView]]
+  def project(ctx: AccessContext, id: ProjectId): F[Either[Problem, OrganizationService.ProjectView]]
+  /** A dataset's placement and stewardship appointments, for its current explicit stewards. */
+  def placement(ctx: AccessContext, dataset: DatasetId): F[Either[Problem, OrganizationService.PlacementView]]
+
+object OrganizationService:
+  /** `roster` is present only for the lab's current administrators. */
+  final case class LabView(lab: Lab, roster: Option[Vector[LabMembership]])
+  /** `roster` is present only for the project's current stewards. */
+  final case class ProjectView(project: Project, roster: Option[Vector[ProjectParticipation]])
+  final case class PlacementView(placement: DatasetPlacement, stewards: Vector[DatasetStewardship])

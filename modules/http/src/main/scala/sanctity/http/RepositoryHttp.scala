@@ -15,7 +15,7 @@ import sanctity.kernel.*
 /** Public v1 workflow adapter. No arbitrary filesystem paths, blobs, manifests, or caller contexts are accepted. */
 final class RepositoryHttp[F[_]](
     catalog: Catalog[F], repository: NativeRepository[F], authenticator: Authenticator[F],
-    independentPolicy: Boolean = false
+    independentPolicy: Boolean = false, organization: Option[OrganizationService[F]] = None
 )(using F: Async[F]) extends Http4sDsl[F]:
   import PublicJson as Out
   import RequestJson as In
@@ -40,6 +40,36 @@ final class RepositoryHttp[F[_]](
     case _: Problem.LimitExceeded => error(Status.PayloadTooLarge, "limit_exceeded")
     case _: Problem.Integrity | _: Problem.Operational => error(Status.InternalServerError, "repository_failure")
     case _ => error(Status.BadRequest, "invalid_request")
+
+  private def org: F[OrganizationService[F]] =
+    organization.fold(F.raiseError[OrganizationService[F]](Failure(Problem.NotFound("route", "organization"))))(F.pure)
+
+  /** One governed organization mutation (ADR 001): Idempotency-Key and the body's `expected` generations are required
+    * preconditions (428 when absent); the command is authorized and applied by the organization service.
+    */
+  private def govern(ctx: AccessContext, req: Request[F], fields: Set[String], status: Status = Status.Ok)(
+      build: (Json, IdempotencyKey) => F[(OrganizationCommand, Json)]): F[Response[F]] =
+    if req.headers.get(CIString("Idempotency-Key")).isEmpty then error(Status.PreconditionRequired, "precondition_required")
+    else for
+      service <- org
+      key <- header(req, "Idempotency-Key").flatMap(v => lift(IdempotencyKey.from(v)))
+      b <- body(req)
+      res <- if b.hcursor.downField("expected").focus.isEmpty then error(Status.PreconditionRequired, "precondition_required") else for
+        _ <- lift(In.fields(b, fields + "expected"))
+        expected <- lift(In.expected(b))
+        built <- build(b, key)
+        receipt <- checked(service.execute(ctx, OrganizationMutation(key, expected, built._1)))
+        out <- json(Out.organizationReceipt(receipt, built._2), status)
+      yield out
+    yield res
+  /** Server-minted identities derive from the caller, the parent and the idempotency key, so a retry after a lost
+    * response names the same record instead of creating another.
+    */
+  private def minted[A](kind: String, ctx: AccessContext, parent: String, key: IdempotencyKey): Id[A] =
+    OrganizationMigration.id[A]("http-" + kind, ctx.principal.render, parent, key.value)
+  private def created(pairs: (String, String)*): Json = Json.obj(pairs.map((k, v) => k -> Json.fromString(v))*)
+  private def role[A](values: Array[A], name: String): Either[Problem, A] =
+    values.find(_.toString.equalsIgnoreCase(name)).toRight(Problem.Unsupported("unknown role"))
 
   private def body(req: Request[F]): F[Json] =
     if req.contentType.forall(_.mediaType != MediaType.application.json) ||
@@ -166,6 +196,82 @@ final class RepositoryHttp[F[_]](
             "path" -> Json.fromString(h.path.value), "participant" -> Json.fromString(h.participant),
             "session" -> h.session.fold(Json.Null)(Json.fromString)))*)))
       yield result
+    // ---------- organization (F02.3) ----------
+    case GET -> Root / "v1" / "labs" / l =>
+      for { service <- org; lab <- id[LabTag](l); v <- checked(service.lab(ctx, lab)); r <- json(Out.lab(v)) } yield r
+    case GET -> Root / "v1" / "projects" / p =>
+      for { service <- org; project <- id[ProjectTag](p); v <- checked(service.project(ctx, project)); r <- json(Out.project(v)) } yield r
+    case GET -> Root / "v1" / "datasets" / d / "placement" =>
+      for { service <- org; dataset <- id[DatasetTag](d); v <- checked(service.placement(ctx, dataset)); r <- json(Out.placement(v)) } yield r
+    case GET -> Root / "v1" / "datasets" / d / "inheritance" =>
+      for
+        service <- org
+        dataset <- id[DatasetTag](d)
+        impact <- checked(service.inheritanceImpact(ctx, dataset))
+        r <- json(Out.impact(impact).deepMerge(Json.obj("digest" -> Json.fromString(Out.impactDigest(impact)))))
+      yield r
+    case POST -> Root / "v1" / "labs" / l / "rename" =>
+      id[LabTag](l).flatMap(lab => govern(ctx, req, Set("name", "description"))((b, _) =>
+        lift((In.name(b), In.description(b)).tupled).map((n, d) => OrganizationCommand.RenameLab(lab, n, d) -> Json.Null)))
+    case POST -> Root / "v1" / "labs" / l / "archive" =>
+      id[LabTag](l).flatMap(lab => govern(ctx, req, Set("archived"))((b, _) =>
+        lift(In.get[Boolean](b, "archived")).map(a => OrganizationCommand.ArchiveLab(lab, a) -> Json.Null)))
+    case POST -> Root / "v1" / "labs" / l / "projects" =>
+      id[LabTag](l).flatMap(lab => govern(ctx, req, Set("name", "description", "steward"), Status.Created)((b, key) => lift(for
+        n <- In.name(b)
+        d <- In.description(b)
+        steward <- In.get[Option[String]](b, "steward").flatMap(_.traverse(Id.parse[PrincipalTag]))
+      yield
+        val project = minted[ProjectTag]("project", ctx, lab.render, key)
+        val participation = minted[ProjectParticipationTag]("project-steward", ctx, lab.render, key)
+        OrganizationCommand.CreateProject(project, lab, steward.getOrElse(ctx.principal), participation, n, d) ->
+          created("project" -> project.render, "participation" -> participation.render))))
+    case POST -> Root / "v1" / "labs" / l / "members" =>
+      id[LabTag](l).flatMap(lab => govern(ctx, req, Set("principal", "role", "expiresAt"), Status.Created)((b, key) => lift(for
+        person <- In.id[PrincipalTag](b, "principal")
+        r <- In.get[String](b, "role").flatMap(role(LabRole.values, _))
+        expires <- In.expiry(b)
+      yield
+        val membership = minted[LabMembershipTag]("membership", ctx, lab.render, key)
+        OrganizationCommand.AddMember(membership, lab, person, r, expires) -> created("membership" -> membership.render))))
+    case POST -> Root / "v1" / "memberships" / m / "end" =>
+      id[LabMembershipTag](m).flatMap(x => govern(ctx, req, Set.empty)((_, _) => F.pure(OrganizationCommand.EndMember(x) -> Json.Null)))
+    case POST -> Root / "v1" / "projects" / p / "rename" =>
+      id[ProjectTag](p).flatMap(project => govern(ctx, req, Set("name", "description"))((b, _) =>
+        lift((In.name(b), In.description(b)).tupled).map((n, d) => OrganizationCommand.RenameProject(project, n, d) -> Json.Null)))
+    case POST -> Root / "v1" / "projects" / p / "archive" =>
+      id[ProjectTag](p).flatMap(project => govern(ctx, req, Set("archived"))((b, _) =>
+        lift(In.get[Boolean](b, "archived")).map(a => OrganizationCommand.ArchiveProject(project, a) -> Json.Null)))
+    case POST -> Root / "v1" / "projects" / p / "participants" =>
+      id[ProjectTag](p).flatMap(project => govern(ctx, req, Set("principal", "role", "membership", "expiresAt"), Status.Created)((b, key) => lift(for
+        person <- In.id[PrincipalTag](b, "principal")
+        r <- In.get[String](b, "role").flatMap(role(OrganizationRole.values, _))
+        membership <- In.get[Option[String]](b, "membership").flatMap(_.traverse(Id.parse[LabMembershipTag]))
+        expires <- In.expiry(b)
+      yield
+        val participation = minted[ProjectParticipationTag]("participation", ctx, project.render, key)
+        OrganizationCommand.AddParticipant(participation, project, person, r,
+          membership.fold(ParticipationBasis.Independent)(ParticipationBasis.Membership(_)), expires) ->
+          created("participation" -> participation.render))))
+    case POST -> Root / "v1" / "participations" / x / "end" =>
+      id[ProjectParticipationTag](x).flatMap(r => govern(ctx, req, Set.empty)((_, _) => F.pure(OrganizationCommand.EndParticipant(r) -> Json.Null)))
+    case POST -> Root / "v1" / "datasets" / d / "stewards" =>
+      id[DatasetTag](d).flatMap(dataset => govern(ctx, req, Set("principal"), Status.Created)((b, key) =>
+        lift(In.id[PrincipalTag](b, "principal")).map { person =>
+          val stewardship = minted[DatasetStewardshipTag]("stewardship", ctx, dataset.render, key)
+          OrganizationCommand.AddSteward(stewardship, dataset, person) -> created("stewardship" -> stewardship.render)
+        }))
+    case POST -> Root / "v1" / "stewardships" / x / "end" =>
+      id[DatasetStewardshipTag](x).flatMap(a => govern(ctx, req, Set.empty)((_, _) => F.pure(OrganizationCommand.EndSteward(a) -> Json.Null)))
+    case POST -> Root / "v1" / "datasets" / d / "inheritance" =>
+      // The steward confirms the preview they saw: its digest must match the impact recomputed now.
+      id[DatasetTag](d).flatMap(dataset => govern(ctx, req, Set("policy", "previewDigest"))((b, _) => for
+        service <- org
+        policy <- lift(In.get[String](b, "policy").flatMap(n => PlacementPolicy.values.find(_.toString == n).toRight(Problem.Unsupported("unknown policy"))))
+        digest <- lift(In.get[String](b, "previewDigest"))
+        impact <- checked(service.inheritanceImpact(ctx, dataset))
+        _ <- lift(Either.cond(Out.impactDigest(impact) == digest, (), Problem.Conflict("access-impact preview changed; review it again")))
+      yield OrganizationCommand.SetInheritance(dataset, policy, impact) -> Json.Null))
     case _ => error(Status.NotFound, "not_found")
 
   private def authenticate(req: Request[F]): F[Either[Problem, AccessContext]] =
