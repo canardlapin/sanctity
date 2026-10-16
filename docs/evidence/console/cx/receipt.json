@@ -1,0 +1,50 @@
+{
+  "schema": "sanctity.console-walkthrough.v1",
+  "recordedAt": "2026-10-16T01:03:31Z",
+  "revision": "f0c8df6e41194ba05d6ec63e896f10392cdde929",
+  "data": "synthetic demo transport (tests/console/serve.js)",
+  "viewports": [
+    "1440x900",
+    "390x844"
+  ],
+  "plan": "mote epic CX",
+  "sourceSha256": {
+    "index.html": "3098e794d6a8fbb68b1dacc0b29481040579267ec75d36696de17e4c7f230cfa",
+    "app.js": "817eff8f20d064495b3bddd812f19207a9c37516b741927593c30afb13390fd2",
+    "app.css": "a252e159bcb00d71c020bfea3a99f2536abfbb1127941a4ed78a91bda13ae722",
+    "demo.js": "ee4b21bfb5cccfd064c8551ac77f4612512d712d05e34ffa29fee69949843ef6"
+  },
+  "screens": {
+    "01-connect-1440.png": "05db5ab16da5816be0322b12fdcdb528954743da6d7bec622baf900cc15e2d1b",
+    "01-connect-390.png": "a782b6b5ce4e51c63f02676159db5305d08c71d6fc23b686bca8d3e4d629d1c5",
+    "02-release-1440.png": "6b7dac31ac723341d6d4c454fe111f1770f65456f0182d905d24988eded69ed9",
+    "02-release-390.png": "a2f94d6a133a218168eeb52a0add32c576f649dbb8c27bcb05b2803ea7421c95",
+    "03-file-1440.png": "7485ad4d655da44f38d734d89ae5a341594c789196256a9b98972fefdf5f8cb1",
+    "03-file-390.png": "62a92890e69cb10d41cf6556dc2d0dfc0dc6d68f5de2b2f6813c18e017357d51",
+    "04-assessment-1440.png": "721388a7b5b791cc9a4cbb41f2e9d43c6d9d65c2439f00bb98d17f64a449e674",
+    "04-assessment-390.png": "e76feb42e75bc71e258659a3b6f7361433c9fb3cf499b6c2b3b03b1617a3159b",
+    "05-relationships-1440.png": "4fd50e8a58eeb4615b394554d15d263ef688e79c69a6064af63c4d9977590ccf",
+    "05-relationships-390.png": "f6d4c8851d2c942c21009a6689e9155b3deb76a85a3893eccbdf24d88ad9f3b7",
+    "06-correct-1440.png": "5bb810eca8c96f0d56235415aac68d24ad9a8ef67b1cc426fa9297aea1b4c871",
+    "06-correct-390.png": "01c7f93c020a76f83c6013c781c0e000df46b56f9294c0eaef1e8c8b8d13fc25",
+    "07-query-1440.png": "eddedce016cdd0ba4841dd021c06321b22af1ecb625c421cd3a16c78e74aeebb",
+    "07-query-390.png": "1bb650b4eb0c0ad07d71523a4286ce7b73e8073883f5f6f76b99ff42447f3f64",
+    "08-access-1440.png": "ddf957db349b45685093b6097f59ddd711b6672dd241fee2557a4799391873eb",
+    "08-access-390.png": "0edc5e6bbf0ba6f0b0c8a5ed3c174adca7efe0b8f55f19e3b1d6d0098eda80dc",
+    "09-head-1440.png": "6b7dac31ac723341d6d4c454fe111f1770f65456f0182d905d24988eded69ed9",
+    "09-head-390.png": "a2f94d6a133a218168eeb52a0add32c576f649dbb8c27bcb05b2803ea7421c95",
+    "10-preview-1440.png": "131cc55770c8195de9926195f5b717b4cb6e39b6d98cae7a89c93e23922123a0",
+    "10-preview-390.png": "0c4c998d9f946a0901803a6413647c79366870ee15ffabccf681a386b76c973b",
+    "11-receipt-1440.png": "d930790024a90aa4b00db53b65d07dd68b3c4273321f9f43ca874b283ba50bfe",
+    "11-receipt-390.png": "bd5528b37937750a2dea7f96bc13bd8fa208522bf9362fa8a94a8844780ab8a6"
+  },
+  "verification": {
+    "check-console.sh": "84/84 behaviour, 27/27 UI, layout and syntax; seven v4f regressions reproduce",
+    "check-console-backend.sh": "9 scenarios plus PostgreSQL persistence",
+    "integration": "http/test 5/5; ConsoleSuite and HttpSuite 9/9"
+  },
+  "limits": [
+    "Demo data only in these captures; the PostgreSQL rehearsal keeps its own screenshots.",
+    "Screen-reader use is unverified (CON-03 deferred)."
+  ]
+}
