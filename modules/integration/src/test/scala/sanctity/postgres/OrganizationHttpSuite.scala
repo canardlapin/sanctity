@@ -306,3 +306,32 @@ final class OrganizationHttpSuite extends FunSuite:
     yield () }.unsafeRunSync()
   }
 
+  test("concurrent transfers of one stewardship resolve to exactly one; a project steward cannot make themselves dataset steward") {
+    PostgresFixture.resource.use { f => for
+      t <- world(f)
+      place <- placementOf(f, t, "alice", restricted)
+      from = place.hcursor.downField("stewards").downArray
+      fromId = from.get[String]("id").toOption.get
+      expected = Json.obj(s"stewardship:$fromId" -> Json.fromLong(gen(from.focus.get)), s"placement:${restricted.render}" -> Json.fromLong(gen(place)))
+      to = (who: String) => Json.obj("principal" -> Json.fromString(Corpus.principal(who).render), "expected" -> expected)
+      raced <- (call(f, Method.POST, s"/v1/stewardships/$fromId/transfer", t("alice"), Some(to("dan")), Some("race-a")),
+        call(f, Method.POST, s"/v1/stewardships/$fromId/transfer", t("alice"), Some(to("sam")), Some("race-b"))).parTupled
+      // The policy lock serializes them. The loser is refused: 409 if it saw the stale generation, or the uniform 404 once
+      // reauthorization finds that alice no longer holds the stewardship it names.
+      statuses = Vector(raced._1._1, raced._2._1)
+      _ = assert(statuses.count(_ == Status.Created) == 1 && statuses.exists(Set(Status.Conflict, Status.NotFound)), statuses.toString)
+      after <- sql"SELECT count(*) FROM organization_stewardship WHERE dataset_id=${restricted.render}::uuid AND status='Active'"
+        .query[Long].unique.transact(f.database.transactor)
+      _ = assertEquals(after, 1L)
+      // sam stewards the project but not this ExplicitOnly dataset: no self-appointment, no inheritance switch.
+      current <- placementOf(f, t, (if raced._1._1 == Status.Created then "dan" else "sam"), restricted)
+      selfAppoint <- call(f, Method.POST, s"/v1/datasets/${open.render}/stewards", t("sam"), Some(Json.obj("principal" -> Json.fromString(Corpus.principal("sam").render),
+        "expected" -> Json.obj(s"placement:${open.render}" -> Json.fromLong(1L)))), Some("esc-1"))
+      project <- projectGen(f, t, "sam", memory.render)
+      inherit <- call(f, Method.POST, s"/v1/datasets/${restricted.render}/inheritance", t("sam"), Some(Json.obj("policy" -> Json.fromString("ProjectMembers"),
+        "previewDigest" -> Json.fromString("0" * 64), "expected" -> Json.obj(s"placement:${restricted.render}" -> Json.fromLong(gen(current)),
+          s"project:${memory.render}" -> Json.fromLong(project)))), Some("esc-2"))
+      _ = assertEquals(Vector(selfAppoint, inherit).distinct, Vector(Status.NotFound -> notFound))
+    yield () }.unsafeRunSync()
+  }
+

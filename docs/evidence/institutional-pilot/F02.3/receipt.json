@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "task": "F02.3",
+  "mote": "bd-01M4W5P591G5D5048MSJ46BN27",
+  "status": "passed-with-limitations",
+  "at": "2026-10-16T03:28:08.353182+00:00",
+  "artifact": {
+    "revision": "e02e10aa011c8a35fe922e43d5f843200fc8feef",
+    "sourceTreeDirty": true,
+    "note": "Sources bound by SHA-256; unrelated uncommitted work from other sessions was present in the tree.",
+    "sourceSha256": {
+      "modules/kernel/src/main/scala/sanctity/kernel/Organization.scala": "8b72ad02fd0e3df1dd063676ddb06317bebbc0bc3f3c6346712faa685a3f16c9",
+      "modules/application/src/main/scala/sanctity/application/ReferenceOrganizationCatalog.scala": "02a621d184fff13b7df1dfd2ebff9fc63b72c89d16a283d4abf1c94660c5cc0c",
+      "modules/application/src/main/scala/sanctity/application/OrganizationService.scala": "22c4a69690ff528f0a53fd180dfd28f2e972c22c910538bb9560a2ae0f044e2d",
+      "modules/postgres/src/main/scala/sanctity/postgres/PostgresOrganizationCatalog.scala": "573d40d710a1b4455a86957b090e9a972f690a149488c0ee60b7a10dd901f925",
+      "modules/postgres/src/main/scala/sanctity/postgres/PostgresDatabase.scala": "75a895f0f676623a085aeb6e9b1cc08fba9ea905725a5011e126caced1184467",
+      "modules/postgres/src/main/scala/sanctity/postgres/OrganizationCodecs.scala": "cf5b7b4c835c5b20fdddcc21d772d433ccdb0f1d7964cf5660d78aa9b3247458",
+      "modules/postgres/src/main/scala/sanctity/postgres/PolicyBridge.scala": "bd46ae765f0ae70be97444a6cf81181ddd8f5c31e4315f612075bdc7ea007e93",
+      "modules/postgres/src/main/resources/sanctity/postgres/V011__governed_organization.sql": "6770e360317de5080a59938fe7b90a96cf370382e35db4083bfd6e09315e35df",
+      "modules/postgres/src/main/resources/sanctity/postgres/V012__dataset_moves.sql": "6c454e4a78e9c0814096ad10e01fe0cf9dec3352ffca8335e6b9c0a7cbfc2d67",
+      "modules/http/src/main/scala/sanctity/http/RepositoryHttp.scala": "8d7bf170bac470699bf40618712e4e5fbfab2764ba4daabcad557193c182bd05",
+      "modules/service/src/main/scala/sanctity/app/OrganizationCli.scala": "acde8512ecff5efcf307796d902e42d7232df5e0190196e6b48ab64dab456b43",
+      "modules/integration/src/test/scala/sanctity/postgres/OrganizationHttpSuite.scala": "3f3f01fe34e013fc644356a26e6cb2180d5207a1060ea514a89bcea03ae522f1",
+      "modules/integration/src/test/scala/sanctity/postgres/ServicePrivilegesSuite.scala": "eb96c5a26236cd64e9948454e317a3bd6e0e6b41585a8992525a182c6504492f"
+    }
+  },
+  "implementation": {
+    "commits": [
+      "dc96464 runtime privilege profile (V011)",
+      "5dbc8e4 HTTP commands and reads",
+      "9f1afed dataset creation",
+      "e02e10a transfer, moves (V012), recovery, operator CLI"
+    ],
+    "authority": "ReferenceOrganizationCatalog.decide under the exclusive policy guard; events via PolicySql.commit",
+    "durability": "Receipts state LocalOnly/Pending/Durable as recorded; no independent-durability claim beyond O03.6"
+  },
+  "acceptance": [
+    {
+      "criterion": "Support authorized lab/project creation, membership updates, dataset placement and stewardship transfer with clear public errors and audit records.",
+      "status": "passed",
+      "evidence": "OrganizationHttpSuite (9 tests, PostgreSQL): lab admins create projects and manage memberships; project stewards manage participations; contributors create ExplicitOnly datasets they steward; stewards appoint, end and transfer stewardship and confirm inheritance against the reviewed preview digest; dataset moves need the dataset, source and destination stewards. Every mutation appends its event (kinds verified by ServicePrivilegesSuite) and returns a receipt. Errors: 428 missing preconditions, 409 stale/reused/closed/last-steward, uniform 404 without authority, 400 invalid input (e.g. unknown custodian)."
+    },
+    {
+      "criterion": "Enforce current authority and expected generations on every mutation; retries cannot duplicate membership or perform a second transfer.",
+      "status": "passed",
+      "evidence": "Stale generations return 409; identical retries return the original receipt and server-minted IDs (project, dataset); a retry is reauthorized first, so a former steward's transfer retry is denied while the transfer happened once; two concurrent transfers of one stewardship leave exactly one active steward."
+    },
+    {
+      "criterion": "A trusted bootstrap can establish the first steward; ordinary users cannot exploit that path, remove the last steward silently or grant themselves wider access.",
+      "status": "passed",
+      "evidence": "Bootstrap remains the reviewed operator migration. Lab creation, principal disablement and stewardship recovery require the operator connection and bootstrap operator principal; the runtime login is refused by application check and row security (forged CreateLab/OrganizationGenesis/DisablePrincipal events fail with 42501). Ending the last eligible steward is 409; a project steward cannot appoint themselves dataset steward or switch inheritance on an ExplicitOnly dataset; recovery is refused while an eligible steward exists."
+    }
+  ],
+  "verification": {
+    "commands": [
+      "pgtest.sh 'integration/testOnly sanctity.postgres.OrganizationHttpSuite' (9/9)",
+      "pgtest.sh 'integration/testOnly sanctity.postgres.ServicePrivilegesSuite' (6/6)",
+      "pgtest.sh 'test' plus ServicePrivileges/PolicyIntegration/OrganizationHttp/Disclosure suites (all pass)",
+      "bash scripts/check-console-backend.sh",
+      "bash scripts/check-postgres.sh (sbt check, complete integration project 333/333, crash/retry and coordinated restore demonstrations)"
+    ],
+    "database": "disposable PostgreSQL 17.11 container per run",
+    "results": {
+      "integration": "333/333 (complete integration project, including OrganizationHttpSuite 9/9 and ServicePrivilegesSuite 6/6)",
+      "aggregate": "636/636 across the root aggregate (excludes integration)",
+      "postgresGate": "PASS, evidence target/postgres-check.IyKp5c",
+      "consoleRehearsal": "PASS (9 scenarios plus persistence)"
+    }
+  },
+  "inputs": [
+    "docs/decisions/001-institutional-organization.md",
+    "docs/decisions/002-institutional-authority.md",
+    "docs/decisions/003-institutional-lifecycle.md",
+    "docs/organization-reference.md"
+  ],
+  "limitations": [
+    "Local engineering evidence; no institutional reviewer acceptance.",
+    "Custody transfer (ADR 001 Change custody) is not implemented; new custodians remain an operator decision.",
+    "Organization directories and pagination are F05.1; this task supplies single-resource reads only.",
+    "No 403 is used for authorized readers denied a known action; every denial is the uniform 404 (ADR permits 403, does not require it).",
+    "Organization state is still loaded in full per command (H04 scale qualification).",
+    "The root sbt aggregate excludes the integration project; integration evidence comes from scripts/check-postgres.sh."
+  ]
+}

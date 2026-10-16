@@ -59,11 +59,14 @@
       "bash scripts/check-console-backend.sh"
     ],
     "results": {
-      "allModules": "636/636 passed (47+68+9+507+5)",
+      "allModules": "636/636 across the root aggregate (47+68+9+507+5), which excludes the integration project",
       "DisclosureSuite": "5/5",
       "console": "gate PASS; v4f regressions reproduce",
-      "rehearsal": "9 scenarios plus persistence PASS"
-    }
+      "rehearsal": "9 scenarios plus persistence PASS",
+      "integrationAtF03.3": "Explicit runs: DisclosureSuite 5/5, CurrentAuthoritySuite, HttpSuite, ConsoleSuite (58/58 together)",
+      "integrationLater": "Complete integration project 333/333 via scripts/check-postgres.sh after F02.3 (includes DisclosureSuite)"
+    },
+    "correction": "Recorded 2026-10-15 after F02.3: the earlier 'allModules' figure did not include integration suites; the complete integration project is now run by scripts/check-postgres.sh (see F02.3 receipt)."
   },
   "environment": {
     "platform": "darwin 24.1.0 arm64",
