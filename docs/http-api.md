@@ -232,6 +232,7 @@ changes, its policy event and its retry receipt.
 | `POST /v1/labs/{lab}/projects` | Lab administrator | New project with an initial steward (`steward`, default the caller); 201 with `created.project` |
 | `POST /v1/labs/{lab}/members`, `/v1/memberships/{id}/end` | Lab administrator | Appoint (`principal`, `role` member/admin, optional `expiresAt`) or end a membership |
 | `POST /v1/projects/{project}/rename`, `.../archive` | Project steward | Rename or archive/unarchive |
+| `POST /v1/projects/{project}/datasets` | Project contributor or steward | Empty dataset for a `custodian` already recorded by this installation, with `ExplicitOnly` placement and the caller as explicit steward; 201 with `created.dataset` |
 | `POST /v1/projects/{project}/participants`, `/v1/participations/{id}/end` | Project steward | Appoint (`principal`, `role` reader/contributor/steward, optional `membership` basis and `expiresAt`) or end a role |
 | `POST /v1/datasets/{dataset}/stewards`, `/v1/stewardships/{id}/end` | Explicit dataset steward | Appoint or end explicit stewardship; the last eligible steward cannot be removed |
 | `POST /v1/datasets/{dataset}/inheritance` | Explicit dataset steward | Set `policy`, confirming `previewDigest` from the preview just reviewed |
@@ -251,7 +252,7 @@ are 409. Unknown records and principals without authority receive the same 404.
 Server-minted identifiers derive from the caller, the parent record and the key, so
 retrying after a lost response returns the original receipt and identifiers. A
 receipt states its durability as recorded: `LocalOnly`, `Pending` or `Durable`.
-Lab creation and principal disablement remain operator commands.
+Lab creation, principal disablement and new custodians remain operator decisions.
 
 A correction request has exactly these fields:
 

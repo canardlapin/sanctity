@@ -91,7 +91,7 @@ final class PostgresOrganizationCatalog[F[_]: Async] private[postgres](db: Postg
     * Stable request-derived dataset ID makes a response-loss retry resolve to the same record.
     */
   def createDataset(ctx: AccessContext, custodian: CustodianId, project: ProjectId,
-      key: IdempotencyKey, expectedProject: OrganizationGeneration): F[Either[Problem, (Dataset, OrganizationReceipt)]] = db.requireOperator *> OperationsSql.run(xa) {
+      key: IdempotencyKey, expectedProject: OrganizationGeneration): F[Either[Problem, (Dataset, OrganizationReceipt)]] = OperationsSql.run(xa) {
     val id = OrganizationMigration.id[DatasetTag]("new-dataset", ctx.principal.render, project.render, key.value)
     for
       _ <- OperationsSql.active
@@ -100,6 +100,9 @@ final class PostgresOrganizationCatalog[F[_]: Async] private[postgres](db: Postg
       _ <- CredentialSql.check(ctx)
       active <- sql"SELECT EXISTS(SELECT 1 FROM principal WHERE id=${uuid(ctx.principal)} AND active)".query[Boolean].unique
       _ <- lift(Either.cond(active, (), Problem.Denied))
+      // Public creation names a custodian this installation already recognizes; a new custodian is an operator decision.
+      recognized <- sql"SELECT EXISTS(SELECT 1 FROM dataset WHERE custodian=${uuid(custodian)})".query[Boolean].unique
+      _ <- lift(Either.cond(recognized, (), Problem.Unsupported("unrecognized custodian")))
       _ <- sql"""INSERT INTO dataset(id,custodian,curator) VALUES(${uuid(id)},${uuid(custodian)},${uuid(ctx.principal)})
         ON CONFLICT(id) DO NOTHING""".update.run
       row <- sql"SELECT custodian,curator,head FROM dataset WHERE id=${uuid(id)}".query[(UUID, UUID, Option[UUID])].unique

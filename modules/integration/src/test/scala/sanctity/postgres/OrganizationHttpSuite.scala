@@ -155,3 +155,35 @@ final class OrganizationHttpSuite extends FunSuite:
       _ = assert(bobCanRead.isRight, bobCanRead.toString)
     yield () }.unsafeRunSync()
   }
+
+  test("project contributors create datasets they then steward; readers, lab admins, unknown custodians and archived projects cannot") {
+    PostgresFixture.resource.use { f => for
+      t <- world(f)
+      project <- call(f, Method.GET, s"/v1/projects/${memory.render}", t("alice")).map(_._2)
+      url = s"/v1/projects/${memory.render}/datasets"
+      body = (custodian: String, generation: Long) => Json.obj("custodian" -> Json.fromString(custodian),
+        "expected" -> Json.obj(s"project:${memory.render}" -> Json.fromLong(generation)))
+      custodian = f.system.dataset.custodian.render
+      made <- call(f, Method.POST, url, t("dan"), Some(body(custodian, gen(project))), Some("d-1"))
+      _ = assertEquals(made._1, Status.Created)
+      dataset = made._2.hcursor.downField("created").get[String]("dataset").toOption.get
+      retried <- call(f, Method.POST, url, t("dan"), Some(body(custodian, gen(project))), Some("d-1"))
+      _ = assertEquals(retried._2.hcursor.downField("created").get[String]("dataset").toOption, Some(dataset))
+      placement <- call(f, Method.GET, s"/v1/datasets/$dataset/placement", t("dan")).map(_._2)
+      _ = assertEquals(placement.hcursor.get[String]("policy").toOption, Some("ExplicitOnly"))
+      _ = assertEquals(placement.hcursor.downField("stewards").downArray.get[String]("principal").toOption, Some(Corpus.principal("dan").render))
+      current <- call(f, Method.GET, s"/v1/projects/${memory.render}", t("alice")).map(x => gen(x._2))
+      reader <- call(f, Method.POST, url, t("bob"), Some(body(custodian, current)), Some("d-2"))
+      labAdmin <- call(f, Method.POST, url, t("carol"), Some(body(custodian, current)), Some("d-3"))
+      _ = assertEquals(Vector(reader, labAdmin).distinct, Vector(Status.NotFound -> notFound))
+      unknown <- call(f, Method.POST, url, t("dan"), Some(body(java.util.UUID.randomUUID().toString, current)), Some("d-4"))
+      _ = assertEquals(unknown._1, Status.BadRequest)
+      lab <- call(f, Method.GET, s"/v1/labs/${labA.render}", t("alice")).map(x => gen(x._2))
+      archived <- call(f, Method.POST, s"/v1/projects/${memory.render}/archive", t("alice"), Some(Json.obj("archived" -> Json.True,
+        "expected" -> Json.obj(s"project:${memory.render}" -> Json.fromLong(current), s"lab:${labA.render}" -> Json.fromLong(lab)))), Some("a-1"))
+      _ = assertEquals(archived._1, Status.Ok)
+      after <- call(f, Method.GET, s"/v1/projects/${memory.render}", t("alice")).map(x => gen(x._2))
+      refused <- call(f, Method.POST, url, t("dan"), Some(body(custodian, after)), Some("d-5"))
+      _ = assertEquals(refused._1, Status.Conflict)
+    yield () }.unsafeRunSync()
+  }

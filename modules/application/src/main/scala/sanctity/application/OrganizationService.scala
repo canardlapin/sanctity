@@ -8,6 +8,11 @@ import sanctity.kernel.*
   */
 trait OrganizationService[F[_]]:
   def execute(ctx: AccessContext, request: OrganizationMutation): F[Either[Problem, OrganizationReceipt]]
+  /** An empty dataset in an active project, with ExplicitOnly placement and the caller's explicit stewardship, created
+    * atomically by a project contributor or steward for a custodian already recognized by this installation.
+    */
+  def createDataset(ctx: AccessContext, custodian: CustodianId, project: ProjectId, key: IdempotencyKey,
+      expectedProject: OrganizationGeneration): F[Either[Problem, (Dataset, OrganizationReceipt)]]
   /** Recipients whose roles would gain dataset actions under ProjectMembers; current explicit stewards only. */
   def inheritanceImpact(ctx: AccessContext, dataset: DatasetId): F[Either[Problem, OrganizationAccessImpact]]
   def lab(ctx: AccessContext, id: LabId): F[Either[Problem, OrganizationService.LabView]]

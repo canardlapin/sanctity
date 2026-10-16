@@ -210,6 +210,23 @@ final class RepositoryHttp[F[_]](
         impact <- checked(service.inheritanceImpact(ctx, dataset))
         r <- json(Out.impact(impact).deepMerge(Json.obj("digest" -> Json.fromString(Out.impactDigest(impact)))))
       yield r
+    case POST -> Root / "v1" / "projects" / p / "datasets" =>
+      if req.headers.get(CIString("Idempotency-Key")).isEmpty then error(Status.PreconditionRequired, "precondition_required")
+      else for
+        service <- org
+        project <- id[ProjectTag](p)
+        key <- header(req, "Idempotency-Key").flatMap(v => lift(IdempotencyKey.from(v)))
+        b <- body(req)
+        res <- if b.hcursor.downField("expected").focus.isEmpty then error(Status.PreconditionRequired, "precondition_required") else for
+          _ <- lift(In.fields(b, Set("custodian", "expected")))
+          custodian <- lift(In.id[CustodianTag](b, "custodian"))
+          expected <- lift(In.expected(b))
+          generation <- lift(expected.get(OrganizationRef.Project(project)).filter(_ => expected.size == 1)
+            .toRight(Problem.Conflict("required organization preconditions missing or extra")))
+          made <- checked(service.createDataset(ctx, custodian, project, key, generation))
+          out <- json(Out.organizationReceipt(made._2, created("dataset" -> made._1.id.render)), Status.Created)
+        yield out
+      yield res
     case POST -> Root / "v1" / "labs" / l / "rename" =>
       id[LabTag](l).flatMap(lab => govern(ctx, req, Set("name", "description"))((b, _) =>
         lift((In.name(b), In.description(b)).tupled).map((n, d) => OrganizationCommand.RenameLab(lab, n, d) -> Json.Null)))
