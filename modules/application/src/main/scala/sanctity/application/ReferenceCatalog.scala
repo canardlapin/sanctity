@@ -31,6 +31,9 @@ final class ReferenceCatalog[F[_]] private (
     }
 
   // Organization policy is evaluated by the PostgreSQL catalog; the reference catalog models legacy grants only.
+  def grantShare(ctx: AccessContext, dataset: DatasetId, recipient: PrincipalId, release: Option[ReleaseId],
+      actions: Set[OrganizationAuthority.Permission], expiresAt: Option[java.time.Instant]): F[Either[Problem, OrganizationAuthority.PolicyGrant]] =
+    F.pure(Left(Problem.Unsupported("shares with discovery or expiry require an initialized organization")))
   def grants(ctx: AccessContext, dataset: DatasetId): F[Either[Problem, Vector[OrganizationAuthority.GrantView]]] =
     F.pure(Left(Problem.Unsupported("grant inspection requires an initialized organization")))
   def explainAccess(ctx: AccessContext, subject: PrincipalId, scope: OrganizationAuthority.DataScope,

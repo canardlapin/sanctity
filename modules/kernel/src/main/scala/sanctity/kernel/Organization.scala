@@ -69,8 +69,9 @@ final case class LabMembership(id: LabMembershipId, lab: LabId, principal: Princ
 final case class ProjectParticipation(id: ProjectParticipationId, project: ProjectId, principal: PrincipalId,
     role: OrganizationRole, basis: ParticipationBasis, status: AppointmentStatus, expiresAt: Option[Instant],
     generation: OrganizationGeneration, createdAt: Instant)
+/** `label` is a steward-curated name that discovery may show (ADR 002 Discover), unlike scientific metadata. */
 final case class DatasetPlacement(dataset: DatasetId, project: ProjectId, policy: PlacementPolicy,
-    generation: OrganizationGeneration, createdAt: Instant)
+    generation: OrganizationGeneration, createdAt: Instant, label: Option[OrganizationName] = None)
 final case class DatasetStewardship(id: DatasetStewardshipId, dataset: DatasetId, principal: PrincipalId,
     status: AppointmentStatus, generation: OrganizationGeneration, createdAt: Instant)
 final case class ProjectDatasetLink(id: ProjectDatasetLinkId, project: ProjectId, dataset: DatasetId,
@@ -116,13 +117,15 @@ enum OrganizationCommand:
   case AddParticipant(id: ProjectParticipationId, project: ProjectId, principal: PrincipalId,
       role: OrganizationRole, basis: ParticipationBasis, expiresAt: Option[Instant])
   case EndParticipant(id: ProjectParticipationId)
-  case PlaceNewDataset(dataset: DatasetId, project: ProjectId, stewardship: DatasetStewardshipId)
+  case PlaceNewDataset(dataset: DatasetId, project: ProjectId, stewardship: DatasetStewardshipId, label: Option[OrganizationName] = None)
   case AddSteward(id: DatasetStewardshipId, dataset: DatasetId, principal: PrincipalId)
   case EndSteward(id: DatasetStewardshipId)
   case SetInheritance(dataset: DatasetId, policy: PlacementPolicy, confirmedImpact: OrganizationAccessImpact)
   case ArchiveProject(id: ProjectId, archived: Boolean)
   case ArchiveLab(id: LabId, archived: Boolean)
   case DisablePrincipal(id: PrincipalId)
+  /** Sets the dataset's discovery label; explicit dataset stewards only. */
+  case RenameDataset(dataset: DatasetId, label: OrganizationName)
   /** Ends one explicit stewardship and appoints another in the same transition: never zero, never duplicated. */
   case TransferSteward(from: DatasetStewardshipId, to: DatasetStewardshipId, principal: PrincipalId)
   case RequestMove(id: MoveRequestId, dataset: DatasetId, destination: ProjectId, policy: PlacementPolicy,

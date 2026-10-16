@@ -232,7 +232,8 @@ changes, its policy event and its retry receipt.
 | `POST /v1/labs/{lab}/projects` | Lab administrator | New project with an initial steward (`steward`, default the caller); 201 with `created.project` |
 | `POST /v1/labs/{lab}/members`, `/v1/memberships/{id}/end` | Lab administrator | Appoint (`principal`, `role` member/admin, optional `expiresAt`) or end a membership |
 | `POST /v1/projects/{project}/rename`, `.../archive` | Project steward | Rename or archive/unarchive |
-| `POST /v1/projects/{project}/datasets` | Project contributor or steward | Empty dataset for a `custodian` already recorded by this installation, with `ExplicitOnly` placement and the caller as explicit steward; 201 with `created.dataset` |
+| `POST /v1/projects/{project}/datasets` | Project contributor or steward | Empty dataset for a `custodian` already recorded by this installation, with optional `label`, `ExplicitOnly` placement and the caller as explicit steward; 201 with `created.dataset` |
+| `POST /v1/datasets/{dataset}/rename` | Explicit dataset steward | Set the dataset's discovery `label` |
 | `POST /v1/projects/{project}/participants`, `/v1/participations/{id}/end` | Project steward | Appoint (`principal`, `role` reader/contributor/steward, optional `membership` basis and `expiresAt`) or end a role |
 | `POST /v1/datasets/{dataset}/stewards`, `/v1/stewardships/{id}/end` | Explicit dataset steward | Appoint or end explicit stewardship; the last eligible steward cannot be removed |
 | `POST /v1/datasets/{dataset}/inheritance` | Explicit dataset steward | Set `policy`, confirming `previewDigest` from the preview just reviewed |
@@ -240,6 +241,30 @@ changes, its policy event and its retry receipt.
 | `POST /v1/datasets/{dataset}/moves` | Dataset, source-project or destination-project steward | Request a move to `destination` with `policy` (default `ExplicitOnly`) and optional `keepLink`; freezes the placement and both project generations; the requester's roles approve at once |
 | `GET /v1/moves/{id}` | Requester or a holder of a required role | Request, approvals, the caller's roles and the preview: inheritance `lost` and `gained`, surviving stewards and the number of surviving grants |
 | `POST /v1/moves/{id}/approve`, `.../commit`, `.../withdraw` | Holder of a required role (withdraw: also the requester) | Approve with every role the caller holds; commit once the dataset, source and destination stewards all currently approve; or withdraw |
+
+### Directories
+
+| Method and path | Result |
+| --- | --- |
+| `GET /v1/labs` | Labs the caller belongs to |
+| `GET /v1/projects[?lab=...]` | Projects the caller participates in or administers through the owning lab |
+| `GET /v1/projects/{project}/datasets` | Datasets placed in that project the caller may discover, plus discoverable linked datasets (`linked: true`); 404 if the project itself is not visible |
+| `GET /v1/me/shares` | The caller's shares that include `Discover`: dataset, exact release (`null` for future releases) and the dataset label |
+
+Each accepts `q` (case-insensitive search over the visible name or label, at most 200
+characters), `limit` (1–100, default 25) and `cursor`. A page is
+`{"items": [...], "total": N, "next": CURSOR|null}`; `total` counts only rows the caller
+may see. Datasets show the steward-curated `label` (or `null`), never scientific
+metadata, byte counts or a head. Stewards set the label at creation (`label`) or with
+`POST /v1/datasets/{dataset}/rename`. A cursor belongs to its caller, directory and
+query (another use is 400). Each later page re-evaluates current policy: if anything the
+caller can see in that directory changed, it is answered with 409 and the caller
+restarts from the first page. Changes the caller cannot see never invalidate a
+cursor or alter a page.
+
+A grant request may also name `Discover` and `ReadEvidence` and carry `expiresAt`
+(RFC 3339, stored at microsecond precision); such shares need an initialized
+organization. Discover is what makes a share appear in `/v1/me/shares`.
 
 Every mutation needs an `Idempotency-Key` header and an `expected` object naming the
 current generation of every record the command depends on, keyed `kind:id`

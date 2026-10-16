@@ -120,7 +120,7 @@ private[http] object PublicJson:
     "roster" -> opt(v.roster)(rs => Json.arr(rs.map(participation)*)))
   def placement(v: sanctity.application.OrganizationService.PlacementView): Json = Json.obj(
     "dataset" -> text(v.placement.dataset.render), "project" -> text(v.placement.project.render),
-    "policy" -> text(v.placement.policy.toString), "generation" -> Json.fromLong(v.placement.generation.value),
+    "label" -> opt(v.placement.label)(l => text(l.value)), "policy" -> text(v.placement.policy.toString), "generation" -> Json.fromLong(v.placement.generation.value),
     "stewards" -> Json.arr(v.stewards.map(x => Json.obj("id" -> text(x.id.render), "principal" -> text(x.principal.render),
       "status" -> lower(x.status), "generation" -> Json.fromLong(x.generation.value)))*))
   private def roles(m: Map[PrincipalId, OrganizationRole]): Json = Json.arr(m.toVector.sortBy(_._1.render)
@@ -162,6 +162,18 @@ private[http] object PublicJson:
         case Basis.Share(id, scope, _, expires, derived) => Json.obj("kind" -> text("grant"), "id" -> text(id.render),
           "release" -> opt(scope.release)(r => text(r.render)), "derived" -> Json.fromBoolean(derived), "expiresAt" -> opt(expires)(instant))
       }*))
+  def share(g: OrganizationAuthority.PolicyGrant): Json = Json.obj("id" -> text(g.id.render), "dataset" -> text(g.scope.dataset.render),
+    "recipient" -> text(g.recipient.render), "release" -> opt(g.scope.release)(r => text(r.render)),
+    "actions" -> Json.arr(g.actions.toVector.map(_.toString).sorted.map(text)*), "expiresAt" -> opt(g.expiresAt)(instant))
+  /** A directory page: authorized rows only, their total, and an opaque cursor for the next page. */
+  def page[A](p: sanctity.application.Directory.Page[A])(row: A => Json): Json =
+    Json.obj("items" -> Json.arr(p.items.map(row)*), "total" -> Json.fromInt(p.total), "next" -> opt(p.next)(text))
+  def labEntry(l: Lab): Json = Json.obj("id" -> text(l.id.render), "name" -> text(l.name.value), "status" -> lower(l.status))
+  def projectEntry(p: Project): Json = Json.obj("id" -> text(p.id.render), "lab" -> text(p.lab.render), "name" -> text(p.name.value), "status" -> lower(p.status))
+  def datasetEntry(e: sanctity.application.OrganizationService.DatasetEntry): Json = Json.obj("id" -> text(e.dataset.render),
+    "label" -> opt(e.label)(l => text(l.value)), "linked" -> Json.fromBoolean(e.linked))
+  def shareEntry(e: sanctity.application.OrganizationService.ShareEntry): Json = Json.obj("dataset" -> text(e.dataset.render),
+    "release" -> opt(e.release)(r => text(r.render)), "label" -> opt(e.label)(l => text(l.value)))
   def grant(g: Grant): Json = Json.obj("id" -> text(g.id.render), "dataset" -> text(g.dataset.render),
     "recipient" -> text(g.recipient.render), "release" -> opt(g.release)(r => text(r.render)),
     "actions" -> Json.arr(g.actions.toVector.map(_.toString).sorted.map(text)*))

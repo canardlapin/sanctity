@@ -54,7 +54,7 @@ final class PostgresDatabase[F[_]] private[postgres] (
 
   private def migrations: F[Vector[(Int, String, String)]] =
     F.blocking {
-      Vector("V001__catalog.sql", "V002__authority.sql", "V003__queries.sql", "V004__operations.sql", "V005__credentials.sql", "V006__processing.sql", "V007__publication.sql", "V008__organization.sql", "V009__current_authority.sql", "V010__policy_witness.sql", "V011__governed_organization.sql", "V012__dataset_moves.sql").zipWithIndex.map { (name, index) =>
+      Vector("V001__catalog.sql", "V002__authority.sql", "V003__queries.sql", "V004__operations.sql", "V005__credentials.sql", "V006__processing.sql", "V007__publication.sql", "V008__organization.sql", "V009__current_authority.sql", "V010__policy_witness.sql", "V011__governed_organization.sql", "V012__dataset_moves.sql", "V013__dataset_labels.sql").zipWithIndex.map { (name, index) =>
         val stream = Option(getClass.getResourceAsStream(s"/sanctity/postgres/$name"))
           .getOrElse(throw Failure(Problem.Operational("missing catalog migration")))
         val source = try new String(stream.readAllBytes(), StandardCharsets.UTF_8) finally stream.close()

@@ -67,6 +67,17 @@ final class RepositoryHttp[F[_]](
     */
   private def minted[A](kind: String, ctx: AccessContext, parent: String, key: IdempotencyKey): Id[A] =
     OrganizationMigration.id[A]("http-" + kind, ctx.principal.render, parent, key.value)
+  private def single(req: Request[F], name: String): F[Option[String]] = req.uri.multiParams.get(name) match
+    case None => F.pure(None)
+    case Some(Seq(v)) => F.pure(Some(v))
+    case _ => F.raiseError(Failure(Problem.Unsupported("one " + name + " parameter at most")))
+  private def directoryQuery(req: Request[F]): F[(Directory.Query, Option[String])] =
+    for
+      q <- single(req, "q")
+      limit <- single(req, "limit").flatMap(_.traverse(v => lift(v.toIntOption.toRight(Problem.Unsupported("invalid limit")))))
+      query <- lift(Directory.Query.from(q, limit))
+      cursor <- single(req, "cursor")
+    yield query -> cursor
   private def created(pairs: (String, String)*): Json = Json.obj(pairs.map((k, v) => k -> Json.fromString(v))*)
   private def role[A](values: Array[A], name: String): Either[Problem, A] =
     values.find(_.toString.equalsIgnoreCase(name)).toRight(Problem.Unsupported("unknown role"))
@@ -110,6 +121,24 @@ final class RepositoryHttp[F[_]](
         parent <- if readsHistory && showParent then rel.parent.traverse(p => checked(repository.release(ctx, ReleaseRef(at.dataset, p)))) else F.pure(None)
         res <- json(Out.release(rel, Option.when(readsHistory)(Out.provenance(rel, parent, curates)), showParent))
       yield res
+    // ---------- directories (F05.1) ----------
+    case GET -> Root / "v1" / "labs" =>
+      for { service <- org; q <- directoryQuery(req); p <- checked(service.labs(ctx, q._1, q._2)); r <- json(Out.page(p)(Out.labEntry)) } yield r
+    case GET -> Root / "v1" / "projects" =>
+      for
+        service <- org
+        q <- directoryQuery(req)
+        lab <- req.uri.multiParams.get("lab") match
+          case None => F.pure(None)
+          case Some(Seq(l)) => id[LabTag](l).map(Some(_))
+          case _ => F.raiseError[Option[LabId]](Failure(Problem.Unsupported("one lab parameter at most")))
+        p <- checked(service.projects(ctx, lab, q._1, q._2))
+        r <- json(Out.page(p)(Out.projectEntry))
+      yield r
+    case GET -> Root / "v1" / "projects" / p / "datasets" =>
+      for { service <- org; project <- id[ProjectTag](p); q <- directoryQuery(req); page <- checked(service.datasets(ctx, project, q._1, q._2)); r <- json(Out.page(page)(Out.datasetEntry)) } yield r
+    case GET -> Root / "v1" / "me" / "shares" =>
+      for { service <- org; q <- directoryQuery(req); page <- checked(service.shares(ctx, q._1, q._2)); r <- json(Out.page(page)(Out.shareEntry)) } yield r
     case GET -> Root / "v1" / "datasets" / d / "grants" =>
       id[DatasetTag](d).flatMap(i => checked(catalog.grants(ctx, i))).flatMap(gs => json(Out.grants(gs)))
     case GET -> Root / "v1" / "datasets" / d / "access" =>
@@ -165,14 +194,20 @@ final class RepositoryHttp[F[_]](
         dataset <- id[DatasetTag](d)
         _ <- checked(catalog.check(ctx, dataset, Action.ManageAccess))
         b <- body(req)
-        _ <- lift(In.fields(b, Set("recipient", "release", "actions")))
+        _ <- lift(In.fields(b, Set("recipient", "release", "actions", "expiresAt")))
         recipient <- lift(In.id[PrincipalTag](b, "recipient"))
         release <- lift(In.get[Option[String]](b, "release").flatMap(_.traverse(Id.parse[ReleaseTag])))
         names <- lift(In.get[Vector[String]](b, "actions"))
-        actions <- lift(names.traverse(n => Action.values.find(_.toString == n).toRight(Problem.Unsupported("unknown action"))))
-        grant <- checked(catalog.grant(ctx, dataset, recipient, release, actions.toSet))
-        result <- json(Out.grant(grant), Status.Created).map(policyAcknowledged)
-      yield result
+        permissions <- lift(names.traverse(n => OrganizationAuthority.Permission.values.find(_.toString == n).toRight(Problem.Unsupported("unknown action"))))
+        expires <- lift(In.expiry(b))
+        legacy = permissions.traverse(p => Action.values.find(_.toString == p.toString))
+        // Legacy actions without expiry keep the original grant path; Discover, ReadEvidence or an expiry need the share model.
+        result <- (legacy, expires) match
+          case (Some(actions), None) =>
+            checked(catalog.grant(ctx, dataset, recipient, release, actions.toSet)).flatMap(g => json(Out.grant(g), Status.Created))
+          case _ =>
+            checked(catalog.grantShare(ctx, dataset, recipient, release, permissions.toSet, expires)).flatMap(g => json(Out.share(g), Status.Created))
+      yield policyAcknowledged(result)
     case DELETE -> Root / "v1" / "datasets" / d / "grants" / g =>
       (id[DatasetTag](d), id[GrantTag](g)).tupled.flatMap((ds, grant) => checked(catalog.revoke(ctx, ds, grant)))
         .as(policyAcknowledged(Response[F](Status.NoContent)))
@@ -218,12 +253,13 @@ final class RepositoryHttp[F[_]](
         key <- header(req, "Idempotency-Key").flatMap(v => lift(IdempotencyKey.from(v)))
         b <- body(req)
         res <- if b.hcursor.downField("expected").focus.isEmpty then error(Status.PreconditionRequired, "precondition_required") else for
-          _ <- lift(In.fields(b, Set("custodian", "expected")))
+          _ <- lift(In.fields(b, Set("custodian", "label", "expected")))
           custodian <- lift(In.id[CustodianTag](b, "custodian"))
+          label <- lift(In.label(b))
           expected <- lift(In.expected(b))
           generation <- lift(expected.get(OrganizationRef.Project(project)).filter(_ => expected.size == 1)
             .toRight(Problem.Conflict("required organization preconditions missing or extra")))
-          made <- checked(service.createDataset(ctx, custodian, project, key, generation))
+          made <- checked(service.createDataset(ctx, custodian, project, key, generation, label))
           out <- json(Out.organizationReceipt(made._2, created("dataset" -> made._1.id.render)), Status.Created)
         yield out
       yield res
@@ -280,6 +316,9 @@ final class RepositoryHttp[F[_]](
         }))
     case POST -> Root / "v1" / "stewardships" / x / "end" =>
       id[DatasetStewardshipTag](x).flatMap(a => govern(ctx, req, Set.empty)((_, _) => F.pure(OrganizationCommand.EndSteward(a) -> Json.Null)))
+    case POST -> Root / "v1" / "datasets" / d / "rename" =>
+      id[DatasetTag](d).flatMap(dataset => govern(ctx, req, Set("label"))((b, _) =>
+        lift(In.label(b).flatMap(_.toRight(Problem.Unsupported("label required")))).map(l => OrganizationCommand.RenameDataset(dataset, l) -> Json.Null)))
     case POST -> Root / "v1" / "stewardships" / x / "transfer" =>
       id[DatasetStewardshipTag](x).flatMap(from => govern(ctx, req, Set("principal"), Status.Created)((b, key) =>
         lift(In.id[PrincipalTag](b, "principal")).map { person =>

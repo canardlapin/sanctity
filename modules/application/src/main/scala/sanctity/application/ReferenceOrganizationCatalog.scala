@@ -148,7 +148,7 @@ object ReferenceOrganizationCatalog:
     case OrganizationCommand.EndMember(id) => "lab:" + s.memberships.get(id).map(_.lab.render).getOrElse("")
     case OrganizationCommand.AddParticipant(_, project, _, _, _, _) => "project:" + project.render
     case OrganizationCommand.EndParticipant(id) => "project:" + s.participations.get(id).map(_.project.render).getOrElse("")
-    case OrganizationCommand.PlaceNewDataset(dataset, _, _) => "dataset:" + dataset.render
+    case OrganizationCommand.PlaceNewDataset(dataset, _, _, _) => "dataset:" + dataset.render
     case OrganizationCommand.AddSteward(_, dataset, _) => "dataset:" + dataset.render
     case OrganizationCommand.EndSteward(id) => "dataset:" + s.stewardships.get(id).map(_.dataset.render).getOrElse("")
     case OrganizationCommand.SetInheritance(dataset, _, _) => "dataset:" + dataset.render
@@ -161,6 +161,7 @@ object ReferenceOrganizationCatalog:
     case OrganizationCommand.CommitMove(id) => "dataset:" + s.moves.get(id).map(_.dataset.render).getOrElse("")
     case OrganizationCommand.WithdrawMove(id) => "dataset:" + s.moves.get(id).map(_.dataset.render).getOrElse("")
     case OrganizationCommand.RecoverSteward(dataset, _, _, _) => "dataset:" + dataset.render
+    case OrganizationCommand.RenameDataset(dataset, _) => "dataset:" + dataset.render
 
   private def authorize(s: Snapshot, operators: Set[PrincipalId], actor: PrincipalId,
       c: OrganizationCommand, now: Instant): Either[Problem, Unit] =
@@ -176,7 +177,7 @@ object ReferenceOrganizationCatalog:
       case OrganizationCommand.ArchiveProject(id, _) => project(id)
       case OrganizationCommand.AddParticipant(_, id, _, _, _, _) => project(id)
       case OrganizationCommand.EndParticipant(id) => s.participations.get(id).exists(p => project(p.project))
-      case OrganizationCommand.PlaceNewDataset(d, p, _) => s.knownDatasets.get(d).exists(_.curator == actor) &&
+      case OrganizationCommand.PlaceNewDataset(d, p, _, _) => s.knownDatasets.get(d).exists(_.curator == actor) &&
         s.projectRole(p, actor, now).exists(_ != OrganizationRole.Reader)
       case OrganizationCommand.AddSteward(_, d, _) => s.steward(d, actor)
       case OrganizationCommand.SetInheritance(d, _, _) => s.steward(d, actor)
@@ -188,7 +189,8 @@ object ReferenceOrganizationCatalog:
       case OrganizationCommand.CommitMove(id) => s.moves.get(id).exists(m => s.moveRoles(m.dataset, m.source, m.destination, actor, now).nonEmpty)
       case OrganizationCommand.WithdrawMove(id) => s.moves.get(id).exists(m => m.requestedBy == actor ||
         s.moveRoles(m.dataset, m.source, m.destination, actor, now).nonEmpty)
-      case OrganizationCommand.RecoverSteward(_, _, _, _) => operators(actor))
+      case OrganizationCommand.RecoverSteward(_, _, _, _) => operators(actor)
+      case OrganizationCommand.RenameDataset(d, _) => s.steward(d, actor))
     require(allowed, Problem.Denied)
 
   private def prerequisites(s: Snapshot, c: OrganizationCommand): Either[Problem, Set[OrganizationRef]] =
@@ -206,7 +208,7 @@ object ReferenceOrganizationCatalog:
         case ParticipationBasis.Independent => Set.empty
         case ParticipationBasis.Membership(id) => Set(Membership(id))))
       case OrganizationCommand.EndParticipant(id) => s.participations.get(id).map(p => Set(Participation(id), Project(p.project))).toRight(Problem.Denied)
-      case OrganizationCommand.PlaceNewDataset(_, project, _) => Right(Set(Project(project)))
+      case OrganizationCommand.PlaceNewDataset(_, project, _, _) => Right(Set(Project(project)))
       case OrganizationCommand.AddSteward(_, dataset, _) => Right(Set(Placement(dataset)))
       case OrganizationCommand.EndSteward(id) => s.stewardships.get(id).map(a => Set(Stewardship(id), Placement(a.dataset))).toRight(Problem.Denied)
       case OrganizationCommand.SetInheritance(dataset, _, _) => parent(s, dataset).map(p => Set(Placement(dataset), Project(p)))
@@ -218,6 +220,7 @@ object ReferenceOrganizationCatalog:
       case OrganizationCommand.CommitMove(id) => Right(Set(Move(id)))
       case OrganizationCommand.WithdrawMove(id) => Right(Set(Move(id)))
       case OrganizationCommand.RecoverSteward(dataset, _, _, _) => Right(Set(Placement(dataset)))
+      case OrganizationCommand.RenameDataset(dataset, _) => Right(Set(Placement(dataset)))
 
   private def touch(s: Snapshot, refs: Set[OrganizationRef]): Either[Problem, Snapshot] = refs.toVector.foldLeft[Either[Problem, Snapshot]](Right(s)) { (result, ref) =>
     result.flatMap { current => current.generation(ref).toRight(Problem.Denied).flatMap(_.next).map { generation => ref match
@@ -296,13 +299,13 @@ object ReferenceOrganizationCatalog:
       case OrganizationCommand.EndParticipant(id) =>
         touch(s, Set(OrganizationRef.Participation(id), OrganizationRef.Project(s.participations(id).project)))
           .map(n => n.copy(participations = n.participations.updated(id, n.participations(id).copy(status = AppointmentStatus.Ended))))
-      case OrganizationCommand.PlaceNewDataset(dataset, project, stewardship) =>
+      case OrganizationCommand.PlaceNewDataset(dataset, project, stewardship, label) =>
         for
           _ <- activeProject(project)
           _ <- conflict(s.knownDatasets.get(dataset).exists(_.head.isEmpty), "existing accepted data requires the migration protocol")
           _ <- conflict(!s.placements.contains(dataset) && !s.stewardships.contains(stewardship), "dataset is already placed or appointment identity reused")
           n <- touch(s, Set(OrganizationRef.Project(project)))
-        yield n.copy(placements = n.placements.updated(dataset, DatasetPlacement(dataset, project, PlacementPolicy.ExplicitOnly, initial, now)),
+        yield n.copy(placements = n.placements.updated(dataset, DatasetPlacement(dataset, project, PlacementPolicy.ExplicitOnly, initial, now, label)),
           stewardships = n.stewardships.updated(stewardship, DatasetStewardship(stewardship, dataset, actor, AppointmentStatus.Active, initial, now)))
       case OrganizationCommand.AddSteward(id, dataset, person) =>
         for
@@ -395,6 +398,12 @@ object ReferenceOrganizationCatalog:
           _ <- conflict(!s.stewardships.contains(stewardship), "appointment identity reused")
           n <- touch(s, Set(OrganizationRef.Placement(dataset)))
         yield n.copy(stewardships = n.stewardships.updated(stewardship, DatasetStewardship(stewardship, dataset, person, AppointmentStatus.Active, initial, now)))
+      case OrganizationCommand.RenameDataset(dataset, label) =>
+        for
+          p <- parent(s, dataset)
+          _ <- activeProject(p)
+          n <- touch(s, Set(OrganizationRef.Placement(dataset)))
+        yield n.copy(placements = n.placements.updated(dataset, n.placements(dataset).copy(label = Some(label))))
       case OrganizationCommand.DisablePrincipal(id) =>
         val labs = s.memberships.values.filter(_.principal == id).map(m => OrganizationRef.Lab(m.lab)).toSet
         val projects = s.participations.values.filter(_.principal == id).map(p => OrganizationRef.Project(p.project)).toSet

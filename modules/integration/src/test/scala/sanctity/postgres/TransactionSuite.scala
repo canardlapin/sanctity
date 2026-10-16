@@ -33,7 +33,7 @@ final class TransactionSuite extends FunSuite:
       for
         _ <- (f.database.migrate, f.database.migrate).parTupled
         versions <- sql"SELECT count(*) FROM schema_migration".query[Long].unique.transact(f.database.transactor)
-        _ = assertEquals(versions, 12L)   // through V012 (dataset moves); moves with every migration
+        _ = assertEquals(versions, 13L)   // through V013 (dataset labels); moves with every migration
         _ <- sqlRun(f, "UPDATE schema_migration SET checksum='changed'")
         drift <- f.database.migrate.attempt
         _ = assert(drift.isLeft)

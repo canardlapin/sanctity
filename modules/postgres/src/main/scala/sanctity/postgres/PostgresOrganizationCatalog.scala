@@ -65,6 +65,38 @@ final class PostgresOrganizationCatalog[F[_]: Async] private[postgres](db: Postg
     yield OrganizationService.PlacementView(placement, s.stewardships.values.filter(_.dataset == dataset).toVector.sortBy(x => (x.createdAt, x.id.render)))
   }
 
+  import sanctity.application.Directory
+  def labs(ctx: AccessContext, query: Directory.Query, cursor: Option[String]): F[Either[Problem, Directory.Page[Lab]]] =
+    view(ctx) { (s, state, a, now) =>
+      val visible = s.labs.values.toVector.filter(l => OrganizationAuthority.permits(state, a, OrganizationAuthority.Request.DiscoverLab(l.id), now))
+      Directory.page(ctx.principal, "labs", query, cursor, visible)(_.name.value, _.id.render)
+    }
+  def projects(ctx: AccessContext, lab: Option[LabId], query: Directory.Query, cursor: Option[String]): F[Either[Problem, Directory.Page[Project]]] =
+    view(ctx) { (s, state, a, now) =>
+      val visible = s.projects.values.toVector.filter(p => lab.forall(_ == p.lab) &&
+        OrganizationAuthority.permits(state, a, OrganizationAuthority.Request.DiscoverProject(p.id), now))
+      Directory.page(ctx.principal, "projects:" + lab.fold("")(_.render), query, cursor, visible)(_.name.value, _.id.render)
+    }
+  def datasets(ctx: AccessContext, project: ProjectId, query: Directory.Query, cursor: Option[String]): F[Either[Problem, Directory.Page[OrganizationService.DatasetEntry]]] =
+    view(ctx) { (s, state, a, now) =>
+      for
+        placed <- OrganizationAuthority.visibleDatasets(state, a, project, now)
+        linked <- OrganizationAuthority.visibleLinks(state, a, project, now)
+        entries = placed.map(d => OrganizationService.DatasetEntry(d, s.placements.get(d).flatMap(_.label), false)) ++
+          linked.filterNot(placed.contains).map(d => OrganizationService.DatasetEntry(d, s.placements.get(d).flatMap(_.label), true))
+        page <- Directory.page(ctx.principal, "datasets:" + project.render, query, cursor, entries)(_.label.fold("")(_.value), _.dataset.render)
+      yield page
+    }
+  def shares(ctx: AccessContext, query: Directory.Query, cursor: Option[String]): F[Either[Problem, Directory.Page[OrganizationService.ShareEntry]]] =
+    view(ctx) { (s, state, a, now) =>
+      for
+        scopes <- OrganizationAuthority.sharedScopes(state, a, now)
+        entries = scopes.map(x => OrganizationService.ShareEntry(x.dataset, x.release, s.placements.get(x.dataset).flatMap(_.label)))
+        page <- Directory.page(ctx.principal, "shares", query, cursor, entries)(_.label.fold("")(_.value),
+          e => e.dataset.render + "/" + e.release.fold("")(_.render))
+      yield page
+    }
+
   def move(ctx: AccessContext, id: MoveRequestId): F[Either[Problem, OrganizationService.MoveView]] = view(ctx) { (s, state, _, now) =>
     for
       m <- s.moves.get(id).toRight(Problem.Denied)
@@ -104,7 +136,7 @@ final class PostgresOrganizationCatalog[F[_]: Async] private[postgres](db: Postg
     * Stable request-derived dataset ID makes a response-loss retry resolve to the same record.
     */
   def createDataset(ctx: AccessContext, custodian: CustodianId, project: ProjectId,
-      key: IdempotencyKey, expectedProject: OrganizationGeneration): F[Either[Problem, (Dataset, OrganizationReceipt)]] = OperationsSql.run(xa) {
+      key: IdempotencyKey, expectedProject: OrganizationGeneration, label: Option[OrganizationName] = None): F[Either[Problem, (Dataset, OrganizationReceipt)]] = OperationsSql.run(xa) {
     val id = OrganizationMigration.id[DatasetTag]("new-dataset", ctx.principal.render, project.render, key.value)
     for
       _ <- OperationsSql.active
@@ -121,7 +153,7 @@ final class PostgresOrganizationCatalog[F[_]: Async] private[postgres](db: Postg
       row <- sql"SELECT custodian,curator,head FROM dataset WHERE id=${uuid(id)}".query[(UUID, UUID, Option[UUID])].unique
       _ <- lift(Either.cond(row._1 == uuid(custodian) && row._2 == uuid(ctx.principal), (), Problem.Conflict("creation key belongs to another intent")))
       request = OrganizationMutation(key, Map(OrganizationRef.Project(project) -> expectedProject),
-        OrganizationCommand.PlaceNewDataset(id, project, OrganizationMigration.stewardship(id)))
+        OrganizationCommand.PlaceNewDataset(id, project, OrganizationMigration.stewardship(id), label))
       receipt <- executeIn(ctx, request)
     yield Dataset(id, custodian, ctx.principal, row._3.map(Id[ReleaseTag].apply)) -> receipt
   }
@@ -317,7 +349,7 @@ final class PostgresOrganizationCatalog[F[_]: Async] private[postgres](db: Postg
 
   private def append(actor: PrincipalId, scope: String, key: IdempotencyKey, request: Option[OrganizationMutation],
       receipt: OrganizationReceipt, changes: Json, invalidations: Json = Json.obj())(effects: ConnectionIO[Unit]): ConnectionIO[Unit] = for
-    creation <- request.toVector.collect { case OrganizationMutation(_,_,OrganizationCommand.PlaceNewDataset(d,_,_)) => d }
+    creation <- request.toVector.collect { case OrganizationMutation(_,_,OrganizationCommand.PlaceNewDataset(d,_,_,_)) => d }
       .traverse(d => sql"SELECT custodian,curator FROM dataset WHERE id=${uuid(d)}".query[(UUID,UUID)].unique.map((c,p) =>
         Json.obj("id" -> d.asJson,"custodian" -> Json.fromString(c.toString),"attributedCurator" -> Json.fromString(p.toString))))
     _ <- PolicySql.commit(actor,scope,key.value,request.fold("OrganizationGenesis")(_.command.productPrefix),changes,

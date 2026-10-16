@@ -51,6 +51,19 @@ final class PostgresCatalog[F[_]] private[postgres] (
       yield legacy
     }}
 
+  def grantShare(ctx: AccessContext, dataset: DatasetId, recipient: PrincipalId, release: Option[ReleaseId],
+      actions: Set[OrganizationAuthority.Permission], expiresAt: Option[java.time.Instant]): F[Either[Problem, OrganizationAuthority.PolicyGrant]] =
+    import java.time.temporal.ChronoUnit.MICROS
+    ids.next[GrantTag].flatMap { id => run(for
+      _ <- OperationsSql.active
+      enabled <- OrganizationSql.guard(true)
+      _ <- lift(Either.cond(enabled, (), Problem.Unsupported("shares with discovery or expiry require an initialized organization")))
+      now <- OrganizationSql.now
+      share = OrganizationAuthority.PolicyGrant(id, Some(ctx.principal), recipient, OrganizationAuthority.DataScope(dataset, release),
+        actions, now.truncatedTo(MICROS), expiresAt.map(_.truncatedTo(MICROS)), OrganizationAuthority.GrantBasis.Independent, OrganizationGeneration.initial)
+      issued <- putGrant(ctx, share)
+    yield issued) }
+
   private def putGrant(ctx: AccessContext, grant: OrganizationAuthority.PolicyGrant): ConnectionIO[OrganizationAuthority.PolicyGrant] =
     import OrganizationAuthority.*
     import OrganizationCodecs.given

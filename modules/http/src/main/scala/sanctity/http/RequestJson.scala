@@ -58,6 +58,8 @@ private[http] object RequestJson:
       yield ref -> generation
     }.map(_.toMap))
   def name(j: Json): Either[Problem, OrganizationName] = get[String](j, "name").flatMap(OrganizationName.from(_).leftMap(_ => invalid))
+  def label(j: Json): Either[Problem, Option[OrganizationName]] =
+    get[Option[String]](j, "label").flatMap(_.traverse(OrganizationName.from(_).leftMap(_ => invalid)))
   def description(j: Json): Either[Problem, OrganizationDescription] =
     get[Option[String]](j, "description").flatMap(d => OrganizationDescription.from(d.getOrElse("")).leftMap(_ => invalid))
   def expiry(j: Json): Either[Problem, Option[java.time.Instant]] =

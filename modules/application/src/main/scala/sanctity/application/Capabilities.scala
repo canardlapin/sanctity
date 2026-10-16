@@ -62,6 +62,11 @@ trait Catalog[F[_]]:
   def check(ctx: AccessContext, dataset: DatasetId, action: Action, release: Option[ReleaseId] = None): F[Either[Problem, Unit]]
   def grant(ctx: AccessContext, dataset: DatasetId, recipient: PrincipalId, release: Option[ReleaseId], actions: Set[Action]): F[Either[Problem, Grant]]
   def revoke(ctx: AccessContext, dataset: DatasetId, grant: GrantId): F[Either[Problem, Unit]]
+  /** A share with any ADR 002 permission set (including Discover/ReadEvidence) and an optional expiry, issued at the
+    * database clock under IssueGrant authority. Requires an initialized organization.
+    */
+  def grantShare(ctx: AccessContext, dataset: DatasetId, recipient: PrincipalId, release: Option[ReleaseId],
+      actions: Set[OrganizationAuthority.Permission], expiresAt: Option[java.time.Instant]): F[Either[Problem, OrganizationAuthority.PolicyGrant]]
   /** Shares on a dataset, for its current access managers. */
   def grants(ctx: AccessContext, dataset: DatasetId): F[Either[Problem, Vector[OrganizationAuthority.GrantView]]]
   /** Why `subject` holds or lacks `permission` on `scope`: the caller's own access, or a principal known on that
