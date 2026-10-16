@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "task": "F05.1",
+  "mote": "bd-01M4W5P6KGS22KR04N7W3TVZZW",
+  "status": "passed-with-limitations",
+  "at": "2026-10-16T10:49:33.494233+00:00",
+  "artifact": {
+    "revision": "72aa7c880f01a49006e1d37c4b82b68135f63c22",
+    "sourceTreeDirty": true,
+    "note": "Sources bound by SHA-256; unrelated uncommitted work from other sessions was present.",
+    "sourceSha256": {
+      "modules/application/src/main/scala/sanctity/application/Directory.scala": "0c1efb3c05696921195e3b7a40547f7e1856642a4484a8072ffae15125abb635",
+      "modules/application/src/main/scala/sanctity/application/OrganizationService.scala": "b97289fc3d14909fd8aada7ba7791e15cef1a73c40022d7ee52ac0d748050fcb",
+      "modules/postgres/src/main/scala/sanctity/postgres/PostgresOrganizationCatalog.scala": "dd9cbd5d37c8df635f282e70d826bf48f5d4f8d179f13cd37d238d99e9424b00",
+      "modules/postgres/src/main/scala/sanctity/postgres/PostgresCatalog.scala": "2e375f4602b08108706b470ca923d830557e98aebe995c3acc443e2f5f6b811c",
+      "modules/http/src/main/scala/sanctity/http/RepositoryHttp.scala": "65cd580b6c946842e9aa3cdb5ad262647b26915529ec77e5a5e340e7a02e75b0",
+      "modules/http/src/main/scala/sanctity/http/PublicJson.scala": "940e19ebb3835fba8ce067098714df6a1a684682a01bd00761142d956302113e",
+      "modules/kernel/src/main/scala/sanctity/kernel/Organization.scala": "c551e5b1ec01481e7844e24842a7ffbedd6f1a9b04a105f719ba6cb4510aa652",
+      "modules/postgres/src/main/resources/sanctity/postgres/V013__dataset_labels.sql": "b7231e14fd2a685b148ed6a1b49415900c4bce8ac825782abb85289b911e6796",
+      "modules/integration/src/test/scala/sanctity/postgres/DirectorySuite.scala": "764d7f277637694879f62f2eaa4345c033616eb41cc0be26662adc94dc70818c"
+    }
+  },
+  "implementation": {
+    "commit": "72aa7c8",
+    "routes": [
+      "GET /v1/labs",
+      "GET /v1/projects[?lab]",
+      "GET /v1/projects/{p}/datasets",
+      "GET /v1/me/shares",
+      "POST /v1/datasets/{d}/rename"
+    ],
+    "authority": "OrganizationAuthority DiscoverLab/DiscoverProject/visibleDatasets/visibleLinks/sharedScopes under the shared policy guard",
+    "cursor": "base64url fields: version, principal, directory, query, limit, last key, digest of the caller's matching set"
+  },
+  "acceptance": [
+    {
+      "criterion": "List and search accessible labs/projects/datasets with stable bounded pagination, readable labels and correct empty/error states.",
+      "status": "passed",
+      "evidence": "DirectorySuite: labs, projects and datasets per persona; steward labels searchable; limit 1 pages cover both datasets once; limit above 100 refused; empty directory returns total 0; unseen project 404."
+    },
+    {
+      "criterion": "Apply authority to names, counts, filters, ordering and suggestions; define live-directory cursor behavior under concurrent membership or catalog changes.",
+      "status": "passed",
+      "evidence": "Totals and search count only authorized rows (a hidden dataset's label matches nothing and counts 0); links grant nothing; cursor behavior defined and tested: hidden change leaves the next page byte-identical, visible change gives 409 restart, other principal or query gives 400. No suggestion surface exists (none returned beyond the filtered rows)."
+    },
+    {
+      "criterion": "Recheck policy on later pages and omit no records silently from a purported frozen result; directory discovery must not expose unauthorized heads or private evidence.",
+      "status": "passed",
+      "evidence": "Every page reloads current policy; a changed visible set restarts instead of silently omitting or adding rows. Directory rows carry IDs, labels and status only; shares carry exact scope and label, never project, head, issuer or other recipients (asserted for a fixed R1 share)."
+    }
+  ],
+  "verification": {
+    "commands": [
+      "pgtest.sh 'integration/testOnly sanctity.postgres.DirectorySuite' (5/5)",
+      "bash scripts/check-postgres.sh (integration 338/338, crash/retry demonstration)",
+      "bash scripts/check-console-backend.sh"
+    ],
+    "database": "disposable PostgreSQL 17.11 container per run"
+  },
+  "inputs": [
+    "docs/decisions/001-institutional-organization.md",
+    "docs/decisions/002-institutional-authority.md"
+  ],
+  "limitations": [
+    "Query-plan qualification is not done: directories filter the fully loaded policy state (H04 scale qualification).",
+    "Labels exist only where stewards set them; bootstrap-migrated datasets list with label null until named.",
+    "The cursor binds to the caller's matching set, so any visible change in that directory restarts paging, including additions after the current position.",
+    "Console navigation using these directories is F05.2 (also blocked by F04.3 identity work)."
+  ]
+}
