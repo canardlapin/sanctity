@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "task": "F03.3",
+  "mote": "bd-01M4W5P5MCD12DVHWQC1KFXNDP",
+  "status": "passed-with-limitations",
+  "at": "2026-10-16T02:45:44.798646+00:00",
+  "artifact": {
+    "revision": "1c38d225660e0e1776dd92e3b4314d2883e37838",
+    "sourceTreeDirty": true,
+    "note": "Committed sources below are bound by SHA-256; the tree also held other sessions' uncommitted, unrelated work (bids/processing modules).",
+    "sourceSha256": {
+      "modules/kernel/src/main/scala/sanctity/kernel/OrganizationAuthority.scala": "25b91e6e4b23e52e3c7088bd3082a7c5f2a48806115074212e036f5588dca04c",
+      "modules/postgres/src/main/scala/sanctity/postgres/PostgresCatalog.scala": "83a2f6c3eb306c9d4228fe32e9f3bb40797ebda8e77cf952079819d7205f7d63",
+      "modules/http/src/main/scala/sanctity/http/RepositoryHttp.scala": "7fa59fb93c9389d72e1883fdc01691016ea7520bea51c0838bfa793f3ad5d7fe",
+      "modules/http/src/main/scala/sanctity/http/PublicJson.scala": "d28a5c3ea6fb8cb379de8032fff5d5f361b6efe4f5e730ce5449dd0be22f8b09",
+      "modules/application/src/main/scala/sanctity/application/Capabilities.scala": "28e0bad762c5a5ed6e4e326fa207d8673f089657b3a47ba1966c0f939243f881",
+      "modules/integration/src/test/scala/sanctity/postgres/DisclosureSuite.scala": "40bb983db7d17660542ba970ee45d4d07d40fd6bc83f0f63ee7de2034d041b80",
+      "modules/integration/src/test/scala/sanctity/postgres/AuthoritySeed.scala": "5541dbe98b924799403666b0cc0fbc6b1a355ab6c0811019651828d500d5908e"
+    }
+  },
+  "implementation": {
+    "authority": "OrganizationAuthority (datasetGrants, explain, Request.Candidate, Request.Receipt) via PolicySql under the shared policy guard",
+    "surfaces": [
+      "GET /v1/candidates/{id}: Propose + dataset ReadMetadata",
+      "POST /v1/candidates/{id}/accept receipt replay: ReadMetadata on the exact release",
+      "GET release: parent only to readers of that parent; provenance identities only with Propose or ManageAccess",
+      "GET /v1/datasets/{d}/grants: ManageAccess (revocation basis, works on archived parents)",
+      "GET /v1/datasets/{d}/access: self, or ManageAccess for a principal known on the dataset"
+    ]
+  },
+  "acceptance": [
+    {
+      "criterion": "Scope metadata/content reads, query predicates/results/counts, head/history/candidate/receipt lookup and collaborator suggestions by current authority.",
+      "status": "passed-with-limitation",
+      "evidence": "Metadata/content/selection/head already used the guarded model (audit). Candidate and receipt reads now use Request.Candidate and Request.Receipt; history (release parent) and provenance identities are projected by current authority. DisclosureSuite: Accept-only and read-only principals receive the uniform 404 for a candidate; a contributor reads it. CurrentAuthoritySuite receipt test still denies replay after metadata revocation.",
+      "limitation": "No collaborator-suggestion surface exists yet; F05.3 must use explain's known-on-dataset rule when it adds one."
+    },
+    {
+      "criterion": "Fixed-release recipients cannot discover a newer head; denied predicates/counts/errors do not reveal excluded data.",
+      "status": "passed",
+      "evidence": "DisclosureSuite: an R2-only share gets parent null, provenance null; R1, the dataset head and an unknown release return the identical 404 body; release JSON and effective metadata stay byte-identical while another share is added, the project is renamed, the head moves and another grant is revoked."
+    },
+    {
+      "criterion": "Provide authorized grant/effective-access inspection, including why access exists and expiry, without exposing unrelated identities or source evidence.",
+      "status": "passed",
+      "evidence": "DisclosureSuite: the dataset steward lists grants with recipient, exact release, state and effective expiry and no issuer; a revoked grant reports revoked; reader, guest and outsider requests and an unknown dataset get the same 404. Explanations: self and manager views are identical (grant basis on R1); a project reader's basis is project-role/reader without project names; a reader asking about another principal and a manager asking about an unknown principal get the same 404."
+    },
+    {
+      "criterion": "Explicit source-evidence authorization and canary-based non-disclosure tests for raw/effective metadata, error shapes, links and result counts; authentication and curator attribution are not bypasses.",
+      "status": "passed-with-limitation",
+      "evidence": "Canaries cover release JSON (relationships/links, assessment counts and checks), effective metadata and error bodies. The public API discloses no activity source labels or retained evidence (PublicJson boundary). Curator attribution grants nothing in an initialized organization (existing SQL matrix, 38 cases).",
+      "limitation": "No public surface yet discloses source evidence, so no ReadEvidence-gated read exists to test; the grant API cannot yet issue Discover or ReadEvidence (F05.3). Assessment check inputs carry digests of files in the same release to any ReadMetadata reader."
+    }
+  ],
+  "verification": {
+    "commands": [
+      "scratchpad pgtest.sh 'test' (all modules against disposable PostgreSQL 17.11 image postgres@sha256:b0f9560a\u2026)",
+      "bash scripts/check-console.sh",
+      "bash scripts/check-console-backend.sh"
+    ],
+    "results": {
+      "allModules": "636/636 passed (47+68+9+507+5)",
+      "DisclosureSuite": "5/5",
+      "console": "gate PASS; v4f regressions reproduce",
+      "rehearsal": "9 scenarios plus persistence PASS"
+    }
+  },
+  "environment": {
+    "platform": "darwin 24.1.0 arm64",
+    "database": "disposable PostgreSQL container per run"
+  },
+  "inputs": [
+    "docs/decisions/002-institutional-authority.md",
+    "docs/decisions/institutional-authority-cases.json",
+    "docs/policy-transactions.md"
+  ],
+  "limitations": [
+    "Local engineering evidence only; no institutional reviewer acceptance.",
+    "PolicySql.load still loads full policy state per check (H04 scale qualification).",
+    "Run status reads (readRun) check destination Propose but do not recheck input authority; recorded as remediation for F03.4.",
+    "Release pages for dataset-wide readers make extra authority checks and one parent load per request."
+  ]
+}
