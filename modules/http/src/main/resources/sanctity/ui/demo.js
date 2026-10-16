@@ -268,6 +268,30 @@
   const fail = (status, code) => Promise.reject(Object.assign(new Error(code), { status, code }));
   const later = v => new Promise(res => setTimeout(() => res(v), window.SanctityDemo ? window.SanctityDemo.latency : 90));
 
+  // ---- organization directories (F05.1 shapes): what this principal may discover ----
+  const LAB = 'c41f7a2e-8d3b-4e61-9a05-2b7e6d1c8f30', CORE = 'e8a2d5f1-3c7b-4a96-8e40-5f1b9c2d7a63';
+  const PROJECTS = [
+    { id: '0b6e3f9a-1d24-4c8e-b7a5-9e2f4d1c6a80', lab: LAB, name: 'Episodic sequence memory', description: 'MRI and behavioural studies of sequence recall.', status: 'active' },
+    { id: '7d1c9e4b-5a3f-4b28-a6e1-3c8f0b2d9e57', lab: LAB, name: 'Resting-state reliability', description: 'Planned test–retest acquisitions.', status: 'active' },
+    { id: '4a8f2c6d-9e1b-4d73-b5c0-8e6a1f3d2b94', lab: LAB, name: 'Scanner archive', description: 'Historical acquisitions kept for reference.', status: 'archived' },
+    { id: '2e9b7d4c-6f1a-4c35-9d82-1a7e5c3b8f06', lab: CORE, name: 'Cross-site harmonisation', description: 'Shared with the imaging core.', status: 'active' }];
+  const LABS = [{ id: LAB, name: 'Memory & Cognition Lab', description: 'Human memory research.', status: 'active' }];
+  const placed = { [PROJECTS[0].id]: [{ id: DS, label: 'Episodic sequence memory — MRI pilot', linked: false }],
+    [PROJECTS[1].id]: [],
+    [PROJECTS[2].id]: Array.from({ length: 60 }, (_, i) => ({ id: hex('archive' + i).replace(/^(.{8})(.{4}).(.{3}).(.{3})(.{12}).*$/, '$1-$2-4$3-8$4-$5'), label: 'Archive scan ' + String(i + 1).padStart(2, '0'), linked: false })),
+    [PROJECTS[3].id]: [{ id: DS, label: 'Episodic sequence memory — MRI pilot', linked: true }] };
+  const SHARES = [{ dataset: DS, release: R[1], label: 'Episodic sequence memory — MRI pilot' }];
+  // Search, order and cursor paging as the server does; `directoryChanged` makes the next cursor stale (409).
+  function directory(rows, q, name, id) {
+    const text = (q.get('q') || '').trim().toLowerCase(), limit = +(q.get('limit') || 25);
+    const all = rows.filter(r => name(r).toLowerCase().includes(text)).sort((x, y) => name(x).toLowerCase().localeCompare(name(y).toLowerCase()) || id(x).localeCompare(id(y)));
+    const cursor = q.get('cursor');
+    if (cursor && window.SanctityDemo.directoryChanged) { window.SanctityDemo.directoryChanged = false; return fail(409, 'conflict'); }
+    const from = cursor ? +atob(cursor) : 0;
+    const items = all.slice(from, from + limit);
+    return clone({ items, total: all.length, next: from + limit < all.length ? btoa(String(from + limit)) : null });
+  }
+
   function request(method, url, { body, headers, raw }) {
     const [path, qs] = url.split('?');
     const q = new URLSearchParams(qs || '');
@@ -275,6 +299,13 @@
     const b = typeof body === 'string' ? parse(body) : body;
     return later().then(() => {
       if (method === 'GET' && path === '/v1/me') return { principal: window.SanctityDemo.principal };
+      if (window.SanctityDemo.noOrganization && /^\/v1\/(labs|projects|me\/shares)/.test(path)) return fail(409, 'conflict');
+      if (method === 'GET' && path === '/v1/labs') return directory(LABS, q, l => l.name, l => l.id);
+      if (method === 'GET' && seg[1] === 'labs' && seg.length === 3) { const l = LABS.find(x => x.id === seg[2]); return l ? clone({ ...l, generation: 3, roster: null }) : fail(404, 'not_found'); }
+      if (method === 'GET' && path === '/v1/projects') return directory(PROJECTS.filter(p => !q.get('lab') || p.lab === q.get('lab')), q, p => p.name, p => p.id);
+      if (method === 'GET' && seg[1] === 'projects' && seg.length === 3) { const p = PROJECTS.find(x => x.id === seg[2]); return p ? clone({ ...p, generation: 2, roster: null }) : fail(404, 'not_found'); }
+      if (method === 'GET' && seg[1] === 'projects' && seg[3] === 'datasets' && seg.length === 4) return placed[seg[2]] ? directory(placed[seg[2]], q, d => d.label || '', d => d.id) : fail(404, 'not_found');
+      if (method === 'GET' && path === '/v1/me/shares') return directory(SHARES, q, s => s.label || '', s => s.dataset + '/' + (s.release || ''));
       if (seg[1] === 'datasets' && seg[2] !== DS) return fail(404, 'not_found');
       if (method === 'GET' && seg.length === 3 && seg[1] === 'datasets') return { id: DS, head };
       if (seg[1] === 'datasets' && seg[3] === 'releases') {

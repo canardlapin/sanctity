@@ -57,7 +57,7 @@ const versionSpecificAssertions = {
   'fold-follows-viewport': 'v4g tests the CSS fold structure introduced after v4f',
   'head-keeps-draft': 'v4g expects the new “is restored” notice; v4f used “carried over”'
 };
-// Probes for behaviour added after v4g (table/gradient corrections, unconfirmed policy outcomes, fixing from a finding, grouped previews, release provenance and layout polish).
+// Probes for behaviour added after v4g (table/gradient corrections, unconfirmed policy outcomes, fixing from a finding, grouped previews, release provenance, layout polish and directory navigation).
 // v4f never had these features, so their v4f outcomes are recorded but not required either way.
 const postV4gAssertions = [
   'companion-correction-offered', 'table-tab-separator', 'table-width-refused', 'table-correction-accepted', 'table-blocked-row-marked',
@@ -65,7 +65,8 @@ const postV4gAssertions = [
   'policy-unknown-revoke', 'policy-pending-grant',
   'fix-offered-where-editable', 'fix-tr-suggests-sidecar', 'fix-events-selects-row', 'fix-in-inspector-head-only', 'metadata-changes-grouped',
   'candidate-identifiers-folded', 'receipt-restates-change', 'receipt-table-change',
-  'tree-folder-findings', 'release-overview', 'release-story', 'relationships-by-subject', 'query-operator-readable', 'release-and-editor-layout'
+  'tree-folder-findings', 'release-overview', 'release-story', 'relationships-by-subject', 'query-operator-readable', 'release-and-editor-layout',
+  'home-lists-directories', 'navigate-by-name', 'project-paging-and-search', 'directory-restart-on-change', 'no-organization-fallback', 'denied-directory-link'
 ];
 const assertionCount = 59 + postV4gAssertions.length;
 const checks = {};
@@ -80,7 +81,7 @@ const differentialPassed = checks.v4f.exitCode === 1 && checks.v4f.assertions.le
   expectedFailures.every(name => actualFailures.includes(name)) &&
   extraFailures.every(name => Object.hasOwn(versionSpecificAssertions, name) || postV4gAssertions.includes(name));
 const currentPassed = checks.current.exitCode === 0 && checks.current.assertions.length === assertionCount &&
-  checks.current.assertions.every(a => a.result === 'PASS') && /ui summary: 27\/27 PASS/.test(checks.current.text);
+  checks.current.assertions.every(a => a.result === 'PASS') && /ui summary: 30\/30 PASS/.test(checks.current.text);
 for (const value of Object.values(checks)) delete value.text;
 (async () => {
   const browser = await require('./scripts/lib').launch();

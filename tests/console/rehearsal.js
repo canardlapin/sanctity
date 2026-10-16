@@ -55,13 +55,13 @@ const newPage = async (width = 1440) => {
   });
   return page;
 };
+// A dataset deep link asks for the credential, then opens the dataset it named.
 const signIn = async (page, token, dataset = config.dataset) => {
-  await page.goto(config.baseUrl + '/');
+  await page.goto(config.baseUrl + '/' + (dataset ? '#/d/' + dataset : ''));
   await page.locator('#token').fill(token);
-  await page.locator('#dataset').fill(dataset);
-  await page.getByRole('button', { name: 'Sign in and open', exact: true }).press('Enter');
+  await page.getByRole('button', { name: 'Sign in', exact: true }).press('Enter');
   if (dataset) await page.getByRole('tab', { name: /^Files/ }).waitFor();
-  else await page.getByRole('heading', { name: 'Open a dataset', exact: true }).waitFor();
+  else await page.getByRole('heading', { name: 'Labs and projects', exact: true }).waitFor();
   assert.equal(await page.evaluate(() => typeof window.SanctityDemo), 'undefined');
 };
 const editor = async (page, release) => {
@@ -110,17 +110,43 @@ const accept = async (page, status = 200) => {
     stage = 'authentication';
     const shell = await owner.goto(config.baseUrl + '/');
     assert(shell.headers()['content-security-policy'].includes("script-src 'self'"));
-    await owner.getByRole('button', { name: 'Sign in and open', exact: true }).press('Enter');
+    await owner.getByRole('button', { name: 'Sign in', exact: true }).press('Enter');
     await owner.getByRole('alert').filter({ hasText: 'Enter an access token.' }).waitFor();
     assert.equal(await owner.locator('#token').getAttribute('aria-invalid'), 'true');
     await owner.locator('#token').fill('invalid-rehearsal-credential');
     const denied = owner.waitForResponse(r => new URL(r.url()).pathname === '/v1/me');
-    await owner.getByRole('button', { name: 'Sign in and open', exact: true }).press('Enter');
+    await owner.getByRole('button', { name: 'Sign in', exact: true }).press('Enter');
     assert.equal((await denied).status(), 401);
-    await signIn(owner, config.ownerToken);
+    await signIn(owner, config.ownerToken, '');
     await signIn(colleague, config.colleagueToken);
     await read(recipientApi, releaseUrl(config.initialRelease), 404);
-    check(stage, 'Empty and invalid credentials rejected; two independent curators authenticate; ungranted recipient cannot read.');
+    check(stage, 'Empty and invalid credentials rejected; a dataset deep link survives sign-in; ungranted recipient cannot read.');
+
+    // The organization was bootstrapped by the operator path; the owner reaches the dataset by name, not identifier.
+    stage = 'directory-navigation';
+    const labCard = owner.locator('main section').filter({ has: owner.getByRole('heading', { name: config.labName, exact: true }) });
+    await labCard.getByRole('link', { name: config.projectName }).click();
+    await owner.getByRole('heading', { name: config.projectName, exact: true, level: 1 }).waitFor();
+    assert.equal(await owner.evaluate(() => location.hash), '#/p/' + config.project);
+    await owner.locator('#dir-q').fill(config.label.split(' ')[0]);
+    await owner.locator('#dir-q').press('Enter');
+    await until(async () => /q=/.test(await owner.evaluate(() => location.hash)), 'Search did not reach the URL');
+    await owner.getByText('1 dataset matching “' + config.label.split(' ')[0] + '”.', { exact: true }).waitFor();
+    await capture(owner, 'project-datasets');
+    await owner.getByRole('link', { name: new RegExp('^' + config.label) }).press('Enter');
+    await owner.getByRole('tab', { name: /^Files/ }).waitFor();
+    assert.match(await owner.locator('.page-head .crumbs').innerText(), new RegExp(config.projectName + '[\\s\\S]*' + config.label));
+    assert.equal(await owner.evaluate(() => location.hash), releaseHash(config.initialRelease));
+    const ownerApiProjects = await json(ownerApi, '/v1/projects');
+    assert.deepEqual(ownerApiProjects.items.map(p => p.id), [config.project]);
+    // The colleague holds a direct grant without Discover and no project role: nothing is listed, and the project link is denied.
+    await colleague.goto(config.baseUrl + '/#/');
+    await colleague.getByRole('heading', { name: 'Nothing to show yet', exact: true }).waitFor();
+    await colleague.goto(config.baseUrl + '/#/p/' + config.project);
+    await colleague.getByRole('heading', { name: 'Nothing here', exact: true }).waitFor();
+    await colleague.goto(config.baseUrl + '/' + releaseHash(config.initialRelease));
+    await colleague.getByRole('tab', { name: /^Files/ }).waitFor();
+    check(stage, 'Owner opens lab › project › dataset by name with server-side search; a grant-only colleague sees an empty directory, a denied project link and the dataset itself.');
 
     stage = 'metadata-and-relationships';
     await owner.getByLabel('Filter files', { exact: true }).fill(runPath.split('/').pop());

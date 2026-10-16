@@ -667,6 +667,69 @@ const DS = 'b7e3c1d2-5a4f-4e8b-9c21-6f0a3d9e8b14', R3 = '9d4b2e61-7a3c-4f18-a5d9
         return { width: Math.round(t.getBoundingClientRect().width), rows: t.rows, aside: !!document.querySelector('aside.explainer'), folded: !!ex && !ex.open }; });
       done(actions.join() === 'Propose correction' && st.width > 800 && st.rows >= 14 && !st.aside && st.folded, JSON.stringify({ actions, ...st }));
     });
+    // 76–81: directory navigation (F05.2.1). Projects, labs and shares come from the authorized directories.
+    const PROJ = '0b6e3f9a-1d24-4c8e-b7a5-9e2f4d1c6a80', ARCHIVE = '4a8f2c6d-9e1b-4d73-b5c0-8e6a1f3d2b94';
+    // 76. Home lists labs with their projects, projects in other labs and direct shares, by name.
+    await guarded('home-lists-directories', async (o, done) => {
+      const [, p] = await o('#/'); await p.waitForSelector('.dir-row', { timeout: 5000 });
+      const st = await p.evaluate(() => ({ h1: document.querySelector('h1').textContent, sections: [...document.querySelectorAll('main section h2')].map(x => x.textContent),
+        rows: [...document.querySelectorAll('.dir-row .dir-name')].map(x => x.textContent), uuidInput: !!document.querySelector('#dataset:not(details:not([open]) #dataset)') }));
+      done(st.h1 === 'Labs and projects' && st.sections.join('|') === 'Memory & Cognition Lab|Projects in other labs|Shared with you' &&
+        st.rows.includes('Episodic sequence memory') && st.rows.includes('Episodic sequence memory — MRI pilot') && !st.uuidInput, JSON.stringify(st));
+    });
+    // 77. Keyboard only: home → project → dataset reaches the release, whose crumbs name the lab, project and dataset.
+    await guarded('navigate-by-name', async (o, done) => {
+      const [, p] = await o('#/'); await p.waitForSelector('.dir-row', { timeout: 5000 });
+      await p.locator(`[data-fk="project:${PROJ}"]`).focus(); await p.keyboard.press('Enter');
+      await p.waitForSelector(`[data-fk="ds:${DS}"]`, { timeout: 5000 });
+      const projectFocus = await p.evaluate(() => document.activeElement === document.querySelector('main') || document.activeElement === document.body ? 'main' : document.activeElement.dataset.fk);
+      await p.locator(`[data-fk="ds:${DS}"]`).focus(); await p.keyboard.press('Enter');
+      await p.waitForSelector('.tree .item', { timeout: 5000 });
+      const st = await p.evaluate(() => ({ hash: location.hash, crumbs: [...document.querySelectorAll('.page-head .crumbs a, .page-head .crumbs span')].map(x => x.textContent) }));
+      await p.locator('.page-head .crumbs a', { hasText: 'Episodic sequence memory' }).first().click();
+      await p.waitForSelector('h1', { timeout: 5000 }); await p.waitForTimeout(300);
+      const back = await p.evaluate(() => location.hash);
+      done(projectFocus === 'main' && st.hash.startsWith('#/d/' + 'b7e3c1d2') && st.crumbs.slice(0, 3).join('|') === 'Memory & Cognition Lab|Episodic sequence memory|Episodic sequence memory — MRI pilot' &&
+        back === '#/p/' + '0b6e3f9a-1d24-4c8e-b7a5-9e2f4d1c6a80', JSON.stringify({ projectFocus, ...st, back }));
+    });
+    // 78. Show more appends the next page and moves focus to its first row; search is server-side and keeps focus in the box.
+    await guarded('project-paging-and-search', async (o, done) => {
+      const [, p] = await o(`#/p/${ARCHIVE}`); await p.waitForSelector('[data-fk="dir-more"]', { timeout: 5000 });
+      const before = await p.$$eval('.dir-row', xs => xs.length);
+      await p.locator('[data-fk="dir-more"]').focus(); await p.keyboard.press('Enter'); await p.waitForFunction(() => document.querySelectorAll('.dir-row').length > 50, null, { timeout: 5000 });
+      const after = await p.evaluate(() => ({ rows: document.querySelectorAll('.dir-row').length, more: !!document.querySelector('[data-fk="dir-more"]'),
+        focus: document.activeElement.querySelector('.dir-name')?.textContent, status: document.querySelector('[role=status].small')?.textContent }));
+      await p.fill('#dir-q', 'scan 07'); await p.keyboard.press('Enter'); await p.waitForFunction(() => /q=scan/.test(location.hash) && document.querySelectorAll('.dir-row').length === 1, null, { timeout: 5000 });
+      const search = await p.evaluate(() => ({ focus: document.activeElement.id, name: document.querySelector('.dir-row .dir-name').textContent }));
+      await p.fill('#dir-q', 'no such scan'); await p.keyboard.press('Enter'); await p.waitForSelector('[data-fk="dir-clear"]', { timeout: 5000 });
+      done(before === 50 && after.rows === 60 && !after.more && after.focus === 'Archive scan 51' && /60 datasets/.test(after.status) &&
+        search.focus === 'dir-q' && search.name === 'Archive scan 07', JSON.stringify({ before, after, search }));
+    });
+    // 79. A listing that changed between pages restarts from the first page and says so.
+    await guarded('directory-restart-on-change', async (o, done) => {
+      const [, p] = await o(`#/p/${ARCHIVE}`); await p.waitForSelector('[data-fk="dir-more"]', { timeout: 5000 });
+      await p.evaluate(() => { window.SanctityDemo.directoryChanged = true; });
+      await p.click('[data-fk="dir-more"]'); await p.waitForSelector('.notice.warn', { timeout: 5000 });
+      const st = await p.evaluate(() => ({ notice: document.querySelector('.notice.warn').textContent, rows: document.querySelectorAll('.dir-row').length }));
+      done(/changed while you were paging/.test(st.notice) && st.rows === 50, JSON.stringify(st));
+    });
+    // 80. Without an organization directory the home page offers the identifier form, open and focused-ready.
+    await guarded('no-organization-fallback', async (o, done) => {
+      const [, p] = await o('#/'); await p.waitForSelector('.dir-row', { timeout: 5000 });
+      await p.evaluate(() => { window.SanctityDemo.noOrganization = true; location.hash = '#/?again'; });
+      await p.waitForSelector('#dataset', { state: 'visible', timeout: 5000 });
+      const st = await p.evaluate(() => ({ notice: document.querySelector('main .notice')?.textContent, rows: document.querySelectorAll('.dir-row:not([data-fk^="recent:"])').length }));
+      await p.fill('#dataset', 'not-a-uuid'); await p.keyboard.press('Enter'); await p.waitForSelector('#dataset[aria-invalid=true]', { timeout: 5000 });
+      await p.fill('#dataset', 'b7e3c1d2-5a4f-4e8b-9c21-6f0a3d9e8b14'); await p.keyboard.press('Enter'); await p.waitForSelector('.tree .item', { timeout: 5000 });
+      done(/no lab or project directory/.test(st.notice || '') && st.rows === 0, JSON.stringify(st));
+    });
+    // 81. A denied or stale project link gets the uniform answer and a way back, without the dataset form.
+    await guarded('denied-directory-link', async (o, done) => {
+      const [, p] = await o('#/p/11111111-2222-4333-8444-555555555555'); await p.waitForSelector('[data-fk="back-home"]', { timeout: 5000 });
+      const st = await p.evaluate(() => ({ h1: document.querySelector('h1').textContent, text: document.querySelector('main').textContent }));
+      await p.click('[data-fk="back-home"]'); await p.waitForSelector('.dir-row', { timeout: 5000 });
+      done(st.h1 === 'Nothing here' && /no longer have access/.test(st.text) && !/Try again/.test(st.text), JSON.stringify(st));
+    });
   } finally { await b.close(); }
   console.log(`behaviour failures: ${bad}`);
   process.exitCode = bad ? 1 : 0;

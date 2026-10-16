@@ -6,7 +6,9 @@ import doobie.implicits.*
 import doobie.postgres.implicits.*
 import io.circe.Json
 import io.circe.jawn.JawnParser
+import org.http4s.{Header, Method, Request, Status, Uri}
 import org.http4s.ember.server.EmberServerBuilder
+import org.typelevel.ci.CIString
 import sanctity.application.{Checked, IdSource}
 import sanctity.http.{ConsoleAssets, RepositoryHttp}
 import sanctity.kernel.*
@@ -23,6 +25,7 @@ object ConsoleRehearsal extends IOApp.Simple:
   private def checked[A](value: IO[Either[Problem, A]]): IO[A] = value.flatMap(Checked.lift[IO, A])
   private def ensure(ok: Boolean, message: String): IO[Unit] = IO.raiseUnless(ok)(new IllegalStateException(message))
   private val parser = new JawnParser()
+  private val label = "Console rehearsal n-back pilot"
 
   def run: IO[Unit] =
     val output = Path.of(sys.env.getOrElse("SANCTITY_CONSOLE_REHEARSAL_OUTPUT",
@@ -49,7 +52,26 @@ object ConsoleRehearsal extends IOApp.Simple:
         ownerToken <- checked(credentials.issue(f.system.context.principal, "console rehearsal curator", 600))
         colleagueToken <- checked(credentials.issue(colleague, "console rehearsal colleague", 600))
         recipientToken <- checked(credentials.issue(recipient, "console rehearsal recipient", 600))
-        app = ConsoleAssets.withApi(new RepositoryHttp[IO](f.system.catalog, f.system.repository, credentials).app)
+        // Organization through the operator path: the dataset lands in a legacy project its curator stewards.
+        report <- f.database.organization.preview(f.system.context.principal)
+        _ <- f.database.organization.bootstrap(f.system.context.principal, PostgresOrganizationCatalog.previewDigest(report))
+        api = new RepositoryHttp[IO](f.system.catalog, f.system.repository, credentials, organization = Some(f.database.organization)).app
+        call = (method: Method, target: String, body: Option[Json]) =>
+          val base = Request[IO](method, Uri.unsafeFromString(target)).putHeaders(Header.Raw(CIString("Authorization"), s"Bearer ${ownerToken.secret}"),
+            Header.Raw(CIString("Idempotency-Key"), "console-rehearsal-label"))
+          api.run(body.fold(base)(j => base.withEntity(j.noSpaces).putHeaders(Header.Raw(CIString("Content-Type"), "application/json"))))
+            .flatMap(r => r.as[String].map(t => r.status -> parser.parse(t).getOrElse(Json.Null)))
+        dataset = f.system.dataset.id.render
+        placement <- call(Method.GET, s"/v1/datasets/$dataset/placement", None)
+        generation = placement._2.hcursor.get[Long]("generation").toOption
+        renamed <- call(Method.POST, s"/v1/datasets/$dataset/rename", Some(Json.obj("label" -> Json.fromString(label),
+          "expected" -> Json.obj(s"placement:$dataset" -> Json.fromLong(generation.getOrElse(-1L))))))
+        _ <- ensure(renamed._1 == Status.Ok, s"dataset label not set: ${renamed._2.noSpaces}")
+        projects <- call(Method.GET, "/v1/projects", None)
+        labs <- call(Method.GET, "/v1/labs", None)
+        project = projects._2.hcursor.downField("items").downArray
+        lab = labs._2.hcursor.downField("items").downArray
+        app = ConsoleAssets.withApi(api)
         _ <- EmberServerBuilder.default[IO].withHost(Host.fromString("127.0.0.1").get).withPort(Port.fromInt(0).get)
           .withHttpApp(app).build.use { server =>
             val config = Json.obj(
@@ -57,6 +79,10 @@ object ConsoleRehearsal extends IOApp.Simple:
               "dataset" -> Json.fromString(f.system.dataset.id.render),
               "initialRelease" -> Json.fromString(initial.release.release.render),
               "recipient" -> Json.fromString(recipient.render),
+              "label" -> Json.fromString(label),
+              "project" -> project.downField("id").focus.getOrElse(Json.Null),
+              "projectName" -> project.downField("name").focus.getOrElse(Json.Null),
+              "labName" -> lab.downField("name").focus.getOrElse(Json.Null),
               "ownerToken" -> Json.fromString(ownerToken.secret),
               "colleagueToken" -> Json.fromString(colleagueToken.secret),
               "recipientToken" -> Json.fromString(recipientToken.secret))

@@ -1,5 +1,6 @@
 {
-  "connect": { "hash": "#/" },
+  "connect": { "hash": "#/", "steps": [{ "wait": ".dir-row" }] },
+  "project": { "hash": "#/p/4a8f2c6d-9e1b-4d73-b5c0-8e6a1f3d2b94", "steps": [{ "wait": "[data-fk='dir-more']" }] },
   "release": { "hash": "#/d/b7e3c1d2-5a4f-4e8b-9c21-6f0a3d9e8b14/r/9d4b2e61-7a3c-4f18-a5d9-0e6c1b2f8a73?path=sub-02%2Ffunc%2Fsub-02_task-nback_run-1_bold.nii.gz",
     "steps": [{ "wait": ".fieldrow" }] },
   "release-empty": { "hash": "#/d/b7e3c1d2-5a4f-4e8b-9c21-6f0a3d9e8b14/r/9d4b2e61-7a3c-4f18-a5d9-0e6c1b2f8a73", "steps": [{ "wait": ".tree .item" }] },

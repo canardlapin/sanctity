@@ -144,6 +144,7 @@
   const demo = () => window.SanctityDemo;
   // Forget everything tied to the signed-in principal and invalidate pending loads.
   function resetSession() {
+    if (placesKey()) store.set('sessionStorage', placesKey(), null);
     generation++; memo.clear(); focusKey = null;
     state.principal = null; state.token = null; state.correction = null; state.query = null; state.accessForm = null;
     state.revoking = null; state.revokeBusy = false; state.selectionQueries = null;
@@ -268,7 +269,7 @@
       h('h1', { class: 'h2' }, e instanceof ApiError && e.code === 'not_found' ? 'Nothing here' : 'Something went wrong'),
       h('p', { class: 'muted' }, explain(e)),
       h('div', { class: 'row' }, retry ? h('button', { class: 'btn', type: 'button', onclick: retry }, 'Try again') : null,
-        h('a', { class: 'btn ghost', href: '#/' }, 'Open another dataset'))));
+        h('a', { class: 'btn ghost', href: '#/' }, 'Back to labs and projects'))));
   }
   // Paint a loading state only if data takes long enough to notice; avoids flashing over cached views.
   const loadingAfter = (my, ctx, active, label) => setTimeout(() => { if (my === generation) page(ctx, active, h('p', { class: 'loading' }, label)); }, 180);
@@ -279,30 +280,28 @@
   }
 
   // ---------- connect ----------
+  // Sign-in asks only for the credential; the route that asked for it (a deep link) renders once it is accepted.
   function connectView(message) {
-    const recent = recentDatasets();
-    let tokenInput, datasetInput, err;
+    let tokenInput, err;
     const notice = state.notice || message; state.notice = null;
     const submit = async ev => {
       ev.preventDefault();
-      const token = tokenInput ? tokenInput.value.trim() : state.token, ds = datasetInput.value.trim();
+      const token = tokenInput.value.trim();
       err.replaceChildren();
       if (!demo() && !token) { err.append(h('p', { class: 'notice err', role: 'alert' }, 'Enter an access token.')); tokenInput.setAttribute('aria-invalid', 'true'); tokenInput.focus(); return; }
-      if (ds && !UUID.test(ds)) { err.append(h('p', { class: 'notice err', role: 'alert' }, 'Dataset identifiers are UUIDs, like 3f2a9c1e-…-…')); datasetInput.setAttribute('aria-invalid', 'true'); datasetInput.focus(); return; }
       state.token = token;
       try {
         const me = await api('GET', '/v1/me');
         state.principal = me.principal;
         store.set('sessionStorage', 'sanctity.token', token);
-        if (ds) go('#/d/' + enc(ds)); else render();
+        render();
       } catch (e) {
         state.token = null;
         err.append(h('p', { class: 'notice err', role: 'alert' }, explain(e)));
-        if (tokenInput && e instanceof ApiError && e.status === 401) { tokenInput.setAttribute('aria-invalid', 'true'); tokenInput.focus(); }
+        if (e instanceof ApiError && e.status === 401) { tokenInput.setAttribute('aria-invalid', 'true'); tokenInput.focus(); }
       }
     };
     const clearInvalid = ev => ev.target.removeAttribute('aria-invalid');
-    const signedIn = !!state.principal;
     const rings = svg(['M260 20a240 240 0 1 0 0 480a240 240 0 1 0 0-480', 'M260 90a170 170 0 1 0 0 340a170 170 0 1 0 0-340', 'M260 160a100 100 0 1 0 0 200a100 100 0 1 0 0-200'], 'rings', '0 0 520 520');
     app.replaceChildren(h('div', { class: 'connect' },
       h('section', { class: 'connect-hero', 'aria-label': 'About Sanctity' },
@@ -318,21 +317,222 @@
       h('main', { class: 'connect-form', id: 'main', tabindex: '-1' },
         h('form', { class: 'stack s18', onsubmit: submit, novalidate: true },
           h('div', { class: 'stack s6' },
-            h('h1', { class: 'h2' }, signedIn ? 'Open a dataset' : 'Sign in'),
-            h('p', { class: 'muted small' }, signedIn ? 'Signed in as principal ' + short(state.principal) + '. Paste a dataset identifier to continue.' :
-              'Use a principal credential issued by your repository operator. It stays in this browser tab only.')),
+            h('h1', { class: 'h2' }, 'Sign in'),
+            h('p', { class: 'muted small' }, 'Use a principal credential issued by your repository operator. It stays in this browser tab only.')),
           notice ? h('p', { class: 'notice warn', role: 'status' }, notice) : null,
-          signedIn ? null : h('div', { class: 'field' }, h('label', { for: 'token' }, 'Access token'),
+          h('div', { class: 'field' }, h('label', { for: 'token' }, 'Access token'),
             tokenInput = h('input', { class: 'input mono', id: 'token', type: 'password', oninput: clearInvalid, 'aria-describedby': 'connect-errors', autocomplete: 'off', spellcheck: 'false', placeholder: demo() ? 'Demo mode: any value works' : 'Paste your token' })),
-          h('div', { class: 'field' }, h('label', { for: 'dataset' }, 'Dataset identifier'),
-            datasetInput = h('input', { class: 'input mono', id: 'dataset', oninput: clearInvalid, autocomplete: 'off', spellcheck: 'false', placeholder: '00000000-0000-0000-0000-000000000000', value: recent[0] || (demo() ? demo().dataset : ''), 'aria-describedby': 'dataset-hint' }),
-            h('span', { class: 'hint', id: 'dataset-hint' }, 'The API does not list datasets. Use the identifier of one you can read.')),
           err = h('div', { class: 'stack', id: 'connect-errors' }),
-          h('button', { class: 'btn primary block', type: 'submit' }, signedIn ? 'Open dataset' : 'Sign in and open'),
-          recent.length > 1 ? h('div', { class: 'stack s8' }, h('h2', { class: 'overline' }, 'Recent'),
-            h('div', { class: 'recent' }, recent.map(d => h('button', { type: 'button', onclick: () => { datasetInput.value = d; datasetInput.focus(); } },
-              h('span', { class: 'mono' }, d), I.chev())))) : null))));
-    (signedIn ? datasetInput : tokenInput).focus();
+          h('button', { class: 'btn primary block', type: 'submit' }, 'Sign in')))));
+    tokenInput.focus();
+  }
+
+  // ---------- directories ----------
+  // Labs, projects and datasets come from the F05.1 directories, which list only what this principal may discover.
+  // A 409 on a later page means something visible changed mid-listing: the listing restarts once from the first page.
+  // A 409 or 404 on the first page means the repository has no organization (not bootstrapped, or no such routes).
+  const DIR_PAGE = 100;
+  const dirUrl = (url, q) => url + (url.includes('?') ? '&' : '?') + new URLSearchParams(q);
+  async function listAll(url, pages = 5) {
+    for (let attempt = 0; ; attempt++) {
+      const items = []; let total = 0, cursor = null, n = 0;
+      try {
+        do {
+          const p = await api('GET', dirUrl(url, { limit: DIR_PAGE, ...(cursor ? { cursor } : {}) }));
+          items.push(...p.items); total = p.total; cursor = p.next;
+        } while (cursor && ++n < pages);
+        return { items, total, more: !!cursor };
+      } catch (e) { if (!(e instanceof ApiError && e.status === 409 && cursor && attempt === 0)) throw e; }
+    }
+  }
+  const noOrganization = e => e instanceof ApiError && (e.status === 409 || e.code === 'not_found');
+  // What this tab learned about where a dataset sits (from directories it was shown), for names in crumbs.
+  // It is display only: every page still asks the API, and it is forgotten on sign-out.
+  const placesKey = () => state.principal ? 'sanctity.places.' + state.principal : null;
+  const places = () => { const k = placesKey(); try { return k ? JSON.parse(store.get('sessionStorage', k) || '{}') : {}; } catch { return {}; } };
+  const learn = found => {
+    const k = placesKey(); if (!k) return;
+    const all = places();
+    for (const [d, p] of Object.entries(found)) all[d] = { ...all[d], ...p };
+    store.set('sessionStorage', k, JSON.stringify(all));
+  };
+  const datasetName = (label, id) => label || 'Unlabelled dataset ' + short(id);
+  const statusChip = s => s && s !== 'active' ? h('span', { class: 'chip' }, s.replace(/^./, x => x.toUpperCase())) : null;
+  const dirRow = (href, fk, name, ...meta) => h('li', {}, h('a', { class: 'dir-row', href, fk },
+    h('span', { class: 'dir-name' }, name), h('span', { class: 'dir-meta' }, ...meta), I.chev()));
+  const homeLink = () => h('a', { href: '#/' }, 'Labs and projects');
+
+  function openByIdentifier(open) {
+    const recent = recentDatasets(), known = places();
+    let input, err;
+    const submit = ev => {
+      ev.preventDefault();
+      const ds = input.value.trim();
+      err.replaceChildren();
+      if (!UUID.test(ds)) { err.append(h('p', { class: 'notice err', role: 'alert' }, 'Dataset identifiers are UUIDs, like 3f2a9c1e-…-…')); input.setAttribute('aria-invalid', 'true'); input.focus(); return; }
+      go('#/d/' + enc(ds));
+    };
+    const body = h('form', { class: 'stack s12', onsubmit: submit, novalidate: true },
+      h('div', { class: 'field' }, h('label', { for: 'dataset' }, 'Dataset identifier'),
+        h('div', { class: 'row nowrap' },
+          input = h('input', { class: 'input mono grow', id: 'dataset', fk: 'dataset', oninput: ev => ev.target.removeAttribute('aria-invalid'), autocomplete: 'off', spellcheck: 'false', placeholder: '00000000-0000-0000-0000-000000000000', 'aria-describedby': 'dataset-errors' }),
+          h('button', { class: 'btn', type: 'submit', fk: 'open-dataset' }, 'Open'))),
+      err = h('div', { class: 'stack', id: 'dataset-errors' }),
+      recent.length ? h('div', { class: 'stack s8' }, h('h3', { class: 'overline' }, 'Recently opened'),
+        h('ul', { class: 'dir-list' }, recent.map(d => dirRow('#/d/' + enc(d), 'recent:' + d, known[d] && known[d].label || h('span', { class: 'mono' }, d))))) : null);
+    return open
+      ? h('section', { class: 'card pad stack s12', 'aria-labelledby': 'open-id' }, h('h2', { id: 'open-id' }, 'Open a dataset by identifier'), body)
+      : h('details', { class: 'card pad disclose' }, h('summary', { fk: 'open-id' }, 'Open a dataset by identifier'), body);
+  }
+
+  async function homeView() {
+    const my = ++generation;
+    const timer = loadingAfter(my, null, null, 'Loading your labs and projects…');
+    const settle = p => p.then(v => ({ v }), e => ({ e }));
+    const [labs, projects, shares] = await Promise.all([listAll('/v1/labs'), listAll('/v1/projects'), listAll('/v1/me/shares')].map(settle));
+    clearTimeout(timer);
+    if (my !== generation) return;
+    const missing = [labs, projects, shares].find(x => x.e && noOrganization(x.e));
+    const broken = [labs, projects, shares].find(x => x.e && !noOrganization(x.e));
+    const head = h('div', { class: 'page-head' }, h('div', { class: 'stack s6' },
+      h('h1', {}, 'Labs and projects'),
+      h('p', { class: 'lead' }, 'Signed in as principal ' + short(state.principal) + '. Only labs, projects and datasets you may see are listed.')));
+    if (missing || broken) {
+      page(null, null, h('div', { class: 'home stack s18' }, head,
+        broken ? h('div', { class: 'notice err stack s8', role: 'alert' }, h('p', {}, explain(broken.e)),
+          h('div', {}, h('button', { class: 'btn sm', type: 'button', fk: 'retry', onclick: () => render() }, 'Try again'))) :
+          h('p', { class: 'notice' }, 'This repository has no lab or project directory yet. Open a dataset by its identifier.'),
+        openByIdentifier(true)));
+      return;
+    }
+    const labIds = new Set(labs.v.items.map(l => l.id));
+    const byLab = new Map();
+    for (const p of projects.v.items) { if (!byLab.has(p.lab)) byLab.set(p.lab, []); byLab.get(p.lab).push(p); }
+    const projectRows = ps => h('ul', { class: 'dir-list' }, ps.map(p => dirRow('#/p/' + enc(p.id), 'project:' + p.id, p.name, statusChip(p.status))));
+    const labCard = l => h('section', { class: 'card pad stack s12', 'aria-labelledby': 'lab-' + l.id },
+      h('div', { class: 'row between' }, h('h2', { id: 'lab-' + l.id }, h('a', { class: 'plain', href: '#/l/' + enc(l.id), fk: 'lab:' + l.id }, l.name)), statusChip(l.status)),
+      (byLab.get(l.id) || []).length ? projectRows(byLab.get(l.id)) : h('p', { class: 'muted small' }, 'No projects in this lab that you can see.'));
+    const others = projects.v.items.filter(p => !labIds.has(p.lab));
+    learn(Object.fromEntries(shares.v.items.filter(s => s.label).map(s => [s.dataset, { label: s.label }])));
+    const shareRows = h('ul', { class: 'dir-list' }, shares.v.items.map(s => dirRow(s.release ? relHash(s.dataset, s.release) : '#/d/' + enc(s.dataset),
+      'share:' + s.dataset + '/' + (s.release || ''), datasetName(s.label, s.dataset),
+      h('span', { class: 'small muted' }, s.release ? 'Release ' + short(s.release) + ' only' : 'All releases'))));
+    const nothing = !labs.v.items.length && !projects.v.items.length && !shares.v.items.length;
+    const truncated = [labs, projects, shares].some(x => x.v.more);
+    page(null, null, h('div', { class: 'home stack s18' }, head,
+      nothing ? h('div', { class: 'card empty stack' }, h('h2', {}, 'Nothing to show yet'),
+        h('p', { class: 'measure' }, 'You are not in any lab or project, and no dataset has been shared with you. Ask a lab administrator or a dataset steward for access. If you already have a dataset identifier, open it below.')) : null,
+      truncated ? h('p', { class: 'notice warn' }, 'Showing the first ' + DIR_PAGE * 5 + ' entries of a long list. Open a lab or project to search it.') : null,
+      labs.v.items.map(labCard),
+      others.length ? h('section', { class: 'card pad stack s12', 'aria-labelledby': 'lab-other' },
+        h('h2', { id: 'lab-other' }, 'Projects in other labs'), projectRows(others)) : null,
+      shares.v.items.length ? h('section', { class: 'card pad stack s12', 'aria-labelledby': 'shared' },
+        h('div', { class: 'stack s4' }, h('h2', { id: 'shared' }, 'Shared with you'),
+          h('p', { class: 'muted small' }, 'Datasets shared with you directly, outside any project.')), shareRows) : null,
+      openByIdentifier(nothing)));
+  }
+
+  async function labView(id) {
+    const my = ++generation;
+    const timer = loadingAfter(my, null, null, 'Loading lab…');
+    let lab, projects;
+    try { [lab, projects] = await Promise.all([api('GET', '/v1/labs/' + enc(id)), listAll('/v1/projects?lab=' + enc(id))]); }
+    catch (e) { clearTimeout(timer); if (my === generation) directoryFailure(e, () => render()); return; }
+    clearTimeout(timer);
+    if (my !== generation) return;
+    page(null, null, h('div', { class: 'home stack s18' },
+      h('div', { class: 'page-head' }, h('div', { class: 'stack s10' },
+        h('div', { class: 'crumbs' }, homeLink(), I.chev(), h('span', {}, 'Lab')),
+        h('div', { class: 'row' }, h('h1', {}, lab.name), statusChip(lab.status)),
+        lab.description ? h('p', { class: 'lead' }, lab.description) : null)),
+      h('section', { class: 'card pad stack s12', 'aria-labelledby': 'lab-projects' },
+        h('h2', { id: 'lab-projects' }, 'Projects'),
+        projects.items.length ? h('ul', { class: 'dir-list' }, projects.items.map(p => dirRow('#/p/' + enc(p.id), 'project:' + p.id, p.name, statusChip(p.status))))
+          : h('p', { class: 'muted small' }, 'No projects in this lab that you can see.'))));
+  }
+
+  // A project's datasets, searched and paged by the API. "Show more" appends the next page in place.
+  async function projectView(id, q) {
+    const my = ++generation;
+    const text = (q.get('q') || '').trim();
+    const timer = loadingAfter(my, null, null, 'Loading project…');
+    const first = () => api('GET', dirUrl('/v1/projects/' + enc(id) + '/datasets', { limit: 50, ...(text ? { q: text } : {}) }));
+    let project, lab, listing;
+    try {
+      [project, listing] = await Promise.all([api('GET', '/v1/projects/' + enc(id)), first()]);
+      // A project participant need not belong to its lab; the lab is then simply not named.
+      lab = await api('GET', '/v1/labs/' + enc(project.lab)).catch(() => null);
+    } catch (e) { clearTimeout(timer); if (my === generation) directoryFailure(e, () => render()); return; }
+    clearTimeout(timer);
+    if (my !== generation) return;
+    const place = e => ({ label: e.label, project: id, projectName: project.name, lab: lab ? lab.id : null, labName: lab ? lab.name : null });
+    let items = listing.items, next = listing.next, total = listing.total;
+    learn(Object.fromEntries(items.map(e => [e.id, place(e)])));
+    let list, more, status, searchInput;
+    const row = e => dirRow('#/d/' + enc(e.id), 'ds:' + e.id, datasetName(e.label, e.id),
+      e.linked ? h('span', { class: 'chip', title: 'Placed in another project and linked here' }, 'Linked') : null,
+      h('span', { class: 'mono small muted' }, short(e.id)));
+    const counts = () => text ? plural(total, 'dataset') + ' matching “' + text + '”' : plural(total, 'dataset');
+    const showMore = async () => {
+      more.setAttribute('aria-busy', 'true'); more.disabled = true;
+      try {
+        const p = await api('GET', dirUrl('/v1/projects/' + enc(id) + '/datasets', { limit: 50, cursor: next, ...(text ? { q: text } : {}) }));
+        if (my !== generation) return;
+        learn(Object.fromEntries(p.items.map(e => [e.id, place(e)])));
+        const firstNew = p.items[0];
+        items = items.concat(p.items); next = p.next; total = p.total;
+        list.append(...p.items.map(row));
+        status.textContent = next ? 'Showing ' + items.length + ' of ' + counts() + '.' : counts() + ', all shown.';
+        if (!next) more.remove(); else { more.removeAttribute('aria-busy'); more.disabled = false; }
+        if (firstNew) list.querySelector('[data-fk="ds:' + CSS.escape(firstNew.id) + '"]')?.focus();
+      } catch (e) {
+        if (my !== generation) return;
+        if (e instanceof ApiError && e.status === 409) { state.notice = 'The datasets you can see changed while you were paging. This is the current list.'; return render(); }
+        more.removeAttribute('aria-busy'); more.disabled = false;
+        status.textContent = explain(e);
+      }
+    };
+    const search = ev => {
+      ev.preventDefault();
+      const v = searchInput.value.trim();
+      focusKey = 'dir-q';
+      go('#/p/' + enc(id) + (v ? '?' + new URLSearchParams({ q: v }) : ''));
+    };
+    const notice = state.notice; state.notice = null;
+    page(null, null, h('div', { class: 'home stack s18' },
+      h('div', { class: 'page-head' }, h('div', { class: 'stack s10' },
+        h('div', { class: 'crumbs' }, homeLink(), I.chev(), lab ? [h('a', { href: '#/l/' + enc(lab.id) }, lab.name), I.chev()] : null, h('span', {}, 'Project')),
+        h('div', { class: 'row' }, h('h1', {}, project.name), statusChip(project.status)),
+        project.description ? h('p', { class: 'lead' }, project.description) : null)),
+      notice ? h('p', { class: 'notice warn', role: 'status' }, notice) : null,
+      h('section', { class: 'card pad stack s14', 'aria-labelledby': 'project-datasets' },
+        h('div', { class: 'row between' }, h('h2', { id: 'project-datasets' }, 'Datasets'),
+          h('form', { class: 'row nowrap dir-search', role: 'search', onsubmit: search },
+            h('label', { class: 'sr-only', for: 'dir-q' }, 'Find a dataset in this project'),
+            searchInput = h('input', { class: 'input', id: 'dir-q', fk: 'dir-q', type: 'search', value: text, placeholder: 'Find a dataset', autocomplete: 'off' }),
+            h('button', { class: 'btn', type: 'submit', fk: 'dir-search' }, 'Search'))),
+        items.length ? list = h('ul', { class: 'dir-list' }, items.map(row)) :
+          h('p', { class: 'muted' }, text ? 'No datasets match “' + text + '”. ' : 'This project has no datasets you can see yet. A dataset appears here once a steward places it in the project and you have access to it.',
+            text ? h('a', { href: '#/p/' + enc(id), fk: 'dir-clear' }, 'Show all datasets') : null),
+        h('div', { class: 'row between' },
+          status = h('p', { class: 'small muted', role: 'status' }, items.length ? (next ? 'Showing ' + items.length + ' of ' + counts() + '.' : counts() + '.') : ''),
+          next ? more = h('button', { class: 'btn sm', type: 'button', fk: 'dir-more', onclick: showMore }, 'Show more') : null))));
+  }
+
+  function directoryFailure(e, retry, what = 'lab or project') {
+    page(null, null, h('div', { class: 'card pad stack measure' },
+      h('h1', { class: 'h2' }, e instanceof ApiError && e.code === 'not_found' ? 'Nothing here' : 'Something went wrong'),
+      h('p', { class: 'muted' }, e instanceof ApiError && e.code === 'not_found'
+        ? 'This ' + what + ' does not exist, or you no longer have access to it. Sanctity does not distinguish the two.' : explain(e)),
+      h('div', { class: 'row' }, e instanceof ApiError && e.code === 'not_found' ? null : h('button', { class: 'btn', type: 'button', onclick: retry }, 'Try again'),
+        h('a', { class: 'btn ghost', href: '#/', fk: 'back-home' }, 'Back to labs and projects'))));
+  }
+  // Lab › Project › dataset label, when this tab reached the dataset through a directory; otherwise just the identifier.
+  function datasetCrumbs(d) {
+    const p = places()[d] || {};
+    return [p.project ? [p.lab && p.labName ? [h('a', { href: '#/l/' + enc(p.lab) }, p.labName), I.chev()] : null,
+      h('a', { href: '#/p/' + enc(p.project) }, p.projectName), I.chev()] : null,
+      h('span', {}, p.label || 'Dataset'), hashChip(d, 'dataset id')];
   }
 
   // ---------- release ----------
@@ -412,7 +612,7 @@
 
     const head = h('div', { class: 'page-head' },
       h('div', { class: 'stack s10' },
-        h('div', { class: 'crumbs' }, h('span', {}, 'Dataset'), hashChip(d, 'dataset id'), I.chev(), h('span', {}, 'Release'), hashChip(r, 'release id')),
+        h('div', { class: 'crumbs' }, datasetCrumbs(d), I.chev(), h('span', {}, 'Release'), hashChip(r, 'release id')),
         h('h1', {}, desc && typeof desc.Name === 'string' ? desc.Name : 'Release ' + short(r)),
         h('div', { class: 'row' },
           a.admissible ? h('span', { class: 'seal ok' }, I.seal(), 'Admitted') : h('span', { class: 'seal err' }, I.stop(), 'Not admissible'),
@@ -1600,9 +1800,12 @@
     }
     const { parts, q } = route();
     if (!state.principal) return connectView(parts.length ? 'Sign in to continue.' : null);
-    if (parts[0] !== 'd' || !parts[1]) return connectView();
+    if ((parts[0] === 'l' || parts[0] === 'p') && parts[1] && !UUID.test(parts[1])) { state.notice = null; return directoryFailure(new ApiError(404, 'not_found')); }
+    if (parts[0] === 'l' && parts[1]) return labView(parts[1]);
+    if (parts[0] === 'p' && parts[1]) return projectView(parts[1], q);
+    if (parts[0] !== 'd' || !parts[1]) return homeView();
     const d = parts[1];
-    if (!UUID.test(d)) return connectView('That dataset identifier is not a UUID.');
+    if (!UUID.test(d)) return directoryFailure(new ApiError(404, 'not_found'), null, 'dataset');
     if (parts[2] !== 'access') { state.revoking = null; onEscape = null; }
     if (parts[2] === 'r' && parts[3] && parts[4] === 'correct') return correctionView(d, parts[3], q);
     if (parts[2] === 'r' && parts[3]) return releaseView(d, parts[3], q);
