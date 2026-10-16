@@ -236,6 +236,10 @@ changes, its policy event and its retry receipt.
 | `POST /v1/projects/{project}/participants`, `/v1/participations/{id}/end` | Project steward | Appoint (`principal`, `role` reader/contributor/steward, optional `membership` basis and `expiresAt`) or end a role |
 | `POST /v1/datasets/{dataset}/stewards`, `/v1/stewardships/{id}/end` | Explicit dataset steward | Appoint or end explicit stewardship; the last eligible steward cannot be removed |
 | `POST /v1/datasets/{dataset}/inheritance` | Explicit dataset steward | Set `policy`, confirming `previewDigest` from the preview just reviewed |
+| `POST /v1/stewardships/{id}/transfer` | Explicit dataset steward | End this stewardship and appoint `principal` in one transition; 201 with `created.stewardship` |
+| `POST /v1/datasets/{dataset}/moves` | Dataset, source-project or destination-project steward | Request a move to `destination` with `policy` (default `ExplicitOnly`) and optional `keepLink`; freezes the placement and both project generations; the requester's roles approve at once |
+| `GET /v1/moves/{id}` | Requester or a holder of a required role | Request, approvals, the caller's roles and the preview: inheritance `lost` and `gained`, surviving stewards and the number of surviving grants |
+| `POST /v1/moves/{id}/approve`, `.../commit`, `.../withdraw` | Holder of a required role (withdraw: also the requester) | Approve with every role the caller holds; commit once the dataset, source and destination stewards all currently approve; or withdraw |
 
 Every mutation needs an `Idempotency-Key` header and an `expected` object naming the
 current generation of every record the command depends on, keyed `kind:id`
@@ -251,6 +255,12 @@ access-impact preview that no longer matches, and last-steward or archive refusa
 are 409. Unknown records and principals without authority receive the same 404.
 Server-minted identifiers derive from the caller, the parent record and the key, so
 retrying after a lost response returns the original receipt and identifiers. A
+retry is reauthorized first: after transferring away a stewardship, the former
+steward's retry is denied, and the transfer still happened exactly once. A move
+whose frozen placement or project generations changed must be requested again;
+committing moves the placement only, keeping releases, bytes, receipts, custody,
+explicit stewards and grants, and ending inheritance from the source project.
+Stewardship recovery for a dataset with no eligible steward is an operator command. A
 receipt states its durability as recorded: `LocalOnly`, `Pending` or `Durable`.
 Lab creation, principal disablement and new custodians remain operator decisions.
 

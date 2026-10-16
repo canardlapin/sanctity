@@ -280,6 +280,30 @@ final class RepositoryHttp[F[_]](
         }))
     case POST -> Root / "v1" / "stewardships" / x / "end" =>
       id[DatasetStewardshipTag](x).flatMap(a => govern(ctx, req, Set.empty)((_, _) => F.pure(OrganizationCommand.EndSteward(a) -> Json.Null)))
+    case POST -> Root / "v1" / "stewardships" / x / "transfer" =>
+      id[DatasetStewardshipTag](x).flatMap(from => govern(ctx, req, Set("principal"), Status.Created)((b, key) =>
+        lift(In.id[PrincipalTag](b, "principal")).map { person =>
+          val to = minted[DatasetStewardshipTag]("transfer", ctx, from.render, key)
+          OrganizationCommand.TransferSteward(from, to, person) -> created("stewardship" -> to.render)
+        }))
+    case GET -> Root / "v1" / "moves" / x =>
+      for { service <- org; move <- id[MoveRequestTag](x); v <- checked(service.move(ctx, move)); r <- json(Out.move(v)) } yield r
+    case POST -> Root / "v1" / "datasets" / d / "moves" =>
+      id[DatasetTag](d).flatMap(dataset => govern(ctx, req, Set("destination", "policy", "keepLink"), Status.Created)((b, key) => lift(for
+        destination <- In.id[ProjectTag](b, "destination")
+        policy <- In.get[Option[String]](b, "policy").flatMap(_.fold(Right(PlacementPolicy.ExplicitOnly))(n =>
+          PlacementPolicy.values.find(_.toString == n).toRight(Problem.Unsupported("unknown policy"))))
+        keep <- In.get[Option[Boolean]](b, "keepLink").map(_.getOrElse(false))
+      yield
+        val move = minted[MoveRequestTag]("move", ctx, dataset.render, key)
+        val link = Option.when(keep)(minted[ProjectDatasetLinkTag]("move-link", ctx, dataset.render, key))
+        OrganizationCommand.RequestMove(move, dataset, destination, policy, link) -> created("move" -> move.render))))
+    case POST -> Root / "v1" / "moves" / x / "approve" =>
+      id[MoveRequestTag](x).flatMap(m => govern(ctx, req, Set.empty)((_, _) => F.pure(OrganizationCommand.ApproveMove(m) -> Json.Null)))
+    case POST -> Root / "v1" / "moves" / x / "commit" =>
+      id[MoveRequestTag](x).flatMap(m => govern(ctx, req, Set.empty)((_, _) => F.pure(OrganizationCommand.CommitMove(m) -> Json.Null)))
+    case POST -> Root / "v1" / "moves" / x / "withdraw" =>
+      id[MoveRequestTag](x).flatMap(m => govern(ctx, req, Set.empty)((_, _) => F.pure(OrganizationCommand.WithdrawMove(m) -> Json.Null)))
     case POST -> Root / "v1" / "datasets" / d / "inheritance" =>
       // The steward confirms the preview they saw: its digest must match the impact recomputed now.
       id[DatasetTag](d).flatMap(dataset => govern(ctx, req, Set("policy", "previewDigest"))((b, _) => for

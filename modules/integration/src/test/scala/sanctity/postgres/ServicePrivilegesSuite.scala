@@ -6,7 +6,7 @@ import cats.syntax.all.*
 import doobie.Fragment
 import doobie.implicits.*
 import munit.FunSuite
-import sanctity.app.RepositoryCli
+import sanctity.app.{OrganizationCli, RepositoryCli}
 import sanctity.application.{Checked, IdSource, NativeRepository}
 import sanctity.bids.BidsInterpreter
 import sanctity.kernel.*
@@ -123,6 +123,36 @@ final class ServicePrivilegesSuite extends FunSuite:
             SELECT gen_random_uuid(),revision+1000,installation,writer_epoch,previous_hash,payload_digest,applied_hash,actor,'forged','forged-$kind',request,receipt,
               jsonb_set(payload,'{kind}','"$kind"'::jsonb),recorded_at FROM organization_event WHERE request IS NOT NULL ORDER BY revision DESC LIMIT 1""")
         }
+      yield ()
+    }
+  }
+
+  test("operator organization commands need the operator connection and the reviewed generation") {
+    fixture { (f, db, _) =>
+      val ids = IdSource.random[IO]
+      val operator = f.system.context.principal.render
+      for
+        report <- f.database.organization.preview(f.system.context.principal)
+        _ <- f.database.organization.bootstrap(f.system.context.principal,PostgresOrganizationCatalog.previewDigest(report))
+        _ <- db.checkRuntimeRole
+        none <- OrganizationCli.command(f.database, List("recovery-needs", operator))
+        _ = assertEquals(none, "No lab, project or dataset needs recovery.")
+        admin <- ids.next[PrincipalTag]
+        _ <- sqlRun(f.database, s"INSERT INTO principal(id,label,created_at) VALUES('${admin.render}','Second lab admin',clock_timestamp())")
+        created <- OrganizationCli.command(f.database, List("create-lab", operator, admin.render, "Imaging", "lab-1"))
+        _ = assert(created.startsWith("Lab "), created)
+        labs <- f.database.organization.snapshot.map(_.labs.size)
+        _ = assertEquals(labs, 2)
+        runtime <- OrganizationCli.command(db, List("create-lab", operator, admin.render, "Forbidden", "lab-2")).attempt
+        _ = assert(runtime.isLeft, "the runtime login cannot run operator organization commands")
+        principal <- f.database.organization.snapshot.map(_.principals(admin).generation.value)
+        stale <- OrganizationCli.command(f.database, List("disable-principal", operator, admin.render, (principal + 5).toString, "off-1")).attempt
+        _ = assert(stale.isLeft, "a stale reviewed generation is refused")
+        // Emergency disablement overrides last-administrator protection; the lab then shows up as needing recovery.
+        disabled <- OrganizationCli.command(f.database, List("disable-principal", operator, admin.render, principal.toString, "off-2"))
+        _ = assert(disabled.startsWith("Principal "), disabled)
+        needs <- OrganizationCli.command(f.database, List("recovery-needs", operator))
+        _ = assert(needs.linesIterator.exists(_.startsWith("lab ")), needs)
       yield ()
     }
   }

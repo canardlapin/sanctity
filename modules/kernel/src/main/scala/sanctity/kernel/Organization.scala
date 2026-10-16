@@ -8,12 +8,14 @@ sealed trait LabMembershipTag
 sealed trait ProjectParticipationTag
 sealed trait DatasetStewardshipTag
 sealed trait ProjectDatasetLinkTag
+sealed trait MoveRequestTag
 type LabId = Id[LabTag]
 type ProjectId = Id[ProjectTag]
 type LabMembershipId = Id[LabMembershipTag]
 type ProjectParticipationId = Id[ProjectParticipationTag]
 type DatasetStewardshipId = Id[DatasetStewardshipTag]
 type ProjectDatasetLinkId = Id[ProjectDatasetLinkTag]
+type MoveRequestId = Id[MoveRequestTag]
 
 opaque type OrganizationName = String
 object OrganizationName:
@@ -83,6 +85,20 @@ enum OrganizationRef:
   case Placement(id: DatasetId)
   case Stewardship(id: DatasetStewardshipId)
   case Link(id: ProjectDatasetLinkId)
+  case Move(id: MoveRequestId)
+
+/** The three approvals a dataset move needs (ADR 001); one principal may hold several, but each is checked. */
+enum MoveRole:
+  case DatasetSteward, SourceSteward, DestinationSteward
+enum MoveStatus:
+  case Open, Committed, Withdrawn
+/** A frozen move request: destination, access policy, optional retained link from the source project, and the
+  * placement/project generations its access-impact preview was computed from. Any change to them invalidates it.
+  */
+final case class DatasetMoveRequest(id: MoveRequestId, dataset: DatasetId, source: ProjectId, destination: ProjectId,
+    policy: PlacementPolicy, keepLink: Option[ProjectDatasetLinkId], frozen: Map[OrganizationRef, OrganizationGeneration],
+    approvals: Map[MoveRole, PrincipalId], requestedBy: PrincipalId, status: MoveStatus,
+    generation: OrganizationGeneration, createdAt: Instant)
 
 /** A frozen role-inheritance impact; F02.3/F03 join explicit grants and disclosure actions. */
 final case class OrganizationAccessImpact(project: ProjectId, generation: OrganizationGeneration,
@@ -107,6 +123,15 @@ enum OrganizationCommand:
   case ArchiveProject(id: ProjectId, archived: Boolean)
   case ArchiveLab(id: LabId, archived: Boolean)
   case DisablePrincipal(id: PrincipalId)
+  /** Ends one explicit stewardship and appoints another in the same transition: never zero, never duplicated. */
+  case TransferSteward(from: DatasetStewardshipId, to: DatasetStewardshipId, principal: PrincipalId)
+  case RequestMove(id: MoveRequestId, dataset: DatasetId, destination: ProjectId, policy: PlacementPolicy,
+      keepLink: Option[ProjectDatasetLinkId])
+  case ApproveMove(id: MoveRequestId)
+  case CommitMove(id: MoveRequestId)
+  case WithdrawMove(id: MoveRequestId)
+  /** Operator procedure (ADR 003): appoint a steward when the dataset has no eligible one, with a stated reason. */
+  case RecoverSteward(dataset: DatasetId, stewardship: DatasetStewardshipId, principal: PrincipalId, reason: OrganizationDescription)
 
 final case class OrganizationMutation(key: IdempotencyKey, expected: Map[OrganizationRef, OrganizationGeneration],
     command: OrganizationCommand)

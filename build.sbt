@@ -72,7 +72,9 @@ lazy val postgres = project.in(file("modules/postgres")).dependsOn(application).
     "io.circe" %% "circe-jawn" % "0.14.10",
     "io.circe" %% "circe-generic" % "0.14.10",
     "org.slf4j" % "slf4j-nop" % "2.0.16"
-  )
+  ),
+  // The derived OrganizationCommand codec (23 cases) exceeds the default inline budget; derivation keeps the stored format.
+  scalacOptions += "-Xmax-inlines:64"
 )
 lazy val importDicom = project.in(file("modules/import-dicom")).dependsOn(bids, objects).settings(common)
 lazy val processingMri = project.in(file("modules/processing-mri")).dependsOn(bids, objects).settings(common)

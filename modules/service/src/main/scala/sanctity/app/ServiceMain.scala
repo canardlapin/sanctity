@@ -4,7 +4,7 @@ import java.util.Properties
 
 /** Deliberately excludes demo and analysis dispatch; all operational commands remain explicit. */
 object ServiceMain:
-  private val usage = "sanctity serve | migrate [--runtime-role ROLE | --organization-preview OPERATOR NEW_FILE | --organization-bootstrap OPERATOR DIGEST] | repository <arguments> | recovery <arguments> | policy enroll WRITER_CONFIG RECOVERY_CONFIG|readiness|resolve | policy-witness init|serve|inspect CONFIG | --version | --help"
+  private val usage = "sanctity serve | migrate [--runtime-role ROLE | --organization-preview OPERATOR NEW_FILE | --organization-bootstrap OPERATOR DIGEST] | repository <arguments> | recovery <arguments> | organization recovery-needs|create-lab|disable-principal|recover-steward <arguments> | policy enroll WRITER_CONFIG RECOVERY_CONFIG|readiness|resolve | policy-witness init|serve|inspect CONFIG | --version | --help"
 
   def main(args: Array[String]): Unit =
     if Runtime.version().feature() < 21 then
@@ -23,6 +23,7 @@ object ServiceMain:
       case "migrate" :: rest => MigrationCli.main(rest.toArray)
       case "repository" :: rest => RepositoryCli.main(rest.toArray)
       case "recovery" :: rest => RecoveryCli.main(rest.toArray)
+      case "organization" :: rest => OrganizationCli.main(rest.toArray)
       case "policy" :: rest => PolicyCatalogCli.main(rest.toArray)
       case "policy-witness" :: rest => PolicyWitnessCli.main(rest.toArray)
       case _ =>

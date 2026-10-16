@@ -65,6 +65,19 @@ final class PostgresOrganizationCatalog[F[_]: Async] private[postgres](db: Postg
     yield OrganizationService.PlacementView(placement, s.stewardships.values.filter(_.dataset == dataset).toVector.sortBy(x => (x.createdAt, x.id.render)))
   }
 
+  def move(ctx: AccessContext, id: MoveRequestId): F[Either[Problem, OrganizationService.MoveView]] = view(ctx) { (s, state, _, now) =>
+    for
+      m <- s.moves.get(id).toRight(Problem.Denied)
+      roles = s.moveRoles(m.dataset, m.source, m.destination, ctx.principal, now)
+      _ <- Either.cond(roles.nonEmpty || m.requestedBy == ctx.principal, (), Problem.Denied)
+      current <- s.placements.get(m.dataset).toRight(Problem.Denied)
+      inheritance = (p: ProjectId, policy: PlacementPolicy) => if policy != PlacementPolicy.ProjectMembers then Map.empty[PrincipalId, OrganizationRole]
+        else s.participations.values.filter(r => r.project == p && s.live(r, now)).map(r => r.principal -> r.role).toMap
+    yield OrganizationService.MoveView(m, roles, inheritance(current.project, current.policy), inheritance(m.destination, m.policy),
+      s.stewardships.values.filter(a => a.dataset == m.dataset && a.status == AppointmentStatus.Active).toVector.sortBy(_.id.render),
+      state.grants.values.count(g => g.scope.dataset == m.dataset && !g.revoked))
+  }
+
   def inheritanceImpact(ctx: AccessContext, dataset: DatasetId): F[Either[Problem, OrganizationAccessImpact]] = OperationsSql.run(xa) {
     for
       _ <- OperationsSql.active
@@ -79,11 +92,11 @@ final class PostgresOrganizationCatalog[F[_]: Async] private[postgres](db: Postg
   }
 
   /** Governed commands run on the runtime login, authorized by the decision function under the policy guard and
-    * admitted by row security (V011). Lab creation and principal disablement remain operator commands.
+    * admitted by row security (V011/V012). Lab creation, principal disablement and stewardship recovery remain operator commands.
     */
   def execute(ctx: AccessContext, request: OrganizationMutation): F[Either[Problem, OrganizationReceipt]] =
     val operatorOnly = request.command match
-      case _: OrganizationCommand.CreateLab | _: OrganizationCommand.DisablePrincipal => true
+      case _: OrganizationCommand.CreateLab | _: OrganizationCommand.DisablePrincipal | _: OrganizationCommand.RecoverSteward => true
       case _ => false
     (if operatorOnly then db.requireOperator else Async[F].unit) *> OperationsSql.run(xa)(executeIn(ctx, request))
 
@@ -247,6 +260,7 @@ final class PostgresOrganizationCatalog[F[_]: Async] private[postgres](db: Postg
     placements <- rows[DatasetPlacement]("placement")
     stewards <- rows[DatasetStewardship]("stewardship")
     links <- rows[ProjectDatasetLink]("link")
+    moves <- rows[DatasetMoveRequest]("move")
     revision <- sql"SELECT revision FROM organization_policy WHERE singleton".query[Long].unique
     events <- sql"""SELECT e.scope,e.request::text,e.receipt::text,
         CASE WHEN a.event_id IS NOT NULL AND e.durability='Pending' THEN 'Durable' ELSE e.durability END
@@ -267,7 +281,7 @@ final class PostgresOrganizationCatalog[F[_]: Async] private[postgres](db: Postg
   yield Snapshot(people.map(p => p.id -> p).toMap, data.map(d => d.id -> d).toMap, labs.map(l => l.id -> l).toMap,
     projects.map(p => p.id -> p).toMap, members.map(m => m.id -> m).toMap, participants.map(p => p.id -> p).toMap,
     placements.map(p => p.dataset -> p).toMap, stewards.map(s => s.id -> s).toMap, links.map(l => l.id -> l).toMap,
-    work, revision, events.map((_,m,r) => OrganizationAudit(r,m.command)), events.map((scope,m,r) => (r.actor,scope,r.key) -> (m,r)).toMap)
+    moves.map(m => m.id -> m).toMap, work, revision, events.map((_,m,r) => OrganizationAudit(r,m.command)), events.map((scope,m,r) => (r.actor,scope,r.key) -> (m,r)).toMap)
 
   /** New records are inserted; changed records are updated in place, matched on their exact previous payload, so a
     * runtime login needs no INSERT on tables whose records it may only change (labs).
@@ -290,7 +304,7 @@ final class PostgresOrganizationCatalog[F[_]: Async] private[postgres](db: Postg
     } *> write("lab",before.labs,after.labs) *> write("project",before.projects,after.projects) *>
       write("membership",before.memberships,after.memberships) *> write("participation",before.participations,after.participations) *>
       write("placement",before.placements,after.placements) *> write("stewardship",before.stewardships,after.stewardships) *>
-      write("link",before.links,after.links)
+      write("link",before.links,after.links) *> write("move",before.moves,after.moves)
 
   private def changes(before: Snapshot, after: Snapshot): Json =
     def diff[K,A: Encoder](kind: String, a: Map[K,A], b: Map[K,A]): Vector[Json] = b.toVector.filter((id,v) => !a.get(id).contains(v))
@@ -298,7 +312,8 @@ final class PostgresOrganizationCatalog[F[_]: Async] private[postgres](db: Postg
     Json.arr((diff("principal",before.principals,after.principals) ++ diff("lab",before.labs,after.labs) ++
       diff("project",before.projects,after.projects) ++ diff("membership",before.memberships,after.memberships) ++
       diff("participation",before.participations,after.participations) ++ diff("placement",before.placements,after.placements) ++
-      diff("stewardship",before.stewardships,after.stewardships) ++ diff("link",before.links,after.links)).sortBy(_.noSpaces)*)
+      diff("stewardship",before.stewardships,after.stewardships) ++ diff("link",before.links,after.links) ++
+      diff("move",before.moves,after.moves)).sortBy(_.noSpaces)*)
 
   private def append(actor: PrincipalId, scope: String, key: IdempotencyKey, request: Option[OrganizationMutation],
       receipt: OrganizationReceipt, changes: Json, invalidations: Json = Json.obj())(effects: ConnectionIO[Unit]): ConnectionIO[Unit] = for

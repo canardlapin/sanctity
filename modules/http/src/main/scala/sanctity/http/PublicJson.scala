@@ -98,6 +98,7 @@ private[http] object PublicJson:
     case OrganizationRef.Placement(id) => "placement:" + id.render
     case OrganizationRef.Stewardship(id) => "stewardship:" + id.render
     case OrganizationRef.Link(id) => "link:" + id.render
+    case OrganizationRef.Move(id) => "move:" + id.render
   /** Durability is stated as recorded: LocalOnly, Pending or Durable (a verified independent COMMIT). */
   def organizationReceipt(r: OrganizationReceipt, created: Json): Json = Json.obj("sequence" -> Json.fromLong(r.sequence),
     "key" -> text(r.key.value), "at" -> instant(r.at), "durability" -> text(r.durability.toString),
@@ -122,6 +123,18 @@ private[http] object PublicJson:
     "policy" -> text(v.placement.policy.toString), "generation" -> Json.fromLong(v.placement.generation.value),
     "stewards" -> Json.arr(v.stewards.map(x => Json.obj("id" -> text(x.id.render), "principal" -> text(x.principal.render),
       "status" -> lower(x.status), "generation" -> Json.fromLong(x.generation.value)))*))
+  private def roles(m: Map[PrincipalId, OrganizationRole]): Json = Json.arr(m.toVector.sortBy(_._1.render)
+    .map((p, r) => Json.obj("principal" -> text(p.render), "role" -> lower(r)))*)
+  def move(v: sanctity.application.OrganizationService.MoveView): Json =
+    val m = v.request
+    Json.obj("id" -> text(m.id.render), "dataset" -> text(m.dataset.render), "source" -> text(m.source.render),
+      "destination" -> text(m.destination.render), "policy" -> text(m.policy.toString), "keepLink" -> Json.fromBoolean(m.keepLink.nonEmpty),
+      "status" -> lower(m.status), "generation" -> Json.fromLong(m.generation.value),
+      "approvals" -> Json.obj(m.approvals.toVector.sortBy(_._1.toString).map((r, p) => r.toString -> text(p.render))*),
+      "required" -> Json.arr(MoveRole.values.toVector.map(r => text(r.toString))*),
+      "yourRoles" -> Json.arr(v.yourRoles.toVector.map(_.toString).sorted.map(text)*),
+      "preview" -> Json.obj("lost" -> roles(v.lost), "gained" -> roles(v.gained),
+        "survivingStewards" -> Json.arr(v.stewards.map(a => text(a.principal.render))*), "survivingGrants" -> Json.fromInt(v.grants)))
   /** The access-impact preview a steward confirms; its digest binds the confirmation to exactly this content. */
   def impact(i: OrganizationAccessImpact): Json = Json.obj("project" -> text(i.project.render),
     "generation" -> Json.fromLong(i.generation.value), "recipients" -> Json.arr(i.recipients.toVector.sortBy(_._1.render)

@@ -79,6 +79,7 @@ object ReferenceOrganizationCatalog:
       placements: Map[DatasetId, DatasetPlacement] = Map.empty,
       stewardships: Map[DatasetStewardshipId, DatasetStewardship] = Map.empty,
       links: Map[ProjectDatasetLinkId, ProjectDatasetLink] = Map.empty,
+      moves: Map[MoveRequestId, DatasetMoveRequest] = Map.empty,
       activeWork: Map[ProjectId, Set[LeaseId]] = Map.empty, sequence: Long = 0,
       audit: Vector[OrganizationAudit] = Vector.empty,
       private[sanctity] val retries: Map[(PrincipalId, String, IdempotencyKey), (OrganizationMutation, OrganizationReceipt)] = Map.empty
@@ -113,11 +114,18 @@ object ReferenceOrganizationCatalog:
       case OrganizationRef.Placement(id) => placements.get(id).map(_.generation)
       case OrganizationRef.Stewardship(id) => stewardships.get(id).map(_.generation)
       case OrganizationRef.Link(id) => links.get(id).map(_.generation)
+      case OrganizationRef.Move(id) => moves.get(id).map(_.generation)
+    /** Roles `principal` currently holds for a move of `dataset` from `source` to `destination`. */
+    def moveRoles(dataset: DatasetId, source: ProjectId, destination: ProjectId, principal: PrincipalId, now: Instant): Set[MoveRole] =
+      Set(MoveRole.DatasetSteward -> steward(dataset, principal),
+        MoveRole.SourceSteward -> projectRole(source, principal, now).contains(OrganizationRole.Steward),
+        MoveRole.DestinationSteward -> projectRole(destination, principal, now).contains(OrganizationRole.Steward)).collect { case (r, true) => r }
     def references: Set[OrganizationRef] =
       principals.keySet.map(OrganizationRef.Principal.apply) ++ labs.keySet.map(OrganizationRef.Lab.apply) ++
         projects.keySet.map(OrganizationRef.Project.apply) ++ memberships.keySet.map(OrganizationRef.Membership.apply) ++
         participations.keySet.map(OrganizationRef.Participation.apply) ++ placements.keySet.map(OrganizationRef.Placement.apply) ++
-        stewardships.keySet.map(OrganizationRef.Stewardship.apply) ++ links.keySet.map(OrganizationRef.Link.apply)
+        stewardships.keySet.map(OrganizationRef.Stewardship.apply) ++ links.keySet.map(OrganizationRef.Link.apply) ++
+        moves.keySet.map(OrganizationRef.Move.apply)
 
   def create[F[_]: Sync](principals: Vector[OrganizationPrincipal], datasets: Vector[Dataset],
       operators: Set[PrincipalId]): F[ReferenceOrganizationCatalog[F]] =
@@ -147,6 +155,12 @@ object ReferenceOrganizationCatalog:
     case OrganizationCommand.ArchiveProject(id, _) => "project:" + id.render
     case OrganizationCommand.ArchiveLab(id, _) => "lab:" + id.render
     case OrganizationCommand.DisablePrincipal(id) => "principal:" + id.render
+    case OrganizationCommand.TransferSteward(from, _, _) => "dataset:" + s.stewardships.get(from).map(_.dataset.render).getOrElse("")
+    case OrganizationCommand.RequestMove(_, dataset, _, _, _) => "dataset:" + dataset.render
+    case OrganizationCommand.ApproveMove(id) => "dataset:" + s.moves.get(id).map(_.dataset.render).getOrElse("")
+    case OrganizationCommand.CommitMove(id) => "dataset:" + s.moves.get(id).map(_.dataset.render).getOrElse("")
+    case OrganizationCommand.WithdrawMove(id) => "dataset:" + s.moves.get(id).map(_.dataset.render).getOrElse("")
+    case OrganizationCommand.RecoverSteward(dataset, _, _, _) => "dataset:" + dataset.render
 
   private def authorize(s: Snapshot, operators: Set[PrincipalId], actor: PrincipalId,
       c: OrganizationCommand, now: Instant): Either[Problem, Unit] =
@@ -166,7 +180,15 @@ object ReferenceOrganizationCatalog:
         s.projectRole(p, actor, now).exists(_ != OrganizationRole.Reader)
       case OrganizationCommand.AddSteward(_, d, _) => s.steward(d, actor)
       case OrganizationCommand.SetInheritance(d, _, _) => s.steward(d, actor)
-      case OrganizationCommand.EndSteward(id) => s.stewardships.get(id).exists(a => s.steward(a.dataset, actor)))
+      case OrganizationCommand.EndSteward(id) => s.stewardships.get(id).exists(a => s.steward(a.dataset, actor))
+      case OrganizationCommand.TransferSteward(from, _, _) => s.stewardships.get(from).exists(a => s.steward(a.dataset, actor))
+      case OrganizationCommand.RequestMove(_, d, destination, _, _) =>
+        s.placements.get(d).exists(p => s.moveRoles(d, p.project, destination, actor, now).nonEmpty)
+      case OrganizationCommand.ApproveMove(id) => s.moves.get(id).exists(m => s.moveRoles(m.dataset, m.source, m.destination, actor, now).nonEmpty)
+      case OrganizationCommand.CommitMove(id) => s.moves.get(id).exists(m => s.moveRoles(m.dataset, m.source, m.destination, actor, now).nonEmpty)
+      case OrganizationCommand.WithdrawMove(id) => s.moves.get(id).exists(m => m.requestedBy == actor ||
+        s.moveRoles(m.dataset, m.source, m.destination, actor, now).nonEmpty)
+      case OrganizationCommand.RecoverSteward(_, _, _, _) => operators(actor))
     require(allowed, Problem.Denied)
 
   private def prerequisites(s: Snapshot, c: OrganizationCommand): Either[Problem, Set[OrganizationRef]] =
@@ -189,6 +211,13 @@ object ReferenceOrganizationCatalog:
       case OrganizationCommand.EndSteward(id) => s.stewardships.get(id).map(a => Set(Stewardship(id), Placement(a.dataset))).toRight(Problem.Denied)
       case OrganizationCommand.SetInheritance(dataset, _, _) => parent(s, dataset).map(p => Set(Placement(dataset), Project(p)))
       case OrganizationCommand.DisablePrincipal(id) => Right(Set(Principal(id)))
+      case OrganizationCommand.TransferSteward(from, _, _) => s.stewardships.get(from).map(a => Set(Stewardship(from), Placement(a.dataset))).toRight(Problem.Denied)
+      case OrganizationCommand.RequestMove(_, dataset, destination, _, _) =>
+        parent(s, dataset).map(source => Set(Placement(dataset), Project(source), Project(destination)))
+      case OrganizationCommand.ApproveMove(id) => Right(Set(Move(id)))
+      case OrganizationCommand.CommitMove(id) => Right(Set(Move(id)))
+      case OrganizationCommand.WithdrawMove(id) => Right(Set(Move(id)))
+      case OrganizationCommand.RecoverSteward(dataset, _, _, _) => Right(Set(Placement(dataset)))
 
   private def touch(s: Snapshot, refs: Set[OrganizationRef]): Either[Problem, Snapshot] = refs.toVector.foldLeft[Either[Problem, Snapshot]](Right(s)) { (result, ref) =>
     result.flatMap { current => current.generation(ref).toRight(Problem.Denied).flatMap(_.next).map { generation => ref match
@@ -200,6 +229,7 @@ object ReferenceOrganizationCatalog:
       case OrganizationRef.Placement(id) => current.copy(placements = current.placements.updated(id, current.placements(id).copy(generation = generation)))
       case OrganizationRef.Stewardship(id) => current.copy(stewardships = current.stewardships.updated(id, current.stewardships(id).copy(generation = generation)))
       case OrganizationRef.Link(id) => current.copy(links = current.links.updated(id, current.links(id).copy(generation = generation)))
+      case OrganizationRef.Move(id) => current.copy(moves = current.moves.updated(id, current.moves(id).copy(generation = generation)))
     }}
   }
 
@@ -302,6 +332,69 @@ object ReferenceOrganizationCatalog:
           _ <- conflict(!archived || s.projects.values.filter(_.lab == id).forall(_.status == OrganizationStatus.Archived), "lab has active projects")
           n <- touch(s, Set(OrganizationRef.Lab(id)))
         yield n.copy(labs = n.labs.updated(id, n.labs(id).copy(status = if archived then OrganizationStatus.Archived else OrganizationStatus.Active)))
+      case OrganizationCommand.TransferSteward(from, to, person) =>
+        val giving = s.stewardships(from)
+        for
+          _ <- conflict(giving.status == AppointmentStatus.Active, "stewardship already ended")
+          _ <- principal(person)
+          _ <- activeProject(s.placements(giving.dataset).project)
+          _ <- conflict(!s.stewardships.contains(to) && !s.stewardships.values.exists(a => a.dataset == giving.dataset &&
+            a.principal == person && a.status == AppointmentStatus.Active), "receiving steward already appointed")
+          n <- touch(s, Set(OrganizationRef.Stewardship(from), OrganizationRef.Placement(giving.dataset)))
+        yield n.copy(stewardships = n.stewardships.updated(from, n.stewardships(from).copy(status = AppointmentStatus.Ended))
+          .updated(to, DatasetStewardship(to, giving.dataset, person, AppointmentStatus.Active, initial, now)))
+      case OrganizationCommand.RequestMove(id, dataset, destination, policy, keepLink) =>
+        for
+          source <- parent(s, dataset)
+          _ <- activeProject(source)
+          _ <- activeProject(destination)
+          _ <- conflict(source != destination, "dataset is already in that project")
+          _ <- conflict(!s.moves.contains(id) && !s.moves.values.exists(m => m.dataset == dataset && m.status == MoveStatus.Open),
+            "an open move request already exists for this dataset")
+          _ <- conflict(keepLink.forall(l => !s.links.contains(l) && !s.links.values.exists(x => x.project == source && x.dataset == dataset)),
+            "link identity reused or link already present")
+          frozen = Set[OrganizationRef](OrganizationRef.Placement(dataset), OrganizationRef.Project(source), OrganizationRef.Project(destination))
+            .map(r => r -> s.generation(r).get).toMap
+          approvals = s.moveRoles(dataset, source, destination, actor, now).map(_ -> actor).toMap
+        yield s.copy(moves = s.moves.updated(id, DatasetMoveRequest(id, dataset, source, destination, policy, keepLink, frozen,
+          approvals, actor, MoveStatus.Open, initial, now)))
+      case OrganizationCommand.ApproveMove(id) =>
+        val m = s.moves(id)
+        val roles = s.moveRoles(m.dataset, m.source, m.destination, actor, now) -- m.approvals.keySet
+        for
+          _ <- conflict(m.status == MoveStatus.Open, "move request is closed")
+          _ <- conflict(m.frozen.forall((r, g) => s.generation(r).contains(g)), "placement or project changed; request the move again")
+          _ <- conflict(roles.nonEmpty, "no further approval is needed from you")
+          n <- touch(s, Set(OrganizationRef.Move(id)))
+        yield n.copy(moves = n.moves.updated(id, n.moves(id).copy(approvals = m.approvals ++ roles.map(_ -> actor))))
+      case OrganizationCommand.CommitMove(id) =>
+        val m = s.moves(id)
+        for
+          _ <- conflict(m.status == MoveStatus.Open, "move request is closed")
+          _ <- conflict(m.frozen.forall((r, g) => s.generation(r).contains(g)), "placement or project changed; request the move again")
+          _ <- conflict(MoveRole.values.forall(role => m.approvals.get(role).exists(p =>
+            s.moveRoles(m.dataset, m.source, m.destination, p, now)(role))), "every required steward must currently approve")
+          _ <- activeProject(m.source)
+          _ <- activeProject(m.destination)
+          n <- touch(s, Set(OrganizationRef.Move(id), OrganizationRef.Placement(m.dataset),
+            OrganizationRef.Project(m.source), OrganizationRef.Project(m.destination)))
+        yield
+          val placed = n.placements.updated(m.dataset, n.placements(m.dataset).copy(project = m.destination, policy = m.policy))
+          val linked = m.keepLink.fold(n.links)(l => n.links.updated(l, ProjectDatasetLink(l, m.source, m.dataset, initial, now)))
+          n.copy(placements = placed, links = linked, moves = n.moves.updated(id, n.moves(id).copy(status = MoveStatus.Committed)))
+      case OrganizationCommand.WithdrawMove(id) =>
+        for
+          _ <- conflict(s.moves(id).status == MoveStatus.Open, "move request is closed")
+          n <- touch(s, Set(OrganizationRef.Move(id)))
+        yield n.copy(moves = n.moves.updated(id, n.moves(id).copy(status = MoveStatus.Withdrawn)))
+      case OrganizationCommand.RecoverSteward(dataset, stewardship, person, _) =>
+        for
+          _ <- principal(person)
+          _ <- conflict(s.placements.contains(dataset), "dataset is not placed")
+          _ <- conflict(s.recoveryNeeds(now).datasets(dataset), "the dataset still has an eligible steward")
+          _ <- conflict(!s.stewardships.contains(stewardship), "appointment identity reused")
+          n <- touch(s, Set(OrganizationRef.Placement(dataset)))
+        yield n.copy(stewardships = n.stewardships.updated(stewardship, DatasetStewardship(stewardship, dataset, person, AppointmentStatus.Active, initial, now)))
       case OrganizationCommand.DisablePrincipal(id) =>
         val labs = s.memberships.values.filter(_.principal == id).map(m => OrganizationRef.Lab(m.lab)).toSet
         val projects = s.participations.values.filter(_.principal == id).map(p => OrganizationRef.Project(p.project)).toSet

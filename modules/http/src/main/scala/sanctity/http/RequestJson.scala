@@ -53,6 +53,7 @@ private[http] object RequestJson:
           case Array("placement", v) => Id.parse[DatasetTag](v).map(OrganizationRef.Placement(_))
           case Array("stewardship", v) => Id.parse[DatasetStewardshipTag](v).map(OrganizationRef.Stewardship(_))
           case Array("link", v) => Id.parse[ProjectDatasetLinkTag](v).map(OrganizationRef.Link(_))
+          case Array("move", v) => Id.parse[MoveRequestTag](v).map(OrganizationRef.Move(_))
           case _ => Left(invalid)
       yield ref -> generation
     }.map(_.toMap))

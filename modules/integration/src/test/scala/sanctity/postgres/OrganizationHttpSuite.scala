@@ -13,6 +13,7 @@ import sanctity.application.*
 import sanctity.http.RepositoryHttp
 import sanctity.kernel.*
 import sanctity.kernel.OrganizationAuthority.Request as Policy
+import doobie.implicits.*
 import scala.concurrent.duration.*
 
 /** F02.3.2: governed organization commands and authorized organization reads over HTTP and PostgreSQL,
@@ -40,7 +41,7 @@ final class OrganizationHttpSuite extends FunSuite:
 
   private def world(f: PgFixture): IO[Map[String, String]] = for
     _ <- AuthoritySeed.seed(f, Corpus.Scenario(Corpus.state, Corpus.now, Corpus.admission("alice"), Policy.ListSharedReleases, Json.Null))
-    tokens <- Vector("alice", "bob", "carol", "dan", "outsider").traverse(who =>
+    tokens <- Vector("alice", "bob", "carol", "dan", "outsider", "sam").traverse(who =>
       checked(credentials(f).issue(Corpus.principal(who), who, 3600)).map(t => who -> t.secret))
   yield tokens.toMap
 
@@ -187,3 +188,121 @@ final class OrganizationHttpSuite extends FunSuite:
       _ = assertEquals(refused._1, Status.Conflict)
     yield () }.unsafeRunSync()
   }
+
+  private def placementOf(f: PgFixture, t: Map[String, String], who: String, d: DatasetId): IO[Json] =
+    call(f, Method.GET, s"/v1/datasets/${d.render}/placement", t(who)).map(_._2)
+  private def projectGen(f: PgFixture, t: Map[String, String], who: String, p: String): IO[Long] =
+    call(f, Method.GET, s"/v1/projects/$p", t(who)).map(x => gen(x._2))
+  /** carol (L-A admin) creates P-new with dan as its steward. */
+  private def destination(f: PgFixture, t: Map[String, String]): IO[String] = for
+    lab <- call(f, Method.GET, s"/v1/labs/${labA.render}", t("carol")).map(x => gen(x._2))
+    made <- call(f, Method.POST, s"/v1/labs/${labA.render}/projects", t("carol"), Some(Json.obj("name" -> Json.fromString("P-new"),
+      "steward" -> Json.fromString(Corpus.principal("dan").render), "expected" -> Json.obj(s"lab:${labA.render}" -> Json.fromLong(lab)))), Some("new-project"))
+  yield made._2.hcursor.downField("created").get[String]("project").toOption.get
+
+  test("stewardship transfer is atomic: one active steward before and after, retries do not transfer twice") {
+    PostgresFixture.resource.use { f => for
+      t <- world(f)
+      place <- placementOf(f, t, "alice", restricted)
+      from = place.hcursor.downField("stewards").downArray
+      fromId = from.get[String]("id").toOption.get
+      expected = Json.obj(s"stewardship:$fromId" -> Json.fromLong(gen(from.focus.get)), s"placement:${restricted.render}" -> Json.fromLong(gen(place)))
+      body = Json.obj("principal" -> Json.fromString(Corpus.principal("dan").render), "expected" -> expected)
+      byReader <- call(f, Method.POST, s"/v1/stewardships/$fromId/transfer", t("bob"), Some(body), Some("t-0"))
+      _ = assertEquals(byReader, Status.NotFound -> notFound)
+      moved <- call(f, Method.POST, s"/v1/stewardships/$fromId/transfer", t("alice"), Some(body), Some("t-1"))
+      _ = assertEquals(moved._1, Status.Created)
+      // A retry reauthorizes first (ADR 001): the former steward no longer holds authority, so it is denied, and nothing transfers twice.
+      retried <- call(f, Method.POST, s"/v1/stewardships/$fromId/transfer", t("alice"), Some(body), Some("t-1"))
+      _ = assertEquals(retried, Status.NotFound -> notFound)
+      after <- placementOf(f, t, "dan", restricted)
+      active = after.hcursor.downField("stewards").focus.get.asArray.get.filter(_.hcursor.get[String]("status").toOption.contains("active"))
+      _ = assertEquals(active.flatMap(_.hcursor.get[String]("principal").toOption), Vector(Corpus.principal("dan").render))
+      aliceNow <- call(f, Method.GET, s"/v1/datasets/${restricted.render}/placement", t("alice"))
+      _ = assertEquals(aliceNow, Status.NotFound -> notFound)
+      again <- call(f, Method.POST, s"/v1/stewardships/$fromId/transfer", t("dan"), Some(Json.obj("principal" -> Json.fromString(Corpus.principal("bob").render),
+        "expected" -> Json.obj(s"stewardship:$fromId" -> Json.fromLong(gen(from.focus.get) + 1), s"placement:${restricted.render}" -> Json.fromLong(gen(after))))), Some("t-2"))
+      _ = assertEquals(again._1, Status.Conflict)
+    yield () }.unsafeRunSync()
+  }
+
+  test("a dataset move needs the dataset, source and destination stewards; it keeps releases, grants and stewards and ends source inheritance") {
+    PostgresFixture.resource.use { f => for
+      t <- world(f)
+      target <- destination(f, t)
+      before <- call(f, Method.GET, s"/v1/datasets/${open.render}/releases/${Corpus.release("D-open", "R2").render}", t("alice")).map(_._2)
+      bobBefore <- f.system.catalog.check(AccessContext(Corpus.principal("bob")), open, Action.ReadMetadata)
+      _ = assert(bobBefore.isRight, "bob reads D-open through P-memory inheritance")
+      place <- placementOf(f, t, "alice", open)
+      expected = (p: Long, src: Long, dst: Long) => Json.obj(s"placement:${open.render}" -> Json.fromLong(p),
+        s"project:${memory.render}" -> Json.fromLong(src), s"project:$target" -> Json.fromLong(dst))
+      src <- projectGen(f, t, "alice", memory.render)
+      dst <- projectGen(f, t, "dan", target)
+      requested <- call(f, Method.POST, s"/v1/datasets/${open.render}/moves", t("alice"), Some(Json.obj("destination" -> Json.fromString(target),
+        "keepLink" -> Json.True, "expected" -> expected(gen(place), src, dst))), Some("mv-1"))
+      _ = assertEquals(requested._1, Status.Created)
+      move = requested._2.hcursor.downField("created").get[String]("move").toOption.get
+      view <- call(f, Method.GET, s"/v1/moves/$move", t("alice")).map(_._2)
+      _ = assertEquals(view.hcursor.downField("approvals").keys.map(_.toSet), Some(Set("DatasetSteward", "SourceSteward")))
+      _ = assert(view.hcursor.downField("preview").downField("lost").focus.exists(_.asArray.exists(_.exists(_.hcursor.get[String]("principal").toOption.contains(Corpus.principal("bob").render)))), view.noSpaces)
+      _ = assertEquals(view.hcursor.downField("preview").get[Int]("survivingGrants").toOption, Some(0))
+      stranger <- call(f, Method.GET, s"/v1/moves/$move", t("bob"))
+      _ = assertEquals(stranger, Status.NotFound -> notFound)
+      early <- call(f, Method.POST, s"/v1/moves/$move/commit", t("alice"), Some(Json.obj("expected" -> Json.obj(s"move:$move" -> Json.fromLong(gen(view))))), Some("mv-2"))
+      _ = assertEquals(early._1, Status.Conflict)
+      approved <- call(f, Method.POST, s"/v1/moves/$move/approve", t("dan"), Some(Json.obj("expected" -> Json.obj(s"move:$move" -> Json.fromLong(gen(view))))), Some("mv-3"))
+      _ = assertEquals(approved._1, Status.Ok)
+      view2 <- call(f, Method.GET, s"/v1/moves/$move", t("dan")).map(_._2)
+      committed <- call(f, Method.POST, s"/v1/moves/$move/commit", t("dan"), Some(Json.obj("expected" -> Json.obj(s"move:$move" -> Json.fromLong(gen(view2))))), Some("mv-4"))
+      _ = assertEquals(committed._1, Status.Ok)
+      after <- placementOf(f, t, "alice", open)
+      _ = assertEquals((after.hcursor.get[String]("project").toOption, after.hcursor.get[String]("policy").toOption), (Some(target), Some("ExplicitOnly")))
+      bobAfter <- f.system.catalog.check(AccessContext(Corpus.principal("bob")), open, Action.ReadMetadata)
+      _ = assert(bobAfter.isLeft, "source-project inheritance ends with the move")
+      release <- call(f, Method.GET, s"/v1/datasets/${open.render}/releases/${Corpus.release("D-open", "R2").render}", t("alice")).map(_._2)
+      _ = assertEquals(release.hcursor.get[String]("manifest").toOption, before.hcursor.get[String]("manifest").toOption)
+      links <- sql"SELECT count(*) FROM organization_link WHERE dataset_id=${open.render}::uuid AND project_id=${memory.render}::uuid"
+        .query[Long].unique.transact(f.database.transactor)
+      _ = assertEquals(links, 1L)
+    yield () }.unsafeRunSync()
+  }
+
+  test("a concurrent project change invalidates a pending move, and only the operator recovers a dataset with no steward") {
+    PostgresFixture.resource.use { f => for
+      t <- world(f)
+      target <- destination(f, t)
+      place <- placementOf(f, t, "alice", restricted)
+      src <- projectGen(f, t, "alice", memory.render)
+      dst <- projectGen(f, t, "dan", target)
+      requested <- call(f, Method.POST, s"/v1/datasets/${restricted.render}/moves", t("alice"), Some(Json.obj("destination" -> Json.fromString(target),
+        "expected" -> Json.obj(s"placement:${restricted.render}" -> Json.fromLong(gen(place)), s"project:${memory.render}" -> Json.fromLong(src),
+          s"project:$target" -> Json.fromLong(dst)))), Some("mv-a"))
+      move = requested._2.hcursor.downField("created").get[String]("move").toOption.get
+      // alice adds a participant to the source project after the request: the frozen preview is stale.
+      _ <- call(f, Method.POST, s"/v1/projects/${memory.render}/participants", t("alice"), Some(Json.obj("principal" -> Json.fromString(Corpus.principal("outsider").render),
+        "role" -> Json.fromString("reader"), "expected" -> Json.obj(s"project:${memory.render}" -> Json.fromLong(src)))), Some("mv-b"))
+      view <- call(f, Method.GET, s"/v1/moves/$move", t("dan")).map(_._2)
+      stale <- call(f, Method.POST, s"/v1/moves/$move/approve", t("dan"), Some(Json.obj("expected" -> Json.obj(s"move:$move" -> Json.fromLong(gen(view))))), Some("mv-c"))
+      _ = assertEquals(stale._1, Status.Conflict)
+      // Recovery: disabling alice leaves D-restricted with no eligible steward; only the operator connection can appoint one.
+      snapshot <- f.database.organization.snapshot
+      alice = Corpus.principal("alice")
+      _ <- checked(f.database.organization.execute(f.system.context, OrganizationMutation(IdempotencyKey.from("disable-alice").toOption.get,
+        Map(OrganizationRef.Principal(alice) -> snapshot.generation(OrganizationRef.Principal(alice)).get), OrganizationCommand.DisablePrincipal(alice))))
+      after <- f.database.organization.snapshot
+      recover = (key: String) => OrganizationMutation(IdempotencyKey.from(key).toOption.get,
+        Map(OrganizationRef.Placement(restricted) -> after.generation(OrganizationRef.Placement(restricted)).get),
+        OrganizationCommand.RecoverSteward(restricted, Id[DatasetStewardshipTag](java.util.UUID.randomUUID()), Corpus.principal("sam"),
+          OrganizationDescription.from("Steward disabled; custodian approved sam").toOption.get))
+      byUser <- checked(credentials(f).authenticate(t("sam"))).flatMap(ctx => f.database.organization.execute(ctx, recover("recover-sam")))
+      _ = assertEquals(byUser, Left(Problem.Denied))
+      recovered <- f.database.organization.execute(f.system.context, recover("recover-op"))
+      _ = assert(recovered.isRight, recovered.toString)
+      samSees <- placementOf(f, t, "sam", restricted)
+      _ = assert(samSees.hcursor.downField("stewards").focus.exists(_.asArray.exists(_.exists(_.hcursor.get[String]("principal").toOption.contains(Corpus.principal("sam").render)))))
+      refused <- f.database.organization.execute(f.system.context, recover("recover-again").copy(expected = Map(OrganizationRef.Placement(restricted) ->
+        after.generation(OrganizationRef.Placement(restricted)).get.next.toOption.get)))
+      _ = assert(refused.left.exists(_.isInstanceOf[Problem.Conflict]), refused.toString)
+    yield () }.unsafeRunSync()
+  }
+

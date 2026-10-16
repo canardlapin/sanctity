@@ -142,9 +142,16 @@ original appointment dependencies, principal/guest eligibility and current expir
 `OrganizationAuthority`. Navigation links convey no rights. Eligibility/lifecycle columns
 are trusted read-model inputs; public guest and lifecycle administration remain F04/O04.
 
+F02.3 makes administration public. The runtime login records governed commands
+under row security (V011/V012) while lab creation, principal disablement and
+stewardship recovery stay operator commands (`sanctity organization ...`). The HTTP
+API exposes authorized lab/project/placement reads, governed mutations with
+`Idempotency-Key` and expected generations (428/409/404 mapping), dataset creation by
+project contributors, atomic stewardship transfer and dataset move requests that need
+the dataset, source and destination stewards' current approval and keep releases,
+bytes, receipts, custody, stewards and grants. See the [HTTP reference](http-api.md).
+
 Remaining integration has explicit owners:
-- **F02.3:** governed application/API commands, complete placement/move approvals,
-  atomic stewardship-transfer commands, bootstrap/recovery and public error mapping.
 - **F03.3/F03.4:** complete public disclosure/effective-access reads, restricted evidence,
   streams and processing admission. F03.2 supplies transaction authority, credential
   rechecking, protected receipt retries and current policy-event ordering.

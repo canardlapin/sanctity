@@ -46,6 +46,20 @@ private[postgres] object OrganizationCodecs:
   given Decoder[ProjectDatasetLink] = deriveDecoder
   given Encoder[OrganizationRef] = deriveEncoder
   given Decoder[OrganizationRef] = deriveDecoder
+  given Encoder[MoveRole] = Encoder.encodeString.contramap(_.toString)
+  given Decoder[MoveRole] = Decoder.decodeString.emap(s => MoveRole.values.find(_.toString == s).toRight("invalid move role"))
+  given Encoder[MoveStatus] = Encoder.encodeString.contramap(_.toString)
+  given Decoder[MoveStatus] = Decoder.decodeString.emap(s => MoveStatus.values.find(_.toString == s).toRight("invalid move status"))
+  // Maps keyed by references or roles are stored as ordered pairs, like expected generations below.
+  given Encoder[DatasetMoveRequest] = Encoder.forProduct12("id", "dataset", "source", "destination", "policy", "keepLink",
+    "frozen", "approvals", "requestedBy", "status", "generation", "createdAt")(m => (m.id, m.dataset, m.source, m.destination,
+    m.policy, m.keepLink, m.frozen.toVector.sortBy(_._1.toString), m.approvals.toVector.sortBy(_._1.toString), m.requestedBy,
+    m.status, m.generation, m.createdAt))
+  given Decoder[DatasetMoveRequest] = Decoder.forProduct12[DatasetMoveRequest, MoveRequestId, DatasetId, ProjectId, ProjectId,
+    PlacementPolicy, Option[ProjectDatasetLinkId], Vector[(OrganizationRef, OrganizationGeneration)], Vector[(MoveRole, PrincipalId)],
+    PrincipalId, MoveStatus, OrganizationGeneration, java.time.Instant]("id", "dataset", "source", "destination", "policy", "keepLink",
+    "frozen", "approvals", "requestedBy", "status", "generation", "createdAt")((id, d, s, t, p, l, f, a, r, st, g, at) =>
+    DatasetMoveRequest(id, d, s, t, p, l, f.toMap, a.toMap, r, st, g, at))
   given Encoder[OrganizationAccessImpact] = deriveEncoder
   given Decoder[OrganizationAccessImpact] = deriveDecoder
   given Encoder[OrganizationCommand] = deriveEncoder
