@@ -13,7 +13,7 @@ import java.sql.Timestamp
 import java.time.Instant
 import java.util.UUID
 
-/** Trusted adapter. Public projections/administration remain F02.3/F03/F05.
+/** Organization administration. Governed commands are public through F02.3; snapshots and leases stay trusted.
   * LocalOnly receipts explicitly do not acknowledge independent policy durability.
   */
 final class PostgresOrganizationCatalog[F[_]: Async] private[postgres](db: PostgresDatabase[F]):
@@ -40,8 +40,14 @@ final class PostgresOrganizationCatalog[F[_]: Async] private[postgres](db: Postg
     yield s.impact(placement.project, now)
   }
 
+  /** Governed commands run on the runtime login, authorized by the decision function under the policy guard and
+    * admitted by row security (V011). Lab creation and principal disablement remain operator commands.
+    */
   def execute(ctx: AccessContext, request: OrganizationMutation): F[Either[Problem, OrganizationReceipt]] =
-    db.requireOperator *> OperationsSql.run(xa)(executeIn(ctx, request))
+    val operatorOnly = request.command match
+      case _: OrganizationCommand.CreateLab | _: OrganizationCommand.DisablePrincipal => true
+      case _ => false
+    (if operatorOnly then db.requireOperator else Async[F].unit) *> OperationsSql.run(xa)(executeIn(ctx, request))
 
   /** Scientific creation and initial ExplicitOnly stewardship share the policy transaction.
     * Stable request-derived dataset ID makes a response-loss retry resolve to the same record.
@@ -222,21 +228,28 @@ final class PostgresOrganizationCatalog[F[_]: Async] private[postgres](db: Postg
     placements.map(p => p.dataset -> p).toMap, stewards.map(s => s.id -> s).toMap, links.map(l => l.id -> l).toMap,
     work, revision, events.map((_,m,r) => OrganizationAudit(r,m.command)), events.map((scope,m,r) => (r.actor,scope,r.key) -> (m,r)).toMap)
 
-  private def write[K,A: Encoder](table: String, key: String, before: Map[K,A], after: Map[K,A]): ConnectionIO[Unit] =
-    after.toVector.filter((id,value) => !before.get(id).contains(value)).traverse_ { (_,value) =>
+  /** New records are inserted; changed records are updated in place, matched on their exact previous payload, so a
+    * runtime login needs no INSERT on tables whose records it may only change (labs).
+    */
+  private def write[K,A: Encoder](table: String, before: Map[K,A], after: Map[K,A]): ConnectionIO[Unit] =
+    after.toVector.filter((id,value) => !before.get(id).contains(value)).traverse_ { (id,value) =>
       val text = JsonCodecs.encode(value)
-      (Fragment.const(s"INSERT INTO organization_$table(payload) VALUES(") ++ fr"$text::jsonb" ++
-        Fragment.const(s") ON CONFLICT($key) DO UPDATE SET payload=EXCLUDED.payload")).update.run.void
+      before.get(id) match
+        case None => (Fragment.const(s"INSERT INTO organization_$table(payload) VALUES(") ++ fr"$text::jsonb)").update.run.void
+        case Some(previous) =>
+          val old = JsonCodecs.encode(previous)
+          (Fragment.const(s"UPDATE organization_$table SET payload=") ++ fr"$text::jsonb WHERE payload=$old::jsonb").update.run
+            .flatMap(n => Records.require(n == 1, s"organization $table record changed concurrently"))
     }
 
   private def persist(before: Snapshot, after: Snapshot): ConnectionIO[Unit] =
     after.principals.toVector.filter((id,value) => !before.principals.get(id).contains(value)).traverse_ { (_,p) =>
       sql"""UPDATE principal SET label=${p.label.value},active=${p.active},generation=${p.generation.value},created_at=${Timestamp.from(p.createdAt)}
         WHERE id=${uuid(p.id)}""".update.run.void
-    } *> write("lab","id",before.labs,after.labs) *> write("project","id",before.projects,after.projects) *>
-      write("membership","id",before.memberships,after.memberships) *> write("participation","id",before.participations,after.participations) *>
-      write("placement","dataset_id",before.placements,after.placements) *> write("stewardship","id",before.stewardships,after.stewardships) *>
-      write("link","id",before.links,after.links)
+    } *> write("lab",before.labs,after.labs) *> write("project",before.projects,after.projects) *>
+      write("membership",before.memberships,after.memberships) *> write("participation",before.participations,after.participations) *>
+      write("placement",before.placements,after.placements) *> write("stewardship",before.stewardships,after.stewardships) *>
+      write("link",before.links,after.links)
 
   private def changes(before: Snapshot, after: Snapshot): Json =
     def diff[K,A: Encoder](kind: String, a: Map[K,A], b: Map[K,A]): Vector[Json] = b.toVector.filter((id,v) => !a.get(id).contains(v))

@@ -75,6 +75,58 @@ final class ServicePrivilegesSuite extends FunSuite:
     }
   }
 
+  test("runtime records governed organization commands; lab creation, genesis and disablement stay operator-only") {
+    fixture { (f, db, _) =>
+      val ids = IdSource.random[IO]
+      def name(s: String) = OrganizationName.from(s).toOption.get
+      val blank = OrganizationDescription.from("").toOption.get
+      def key(s: String) = IdempotencyKey.from(s).toOption.get
+      for
+        report <- f.database.organization.preview(f.system.context.principal)
+        _ <- f.database.organization.bootstrap(f.system.context.principal,PostgresOrganizationCatalog.previewDigest(report))
+        _ <- db.checkRuntimeRole
+        credential <- checked(f.database.credentials(ids).issue(f.system.context.principal, "runtime-org", 600))
+        context <- checked(db.credentials(ids).authenticate(credential.secret))
+        before <- f.database.organization.snapshot
+        lab = before.labs.keys.head
+        project <- ids.next[ProjectTag]
+        role <- ids.next[ProjectParticipationTag]
+        created <- checked(db.organization.execute(context, OrganizationMutation(key("runtime-project"),
+          Map(OrganizationRef.Lab(lab) -> before.generation(OrganizationRef.Lab(lab)).get),
+          OrganizationCommand.CreateProject(project, lab, context.principal, role, name("Runtime project"), blank))))
+        retried <- checked(db.organization.execute(context, OrganizationMutation(key("runtime-project"),
+          Map(OrganizationRef.Lab(lab) -> before.generation(OrganizationRef.Lab(lab)).get),
+          OrganizationCommand.CreateProject(project, lab, context.principal, role, name("Runtime project"), blank))))
+        _ = assertEquals(retried, created)
+        middle <- f.database.organization.snapshot
+        _ <- checked(db.organization.execute(context, OrganizationMutation(key("runtime-rename"),
+          Map(OrganizationRef.Project(project) -> middle.generation(OrganizationRef.Project(project)).get),
+          OrganizationCommand.RenameProject(project, name("Renamed by runtime"), blank))))
+        after <- f.database.organization.snapshot
+        _ = assertEquals(after.projects(project).name, name("Renamed by runtime"))
+        kinds <- sql"SELECT payload->>'kind' FROM organization_event ORDER BY revision DESC LIMIT 2".query[String].to[List].transact(f.database.transactor)
+        _ = assertEquals(kinds, List("RenameProject", "CreateProject"))
+        // The runtime login cannot create a lab or disable a principal, by application check and by row security.
+        lab2 <- ids.next[LabTag]
+        member <- ids.next[LabMembershipTag]
+        // Refused before any transaction: the operator check fails on the runtime login.
+        createLab <- db.organization.execute(context, OrganizationMutation(key("runtime-lab"), Map.empty,
+          OrganizationCommand.CreateLab(lab2, context.principal, member, name("Forbidden"), blank))).attempt
+        disable <- db.organization.execute(context, OrganizationMutation(key("runtime-disable"),
+          Map(OrganizationRef.Principal(context.principal) -> after.generation(OrganizationRef.Principal(context.principal)).get),
+          OrganizationCommand.DisablePrincipal(context.principal))).attempt
+        _ = assert(Vector(createLab, disable).forall(r => r.isLeft || r.exists(_.isLeft)), (createLab, disable).toString)
+        labs <- f.database.organization.snapshot.map(_.labs.size)
+        _ = assertEquals(labs, 1)
+        _ <- Vector("CreateLab", "OrganizationGenesis", "DisablePrincipal").traverse_ { kind =>
+          deniedSql(db, s"""INSERT INTO organization_event(id,revision,installation,writer_epoch,previous_hash,payload_digest,applied_hash,actor,scope,request_key,request,receipt,payload,recorded_at)
+            SELECT gen_random_uuid(),revision+1000,installation,writer_epoch,previous_hash,payload_digest,applied_hash,actor,'forged','forged-$kind',request,receipt,
+              jsonb_set(payload,'{kind}','"$kind"'::jsonb),recorded_at FROM organization_event WHERE request IS NOT NULL ORDER BY revision DESC LIMIT 1""")
+        }
+      yield ()
+    }
+  }
+
   test("runtime denies DDL, immutable-history mutation, credential administration and recovery/migration commands") {
     fixture { (f, db, role) =>
       for
@@ -95,7 +147,10 @@ final class ServicePrivilegesSuite extends FunSuite:
           "UPDATE principal SET authority_eligibility='{}'::jsonb",
           "UPDATE dataset SET authority_lifecycle='Withdrawn'",
           "UPDATE release SET authority_lifecycle='Available'",
-          "UPDATE organization_project SET payload='{}'::jsonb",
+          "INSERT INTO organization_lab(payload) VALUES('{}'::jsonb)",
+          "DELETE FROM organization_project",
+          "DELETE FROM organization_stewardship",
+          "TRUNCATE organization_membership",
           "UPDATE organization_event SET receipt='{}'::jsonb",
           "UPDATE schema_migration SET checksum='forbidden'",
           "UPDATE repository_state SET recovery_required=FALSE",

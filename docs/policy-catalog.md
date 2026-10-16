@@ -172,3 +172,11 @@ The additive V010 migration adds enrollment, retired runtime identity and append
 acknowledgement storage. V001–V009, historical event payloads, scientific identity and
 attribution remain unchanged. The legacy recovery path still rejects initialized
 organization catalogs.
+
+The additive V011 migration (F02.3) lets the runtime login record governed organization
+commands (lab and project renames and archival, project creation, memberships,
+participations, dataset placement, stewardship and inheritance) under row security.
+Lab creation, principal disablement, genesis, credential and recovery events remain
+operator-only, and the runtime holds no lab INSERT or principal UPDATE privilege.
+The producer schema check in independent admission moves with each migration and now
+requires exactly V011.

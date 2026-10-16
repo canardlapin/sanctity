@@ -54,7 +54,7 @@ final class PostgresDatabase[F[_]] private[postgres] (
 
   private def migrations: F[Vector[(Int, String, String)]] =
     F.blocking {
-      Vector("V001__catalog.sql", "V002__authority.sql", "V003__queries.sql", "V004__operations.sql", "V005__credentials.sql", "V006__processing.sql", "V007__publication.sql", "V008__organization.sql", "V009__current_authority.sql", "V010__policy_witness.sql").zipWithIndex.map { (name, index) =>
+      Vector("V001__catalog.sql", "V002__authority.sql", "V003__queries.sql", "V004__operations.sql", "V005__credentials.sql", "V006__processing.sql", "V007__publication.sql", "V008__organization.sql", "V009__current_authority.sql", "V010__policy_witness.sql", "V011__governed_organization.sql").zipWithIndex.map { (name, index) =>
         val stream = Option(getClass.getResourceAsStream(s"/sanctity/postgres/$name"))
           .getOrElse(throw Failure(Problem.Operational("missing catalog migration")))
         val source = try new String(stream.readAllBytes(), StandardCharsets.UTF_8) finally stream.close()
@@ -125,7 +125,11 @@ final class PostgresDatabase[F[_]] private[postgres] (
         AND NOT EXISTS(SELECT 1 FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace
           WHERE n.nspname=$schema AND c.relname IN ('organization_lab','organization_project',
             'organization_membership','organization_participation','organization_placement','organization_stewardship','organization_link')
-          AND (has_table_privilege(c.oid,'INSERT,UPDATE,DELETE,TRUNCATE') OR has_any_column_privilege(c.oid,'INSERT,UPDATE')))
+          AND (has_table_privilege(c.oid,'UPDATE,DELETE,TRUNCATE') OR (c.relname='organization_lab' AND has_any_column_privilege(c.oid,'INSERT'))))
+        AND NOT EXISTS(SELECT 1 FROM information_schema.columns WHERE table_schema=$schema
+          AND table_name IN ('organization_lab','organization_project','organization_membership',
+            'organization_participation','organization_placement','organization_stewardship','organization_link')
+          AND column_name <> 'payload' AND has_column_privilege(table_name,column_name,'UPDATE'))
         AND NOT has_any_column_privilege('principal','UPDATE')
         AND NOT has_column_privilege('dataset','authority_lifecycle','UPDATE')
         AND NOT has_column_privilege('release','authority_lifecycle','UPDATE')
@@ -134,6 +138,8 @@ final class PostgresDatabase[F[_]] private[postgres] (
         FROM pg_roles r WHERE r.rolname=current_user""".query[Boolean].unique
       _ <- Records.require(safe, "runtime database role is not isolated from operator authority")
     yield ()).transact(transactor)
+
+  private val governedOrganization = Vector("project", "membership", "participation", "placement", "stewardship", "link")
 
   /** Apply a reviewed, narrow profile to a pre-provisioned ordinary login. No automatic role creation. */
   def grantRuntime(role: String): F[Unit] =
@@ -164,6 +170,14 @@ final class PostgresDatabase[F[_]] private[postgres] (
         "repository_state" -> "singleton", "organization_policy" -> "singleton,revision,applied_hash", "api_credential" -> "id")
       _ <- updates.toVector.traverse_ { (table, columns) =>
         Fragment.const(s"""GRANT UPDATE ($columns) ON "$schema"."$table" TO "$role"""").update.run
+      }
+      // Governed organization commands (F02.3): the application authorizes each one under the policy guard and
+      // row security admits only their event kinds. Labs are never inserted and principals never updated here.
+      _ <- governedOrganization.traverse_ { table =>
+        Fragment.const(s"""GRANT INSERT ON "$schema"."organization_$table" TO "$role"""").update.run
+      }
+      _ <- ("lab" +: governedOrganization).traverse_ { table =>
+        Fragment.const(s"""GRANT UPDATE (payload) ON "$schema"."organization_$table" TO "$role"""").update.run
       }
       _ <- Vector("audit_sequence_seq", "outbox_sequence_seq", "policy_audit_sequence_seq")
         .traverse_(sequence => Fragment.const(s"""GRANT USAGE ON SEQUENCE "$schema"."$sequence" TO "$role"""").update.run)
