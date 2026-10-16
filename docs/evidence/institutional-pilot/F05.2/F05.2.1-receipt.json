@@ -1,0 +1,77 @@
+{
+  "work": "F05.2.1",
+  "bead": "bd-01M52N0GKYCAF0VZATAA5ZVZBX",
+  "parent": "F05.2 (bd-01M4W5P6T47HZ6QTQ7NHW3PJCJ), which stays open",
+  "date": "2026-10-16",
+  "commit": "095363213cae08ebdaf8cf25b615aac61b812924",
+  "sourceSha256": {
+    "app.js": "7784d206d8ab7a4ff163d88a70a03fef2e098e7e342f837128ffe1bd22905f45",
+    "app.css": "451884c487c61d078fae12e7a3bcc66f7ee77639fb87d7cf4f98f646352bbba2",
+    "demo.js": "7fe35c67480a77da0cbc32f92148c875e6b996e8bafbd5b381a106518572785c",
+    "index.html": "3098e794d6a8fbb68b1dacc0b29481040579267ec75d36696de17e4c7f230cfa"
+  },
+  "scope": "Console navigation over the F05.1 directories with today's bearer-token sign-in. Institutional sign-in, sessions and expiry are F04.3; choosing people and recipients is F05.3.",
+  "commands": [
+    {
+      "command": "bash scripts/check-console.sh",
+      "result": "PASS",
+      "detail": "ui summary 30/30 (10 specimens x 3 viewports, new 'project' specimen); behaviour 0 failures including probes 76-81; seven v4f regressions still reproduced",
+      "browser": {
+        "engine": "chromium",
+        "version": "131.0.6778.33"
+      },
+      "passed": true
+    },
+    {
+      "command": "bash scripts/check-console-backend.sh",
+      "result": "PASS",
+      "detail": "10 scenarios plus PostgreSQL persistence after browser/server shutdown",
+      "scenarios": [
+        "authentication",
+        "directory-navigation",
+        "metadata-and-relationships",
+        "subject-sidecar",
+        "frozen-query",
+        "concurrent-correction",
+        "table-correction",
+        "fixed-release-grant",
+        "revocation",
+        "transport"
+      ],
+      "passed": true
+    }
+  ],
+  "acceptance": {
+    "1 navigate login > labs/projects > datasets > release by name, durable URLs": "Met for token sign-in. Real PostgreSQL: after an operator bootstrap the owner opens 'Legacy migration lab' > project > 'Console rehearsal n-back pilot' (server-side search) and lands on the release; crumbs name project and label. URLs are #/l/{lab}, #/p/{project}[?q=], #/d/{dataset}; a #/d deep link survives sign-in. Institutional login itself is not built (F04.3).",
+    "2 no memberships, empty projects, expired sessions, denied/stale links, failures": "Met except expired institutional sessions (F04.3; a revoked/expired token still returns to sign-in as before). Real PostgreSQL: grant-only colleague sees 'Nothing to show yet' and a denied project link. Demo probes: empty project, denied link (uniform 'Nothing here', back link), stale paging (409 restart with notice), no organization (409/404 falls back to the identifier form), operational errors offer Try again.",
+    "3 keyboard/focus, responsive, production APIs only": "Met. Probe 77 navigates home > project > dataset with Enter only; Show more moves focus to the first new row; search keeps focus in its box. 390 px specimens pass with no horizontal overflow and axe. The console calls only /v1 directory, lab and project routes; places remembered for crumbs are display-only and cleared on sign-out."
+  },
+  "negativeCases": [
+    "colleague without Discover sees no directory rows (PostgreSQL)",
+    "colleague denied #/p/{project} (PostgreSQL)",
+    "unknown project id: uniform not-found",
+    "cursor invalidated mid-listing: restart from page one",
+    "organization not bootstrapped: identifier fallback",
+    "invalid dataset identifier refused before any request"
+  ],
+  "limitations": [
+    "Sign-in is still a pasted bearer token; F04.3 replaces the form only.",
+    "Crumb names come from directories this tab has shown. A dataset opened directly by URL in a fresh tab shows its identifier, since placement is steward-only.",
+    "Home loads at most five pages of 100 per directory and says so when truncated; lab pages do not search.",
+    "Labels exist only where stewards set them; unlabelled datasets show 'Unlabelled dataset' and a short id.",
+    "Shares appear only for grants that include Discover; grants made from the console Access page do not yet offer Discover (F05.3).",
+    "Demo-transport probes do not qualify scale or query plans (H04)."
+  ],
+  "evidence": {
+    "screenshots": [
+      "demo-home-1440.png",
+      "demo-project-search-390.png",
+      "demo-release-crumbs-1440.png",
+      "postgres-project-datasets-1440.png"
+    ],
+    "localRuns": [
+      "target/console-check.2lPaxh",
+      "target/console-backend.c5W6nS"
+    ]
+  }
+}
