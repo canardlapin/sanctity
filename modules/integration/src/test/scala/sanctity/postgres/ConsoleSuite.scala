@@ -68,6 +68,8 @@ final class ConsoleSuite extends FunSuite:
                 head <- http.json(Method.GET, s"/v1/datasets/${initial.release.dataset.render}/releases/$next")
                 _ = assert(!findings(head._2).exists(j => str(j, "code") == "MriRepetitionTimeMismatch" && pathOf(j).contains(nback2)),
                   "accepted sidecar must clear the mismatch it was written for")
+                // The release names its own curation history: why, by whom, and which files differ from its parent.
+                _ <- IO(assertProvenance(release._2, head._2, f.system.context.principal.render))
               yield ()
             }
           }
@@ -102,6 +104,21 @@ final class ConsoleSuite extends FunSuite:
     // The finding shows both compared values (app.js KEY_FACTS): the authored TR and the header's volume spacing.
     assertEquals(flat(mismatch.hcursor.downField("facts").focus.get).get("temporalSpacingSeconds").map(BigDecimal(_)), Some(BigDecimal(2)))
     assert(findings(release).exists(j => str(j, "code") == "MriRepetitionTimeMismatch" && pathOf(j).contains(nback2)))
+
+  private def assertProvenance(initial: Json, accepted: Json, principal: String): Unit =
+    val first = initial.hcursor.downField("provenance")
+    assertEquals(first.get[String]("kind").toOption, Some("native-import"))
+    assert(first.downField("changesFromParent").focus.exists(_.isNull), "an import has no parent to compare with")
+    val p = accepted.hcursor.downField("provenance")
+    assertEquals(p.get[String]("kind").toOption, Some("metadata-correction"))
+    assertEquals(p.get[String]("reason").toOption, Some("Console contract: sub-02 TR from header"))
+    assertEquals(p.get[String]("proposedBy").toOption, Some(principal))
+    assertEquals(p.get[String]("acceptedBy").toOption, Some(principal))
+    val changes = p.downField("changesFromParent")
+    assertEquals(changes.downField("added").get[Vector[String]]("paths").toOption, Some(Vector(newSidecar)))
+    assertEquals(changes.downField("changed").get[Int]("count").toOption, Some(0))
+    assertEquals(changes.downField("removed").get[Int]("count").toOption, Some(0))
+    assert(!p.focus.get.noSpaces.contains("sha256") && p.downField("source").failed, "provenance discloses paths only")
 
   private def assertPreview(base: Json, preview: Json): Unit =
     val added = preview.hcursor.get[Vector[Json]]("contentChanges").toOption.get.find(j => str(j, "path") == newSidecar).get

@@ -149,6 +149,11 @@ final class HttpSuite extends FunSuite:
         token <- checked(credentials(f).issue(guest, "guest", 3600))
         allowed <- api(f).run(request(Method.GET, endpoint(initial.release), token.secret))
         _ = assertEquals(allowed.status, Status.Ok)
+        // Curation history is dataset-wide: the fixed-release recipient sees the release without it; the curator sees it.
+        shared <- decode(allowed)
+        _ = assert(shared.hcursor.downField("provenance").focus.exists(_.isNull), "fixed-release grant must not see provenance")
+        own <- api(f).run(request(Method.GET, endpoint(initial.release), owner.secret)).flatMap(decode)
+        _ = assertEquals(own.hcursor.downField("provenance").get[String]("acceptedBy").toOption, Some(f.system.context.principal.render))
         head <- api(f).run(request(Method.GET, s"/v1/datasets/${f.system.dataset.id.render}", token.secret))
         _ = assertEquals(head.status, Status.NotFound)
         forbidden <- api(f).run(request(Method.POST, endpoint(initial.release) + "/corrections", token.secret,

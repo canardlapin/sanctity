@@ -160,7 +160,7 @@ Every `/v1` route requires authentication. There are no raw blob-digest, local-f
 | --- | --- |
 | `GET /v1/me` | Authenticated stable principal |
 | `GET /v1/datasets/{dataset}` | Current head; requires dataset-wide metadata authority |
-| `GET /v1/datasets/{dataset}/releases/{release}` | Pinned public inventory, interpretation identity and assessment |
+| `GET /v1/datasets/{dataset}/releases/{release}` | Pinned public inventory, interpretation identity and assessment; `provenance` with dataset-wide metadata authority |
 | `GET /v1/datasets/{dataset}/releases/{release}/metadata?path=...` | Effective values, origins and override history |
 | `GET /v1/datasets/{dataset}/releases/{release}/file?path=...` | Authorized chunked bytes, `X-Sanctity-SHA256` and `X-Sanctity-Size` |
 | `POST /v1/datasets/{dataset}/releases/{release}/corrections` | A prepared candidate plus content and metadata impact |
@@ -172,6 +172,30 @@ Every `/v1` route requires authentication. There are no raw blob-digest, local-f
 | `GET /v1/selections/{selection}?offset=0&limit=100` | Reauthorized, stable membership page |
 
 Metadata inspection requires `ReadMetadata`; file delivery requires both `ReadMetadata` and `ReadContent` in this profile. Fixed-release recipients can inspect their authorized release without learning or accessing the current dataset head. The public release representation omits source labels, private evidence references, retained converter files/logs and internal activity records. Curated BIDS paths and effective metadata are still part of the recipient's approved data.
+
+A release's `provenance` records its curation history for callers with
+dataset-wide `ReadMetadata`; for a fixed-release recipient it is `null`:
+
+```json
+{
+  "kind": "metadata-correction",
+  "reason": "Correct the acquisition timing",
+  "proposedBy": "PRINCIPAL_UUID",
+  "proposedAt": "2026-10-15T19:58:00Z",
+  "acceptedBy": "PRINCIPAL_UUID",
+  "changesFromParent": {
+    "added": {"count": 1, "paths": ["sub-02/func/sub-02_task-nback_run-1_bold.json"]},
+    "changed": {"count": 0, "paths": []},
+    "removed": {"count": 0, "paths": []}
+  }
+}
+```
+
+`kind` is the activity that produced the release (`native-import`,
+`metadata-correction`, `reinterpretation` and so on). `changesFromParent` is `null`
+for a release without a parent; otherwise it compares files with the parent
+release, with exact counts and at most 200 paths per group. It lists paths only,
+never digests or source labels.
 
 A correction request has exactly these fields:
 

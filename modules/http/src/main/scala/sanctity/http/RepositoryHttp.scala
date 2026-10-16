@@ -68,7 +68,14 @@ final class RepositoryHttp[F[_]](
         json(Json.obj("id" -> Json.fromString(ds.id.render), "head" -> ds.head.fold(Json.Null)(r => Json.fromString(r.render))))
       }
     case GET -> Root / "v1" / "datasets" / d / "releases" / r =>
-      ref(d, r).flatMap(at => checked(repository.release(ctx, at))).flatMap(v => json(Out.release(v)))
+      for
+        at <- ref(d, r)
+        rel <- checked(repository.release(ctx, at))
+        // Curation history (who, why, what changed) is dataset-wide information: a fixed-release grant sees the release alone.
+        steward <- catalog.check(ctx, at.dataset, Action.ReadMetadata).map(_.isRight)
+        parent <- if steward then rel.parent.traverse(p => checked(repository.release(ctx, ReleaseRef(at.dataset, p)))) else F.pure(None)
+        res <- json(Out.release(rel, Option.when(steward)(Out.provenance(rel, parent))))
+      yield res
     case GET -> Root / "v1" / "datasets" / d / "releases" / r / "metadata" =>
       (ref(d, r), path(req)).tupled.flatMap((at, p) => checked(repository.explain(ctx, at, p))).flatMap(v => json(Out.metadata(v)))
     case GET -> Root / "v1" / "datasets" / d / "releases" / r / "file" =>

@@ -36,13 +36,29 @@ private[http] object PublicJson:
         "rule" -> text(rule), "datasetRoot" -> opt(root)(p => text(p.value)),
         "matchedEntities" -> Json.obj(entities.toVector.sortBy(_._1).map((k, v) => k -> text(v))*),
         "applicable" -> Json.arr(applicable.map(p => text(p.value))*))
-  def release(r: Release): Json = Json.obj(
+  /** Changed paths listed per group; counts are always exact. */
+  val listedChanges = 200
+  private def kindName(k: ActivityKind): String = k.toString.replaceAll("([a-z])([A-Z])", "$1-$2").toLowerCase
+  /** Curation history: what kind of change made the release, why, who proposed and accepted it, and which files
+    * differ from its parent. Paths only, never digests; the activity's source label is not disclosed. */
+  def provenance(r: Release, parent: Option[Release]): Json =
+    val a = r.activity
+    val changes = parent.map { p =>
+      val files = p.manifest.diff(r.manifest).filter(d => (d.before.toVector ++ d.after.toVector).exists(_.isInstanceOf[Entry.File]))
+      def group(ds: Vector[EntryDelta]) = Json.obj("count" -> Json.fromInt(ds.size), "paths" -> Json.arr(ds.take(listedChanges).map(d => text(d.path.value))*))
+      Json.obj("added" -> group(files.filter(_.before.isEmpty)), "changed" -> group(files.filter(d => d.before.nonEmpty && d.after.nonEmpty)),
+        "removed" -> group(files.filter(_.after.isEmpty)))
+    }
+    Json.obj("kind" -> text(kindName(a.kind)), "reason" -> text(a.reason), "proposedBy" -> text(a.actor.render),
+      "proposedAt" -> text(a.at.toString), "acceptedBy" -> text(r.acceptedBy.render), "changesFromParent" -> opt(changes)(identity))
+  def release(r: Release, provenance: Option[Json] = None): Json = Json.obj(
     "ref" -> ref(r.ref), "parent" -> opt(r.parent)(p => text(p.render)), "manifest" -> text(r.manifest.id.value.value),
     "interpretation" -> text(r.interpretation.id.value.value), "profile" -> text(r.interpretation.profile.name),
     "coverage" -> text(r.interpretation.profile.coverage), "assessment" -> assessment(r.assessment),
     "acceptedAt" -> text(r.acceptedAt.toString), "entries" -> Json.arr(r.manifest.entries.map(entry)*),
     "relationships" -> opt(r.interpretation.relationships)(g => Json.obj("version" -> text(g.version), "evidenceVersion" -> Json.fromInt(g.evidenceVersion),
-      "links" -> Json.arr(g.relationships.map(relationship)*))))
+      "links" -> Json.arr(g.relationships.map(relationship)*))),
+    "provenance" -> provenance.getOrElse(Json.Null))
   def candidate(c: Candidate): Json = Json.obj("id" -> text(c.id.render), "dataset" -> text(c.dataset.render),
     "base" -> opt(c.base)(r => text(r.render)), "generation" -> Json.fromLong(c.generation),
     "manifest" -> text(c.manifest.id.value.value), "interpretation" -> text(c.interpretation.id.value.value),
