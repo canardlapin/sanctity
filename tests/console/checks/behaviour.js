@@ -604,6 +604,69 @@ const DS = 'b7e3c1d2-5a4f-4e8b-9c21-6f0a3d9e8b14', R3 = '9d4b2e61-7a3c-4f18-a5d9
       const change = await p.evaluate(() => document.querySelector('.accepted-change').innerText.replace(/\s+/g, ' '));
       done(/Edited sub-03\/func\/sub-03_task-nback_run-1_events\.tsv/.test(change) && /2 rows changed/.test(change) && /No longer reported: EventsOutsideWindow/.test(change), change);
     });
+    // 70. Collapsed folders carry their findings, and the tree narrows to files with findings.
+    await guarded('tree-folder-findings', async (o, done) => {
+      const [, p] = await o(`#/d/${DS}/r/${R3}`); await p.waitForSelector('.tree .item', { timeout: 5000 });
+      const flags = await p.evaluate(() => Object.fromEntries([...document.querySelectorAll('.tree li.dir > .item')].map(b => [b.querySelector('.name').textContent, (b.querySelector('.flag [aria-hidden]') || {}).textContent || null])));
+      await p.check('#tree-flagged');
+      const files = await p.$$eval('.tree .item.file .name', ns => ns.map(n => n.textContent));
+      done(flags['sub-03'] === '2' && flags['sub-04'] === '2' && flags['sub-01'] === null && files.length === 2 && files.some(f => /sub-03_task-nback_run-1_events\.tsv/.test(f)) && files.some(f => /sub-04_task-rest_bold\.nii\.gz/.test(f)),
+        JSON.stringify({ flags, files }));
+    });
+    // 71. With no file chosen, the inspector summarises the release and leads to the findings that can be fixed.
+    await guarded('release-overview', async (o, done) => {
+      const [, p] = await o(`#/d/${DS}/r/${R3}`); await p.waitForSelector('.overview', { timeout: 5000 });
+      const st = await p.evaluate(() => { const ov = document.querySelector('.overview');
+        return { tally: [...ov.querySelectorAll('.tally b')].map(b => b.textContent), types: ov.querySelectorAll('.type-list li').length,
+          fixes: ov.querySelectorAll('.attn .chip').length, codes: [...ov.querySelectorAll('.attn .mono')].map(x => x.textContent) }; });
+      await p.click('[data-fk="overview-assessment"]'); await p.waitForSelector('#tab-assessment[aria-selected="true"]', { timeout: 5000 });
+      done(st.tally.join() === '4,62,4' && st.types >= 5 && st.fixes === 2 && st.codes.includes('MriRepetitionTimeMismatch'), JSON.stringify(st));
+    });
+    // 72. A release says how it was made: kind, reason, acceptor, changed files and resolved findings; lineage names the reason.
+    await guarded('release-story', async (o, done) => {
+      const [, p] = await o(`#/d/${DS}/r/${R3}`); await p.waitForSelector('.story', { timeout: 5000 });
+      const r2 = await p.evaluate(() => [...document.querySelectorAll('.lineage a.node')][1].getAttribute('href'));
+      const lineage = await p.evaluate(() => [...document.querySelectorAll('.lineage a.node')].map(a => a.getAttribute('aria-label')));
+      await p.evaluate(h => { location.hash = h; }, r2);
+      await p.waitForFunction(() => /Scanner protocol/.test((document.querySelector('.story') || {}).textContent || ''), null, { timeout: 5000 });
+      await p.click('.story-more summary');
+      const st = await p.evaluate(() => ({ line: document.querySelector('.story-line').innerText.replace(/\s+/g, ' '), summary: document.querySelector('.story-more summary').textContent,
+        added: [...document.querySelectorAll('.story-grid li button')].map(b => b.textContent), grid: document.querySelector('.story-grid').innerText.replace(/\s+/g, ' ') }));
+      done(/^Correction/.test(st.line) && /Scanner protocol gives sub-02 n-back TR 2\.0 s/.test(st.line) && /accepted by you/.test(st.line)
+        && /1 file changed/.test(st.summary) && /1 finding resolved/.test(st.summary) && st.added.join() === 'sub-02/func/sub-02_task-nback_run-1_bold.json'
+        && /Resolved · 1/i.test(st.grid) && lineage.some(l => /Correction: Scanner protocol/.test(l)), JSON.stringify({ ...st, lineage }));
+    });
+    // 73. Relationships group by subject, show subject-relative paths and keep the full path in the accessible text; the filter spans groups.
+    await guarded('relationships-by-subject', async (o, done) => {
+      const [, p] = await o(`#/d/${DS}/r/${R3}?tab=relationships`); await p.waitForSelector('.rel-subject', { timeout: 5000 });
+      const st = await p.evaluate(() => { const b = document.querySelector('.rel-group .endpoint');
+        const shown = b.cloneNode(true); shown.querySelectorAll('.sr-only').forEach(x => x.remove());
+        return { subjects: [...new Set([...document.querySelectorAll('.rel-subject')].map(h => h.textContent))], visible: shown.textContent, full: b.textContent }; });
+      await p.fill('#rel-filter', 'sub-03_dir-AP');
+      const filtered = await p.evaluate(() => [...new Set([...document.querySelectorAll('.rel-subject')].map(h => h.textContent))]);
+      done(st.subjects.join() === 'sub-01,sub-02,sub-03,sub-04' && /^func\//.test(st.visible) && /^sub-01\/func\//.test(st.full) && filtered.join() === 'sub-03',
+        JSON.stringify({ ...st, filtered }));
+    });
+    // 74. Query operators read in full at desktop and phone widths.
+    await guarded('query-operator-readable', async (o, done) => {
+      const out = {};
+      for (const width of [1440, 390]) {
+        const [, p] = await o(`#/d/${DS}/query?release=${R3}`, { width, height: 900 }); await p.waitForSelector('.cond select', { timeout: 5000 });
+        out[width] = await p.evaluate(() => [...document.querySelectorAll('.cond select')].map(sel => { const cs = getComputedStyle(sel), c = document.createElement('canvas').getContext('2d');
+          c.font = cs.fontWeight + ' ' + cs.fontSize + ' ' + cs.fontFamily;
+          return Math.ceil(c.measureText(sel.options[sel.selectedIndex].text).width) <= sel.clientWidth - parseFloat(cs.paddingLeft) - 18; }));
+      }
+      done(Object.values(out).every(xs => xs.length >= 2 && xs.every(Boolean)), JSON.stringify(out));
+    });
+    // 75. The release header has one primary action; the correction editor has the main width and folds its explanation.
+    await guarded('release-and-editor-layout', async (o, done) => {
+      const [, p] = await o(`#/d/${DS}/r/${R3}`); await p.waitForSelector('.head-actions', { timeout: 5000 });
+      const actions = await p.$$eval('.head-actions a, .head-actions button', xs => xs.map(x => x.textContent.trim()));
+      await p.evaluate(h => { location.hash = h; }, `#/d/${DS}/r/${R3}/correct?path=task-nback_bold.json`); await loaded(p);
+      const st = await p.evaluate(() => { const t = document.querySelector('#c-text'), ex = document.querySelector('details.explainer');
+        return { width: Math.round(t.getBoundingClientRect().width), rows: t.rows, aside: !!document.querySelector('aside.explainer'), folded: !!ex && !ex.open }; });
+      done(actions.join() === 'Propose correction' && st.width > 800 && st.rows >= 14 && !st.aside && st.folded, JSON.stringify({ actions, ...st }));
+    });
   } finally { await b.close(); }
   console.log(`behaviour failures: ${bad}`);
   process.exitCode = bad ? 1 : 0;

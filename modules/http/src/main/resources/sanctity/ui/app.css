@@ -257,6 +257,9 @@ textarea.input { font-family: var(--mono); font-size: 13px; line-height: 1.55; m
 .tree .dir > .item { color: var(--ink); font-weight: 500; }
 .tree .dir > .item .name { font-family: var(--mono); font-size: 12.5px; }
 .flag { font: 600 11px/1 var(--sans); padding: 3px 6px; border-radius: 999px; background: var(--warn-wash); color: var(--warn); }
+.flag.err { background: var(--err-wash); color: var(--err); }
+.item .flag { margin-left: auto; }
+.check-inline { display: flex; gap: 8px; align-items: center; color: var(--ink-2); cursor: pointer; }
 .kind { font: 600 9.5px/1 var(--sans); letter-spacing: 0.05em; text-transform: uppercase; padding: 3px 5px; border-radius: 4px; background: var(--sunk); color: var(--muted); min-width: 34px; text-align: center; }
 .kind.json { color: var(--accent-ink); background: var(--accent-wash); }
 .kind.nii { color: var(--ok); background: var(--ok-wash); }
@@ -430,6 +433,29 @@ details.tech .overline { margin-top: 12px; }
 .split { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 22px; align-items: start; }
 .sticky { position: sticky; top: 80px; }
 .explainer { padding: 4px 4px 0; }
+.edit-layout { display: grid; max-width: 920px; }
+details.explainer { border-top: 1px solid var(--rule); padding: 12px 0 0; }
+details.explainer summary { cursor: pointer; font-size: 13px; color: var(--ink-2); width: fit-content; }
+details.explainer[open] summary { margin-bottom: 10px; }
+/* Release story: how the release was made, under the lineage. */
+.story { display: grid; gap: 8px; margin: -8px 0 22px; }
+.story-line { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: baseline; font-size: 14.5px; }
+.story-line q { color: var(--ink); }
+.story-more summary { cursor: pointer; font-size: 13px; color: var(--ink-2); width: fit-content; }
+.story-more[open] summary { margin-bottom: 10px; }
+.story-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px 22px; padding: 14px 16px; border: 1px solid var(--rule); border-radius: 10px; background: var(--surface); }
+/* Release overview in the empty inspector. */
+.overview { padding: 22px; }
+.overview .tally { max-width: 460px; }
+.type-list { display: flex; flex-wrap: wrap; gap: 6px; }
+.type-list li { display: inline-flex; gap: 8px; padding: 4px 10px; border: 1px solid var(--rule); border-radius: 999px; font-size: 13px; }
+.attn { gap: 10px; align-items: center; padding: 6px 0; border-bottom: 1px dashed var(--rule); }
+.attn .sev { display: inline-flex; }
+.attn .chip { margin-left: auto; }
+/* Relationships grouped by subject. */
+.rel-group + .rel-group { border-top: 1px solid var(--rule); }
+.rel-subject { font-size: 12.5px; font-weight: 600; color: var(--ink-2); padding: 12px 16px 0; }
+.rel-filter { max-width: 360px; }
 .numbered { display: grid; gap: 12px; counter-reset: n; }
 .numbered li { display: grid; grid-template-columns: 26px 1fr; gap: 10px; font-size: 14px; color: var(--ink-2); counter-increment: n; }
 .numbered li::before { content: counter(n); width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; border: 1px solid var(--rule-strong); font-size: 12px; color: var(--muted); }
@@ -440,7 +466,8 @@ details.tech .overline { margin-top: 12px; }
 
 /* Query */
 .query { display: grid; grid-template-columns: minmax(0, 420px) minmax(0, 1fr); gap: 22px; align-items: start; }
-.cond { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr) minmax(0, 1fr) auto; gap: 6px; align-items: center; }
+/* The operator column fits its longest label ("Column at least"); names and values share what remains. */
+.cond { display: grid; grid-template-columns: auto minmax(0, 1fr) minmax(0, 1fr) auto; gap: 6px; align-items: center; }
 .cond-note { padding-left: 4px; }
 .release-pill { padding: 6px 6px 6px 10px; border-radius: 8px; background: var(--sunk); }
 .release-pill .mono { overflow-wrap: anywhere; }

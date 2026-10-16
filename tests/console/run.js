@@ -57,14 +57,15 @@ const versionSpecificAssertions = {
   'fold-follows-viewport': 'v4g tests the CSS fold structure introduced after v4f',
   'head-keeps-draft': 'v4g expects the new “is restored” notice; v4f used “carried over”'
 };
-// Probes for behaviour added after v4g (table/gradient corrections, unconfirmed policy outcomes, fixing from a finding, grouped previews).
+// Probes for behaviour added after v4g (table/gradient corrections, unconfirmed policy outcomes, fixing from a finding, grouped previews, release provenance and layout polish).
 // v4f never had these features, so their v4f outcomes are recorded but not required either way.
 const postV4gAssertions = [
   'companion-correction-offered', 'table-tab-separator', 'table-width-refused', 'table-correction-accepted', 'table-blocked-row-marked',
   'beh-correction-checked', 'gradient-correction-checked', 'table-carried-no-lost-update', 'table-preview-mobile',
   'policy-unknown-revoke', 'policy-pending-grant',
   'fix-offered-where-editable', 'fix-tr-suggests-sidecar', 'fix-events-selects-row', 'fix-in-inspector-head-only', 'metadata-changes-grouped',
-  'candidate-identifiers-folded', 'receipt-restates-change', 'receipt-table-change'
+  'candidate-identifiers-folded', 'receipt-restates-change', 'receipt-table-change',
+  'tree-folder-findings', 'release-overview', 'release-story', 'relationships-by-subject', 'query-operator-readable', 'release-and-editor-layout'
 ];
 const assertionCount = 59 + postV4gAssertions.length;
 const checks = {};

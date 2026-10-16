@@ -345,6 +345,37 @@
     return { chain: chain.reverse(), more: !!cur };
   }
 
+  // ---------- release provenance ----------
+  // A release says how it was made: its kind of change, the curator's reason, who accepted it, and (against its parent)
+  // which files and findings changed. Provenance is null for fixed-release readers, so the story is simply absent.
+  const KIND_LABEL = { 'native-import': 'Import', 'metadata-correction': 'Correction', 'reinterpretation': 'Reinterpretation', 'derivative': 'Derivative' };
+  const kindLabel = k => KIND_LABEL[k] || k.replace(/-/g, ' ').replace(/^./, x => x.toUpperCase());
+  const who = id => id === state.principal ? 'you' : short(id);
+  function releaseStory(d, r, rel, parent) {
+    const pv = rel.provenance;
+    if (!pv) return null;
+    const ch = pv.changesFromParent;
+    const was = parent && parent.ref.release === rel.parent ? new Set(parent.assessment.findings.map(findingKey)) : null;
+    const now = new Set(rel.assessment.findings.map(findingKey));
+    const introduced = was ? rel.assessment.findings.filter(f => !was.has(findingKey(f))) : [];
+    const resolved = was ? parent.assessment.findings.filter(f => !now.has(findingKey(f))) : [];
+    const nfiles = ch ? ch.added.count + ch.changed.count + ch.removed.count : 0;
+    const summary = [ch ? plural(nfiles, 'file') + ' changed' : null, resolved.length ? plural(resolved.length, 'finding') + ' resolved' : null,
+      introduced.length ? plural(introduced.length, 'new finding') : null].filter(Boolean).join(' · ');
+    const openFile = p => { focusKey = 'f:' + p; go(relHash(d, r, { path: p })); };
+    const group = (label, g) => g && g.count ? h('div', { class: 'stack s4' }, h('h3', { class: 'overline' }, label + ' · ' + g.count),
+      h('ul', { class: 'stack s2' }, g.paths.map(p => h('li', {}, h('button', { class: 'linkish mono small', type: 'button', onclick: () => openFile(p) }, pathText(p)))),
+        g.count > g.paths.length ? h('li', { class: 'small muted' }, 'and ' + (g.count - g.paths.length) + ' more') : null)) : null;
+    const codes = (label, fs) => fs.length ? h('div', { class: 'stack s4' }, h('h3', { class: 'overline' }, label + ' · ' + fs.length),
+      h('p', { class: 'small' }, [...new Set(fs.map(f => f.code))].map((c, i) => [i ? ', ' : '', h('span', { class: 'mono' }, c)]))) : null;
+    return h('section', { class: 'story', 'aria-label': 'How this release was made' },
+      h('p', { class: 'story-line' }, h('span', { class: 'chip' }, kindLabel(pv.kind)), h('q', {}, pv.reason),
+        h('span', { class: 'muted small' }, 'accepted by ' + who(pv.acceptedBy) + (pv.proposedBy !== pv.acceptedBy ? ' · proposed by ' + who(pv.proposedBy) : ''))),
+      summary ? h('details', { class: 'story-more' }, h('summary', {}, summary, ch ? ' since the previous release' : ''),
+        h('div', { class: 'story-grid' }, group('Added', ch && ch.added), group('Changed', ch && ch.changed), group('Removed', ch && ch.removed),
+          codes('Resolved', resolved), codes('New findings', introduced))) : null);
+  }
+
   function buildTree(entries) {
     const root = { name: '', path: '', dirs: new Map(), files: [] };
     for (const e of entries) {
@@ -388,8 +419,8 @@
           h('span', { class: 'meta-item', title: 'Interpretation profile' }, 'Profile ', h('b', { class: 'mono' }, rel.profile)),
           desc && desc.BIDSVersion ? h('span', { class: 'meta-item', title: 'Authored BIDS version' }, 'BIDS ', h('b', {}, desc.BIDSVersion)) : null,
           h('span', { class: 'meta-item' }, h('b', {}, files.length), ' files'))),
+      // One primary action; Query stays in the workspace navigation, which opens it for this release.
       h('div', { class: 'row head-actions' },
-        h('a', { class: 'btn', href: '#/d/' + enc(d) + '/query?release=' + enc(r) }, 'Query'),
         isHead ? h('a', { class: 'btn primary', href: '#/d/' + enc(d) + '/r/' + enc(r) + '/correct' + (selected && selected.endsWith('.json') ? '?path=' + enc(selected) : '') }, I.edit(), 'Propose correction')
           : h('a', { class: 'btn primary', href: relHash(d, headId, selected ? { path: selected } : null) }, 'Go to current head')));
     const notHead = isHead ? null : h('p', { class: 'notice warn' }, 'This is an earlier release. It never changes, and corrections are prepared against the current dataset head.');
@@ -398,7 +429,8 @@
       lin.more ? [h('span', { class: 'muted small' }, 'earlier'), h('span', { class: 'link', 'aria-hidden': 'true' })] : null,
       lin.chain.map((x, i) => [i ? h('span', { class: 'link', 'aria-hidden': 'true' }) : null,
         h('a', { class: 'node', href: relHash(d, x.ref.release), 'aria-current': x.ref.release === r ? 'true' : null,
-          'aria-label': 'Release ' + short(x.ref.release) + ', accepted ' + when(x.acceptedAt) + (x.ref.release === r ? ' (viewing)' : '') },
+          title: x.provenance ? kindLabel(x.provenance.kind) + ': ' + x.provenance.reason : null,
+          'aria-label': 'Release ' + short(x.ref.release) + ', accepted ' + when(x.acceptedAt) + (x.provenance ? ', ' + kindLabel(x.provenance.kind) + ': ' + x.provenance.reason : '') + (x.ref.release === r ? ' (viewing)' : '') },
           h('span', { class: 'label' }, short(x.ref.release)), h('span', { class: 'when' }, when(x.acceptedAt, true)))]));
 
     const tabs = [['files', 'Files', files.length], ['assessment', 'Assessment', a.findings.length], ['relationships', 'Relationships', links.length]];
@@ -426,14 +458,58 @@
       h('span', { class: 'meta-item' }, 'Manifest ', hashChip(rel.manifest, 'manifest digest')),
       h('span', { class: 'meta-item' }, 'Interpretation ', hashChip(rel.interpretation, 'interpretation digest')),
       h('span', { class: 'meta-item' }, 'Assessment ', hashChip(a.id, 'assessment digest')));
-    page(ctx, 'release', head, notHead, h('div', { class: 'strip' }, lineageNav, identity), tabBar, panel);
-    if (tab === 'files') filesPanel(panel, d, r, rel, selected, my, isHead);
+    const parent = lin.chain.length > 1 ? lin.chain[lin.chain.length - 2] : null;
+    page(ctx, 'release', head, notHead, h('div', { class: 'strip' }, lineageNav, identity), releaseStory(d, r, rel, parent), tabBar, panel);
+    if (tab === 'files') filesPanel(panel, d, r, rel, selected, my, isHead, goTab);
   }
 
-  function filesPanel(panel, d, r, rel, selected, my, isHead) {
+  // With no file chosen, the inspector summarises the release: what it contains and what needs attention.
+  const DATATYPES = new Set(['anat', 'func', 'dwi', 'fmap', 'perf', 'beh', 'eeg', 'meg', 'ieeg', 'pet', 'micr', 'nirs', 'motion']);
+  function releaseOverview(d, r, rel, isHead, goTab) {
+    const files = rel.entries.filter(e => e.kind === 'file');
+    const subjects = new Set(files.map(e => e.path.split('/')[0]).filter(x => /^sub-/.test(x)));
+    const byType = new Map();
+    files.forEach(e => { const t = e.path.split('/').slice(0, -1).reverse().find(x => DATATYPES.has(x)) || (e.path.includes('/') ? 'other' : 'top level');
+      byType.set(t, (byType.get(t) || 0) + 1); });
+    const a = rel.assessment, paths = files.map(e => e.path);
+    const codes = new Map();
+    a.findings.forEach(f => { const v = codes.get(f.code) || { n: 0, err: false, fix: 0, files: new Set() };
+      v.n++; v.err = v.err || f.severity === 'Error'; if (f.path) v.files.add(f.path); if (isHead && fixIntent(f, paths, a.checks)) v.fix++; codes.set(f.code, v); });
+    const fixable = [...codes.values()].reduce((x, v) => x + v.fix, 0);
+    const tally = (n, label) => h('div', {}, h('b', {}, String(n)), h('span', {}, label));
+    return h('div', { class: 'overview stack s18' },
+      h('div', { class: 'stack s6' }, h('h2', {}, 'This release'),
+        h('p', { class: 'small muted' }, 'Choose a file to see its effective metadata, where each value comes from, and the acquisitions it is linked to.')),
+      h('div', { class: 'tally' }, tally(subjects.size, subjects.size === 1 ? 'subject' : 'subjects'), tally(files.length, 'files'),
+        h('div', { class: a.findings.length ? (a.findings.some(f => f.severity === 'Error') ? 'err' : 'warn') : '' }, h('b', {}, String(a.findings.length)), h('span', {}, a.findings.length === 1 ? 'finding' : 'findings'))),
+      h('section', { class: 'stack s8' }, h('h3', { class: 'overline' }, 'Files by data type'),
+        h('ul', { class: 'type-list' }, [...byType].sort((x, y) => y[1] - x[1]).map(([t, n]) => h('li', {}, h('span', { class: 'mono' }, t), h('span', { class: 'muted' }, String(n)))))),
+      h('section', { class: 'stack s8' }, h('h3', { class: 'overline' }, 'Needs attention'),
+        codes.size ? [h('ul', { class: 'stack s4' }, [...codes].sort((x, y) => (y[1].err - x[1].err) || (y[1].n - x[1].n)).map(([code, v]) => h('li', { class: 'attn row' },
+            h('span', { class: 'sev', 'aria-hidden': 'true' }, v.err ? I.err() : I.warn()), h('span', { class: 'mono small strong' }, code),
+            h('span', { class: 'small muted' }, plural(v.files.size || v.n, v.files.size ? 'file' : 'occurrence') + (v.err ? ' · blocks acceptance' : '')),
+            v.fix ? h('span', { class: 'chip ok small' }, 'Fix available') : null))),
+          h('div', { class: 'row' }, h('button', { class: 'btn sm', type: 'button', fk: 'overview-assessment', onclick: () => { focusKey = 'tab:assessment'; goTab('assessment'); } },
+            fixable ? 'Review and fix in Assessment' : 'Review in Assessment'))]
+          : h('p', { class: 'small' }, 'No findings. Every assessed rule passed.')));
+  }
+  function filesPanel(panel, d, r, rel, selected, my, isHead, goTab) {
     const tree = buildTree(rel.entries);
-    const findingsByPath = new Map();
-    rel.assessment.findings.forEach(f => f.path && findingsByPath.set(f.path, (findingsByPath.get(f.path) || 0) + 1));
+    // Findings per file and, summed, per folder, so a collapsed folder still shows that something inside needs attention.
+    const findingsByPath = new Map(), errorPaths = new Set(), inFolder = new Map();
+    rel.assessment.findings.forEach(f => {
+      if (!f.path) return;
+      findingsByPath.set(f.path, (findingsByPath.get(f.path) || 0) + 1);
+      if (f.severity === 'Error') errorPaths.add(f.path);
+      const segs = f.path.split('/');
+      for (let i = 1; i < segs.length; i++) {
+        const dp = segs.slice(0, i).join('/'), v = inFolder.get(dp) || { n: 0, err: false };
+        inFolder.set(dp, { n: v.n + 1, err: v.err || f.severity === 'Error' });
+      }
+    });
+    const flag = (n, err, inside) => h('span', { class: 'flag' + (err ? ' err' : ''), title: plural(n, err ? 'finding, including errors' : 'finding') + (inside ? ' inside' : '') },
+      h('span', { class: 'sr-only' }, plural(n, 'finding') + (err ? ', including errors' : '') + (inside ? ' inside' : '')), h('span', { 'aria-hidden': 'true' }, n));
+    let onlyFlagged = false;
     let open;
     try { open = new Set(JSON.parse(store.get('sessionStorage', 'sanctity.open') || '[]')); } catch { open = new Set(); }
     if (selected) selected.split('/').slice(0, -1).forEach((_, i, a) => open.add(a.slice(0, i + 1).join('/')));
@@ -441,17 +517,18 @@
     const list = h('div', { class: 'tree-list' });
     const draw = () => {
       rememberFocus();
-      const match = p => !filter || p.toLowerCase().includes(filter);
+      const match = p => (!filter || p.toLowerCase().includes(filter)) && (!onlyFlagged || findingsByPath.has(p));
+      const narrowed = !!filter || onlyFlagged;
       const node = n => {
         const items = [];
         for (const dir of [...n.dirs.values()].sort((x, y) => x.name.localeCompare(y.name))) {
           const sub = node(dir);
-          if (filter && !sub.length) continue;
-          const isOpen = !!filter || open.has(dir.path);
+          if (narrowed && !sub.length) continue;
+          const isOpen = narrowed || open.has(dir.path), inside = inFolder.get(dir.path);
           items.push(h('li', { class: 'dir' },
             h('button', { class: 'item', type: 'button', fk: 'd:' + dir.path, 'aria-expanded': String(isOpen),
               onclick: () => { isOpen ? open.delete(dir.path) : open.add(dir.path); store.set('sessionStorage', 'sanctity.open', JSON.stringify([...open])); draw(); } },
-              I.dir(), h('span', { class: 'name' }, dir.name)),
+              I.dir(), h('span', { class: 'name' }, dir.name), !isOpen && inside ? flag(inside.n, inside.err, true) : null),
             isOpen ? h('ul', {}, sub) : null));
         }
         for (const f of n.files.sort((x, y) => x.name.localeCompare(y.name))) {
@@ -460,13 +537,13 @@
           items.push(h('li', {}, h('button', { class: 'item file', type: 'button', fk: 'f:' + f.path, 'aria-current': f.path === selected ? 'true' : null,
             onclick: () => { state.scrollInspector = true; focusKey = 'f:' + f.path; go(relHash(d, r, { path: f.path })); } },
             h('span', { class: 'kind ' + k, 'aria-hidden': 'true' }, k || 'file'), h('span', { class: 'name' }, pathText(f.name)),
-            nf ? h('span', { class: 'flag', title: nf + ' finding' + (nf > 1 ? 's' : '') }, h('span', { class: 'sr-only' }, nf + (nf > 1 ? ' findings' : ' finding')), h('span', { 'aria-hidden': 'true' }, nf)) : null,
+            nf ? flag(nf, errorPaths.has(f.path), false) : null,
             h('span', { class: 'size' }, bytes(f.size)))));
         }
         return items;
       };
       const items = node(tree);
-      list.replaceChildren(items.length ? h('ul', {}, items) : h('p', { class: 'empty small' }, 'No files match “' + filter + '”.'));
+      list.replaceChildren(items.length ? h('ul', {}, items) : h('p', { class: 'empty small' }, onlyFlagged && !filter ? 'No files have findings.' : 'No files match “' + filter + '”' + (onlyFlagged ? ' among files with findings.' : '.')));
       restoreFocus();
     };
     // Up/Down move between visible items; the list is otherwise ordinary buttons.
@@ -480,8 +557,10 @@
     });
     draw();
     const nav = h('nav', { class: 'card tree', id: 'release-tree', 'aria-label': 'Release files' },
-      h('div', { class: 'tree-filter' }, h('input', { class: 'input', type: 'search', id: 'tree-filter', placeholder: 'Filter files', 'aria-label': 'Filter files',
-        oninput: ev => { filter = ev.target.value.trim().toLowerCase(); draw(); } })), list);
+      h('div', { class: 'tree-filter stack s6' }, h('input', { class: 'input', type: 'search', id: 'tree-filter', placeholder: 'Filter files', 'aria-label': 'Filter files',
+        oninput: ev => { filter = ev.target.value.trim().toLowerCase(); draw(); } }),
+        findingsByPath.size ? h('label', { class: 'check-inline small' }, h('input', { type: 'checkbox', id: 'tree-flagged', onchange: ev => { onlyFlagged = ev.target.checked; draw(); } }),
+          'Only files with findings (' + findingsByPath.size + ')') : null), list);
     // On narrow screens a chosen file comes first; the tree folds into one line that names the selection.
     // CSS decides when the fold applies, so resizing re-renders nothing (focus, filter and disclosures survive).
     const fold = !!selected && narrow();
@@ -497,11 +576,7 @@
     if (fold && focusKey && focusKey.startsWith('f:')) focusKey = 'inspector';   // the chosen file's button is folded away
     panel.append(h('div', { class: 'workspace' }, side, inspector));
     restoreFocus();
-    if (!selected) {
-      inspector.append(h('div', { class: 'empty stack' }, h('h2', {}, 'Select a file'),
-        h('p', {}, 'See its effective metadata, the file each value comes from, and the acquisitions it is linked to.')));
-      return;
-    }
+    if (!selected) { inspector.append(releaseOverview(d, r, rel, isHead, goTab)); return; }
     if (state.scrollInspector && narrow()) inspector.scrollIntoView({ block: 'start' });
     state.scrollInspector = false;
     inspectFile(inspector, d, r, rel, selected, my, isHead);
@@ -743,26 +818,44 @@
   const kindName = k => (KIND[k] || [k])[0];
   const kindHelp = k => (KIND[k] || [k, ''])[1];
   const evidenceText = e => e.kind === 'companion-selection' ? 'companion rule ' + e.rule : e.document + ' · ' + (e.kind === 'table-column' ? 'column ' + e.column : e.field);
-  function endpoint(p, focus, open) {
-    return p === focus ? h('span', { class: 'endpoint self' }, pathText(p), h('span', { class: 'tag' }, 'this file'))
-      : h('button', { class: 'endpoint linkish', type: 'button', onclick: () => open(p) }, pathText(p));
+  // Inside a subject's group, paths drop the shared prefix visually; the full path stays in the accessible text.
+  const relPath = (p, prefix) => prefix && p.startsWith(prefix) ? [h('span', { class: 'sr-only' }, prefix), pathText(p.slice(prefix.length))] : pathText(p);
+  function endpoint(p, focus, open, prefix) {
+    return p === focus ? h('span', { class: 'endpoint self' }, relPath(p, prefix), h('span', { class: 'tag' }, 'this file'))
+      : h('button', { class: 'endpoint linkish', type: 'button', title: p, onclick: () => open(p) }, relPath(p, prefix));
   }
-  function relRows(links, focus, open, grouped) {
+  function relRows(links, focus, open, grouped, prefix) {
     return h('ul', { class: 'rels' + (grouped ? ' grouped' : '') }, links.map(l => h('li', { class: 'rel' },
       grouped ? (l.label ? h('div', { class: 'rel-kind' }, h('span', { class: 'mono small' }, l.label)) : null)
         : h('div', { class: 'rel-kind' }, h('b', {}, kindName(l.kind)), l.label ? h('span', { class: 'mono small muted' }, l.label) : null),
-      h('div', { class: 'rel-ends' }, endpoint(l.from, focus, open),
+      h('div', { class: 'rel-ends' }, endpoint(l.from, focus, open, prefix),
         h('span', { class: 'rel-arrow', role: 'img', 'aria-label': FIELDMAP.has(l.kind) ? 'corrected by' : 'links to' }, I.arrow()),
-        h('div', { class: 'stack s4' }, l.to.map(t => endpoint(t, focus, open)))),
+        h('div', { class: 'stack s4' }, l.to.map(t => endpoint(t, focus, open, prefix)))),
       l.evidence.length ? h('p', { class: 'rel-evidence' }, I.link(), h('span', {}, 'Declared by ', l.evidence.map((e, i) => [i ? '; ' : '', h('span', { class: 'mono' }, evidenceText(e))]))) : null)));
   }
+  // Relationships by kind, then by subject (and session), so each group reads as one participant's acquisitions.
+  const subjectOf = p => { const m = /^(sub-[^/]+\/)(ses-[^/]+\/)?/.exec(p); return m ? m[0] : ''; };
   function relationshipsPanel(links, open) {
     if (!links.length) return h('p', { class: 'card empty' }, 'No acquisition relationships were recorded for this release.');
-    const groups = new Map();
-    links.forEach(l => groups.set(l.kind, [...(groups.get(l.kind) || []), l]));
-    return h('div', { class: 'stack s28' }, [...groups].map(([k, ls]) => h('section', { class: 'stack s10' },
-      h('div', { class: 'row between' }, h('h2', {}, kindName(k), ' ', h('span', { class: 'count' }, ls.length)), h('span', { class: 'small muted' }, kindHelp(k))),
-      h('div', { class: 'card' }, relRows(ls, null, open, true)))));
+    const body = h('div', { class: 'stack s28' });
+    let filter = '';
+    const draw = () => {
+      const shown = links.filter(l => !filter || [l.from, ...l.to].some(p => p.toLowerCase().includes(filter)));
+      const kinds = new Map();
+      shown.forEach(l => kinds.set(l.kind, [...(kinds.get(l.kind) || []), l]));
+      body.replaceChildren(...(shown.length ? [...kinds].map(([k, ls]) => {
+        const subjects = new Map();
+        ls.forEach(l => { const s = subjectOf(l.from); subjects.set(s, [...(subjects.get(s) || []), l]); });
+        return h('section', { class: 'stack s10' },
+          h('div', { class: 'row between' }, h('h2', {}, kindName(k), ' ', h('span', { class: 'count' }, ls.length)), h('span', { class: 'small muted' }, kindHelp(k))),
+          h('div', { class: 'card' }, [...subjects].map(([sub, sl]) => h('div', { class: 'rel-group' },
+            h('h3', { class: 'rel-subject mono' }, sub ? sub.replace(/\/$/, '') : 'Dataset level'), relRows(sl, null, open, true, sub)))));
+      }) : [h('p', { class: 'card empty' }, 'No relationships involve a file matching “' + filter + '”.')]));
+    };
+    draw();
+    return h('div', { class: 'stack s18' },
+      h('input', { class: 'input rel-filter', type: 'search', id: 'rel-filter', placeholder: 'Filter by file name', 'aria-label': 'Filter relationships by file name',
+        oninput: ev => { filter = ev.target.value.trim().toLowerCase(); draw(); } }), body);
   }
 
   // ---------- correction ----------
@@ -895,7 +988,8 @@
       if (!p) { text.value = ''; return; }
       if (c.newMode) { c.original = ''; restoreDraft(''); text.value = c.text; return; }
       text.value = ''; text.placeholder = 'Loading current content…';
-      try { const t = await getFileText(d, r, p); if (c.path !== p) return; c.original = t; restoreDraft(t); applyFix(t); text.value = c.text || t; text.placeholder = ''; selectRow(); }
+      try { const t = await getFileText(d, r, p); if (c.path !== p) return; c.original = t; restoreDraft(t); applyFix(t); text.value = c.text || t; text.placeholder = '';
+        text.rows = Math.min(28, Math.max(14, text.value.split('\n').length + 2)); selectRow(); }
       catch (e) { text.placeholder = explain(e) + ' Paste the complete corrected document.'; }
     };
     const submit = async ev => {
@@ -932,7 +1026,8 @@
         err.append(h('p', { class: 'notice err', role: 'alert' }, explain(e)));
       }
     };
-    const card = h('form', { class: 'split', onsubmit: submit, novalidate: true },
+    const lines = (c.text || '').split('\n').length;
+    const card = h('form', { class: 'edit-layout', onsubmit: submit, novalidate: true },
       h('div', { class: 'card pad stack s16' },
         fx ? fixNote : null,
         h('div', { class: 'field' }, h('label', { for: 'c-path' }, 'Document'),
@@ -950,7 +1045,7 @@
             oninput: () => { c.newPath = newPath.value; newPath.removeAttribute('aria-invalid'); } }),
           h('span', { class: 'hint', id: 'c-new-hint' }, 'BIDS inheritance applies it to the files it matches, after any dataset- or task-level sidecar.')) : null,
         h('div', { class: 'field' }, h('label', { for: 'c-text' }, c.newMode ? 'Content' : 'Complete replacement content'),
-          text = h('textarea', { class: 'input' + (kind === 'table' ? ' tsv' : ''), id: 'c-text', fk: 'c-text', spellcheck: 'false', rows: 12, wrap: kind === 'json' ? null : 'off', placeholder: c.newMode ? '{ "RepetitionTime": 2.0 }' : null, 'aria-describedby': 'c-text-hint c-errors',
+          text = h('textarea', { class: 'input' + (kind === 'table' ? ' tsv' : ''), id: 'c-text', fk: 'c-text', spellcheck: 'false', rows: Math.min(28, Math.max(14, lines + 2)), wrap: kind === 'json' ? null : 'off', placeholder: c.newMode ? '{ "RepetitionTime": 2.0 }' : null, 'aria-describedby': 'c-text-hint c-errors',
             oninput: () => { c.text = text.value; text.removeAttribute('aria-invalid'); }, onkeydown: tableKeys }),
           h('span', { class: 'hint', id: 'c-text-hint' }, c.newMode ? 'Only the fields you set here override inherited values.'
             : kind === 'table' ? 'The table is replaced as a whole. Tab inserts a column separator; press Escape, then Tab, to leave the editor. Write n/a for a missing value.'
@@ -963,14 +1058,14 @@
         h('div', { class: 'row end' },
           // Cancelling a Fix discards its prepared draft, so the same document opened later starts from its current content.
           h('a', { class: 'btn ghost', href: c.back || relHash(d, r, c.path && !c.newMode ? { path: c.path } : null), onclick: () => { if (c.fix) state.correction = null; } }, 'Cancel'),
-          submitBtn = h('button', { class: 'btn primary', type: 'submit', disabled: c.stale }, 'Prepare preview'))),
-      h('aside', { class: 'stack s14 explainer' },
-        h('h2', { class: 'overline' }, 'What happens next'),
+          submitBtn = h('button', { class: 'btn primary', type: 'submit', disabled: c.stale }, 'Prepare preview')),
+        h('details', { class: 'explainer' },
+        h('summary', {}, 'What happens next'),
         h('ol', { class: 'numbered' },
           ['Sanctity prepares a candidate from this release plus your edit.', kind === 'json' || !kind ? 'It re-resolves metadata inheritance and acquisition relationships, then re-runs admission checks.'
             : 'It re-reads the ' + DOC[kind][0] + ' and re-runs the checks that use it, then the other admission checks.',
            'You review every changed value and finding before anything is accepted.', 'Acceptance is atomic and safe to retry. This release never changes.']
-            .map(t => h('li', {}, t)))));
+            .map(t => h('li', {}, t))))));
     if (c.newMode) { c.original = ''; restoreDraft(''); applyFix(''); text.value = c.text || ''; }
     else if (c.path) await load(c.path);
     return card;

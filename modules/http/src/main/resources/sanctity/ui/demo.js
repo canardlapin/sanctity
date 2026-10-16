@@ -65,9 +65,10 @@
   // Release 1 lacked sub-02's n-back TR override (a recorded warning); release 2 added that sidecar.
   const r1 = { ...base }; delete r1['sub-02/func/sub-02_task-nback_run-1_bold.json'];
   const releases = new Map([
-    [R[0], { texts: r1, parent: null, acceptedAt: '2026-09-18T09:12:04Z' }],
-    [R[1], { texts: base, parent: R[0], acceptedAt: '2026-09-29T14:47:31Z' }],
-    [R[2], { texts: { ...base, 'README': base.README + '\nContact the custodian before sharing outside the lab.\n' }, parent: R[1], acceptedAt: '2026-10-08T16:03:52Z' }],
+    [R[0], { texts: r1, parent: null, acceptedAt: '2026-09-18T09:12:04Z', activity: { kind: 'native-import', reason: 'Native BIDS import', by: ME, at: '2026-09-18T09:10:40Z' } }],
+    [R[1], { texts: base, parent: R[0], acceptedAt: '2026-09-29T14:47:31Z', activity: { kind: 'metadata-correction', reason: 'Scanner protocol gives sub-02 n-back TR 2.0 s', by: ME, at: '2026-09-29T14:45:02Z' } }],
+    [R[2], { texts: { ...base, 'README': base.README + '\nContact the custodian before sharing outside the lab.\n' }, parent: R[1], acceptedAt: '2026-10-08T16:03:52Z',
+      activity: { kind: 'native-import', reason: 'Re-import with the custodian contact note', by: ME, at: '2026-10-08T16:01:10Z' } }],
   ]);
   let head = R[2];
 
@@ -243,12 +244,23 @@
   };
   const policyOf = texts => behavioural(texts) ? 'repository-mri-behavioural-admission-v1' : POLICY;
   const assessment = (seed, i, texts) => ({ id: hex('assess' + seed), policy: policyOf(texts), admissible: i.admissible, findings: i.findings, checks: i.checks });
+  // Mirrors the backend's provenance for a dataset-wide reader: paths only, compared with the parent's files.
+  function provenance(r) {
+    const p = r.parent ? releases.get(r.parent) : null;
+    const group = xs => ({ count: xs.length, paths: xs.slice(0, 200) });
+    const changes = p ? (() => {
+      const before = p.texts, after = r.texts, paths = [...new Set([...Object.keys(before), ...Object.keys(after)])].sort();
+      return { added: group(paths.filter(x => !(x in before))), changed: group(paths.filter(x => x in before && x in after && before[x] !== after[x])), removed: group(paths.filter(x => !(x in after))) };
+    })() : null;
+    const a = r.activity;
+    return { kind: a.kind, reason: a.reason, proposedBy: a.by, proposedAt: a.at, acceptedBy: ME, changesFromParent: changes };
+  }
   function releaseJson(id) {
     const r = releases.get(id), i = interpret(r.texts);
     const ident = r.identity || identityOf(r.texts);
     return { ref: { dataset: DS, release: id }, parent: r.parent, manifest: ident.manifest, interpretation: ident.interpretation,
       profile: behavioural(r.texts) ? 'native-mri-behavioural-v1' : 'native-reference-v7', coverage: 'Context-selected bids4s names and JSON inheritance; basic description/timing checks. Explicit NIfTI B0 fieldmap groups and IntendedFor links. Inherited DWI gradients and BOLD event companions. Bounded MRI dimensions, units and TR/header comparison; discrepancies remain observations. No full BIDS conformance validation.' + (behavioural(r.texts) ? ' Strict bounded behavioural tables, optional corresponding events and local stimuli; no behavioural clock qualification.' : ''), assessment: { ...assessment(id, i, r.texts), id: ident.assessment }, acceptedAt: r.acceptedAt, entries: i.entries,
-      relationships: { version: 'bids-fieldmap-associations-v1+bids-mri-companions-v1+bids-phasediff-family-v1', evidenceVersion: 2, links: i.links } };
+      relationships: { version: 'bids-fieldmap-associations-v1+bids-mri-companions-v1+bids-phasediff-family-v1', evidenceVersion: 2, links: i.links }, provenance: provenance(r) };
   }
 
   const grants = new Map(), selections = new Map(), candidates = new Map();
@@ -294,7 +306,7 @@
           const id = uuid();
           const ident = identityOf(texts);
           const cand = { id, dataset: DS, base: seg[4], generation: 0, manifest: ident.manifest, interpretation: ident.interpretation, assessment: { ...assessment(id, after, texts), id: ident.assessment } };
-          candidates.set(id, { cand, texts, base: seg[4] });
+          candidates.set(id, { cand, texts, base: seg[4], reason: b.reason, at: new Date().toISOString() });
           const sz = t => utf8(t).length;
           return clone({ candidate: cand,
             contentChanges: [{ path: b.path, before: rel.texts[b.path] == null ? null : { path: b.path, kind: 'file', size: sz(rel.texts[b.path]) }, after: { path: b.path, kind: 'file', size: sz(texts[b.path]) } }],
@@ -311,7 +323,7 @@
         if (c.base !== head) return fail(409, 'conflict');
         const nr = uuid(), at = new Date().toISOString();
         // Acceptance binds the candidate's exact manifest, interpretation and assessment to the new release.
-        releases.set(nr, { texts: c.texts, parent: head, acceptedAt: at,
+        releases.set(nr, { texts: c.texts, parent: head, acceptedAt: at, activity: { kind: 'metadata-correction', reason: c.reason, by: ME, at: c.at },
           identity: { manifest: c.cand.manifest, interpretation: c.cand.interpretation, assessment: c.cand.assessment.id } }); head = nr;
         c.receipt = { ref: { dataset: DS, release: nr }, candidate: seg[2], key, acceptedAt: at };
         return clone(c.receipt);
