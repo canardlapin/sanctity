@@ -30,6 +30,13 @@ final class ReferenceCatalog[F[_]] private (
       }
     }
 
+  // Organization policy is evaluated by the PostgreSQL catalog; the reference catalog models legacy grants only.
+  def grants(ctx: AccessContext, dataset: DatasetId): F[Either[Problem, Vector[OrganizationAuthority.GrantView]]] =
+    F.pure(Left(Problem.Unsupported("grant inspection requires an initialized organization")))
+  def explainAccess(ctx: AccessContext, subject: PrincipalId, scope: OrganizationAuthority.DataScope,
+      permission: OrganizationAuthority.Permission): F[Either[Problem, OrganizationAuthority.Explanation]] =
+    F.pure(Left(Problem.Unsupported("access explanation requires an initialized organization")))
+
   def revoke(ctx: AccessContext, dataset: DatasetId, grant: GrantId): F[Either[Problem, Unit]] =
     state.modify { s =>
       val result = for

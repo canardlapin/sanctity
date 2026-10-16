@@ -90,6 +90,27 @@ final class PostgresCatalog[F[_]] private[postgres] (
         }
     yield grant
 
+  /** Current policy projections for access managers and principals (F03.3). Both need an initialized organization;
+    * a legacy catalog has no recorded bases to explain. Evaluated under the shared policy guard with the DB clock.
+    */
+  private def policyRead[A](ctx: AccessContext)(f: (OrganizationAuthority.State, OrganizationAuthority.PolicyAdmission, java.time.Instant) => Either[Problem, A]): ConnectionIO[A] =
+    for
+      _ <- OperationsSql.active
+      organized <- OrganizationSql.guard(false)
+      _ <- lift(Either.cond(organized, (), Problem.Unsupported("access inspection requires an initialized organization")))
+      _ <- CredentialSql.check(ctx)
+      state <- PolicySql.load
+      now <- OrganizationSql.now
+      value <- lift(f(state, OrganizationAuthority.PolicyAdmission(ctx.principal, true, None), now))
+    yield value
+
+  def grants(ctx: AccessContext, dataset: DatasetId): F[Either[Problem, Vector[OrganizationAuthority.GrantView]]] =
+    run(policyRead(ctx)((s, a, now) => OrganizationAuthority.datasetGrants(s, a, dataset, now)))
+
+  def explainAccess(ctx: AccessContext, subject: PrincipalId, scope: OrganizationAuthority.DataScope,
+      permission: OrganizationAuthority.Permission): F[Either[Problem, OrganizationAuthority.Explanation]] =
+    run(policyRead(ctx)((s, a, now) => OrganizationAuthority.explain(s, a, subject, scope, permission, now)))
+
   def revoke(ctx: AccessContext, dataset: DatasetId, grant: GrantId): F[Either[Problem, Unit]] = run {
     import OrganizationAuthority.*
     import OrganizationCodecs.given
@@ -342,15 +363,27 @@ final class PostgresCatalog[F[_]] private[postgres] (
       }
     }
 
+  /** A candidate discloses a proposed state: current Propose plus dataset metadata rights (ADR 002), never Accept
+    * alone. The public candidate carries no activity or source evidence, so no evidence scopes are requested; private
+    * bundle sources keep their actor-and-ReadContent restriction. A legacy catalog keeps Propose-or-Accept.
+    */
   def candidate(ctx: AccessContext, id: CandidateId): F[Either[Problem, Candidate]] =
-    run(candidateScope(ctx, uuid(id), false, Action.Propose, allowAccept = true).flatMap(pair => hydrateCandidate(pair._2)))
+    run(for
+      organized <- OrganizationSql.guard(false)
+      pair <- candidateScope(ctx, uuid(id), false, Action.Propose, allowAccept = !organized)
+      _ <- if organized then PolicySql.check(ctx, OrganizationAuthority.Request.Candidate(pair._1.id, Vector.empty)) else ().pure[ConnectionIO]
+      candidate <- hydrateCandidate(pair._2)
+    yield candidate)
 
   def receipt(ctx: AccessContext, id: CandidateId, key: IdempotencyKey): F[Either[Problem, Option[AcceptanceReceipt]]] =
     run {
       for
         row <- fetchCandidate(uuid(id))
         activity <- lift(JsonCodecs.decode[Activity](row.activity))
-        _ <- authorizeActivity(ctx, row, activity, false)
+        // Replaying a receipt reauthorizes metadata on its exact release (Request.Receipt, in priorReceipt), not Accept;
+        // private-source and processing-input restrictions still apply. A legacy catalog keeps its Accept check.
+        organized <- OrganizationSql.guard(false)
+        _ <- authorizeActivity(ctx, row, activity, false, requireAccept = !organized)
         _ <- processingInput(ctx, activity)
         receipt <- priorReceipt(ctx, row, key)
       yield receipt
@@ -411,8 +444,8 @@ final class PostgresCatalog[F[_]] private[postgres] (
       }
     }
 
-  private def authorizeActivity(ctx: AccessContext, row: CandidateRow, activity: Activity, write: Boolean): ConnectionIO[Unit] =
-    val scopes = Vector((Id[DatasetTag](row.dataset), Action.Accept, Option.empty[ReleaseId])) ++
+  private def authorizeActivity(ctx: AccessContext, row: CandidateRow, activity: Activity, write: Boolean, requireAccept: Boolean = true): ConnectionIO[Unit] =
+    val scopes = Vector((Id[DatasetTag](row.dataset), Action.Accept, Option.empty[ReleaseId])).filter(_ => requireAccept) ++
       activity.projection.toVector.map(p => if activity.kind == ActivityKind.PrivateBundle then
         (p.source.dataset, Action.ReadContent, Some(p.source.release)) else (p.source.dataset, Action.ManageAccess, Option.empty[ReleaseId])) ++
       activity.processing.toVector.map(p => (p.input.dataset, Action.ReadContent, Some(p.input.release)))

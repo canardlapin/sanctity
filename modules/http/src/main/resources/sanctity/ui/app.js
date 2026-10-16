@@ -370,7 +370,8 @@
       h('p', { class: 'small' }, [...new Set(fs.map(f => f.code))].map((c, i) => [i ? ', ' : '', h('span', { class: 'mono' }, c)]))) : null;
     return h('section', { class: 'story', 'aria-label': 'How this release was made' },
       h('p', { class: 'story-line' }, h('span', { class: 'chip' }, kindLabel(pv.kind)), h('q', {}, pv.reason),
-        h('span', { class: 'muted small' }, 'accepted by ' + who(pv.acceptedBy) + (pv.proposedBy !== pv.acceptedBy ? ' · proposed by ' + who(pv.proposedBy) : ''))),
+        // Curator identities are withheld from plain readers (null); the story then omits them.
+        pv.acceptedBy ? h('span', { class: 'muted small' }, 'accepted by ' + who(pv.acceptedBy) + (pv.proposedBy && pv.proposedBy !== pv.acceptedBy ? ' · proposed by ' + who(pv.proposedBy) : '')) : null),
       summary ? h('details', { class: 'story-more' }, h('summary', {}, summary, ch ? ' since the previous release' : ''),
         h('div', { class: 'story-grid' }, group('Added', ch && ch.added), group('Changed', ch && ch.changed), group('Removed', ch && ch.removed),
           codes('Resolved', resolved), codes('New findings', introduced))) : null);

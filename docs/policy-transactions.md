@@ -20,10 +20,12 @@ not a bounded-query or institutional-scale qualification. F03.3 owns the public
 disclosure projections and F03.4 owns continuous stream/worker admission.
 Existing repository actions, receipt retries and import renewals already pass
 through the transaction guard. The SQL matrix qualifies the trusted state/decision
-adapter, not every public projection. The receipt-read entry point still also requires
-legacy `Accept` authority, and candidate retrieval retains its legacy Propose-or-Accept
-path. F03.3 must reconcile these read surfaces with the model's metadata/evidence rules
-and uniform disclosure behavior while preserving private-source restrictions. An authorization admitted before a restrictive
+adapter, not every public projection. F03.3 reconciled the read surfaces: receipt replay
+now requires metadata on its exact release (no `Accept`), and candidate retrieval
+requires `Propose` plus dataset `ReadMetadata` (`Request.Candidate`), both keeping
+private-source restrictions. Grant inspection and access explanations project
+`datasetGrants` and `explain` under the shared guard; see the
+[HTTP reference](http-api.md). An authorization admitted before a restrictive
 transaction may finish first; subsequent admissions see the restriction.
 
 ## Supported mutation inventory

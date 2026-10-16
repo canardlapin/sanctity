@@ -170,13 +170,30 @@ Every `/v1` route requires authentication. There are no raw blob-digest, local-f
 | `POST /v1/candidates/{candidate}/accept` | Durable acceptance receipt; requires `Idempotency-Key` |
 | `POST /v1/datasets/{dataset}/grants` | Curator-controlled grant to a principal |
 | `DELETE /v1/datasets/{dataset}/grants/{grant}` | Revoke a grant |
+| `GET /v1/datasets/{dataset}/grants` | The dataset's grants with state and effective expiry; requires current `ManageAccess` |
+| `GET /v1/datasets/{dataset}/access?principal=...&permission=...[&release=...]` | Why a principal holds or lacks a permission: each basis with its expiry |
 | `POST /v1/selections` | Persist a correlated query over pinned releases |
 | `GET /v1/selections/{selection}?offset=0&limit=100` | Reauthorized, stable membership page |
 
-Metadata inspection requires `ReadMetadata`; file delivery requires both `ReadMetadata` and `ReadContent` in this profile. Fixed-release recipients can inspect their authorized release without learning or accessing the current dataset head. The public release representation omits source labels, private evidence references, retained converter files/logs and internal activity records. Curated BIDS paths and effective metadata are still part of the recipient's approved data.
+Metadata inspection requires `ReadMetadata`; file delivery requires both `ReadMetadata` and `ReadContent` in this profile. Reading a candidate requires current `Propose` and dataset `ReadMetadata`; `Accept` alone does not disclose candidates. Replaying an acceptance receipt requires metadata access to its exact release today, not `Accept`, and keeps private-source and processing-input restrictions.
+
+Grant inspection lists, for each grant: recipient, exact release (or `null` for
+future releases), actions, creation and own expiry, the effective expiry (the
+earliest of its own, a guest sponsorship's and any required appointment's), its
+basis (`independent` or `derived`) and its state (`active`, `expired`, `revoked`
+or `inactive`). It never names the issuer. An access explanation is available to
+the principal themself, or to a current access manager for a principal already known
+on that dataset. Its bases are `dataset-stewardship`, `project-role` (with role) and
+`grant` (with release and whether it is derived), each with its expiry; project
+names and issuers are omitted. Both reads need an initialized organization and
+answer every denial, unknown dataset or unknown principal with the same 404. Fixed-release recipients can inspect their authorized release without learning or accessing the current dataset head. The public release representation omits source labels, private evidence references, retained converter files/logs and internal activity records. Curated BIDS paths and effective metadata are still part of the recipient's approved data.
 
 A release's `provenance` records its curation history for callers with
-dataset-wide `ReadMetadata`; for a fixed-release recipient it is `null`:
+dataset-wide `ReadMetadata`; for a fixed-release recipient it is `null`.
+`proposedBy` and `acceptedBy` are `null` unless the caller can also propose or
+manage access on the dataset. A release's `parent` is likewise `null` unless the
+caller can read that parent release, so a fixed-release share never names another
+release:
 
 ```json
 {

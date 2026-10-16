@@ -71,10 +71,29 @@ final class RepositoryHttp[F[_]](
       for
         at <- ref(d, r)
         rel <- checked(repository.release(ctx, at))
-        // Curation history (who, why, what changed) is dataset-wide information: a fixed-release grant sees the release alone.
-        steward <- catalog.check(ctx, at.dataset, Action.ReadMetadata).map(_.isRight)
-        parent <- if steward then rel.parent.traverse(p => checked(repository.release(ctx, ReleaseRef(at.dataset, p)))) else F.pure(None)
-        res <- json(Out.release(rel, Option.when(steward)(Out.provenance(rel, parent))))
+        // Curation history (why, what changed) is dataset-wide information: a fixed-release grant sees the release alone.
+        // The parent's identity is shown only to readers of that parent; curator identities need Propose or ManageAccess.
+        readsHistory <- catalog.check(ctx, at.dataset, Action.ReadMetadata).map(_.isRight)
+        showParent <- rel.parent.fold(F.pure(false))(p => catalog.check(ctx, at.dataset, Action.ReadMetadata, Some(p)).map(_.isRight))
+        curates <- if !readsHistory then F.pure(false) else
+          catalog.check(ctx, at.dataset, Action.Propose).flatMap(r => if r.isRight then F.pure(true) else catalog.check(ctx, at.dataset, Action.ManageAccess).map(_.isRight))
+        parent <- if readsHistory && showParent then rel.parent.traverse(p => checked(repository.release(ctx, ReleaseRef(at.dataset, p)))) else F.pure(None)
+        res <- json(Out.release(rel, Option.when(readsHistory)(Out.provenance(rel, parent, curates)), showParent))
+      yield res
+    case GET -> Root / "v1" / "datasets" / d / "grants" =>
+      id[DatasetTag](d).flatMap(i => checked(catalog.grants(ctx, i))).flatMap(gs => json(Out.grants(gs)))
+    case GET -> Root / "v1" / "datasets" / d / "access" =>
+      for
+        dataset <- id[DatasetTag](d)
+        subject <- parameter(req, "principal").flatMap(id[PrincipalTag])
+        release <- req.uri.multiParams.get("release") match
+          case None => F.pure(None)
+          case Some(Seq(r)) => id[ReleaseTag](r).map(Some(_))
+          case _ => F.raiseError[Option[ReleaseId]](Failure(Problem.Unsupported("one release parameter at most")))
+        name <- parameter(req, "permission")
+        permission <- lift(OrganizationAuthority.Permission.values.find(_.toString == name).toRight(Problem.Unsupported("unknown permission")))
+        explained <- checked(catalog.explainAccess(ctx, subject, OrganizationAuthority.DataScope(dataset, release), permission))
+        res <- json(Out.explanation(explained))
       yield res
     case GET -> Root / "v1" / "datasets" / d / "releases" / r / "metadata" =>
       (ref(d, r), path(req)).tupled.flatMap((at, p) => checked(repository.explain(ctx, at, p))).flatMap(v => json(Out.metadata(v)))

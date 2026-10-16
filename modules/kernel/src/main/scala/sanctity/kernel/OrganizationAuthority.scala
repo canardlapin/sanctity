@@ -237,6 +237,25 @@ object OrganizationAuthority:
     else Right(s.links.toVector.collect { case (id, link) if id == link.id && link.project == projectId &&
       permits(s, a, Request.Data(DataScope(link.dataset), Permission.Discover), now) => link.dataset }.distinct.sortBy(_.render))
 
+  enum GrantState:
+    case Active, Expired, Revoked, Inactive
+  /** One share as its dataset's stewards see it: exact scope and actions, basis kind, current state and the effective
+    * expiry (the earliest of its own, a guest sponsorship's and any required appointment's). */
+  final case class GrantView(grant: PolicyGrant, state: GrantState, effectiveExpiresAt: Option[Instant])
+
+  /** Shares on one dataset for a current ManageAccess holder. Like revocation, listing stays possible on archived
+    * parents. The projection carries recipients (the shares being administered) but never issuer identities. */
+  def datasetGrants(s: State, viewer: PolicyAdmission, dataset: DatasetId, now: Instant): Either[Problem, Vector[GrantView]] =
+    if !admitted(s, viewer, now) || bases(s, viewer.principal, DataScope(dataset), Permission.ManageAccess, now, revocation = true).isEmpty then Left(Problem.Denied)
+    else Right(s.grants.toVector.collect { case (id, g) if id == g.id && g.scope.dataset == dataset => g }
+      .sortBy(g => (g.createdAt, g.id.render)).map { g =>
+        val state = if g.revoked then GrantState.Revoked
+          else if g.expiresAt.exists(e => !now.isBefore(e)) then GrantState.Expired
+          else if applicable(s, g, g.recipient, now) then GrantState.Active
+          else GrantState.Inactive
+        GrantView(g.copy(issuer = None), state, Option.when(state == GrantState.Active)(shareExpiry(s, g)).flatten)
+      })
+
   /** Self explanations require the requested right; others require current ManageAccess
     * and that same right. This projection never includes issuer/recipient identities,
     * private parent names, unrelated scopes or a global revision that leaks hidden changes.

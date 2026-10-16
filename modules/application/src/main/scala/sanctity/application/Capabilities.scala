@@ -62,6 +62,12 @@ trait Catalog[F[_]]:
   def check(ctx: AccessContext, dataset: DatasetId, action: Action, release: Option[ReleaseId] = None): F[Either[Problem, Unit]]
   def grant(ctx: AccessContext, dataset: DatasetId, recipient: PrincipalId, release: Option[ReleaseId], actions: Set[Action]): F[Either[Problem, Grant]]
   def revoke(ctx: AccessContext, dataset: DatasetId, grant: GrantId): F[Either[Problem, Unit]]
+  /** Shares on a dataset, for its current access managers. */
+  def grants(ctx: AccessContext, dataset: DatasetId): F[Either[Problem, Vector[OrganizationAuthority.GrantView]]]
+  /** Why `subject` holds or lacks `permission` on `scope`: the caller's own access, or a principal known on that
+    * dataset for a current access manager. Denials say nothing about other principals or hidden policy. */
+  def explainAccess(ctx: AccessContext, subject: PrincipalId, scope: OrganizationAuthority.DataScope,
+      permission: OrganizationAuthority.Permission): F[Either[Problem, OrganizationAuthority.Explanation]]
   def select(ctx: AccessContext, releases: Vector[ReleaseRef], query: ScientificQuery): F[Either[Problem, FrozenSelection]]
   def selection(ctx: AccessContext, id: SelectionId): F[Either[Problem, FrozenSelection]]
   def startRun(ctx: AccessContext, spec: RunSpec, key: IdempotencyKey): F[Either[Problem, ProcessingRun]]

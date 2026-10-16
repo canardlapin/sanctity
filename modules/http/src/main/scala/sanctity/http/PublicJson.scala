@@ -41,7 +41,7 @@ private[http] object PublicJson:
   private def kindName(k: ActivityKind): String = k.toString.replaceAll("([a-z])([A-Z])", "$1-$2").toLowerCase
   /** Curation history: what kind of change made the release, why, who proposed and accepted it, and which files
     * differ from its parent. Paths only, never digests; the activity's source label is not disclosed. */
-  def provenance(r: Release, parent: Option[Release]): Json =
+  def provenance(r: Release, parent: Option[Release], identities: Boolean): Json =
     val a = r.activity
     val changes = parent.map { p =>
       val files = p.manifest.diff(r.manifest).filter(d => (d.before.toVector ++ d.after.toVector).exists(_.isInstanceOf[Entry.File]))
@@ -49,10 +49,11 @@ private[http] object PublicJson:
       Json.obj("added" -> group(files.filter(_.before.isEmpty)), "changed" -> group(files.filter(d => d.before.nonEmpty && d.after.nonEmpty)),
         "removed" -> group(files.filter(_.after.isEmpty)))
     }
-    Json.obj("kind" -> text(kindName(a.kind)), "reason" -> text(a.reason), "proposedBy" -> text(a.actor.render),
-      "proposedAt" -> text(a.at.toString), "acceptedBy" -> text(r.acceptedBy.render), "changesFromParent" -> opt(changes)(identity))
-  def release(r: Release, provenance: Option[Json] = None): Json = Json.obj(
-    "ref" -> ref(r.ref), "parent" -> opt(r.parent)(p => text(p.render)), "manifest" -> text(r.manifest.id.value.value),
+    Json.obj("kind" -> text(kindName(a.kind)), "reason" -> text(a.reason),
+      "proposedBy" -> (if identities then text(a.actor.render) else Json.Null), "proposedAt" -> text(a.at.toString),
+      "acceptedBy" -> (if identities then text(r.acceptedBy.render) else Json.Null), "changesFromParent" -> opt(changes)(identity))
+  def release(r: Release, provenance: Option[Json] = None, showParent: Boolean = true): Json = Json.obj(
+    "ref" -> ref(r.ref), "parent" -> opt(r.parent.filter(_ => showParent))(p => text(p.render)), "manifest" -> text(r.manifest.id.value.value),
     "interpretation" -> text(r.interpretation.id.value.value), "profile" -> text(r.interpretation.profile.name),
     "coverage" -> text(r.interpretation.profile.coverage), "assessment" -> assessment(r.assessment),
     "acceptedAt" -> text(r.acceptedAt.toString), "entries" -> Json.arr(r.manifest.entries.map(entry)*),
@@ -86,6 +87,28 @@ private[http] object PublicJson:
       "changedDependencies" -> Json.arr(d.changedDependencies.map(p => text(p.value))*)))*))
   def receipt(r: AcceptanceReceipt): Json = Json.obj("ref" -> ref(r.release), "candidate" -> text(r.candidate.render),
     "key" -> text(r.key.value), "acceptedAt" -> text(r.at.toString))
+  private def instant(i: java.time.Instant): Json = text(i.toString)
+  /** A steward's grant list: recipients and exact scope/actions, never issuer identities. */
+  def grants(gs: Vector[OrganizationAuthority.GrantView]): Json = Json.obj("grants" -> Json.arr(gs.map { v =>
+    val g = v.grant
+    Json.obj("id" -> text(g.id.render), "recipient" -> text(g.recipient.render), "release" -> opt(g.scope.release)(r => text(r.render)),
+      "actions" -> Json.arr(g.actions.toVector.map(_.toString).sorted.map(text)*), "createdAt" -> instant(g.createdAt),
+      "expiresAt" -> opt(g.expiresAt)(instant), "effectiveExpiresAt" -> opt(v.effectiveExpiresAt)(instant),
+      "basis" -> text(g.basis match { case OrganizationAuthority.GrantBasis.Independent => "independent"; case _ => "derived" }),
+      "state" -> text(v.state.toString.toLowerCase))
+  }*))
+  /** Why access exists: each basis by kind with its own expiry. No issuer, parent-project name or unrelated scope. */
+  def explanation(e: OrganizationAuthority.Explanation): Json =
+    import OrganizationAuthority.Basis
+    Json.obj("dataset" -> text(e.scope.dataset.render), "release" -> opt(e.scope.release)(r => text(r.render)),
+      "permission" -> text(e.permission.toString), "allowed" -> Json.fromBoolean(e.allowed),
+      "bases" -> Json.arr(e.bases.map {
+        case Basis.Stewardship(id, _, expires) => Json.obj("kind" -> text("dataset-stewardship"), "id" -> text(id.render), "expiresAt" -> opt(expires)(instant))
+        case Basis.ProjectRole(id, role, _, expires) => Json.obj("kind" -> text("project-role"), "id" -> text(id.render),
+          "role" -> text(role.toString.toLowerCase), "expiresAt" -> opt(expires)(instant))
+        case Basis.Share(id, scope, _, expires, derived) => Json.obj("kind" -> text("grant"), "id" -> text(id.render),
+          "release" -> opt(scope.release)(r => text(r.render)), "derived" -> Json.fromBoolean(derived), "expiresAt" -> opt(expires)(instant))
+      }*))
   def grant(g: Grant): Json = Json.obj("id" -> text(g.id.render), "dataset" -> text(g.dataset.render),
     "recipient" -> text(g.recipient.render), "release" -> opt(g.release)(r => text(r.render)),
     "actions" -> Json.arr(g.actions.toVector.map(_.toString).sorted.map(text)*))
