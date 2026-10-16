@@ -794,7 +794,10 @@
       ['Edit', 'Review preview', 'Accepted'].map((t, i) => h('li', { 'data-state': i + 1 < step ? 'done' : i + 1 === step ? 'current' : 'todo', 'aria-current': i + 1 === step ? 'step' : null },
         h('span', { class: 'n', 'aria-hidden': 'true' }, i + 1 < step ? I.check() : String(i + 1)), h('span', { class: 't' }, t))));
     const head = h('div', { class: 'page-head' }, h('div', { class: 'stack s10' },
-      h('div', { class: 'crumbs' }, h('a', { href: relHash(d, r, c.path ? { path: c.path } : null) }, 'Release ', short(r)), I.chev(), h('span', {}, 'Correction')),
+      // Once accepted, the page belongs to the new head: the crumb leads there, not back to the release it replaced.
+      h('div', { class: 'crumbs' }, c.receipt
+        ? h('a', { href: relHash(d, c.receipt.ref.release, c.path ? { path: c.path } : null) }, 'Release ', short(c.receipt.ref.release), ' (new head)')
+        : h('a', { href: relHash(d, r, c.path ? { path: c.path } : null) }, 'Release ', short(r)), I.chev(), h('span', {}, 'Correction')),
       h('h1', {}, c.path ? (c.newMode ? 'Add ' : 'Correct ') + c.path.split('/').pop() : 'Propose a correction'),
       h('p', { class: 'lead' }, 'Prepared against this exact release and assessed like any import. It becomes the dataset head only when someone with accept authority accepts it.')));
     const staleNote = c.stale ? h('div', { class: 'notice warn row between' }, h('span', {}, 'Release ' + short(r) + ' is not the current dataset head, so a correction prepared here could not be accepted.'),
@@ -874,7 +877,8 @@
         h('p', {}, h('b', {}, 'Suggested fix for ', h('span', { class: 'mono' }, fx.code), '. '),
           fx.set ? [fx.add ? 'Adds this sidecar for this run only, setting ' : 'Sets ', h('span', { class: 'mono' }, field), ' to ', valueNode(field, fx.set[field]),
             ', ' + fx.basis + (fx.was != null ? '; the authored value is ' : '.'), fx.was != null ? [valueNode(field, fx.was), '.'] : null]
-            : fx.rows.length ? 'Rows ' + listPositions(fx.rows) + ' are flagged; the first is selected in the editor.' : 'Edit the document and prepare the preview.'),
+            : fx.rows.length > 1 ? 'Rows ' + listPositions(fx.rows) + ' are flagged; the first is selected in the editor.'
+            : fx.rows.length ? 'Row ' + fx.rows[0] + ' is flagged and selected in the editor.' : 'Edit the document and prepare the preview.'),
         fx.set ? h('p', { class: 'small' }, 'Check the value against the acquisition record before preparing the preview; nothing changes until the candidate is accepted.') : null));
     };
     // Select the first flagged row of a table so the edit starts where the finding points.
@@ -957,7 +961,8 @@
         draftNote,
         err = h('div', { class: 'stack', id: 'c-errors' }),
         h('div', { class: 'row end' },
-          h('a', { class: 'btn ghost', href: c.back || relHash(d, r, c.path && !c.newMode ? { path: c.path } : null) }, 'Cancel'),
+          // Cancelling a Fix discards its prepared draft, so the same document opened later starts from its current content.
+          h('a', { class: 'btn ghost', href: c.back || relHash(d, r, c.path && !c.newMode ? { path: c.path } : null), onclick: () => { if (c.fix) state.correction = null; } }, 'Cancel'),
           submitBtn = h('button', { class: 'btn primary', type: 'submit', disabled: c.stale }, 'Prepare preview'))),
       h('aside', { class: 'stack s14 explainer' },
         h('h2', { class: 'overline' }, 'What happens next'),
@@ -1110,6 +1115,12 @@
     const inert = !byPath.size && p.contentChanges.some(x => !x.before && x.path.endsWith('.json'));
     const val = (name, f) => f ? h('span', { class: 'stack s2' }, valueNode(name, f.value), h('span', { class: 'origin' }, 'from ', h('span', { class: 'mono' }, pathText(f.origin)))) : h('span', { class: 'none' }, 'absent');
     c.firstAffected = p.metadataChanges.length ? p.metadataChanges[0].path : null;
+    // What the receipt restates once accepted: the document, the values or rows that changed, and the findings it cleared.
+    const edited = c.original != null ? lineDiff(c.original, c.text) : null;
+    c.summary = { path: c.path, added: !!c.newMode || c.original === '', kind: c.newMode ? 'json' : docKind(c.path) || 'json',
+      rows: edited ? edited.filter(([op]) => op === '+').length : null,
+      groups: groupChanges(byPath).map(([paths, fs]) => ({ files: paths.length, fields: fs.map(f => ({ name: f.name, before: f.before && f.before.value, after: f.after && f.after.value })) })),
+      cleared: [...new Set(resolved.filter(f => outcome(f) !== 'Not evaluated').map(f => f.code))], fresh: a.findings.filter(f => !before.has(findingKey(f))).length };
     const kind = c.newMode ? 'json' : docKind(c.path) || 'json';
     const diff = c.original != null ? lineDiff(c.original, c.text) : null;
     let keys = []; if (kind === 'json') try { keys = Object.keys(JSON.parse(c.text)); } catch { /* validated earlier */ }
@@ -1170,13 +1181,7 @@
       h('aside', { class: 'card pad stack s16 sticky decision' },
         h('h2', {}, 'Candidate'),
         a.admissible ? h('span', { class: 'seal ok' }, I.seal(), 'Admissible') : h('span', { class: 'seal err' }, I.stop(), 'Not admissible'),
-        h('dl', { class: 'receipt' }, h('dt', {}, 'Candidate'), h('dd', {}, hashChip(cand.id, 'candidate id', true)),
-          h('dt', {}, 'Base release'), h('dd', {}, hashChip(cand.base || r, 'base release')),
-          h('dt', {}, 'Generation'), h('dd', {}, String(cand.generation)), h('dt', {}, 'Reason'), h('dd', {}, c.reason),
-          h('dt', {}, 'Manifest'), h('dd', {}, hashChip(cand.manifest, 'manifest digest')),
-          h('dt', {}, 'Interpretation'), h('dd', {}, hashChip(cand.interpretation, 'interpretation digest')),
-          h('dt', {}, 'Assessment'), h('dd', {}, hashChip(a.id, 'assessment digest')),
-          h('dt', {}, 'Retry key'), h('dd', {}, hashChip(c.key, 'idempotency key'))),
+        h('dl', { class: 'receipt' }, h('dt', {}, 'Reason'), h('dd', {}, c.reason), h('dt', {}, 'Against'), h('dd', {}, 'Release ', short(cand.base || r))),
         h('p', { class: 'finding-summary small' }, a.findings.length || resolved.length
           ? [h('b', {}, String(fresh)), ' new, ', h('b', {}, String(a.findings.length - fresh)), ' unchanged, ', h('b', {}, String(resolved.length)), ' no longer reported. Details below.']
           : 'No findings before or after this change.'),
@@ -1187,28 +1192,53 @@
           h('button', { class: 'btn ghost', type: 'button', onclick: () => { c.preview = null; c.key = uuid(); focusKey = 'c-text'; render(); } }, 'Back to edit')),
         h('p', { class: 'small muted' }, blocked ? 'Errors block acceptance. Edit the ' + DOC[kind][0] + ' and prepare again.' : 'Requires accept authority. Retrying with the same key is safe.'),
         ...findingSections.map(([title, fs, label, why, checks]) => fs.length ? h('div', { class: 'stack s8' }, h('h3', { class: 'overline' }, title), findingList(fs, true, null, label, why, keyFacts(checks))) : null),
-        a.findings.length || resolved.length ? null : h('p', { class: 'small muted' }, 'No findings.')));
+        a.findings.length || resolved.length ? null : h('p', { class: 'small muted' }, 'No findings.'),
+        h('details', { class: 'tech' }, h('summary', {}, 'Technical details'),
+          h('dl', { class: 'receipt' }, h('dt', {}, 'Candidate'), h('dd', {}, hashChip(cand.id, 'candidate id', true)),
+            h('dt', {}, 'Base release'), h('dd', {}, hashChip(cand.base || r, 'base release')),
+            h('dt', {}, 'Generation'), h('dd', {}, String(cand.generation)),
+            h('dt', {}, 'Manifest'), h('dd', {}, hashChip(cand.manifest, 'manifest digest')),
+            h('dt', {}, 'Interpretation'), h('dd', {}, hashChip(cand.interpretation, 'interpretation digest')),
+            h('dt', {}, 'Assessment'), h('dd', {}, hashChip(a.id, 'assessment digest')),
+            h('dt', {}, 'Retry key'), h('dd', {}, hashChip(c.key, 'idempotency key'))))));
   }
 
   function receiptCard(d, c) {
     const rc = c.receipt, cand = c.preview && c.preview.candidate;
     const verify = h('dl', { class: 'receipt verify' }, h('dt', {}, 'Identity'), h('dd', { class: 'muted' }, 'Checking the new release…'));
+    const techSummary = h('summary', {}, 'Technical details'), mismatch = h('div', {});
     if (cand) getRelease(d, rc.ref.release).then(rel => {
       const rows = [['Manifest', rel.manifest, cand.manifest], ['Interpretation', rel.interpretation, cand.interpretation], ['Assessment', rel.assessment.id, cand.assessment.id]];
       verify.replaceChildren(...rows.flatMap(([k, got, want]) => [h('dt', {}, k), h('dd', { class: 'row' }, hashChip(got, k.toLowerCase() + ' digest'),
         got === want ? h('span', { class: 'chip ok' }, I.check(), 'Matches preview') : h('span', { class: 'chip err' }, 'Differs from preview ', shortDigest(want)))]));
       const okAll = rows.every(([, got, want]) => got === want);
+      techSummary.replaceChildren('Technical details', h('span', { class: 'muted' }, okAll ? ' · identity matches the preview' : ''));
+      if (!okAll) mismatch.replaceChildren(h('p', { class: 'notice err', role: 'alert' }, 'The new release identity differs from the preview. Open Technical details to compare digests.'));
       announce(okAll ? 'New release identity matches the preview.' : 'Warning: the new release identity differs from the preview.');
     }).catch(e => verify.replaceChildren(h('dt', {}, 'Identity'), h('dd', { class: 'muted' }, explain(e))));
+    const sm = c.summary;
+    const changed = sm ? h('ul', { class: 'accepted-change plain stack s6' },
+      h('li', {}, sm.added ? 'Added ' : 'Edited ', h('span', { class: 'mono' }, pathText(sm.path))),
+      sm.kind !== 'json' && sm.rows ? h('li', {}, plural(sm.rows, sm.kind === 'table' ? 'row' : 'line') + ' changed') : null,
+      sm.groups.map(g => h('li', {}, g.fields.map((f, i) => [i ? '; ' : '', h('b', {}, f.name), ' ',
+        f.before === undefined || f.before === null ? 'set to ' : [valueNode(f.name, f.before), ' → '], f.after === undefined || f.after === null ? 'removed' : valueNode(f.name, f.after)]),
+        ' in ' + plural(g.files, 'file'))),
+      sm.cleared.length ? h('li', {}, 'No longer reported: ', sm.cleared.map((x, i) => [i ? ', ' : '', h('span', { class: 'mono' }, x)])) : null,
+      sm.fresh ? h('li', {}, plural(sm.fresh, 'new warning') + ' recorded') : null) : null;
     return h('section', { class: 'card pad stack s18 measure' },
       h('span', { class: 'seal ok' }, I.seal(), 'Accepted'),
       h('h2', { tabindex: '-1', fk: 'receipt-head' }, 'A new release is now the dataset head'),
+      changed,
       h('dl', { class: 'receipt' },
         h('dt', {}, 'Release'), h('dd', {}, hashChip(rc.ref.release, 'release id', true)),
-        h('dt', {}, 'Candidate'), h('dd', {}, hashChip(rc.candidate, 'candidate id', true)),
         h('dt', {}, 'Accepted'), h('dd', {}, when(rc.acceptedAt)),
-        h('dt', {}, 'Retry key'), h('dd', {}, hashChip(rc.key, 'idempotency key'))),
-      h('h3', { class: 'overline' }, 'New release identity'), verify,
+        c.reason ? [h('dt', {}, 'Reason'), h('dd', {}, c.reason)] : null),
+      mismatch,
+      h('details', { class: 'tech' }, techSummary,
+        h('dl', { class: 'receipt' },
+          h('dt', {}, 'Candidate'), h('dd', {}, hashChip(rc.candidate, 'candidate id', true)),
+          h('dt', {}, 'Retry key'), h('dd', {}, hashChip(rc.key, 'idempotency key'))),
+        h('h3', { class: 'overline' }, 'New release identity'), verify),
       h('div', { class: 'row' }, h('a', { class: 'btn primary', href: relHash(d, rc.ref.release, c.firstAffected || c.path ? { path: c.firstAffected || c.path } : null), onclick: () => { state.correction = null; } }, 'Open new release')));
   }
 

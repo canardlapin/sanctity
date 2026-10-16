@@ -573,6 +573,37 @@ const DS = 'b7e3c1d2-5a4f-4e8b-9c21-6f0a3d9e8b14', R3 = '9d4b2e61-7a3c-4f18-a5d9
       done(st.entries === 1 && /^4 files with the same change/.test(st.summary) && st.files.length === 4 && st.files.every(f => /_task-nback_run-1_bold\.nii\.gz$/.test(f)) && st.rows === 1 && st.chip === '4 files affected',
         JSON.stringify({ ...st, files: st.files.length }));
     });
+    // 67. The Candidate panel leads with the decision; identifiers sit in a closed Technical details after it.
+    await guarded('candidate-identifiers-folded', async (o, done) => {
+      const [, p] = await o(`#/d/${DS}/r/${R3}/correct?path=task-nback_bold.json`); await loaded(p);
+      await p.fill('#c-text', (await p.inputValue('#c-text')).replace('"FlipAngle": 52', '"FlipAngle": 60')); await prepare(p, 'probe: protocol flip angle');
+      const st = await p.evaluate(() => { const aside = document.querySelector('.decision'), tech = aside.querySelector('details.tech'), acc = aside.querySelector('[data-fk="accept"]');
+        return { tech: !!tech, closed: tech && !tech.open, chipsInside: tech ? tech.querySelectorAll('.hash, code, .chip, [title]').length : 0,
+          outside: [...aside.querySelectorAll('dl.receipt dt')].filter(dt => !tech.contains(dt)).map(dt => dt.textContent),
+          order: tech ? !!(acc.compareDocumentPosition(tech) & Node.DOCUMENT_POSITION_FOLLOWING) : false, reason: /probe: protocol flip angle/.test(aside.textContent) }; });
+      done(st.tech && st.closed && st.outside.join() === 'Reason,Against' && st.order && st.reason, JSON.stringify(st));
+    });
+    // 68. The receipt restates the accepted change and its crumb leads to the new head.
+    await guarded('receipt-restates-change', async (o, done) => {
+      const [, p] = await o(`#/d/${DS}/r/${R3}/correct?path=task-nback_bold.json`); await loaded(p);
+      await p.fill('#c-text', (await p.inputValue('#c-text')).replace('"FlipAngle": 52', '"FlipAngle": 60')); await prepare(p, 'probe: protocol flip angle');
+      await p.click('[data-fk="accept"]'); await p.waitForSelector('[data-fk="receipt-head"]', { timeout: 5000 });
+      await p.waitForFunction(() => /identity matches the preview/.test((document.querySelector('details.tech summary') || {}).textContent || ''), null, { timeout: 5000 });
+      const st = await p.evaluate(() => { const rel = document.querySelector('.receipt dd .hash, .receipt dd [title]'), crumb = document.querySelector('.crumbs a');
+        return { change: document.querySelector('.accepted-change').innerText.replace(/\s+/g, ' '), crumb: crumb.textContent, href: crumb.getAttribute('href'),
+          tech: !document.querySelector('details.tech').open, alert: !!document.querySelector('main [role=alert]') }; });
+      done(/Edited task-nback_bold\.json/.test(st.change) && /FlipAngle 52 ?° → 60 ?° in 4 files/.test(st.change) && /\(new head\)$/.test(st.crumb)
+        && !st.href.includes(R3) && st.tech && !st.alert, JSON.stringify(st));
+    });
+    // 69. A table fix accepted in the demo: the receipt counts changed rows and names the cleared finding.
+    await guarded('receipt-table-change', async (o, done) => {
+      const [, p] = await o(assessAt); await p.waitForSelector('button.fix', { timeout: 5000 });
+      await p.click('button.fix[aria-label$="events.tsv"]'); await loaded(p);
+      await editRows(p, { 50: l => l.replace('405.75', '399.0'), 51: l => l.replace('406.5', '400.0') });
+      await prepare(p, 'probe: log sheet onsets'); await p.click('[data-fk="accept"]'); await p.waitForSelector('[data-fk="receipt-head"]', { timeout: 5000 });
+      const change = await p.evaluate(() => document.querySelector('.accepted-change').innerText.replace(/\s+/g, ' '));
+      done(/Edited sub-03\/func\/sub-03_task-nback_run-1_events\.tsv/.test(change) && /2 rows changed/.test(change) && /No longer reported: EventsOutsideWindow/.test(change), change);
+    });
   } finally { await b.close(); }
   console.log(`behaviour failures: ${bad}`);
   process.exitCode = bad ? 1 : 0;

@@ -63,7 +63,8 @@ const postV4gAssertions = [
   'companion-correction-offered', 'table-tab-separator', 'table-width-refused', 'table-correction-accepted', 'table-blocked-row-marked',
   'beh-correction-checked', 'gradient-correction-checked', 'table-carried-no-lost-update', 'table-preview-mobile',
   'policy-unknown-revoke', 'policy-pending-grant',
-  'fix-offered-where-editable', 'fix-tr-suggests-sidecar', 'fix-events-selects-row', 'fix-in-inspector-head-only', 'metadata-changes-grouped'
+  'fix-offered-where-editable', 'fix-tr-suggests-sidecar', 'fix-events-selects-row', 'fix-in-inspector-head-only', 'metadata-changes-grouped',
+  'candidate-identifiers-folded', 'receipt-restates-change', 'receipt-table-change'
 ];
 const assertionCount = 59 + postV4gAssertions.length;
 const checks = {};

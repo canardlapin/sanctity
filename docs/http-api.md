@@ -17,12 +17,13 @@ dependencies, builds specimens from current UI sources and writes logs plus a
 source-hashed receipt under `target/console-check.*/`. The original
 [review evidence](evidence/console/recovery-manifest.json) remains unchanged.
 These checks use synthetic fixtures; the PostgreSQL runner separately executes
-ConsoleSuite against the real HTTP/backend contracts. Sixteen later probes cover
+ConsoleSuite against the real HTTP/backend contracts. Nineteen later probes cover
 event, behavioural and DWI gradient corrections (row-level preview, blocked rows,
 tab entry, lost-update protection), unconfirmed `policy_pending` /
 `policy_outcome_unknown` grant and revoke outcomes, fixing a finding from where it
-is reported, and grouped metadata changes in the preview. The v4f build predates
-these features, so the receipt records their v4f outcomes without requiring them.
+is reported, grouped metadata changes, folded identifiers and a receipt that
+restates the accepted change. The v4f build predates these features, so the
+receipt records their v4f outcomes without requiring them.
 
 Run `bash scripts/check-console-backend.sh` for the complete browser-to-backend
 rehearsal. It requires Docker, Node and the existing Java/sbt build prerequisites;
@@ -34,9 +35,10 @@ browser runner over stdin. The rehearsal uses normal API requests and production
 CSP, with no demo transport or request interception.
 
 The scenarios cover authentication errors, metadata/relationships, subject-level
-sidecar acceptance, a frozen age query, conflicting edits by two principals, a
-blocked and then accepted events-table correction, fixed-release sharing and
-revocation. After the browser and HTTP server close,
+sidecar acceptance (after checking that Fix on the real TR finding proposes the
+run sidecar), a frozen age query, conflicting edits by two principals, an
+events-table correction started from Fix on the real finding (blocked, then
+accepted), fixed-release sharing and revocation. After the browser and HTTP server close,
 independent SQL checks verify the dataset head, five releases and acceptance
 receipts, frozen selection and revoked grant. Screenshots, redacted logs, source
 hashes and results go under `target/console-backend.*/`. The test schema, temporary

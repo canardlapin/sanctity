@@ -133,6 +133,17 @@ const accept = async (page, status = 200) => {
     check(stage, 'Real imported NIfTI header reports 2 s against authored TR 1.5 s, with recorded fieldmap relationships.');
 
     stage = 'subject-sidecar';
+    // Fix on the real TR finding proposes the run's own sidecar from the backend's recorded header spacing.
+    const runSidecar = runPath.replace(/\.nii(\.gz)?$/, '.json');
+    await owner.locator('.inspector button.fix').click();
+    await until(async () => (await owner.locator('#c-text').inputValue()).includes('RepetitionTime'), 'Fix did not prepare the run sidecar');
+    assert.equal(await owner.locator('#c-new').inputValue(), runSidecar);
+    assert.equal(JSON.parse(await owner.locator('#c-text').inputValue()).RepetitionTime, 2);
+    assert.match(await owner.locator('.fix-note').innerText(), /header volume spacing; the authored value is 1\.5\s*s/);
+    assert.equal(await owner.locator('#c-reason').inputValue(), '');
+    await owner.getByRole('link', { name: 'Cancel', exact: true }).click();
+    await owner.locator('.inspector .fieldrow').first().waitFor();
+    // This stage then corrects the whole subject instead, with a subject-level sidecar that BIDS inheritance applies.
     await owner.getByRole('link', { name: 'Add sidecar', exact: true }).click();
     await owner.locator('#c-new').fill(subjectPath);
     await owner.locator('#c-text').fill('{"RepetitionTime":2.0}');
@@ -211,9 +222,16 @@ const accept = async (page, status = 200) => {
     // Sub-01's events run past the 18 s window (12 volumes at 1.5 s): the real backend re-checks a corrected table.
     const eventsPath = 'sub-01/func/sub-01_task-nback_run-1_events.tsv';
     await owner.setViewportSize({ width: 1440, height: 900 });
-    await owner.goto(config.baseUrl + '/' + `#/d/${config.dataset}/r/${persisted.head}/correct?path=${encodeURIComponent(eventsPath)}`);
+    // Start where a curator sees the problem: the Assessment tab's Fix on the real finding.
+    await owner.goto(config.baseUrl + '/' + `#/d/${config.dataset}/r/${persisted.head}?tab=assessment`);
+    await owner.locator(`button.fix[aria-label="Fix: edit ${eventsPath}"]`).click();
     await until(async () => (await owner.locator('#c-text').inputValue()).startsWith('onset\t'), 'Editor did not load the real events table');
     const table = await owner.locator('#c-text').inputValue();
+    const flagged = await owner.evaluate(() => { const t = document.querySelector('#c-text'); return { line: t.value.slice(0, t.selectionStart).split('\n').length, focus: document.activeElement.id }; });
+    const flaggedRows = (await owner.locator('.fix-note').innerText()).match(/Rows? ([\d, ]+) (?:are|is) flagged/);
+    assert(flaggedRows, 'Fix did not name the flagged rows');
+    assert.equal(flagged.line, Number(flaggedRows[1].split(',')[0]));
+    assert.equal(flagged.focus, 'c-text');
     const prepareTable = async (text, reason) => {
       await owner.locator('#c-text').fill(text); await owner.locator('#c-reason').fill(reason);
       const pending = owner.waitForResponse(r => r.request().method() === 'POST' && r.url().endsWith('/corrections'));

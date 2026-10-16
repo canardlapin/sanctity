@@ -357,6 +357,11 @@ table.data.compact td, table.data.compact th { padding: 6px 10px; }
 .change-files summary { cursor: pointer; font-size: 13px; color: var(--ink-2); width: fit-content; }
 .change-files[open] summary { margin-bottom: 6px; }
 .change-files ul { display: grid; gap: 2px; }
+details.tech { border-top: 1px solid var(--rule); padding-top: 12px; }
+details.tech summary { cursor: pointer; font-size: 13px; color: var(--ink-2); width: fit-content; }
+details.tech[open] summary { margin-bottom: 10px; }
+details.tech .overline { margin-top: 12px; }
+.accepted-change li { font-size: 15px; }
 .change-fields { display: grid; gap: 6px; }
 .change-row { display: grid; grid-template-columns: minmax(120px, 170px) minmax(0, 1fr) auto minmax(0, 1fr); gap: 12px; align-items: start; }
 .change-row .k { font-weight: 600; font-size: 13.5px; }
