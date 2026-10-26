@@ -203,9 +203,9 @@ final class PostgresCatalog[F[_]] private[postgres] (
       yield result
     }}
 
-  private def runAuthority(ctx: AccessContext, spec: RunSpec, source: Boolean): ConnectionIO[Unit] =
+  private def runAuthority(ctx: AccessContext, spec: RunSpec, source: Boolean, write: Boolean = true): ConnectionIO[Unit] =
     authorizeScopes(ctx, Vector((spec.destination, Action.Propose, Option.empty[ReleaseId])) ++
-      (if source then Vector((spec.input.dataset, Action.ReadContent, Some(spec.input.release))) else Vector.empty), true)
+      (if source then Vector((spec.input.dataset, Action.ReadContent, Some(spec.input.release))) else Vector.empty), write)
 
   private def loadRun(ctx: AccessContext, id: RunId, lock: Boolean): ConnectionIO[ProcessingRun] =
     (fr"SELECT payload::text FROM processing_run WHERE id=${uuid(id)} AND owner=${uuid(ctx.principal)}" ++
@@ -215,7 +215,9 @@ final class PostgresCatalog[F[_]] private[postgres] (
   def readRun(ctx: AccessContext, id: RunId): F[Either[Problem, ProcessingRun]] = run {
     for
       record <- loadRun(ctx, id, false)
-      _ <- runAuthority(ctx, record.spec, false)
+      // Status, log and output projections disclose the input's parameters and paths;
+      // starting a run is not perpetual access, so current input authority is rechecked.
+      _ <- runAuthority(ctx, record.spec, true, false)
     yield record
   }
 

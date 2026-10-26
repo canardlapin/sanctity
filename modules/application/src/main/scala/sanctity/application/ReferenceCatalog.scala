@@ -88,7 +88,9 @@ final class ReferenceCatalog[F[_]] private (
       result.fold(p => s -> Left(p), r => s.copy(runs = s.runs.updated(r.id, r)) -> Right(r))
     }}
 
-  def readRun(ctx: AccessContext, id: RunId): F[Either[Problem, ProcessingRun]] = state.get.map(s => authorizedRun(s, ctx, id))
+  def readRun(ctx: AccessContext, id: RunId): F[Either[Problem, ProcessingRun]] = state.get.map { s =>
+    authorizedRun(s, ctx, id).flatTap(r => authorized(s, ctx, r.spec.input.dataset, Action.ReadContent, Some(r.spec.input.release)))
+  }
 
   def completedRun(ctx: AccessContext, id: RunId): F[Either[Problem, ProcessingRun]] = state.get.map { s =>
     for

@@ -182,3 +182,42 @@ final class ProcessingRecoverySuite extends FunSuite:
       yield ()
     }.unsafeRunSync()
   }
+
+  test("run status reads recheck current input authority; starting a run is not perpetual access") {
+    PostgresFixture.resource.use { f =>
+      val s = f.system
+      val ids = IdSource.random[IO]
+      val inputs = new ProcessingInputs[IO](s.catalog, s.repository,
+        new ScientificViews[IO](s.catalog, s.store, s.repository, new MriViewCompiler, ids), new MriInputPlanner)
+      val readSource = Set(Action.ReadMetadata, Action.ReadContent)
+      for
+        imported <- checked(s.repository.importNative(s.context, s.dataset.id, new NativeDirectorySource[IO](f.root.resolve("source"))))
+        original <- checked(s.repository.accept(s.context, imported.candidate.id, key("source")))
+        researcher <- ids.next[PrincipalTag].map(AccessContext(_))
+        sourceGrant <- checked(s.catalog.grant(s.context, s.dataset.id, researcher.principal, Some(original.release.release), readSource))
+        selection <- checked(s.catalog.select(researcher, Vector(original.release), ScientificQuery(artifacts = ArtifactPredicate.All(
+          Vector(ArtifactPredicate.Suffix("bold"), ArtifactPredicate.Entity("sub", "01"))))))
+        inputDataset <- s.repository.create(researcher, s.dataset.custodian)
+        prepared <- checked(inputs.preparePrivate(researcher, original.release, selection.id, inputDataset.id,
+          DisclosureProfile(Set.empty, Set("TaskName", "RepetitionTime")), MriInputPlanner.Contract))
+        bundle <- checked(s.repository.accept(researcher, prepared.candidate.id, key("private")))
+        destination <- s.repository.create(s.context, s.dataset.custodian)
+        _ <- checked(s.catalog.grant(s.context, destination.id, researcher.principal, None, Set(Action.ReadMetadata, Action.Propose)))
+        spec = RunSpec(bundle.release, prepared.candidate.activity.bundle.get.id, destination.id, None, MriInputPlanner.Contract)
+        started <- checked(s.catalog.startRun(researcher, spec, key("status-run")))
+        visible <- checked(s.catalog.readRun(researcher, started.id))
+        _ = assertEquals(visible, started)
+        _ <- checked(s.catalog.revoke(s.context, s.dataset.id, sourceGrant.id))
+        status <- s.catalog.readRun(researcher, started.id)
+        _ = assertEquals(status, Left(Problem.Denied))
+        completed <- s.catalog.completedRun(researcher, started.id)
+        _ = assertEquals(completed, Left(Problem.Denied))
+        unknown <- ids.next[RunTag]
+        missing <- s.catalog.readRun(researcher, unknown)
+        _ = assertEquals(status, missing)
+        _ <- checked(s.catalog.grant(s.context, s.dataset.id, researcher.principal, Some(original.release.release), readSource))
+        restored <- checked(s.catalog.readRun(researcher, started.id))
+        _ = assertEquals(restored, started)
+      yield ()
+    }.unsafeRunSync()
+  }
