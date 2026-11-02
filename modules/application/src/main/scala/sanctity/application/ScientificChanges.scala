@@ -98,11 +98,13 @@ final class ScientificChanges[F[_]: Async](
       _ <- Checked.lift[F, Unit](Either.cond(plan.id == expectedPlan, (), Problem.Conflict("the inspected change plan differs; inspect a fresh plan")))
       dataset <- catalog.dataset(ctx, base.dataset).flatMap(Checked.lift[F, Dataset])
       _ <- Checked.lift[F, Unit](Either.cond(dataset.head.contains(base.release), (), Problem.Conflict("the dataset head changed; plan against the new release")))
+      authorize = catalog.check(ctx, base.dataset, Action.ReadContent, Some(base.release)).flatMap(Checked.lift[F, Unit]) *>
+        catalog.check(ctx, base.dataset, Action.Propose).flatMap(Checked.lift[F, Unit])
       _ <- plan.repairs.traverse_ { repair =>
-        store.put(Stream.emits(repair.bytes).covary[F]).flatMap(blob => Checked.lift[F, Unit](
+        store.put(CurrentAuthority.bytes(Stream.emits(repair.bytes).covary[F], authorize)).flatMap(blob => Checked.lift[F, Unit](
           Either.cond(blob == repair.blob, (), Problem.Integrity("stored repair differs from the inspected plan"))))
       }
-      evidence <- store.put(Stream.emits(plan.receipt.getBytes(StandardCharsets.UTF_8)).covary[F])
+      evidence <- store.put(CurrentAuthority.bytes(Stream.emits(plan.receipt.getBytes(StandardCharsets.UTF_8)).covary[F], authorize))
       now <- Clock[F].realTimeInstant
       draft <- catalog.draft(ctx, base.dataset, Some(base.release), plan.manifest,
         Activity(ActivityKind.ScientificChange, ctx.principal, reason, Some(compiler.identity), now, evidence = Some(evidence),

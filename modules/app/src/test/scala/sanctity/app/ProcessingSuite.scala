@@ -41,6 +41,35 @@ abstract class CatalogProcessingSuite extends CatalogGeneratedQuerySuite:
     receipt.expected.traverse_(f => checked(submissions(s).collectStaged(ctx, draft.id, f.path))) *>
       checked(submissions(s).prepare(ctx, draft.id))
 
+  test("worker heartbeat fails a revoked run and restoration does not restart it") {
+    fixture { (s, root) =>
+      for
+        source <- accepted(s, root)
+        input <- bundle(s, source)
+        destination <- s.repository.create(s.context, s.dataset.custodian)
+        principal <- IdSource.random[IO].next[PrincipalTag]
+        owner = AccessContext(principal)
+        grant <- checked(s.catalog.grant(s.context, input.ref.dataset, principal, Some(input.ref.release), Set(Action.ReadMetadata, Action.ReadContent)))
+        _ <- checked(s.catalog.grant(s.context, destination.id, principal, None, Set(Action.ReadMetadata, Action.Propose)))
+        spec = RunSpec(input.ref, input.activity.bundle.get.id, destination.id, None, MriInputPlanner.Contract)
+        run <- checked(s.catalog.startRun(owner, spec, key("heartbeat-parity")))
+        _ <- checked(s.catalog.advanceRun(owner, run.id, 0, RunUpdate(RunStatus.Preparing)))
+        _ <- checked(s.catalog.heartbeatRun(owner, run.id))
+        _ <- checked(s.catalog.revoke(s.context, input.ref.dataset, grant.id))
+        refused <- s.catalog.heartbeatRun(owner, run.id)
+        unknown <- IdSource.random[IO].next[RunTag].flatMap(s.catalog.heartbeatRun(owner, _))
+        _ = assertEquals(refused, Left(Problem.Denied))
+        _ = assertEquals(unknown, refused)
+        _ <- checked(s.catalog.grant(s.context, input.ref.dataset, principal, Some(input.ref.release), Set(Action.ReadMetadata, Action.ReadContent)))
+        failed <- checked(s.catalog.readRun(owner, run.id))
+        _ = assertEquals(failed.status, RunStatus.Failed)
+        _ = assert(failed.result.isEmpty)
+        retry <- s.catalog.heartbeatRun(owner, run.id)
+        _ = assert(retry.isLeft)
+      yield ()
+    }
+  }
+
   test("accepted content can be unready for a pinned processing contract") {
     fixture { (s, root) =>
       for

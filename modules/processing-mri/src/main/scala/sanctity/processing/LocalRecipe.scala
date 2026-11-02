@@ -7,4 +7,4 @@ import java.nio.file.Path
 trait LocalRecipe[F[_]]:
   def supports(contract: InputContract): Boolean
   private[processing] def produceTracked(ctx: AccessContext, input: ReleaseRef, workspace: Path,
-      run: Option[RunId], beforeLaunch: ExecutionEvidence => F[Unit]): F[Either[Problem, ProcessingEvidence]]
+      run: Option[RunId], beforeLaunch: ExecutionEvidence => F[Unit], admit: Option[F[Unit]] = None): F[Either[Problem, ProcessingEvidence]]

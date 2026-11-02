@@ -100,6 +100,21 @@ final class ReferenceCatalog[F[_]] private (
     yield r
   }
 
+  def heartbeatRun(ctx: AccessContext, id: RunId): F[Either[Problem, Unit]] = state.modify { s =>
+    s.runs.get(id).filter(_.owner == ctx.principal) match
+      case None => s -> Left(Problem.Denied)
+      case Some(r) =>
+        val allowed = authorizedRun(s, ctx, id).flatMap(_ =>
+          authorized(s, ctx, r.spec.input.dataset, Action.ReadContent, Some(r.spec.input.release))).void
+        allowed match
+          case Left(Problem.Denied) if Set(RunStatus.Preparing, RunStatus.Executing)(r.status) =>
+            val failed = r.advance(RunUpdate(RunStatus.Failed, r.execution, detail = Some("Execution authority withdrawn")))
+            failed.fold(p => s -> Left(p), next => s.copy(runs = s.runs.updated(id, next)) -> Left(Problem.Denied))
+          case Left(p) => s -> Left(p)
+          case Right(_) => s -> Either.cond(Set(RunStatus.Preparing, RunStatus.Executing, RunStatus.Completed)(r.status),
+            (), Problem.Conflict("run is no longer executable"))
+  }
+
   def advanceRun(ctx: AccessContext, id: RunId, generation: Long, update: RunUpdate): F[Either[Problem, ProcessingRun]] =
     state.modify { s =>
       val result = for

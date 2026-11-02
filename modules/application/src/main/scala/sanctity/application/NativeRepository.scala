@@ -32,7 +32,8 @@ final class NativeRepository[F[_]](
           case file: SourceEntry.File =>
             for
               artifact <- ids.next[ArtifactTag]
-              blob <- store.put(source.read(file))
+              blob <- store.put(CurrentAuthority.bytes(source.read(file),
+                catalog.check(ctx, datasetId, Action.Propose).flatMap(Checked.lift[F, Unit])))
               _ <- Checked.lift[F, Unit](Either.cond(blob.size == file.size, (), Problem.Integrity(s"source size changed: ${file.path.value}")))
             yield Entry.File(file.path, artifact, blob)
         }
@@ -67,7 +68,8 @@ final class NativeRepository[F[_]](
           case Some(Entry.File(_, id, _)) => F.pure(id)
           case Some(Entry.Directory(_)) => F.raiseError[ArtifactId](Failure(Problem.Conflict("cannot replace a directory")))
           case None => ids.next[ArtifactTag]
-        blob <- store.put(Stream.emits(bytes).covary[F])
+        blob <- store.put(CurrentAuthority.bytes(Stream.emits(bytes).covary[F],
+          catalog.check(ctx, base.dataset, Action.Propose).flatMap(Checked.lift[F, Unit])))
         manifest <- Checked.lift[F, Manifest](release.manifest.change(Vector(Change.Put(path, artifact, blob))))
         now <- Clock[F].realTimeInstant
         draft <- catalog.draft(ctx, base.dataset, Some(base.release), manifest,

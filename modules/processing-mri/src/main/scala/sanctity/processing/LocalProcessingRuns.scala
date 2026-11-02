@@ -22,7 +22,8 @@ class LocalProcessingRuns[F[_]: Async](catalog: Catalog[F], store: BlobStore[F],
           for
             claimed <- catalog.advanceRun(ctx, run.id, run.generation, RunUpdate(RunStatus.Preparing)).flatMap(Checked.lift[F, ProcessingRun])
             current <- Ref.of[F, ProcessingRun](claimed)
-            result <- perform(ctx, current, workspace).guaranteeCase {
+            authorize = catalog.heartbeatRun(ctx, run.id).flatMap(Checked.lift[F, Unit])
+            result <- CurrentAuthority.during(authorize)(perform(ctx, current, workspace)).guaranteeCase {
               case Outcome.Succeeded(_) => F.unit
               case Outcome.Errored(_) => finish(ctx, current, RunStatus.Failed, "Local execution failed; inspect retained request and workspace")
               case Outcome.Canceled() => finish(ctx, current, RunStatus.Interrupted, "Local execution was cancelled")
@@ -44,7 +45,8 @@ class LocalProcessingRuns[F[_]: Async](catalog: Catalog[F], store: BlobStore[F],
     for
       initial <- state.get
       result <- producer.produceTracked(ctx, initial.spec.input, workspace, Some(initial.id), execution =>
-        execution.retained.traverse_(store.verify) *> change(ctx, state, RunUpdate(RunStatus.Executing, Some(execution))).void)
+        execution.retained.traverse_(store.verify) *> change(ctx, state, RunUpdate(RunStatus.Executing, Some(execution))).void,
+        Some(catalog.heartbeatRun(ctx, initial.id).flatMap(Checked.lift[F, Unit])))
         .flatMap(Checked.lift[F, ProcessingEvidence])
       _ <- result.expected.traverse_(f => store.verify(f.blob))
       current <- state.get
@@ -61,5 +63,5 @@ class LocalProcessingRuns[F[_]: Async](catalog: Catalog[F], store: BlobStore[F],
     }
 
   private def finish(ctx: AccessContext, state: Ref[F, ProcessingRun], status: RunStatus, reason: String): F[Unit] =
-    state.get.flatMap(r => catalog.advanceRun(ctx, r.id, r.generation, RunUpdate(status, r.execution, detail = Some(reason))).void)
-
+    state.get.flatMap(r => catalog.heartbeatRun(ctx, r.id) *>
+      catalog.advanceRun(ctx, r.id, r.generation, RunUpdate(status, r.execution, detail = Some(reason))).void)

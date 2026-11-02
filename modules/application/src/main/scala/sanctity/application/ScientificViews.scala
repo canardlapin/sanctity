@@ -99,7 +99,7 @@ final class ScientificViews[F[_]: Async](
       generated <- plan.generated.traverse { (path, text) =>
         for
           id <- ids.next[ArtifactTag]
-          blob <- store.put(Stream.emits(text.getBytes(StandardCharsets.UTF_8)).covary[F])
+          blob <- store.put(CurrentAuthority.bytes(Stream.emits(text.getBytes(StandardCharsets.UTF_8)).covary[F], authorize))
         yield Entry.File(path, id, blob)
       }
       total <- cats.effect.Ref.of[F, Long](0L)

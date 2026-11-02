@@ -77,6 +77,10 @@ trait Catalog[F[_]]:
   def selection(ctx: AccessContext, id: SelectionId): F[Either[Problem, FrozenSelection]]
   def startRun(ctx: AccessContext, spec: RunSpec, key: IdempotencyKey): F[Either[Problem, ProcessingRun]]
   def readRun(ctx: AccessContext, id: RunId): F[Either[Problem, ProcessingRun]]
+  /** Worker heartbeat. Rechecks both scopes; a denied active run is failed without
+    * disclosing its record or allowing a revoked worker to deposit any output.
+    */
+  def heartbeatRun(ctx: AccessContext, id: RunId): F[Either[Problem, Unit]]
   /** Completed owner-held evidence under current input authority, independent of the old destination. */
   def completedRun(ctx: AccessContext, id: RunId): F[Either[Problem, ProcessingRun]]
   def advanceRun(ctx: AccessContext, id: RunId, generation: Long, update: RunUpdate): F[Either[Problem, ProcessingRun]]

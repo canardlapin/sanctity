@@ -116,6 +116,7 @@ lazy val service = project.in(file("modules/service")).dependsOn(bids, objects, 
   }
 )
 lazy val app = project.in(file("modules/app")).dependsOn(service, importDicom, importXnat, processingMri).settings(common).settings(
+  libraryDependencies += "org.typelevel" %% "cats-effect-testkit" % "3.5.7" % Test,
   Compile / run / fork := true,
   Compile / mainClass := Some("sanctity.app.Demo")
 )

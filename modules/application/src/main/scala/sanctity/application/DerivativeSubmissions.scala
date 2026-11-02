@@ -62,8 +62,9 @@ final class DerivativeSubmissions[F[_]: Async](catalog: Catalog[F], store: BlobS
         case Some(_) => Async[F].raiseError[Draft](Failure(Problem.Conflict("output path already contains different content")))
         case None =>
           for
-            blob <- store.put(bytes.take(expected.blob.size + 1).chunkN(64 * 1024).evalTap(_ =>
-              catalog.check(ctx, receipt.input.dataset, Action.ReadContent, Some(receipt.input.release)).flatMap(Checked.lift[F, Unit])).unchunks)
+            blob <- store.put(CurrentAuthority.bytes(bytes.take(expected.blob.size + 1),
+              catalog.check(ctx, receipt.input.dataset, Action.ReadContent, Some(receipt.input.release)).flatMap(Checked.lift[F, Unit]) *>
+                catalog.check(ctx, draft.dataset, Action.Propose).flatMap(Checked.lift[F, Unit])))
             _ <- Checked.lift[F, Unit](Either.cond(blob == expected.blob, (), Problem.Integrity("collected output differs from producer inventory")))
             _ <- input(ctx, receipt)
             before <- draft.base.traverse(r => catalog.release(ctx, ReleaseRef(draft.dataset, r)).flatMap(Checked.lift[F, Release]))

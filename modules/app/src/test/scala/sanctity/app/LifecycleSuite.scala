@@ -4,7 +4,7 @@ import cats.effect.{Deferred, IO, Resource}
 import cats.effect.unsafe.implicits.global
 import cats.syntax.all.*
 import fs2.Stream
-import sanctity.application.{Checked, Failure, IdSource}
+import sanctity.application.{Checked, Failure, IdSource, NativeSource, SourceEntry}
 import sanctity.kernel.*
 import sanctity.objects.{DirectoryExport, NativeDirectorySource}
 
@@ -12,6 +12,28 @@ import java.nio.file.{Files, Path, StandardOpenOption}
 import scala.jdk.CollectionConverters.*
 
 abstract class CatalogLifecycleSuite extends CatalogSubsetSuite:
+  test("native import stops depositing bytes when its proposal grant is revoked") {
+    fixture { (s, _) =>
+      val bytes = Array.fill[Byte](200000)(42)
+      val blob = BlobRef.from(Digest.bytes(bytes), bytes.length.toLong).toOption.get
+      for
+        principal <- IdSource.random[IO].next[PrincipalTag]
+        reader = AccessContext(principal)
+        grant <- checked(s.catalog.grant(s.context, s.dataset.id, principal, None, Set(Action.ReadMetadata, Action.Propose)))
+        source = new NativeSource[IO]:
+          val label = "revoking-source"
+          def entries = Stream.emit(SourceEntry.File(path("payload.bin"), bytes.length.toLong, "fixed")).covary[IO]
+          def read(file: SourceEntry.File) = Stream.emits(bytes.take(65536)).covary[IO] ++
+            Stream.exec(checked(s.catalog.revoke(s.context, s.dataset.id, grant.id))) ++ Stream.emits(bytes.drop(65536)).covary[IO]
+        refused <- s.repository.importNative(reader, s.dataset.id, source)
+        installed <- s.store.verify(blob).attempt
+        dataset <- checked(s.catalog.dataset(s.context, s.dataset.id))
+        _ = assertEquals(refused, Left(Problem.Denied))
+        _ = assert(installed.isLeft && dataset.head.isEmpty)
+      yield ()
+    }
+  }
+
   private def path(value: String): RelPath = RelPath.from(value).fold(p => fail(p.message), identity)
   private def key(value: String): IdempotencyKey = IdempotencyKey.from(value).fold(p => fail(p.message), identity)
   private def checked[A](value: IO[Either[Problem, A]]): IO[A] = value.flatMap(Checked.lift[IO, A])

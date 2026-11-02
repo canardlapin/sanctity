@@ -235,6 +235,29 @@ final class PostgresCatalog[F[_]] private[postgres] (
     yield next
   }
 
+  def heartbeatRun(ctx: AccessContext, id: RunId): F[Either[Problem, Unit]] = run {
+    for
+      _ <- OperationsSql.active
+      _ <- OrganizationSql.guard(false)
+      initial <- loadRun(ctx, id, false)
+      authority <- runAuthority(ctx, initial.spec, true).attempt
+      current <- loadRun(ctx, id, true)
+      result <- authority match
+        case Left(Failure(Problem.Denied)) if Set(RunStatus.Preparing, RunStatus.Executing)(current.status) =>
+          // Only a server-side failed authority check may perform this terminal
+          // transition. It returns no run metadata and cannot register outputs.
+          for
+            failed <- lift(current.advance(RunUpdate(RunStatus.Failed, current.execution, detail = Some("Execution authority withdrawn"))))
+            payload = JsonCodecs.encode(failed)
+            _ <- sql"UPDATE processing_run SET payload=$payload::jsonb WHERE id=${uuid(id)}".update.run
+          yield Left(Problem.Denied): Either[Problem, Unit]
+        case Left(Failure(p)) => (Left(p): Either[Problem, Unit]).pure[ConnectionIO]
+        case Left(error) => error.raiseError[ConnectionIO, Either[Problem, Unit]]
+        case Right(_) => Either.cond(Set(RunStatus.Preparing, RunStatus.Executing, RunStatus.Completed)(current.status),
+          (), Problem.Conflict("run is no longer executable")).pure[ConnectionIO]
+    yield result
+  }.map(_.flatten)
+
   def completedRun(ctx: AccessContext, id: RunId): F[Either[Problem, ProcessingRun]] = run {
     for
       record <- loadRun(ctx, id, false)

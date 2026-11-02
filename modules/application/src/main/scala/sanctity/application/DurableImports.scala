@@ -4,7 +4,6 @@ import cats.effect.{Async, Clock}
 import cats.effect.syntax.all.*
 import cats.syntax.all.*
 import sanctity.kernel.*
-import scala.concurrent.duration.*
 
 /** Checkpoints verified files and a durable candidate. A retry retains artifact identities.
   * Source observations are compared before and after work; this is not a remote atomic snapshot.
@@ -45,7 +44,7 @@ final class DurableImports[F[_]: Async](catalog: Catalog[F], journal: ImportJour
                   case None =>
                     for
                       artifact <- ids.next[ArtifactTag]
-                      blob <- store.put(source.read(file))
+                      blob <- store.put(CurrentAuthority.bytes(source.read(file), checked(catalog.check(ctx, initial.dataset, Action.Propose))))
                       _ <- Checked.lift[F, Unit](Either.cond(blob.size == file.size, (), Problem.Integrity("source size changed")))
                       _ <- checked(journal.record(ctx, lease, Entry.File(file.path, artifact, blob)))
                     yield ()
@@ -78,8 +77,16 @@ final class DurableImports[F[_]: Async](catalog: Catalog[F], journal: ImportJour
               case None => acquisition
               case Some(receipt) => checked(journal.finish(ctx, lease, receipt)) *> checked(journal.get(ctx, id))
             }
-          val heartbeat = (Async[F].sleep((leaseSeconds / 3).seconds) *> checked(journal.renew(ctx, lease, leaseSeconds))).foreverM[ImportOperation]
-          work.race(heartbeat).map(_.merge).guarantee(journal.surrender(ctx, lease))
+          val renew = journal.renew(ctx, lease, leaseSeconds).flatMap {
+            case Right(_) => Async[F].unit
+            case Left(problem) =>
+              // Successful publication retires its lease. A heartbeat racing that
+              // retirement must reauthorize the completed receipt, not fail it.
+              checked(journal.get(ctx, id)).flatMap(op =>
+                if op.receipt.nonEmpty then Async[F].unit else Async[F].raiseError(Failure(problem)))
+          }
+          CurrentAuthority.during(renew)(work)
+            .guarantee(journal.surrender(ctx, lease))
         }
       }
     }
