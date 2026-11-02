@@ -1,0 +1,122 @@
+{
+  "schemaVersion": 1,
+  "task": "F03.4",
+  "mote": "bd-01M4W5P5RX4RKKKDM2NSCV30RY",
+  "status": "passed",
+  "at": "2026-11-02T01:48:20.159923+00:00",
+  "sourceCommit": "e94f88d507560c14c2bbb21b5d5364077444b8c5",
+  "sourceSha256": {
+    "build.sbt": "59611a9f83738d189c032c747e2d1e65583071048e446ca6f7433c85a6616ca5",
+    "modules/app/src/test/scala/sanctity/app/ContinuousAuthoritySuite.scala": "b8268c5618bf47abffdc8d3d8cc2706dc8f683eed8df55daaec96e125d2c5c00",
+    "modules/app/src/test/scala/sanctity/app/LifecycleSuite.scala": "3457917ed959adfec236ad951dbae2a76fa4f89fbaf7d7820cdd1e223cd60923",
+    "modules/app/src/test/scala/sanctity/app/ProcessingSuite.scala": "693b839aed9d10326004fb345124f170e1437456063e30b68e352d13632cd4a2",
+    "modules/application/src/main/scala/sanctity/application/Capabilities.scala": "0cbb0a6a241cf65e86d5dfc588a055d7623d44429199a3479bcc51b8dfc7d1b0",
+    "modules/application/src/main/scala/sanctity/application/CurrentAuthority.scala": "41691e829745e8d0e8e6c765ebd8b673bf8643ee13007c7d4176650eca041e23",
+    "modules/application/src/main/scala/sanctity/application/DerivativeSubmissions.scala": "4c9aec9a4d041bd0c631203a3e0f694a5dc34278588ecb21b746b21caaa41e8b",
+    "modules/application/src/main/scala/sanctity/application/DurableImports.scala": "f8dc33856e5ac4634fcfc9cc97602ba7f2557c0ce42408a30a02193bc404f7f4",
+    "modules/application/src/main/scala/sanctity/application/NativeRepository.scala": "fc7e946f3cb7e597f053bc1c30d5cb06a8a36307633ea7fa40711e3ffb2e3fc9",
+    "modules/application/src/main/scala/sanctity/application/ReferenceCatalog.scala": "cf094696552fecef1754f94a9b04c9648dc49306aae93ea25b30df198e2c5f0a",
+    "modules/application/src/main/scala/sanctity/application/ScientificChanges.scala": "30243602e31c0fbaf7ba26f9581c4d39dac0f73bb269d482ee971bbf086f4f06",
+    "modules/application/src/main/scala/sanctity/application/ScientificViews.scala": "ebf224ae03d55f879d16e7344c40147e59a4051ace64c4d91c6019df50a8d25b",
+    "modules/integration/src/test/scala/sanctity/postgres/ContinuingAuthoritySuite.scala": "1b42b5f8784eb028081b8263d0e647d155a5eb18b5c9b9c59d461c4cd76ebed0",
+    "modules/integration/src/test/scala/sanctity/processing/WaitingRecipe.scala": "47ba06d412217579ff7d06c7d317c71b3a4f03793eec8eeeaf14cf8115e05376",
+    "modules/postgres/src/main/scala/sanctity/postgres/PostgresCatalog.scala": "434d7887d04de7bea5c89d6317a834d7e48429a5d9c487d72049f0450afab6cf",
+    "modules/processing-mri/src/main/scala/sanctity/processing/LocalProcessingRuns.scala": "ffbbceff32258697e3441c36e5e82c3b98543bbbf3580b2ca21fc9216e78846a",
+    "modules/processing-mri/src/main/scala/sanctity/processing/LocalRecipe.scala": "1b55730c3563e2410e128b3ebcd9ac28db489bca62fe1dd7847ec2174e0f3ebf",
+    "modules/processing-mri/src/main/scala/sanctity/processing/MriQcProducer.scala": "990e94adda413eb9516203bdafbf41db2967e4918f704d5b0b29b30797c6685f",
+    "modules/processing-mri/src/main/scala/sanctity/processing/TemporalProducer.scala": "280e57f523cb4a511183e1db0340f1081291dde87c90bfc8ab7510c101592e71"
+  },
+  "scope": "isolated committed baseline plus F03.4; shared scientific edits excluded",
+  "environment": {
+    "java": "Temurin 21.0.12.1",
+    "scala": "3.3.8",
+    "catsEffect": "3.5.7",
+    "postgres": "17.11 pinned image in scripts/check-postgres.sh",
+    "python": "existing pinned MRI venv; Python 3.13 for backup scripts"
+  },
+  "commands": [
+    "sbt app/testOnly sanctity.app.ContinuousAuthoritySuite sanctity.app.LifecycleSuite",
+    "bash scripts/check-postgres.sh"
+  ],
+  "verification": {
+    "aggregateTests": 440,
+    "applicationTests": 311,
+    "integrationTests": 292,
+    "fullPostgresCrashRetryAndCoordinatedRestore": "passed",
+    "newControlledClockAndProcessTests": 6,
+    "newPostgresContinuingTests": 12,
+    "sharedReferenceAndPostgresRegressionCases": 2,
+    "terminationMilliseconds": [
+      914,
+      966
+    ]
+  },
+  "acceptance": [
+    {
+      "criterion": 1,
+      "result": "passed",
+      "evidence": "current input and deposit authority per heartbeat; cached completed-result and destination reuse checks; real file/offboarding/grant expiry resume denials; previous membership and stale-context regressions rerun"
+    },
+    {
+      "criterion": 2,
+      "result": "passed",
+      "evidence": "source ReadContent and destination Propose checked independently in worker heartbeat and every output chunk; completed input lookup does not imply old destination authority"
+    },
+    {
+      "criterion": 3,
+      "result": "passed",
+      "evidence": "disabled principal and expired credential kill real child; revoked source/destination and expired grants record Failed with no outputs; access restoration does not restart; existing accepted history and crash/restore pass"
+    },
+    {
+      "criterion": 4,
+      "result": "passed",
+      "evidence": "maximum chunk 65536; one-second polling and absolute five-second permit from lookup start, including uncancellable renewal; no installed output blob after midstream destination revocation/expiry/offboarding"
+    }
+  ],
+  "negativeControls": [
+    {
+      "log": "f034-negative-deposit.log",
+      "result": "2 tests fail with destination chunk check removed; final catalog denial alone still allowed stored bytes"
+    },
+    {
+      "log": "f034-negative-heartbeat.log",
+      "result": "4 tests fail with periodic heartbeat removed"
+    },
+    {
+      "log": "f034-slow-renewal-before.log",
+      "result": "uncancellable lookup waited 21s under timeoutTo; fixed timeoutAndForget passes at 5s and ignores late result"
+    }
+  ],
+  "failedDevelopmentAttempts": [
+    "unit compilation unused imports/context bounds",
+    "PostgreSQL test decoded wrong envelope JSON field; fixed assertion, retained log"
+  ],
+  "limitations": [
+    "Local synthetic engineering only; no institutional provider, human or off-host qualification.",
+    "Previously admitted transport bytes cannot be recalled; suspended host/JVM is not a hard real-time scheduler.",
+    "Catalog/witness unavailability stops local execution but can leave durable run status uncertain.",
+    "Revoked owners cannot inspect or explicitly cancel; worker heartbeat records failure without disclosing metadata.",
+    "Future guest/session producers and scale qualification retain their own gates."
+  ],
+  "evidenceSha256": {
+    "TEST-sanctity.postgres.DisclosureSuite.xml": "83598744bfa488af14415f2196d2e63749aba7cc65faaeb7aec22108bff3e8ce",
+    "TEST-sanctity.postgres.ContinuingAuthoritySuite.xml": "7ed6dd4b7178d761689dc4b1358b13353ac0b9925db3cc4ff1e90627f010575b",
+    "f034-negative-deposit.log": "1e723af54d9f7c1ccc6b841364846c9a88dc8c44b60bee8c44feb1b986fedbec",
+    "f034-final-full.log": "b937fbd544d0f19e0c911243ec117414222d748650876cd4db4dc9fb69f72d70",
+    "TEST-sanctity.postgres.CurrentAuthoritySuite.xml": "65b1ed7e4b2ddea93f7edf831bff8d1ba39a067001f6b17e66a236a923193804",
+    "f034-postgres-01.log": "96fc5970b3a53be8eafb8c1aa583b11d88c0300175bdc9c9bed2cc3c39e62a59",
+    "f034-negative-heartbeat.log": "4f9be128792a6d30093e36044046eb146aca879c46440101834ddd7bfa3ce3c4",
+    "f034-postgres-02.log": "d5ddb950d3cb9b7cd24505a7482655c04dfe57bc29481be05424866116e6f142",
+    "TEST-sanctity.app.LifecycleSuite.xml": "29d0e963eac453a20fd5ac61c36ca62393e84642b29634652ed1a093e5f0b9e9",
+    "f034-slow-renewal-before.log": "055dec25b3403b4efe2e2cba37c63af92c202689964fb15c7168d0f29f245aab",
+    "TEST-sanctity.postgres.PostgresLifecycleSuite.xml": "6bdb4a4c4f8a5d644f4d80e70aa5e3d2c5b95c9239e36b391a1adb6924e8bf58",
+    "f034-unit-02.log": "b49bbb568e393bd3c33b9692cfa0c3bba2d91946d4d1633a29ccdd0ae92c3c5e",
+    "TEST-sanctity.app.ContinuousAuthoritySuite.xml": "7d4876df9b0e24c204fe326da6822409b2da57e6c2cbc7f74b1a6db52c96a1de",
+    "f034-unit-03.log": "5cd4112a1685d684ac641c14506ee5b22a921c2d30828d6cc7e9c21628f0fd38",
+    "f034-unit-01.log": "a0034130368ecdcfc5f7aae2fa1f22f462f3cf5d5755cf26339ad2bc7665da67",
+    "f034-final-unit.log": "5a6a76b783580a9273359831e3b41edb0b65221bc1b21a734f4b8cb5ae8fe2a1",
+    "f034-slow-renewal-after.log": "e0192d7ba05626cf6964fa7b4b06a6cf39950a7cdd9b455c0667ea72eaa2c049",
+    "TEST-sanctity.postgres.ProcessingRecoverySuite.xml": "fefeb22c9cfb85c548bb2d35fbe650b54e172ac8ba3b995eac1ee42c2d43c169",
+    "f034-full.log": "f958ede9e9c86a4ec296641c69ac3b7a9d8f0d9f58e64d5e6739e1ce6cb18877"
+  }
+}

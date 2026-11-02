@@ -1,6 +1,6 @@
 {
-  "schemaVersion": 13,
-  "at": "2026-11-02T01:34:21.978121+00:00",
+  "schemaVersion": 14,
+  "at": "2026-11-02T01:48:20.212039+00:00",
   "program": "bd-01M4W3ZN8Z16J30J8EYPWQERQC",
   "immediateMilestone": {
     "key": "EP0",
@@ -13,7 +13,7 @@
     "mote": "bd-01M4X8M8Y18BD586KA2AD1BMH9",
     "plan": "docs/core-hardening-plan.md"
   },
-  "updateKind": "Verified committed baseline published; F02 parent review remains blocked; F03.4 in progress.",
+  "updateKind": "F03.4 implemented and F03 engineering review passed; recovery capability compatibility in progress.",
   "baseline": {
     "commit": "95763adf94e1a9977b1cad73a92e842564448013",
     "published": true,
@@ -27,16 +27,16 @@
   "countsByOriginalTag": {
     "pilot-task": {
       "open": 63,
-      "closed": 21,
-      "doing": 1
+      "closed": 22,
+      "doing": 0
     },
     "pilot-gate": {
-      "open": 25,
-      "closed": 1
+      "open": 24,
+      "closed": 2
     }
   },
   "activeWork": [
-    "F03.4"
+    "O03.7.R1"
   ],
   "recoveryOrder": [
     "F03.4",
@@ -96,9 +96,20 @@
   },
   "previousSnapshot": "docs/evidence/institutional-pilot/F02/progress-before-20261101.json",
   "limitations": [
-    "No new implementation or acceptance gate is closed by this update.",
+    "F03 engineering review closes only implemented authority coverage; institutional/provider, scale and recovery gates remain open.",
     "Shared uncommitted scientific work is excluded from the committed baseline qualification.",
     "F02.3 child qualification remains local engineering; F02 review cannot close before newer commands work under independent policy.",
     "Institutional identity, off-host failure-domain, lifecycle and integrated-release gates remain open."
-  ]
+  ],
+  "completedThisTranche": [
+    "F03.4",
+    "F03 engineering review"
+  ],
+  "currentQualification": {
+    "sourceCommit": "e94f88d",
+    "aggregateTests": 440,
+    "integrationTests": 292,
+    "postgresCrashRestore": "passed",
+    "receipt": "docs/evidence/institutional-pilot/F03.4/receipt.json"
+  }
 }

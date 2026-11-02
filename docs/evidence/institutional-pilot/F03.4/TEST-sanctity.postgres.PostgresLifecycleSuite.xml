@@ -1,0 +1,258 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<testsuite hostname="BUC-GW01.local" name="sanctity.postgres.PostgresLifecycleSuite" tests="124" errors="0" failures="0" skipped="0" time="170.221" timestamp="2026-11-01T20:45:13">
+          <properties>
+      <property name="java.specification.version" value="21"/><property name="sun.jnu.encoding" value="UTF-8"/><property name="sun.arch.data.model" value="64"/><property name="java.vendor.url" value="https://adoptium.net/"/><property name="jline.terminal" value="none"/><property name="sun.boot.library.path" value="/Users/bbuchsbaum/Library/Java/JavaVirtualMachines/temurin-21.0.12.1+1.jdk/Contents/Home/lib"/><property name="sun.java.command" value="/Users/bbuchsbaum/.local/share/sbt/1.13.0/bin/sbt-launch.jar check integration/test app/runMain sanctity.app.PostgresDemo stage &quot;/private/tmp/sanctity-recovery-20261101/work/target/postgres-check.C9FccS/demo&quot;"/><property name="jdk.debug" value="release"/><property name="java.specification.vendor" value="Oracle Corporation"/><property name="java.version.date" value="2026-08-18"/><property name="java.home" value="/Users/bbuchsbaum/Library/Java/JavaVirtualMachines/temurin-21.0.12.1+1.jdk/Contents/Home"/><property name="file.separator" value="/"/><property name="java.vm.compressedOopsMode" value="Zero based"/><property name="line.separator" value="
+"/><property name="java.vm.specification.vendor" value="Oracle Corporation"/><property name="java.specification.name" value="Java Platform API Specification"/><property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/><property name="java.runtime.version" value="21.0.12.1+1-LTS"/><property name="user.name" value="bbuchsbaum"/><property name="log4j.ignoreTCL" value="true"/><property name="file.encoding" value="UTF-8"/><property name="java.vendor.version" value="Temurin-21.0.12.1+1"/><property name="java.io.tmpdir" value="/var/folders/f8/k46hqpm95mn7ns9f7wxw88640000gp/T/"/><property name="java.version" value="21.0.12.1"/><property name="java.vm.specification.name" value="Java Virtual Machine Specification"/><property name="native.encoding" value="US-ASCII"/><property name="java.library.path" value="/Users/bbuchsbaum/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:."/><property name="stderr.encoding" value="US-ASCII"/><property name="java.vendor" value="Eclipse Adoptium"/><property name="scala.ext.dirs" value="/Users/bbuchsbaum/.sbt/1.0/java9-rt-ext-eclipse_adoptium_21_0_12_1"/><property name="sun.io.unicode.encoding" value="UnicodeBig"/><property name="socksNonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/><property name="java.class.path" value="/Users/bbuchsbaum/.local/share/sbt/1.13.0/bin/sbt-launch.jar"/><property name="java.vm.vendor" value="Eclipse Adoptium"/><property name="jline.shutdownhook" value="false"/><property name="user.timezone" value="America/Toronto"/><property name="java.vm.specification.version" value="21"/><property name="os.name" value="Mac OS X"/><property name="sun.java.launcher" value="SUN_STANDARD"/><property name="user.country" value="CA"/><property name="http.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/><property name="sun.cpu.endian" value="little"/><property name="user.home" value="/Users/bbuchsbaum"/><property name="user.language" value="en"/><property name="sbt.script" value="/Users/bbuchsbaum/.local/bin/sbt"/><property name="sbt.ipcsocket.tmpdir" value="/var/folders/f8/k46hqpm95mn7ns9f7wxw88640000gp/T/.sbt1b8b7ae4/ipcsocket"/><property name="swoval.tmpdir" value="/var/folders/f8/k46hqpm95mn7ns9f7wxw88640000gp/T/.sbt1b8b7ae4/swoval"/><property name="apple.awt.application.name" value="Boot"/><property name="jline.esc.timeout" value="0"/><property name="ftp.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/><property name="stdout.encoding" value="US-ASCII"/><property name="path.separator" value=":"/><property name="os.version" value="15.1.1"/><property name="jna.nosys" value="true"/><property name="java.runtime.name" value="OpenJDK Runtime Environment"/><property name="java.vm.name" value="OpenJDK 64-Bit Server VM"/><property name="java.vendor.url.bug" value="https://github.com/adoptium/adoptium-support/issues"/><property name="user.dir" value="/private/tmp/sanctity-recovery-20261101/work"/><property name="os.arch" value="aarch64"/><property name="java.vm.info" value="mixed mode, sharing"/><property name="java.vm.version" value="21.0.12.1+1-LTS"/><property name="java.class.version" value="65.0"/>
+    </properties>
+          <testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="temporal maps retain private exact inputs, recover collection, query observations and round-trip" time="3.724">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="temporal admission rejects source geometry changes, nonfinite maps and false source declarations" time="4.475">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="temporal collection enforces current authority and competing acceptance preserves the first complete release" time="5.532">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="shared runner cancels temporal preparation durably and refuses a mismatched recipe" time="1.792">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="seeded scientific query oracle agrees with frozen membership, history, paging and current authority" time="6.953">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="worker heartbeat fails a revoked run and restoration does not restart it" time="1.165">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="accepted content can be unready for a pinned processing contract" time="0.823">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="anatomy requirements correlate participant and session and report ambiguity" time="0.693">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="bundle content identity is deterministic and pinned across source correction and export" time="1.951">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="external producer returns verifiable QC and interrupted collection resumes without rerunning" time="2.28">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="source read and separate destination authority suffice, and revocation blocks acceptance" time="1.748">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="wrong output bytes and forged input bundle cannot pass ordinary admission" time="1.746">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="external QC independently reads licensed compressed NIfTI-1 and NIfTI-2 images" time="1.438">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="a deposition worker cannot accept results or read unrelated source data" time="1.751">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="derivative assessment refuses valid-looking rows with false source provenance" time="1.646">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="declared remote outputs remain distinct from verified retained staging" time="1.369">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="self-consistent output inventories cannot validate false scientific values" time="1.815">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="observations correlate exact input releases and retain historical evidence" time="2.47">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="seeded exact-input observation oracle preserves metric bounds, release identity, coverage and authority" time="20.954">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="private processing needs read authority and cannot acquire independent sharing authority" time="1.326">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="local runs and collection are idempotent and support successive derivative releases" time="4.529">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="explicit publication reuses completed bytes after a head conflict and recovers retries" time="3.757">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="publication is owner-only and independent of old destination authority, with current private-source access" time="2.861">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="publication refuses incomplete runs, changed receipts, forged activities and foreign bases" time="1.698">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="uncertain execution is explicit and late completion cannot override interruption" time="1.16">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="cancellation before launch leaves an interrupted durable run and no output publication" time="1.227">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="phase-pair cross-session view retains all members, origins and bytes through re-import" time="1.596">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="phase-pair duplicate declarations identify one complete required processing family" time="1.386">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="phase-pair member removal blocks admission and preserves historical closure" time="1.108">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="phase-pair scientific changes repair both target references and scan rows and preserve member lineage" time="1.589">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="analysis input independent corpus: complete" time="0.639">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="analysis input independent corpus: missing-echo-time" time="0.64">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="analysis input independent corpus: reversed-echo-time" time="0.61">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="analysis input independent corpus: equal-echo-time" time="0.676">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="analysis input independent corpus: conflicting-timing" time="0.636">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="analysis input independent corpus: singleton" time="0.616">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="analysis input independent corpus: duplicate-index" time="0.602">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="analysis input independent corpus: different-grid" time="0.655">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="analysis input independent corpus: missing-stimulus" time="0.623">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="analysis input independent corpus: unsafe-stimulus" time="0.649">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="analysis input independent corpus: uri-stimulus" time="0.656">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="analysis input independent corpus: missing-stimulus-cells" time="0.648">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="analysis inputs expand one selected echo into its exact family, shared events and referenced stimuli" time="1.407">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="analysis input disclosure excludes masked stimulus bytes and refuses loss of echo metadata" time="1.13">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="analysis input curation moves the complete family and rewrites shared stimulus references" time="1.427">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="analysis input header coherence rejects a changed echo grid without advancing the head" time="0.641">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="analysis inputs run per-echo QC, publish retained results and preserve history under correction and revocation" time="3.689">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="real image family survives correction, cross-session subset, export and re-import with historical evidence" time="1.895">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="missing required magnitude blocks ordinary acceptance and preserves the head" time="0.931">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="optional magnitude2 can be absent and a subset still preserves the complete required family" time="1.049">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="ambiguous magnitude representations are rejected without selecting one arbitrarily" time="0.606">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="echo corrections and disclosure masks cannot discard required scientific meaning" time="0.871">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="malformed real image geometry produces bound evidence and cannot advance the head" time="0.541">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="metadata timing corrections preserve image observations and historical assessment" time="0.837">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="coordinated family renames retain lineage while a partial rename cannot be accepted" time="1.586">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="explicit profile adoption preserves bytes, old query meaning, explanations and assessments" time="0.957">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="edits and view compilers reject context drift until explicit adoption" time="0.574">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="reinterpretation retains ordinary authorization, acceptance and stale-head checks" time="0.89">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="rename repairs references and scan rows, preserves identity, exports history and records the exact plan" time="1.185">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="removing a referenced image proposes explicit reference and table deletion without erasing source history" time="0.91">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="removing a B0 provider leaves declarations intact and cannot accept a dangling group" time="0.893">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="moving shared metadata reports old and new applicability while preserving a local override" time="0.732">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="plan acknowledgment and head conflicts prevent applying different or stale scientific edits" time="1.07">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="companion changes are explicit and orphaning DWI gradients blocks admission" time="0.968">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="unsupported references, subject relabeling and unsafe scans rows fail during planning" time="0.712">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="planning and preparation recheck current access, including revocation after inspection" time="0.561">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="revising a prepared draft cannot attach its old change receipt to new content" time="0.74">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="planning verifies document digests and rejects oversized inventories before reading" time="1.02">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="MRI subset round trip preserves images, supported meaning and exact transformation evidence" time="2.201">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="one inherited event table localizes twice with exact bytes and distinct artifact identities" time="2.199">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="subset masks cannot omit required timing, fieldmap metadata or event columns" time="1.069">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="missing stimulus assets block admission before a masked subset can be prepared" time="0.737">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="summary projection refuses duplicate keys, missing selected rows and unsafe scan paths" time="0.939">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="hidden event edits and later source releases leave accepted subset bytes and receipts intact" time="2.477">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="variable acquisition timing survives subset materialization without an invented TR" time="1.806">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="subset document acquisition reads shared tables once and releases resources on cancellation" time="1.681">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="oversized summary inputs fail before any source-document stream is acquired" time="1.404">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="EPI gradient dependencies outside this profile cannot be silently dropped" time="1.025">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="subset projection cannot silently change participant values interpreted by the native profile" time="0.925">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="ordinary DWI suffix selections may include local gradients without treating them as acquisition roots" time="1.288">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="native import stops depositing bytes when its proposal grant is revoked" time="0.301">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="fixed-release read grants, content separation, frozen selections and revocation" time="0.785">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="proposing and accepting are distinct powers and retry rechecks authority" time="0.726">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="correlated participant and session predicates agree with the pure interpreter" time="0.947">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="authorized views flatten inherited metadata, project participants and share without source access" time="0.961">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="view planning refuses forbidden required metadata and unsupported associations" time="0.817">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="hidden metadata changes do not alter projected view bytes" time="0.757">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="native import, explain, correction, acceptance retry, and two exact isolated exports" time="0.977">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="a new sidecar discovers new applicability while preserving artifact identity" time="0.566">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="ambiguous metadata cannot be accepted and leaves the previous head visible" time="0.634">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="malformed, duplicate-key, invalid, and numerically lossy metadata remain rejected candidates" time="1.05">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="two concurrent writers cannot both advance the same head" time="0.749">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="a prepared candidate becomes stale when its draft generation changes" time="0.569">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="an idempotency key cannot be reused for different prepared content" time="0.629">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="another principal cannot inspect, accept, correct, or export private content" time="0.548">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="corrupt content blocks acceptance and export without exposing an incomplete destination" time="0.753">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="an existing export destination and its contents remain untouched" time="0.523">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="symlinks are rejected and observed source mutation cannot silently succeed" time="0.246">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="cancelling a blob upload removes its temporary file" time="0.233">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="reference profile rejects oversized JSON with a typed limit failure" time="0.643">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="missing dataset description yields findings and no accepted head" time="0.414">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="unrecognized files and empty directories are preserved without a conformance claim" time="0.578">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="invalid UTF-8 and deeply nested metadata produce findings" time="0.674">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="unsupported nested and derivative dataset profiles remain explicit rejected candidates" time="0.634">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="fieldmap correction changes grouped relationships while preserving prior scientific interpretation and bytes" time="0.827">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="dangling fieldmap references remain inspectable and cannot be accepted" time="0.751">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="legacy IntendedFor links resolve with a finding and malformed or external links block admission" time="0.807">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="MRI subsets cannot silently omit explicit fieldmap links from another session" time="0.497">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="inherited event correction changes only the applicable acquisition and retains old closure and exact exports" time="0.948">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="editing selected companion bytes reports dependency impact without inventing a link change" time="0.744">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="ambiguous event companions block admission and never silently advance the head" time="0.693">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="DWI gradients form one group and an incomplete pair remains a rejected candidate" time="0.769">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="root-level events prevent a restricted MRI subset from silently omitting them" time="0.564">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="DWI content evidence survives storage; count rejection preserves the head and corrected history" time="1.085">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="DWI malformed and nonunit vectors remain inspectable rejected corrections" time="0.903">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="big-endian NIfTI-2 gzip headers are assessed without rewriting the image" time="0.688">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="a short image payload is a content finding and cannot become an accepted release" time="0.528">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="shared gradients are checked independently against each acquisition's volume count" time="0.543">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="event content correction rejects negative duration and preserves history and authored exports" time="1.1">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="timing corrections reassess inherited event windows using exact metadata origins" time="0.762">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="nonuniform event timing uses explicit volume times and rejects count disagreement" time="0.688">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="unavailable timing remains explicit while malformed event cells still block admission" time="0.67">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="variable slice timing without a frame duration never extrapolates a last interval" time="0.539">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PostgresLifecycleSuite" name="event assessments use the shared gzip header reader and preserve quoted TSV bytes" time="0.616">
+                      
+                    </testcase>
+          <system-out><![CDATA[]]></system-out>
+          <system-err><![CDATA[]]></system-err>
+        </testsuite>

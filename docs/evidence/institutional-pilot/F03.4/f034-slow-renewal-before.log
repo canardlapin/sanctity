@@ -1,0 +1,37 @@
+[info] welcome to sbt 1.10.5 (Eclipse Adoptium Java 21.0.12.1)
+[info] loading project definition from /private/tmp/sanctity-recovery-20261101/work/project
+[info] loading settings for project root from build.sbt ...
+[info] loading settings for project bids4s-19f022d002f69292dec056eb0762b877438c47305cee6c176adf3e0f780e9146-build from plugins.sbt ...
+[info] loading project definition from /private/tmp/sanctity-recovery-20261101/work/target/source-dependencies/bids4s-19f022d002f69292dec056eb0762b877438c47305cee6c176adf3e0f780e9146/project
+[info] loading settings for project root from build.sbt ...
+[info] resolving key references (17509 settings) ...
+[info] set current project to sanctity (in build file:/private/tmp/sanctity-recovery-20261101/work/)
+[info] compiling 1 Scala source to /private/tmp/sanctity-recovery-20261101/work/modules/app/target/scala-3.3.8/test-classes ...
+[info] done compiling
+Test run sanctity.app.ContinuousAuthoritySuite started
+==> X sanctity.app.ContinuousAuthoritySuite.controlled clock: uninterruptible authority lookup cannot extend a permit 0.023s munit.ComparisonFailException: modules/app/src/test/scala/sanctity/app/ContinuousAuthoritySuite.scala:110
+109:      canceled <- stopped.get
+110:      _ = assertEquals(at, 5.seconds)
+111:      _ = assert(result.isLeft && canceled)
+values are not the same
+=> Obtained
+21000000000 nanoseconds
+=> Diff (- expected, + obtained)
+-5 seconds
++21000000000 nanoseconds
+    at munit.FunSuite.assertEquals(FunSuite.scala:12)
+    at sanctity.app.ContinuousAuthoritySuite.$init$$$anonfun$6$$anonfun$1$$anonfun$2$$anonfun$1$$anonfun$1$$anonfun$1(ContinuousAuthoritySuite.scala:110)
+    at sanctity.app.ContinuousAuthoritySuite.$init$$$anonfun$6$$anonfun$1$$anonfun$2$$anonfun$1$$anonfun$1$$anonfun$adapted$1(ContinuousAuthoritySuite.scala:109)
+    at get @ sanctity.app.ContinuousAuthoritySuite.$init$$$anonfun$1$$anonfun$1$$anonfun$1$$anonfun$1(ContinuousAuthoritySuite.scala:22)
+    at map @ sanctity.app.ContinuousAuthoritySuite.$init$$$anonfun$6$$anonfun$1$$anonfun$2$$anonfun$1$$anonfun$1(ContinuousAuthoritySuite.scala:109)
+    at flatMap @ sanctity.app.ContinuousAuthoritySuite.$init$$$anonfun$6$$anonfun$1$$anonfun$2$$anonfun$1$$anonfun$1(ContinuousAuthoritySuite.scala:109)
+    at flatMap @ sanctity.app.ContinuousAuthoritySuite.$init$$$anonfun$6$$anonfun$1$$anonfun$2$$anonfun$1(ContinuousAuthoritySuite.scala:108)
+    at unsafeRunSync @ sanctity.app.ContinuousAuthoritySuite.$init$$$anonfun$1(ContinuousAuthoritySuite.scala:33)
+    at timeoutTo$extension @ sanctity.application.CurrentAuthority$.during$$anonfun$1(CurrentAuthority.scala:37)
+sanctity.app.ContinuousAuthoritySuite: finished 1.385s
+Test run sanctity.app.ContinuousAuthoritySuite finished: 1 failed, 0 ignored, 6 total 1.391s
+[error] Failed: Total 6, Failed 1, Errors 0, Passed 5
+[error] Failed tests:
+[error] 	sanctity.app.ContinuousAuthoritySuite
+[error] (app / Test / testOnly) sbt.TestsFailedException: Tests unsuccessful
+[error] Total time: 8 s, completed Nov 1, 2026, 8:35:18 p.m.

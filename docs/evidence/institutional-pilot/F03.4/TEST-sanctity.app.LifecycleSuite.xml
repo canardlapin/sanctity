@@ -1,0 +1,258 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<testsuite hostname="BUC-GW01.local" name="sanctity.app.LifecycleSuite" tests="124" errors="0" failures="0" skipped="0" time="38.386" timestamp="2026-11-01T20:41:50">
+          <properties>
+      <property name="java.specification.version" value="21"/><property name="sun.jnu.encoding" value="UTF-8"/><property name="sun.arch.data.model" value="64"/><property name="java.vendor.url" value="https://adoptium.net/"/><property name="jline.terminal" value="none"/><property name="sun.boot.library.path" value="/Users/bbuchsbaum/Library/Java/JavaVirtualMachines/temurin-21.0.12.1+1.jdk/Contents/Home/lib"/><property name="sun.java.command" value="/Users/bbuchsbaum/.local/share/sbt/1.13.0/bin/sbt-launch.jar check integration/test app/runMain sanctity.app.PostgresDemo stage &quot;/private/tmp/sanctity-recovery-20261101/work/target/postgres-check.C9FccS/demo&quot;"/><property name="jdk.debug" value="release"/><property name="java.specification.vendor" value="Oracle Corporation"/><property name="java.version.date" value="2026-08-18"/><property name="java.home" value="/Users/bbuchsbaum/Library/Java/JavaVirtualMachines/temurin-21.0.12.1+1.jdk/Contents/Home"/><property name="file.separator" value="/"/><property name="java.vm.compressedOopsMode" value="Zero based"/><property name="line.separator" value="
+"/><property name="java.vm.specification.vendor" value="Oracle Corporation"/><property name="java.specification.name" value="Java Platform API Specification"/><property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/><property name="java.runtime.version" value="21.0.12.1+1-LTS"/><property name="user.name" value="bbuchsbaum"/><property name="log4j.ignoreTCL" value="true"/><property name="file.encoding" value="UTF-8"/><property name="java.vendor.version" value="Temurin-21.0.12.1+1"/><property name="java.io.tmpdir" value="/var/folders/f8/k46hqpm95mn7ns9f7wxw88640000gp/T/"/><property name="java.version" value="21.0.12.1"/><property name="java.vm.specification.name" value="Java Virtual Machine Specification"/><property name="native.encoding" value="US-ASCII"/><property name="java.library.path" value="/Users/bbuchsbaum/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:."/><property name="stderr.encoding" value="US-ASCII"/><property name="java.vendor" value="Eclipse Adoptium"/><property name="scala.ext.dirs" value="/Users/bbuchsbaum/.sbt/1.0/java9-rt-ext-eclipse_adoptium_21_0_12_1"/><property name="sun.io.unicode.encoding" value="UnicodeBig"/><property name="socksNonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/><property name="java.class.path" value="/Users/bbuchsbaum/.local/share/sbt/1.13.0/bin/sbt-launch.jar"/><property name="java.vm.vendor" value="Eclipse Adoptium"/><property name="jline.shutdownhook" value="false"/><property name="user.timezone" value="America/Toronto"/><property name="java.vm.specification.version" value="21"/><property name="os.name" value="Mac OS X"/><property name="sun.java.launcher" value="SUN_STANDARD"/><property name="user.country" value="CA"/><property name="http.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/><property name="sun.cpu.endian" value="little"/><property name="user.home" value="/Users/bbuchsbaum"/><property name="user.language" value="en"/><property name="sbt.script" value="/Users/bbuchsbaum/.local/bin/sbt"/><property name="sbt.ipcsocket.tmpdir" value="/var/folders/f8/k46hqpm95mn7ns9f7wxw88640000gp/T/.sbt1b8b7ae4/ipcsocket"/><property name="swoval.tmpdir" value="/var/folders/f8/k46hqpm95mn7ns9f7wxw88640000gp/T/.sbt1b8b7ae4/swoval"/><property name="apple.awt.application.name" value="Boot"/><property name="jline.esc.timeout" value="0"/><property name="ftp.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/><property name="stdout.encoding" value="US-ASCII"/><property name="path.separator" value=":"/><property name="os.version" value="15.1.1"/><property name="jna.nosys" value="true"/><property name="java.runtime.name" value="OpenJDK Runtime Environment"/><property name="java.vm.name" value="OpenJDK 64-Bit Server VM"/><property name="java.vendor.url.bug" value="https://github.com/adoptium/adoptium-support/issues"/><property name="user.dir" value="/private/tmp/sanctity-recovery-20261101/work"/><property name="os.arch" value="aarch64"/><property name="java.vm.info" value="mixed mode, sharing"/><property name="java.vm.version" value="21.0.12.1+1-LTS"/><property name="java.class.version" value="65.0"/>
+    </properties>
+          <testcase classname="sanctity.app.LifecycleSuite" name="temporal maps retain private exact inputs, recover collection, query observations and round-trip" time="0.628">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="temporal admission rejects source geometry changes, nonfinite maps and false source declarations" time="0.693">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="temporal collection enforces current authority and competing acceptance preserves the first complete release" time="0.955">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="shared runner cancels temporal preparation durably and refuses a mismatched recipe" time="0.343">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="seeded scientific query oracle agrees with frozen membership, history, paging and current authority" time="1.11">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="worker heartbeat fails a revoked run and restoration does not restart it" time="0.162">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="accepted content can be unready for a pinned processing contract" time="0.14">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="anatomy requirements correlate participant and session and report ambiguity" time="0.19">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="bundle content identity is deterministic and pinned across source correction and export" time="0.223">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="external producer returns verifiable QC and interrupted collection resumes without rerunning" time="0.477">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="source read and separate destination authority suffice, and revocation blocks acceptance" time="0.417">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="wrong output bytes and forged input bundle cannot pass ordinary admission" time="0.453">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="external QC independently reads licensed compressed NIfTI-1 and NIfTI-2 images" time="0.442">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="a deposition worker cannot accept results or read unrelated source data" time="1.072">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="derivative assessment refuses valid-looking rows with false source provenance" time="0.424">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="declared remote outputs remain distinct from verified retained staging" time="0.384">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="self-consistent output inventories cannot validate false scientific values" time="0.471">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="observations correlate exact input releases and retain historical evidence" time="0.557">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="seeded exact-input observation oracle preserves metric bounds, release identity, coverage and authority" time="1.333">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="private processing needs read authority and cannot acquire independent sharing authority" time="0.179">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="local runs and collection are idempotent and support successive derivative releases" time="0.965">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="explicit publication reuses completed bytes after a head conflict and recovers retries" time="0.729">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="publication is owner-only and independent of old destination authority, with current private-source access" time="0.442">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="publication refuses incomplete runs, changed receipts, forged activities and foreign bases" time="0.455">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="uncertain execution is explicit and late completion cannot override interruption" time="0.184">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="cancellation before launch leaves an interrupted durable run and no output publication" time="0.233">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="phase-pair cross-session view retains all members, origins and bytes through re-import" time="0.404">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="phase-pair duplicate declarations identify one complete required processing family" time="0.28">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="phase-pair member removal blocks admission and preserves historical closure" time="0.221">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="phase-pair scientific changes repair both target references and scan rows and preserve member lineage" time="0.382">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="analysis input independent corpus: complete" time="0.3">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="analysis input independent corpus: missing-echo-time" time="0.302">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="analysis input independent corpus: reversed-echo-time" time="0.265">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="analysis input independent corpus: equal-echo-time" time="0.281">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="analysis input independent corpus: conflicting-timing" time="0.269">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="analysis input independent corpus: singleton" time="0.258">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="analysis input independent corpus: duplicate-index" time="0.28">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="analysis input independent corpus: different-grid" time="0.273">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="analysis input independent corpus: missing-stimulus" time="0.33">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="analysis input independent corpus: unsafe-stimulus" time="0.382">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="analysis input independent corpus: uri-stimulus" time="0.325">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="analysis input independent corpus: missing-stimulus-cells" time="0.266">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="analysis inputs expand one selected echo into its exact family, shared events and referenced stimuli" time="0.571">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="analysis input disclosure excludes masked stimulus bytes and refuses loss of echo metadata" time="0.463">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="analysis input curation moves the complete family and rewrites shared stimulus references" time="0.428">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="analysis input header coherence rejects a changed echo grid without advancing the head" time="0.269">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="analysis inputs run per-echo QC, publish retained results and preserve history under correction and revocation" time="0.736">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="real image family survives correction, cross-session subset, export and re-import with historical evidence" time="0.403">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="missing required magnitude blocks ordinary acceptance and preserves the head" time="0.184">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="optional magnitude2 can be absent and a subset still preserves the complete required family" time="0.25">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="ambiguous magnitude representations are rejected without selecting one arbitrarily" time="0.187">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="echo corrections and disclosure masks cannot discard required scientific meaning" time="0.207">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="malformed real image geometry produces bound evidence and cannot advance the head" time="0.173">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="metadata timing corrections preserve image observations and historical assessment" time="0.174">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="coordinated family renames retain lineage while a partial rename cannot be accepted" time="0.288">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="explicit profile adoption preserves bytes, old query meaning, explanations and assessments" time="0.131">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="edits and view compilers reject context drift until explicit adoption" time="0.127">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="reinterpretation retains ordinary authorization, acceptance and stale-head checks" time="0.13">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="rename repairs references and scan rows, preserves identity, exports history and records the exact plan" time="0.284">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="removing a referenced image proposes explicit reference and table deletion without erasing source history" time="0.207">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="removing a B0 provider leaves declarations intact and cannot accept a dangling group" time="0.178">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="moving shared metadata reports old and new applicability while preserving a local override" time="0.131">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="plan acknowledgment and head conflicts prevent applying different or stale scientific edits" time="0.161">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="companion changes are explicit and orphaning DWI gradients blocks admission" time="0.186">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="unsupported references, subject relabeling and unsafe scans rows fail during planning" time="0.172">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="planning and preparation recheck current access, including revocation after inspection" time="0.109">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="revising a prepared draft cannot attach its old change receipt to new content" time="0.127">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="planning verifies document digests and rejects oversized inventories before reading" time="0.206">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="MRI subset round trip preserves images, supported meaning and exact transformation evidence" time="0.696">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="one inherited event table localizes twice with exact bytes and distinct artifact identities" time="0.559">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="subset masks cannot omit required timing, fieldmap metadata or event columns" time="0.342">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="missing stimulus assets block admission before a masked subset can be prepared" time="0.337">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="summary projection refuses duplicate keys, missing selected rows and unsafe scan paths" time="1.194">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="hidden event edits and later source releases leave accepted subset bytes and receipts intact" time="0.832">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="variable acquisition timing survives subset materialization without an invented TR" time="0.58">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="subset document acquisition reads shared tables once and releases resources on cancellation" time="0.686">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="oversized summary inputs fail before any source-document stream is acquired" time="0.465">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="EPI gradient dependencies outside this profile cannot be silently dropped" time="0.397">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="subset projection cannot silently change participant values interpreted by the native profile" time="0.355">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="ordinary DWI suffix selections may include local gradients without treating them as acquisition roots" time="0.489">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="native import stops depositing bytes when its proposal grant is revoked" time="0.016">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="fixed-release read grants, content separation, frozen selections and revocation" time="0.132">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="proposing and accepting are distinct powers and retry rechecks authority" time="0.133">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="correlated participant and session predicates agree with the pure interpreter" time="0.144">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="authorized views flatten inherited metadata, project participants and share without source access" time="0.166">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="view planning refuses forbidden required metadata and unsupported associations" time="0.134">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="hidden metadata changes do not alter projected view bytes" time="0.156">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="native import, explain, correction, acceptance retry, and two exact isolated exports" time="0.154">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="a new sidecar discovers new applicability while preserving artifact identity" time="0.13">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="ambiguous metadata cannot be accepted and leaves the previous head visible" time="0.136">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="malformed, duplicate-key, invalid, and numerically lossy metadata remain rejected candidates" time="0.197">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="two concurrent writers cannot both advance the same head" time="0.146">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="a prepared candidate becomes stale when its draft generation changes" time="0.122">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="an idempotency key cannot be reused for different prepared content" time="0.12">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="another principal cannot inspect, accept, correct, or export private content" time="0.113">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="corrupt content blocks acceptance and export without exposing an incomplete destination" time="0.147">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="an existing export destination and its contents remain untouched" time="0.109">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="symlinks are rejected and observed source mutation cannot silently succeed" time="0.012">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="cancelling a blob upload removes its temporary file" time="0.012">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="reference profile rejects oversized JSON with a typed limit failure" time="0.148">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="missing dataset description yields findings and no accepted head" time="0.095">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="unrecognized files and empty directories are preserved without a conformance claim" time="0.141">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="invalid UTF-8 and deeply nested metadata produce findings" time="0.185">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="unsupported nested and derivative dataset profiles remain explicit rejected candidates" time="0.172">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="fieldmap correction changes grouped relationships while preserving prior scientific interpretation and bytes" time="0.191">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="dangling fieldmap references remain inspectable and cannot be accepted" time="0.178">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="legacy IntendedFor links resolve with a finding and malformed or external links block admission" time="0.208">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="MRI subsets cannot silently omit explicit fieldmap links from another session" time="0.137">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="inherited event correction changes only the applicable acquisition and retains old closure and exact exports" time="0.188">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="editing selected companion bytes reports dependency impact without inventing a link change" time="0.152">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="ambiguous event companions block admission and never silently advance the head" time="0.132">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="DWI gradients form one group and an incomplete pair remains a rejected candidate" time="0.204">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="root-level events prevent a restricted MRI subset from silently omitting them" time="0.128">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="DWI content evidence survives storage; count rejection preserves the head and corrected history" time="0.195">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="DWI malformed and nonunit vectors remain inspectable rejected corrections" time="0.189">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="big-endian NIfTI-2 gzip headers are assessed without rewriting the image" time="0.166">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="a short image payload is a content finding and cannot become an accepted release" time="0.152">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="shared gradients are checked independently against each acquisition's volume count" time="0.194">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="event content correction rejects negative duration and preserves history and authored exports" time="0.233">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="timing corrections reassess inherited event windows using exact metadata origins" time="0.15">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="nonuniform event timing uses explicit volume times and rejects count disagreement" time="0.23">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="unavailable timing remains explicit while malformed event cells still block admission" time="0.162">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="variable slice timing without a frame duration never extrapolates a last interval" time="0.139">
+                      
+                    </testcase><testcase classname="sanctity.app.LifecycleSuite" name="event assessments use the shared gzip header reader and preserve quoted TSV bytes" time="0.145">
+                      
+                    </testcase>
+          <system-out><![CDATA[]]></system-out>
+          <system-err><![CDATA[]]></system-err>
+        </testsuite>

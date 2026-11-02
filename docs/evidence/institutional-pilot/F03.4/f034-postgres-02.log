@@ -1,0 +1,21 @@
+postgres (PostgreSQL) 17.11
+[info] welcome to sbt 1.10.5 (Eclipse Adoptium Java 21.0.12.1)
+[info] loading project definition from /private/tmp/sanctity-recovery-20261101/work/project
+[info] loading settings for project root from build.sbt ...
+[info] loading settings for project bids4s-19f022d002f69292dec056eb0762b877438c47305cee6c176adf3e0f780e9146-build from plugins.sbt ...
+[info] loading project definition from /private/tmp/sanctity-recovery-20261101/work/target/source-dependencies/bids4s-19f022d002f69292dec056eb0762b877438c47305cee6c176adf3e0f780e9146/project
+[info] loading settings for project root from build.sbt ...
+[info] resolving key references (17509 settings) ...
+[info] set current project to sanctity (in build file:/private/tmp/sanctity-recovery-20261101/work/)
+[info] compiling 1 Scala source to /private/tmp/sanctity-recovery-20261101/work/modules/integration/target/scala-3.3.8/test-classes ...
+[info] done compiling
+F03.4 offboarding termination ms=894
+F03.4 credential expiry termination ms=929
+Test run sanctity.postgres.ContinuingAuthoritySuite started
+sanctity.postgres.ContinuingAuthoritySuite: finished 17.977s
+Test run sanctity.postgres.ContinuingAuthoritySuite finished: 0 failed, 0 ignored, 11 total 17.984s
+Test run sanctity.postgres.ProcessingRecoverySuite started
+sanctity.postgres.ProcessingRecoverySuite: finished 7.319s
+Test run sanctity.postgres.ProcessingRecoverySuite finished: 0 failed, 0 ignored, 4 total 7.319s
+[info] Passed: Total 15, Failed 0, Errors 0, Passed 15
+[success] Total time: 30 s, completed Nov 1, 2026, 8:23:49 p.m.

@@ -1,0 +1,287 @@
+postgres (PostgreSQL) 17.11
+[info] welcome to sbt 1.10.5 (Eclipse Adoptium Java 21.0.12.1)
+[info] loading project definition from /private/tmp/sanctity-recovery-20261101/work/project
+[info] loading settings for project root from build.sbt ...
+[info] loading settings for project bids4s-19f022d002f69292dec056eb0762b877438c47305cee6c176adf3e0f780e9146-build from plugins.sbt ...
+[info] loading project definition from /private/tmp/sanctity-recovery-20261101/work/target/source-dependencies/bids4s-19f022d002f69292dec056eb0762b877438c47305cee6c176adf3e0f780e9146/project
+[info] loading settings for project root from build.sbt ...
+[info] resolving key references (17509 settings) ...
+[info] set current project to sanctity (in build file:/private/tmp/sanctity-recovery-20261101/work/)
+[success] Total time: 1 s, completed Nov 1, 2026, 8:40:20 p.m.
+[info] compiling 1 Scala source to /private/tmp/sanctity-recovery-20261101/work/modules/app/target/scala-3.3.8/test-classes ...
+Test run sanctity.kernel.ContentCheckSuite started
+sanctity.kernel.ContentCheckSuite: finished 0.052s
+Test run sanctity.kernel.ContentCheckSuite finished: 0 failed, 0 ignored, 5 total 0.058s
+Test run sanctity.kernel.RelationshipSuite started
+sanctity.kernel.RelationshipSuite: finished 0.046s
+Test run sanctity.kernel.RelationshipSuite finished: 0 failed, 0 ignored, 10 total 0.046s
+Test run sanctity.kernel.SemanticContextSuite started
+sanctity.kernel.SemanticContextSuite: finished 0.02s
+Test run sanctity.kernel.SemanticContextSuite finished: 0 failed, 0 ignored, 3 total 0.021s
+Test run sanctity.kernel.ProjectionSuite started
+sanctity.kernel.ProjectionSuite: finished 0.023s
+Test run sanctity.kernel.ProjectionSuite finished: 0 failed, 0 ignored, 4 total 0.023s
+Test run sanctity.kernel.PublicationSuite started
+sanctity.kernel.PublicationSuite: finished 0.014s
+Test run sanctity.kernel.PublicationSuite finished: 0 failed, 0 ignored, 4 total 0.014s
+Test run sanctity.kernel.KernelSuite started
+sanctity.kernel.KernelSuite: finished 0.093s
+Test run sanctity.kernel.KernelSuite finished: 0 failed, 0 ignored, 9 total 0.093s
+Test run sanctity.kernel.QuerySuite started
+sanctity.kernel.QuerySuite: finished 0.006s
+Test run sanctity.kernel.QuerySuite finished: 0 failed, 0 ignored, 3 total 0.006s
+Test run sanctity.kernel.FileEditsSuite started
+sanctity.kernel.FileEditsSuite: finished 0.007s
+Test run sanctity.kernel.FileEditsSuite finished: 0 failed, 0 ignored, 3 total 0.007s
+Test run sanctity.kernel.ProcessingContractSuite started
+sanctity.kernel.ProcessingContractSuite: finished 0.019s
+Test run sanctity.kernel.ProcessingContractSuite finished: 0 failed, 0 ignored, 6 total 0.019s
+Test run sanctity.http.RequestJsonSuite started
+sanctity.http.RequestJsonSuite: finished 0.164s
+Test run sanctity.http.RequestJsonSuite finished: 0 failed, 0 ignored, 2 total 0.175s
+Test run sanctity.http.ConsoleAssetsSuite started
+sanctity.http.ConsoleAssetsSuite: finished 0.621s
+Test run sanctity.http.ConsoleAssetsSuite finished: 0 failed, 0 ignored, 3 total 0.622s
+Test run sanctity.policy.PolicyJournalSuite started
+sanctity.policy.PolicyJournalSuite: finished 1.69s
+Test run sanctity.policy.PolicyJournalSuite finished: 0 failed, 0 ignored, 17 total 1.703s
+Test run sanctity.policy.PolicyWireSuite started
+sanctity.policy.PolicyWireSuite: finished 0.041s
+Test run sanctity.policy.PolicyWireSuite finished: 0 failed, 0 ignored, 19 total 0.041s
+[info] done compiling
+Test run sanctity.policy.PolicyTransportSuite started
+sanctity.policy.PolicyTransportSuite: finished 29.118s
+Test run sanctity.policy.PolicyTransportSuite finished: 0 failed, 0 ignored, 13 total 29.118s
+Test run sanctity.postgres.PersistenceSuite started
+sanctity.postgres.PersistenceSuite: finished 0.137s
+Test run sanctity.postgres.PersistenceSuite finished: 0 failed, 0 ignored, 19 total 0.137s
+Test run sanctity.app.ServiceConfigurationSuite started
+sanctity.app.ServiceConfigurationSuite: finished 2.988s
+Test run sanctity.app.ServiceConfigurationSuite finished: 0 failed, 0 ignored, 9 total 2.995s
+[info] Passed: Total 47, Failed 0, Errors 0, Passed 47
+Test run sanctity.app.QueryOracleSuite started
+sanctity.app.QueryOracleSuite: finished 0.068s
+Test run sanctity.app.QueryOracleSuite finished: 0 failed, 0 ignored, 1 total 0.077s
+Test run sanctity.app.MriConformanceSuite started
+sanctity.app.MriConformanceSuite: finished 0.157s
+Test run sanctity.app.MriConformanceSuite finished: 0 failed, 0 ignored, 17 total 0.158s
+Test run sanctity.app.ProcessSuite started
+sanctity.app.ProcessSuite: finished 0.453s
+Test run sanctity.app.ProcessSuite finished: 0 failed, 0 ignored, 3 total 0.453s
+Test run sanctity.app.OrganizationAuthoritySuite started
+sanctity.app.OrganizationAuthoritySuite: finished 0.196s
+Test run sanctity.app.OrganizationAuthoritySuite finished: 0 failed, 0 ignored, 57 total 0.196s
+Test run sanctity.app.StreamingTsvSuite started
+sanctity.app.StreamingTsvSuite: finished 0.315s
+Test run sanctity.app.StreamingTsvSuite finished: 0 failed, 0 ignored, 11 total 0.315s
+Test run sanctity.app.PhasePairConformanceSuite started
+sanctity.app.PhasePairConformanceSuite: finished 0.044s
+Test run sanctity.app.PhasePairConformanceSuite finished: 0 failed, 0 ignored, 17 total 0.044s
+Test run sanctity.app.StreamingViewSuite started
+sanctity.app.StreamingViewSuite: finished 3.084s
+Test run sanctity.app.StreamingViewSuite finished: 0 failed, 0 ignored, 7 total 3.084s
+Test run sanctity.app.MriHeaderChecksSuite started
+sanctity.app.MriHeaderChecksSuite: finished 0.039s
+Test run sanctity.app.MriHeaderChecksSuite finished: 0 failed, 0 ignored, 4 total 0.039s
+Test run sanctity.app.BehaviouralSuite started
+sanctity.app.BehaviouralSuite: finished 4.522s
+Test run sanctity.app.BehaviouralSuite finished: 0 failed, 0 ignored, 15 total 4.522s
+Test run sanctity.app.BehaviouralResourceSuite started
+sanctity.app.BehaviouralResourceSuite: finished 0.004s
+Test run sanctity.app.BehaviouralResourceSuite finished: 0 failed, 0 ignored, 5 total 0.004s
+Test run sanctity.app.ConformanceSuite started
+sanctity.app.ConformanceSuite: finished 0.053s
+Test run sanctity.app.ConformanceSuite finished: 0 failed, 0 ignored, 8 total 0.053s
+Test run sanctity.app.OrganizationSuite started
+sanctity.app.OrganizationSuite: finished 0.05s
+Test run sanctity.app.OrganizationSuite finished: 0 failed, 0 ignored, 14 total 0.05s
+Test run sanctity.app.XnatSuite started
+sanctity.app.XnatSuite: finished 0.629s
+Test run sanctity.app.XnatSuite finished: 0 failed, 0 ignored, 4 total 0.629s
+Test run sanctity.app.PayloadSuite started
+sanctity.app.PayloadSuite: finished 1.528s
+Test run sanctity.app.PayloadSuite finished: 0 failed, 0 ignored, 4 total 1.529s
+Test run sanctity.app.TemporalSuite started
+sanctity.app.TemporalSuite: finished 2.837s
+Test run sanctity.app.TemporalSuite finished: 0 failed, 0 ignored, 4 total 2.837s
+Test run sanctity.app.DwiContentChecksSuite started
+sanctity.app.DwiContentChecksSuite: finished 0.015s
+Test run sanctity.app.DwiContentChecksSuite finished: 0 failed, 0 ignored, 5 total 0.015s
+Test run sanctity.app.LifecycleSuite started
+sanctity.app.LifecycleSuite: finished 38.395s
+Test run sanctity.app.LifecycleSuite finished: 0 failed, 0 ignored, 124 total 38.395s
+Test run sanctity.app.ContinuousAuthoritySuite started
+sanctity.app.ContinuousAuthoritySuite: finished 1.043s
+Test run sanctity.app.ContinuousAuthoritySuite finished: 0 failed, 0 ignored, 6 total 1.044s
+Test run sanctity.app.EventContentChecksSuite started
+sanctity.app.EventContentChecksSuite: finished 0.013s
+Test run sanctity.app.EventContentChecksSuite finished: 0 failed, 0 ignored, 5 total 0.013s
+[info] Passed: Total 5, Failed 0, Errors 0, Passed 5
+[info] Passed: Total 68, Failed 0, Errors 0, Passed 68
+[info] Passed: Total 9, Failed 0, Errors 0, Passed 9
+[info] Passed: Total 311, Failed 0, Errors 0, Passed 311
+[success] Total time: 92 s (01:32), completed Nov 1, 2026, 8:41:52 p.m.
+[info] compiling 1 Scala source to /private/tmp/sanctity-recovery-20261101/work/modules/integration/target/scala-3.3.8/test-classes ...
+[info] done compiling
+Test run sanctity.postgres.DisclosureSuite started
+sanctity.postgres.DisclosureSuite: finished 5.018s
+Test run sanctity.postgres.DisclosureSuite finished: 0 failed, 0 ignored, 5 total 5.025s
+Test run sanctity.postgres.CurrentAuthoritySuite started
+sanctity.postgres.CurrentAuthoritySuite: finished 21.803s
+Test run sanctity.postgres.CurrentAuthoritySuite finished: 0 failed, 0 ignored, 44 total 21.804s
+Test run sanctity.postgres.OperationsSuite started
+sanctity.postgres.OperationsSuite: finished 2.706s
+Test run sanctity.postgres.OperationsSuite finished: 0 failed, 0 ignored, 5 total 2.706s
+Test run sanctity.postgres.PostgresLifecycleSuite started
+sanctity.postgres.PostgresLifecycleSuite: finished 170.23s
+Test run sanctity.postgres.PostgresLifecycleSuite finished: 0 failed, 0 ignored, 124 total 170.23s
+Test run sanctity.postgres.BehaviouralPersistenceSuite started
+sanctity.postgres.BehaviouralPersistenceSuite: finished 15.469s
+Test run sanctity.postgres.BehaviouralPersistenceSuite finished: 0 failed, 0 ignored, 16 total 15.469s
+Test run sanctity.postgres.PolicyReceiptCompatibilitySuite started
+sanctity.postgres.PolicyReceiptCompatibilitySuite: finished 0.003s
+Test run sanctity.postgres.PolicyReceiptCompatibilitySuite finished: 0 failed, 0 ignored, 3 total 0.003s
+Test run sanctity.postgres.OrganizationHttpSuite started
+sanctity.postgres.OrganizationHttpSuite: finished 6.703s
+Test run sanctity.postgres.OrganizationHttpSuite finished: 0 failed, 0 ignored, 9 total 6.703s
+Test run sanctity.postgres.StreamingPersistenceSuite started
+sanctity.postgres.StreamingPersistenceSuite: finished 16.952s
+Test run sanctity.postgres.StreamingPersistenceSuite finished: 0 failed, 0 ignored, 7 total 16.952s
+Test run sanctity.postgres.ProcessingRecoverySuite started
+sanctity.postgres.ProcessingRecoverySuite: finished 8.693s
+Test run sanctity.postgres.ProcessingRecoverySuite finished: 0 failed, 0 ignored, 4 total 8.693s
+Test run sanctity.postgres.PolicyIntegrationSuite started
+sanctity.postgres.PolicyIntegrationSuite: finished 29.976s
+Test run sanctity.postgres.PolicyIntegrationSuite finished: 0 failed, 0 ignored, 22 total 29.976s
+Test run sanctity.postgres.OrganizationPersistenceSuite started
+sanctity.postgres.OrganizationPersistenceSuite: finished 4.46s
+Test run sanctity.postgres.OrganizationPersistenceSuite finished: 0 failed, 0 ignored, 11 total 4.46s
+F03.4 offboarding termination ms=914
+F03.4 credential expiry termination ms=966
+Test run sanctity.postgres.ContinuingAuthoritySuite started
+sanctity.postgres.ContinuingAuthoritySuite: finished 19.608s
+Test run sanctity.postgres.ContinuingAuthoritySuite finished: 0 failed, 0 ignored, 12 total 19.608s
+Test run sanctity.postgres.DirectorySuite started
+sanctity.postgres.DirectorySuite: finished 2.836s
+Test run sanctity.postgres.DirectorySuite finished: 0 failed, 0 ignored, 5 total 2.836s
+Import operation: e4652ddb-0dd8-4d08-8f97-097580e6abd9
+{
+  "dataset" : "cb04196c-7f5d-4472-9180-0a30ebed8578",
+  "release" : "ae0ec7da-a491-4f5b-838f-c495c2656397",
+  "operation" : "e4652ddb-0dd8-4d08-8f97-097580e6abd9"
+}
+Import operation: e4652ddb-0dd8-4d08-8f97-097580e6abd9
+{
+  "dataset" : "cb04196c-7f5d-4472-9180-0a30ebed8578",
+  "release" : "ae0ec7da-a491-4f5b-838f-c495c2656397",
+  "operation" : "e4652ddb-0dd8-4d08-8f97-097580e6abd9"
+}
+Credential d632cc85-d66d-4070-aee5-5ac2a4b27930 written to a new private file. Durability: LocalOnly. Expires: 2026-11-02T02:47:02.972258Z
+Credential revoked. Durability: LocalOnly.
+Test run sanctity.postgres.HttpSuite started
+sanctity.postgres.HttpSuite: finished 4.546s
+Test run sanctity.postgres.HttpSuite finished: 0 failed, 0 ignored, 8 total 4.546s
+Test run sanctity.postgres.ConsoleSuite started
+sanctity.postgres.ConsoleSuite: finished 1.222s
+Test run sanctity.postgres.ConsoleSuite finished: 0 failed, 0 ignored, 1 total 1.223s
+Test run sanctity.postgres.ServicePrivilegesSuite started
+sanctity.postgres.ServicePrivilegesSuite: finished 3.112s
+Test run sanctity.postgres.ServicePrivilegesSuite finished: 0 failed, 0 ignored, 6 total 3.112s
+Test run sanctity.postgres.TransactionSuite started
+sanctity.postgres.TransactionSuite: finished 5.471s
+Test run sanctity.postgres.TransactionSuite finished: 0 failed, 0 ignored, 10 total 5.471s
+[info] Passed: Total 292, Failed 0, Errors 0, Passed 292
+[success] Total time: 321 s (05:21), completed Nov 1, 2026, 8:47:13 p.m.
+[info] running (fork) sanctity.app.PostgresDemo stage /private/tmp/sanctity-recovery-20261101/work/target/postgres-check.C9FccS/demo
+[info] Staged durable correction c68eda8b-bbfd-4096-8a0e-d9fd66d5ebe1 in schema sanctity_demo.
+[info] Workspace: /private/tmp/sanctity-recovery-20261101/work/target/postgres-check.C9FccS/demo
+[info] The process can now exit; resume uses persisted preparation.
+[success] Total time: 2 s, completed Nov 1, 2026, 8:47:15 p.m.
+[info] welcome to sbt 1.10.5 (Eclipse Adoptium Java 21.0.12.1)
+[info] loading project definition from /private/tmp/sanctity-recovery-20261101/work/project
+[info] loading settings for project root from build.sbt ...
+[info] loading settings for project bids4s-19f022d002f69292dec056eb0762b877438c47305cee6c176adf3e0f780e9146-build from plugins.sbt ...
+[info] loading project definition from /private/tmp/sanctity-recovery-20261101/work/target/source-dependencies/bids4s-19f022d002f69292dec056eb0762b877438c47305cee6c176adf3e0f780e9146/project
+[info] loading settings for project root from build.sbt ...
+[info] resolving key references (17509 settings) ...
+[info] set current project to sanctity (in build file:/private/tmp/sanctity-recovery-20261101/work/)
+[info] running (fork) sanctity.app.PostgresDemo resume /private/tmp/sanctity-recovery-20261101/work/target/postgres-check.C9FccS/demo
+[info] Durable PostgreSQL lifecycle demonstration
+[info] Schema: sanctity_demo
+[info] Initial release: 55143302-ce7b-4ae4-a3b8-8ca37b5a9979
+[info] Accepted release: 9f3ac990-181c-4baa-9e35-bc46b9fe6af8
+[info] Candidate: c68eda8b-bbfd-4096-8a0e-d9fd66d5ebe1
+[info] Accepted at: 2026-11-02T01:47:29.134703Z
+[info] RepetitionTime: 1.5 -> 1.8; historical interpretation retained.
+[info] Both releases exported with verified bytes; retry returned its original receipt.
+[info] Exports: /private/tmp/sanctity-recovery-20261101/work/target/postgres-check.C9FccS/demo/exports-11553953229073347795
+[info] Authority: explicit demonstration principal, not institutional authentication.
+[success] Total time: 2 s, completed Nov 1, 2026, 8:47:29 p.m.
+[info] running (fork) sanctity.app.PostgresDemo resume /private/tmp/sanctity-recovery-20261101/work/target/postgres-check.C9FccS/demo
+[info] Durable PostgreSQL lifecycle demonstration
+[info] Schema: sanctity_demo
+[info] Initial release: 55143302-ce7b-4ae4-a3b8-8ca37b5a9979
+[info] Accepted release: 9f3ac990-181c-4baa-9e35-bc46b9fe6af8
+[info] Candidate: c68eda8b-bbfd-4096-8a0e-d9fd66d5ebe1
+[info] Accepted at: 2026-11-02T01:47:29.134703Z
+[info] RepetitionTime: 1.5 -> 1.8; historical interpretation retained.
+[info] Both releases exported with verified bytes; retry returned its original receipt.
+[info] Exports: /private/tmp/sanctity-recovery-20261101/work/target/postgres-check.C9FccS/demo/exports-14391096827915727102
+[info] Authority: explicit demonstration principal, not institutional authentication.
+[success] Total time: 1 s, completed Nov 1, 2026, 8:47:30 p.m.
+[info] welcome to sbt 1.10.5 (Eclipse Adoptium Java 21.0.12.1)
+[info] loading project definition from /private/tmp/sanctity-recovery-20261101/work/project
+[info] loading settings for project root from build.sbt ...
+[info] loading settings for project bids4s-19f022d002f69292dec056eb0762b877438c47305cee6c176adf3e0f780e9146-build from plugins.sbt ...
+[info] loading project definition from /private/tmp/sanctity-recovery-20261101/work/target/source-dependencies/bids4s-19f022d002f69292dec056eb0762b877438c47305cee6c176adf3e0f780e9146/project
+[info] loading settings for project root from build.sbt ...
+[info] resolving key references (17509 settings) ...
+[info] set current project to sanctity (in build file:/private/tmp/sanctity-recovery-20261101/work/)
+[info] running (fork) sanctity.app.RecoveryDemo grant /private/tmp/sanctity-recovery-20261101/work/target/postgres-check.C9FccS/demo
+[success] Total time: 2 s, completed Nov 1, 2026, 8:47:37 p.m.
+Backup complete: /private/tmp/sanctity-recovery-20261101/work/target/postgres-check.C9FccS/backup
+[info] welcome to sbt 1.10.5 (Eclipse Adoptium Java 21.0.12.1)
+[info] loading project definition from /private/tmp/sanctity-recovery-20261101/work/project
+[info] loading settings for project root from build.sbt ...
+[info] loading settings for project bids4s-19f022d002f69292dec056eb0762b877438c47305cee6c176adf3e0f780e9146-build from plugins.sbt ...
+[info] loading project definition from /private/tmp/sanctity-recovery-20261101/work/target/source-dependencies/bids4s-19f022d002f69292dec056eb0762b877438c47305cee6c176adf3e0f780e9146/project
+[info] loading settings for project root from build.sbt ...
+[info] resolving key references (17509 settings) ...
+[info] set current project to sanctity (in build file:/private/tmp/sanctity-recovery-20261101/work/)
+[info] running (fork) sanctity.app.RecoveryDemo revoke /private/tmp/sanctity-recovery-20261101/work/target/postgres-check.C9FccS/demo
+[info] Current curator can read; revoked guest remains denied.
+[success] Total time: 2 s, completed Nov 1, 2026, 8:47:45 p.m.
+[info] running (fork) sanctity.app.RecoveryCli capture-policy /private/tmp/sanctity-recovery-20261101/work/target/postgres-check.C9FccS/current-policy.json
+[info] Captured policy digest: cc8dd35aca46559567c36f4bb7e41f8b6251b85c107b405722ad9303e0c198a0
+[success] Total time: 1 s, completed Nov 1, 2026, 8:47:46 p.m.
+Restored with access CLOSED. Reconcile trusted current policy and verify blobs before serving.
+[info] welcome to sbt 1.10.5 (Eclipse Adoptium Java 21.0.12.1)
+[info] loading project definition from /private/tmp/sanctity-recovery-20261101/work/project
+[info] loading settings for project root from build.sbt ...
+[info] loading settings for project bids4s-19f022d002f69292dec056eb0762b877438c47305cee6c176adf3e0f780e9146-build from plugins.sbt ...
+[info] loading project definition from /private/tmp/sanctity-recovery-20261101/work/target/source-dependencies/bids4s-19f022d002f69292dec056eb0762b877438c47305cee6c176adf3e0f780e9146/project
+[info] loading settings for project root from build.sbt ...
+[info] resolving key references (17509 settings) ...
+[info] set current project to sanctity (in build file:/private/tmp/sanctity-recovery-20261101/work/)
+[info] running (fork) sanctity.app.RecoveryDemo closed /private/tmp/sanctity-recovery-20261101/work/target/postgres-check.C9FccS/restored
+[success] Total time: 2 s, completed Nov 1, 2026, 8:47:54 p.m.
+[info] running (fork) sanctity.app.RecoveryCli reconcile /private/tmp/sanctity-recovery-20261101/work/target/postgres-check.C9FccS/current-policy.json cc8dd35aca46559567c36f4bb7e41f8b6251b85c107b405722ad9303e0c198a0 /private/tmp/sanctity-recovery-20261101/work/target/postgres-check.C9FccS/restored/storage
+[info] Recovery reconciled; blob verification passed and current authority applied.
+[success] Total time: 1 s, completed Nov 1, 2026, 8:47:55 p.m.
+[info] running (fork) sanctity.app.RecoveryDemo verify /private/tmp/sanctity-recovery-20261101/work/target/postgres-check.C9FccS/restored
+[info] Current curator can read; revoked guest remains denied.
+[success] Total time: 1 s, completed Nov 1, 2026, 8:47:56 p.m.
+[info] running (fork) sanctity.app.PostgresDemo resume /private/tmp/sanctity-recovery-20261101/work/target/postgres-check.C9FccS/restored
+[info] Durable PostgreSQL lifecycle demonstration
+[info] Schema: sanctity_demo
+[info] Initial release: 55143302-ce7b-4ae4-a3b8-8ca37b5a9979
+[info] Accepted release: 9f3ac990-181c-4baa-9e35-bc46b9fe6af8
+[info] Candidate: c68eda8b-bbfd-4096-8a0e-d9fd66d5ebe1
+[info] Accepted at: 2026-11-02T01:47:29.134703Z
+[info] RepetitionTime: 1.5 -> 1.8; historical interpretation retained.
+[info] Both releases exported with verified bytes; retry returned its original receipt.
+[info] Exports: /private/tmp/sanctity-recovery-20261101/work/target/postgres-check.C9FccS/restored/exports-12222666115978875256
+[info] Authority: explicit demonstration principal, not institutional authentication.
+[success] Total time: 2 s, completed Nov 1, 2026, 8:47:58 p.m.
+Coordinated restore retained scientific releases and preserved subsequent revocation.
+PostgreSQL integration and crash/retry demonstration passed. Evidence: /private/tmp/sanctity-recovery-20261101/work/target/postgres-check.C9FccS

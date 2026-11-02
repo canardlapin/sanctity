@@ -1,0 +1,68 @@
+postgres (PostgreSQL) 17.11
+[info] welcome to sbt 1.10.5 (Eclipse Adoptium Java 21.0.12.1)
+[info] loading project definition from /private/tmp/sanctity-recovery-20261101/work/project
+[info] loading settings for project root from build.sbt ...
+[info] loading settings for project bids4s-19f022d002f69292dec056eb0762b877438c47305cee6c176adf3e0f780e9146-build from plugins.sbt ...
+[info] loading project definition from /private/tmp/sanctity-recovery-20261101/work/target/source-dependencies/bids4s-19f022d002f69292dec056eb0762b877438c47305cee6c176adf3e0f780e9146/project
+[info] loading settings for project root from build.sbt ...
+[info] resolving key references (17509 settings) ...
+[info] set current project to sanctity (in build file:/private/tmp/sanctity-recovery-20261101/work/)
+[info] compiling 24 Scala sources to /private/tmp/sanctity-recovery-20261101/work/modules/integration/target/scala-3.3.8/test-classes ...
+[info] done compiling
+Test run sanctity.postgres.ContinuingAuthoritySuite started
+==> X sanctity.postgres.ContinuingAuthoritySuite.local runner kills its real child within five seconds of offboarding and retains failure 4.63s doobie.util.invariant$NonNullableColumnRead: SQL `NULL` read at column 1 (JDBC type Char) but mapping is to a non-Option type; use Option here. Note that JDBC column indexing is 1-based.
+    at doobie.util.invariant$NonNullableColumnRead$.apply(invariant.scala:58)
+    at doobie.util.Get.unsafeGetNonNullable(get.scala:40)
+    at doobie.util.Read$.$anon$superArg$4$1$$anonfun$1(read.scala:92)
+    at doobie.util.Read$.$anon$superArg$4$1$$anonfun$adapted$1(read.scala:92)
+    at doobie.util.Read.get$$anonfun$1(read.scala:59)
+    at doobie.free.KleisliInterpreter.primitive$$anonfun$1$$anonfun$1(kleisliinterpreter.scala:104)
+    at blocking @ sanctity.postgres.PostgresFixture$.resource$$anonfun$2$$anonfun$1(PostgresFixture.scala:25)
+    at flatMap @ doobie.WeakAsync$$anon$1.flatMap(WeakAsync.scala:30)
+    at tailRecM$$anonfun$1 @ doobie.util.transactor$Transactor$$anon$4.apply$$anonfun$3(transactor.scala:169)
+    at flatMap @ doobie.WeakAsync$$anon$1.flatMap(WeakAsync.scala:30)
+    at tailRecM$$anonfun$1 @ doobie.util.transactor$Transactor$$anon$4.apply$$anonfun$3(transactor.scala:169)
+    at blocking @ sanctity.postgres.PostgresFixture$.resource$$anonfun$2$$anonfun$1(PostgresFixture.scala:25)
+    at flatMap @ doobie.WeakAsync$$anon$1.flatMap(WeakAsync.scala:30)
+    at tailRecM$$anonfun$1 @ doobie.util.transactor$Transactor$$anon$4.apply$$anonfun$3(transactor.scala:169)
+    at flatMap @ doobie.WeakAsync$$anon$1.flatMap(WeakAsync.scala:30)
+    at tailRecM$$anonfun$1 @ doobie.util.transactor$Transactor$$anon$4.apply$$anonfun$3(transactor.scala:169)
+    at uncancelable @ doobie.WeakAsync$$anon$1.uncancelable(WeakAsync.scala:38)
+    at flatMap @ doobie.WeakAsync$$anon$1.flatMap(WeakAsync.scala:30)
+    at tailRecM$$anonfun$1 @ doobie.util.transactor$Transactor$$anon$4.apply$$anonfun$3(transactor.scala:169)
+    at flatMap @ doobie.WeakAsync$$anon$1.flatMap(WeakAsync.scala:30)
+    at tailRecM$$anonfun$1 @ doobie.util.transactor$Transactor$$anon$4.apply$$anonfun$3(transactor.scala:169)
+    at suspend @ doobie.WeakAsync$$anon$1.suspend(WeakAsync.scala:36)
+==> X sanctity.postgres.ContinuingAuthoritySuite.local runner kills its real child within five seconds of credential expiry and retains failure 2.882s doobie.util.invariant$NonNullableColumnRead: SQL `NULL` read at column 1 (JDBC type Char) but mapping is to a non-Option type; use Option here. Note that JDBC column indexing is 1-based.
+    at doobie.util.invariant$NonNullableColumnRead$.apply(invariant.scala:58)
+    at doobie.util.Get.unsafeGetNonNullable(get.scala:40)
+    at doobie.util.Read$.$anon$superArg$4$1$$anonfun$1(read.scala:92)
+    at doobie.util.Read$.$anon$superArg$4$1$$anonfun$adapted$1(read.scala:92)
+    at doobie.util.Read.get$$anonfun$1(read.scala:59)
+    at doobie.free.KleisliInterpreter.primitive$$anonfun$1$$anonfun$1(kleisliinterpreter.scala:104)
+    at blocking @ sanctity.postgres.PostgresFixture$.resource$$anonfun$2$$anonfun$1(PostgresFixture.scala:25)
+    at flatMap @ doobie.WeakAsync$$anon$1.flatMap(WeakAsync.scala:30)
+    at tailRecM$$anonfun$1 @ doobie.util.transactor$Transactor$$anon$4.apply$$anonfun$3(transactor.scala:169)
+    at flatMap @ doobie.WeakAsync$$anon$1.flatMap(WeakAsync.scala:30)
+    at tailRecM$$anonfun$1 @ doobie.util.transactor$Transactor$$anon$4.apply$$anonfun$3(transactor.scala:169)
+    at blocking @ sanctity.postgres.PostgresFixture$.resource$$anonfun$2$$anonfun$1(PostgresFixture.scala:25)
+    at flatMap @ doobie.WeakAsync$$anon$1.flatMap(WeakAsync.scala:30)
+    at tailRecM$$anonfun$1 @ doobie.util.transactor$Transactor$$anon$4.apply$$anonfun$3(transactor.scala:169)
+    at flatMap @ doobie.WeakAsync$$anon$1.flatMap(WeakAsync.scala:30)
+    at tailRecM$$anonfun$1 @ doobie.util.transactor$Transactor$$anon$4.apply$$anonfun$3(transactor.scala:169)
+    at uncancelable @ doobie.WeakAsync$$anon$1.uncancelable(WeakAsync.scala:38)
+    at flatMap @ doobie.WeakAsync$$anon$1.flatMap(WeakAsync.scala:30)
+    at tailRecM$$anonfun$1 @ doobie.util.transactor$Transactor$$anon$4.apply$$anonfun$3(transactor.scala:169)
+    at flatMap @ doobie.WeakAsync$$anon$1.flatMap(WeakAsync.scala:30)
+    at tailRecM$$anonfun$1 @ doobie.util.transactor$Transactor$$anon$4.apply$$anonfun$3(transactor.scala:169)
+    at suspend @ doobie.WeakAsync$$anon$1.suspend(WeakAsync.scala:36)
+sanctity.postgres.ContinuingAuthoritySuite: finished 21.233s
+Test run sanctity.postgres.ContinuingAuthoritySuite finished: 2 failed, 0 ignored, 11 total 21.239s
+Test run sanctity.postgres.ProcessingRecoverySuite started
+sanctity.postgres.ProcessingRecoverySuite: finished 20.888s
+Test run sanctity.postgres.ProcessingRecoverySuite finished: 0 failed, 0 ignored, 4 total 20.889s
+[error] Failed: Total 15, Failed 2, Errors 0, Passed 13
+[error] Failed tests:
+[error] 	sanctity.postgres.ContinuingAuthoritySuite
+[error] (integration / Test / testOnly) sbt.TestsFailedException: Tests unsuccessful
+[error] Total time: 54 s, completed Nov 1, 2026, 8:23:08 p.m.

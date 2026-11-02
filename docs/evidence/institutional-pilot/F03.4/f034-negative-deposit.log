@@ -1,0 +1,67 @@
+postgres (PostgreSQL) 17.11
+[info] welcome to sbt 1.10.5 (Eclipse Adoptium Java 21.0.12.1)
+[info] loading project definition from /private/tmp/sanctity-recovery-20261101/work/project
+[info] loading settings for project root from build.sbt ...
+[info] loading settings for project bids4s-19f022d002f69292dec056eb0762b877438c47305cee6c176adf3e0f780e9146-build from plugins.sbt ...
+[info] loading project definition from /private/tmp/sanctity-recovery-20261101/work/target/source-dependencies/bids4s-19f022d002f69292dec056eb0762b877438c47305cee6c176adf3e0f780e9146/project
+[info] loading settings for project root from build.sbt ...
+[info] resolving key references (17509 settings) ...
+[info] set current project to sanctity (in build file:/private/tmp/sanctity-recovery-20261101/work/)
+[info] compiling 1 Scala source to /private/tmp/sanctity-recovery-20261101/work/modules/application/target/scala-3.3.8/classes ...
+[info] done compiling
+[info] compiling 1 Scala source to /private/tmp/sanctity-recovery-20261101/work/modules/bids/target/scala-3.3.8/classes ...
+[info] done compiling
+[info] compiling 1 Scala source to /private/tmp/sanctity-recovery-20261101/work/modules/app/target/scala-3.3.8/test-classes ...
+[info] done compiling
+[info] compiling 1 Scala source to /private/tmp/sanctity-recovery-20261101/work/modules/integration/target/scala-3.3.8/test-classes ...
+[info] done compiling
+F03.4 offboarding termination ms=834
+F03.4 credential expiry termination ms=933
+Test run sanctity.postgres.ContinuingAuthoritySuite started
+==> X sanctity.postgres.ContinuingAuthoritySuite.output stream rechecks destination at each chunk and leaves no collected output 1.757s munit.FailException: modules/integration/src/test/scala/sanctity/postgres/ContinuingAuthoritySuite.scala:202 assertion failed
+201:          exists <- IO.blocking(Files.exists(f.root.resolve("storage/objects").resolve(blob.digest.value.take(2)).resolve(blob.digest.value)))
+202:          _ = assert(!exists)
+203:          manifest <- sql"SELECT manifest_id FROM draft WHERE id=${Records.uuid(draft.id)}".query[String].unique.transact(f.database.transactor)
+    at munit.FunSuite.assert(FunSuite.scala:12)
+    at sanctity.postgres.ContinuingAuthoritySuite.$init$$$anonfun$5$$anonfun$1$$anonfun$1$$anonfun$2$$anonfun$1$$anonfun$2$$anonfun$2$$anonfun$2(ContinuingAuthoritySuite.scala:202)
+    at sanctity.postgres.ContinuingAuthoritySuite.$init$$$anonfun$5$$anonfun$1$$anonfun$1$$anonfun$2$$anonfun$1$$anonfun$2$$anonfun$2$$anonfun$adapted$1(ContinuingAuthoritySuite.scala:201)
+    at blocking @ sanctity.postgres.PostgresFixture$.resource$$anonfun$2$$anonfun$1(PostgresFixture.scala:25)
+    at map @ sanctity.postgres.ContinuingAuthoritySuite.$init$$$anonfun$5$$anonfun$1$$anonfun$1$$anonfun$2$$anonfun$1$$anonfun$2$$anonfun$2(ContinuingAuthoritySuite.scala:201)
+    at flatMap @ sanctity.postgres.ContinuingAuthoritySuite.$init$$$anonfun$5$$anonfun$1$$anonfun$1$$anonfun$2$$anonfun$1$$anonfun$2$$anonfun$2(ContinuingAuthoritySuite.scala:201)
+    at blocking @ sanctity.postgres.PostgresFixture$.resource$$anonfun$2$$anonfun$1(PostgresFixture.scala:25)
+    at flatMap @ doobie.WeakAsync$$anon$1.flatMap(WeakAsync.scala:30)
+    at tailRecM$$anonfun$1 @ doobie.util.transactor$Transactor$$anon$4.apply$$anonfun$3(transactor.scala:169)
+    at flatMap @ doobie.WeakAsync$$anon$1.flatMap(WeakAsync.scala:30)
+    at tailRecM$$anonfun$1 @ doobie.util.transactor$Transactor$$anon$4.apply$$anonfun$3(transactor.scala:169)
+    at blocking @ sanctity.postgres.PostgresFixture$.resource$$anonfun$2$$anonfun$1(PostgresFixture.scala:25)
+    at flatMap @ doobie.WeakAsync$$anon$1.flatMap(WeakAsync.scala:30)
+    at tailRecM$$anonfun$1 @ doobie.util.transactor$Transactor$$anon$4.apply$$anonfun$3(transactor.scala:169)
+    at uncancelable @ doobie.WeakAsync$$anon$1.uncancelable(WeakAsync.scala:38)
+    at flatMap @ doobie.WeakAsync$$anon$1.flatMap(WeakAsync.scala:30)
+==> X sanctity.postgres.ContinuingAuthoritySuite.output stream rechecks expiry at each chunk and leaves no collected output 2.004s munit.FailException: modules/integration/src/test/scala/sanctity/postgres/ContinuingAuthoritySuite.scala:202 assertion failed
+201:          exists <- IO.blocking(Files.exists(f.root.resolve("storage/objects").resolve(blob.digest.value.take(2)).resolve(blob.digest.value)))
+202:          _ = assert(!exists)
+203:          manifest <- sql"SELECT manifest_id FROM draft WHERE id=${Records.uuid(draft.id)}".query[String].unique.transact(f.database.transactor)
+    at munit.FunSuite.assert(FunSuite.scala:12)
+    at sanctity.postgres.ContinuingAuthoritySuite.$init$$$anonfun$5$$anonfun$1$$anonfun$1$$anonfun$2$$anonfun$1$$anonfun$2$$anonfun$2$$anonfun$2(ContinuingAuthoritySuite.scala:202)
+    at sanctity.postgres.ContinuingAuthoritySuite.$init$$$anonfun$5$$anonfun$1$$anonfun$1$$anonfun$2$$anonfun$1$$anonfun$2$$anonfun$2$$anonfun$adapted$1(ContinuingAuthoritySuite.scala:201)
+    at blocking @ sanctity.postgres.PostgresFixture$.resource$$anonfun$2$$anonfun$1(PostgresFixture.scala:25)
+    at map @ sanctity.postgres.ContinuingAuthoritySuite.$init$$$anonfun$5$$anonfun$1$$anonfun$1$$anonfun$2$$anonfun$1$$anonfun$2$$anonfun$2(ContinuingAuthoritySuite.scala:201)
+    at flatMap @ sanctity.postgres.ContinuingAuthoritySuite.$init$$$anonfun$5$$anonfun$1$$anonfun$1$$anonfun$2$$anonfun$1$$anonfun$2$$anonfun$2(ContinuingAuthoritySuite.scala:201)
+    at blocking @ sanctity.postgres.PostgresFixture$.resource$$anonfun$2$$anonfun$1(PostgresFixture.scala:25)
+    at flatMap @ doobie.WeakAsync$$anon$1.flatMap(WeakAsync.scala:30)
+    at tailRecM$$anonfun$1 @ doobie.util.transactor$Transactor$$anon$4.apply$$anonfun$3(transactor.scala:169)
+    at flatMap @ doobie.WeakAsync$$anon$1.flatMap(WeakAsync.scala:30)
+    at tailRecM$$anonfun$1 @ doobie.util.transactor$Transactor$$anon$4.apply$$anonfun$3(transactor.scala:169)
+    at blocking @ sanctity.postgres.PostgresFixture$.resource$$anonfun$2$$anonfun$1(PostgresFixture.scala:25)
+    at flatMap @ doobie.WeakAsync$$anon$1.flatMap(WeakAsync.scala:30)
+    at tailRecM$$anonfun$1 @ doobie.util.transactor$Transactor$$anon$4.apply$$anonfun$3(transactor.scala:169)
+    at uncancelable @ doobie.WeakAsync$$anon$1.uncancelable(WeakAsync.scala:38)
+    at flatMap @ doobie.WeakAsync$$anon$1.flatMap(WeakAsync.scala:30)
+sanctity.postgres.ContinuingAuthoritySuite: finished 24.666s
+Test run sanctity.postgres.ContinuingAuthoritySuite finished: 2 failed, 0 ignored, 12 total 24.674s
+[error] Failed: Total 12, Failed 2, Errors 0, Passed 10
+[error] Failed tests:
+[error] 	sanctity.postgres.ContinuingAuthoritySuite
+[error] (integration / Test / testOnly) sbt.TestsFailedException: Tests unsuccessful
+[error] Total time: 32 s, completed Nov 1, 2026, 8:25:17 p.m.

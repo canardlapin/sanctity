@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "task": "F03",
+  "status": "passed-engineering-review",
+  "at": "2026-11-02T01:48:20.159923+00:00",
+  "sourceCommit": "e94f88d507560c14c2bbb21b5d5364077444b8c5",
+  "reviewer": "Codex engineering self-review; not institutional acceptance",
+  "children": [
+    "F03.1",
+    "F03.2",
+    "F03.3",
+    "F03.4",
+    "F03.4.R1"
+  ],
+  "criteria": [
+    {
+      "criterion": 1,
+      "result": "passed",
+      "evidence": "OrganizationAuthoritySuite 57; CurrentAuthoritySuite 44; governed stewardship, principal state, membership and expiry under policy transaction guard"
+    },
+    {
+      "criterion": 2,
+      "result": "passed",
+      "evidence": "DisclosureSuite 5, directory and HTTP suites, reference/Postgres lifecycle 124 each, processing/recovery and continuing authority cases; R1 denies run metadata after input/source revocation"
+    },
+    {
+      "criterion": 3,
+      "result": "passed",
+      "evidence": "effective-access fixtures and independent grants retained; bounded streaming and 5s execution validated in F03.4 including negative controls"
+    }
+  ],
+  "currentGate": {
+    "aggregate": 440,
+    "integration": 292,
+    "crashAndRestore": "passed"
+  },
+  "limitations": [
+    "F02 remains blocked on newer independent policy capabilities.",
+    "Institutional provider/session, scale, full recovery and higher-level readiness gates remain open.",
+    "Historical child receipts retain their original scope and counts; this review uses the isolated current committed tree."
+  ]
+}
