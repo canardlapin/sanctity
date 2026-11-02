@@ -61,6 +61,25 @@ private[policy] object PolicyFixtures:
 final class PolicyJournalSuite extends munit.FunSuite:
   import PolicyWire.*
   import PolicyFixtures.*
+  test("v1 signed capability identity is immutable and v2 requires its own enrollment") {
+    assertEquals(PolicyCapabilities.digest,"4a9f4173730262306a912363f3715f705d78077b5fa795fb55c95bf4d3fd3846")
+    assertEquals(PolicyCapabilities.governedKinds.size,26)
+    val old = enrolled
+    val modern = step(PolicyJournal.State(installation),"ENROLL",
+      change(enrollment(),"capabilities",PolicyCapabilities.governedDigest))
+    assertEquals(text(old.current,"capabilities"),PolicyCapabilities.digest)
+    assertEquals(text(modern.current,"capabilities"),PolicyCapabilities.governedDigest)
+    for kind <- PolicyCapabilities.governedKinds -- PolicyCapabilities.kinds do
+      val legacy = event(old,kind)
+      intercept[PolicyFailure](PolicyJournal.validateEvent(legacy))
+      val next = change(event(modern,kind),"capabilities",PolicyCapabilities.governedDigest)
+      val committed = step(step(modern,"PREPARE",next),"COMMIT",next)
+      assertEquals(committed.capabilities,PolicyCapabilities.governedDigest)
+      intercept[PolicyFailure](step(old,"PREPARE",change(legacy,"capabilities",PolicyCapabilities.governedDigest)))
+    val oldGrant = event(modern)
+    intercept[PolicyFailure](step(modern,"PREPARE",oldGrant))
+    intercept[PolicyFailure](step(old,"ENROLL",change(enrollment(),"capabilities",PolicyCapabilities.governedDigest)))
+  }
   test("one pending preparation; COMMIT advances policy and ABORT only journal order") {
     val initial = enrolled
     val e = event(initial)

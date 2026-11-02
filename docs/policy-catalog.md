@@ -81,7 +81,7 @@ existing runtime privilege checks; operator credentials are not a runtime deploy
 
 The snapshot includes every row, including ended appointments, archived organizations,
 inactive principals, revoked grants and credentials. It contains principal eligibility;
-dataset and release identity/lifecycle; all seven organization tables; full grants and
+dataset and release identity/lifecycle; organization tables including move requests; full grants and
 policy audit; credential status/audit; import and delivery lease status/expiry;
 processing-run state; installation/bootstrap and schema identity; historical policy event identity/payload/hash; and retired runtime
 identities. Bearer secrets, token digests and import/delivery lease capability tokens
@@ -93,8 +93,25 @@ Enrollment verifies the complete revision/hash chain, including historical
 receipts as independently acknowledged. Current state is required because historical
 organization events alone did not describe every grant or credential change.
 
-The supported live producers are the nineteen kinds in
-[the transaction inventory](policy-transactions.md). Nondefault guest eligibility or
+New enrollment selects `current-authority-v2` and `policy-checkpoint-v2`. Its 26 event
+kinds include the original nineteen plus `RenameDataset`, `TransferSteward`,
+`RequestMove`, `ApproveMove`, `CommitMove`, `WithdrawMove` and `RecoverSteward`.
+The checkpoint includes complete `organization_move` payloads, including open,
+withdrawn and committed requests. Ordinary runtime credentials handle the governed
+commands; principal disablement and stewardship recovery still require the operator.
+
+Existing `current-authority-v1` enrollments retain their original capability digest,
+checkpoint encoding, event envelopes and signed receipts. They can continue their
+nineteen original operations but refuse the seven v2-only commands without applying
+effects. Retrying an incomplete v1 enrollment uses its exact retained checkpoint;
+installing a newer binary does not upgrade that enrollment. There is no in-place
+profile upgrade command in this tranche. Use a compatible witness binary before
+enrolling a new v2 catalog; an old witness's refusal leaves enrollment closed.
+Readiness reports the enrolled capability digest, and unknown profiles or disagreement
+between catalog and witness refuse admission. No old receipt is rewritten as v2.
+
+See [the transaction inventory](policy-transactions.md) for the original producers.
+Nondefault guest eligibility or
 non-Available dataset/release lifecycle refuses enrollment and live admission. New
 schema/producer versions also require an explicit capability extension. Identity,
 sponsorship, browser sessions, retention and hold administration remain unimplemented.

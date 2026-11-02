@@ -45,7 +45,7 @@ final class PostgresPolicy[F[_]: Async] private[postgres](db: PostgresDatabase[F
   ) ++ Vector("lab","project","membership","participation","placement","stewardship","link")
     .map(t => "organization_"+t -> s"SELECT payload FROM organization_$t")
 
-  private def checkpoint(c: Connection): Array[Byte] =
+  private def checkpoint(c: Connection, profile: String): Array[Byte] =
     val supported = rows(c,"""SELECT NOT EXISTS(SELECT 1 FROM principal WHERE authority_eligibility <> '{"version":1,"value":{"Local":{}}}'::jsonb)
       AND NOT EXISTS(SELECT 1 FROM dataset WHERE authority_lifecycle<>'Available')
       AND NOT EXISTS(SELECT 1 FROM release WHERE authority_lifecycle<>'Available')""")(_.getBoolean(1)).head
@@ -61,7 +61,7 @@ final class PostgresPolicy[F[_]: Async] private[postgres](db: PostgresDatabase[F
       val version = text(payload,"version")
       check(Set("organization-local-v1","policy-local-v2")(version),"unsupported-history-version")
       if version == "policy-local-v2" then
-        check(PolicyCapabilities.kinds(text(payload,"kind")) || (index == 0 && text(payload,"kind") == "OrganizationGenesis"),
+        check(PolicyCapabilities.events(profile)(text(payload,"kind")) || (index == 0 && text(payload,"kind") == "OrganizationGenesis"),
           "unsupported-historical-producer")
       val bytes = payload.printWith(sorted).getBytes(StandardCharsets.UTF_8)
       check(revision == index.toLong && before == previous && digest(bytes) == payloadDigest,"history-continuity")
@@ -70,11 +70,14 @@ final class PostgresPolicy[F[_]: Async] private[postgres](db: PostgresDatabase[F
       previous = applied
     }
     check(history.last._2.toString == state._3 && previous == state._4,"history-current-head")
-    val tables = inventory.map { (name,query) =>
+    val complete = if profile == PolicyCapabilities.digest then inventory
+      else inventory :+ ("organization_move" -> "SELECT payload FROM organization_move")
+    val tables = complete.map { (name,query) =>
       val data = rows(c,s"SELECT to_jsonb(t)::text FROM ($query) t ORDER BY to_jsonb(t)::text")(r => json(r.getString(1)))
       name -> Json.arr(data*)
     }
-    val bytes = obj("version" -> str("policy-checkpoint-v1"),"capabilities" -> PolicyCapabilities.inventory,
+    val bytes = obj("version" -> str(if profile == PolicyCapabilities.digest then "policy-checkpoint-v1" else "policy-checkpoint-v2"),
+      "capabilities" -> PolicyCapabilities.description(profile),
       "installation" -> str(state._1),"epoch" -> str(state._2),"revision" -> str(state._3),
       "appliedHash" -> str(state._4),"tables" -> Json.obj(tables*)).printWith(sorted).getBytes(StandardCharsets.UTF_8)
     check(bytes.length <= maximumCheckpointBytes,"checkpoint-too-large")
@@ -103,27 +106,31 @@ final class PostgresPolicy[F[_]: Async] private[postgres](db: PostgresDatabase[F
       AND r.rolname<>current_user AND r.oid<>(SELECT nspowner FROM pg_namespace WHERE nspname=current_schema())
       AND has_table_privilege(r.oid,'organization_policy','SELECT'))""")(_.getBoolean(1)).head,"runtime-fence-incomplete")
 
-  def enroll(writer: PolicyConnection, recovery: PolicyWitnessClient): F[Json] =
+  def enroll(writer: PolicyConnection, recovery: PolicyWitnessClient,
+      requestedProfile: Option[String] = None): F[Json] =
     db.requireOperator *> db.checkCompatibility(requireOpen=false) *> (for
       command <- FC.raw { c =>
         val closed = lock(c)
         val mode = rows(c,"SELECT durability_mode FROM organization_policy")(_.getString(1)).head
         val existing = rows(c,"SELECT command::text FROM policy_enrollment")(_.getString(1)).headOption.map(json)
+        val profile = requestedProfile.getOrElse(existing.map(text(_,"capabilities")).getOrElse(PolicyCapabilities.governedDigest))
+        check(PolicyCapabilities.supported(profile), "capabilities")
         existing match
           case Some(command) =>
             check(mode == "enrolling" && closed,"enrollment-already-complete-or-recovery-closed")
             check(text(command,"installation") == writer.installation && text(command,"writer") == writer.writer,
               "enrollment-trust-binding")
-            check(digest(checkpoint(c)) == text(command,"checkpointDigest"),"enrollment-state-changed")
+            check(text(command,"capabilities") == profile,"enrollment-profile-changed")
+            check(digest(checkpoint(c,profile)) == text(command,"checkpointDigest"),"enrollment-state-changed")
             command
           case None =>
             check(!closed && mode == "local-engineering","fresh-live-enrollment-required")
             retireRuntime(c)
-            val bytes = checkpoint(c)
+            val bytes = checkpoint(c,profile)
             val state = rows(c,"SELECT installation::text,writer_epoch::text,revision::text,applied_hash FROM organization_policy")(
               r => (r.getString(1),r.getString(2),r.getString(3),r.getString(4))).head
             check(state._1 == writer.installation,"installation")
-            val command = obj("version" -> str(PolicyJournal.enrollmentVersion),"capabilities" -> str(PolicyCapabilities.digest),
+            val command = obj("version" -> str(PolicyJournal.enrollmentVersion),"capabilities" -> str(profile),
               "installation" -> str(state._1),"operation" -> str(UUID.randomUUID().toString),"epoch" -> str(state._2),
               "revision" -> str(state._3),"appliedHash" -> str(state._4),"writer" -> str(writer.writer),
               "checkpoint" -> str(base64(bytes)),"checkpointDigest" -> str(digest(bytes)))
@@ -145,12 +152,13 @@ final class PostgresPolicy[F[_]: Async] private[postgres](db: PostgresDatabase[F
         certificate
       }
       _ <- FC.raw { c =>
+        val profile = text(command,"capabilities")
         check(lock(c),"enrollment-fence-required")
         check(rows(c,"SELECT durability_mode FROM organization_policy")(_.getString(1)).head == "enrolling","enrollment-mode")
-        check(digest(checkpoint(c)) == text(command,"checkpointDigest"),"enrollment-state-changed")
+        check(digest(checkpoint(c,profile)) == text(command,"checkpointDigest"),"enrollment-state-changed")
         val current = field(writer.client.call(PolicyWitnessClient.request("CURRENT",obj(),0,zero)),"current")
         check(text(current,"installation") == writer.installation && text(current,"writer") == writer.writer &&
-          text(current,"capabilities") == PolicyCapabilities.digest && text(current,"epoch") == text(command,"epoch") &&
+          text(current,"capabilities") == profile && text(current,"epoch") == text(command,"epoch") &&
           text(current,"revision") == text(command,"revision") && text(current,"appliedHash") == text(command,"appliedHash") &&
           field(current,"pending").isNull && field(current,"barrier").isNull,"enrollment-currentness")
         update(c,"UPDATE policy_enrollment SET certificate=?::jsonb WHERE singleton AND certificate IS NULL",Seq(certificate.noSpaces))
@@ -167,7 +175,8 @@ final class PostgresPolicy[F[_]: Async] private[postgres](db: PostgresDatabase[F
       val pending = rows(c,"SELECT EXISTS(SELECT 1 FROM organization_event e LEFT JOIN policy_acknowledgement a ON a.event_id=e.id " +
         "WHERE e.durability='Pending' AND a.event_id IS NULL)")(_.getBoolean(1)).head
       obj("installation" -> str(row._1),"epoch" -> str(row._2),"revision" -> str(row._3),"appliedHash" -> str(row._4),
-        "mode" -> str(row._5),"pending" -> Json.fromBoolean(pending),"capabilities" -> str(PolicyCapabilities.digest))
+        "mode" -> str(row._5),"pending" -> Json.fromBoolean(pending),
+        "capabilities" -> str(if row._5 == "independent" then PolicyBridge.capabilities(c) else PolicyCapabilities.governedDigest))
     }).transact(xa)
 
   def resolve: F[Json] = db.requireOperator *>

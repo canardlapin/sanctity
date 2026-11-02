@@ -99,7 +99,7 @@ private[postgres] object PolicyBridge:
     val result = trust(s).client.call(PolicyWitnessClient.request(action,command,
       current.fold(0L)(j => natural(text(j,"sequence"))),current.fold(zero)(j => text(j,"journalHash"))))
     val now = field(result,"current")
-    check(text(now,"installation") == trust(s).installation && text(now,"capabilities") == PolicyCapabilities.digest,
+    check(text(now,"installation") == trust(s).installation && PolicyCapabilities.supported(text(now,"capabilities")),
       "current-binding")
     s.current = Some(now)
     result
@@ -112,13 +112,19 @@ private[postgres] object PolicyBridge:
 
   private def event(c: Connection, operation: String): Option[Json] =
     rows(c,"SELECT payload::text,applied_hash FROM organization_event WHERE id=?::uuid",Seq(operation)) { r =>
-      envelope(json(r.getString(1)).printWith(sorted),r.getString(2))
+      envelope(json(r.getString(1)).printWith(sorted),r.getString(2),capabilities(c))
     }.headOption
 
-  def envelope(payload: String, applied: String): Json =
+  private[postgres] def capabilities(c: Connection): String =
+    val profile = rows(c,"SELECT command->>'capabilities' FROM policy_enrollment")(_.getString(1)).headOption
+      .getOrElse(throw PolicyFailure("enrollment-required"))
+    check(PolicyCapabilities.supported(profile), "capabilities")
+    profile
+
+  def envelope(payload: String, applied: String, profile: String = PolicyCapabilities.digest): Json =
     val p = json(payload)
     val bytes = payload.getBytes(java.nio.charset.StandardCharsets.UTF_8)
-    val result = obj("version" -> str(PolicyJournal.eventVersion),"capabilities" -> str(PolicyCapabilities.digest),
+    val result = obj("version" -> str(PolicyJournal.eventVersion),"capabilities" -> str(profile),
       "installation" -> field(p,"installation"),"epoch" -> field(p,"epoch"),"operation" -> field(p,"event"),
       "revision" -> field(p,"revision"),"previousRevision" -> field(p,"previousRevision"),
       "previousHash" -> field(p,"previousHash"),"appliedHash" -> str(applied),"kind" -> field(p,"kind"),
@@ -130,6 +136,7 @@ private[postgres] object PolicyBridge:
     val (installation,epoch,revision,head,mode) = local(c)
     val current = s.current.get
     check(mode == "independent" && installation == trust(s).installation &&
+      text(current,"capabilities") == capabilities(c) &&
       text(current,"epoch") == epoch && field(current,"barrier").isNull &&
       text(current,"writer") == trust(s).writer && field(current,"enrolled").asBoolean.contains(true),"admission-identity")
     val pending = field(current,"pending")
@@ -177,7 +184,7 @@ private[postgres] object PolicyBridge:
     else
       val s = session(c)
       s.valid()
-      val command = envelope(payload,applied)
+      val command = envelope(payload,applied,capabilities(c))
       requireOpen(s.command.isEmpty,"one policy event per transaction required")
       s.command = Some(command) // retained even when the PREPARE response is lost
       try

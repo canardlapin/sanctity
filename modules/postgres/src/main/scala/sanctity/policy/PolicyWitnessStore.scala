@@ -104,7 +104,7 @@ final class PolicyWitnessStore private (
 
   def diagnostics: Json = synchronized {
     obj("version" -> str("policy-readiness-v1"), "installation" -> str(installation),
-      "capabilities" -> str(PolicyCapabilities.digest), "enrolled" -> Json.fromBoolean(state.enrolled),
+      "capabilities" -> str(state.capabilities), "enrolled" -> Json.fromBoolean(state.enrolled),
       "sequence" -> str(state.sequence.toString), "epoch" -> str(state.epoch.toString),
       "pending" -> Json.fromBoolean(state.pending.nonEmpty), "barrier" -> Json.fromBoolean(state.barrier.nonEmpty),
       "ready" -> Json.fromBoolean(!poisoned && state.enrolled && state.pending.isEmpty && state.barrier.isEmpty),

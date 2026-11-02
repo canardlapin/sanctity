@@ -34,9 +34,10 @@ final class PolicyIntegrationSuite extends FunSuite:
     def query[A](q: ConnectionIO[A]): IO[A] = q.transact(f.database.transactor)
     def sql(s: String): IO[Unit] = query(Fragment.const(s).update.run).void
     def enroll: IO[Json] = db.policy.enroll(trust,witness.recovery)
-    def mutate(command: OrganizationCommand, refs: Set[OrganizationRef], label: String): IO[OrganizationReceipt] = for
+    def mutate(command: OrganizationCommand, refs: Set[OrganizationRef], label: String,
+        as: AccessContext = ctx): IO[OrganizationReceipt] = for
       before <- db.organization.snapshot
-      receipt <- checked(db.organization.execute(ctx,OrganizationMutation(key(label),refs.map(r => r -> before.generation(r).get).toMap,command)))
+      receipt <- checked(db.organization.execute(as,OrganizationMutation(key(label),refs.map(r => r -> before.generation(r).get).toMap,command)))
       _ = assertEquals(receipt.durability,PolicyDurability.Durable)
     yield receipt
   private def fixture(enroll: Boolean = true)(run: Env => IO[Unit]): Unit = (for
@@ -52,6 +53,21 @@ final class PolicyIntegrationSuite extends FunSuite:
     e = Env(f,db,witness,trust)
     _ <- Resource.eval(if enroll then e.enroll.void else IO.unit)
   yield e).use(run).unsafeRunSync()
+
+  private def runtime(e: Env): Resource[IO, Env] =
+    val role = "policy_governed_" + UUID.randomUUID().toString.replace("-","")
+    val password = UUID.randomUUID().toString
+    for
+      _ <- Resource.make(for
+        database <- e.query(sql"SELECT current_database()".query[String].unique)
+        _ <- e.sql(s"""REVOKE CREATE,TEMPORARY ON DATABASE "$database" FROM PUBLIC; REVOKE CREATE ON SCHEMA public FROM PUBLIC""")
+        _ <- e.sql(s"""CREATE ROLE "$role" LOGIN NOINHERIT PASSWORD '$password'""")
+        _ <- e.f.database.grantRuntime(role)
+      yield ())(_ => e.sql(s"""DROP OWNED BY "$role"; DROP ROLE "$role""""))
+      config = DatabaseConfig.from(e.f.config.jdbcUrl,role,password,e.f.config.schema).toOption.get
+      db <- PostgresDatabase.open[IO](config,Some(e.trust))
+      _ <- Resource.eval(db.checkRuntimeRole)
+    yield Env(e.f,db,e.witness,e.trust)
 
   test("fenced enrollment captures complete current state and preserves original history") {
     fixture(false) { e => for
@@ -116,6 +132,98 @@ final class PolicyIntegrationSuite extends FunSuite:
         _ = assertEquals(acknowledgements,kinds.size.toLong)
         state <- IO.blocking(e.witness.current)
         _ = assert(field(state,"pending").isNull)
+      yield ()
+    }
+  }
+
+  test("all seven governed v2 commands receive independent acknowledgements and preserve move history") {
+    fixture() { e => runtime(e).use { r =>
+      val lab = OrganizationMigration.lab(e.ctx.principal)
+      val source = OrganizationMigration.project(e.f.system.dataset)
+      for
+        person <- ids.next[PrincipalTag]
+        _ <- checked(e.db.catalog(ids).grant(e.ctx,e.dataset,person,None,Set(Action.ReadMetadata)))
+        destination <- ids.next[ProjectTag]
+        appointment <- ids.next[ProjectParticipationTag]
+        _ <- r.mutate(OrganizationCommand.CreateProject(destination,lab,person,appointment,name("Move target"),description),Set(OrganizationRef.Lab(lab)),"target")
+        _ <- r.mutate(OrganizationCommand.RenameDataset(e.dataset,name("Reviewed label")),Set(OrganizationRef.Placement(e.dataset)),"label")
+        abandoned <- ids.next[MoveRequestTag]
+        refs = Set(OrganizationRef.Placement(e.dataset),OrganizationRef.Project(source),OrganizationRef.Project(destination))
+        _ <- r.mutate(OrganizationCommand.RequestMove(abandoned,e.dataset,destination,PlacementPolicy.ExplicitOnly,None),refs,"request-abandoned")
+        _ <- r.mutate(OrganizationCommand.WithdrawMove(abandoned),Set(OrganizationRef.Move(abandoned)),"withdraw")
+        move <- ids.next[MoveRequestTag]
+        _ <- r.mutate(OrganizationCommand.RequestMove(move,e.dataset,destination,PlacementPolicy.ExplicitOnly,None),refs,"request")
+        _ <- r.mutate(OrganizationCommand.ApproveMove(move),Set(OrganizationRef.Move(move)),"approve",AccessContext(person))
+        _ <- r.mutate(OrganizationCommand.CommitMove(move),Set(OrganizationRef.Move(move)),"commit")
+        receiving <- ids.next[DatasetStewardshipTag]
+        original = OrganizationMigration.stewardship(e.dataset)
+        _ <- r.mutate(OrganizationCommand.TransferSteward(original,receiving,person),Set(OrganizationRef.Stewardship(original),OrganizationRef.Placement(e.dataset)),"transfer")
+        _ <- e.mutate(OrganizationCommand.DisablePrincipal(person),Set(OrganizationRef.Principal(person)),"disable-receiver")
+        restored <- ids.next[DatasetStewardshipTag]
+        _ <- e.mutate(OrganizationCommand.RecoverSteward(e.dataset,restored,e.ctx.principal,description),Set(OrganizationRef.Placement(e.dataset)),"recover")
+        kinds <- e.query(sql"SELECT payload->>'kind' FROM organization_event WHERE durability='Pending'".query[String].to[Vector])
+        count <- e.query(sql"SELECT count(*) FROM policy_acknowledgement".query[Long].unique)
+        _ = assertEquals(kinds.toSet -- PolicyCapabilities.kinds,PolicyCapabilities.governedKinds -- PolicyCapabilities.kinds)
+        _ = assertEquals(count,kinds.size.toLong)
+        state <- e.db.organization.snapshot
+        _ = assertEquals(state.moves(abandoned).status,MoveStatus.Withdrawn)
+        _ = assertEquals(state.moves(move).status,MoveStatus.Committed)
+        _ = assertEquals(state.placements(e.dataset).project,destination)
+        _ = assert(state.steward(e.dataset,e.ctx.principal))
+        beforeRestart <- IO.blocking(e.witness.current)
+        _ <- IO.blocking(e.witness.restart())
+        afterRestart <- IO.blocking(e.witness.current)
+        _ = assertEquals(afterRestart,beforeRestart)
+        ready <- r.db.policy.readiness
+        _ = assertEquals(text(ready,"capabilities"),PolicyCapabilities.governedDigest)
+      yield ()
+    } }
+  }
+
+  test("v1 catalogs retain their exact profile and refuse v2-only changes without effects") {
+    fixture(false) { e => for
+      _ <- e.db.policy.enroll(e.trust,e.witness.recovery,Some(PolicyCapabilities.digest))
+      person <- ids.next[PrincipalTag]
+      grant <- checked(e.db.catalog(ids).grant(e.ctx,e.dataset,person,None,Set(Action.ReadMetadata)))
+      _ <- checked(e.db.catalog(ids).revoke(e.ctx,e.dataset,grant.id))
+      before <- e.db.organization.snapshot
+      refused <- e.db.organization.execute(e.ctx,OrganizationMutation(key("unsupported-label"),
+        Map(OrganizationRef.Placement(e.dataset) -> before.placements(e.dataset).generation),
+        OrganizationCommand.RenameDataset(e.dataset,name("Must not persist"))))
+      _ = assert(refused.isLeft)
+      after <- e.db.organization.snapshot
+      _ = assertEquals(after,before)
+      ready <- e.db.policy.readiness
+      _ = assertEquals(text(ready,"capabilities"),PolicyCapabilities.digest)
+      current <- IO.blocking(e.witness.current)
+      _ = assert(field(current,"pending").isNull)
+    yield () }
+  }
+
+  test("v2 enrollment captures existing move records while v1 refuses that historical producer") {
+    fixture(false) { e =>
+      def local(command: OrganizationCommand, refs: Set[OrganizationRef], label: String): IO[Unit] = for
+        s <- e.f.database.organization.snapshot
+        _ <- checked(e.f.database.organization.execute(e.ctx,OrganizationMutation(key(label),refs.map(r => r -> s.generation(r).get).toMap,command)))
+      yield ()
+      val lab = OrganizationMigration.lab(e.ctx.principal)
+      val source = OrganizationMigration.project(e.f.system.dataset)
+      for
+        destination <- ids.next[ProjectTag]
+        appointment <- ids.next[ProjectParticipationTag]
+        _ <- local(OrganizationCommand.CreateProject(destination,lab,e.ctx.principal,appointment,name("Pre-enrollment target"),description),Set(OrganizationRef.Lab(lab)),"target")
+        move <- ids.next[MoveRequestTag]
+        _ <- local(OrganizationCommand.RequestMove(move,e.dataset,destination,PlacementPolicy.ExplicitOnly,None),
+          Set(OrganizationRef.Placement(e.dataset),OrganizationRef.Project(source),OrganizationRef.Project(destination)),"pending-move")
+        refused <- e.db.policy.enroll(e.trust,e.witness.recovery,Some(PolicyCapabilities.digest)).attempt
+        _ = assert(refused.isLeft)
+        _ <- e.enroll
+        encoded <- e.query(sql"SELECT command->>'checkpoint' FROM policy_enrollment".query[String].unique)
+        checkpoint = io.circe.jawn.parse(new String(PolicyWire.unbase64(encoded),java.nio.charset.StandardCharsets.UTF_8)).toOption.get
+        _ = assertEquals(text(checkpoint,"version"),"policy-checkpoint-v2")
+        moves = field(field(checkpoint,"tables"),"organization_move").asArray.get
+        _ = assertEquals(moves.size,1)
+        _ = assert(moves.head.noSpaces.contains(move.render))
       yield ()
     }
   }
@@ -317,6 +425,21 @@ final class PolicyIntegrationSuite extends FunSuite:
       after <- e.query(sql"SELECT command::text FROM policy_enrollment".query[String].unique)
       _ = assertEquals(after,retained)
       _ <- e.db.checkOrganizationReady
+    yield () }
+  }
+
+  test("retrying an interrupted v1 enrollment retains its original checkpoint and profile") {
+    fixture(false) { e => for
+      _ <- IO(e.witness.failHead(1))
+      first <- e.db.policy.enroll(e.trust,e.witness.recovery,Some(PolicyCapabilities.digest)).attempt
+      _ = assert(first.isLeft)
+      retained <- e.query(sql"SELECT command::text FROM policy_enrollment".query[String].unique)
+      _ <- IO.blocking(e.witness.restart())
+      _ <- e.enroll
+      after <- e.query(sql"SELECT command::text FROM policy_enrollment".query[String].unique)
+      _ = assertEquals(after,retained)
+      ready <- e.db.policy.readiness
+      _ = assertEquals(text(ready,"capabilities"),PolicyCapabilities.digest)
     yield () }
   }
 

@@ -17,6 +17,21 @@ object PolicyCapabilities:
     "unsupportedProducers" -> Json.arr(Vector("identity","sponsorship","session","lifecycle","retention","hold").map(PolicyWire.str)*))
   val digest: String = PolicyWire.digest(inventory)
 
+  // Never change v1's signed identity. New installations enroll this separately
+  // named profile; existing journals retain their enrolled profile indefinitely.
+  val governedKinds: Set[String] = kinds ++ Set("RenameDataset", "TransferSteward", "RequestMove",
+    "ApproveMove", "CommitMove", "WithdrawMove", "RecoverSteward")
+  val governedInventory: Json = inventory.mapObject(_.add("version", PolicyWire.str("current-authority-v2"))
+    .add("events", Json.arr(governedKinds.toVector.sorted.map(PolicyWire.str)*)))
+  val governedDigest: String = PolicyWire.digest(governedInventory)
+  def supported(value: String): Boolean = value == digest || value == governedDigest
+  def events(value: String): Set[String] =
+    PolicyWire.check(supported(value), "capabilities")
+    if value == digest then kinds else governedKinds
+  def description(value: String): Json =
+    PolicyWire.check(supported(value), "capabilities")
+    if value == digest then inventory else governedInventory
+
 /** A signed record reducer, shared by the live witness and offline verification.
   * Recovery barriers can close admission, but this component cannot reopen a catalog.
   */
@@ -30,23 +45,24 @@ object PolicyJournal:
       epoch: Long = 0, revision: Long = 0, appliedHash: String = zero,
       enrolled: Boolean = false, writer: Option[String] = None,
       pending: Option[Json] = None, barrier: Option[Json] = None,
-      events: Map[String, (Json, String)] = Map.empty):
+      events: Map[String, (Json, String)] = Map.empty,
+      capabilities: String = PolicyCapabilities.digest):
     def current: Json = obj("installation" -> str(installation), "sequence" -> str(sequence.toString),
       "journalHash" -> str(journalHash), "epoch" -> str(epoch.toString), "revision" -> str(revision.toString),
       "appliedHash" -> str(appliedHash), "enrolled" -> Json.fromBoolean(enrolled),
       "writer" -> writer.fold(Json.Null)(str), "pending" -> pending.getOrElse(Json.Null),
-      "barrier" -> barrier.getOrElse(Json.Null), "capabilities" -> str(PolicyCapabilities.digest))
+      "barrier" -> barrier.getOrElse(Json.Null), "capabilities" -> str(capabilities))
 
   def validateEvent(event: Json): Unit =
     fields(event,Set("version","capabilities","installation","epoch","operation","revision","previousRevision",
       "previousHash","appliedHash","kind","payload","payloadDigest"))
-    check(text(event,"version") == eventVersion && text(event,"capabilities") == PolicyCapabilities.digest, "capabilities")
+    check(text(event,"version") == eventVersion && PolicyCapabilities.supported(text(event,"capabilities")), "capabilities")
     id(text(event,"installation")); id(text(event,"operation"))
     natural(text(event,"epoch"))
     val previous = natural(text(event,"previousRevision"))
     check(natural(text(event,"revision")) == increment(previous), "revision")
     hash(text(event,"previousHash")); hash(text(event,"appliedHash"))
-    check(PolicyCapabilities.kinds.contains(text(event,"kind")), "event-kind")
+    check(PolicyCapabilities.events(text(event,"capabilities")).contains(text(event,"kind")), "event-kind")
     val bytes = unbase64(text(event,"payload"))
     check(bytes.nonEmpty && bytes.length <= maximumEventBytes && digest(bytes) == hash(text(event,"payloadDigest")), "payload-size-digest")
     val source = parseCatalog(bytes)
@@ -72,7 +88,7 @@ object PolicyJournal:
   def validateEnrollment(enrollment: Json): Unit =
     fields(enrollment,Set("version","capabilities","installation","operation","epoch","revision","appliedHash",
       "writer","checkpoint","checkpointDigest"))
-    check(text(enrollment,"version") == enrollmentVersion && text(enrollment,"capabilities") == PolicyCapabilities.digest, "capabilities")
+    check(text(enrollment,"version") == enrollmentVersion && PolicyCapabilities.supported(text(enrollment,"capabilities")), "capabilities")
     id(text(enrollment,"installation")); id(text(enrollment,"operation"))
     natural(text(enrollment,"epoch")); natural(text(enrollment,"revision"))
     hash(text(enrollment,"appliedHash")); hash(text(enrollment,"writer"))
@@ -87,10 +103,11 @@ object PolicyJournal:
         check(!state.enrolled && state.sequence == 0, "already-enrolled")
         check(text(command,"installation") == state.installation, "installation")
         state.copy(enrolled=true, epoch=natural(text(command,"epoch")), revision=natural(text(command,"revision")),
-          appliedHash=text(command,"appliedHash"), writer=Some(text(command,"writer")),
+          appliedHash=text(command,"appliedHash"), writer=Some(text(command,"writer")), capabilities=text(command,"capabilities"),
           events=Map(text(command,"operation") -> (command -> "ENROLL")))
       case "PREPARE" =>
         validateEvent(command)
+        check(text(command,"capabilities") == state.capabilities, "enrolled-capabilities")
         check(state.enrolled && state.barrier.isEmpty && state.pending.isEmpty, "closed-or-pending")
         check(text(command,"installation") == state.installation && natural(text(command,"epoch")) == state.epoch, "installation-epoch")
         check(natural(text(command,"previousRevision")) == state.revision && text(command,"previousHash") == state.appliedHash, "policy-head")
@@ -99,6 +116,7 @@ object PolicyJournal:
         state.copy(pending=Some(command), events=state.events.updated(op,command -> "PREPARE"))
       case "COMMIT" | "ABORT" =>
         validateEvent(command)
+        check(text(command,"capabilities") == state.capabilities, "enrolled-capabilities")
         check(state.barrier.isEmpty && state.pending.contains(command) && natural(text(command,"epoch")) == state.epoch,
           "exact-preparation-required")
         val op = text(command,"operation")
