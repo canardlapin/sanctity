@@ -1,0 +1,6 @@
+{"path": "/v1/datasets/2e98048f-80df-412b-b494-7f68a31f6449/releases/23eaaac9-b78d-44b0-bf73-928d226cba5e", "status": 503, "body": "{\"error\":\"authentication_unavailable\"}"}
+{"path": "/v1/datasets/2e98048f-80df-412b-b494-7f68a31f6449/releases/23eaaac9-b78d-44b0-bf73-928d226cba5e", "status": 401, "body": "{\"error\":\"unauthorized\"}"}
+{"path": "/v1/datasets/2e98048f-80df-412b-b494-7f68a31f6449/releases/23eaaac9-b78d-44b0-bf73-928d226cba5e", "status": 401, "body": "{\"error\":\"unauthorized\"}"}
+{"path": "/v1/datasets/2e98048f-80df-412b-b494-7f68a31f6449/releases/23eaaac9-b78d-44b0-bf73-928d226cba5e", "status": 404, "body": "{\"error\":\"not_found\"}"}
+{"path": "/v1/datasets/7410b7f3-0fa0-44c4-9979-d885d789302f/releases/1b76d7d2-aed3-493b-8e0b-dc3e894bccbc", "status": 404, "body": "{\"error\":\"not_found\"}"}
+{"path": "/v1/datasets/2e98048f-80df-412b-b494-7f68a31f6449/releases/23eaaac9-b78d-44b0-bf73-928d226cba5e", "status": 401, "body": "{\"error\":\"unauthorized\"}"}

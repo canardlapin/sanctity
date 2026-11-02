@@ -1,0 +1,38 @@
+{
+  "2774b5fc-0f39-40c9-a30c-e36d0d6770d7": {
+    "README": {
+      "bytes": 2340000,
+      "sha256": "89a57f8583ded956299528778e9b35a145f21b99c0fe8ceb2dcf9d5c20672e5f"
+    },
+    "dataset_description.json": {
+      "bytes": 70,
+      "sha256": "f6840d71d5917556ae990b45313029f06d302983e6a27c6999aa6cfb3949d23f"
+    },
+    "sub-01/anat/sub-01_T1w.json": {
+      "bytes": 62,
+      "sha256": "79b737672d1a33a880a8d98fc3e4fd4cd617e7d746323b4f899e4c9f00e5e007"
+    },
+    "sub-01/anat/sub-01_T1w.nii": {
+      "bytes": 384,
+      "sha256": "4782535bb6d442493d996d9089e75727e38a02b8ed1cf6c1036a8f8f9e91a971"
+    }
+  },
+  "be2635e5-9630-4842-b573-88222462de63": {
+    "README": {
+      "bytes": 2340000,
+      "sha256": "89a57f8583ded956299528778e9b35a145f21b99c0fe8ceb2dcf9d5c20672e5f"
+    },
+    "dataset_description.json": {
+      "bytes": 77,
+      "sha256": "2bbdd698adf072841311d057ad570ffd988f2d844345aebcab269df9ba9214eb"
+    },
+    "sub-01/anat/sub-01_T1w.json": {
+      "bytes": 62,
+      "sha256": "79b737672d1a33a880a8d98fc3e4fd4cd617e7d746323b4f899e4c9f00e5e007"
+    },
+    "sub-01/anat/sub-01_T1w.nii": {
+      "bytes": 384,
+      "sha256": "4782535bb6d442493d996d9089e75727e38a02b8ed1cf6c1036a8f8f9e91a971"
+    }
+  }
+}

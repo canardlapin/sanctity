@@ -1,0 +1,2 @@
+FROM eclipse-temurin@sha256:000fd431958bc81a24abe1e8e5f0f0fd3ae365a594bd50aadb20696805f9408c
+RUN groupadd -g 10001 witness && useradd -u 10001 -g witness witness

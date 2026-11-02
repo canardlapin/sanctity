@@ -1,0 +1,62 @@
+{
+  "operation": "9aba32bf-96d3-4c67-8bc5-d22c56dc603c",
+  "phase": "Opened",
+  "closed": false,
+  "witnessAvailable": true,
+  "admissionReady": true,
+  "backup": "8c0aa8e67063815d60cace06dedaf3081fa5f4653f37e4358009f622d618ef6e",
+  "verification": {
+    "at": "2026-11-02T22:34:52.534495Z",
+    "barrier": {
+      "at": "2026-11-02T22:34:19.281357Z",
+      "epoch": "1",
+      "reason": "verified organization backup recovery",
+      "operator": "be2b176ef90c61be97fe6c604aabb2b5338ef77ea730f4639ac0b6dc87d0b538",
+      "challenge": "6ff649bb-6b8f-4814-8133-f589e9a0061c",
+      "operation": "2538bd53-a10e-3c73-bc13-50f666513724",
+      "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147"
+    },
+    "summary": {
+      "head": {
+        "epoch": "1",
+        "writer": null,
+        "barrier": {
+          "at": "2026-11-02T22:34:19.281357Z",
+          "epoch": "1",
+          "reason": "verified organization backup recovery",
+          "operator": "be2b176ef90c61be97fe6c604aabb2b5338ef77ea730f4639ac0b6dc87d0b538",
+          "challenge": "6ff649bb-6b8f-4814-8133-f589e9a0061c",
+          "operation": "2538bd53-a10e-3c73-bc13-50f666513724",
+          "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147"
+        },
+        "pending": null,
+        "enrolled": true,
+        "revision": "38",
+        "sequence": "80",
+        "appliedHash": "4ac64bfa66c60ef6f3f90fc70e7eca1800644062cabf73d529270bc31d79d86c",
+        "journalHash": "acf146b6ed1cb813752eac3f1bd4007e99e791d388b2b7b0ffe7d39389fc0339",
+        "capabilities": "6616544f200829bbc14c9c7713b17e6c9a2c781abf569049ef1c04e7c23a5446",
+        "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147"
+      },
+      "records": "80",
+      "journalDigest": "c352556baa598ef83831c3a4ec58e5c9cdacc6adb5490d0951eb5ea0c0ca1dab",
+      "checkpointDigest": "4600dc6e8471b45c9212c00559e834ac125ba0b6818730064ac4a62729fcd58e",
+      "projectionDigest": "3b62562b6fd78482791ae583e4205522f7c18aead9fad67c34ea2d81856a34e8"
+    },
+    "version": "organization-recovery-receipt-v1",
+    "operator": "7cb6450b-e41f-43f4-8020-80641474e32f",
+    "outcomes": {
+      "missingDatasets": 1,
+      "missingReleases": 1,
+      "activeRunsFailed": 0,
+      "allCredentialIdentitiesRetired": 8,
+      "restoredCredentialsInvalidated": 8,
+      "allImportAndDeliveryLeasesInvalidated": true
+    },
+    "operation": "9aba32bf-96d3-4c67-8bc5-d22c56dc603c",
+    "backupDigest": "8c0aa8e67063815d60cace06dedaf3081fa5f4653f37e4358009f622d618ef6e",
+    "databaseActor": "recovery_operator",
+    "scientificDigestAfter": "845b99511d62f1e6e85887482fd07bc7e9e2d92e9a9ead13d64eba725377b54a",
+    "scientificDigestBefore": "845b99511d62f1e6e85887482fd07bc7e9e2d92e9a9ead13d64eba725377b54a"
+  }
+}

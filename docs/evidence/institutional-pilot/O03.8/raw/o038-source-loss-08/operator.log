@@ -1,0 +1,247 @@
+preview: Sanctity command failed; check protected configuration and service dependencies.
+
+verify: Sanctity command failed; check protected configuration and service dependencies.
+
+verify: Sanctity command failed; check protected configuration and service dependencies.
+
+preview: Sanctity command failed; check protected configuration and service dependencies.
+
+preview: Sanctity command failed; check protected configuration and service dependencies.
+
+preview: Sanctity command failed; check protected configuration and service dependencies.
+
+preview: Sanctity command failed; check protected configuration and service dependencies.
+
+preview: Sanctity command failed; check protected configuration and service dependencies.
+
+preview: Sanctity command failed; check protected configuration and service dependencies.
+
+preview: Sanctity command failed; check protected configuration and service dependencies.
+
+preview: {
+  "status" : "preview",
+  "operation" : "41f25b70-6031-49de-99e3-88877cd03032",
+  "backup" : "cd1287243a9ad4daf8c6b12f2c2a16efafc1d1a2f99f585f739ea93755e88090",
+  "planDigest" : "c0d227582f9222dff7eb52cebbf7c38a6cbf4c03fef964aef9889542942091bf",
+  "currentPolicy" : {
+    "head" : {
+      "appliedHash" : "e2d277eb15c14bc48aa5f72904830164d6f0a2cff91f09e81bba0d2e2b44343f",
+      "barrier" : null,
+      "capabilities" : "6616544f200829bbc14c9c7713b17e6c9a2c781abf569049ef1c04e7c23a5446",
+      "enrolled" : true,
+      "epoch" : "0",
+      "installation" : "c78aac99-b7ed-4e59-b4c8-328b766636a8",
+      "journalHash" : "8ea0425f536e832ff125eb8c063ea1696c734a23ac49dd2bc912cdace8fd78a1",
+      "pending" : null,
+      "revision" : "38",
+      "sequence" : "79",
+      "writer" : "68423bbe906cec7003bf58a07afab9e9b58438a964378161a326754d9391b749"
+    },
+    "checkpointDigest" : "f7491502d9bbd04ff51c8698efa599fe490a21d24dfa70c3173eaf9cc2b75d2d",
+    "projectionDigest" : "892a803c8230580af4f31c68abcb81a7fe3c7e80ae8558fa3a6238914135bfec",
+    "journalDigest" : "3de095b9b83d64aabaf411e99b4fc2a38f3bacda65237c5ddbf3106ac9f052e1",
+    "records" : "79"
+  },
+  "access" : "not opened"
+}
+
+verify: {
+  "status" : "verified-closed",
+  "operation" : "41f25b70-6031-49de-99e3-88877cd03032",
+  "backup" : "cd1287243a9ad4daf8c6b12f2c2a16efafc1d1a2f99f585f739ea93755e88090",
+  "policy" : {
+    "head" : {
+      "appliedHash" : "e2d277eb15c14bc48aa5f72904830164d6f0a2cff91f09e81bba0d2e2b44343f",
+      "barrier" : {
+        "at" : "2026-11-02T22:16:51.210029Z",
+        "challenge" : "24fff52d-fbda-499e-8b21-de8a4802f0e5",
+        "epoch" : "1",
+        "installation" : "c78aac99-b7ed-4e59-b4c8-328b766636a8",
+        "operation" : "334db81f-333e-360f-adec-c801f80c105b",
+        "operator" : "147ad823bb18a485063d78080e3c55eea2438f430ef7c627e2c805aaff369a23",
+        "reason" : "verified organization backup recovery"
+      },
+      "capabilities" : "6616544f200829bbc14c9c7713b17e6c9a2c781abf569049ef1c04e7c23a5446",
+      "enrolled" : true,
+      "epoch" : "1",
+      "installation" : "c78aac99-b7ed-4e59-b4c8-328b766636a8",
+      "journalHash" : "d1a8642830dfaf19da4b73b3dade33db4032968cd216722688d3a2278169465a",
+      "pending" : null,
+      "revision" : "38",
+      "sequence" : "80",
+      "writer" : null
+    },
+    "checkpointDigest" : "f7491502d9bbd04ff51c8698efa599fe490a21d24dfa70c3173eaf9cc2b75d2d",
+    "projectionDigest" : "892a803c8230580af4f31c68abcb81a7fe3c7e80ae8558fa3a6238914135bfec",
+    "journalDigest" : "6c74cbec21b86d4d3889af871f0cf104f5b10a95f6e5c962ca10f3f35978ee3c",
+    "records" : "80"
+  }
+}
+
+verify: {
+  "status" : "verified-closed",
+  "operation" : "41f25b70-6031-49de-99e3-88877cd03032",
+  "backup" : "cd1287243a9ad4daf8c6b12f2c2a16efafc1d1a2f99f585f739ea93755e88090",
+  "policy" : {
+    "head" : {
+      "appliedHash" : "e2d277eb15c14bc48aa5f72904830164d6f0a2cff91f09e81bba0d2e2b44343f",
+      "barrier" : {
+        "at" : "2026-11-02T22:16:51.210029Z",
+        "challenge" : "24fff52d-fbda-499e-8b21-de8a4802f0e5",
+        "epoch" : "1",
+        "installation" : "c78aac99-b7ed-4e59-b4c8-328b766636a8",
+        "operation" : "334db81f-333e-360f-adec-c801f80c105b",
+        "operator" : "147ad823bb18a485063d78080e3c55eea2438f430ef7c627e2c805aaff369a23",
+        "reason" : "verified organization backup recovery"
+      },
+      "capabilities" : "6616544f200829bbc14c9c7713b17e6c9a2c781abf569049ef1c04e7c23a5446",
+      "enrolled" : true,
+      "epoch" : "1",
+      "installation" : "c78aac99-b7ed-4e59-b4c8-328b766636a8",
+      "journalHash" : "d1a8642830dfaf19da4b73b3dade33db4032968cd216722688d3a2278169465a",
+      "pending" : null,
+      "revision" : "38",
+      "sequence" : "80",
+      "writer" : null
+    },
+    "checkpointDigest" : "f7491502d9bbd04ff51c8698efa599fe490a21d24dfa70c3173eaf9cc2b75d2d",
+    "projectionDigest" : "892a803c8230580af4f31c68abcb81a7fe3c7e80ae8558fa3a6238914135bfec",
+    "journalDigest" : "6c74cbec21b86d4d3889af871f0cf104f5b10a95f6e5c962ca10f3f35978ee3c",
+    "records" : "80"
+  }
+}
+
+capture-policy: Sanctity command failed; check protected configuration and service dependencies.
+
+--runtime-role: Catalog migrations and runtime profile applied.
+
+reconcile: Sanctity command failed; check protected configuration and service dependencies.
+
+reconcile: Sanctity command failed; check protected configuration and service dependencies.
+
+reconcile: {
+  "operation" : "41f25b70-6031-49de-99e3-88877cd03032",
+  "phase" : "Opened",
+  "closed" : false,
+  "witnessAvailable" : true,
+  "admissionReady" : true,
+  "backup" : "cd1287243a9ad4daf8c6b12f2c2a16efafc1d1a2f99f585f739ea93755e88090",
+  "verification" : {
+    "at" : "2026-11-02T22:17:24.146479Z",
+    "barrier" : {
+      "at" : "2026-11-02T22:16:51.210029Z",
+      "epoch" : "1",
+      "reason" : "verified organization backup recovery",
+      "operator" : "147ad823bb18a485063d78080e3c55eea2438f430ef7c627e2c805aaff369a23",
+      "challenge" : "24fff52d-fbda-499e-8b21-de8a4802f0e5",
+      "operation" : "334db81f-333e-360f-adec-c801f80c105b",
+      "installation" : "c78aac99-b7ed-4e59-b4c8-328b766636a8"
+    },
+    "summary" : {
+      "head" : {
+        "epoch" : "1",
+        "writer" : null,
+        "barrier" : {
+          "at" : "2026-11-02T22:16:51.210029Z",
+          "epoch" : "1",
+          "reason" : "verified organization backup recovery",
+          "operator" : "147ad823bb18a485063d78080e3c55eea2438f430ef7c627e2c805aaff369a23",
+          "challenge" : "24fff52d-fbda-499e-8b21-de8a4802f0e5",
+          "operation" : "334db81f-333e-360f-adec-c801f80c105b",
+          "installation" : "c78aac99-b7ed-4e59-b4c8-328b766636a8"
+        },
+        "pending" : null,
+        "enrolled" : true,
+        "revision" : "38",
+        "sequence" : "80",
+        "appliedHash" : "e2d277eb15c14bc48aa5f72904830164d6f0a2cff91f09e81bba0d2e2b44343f",
+        "journalHash" : "d1a8642830dfaf19da4b73b3dade33db4032968cd216722688d3a2278169465a",
+        "capabilities" : "6616544f200829bbc14c9c7713b17e6c9a2c781abf569049ef1c04e7c23a5446",
+        "installation" : "c78aac99-b7ed-4e59-b4c8-328b766636a8"
+      },
+      "records" : "80",
+      "journalDigest" : "6c74cbec21b86d4d3889af871f0cf104f5b10a95f6e5c962ca10f3f35978ee3c",
+      "checkpointDigest" : "f7491502d9bbd04ff51c8698efa599fe490a21d24dfa70c3173eaf9cc2b75d2d",
+      "projectionDigest" : "892a803c8230580af4f31c68abcb81a7fe3c7e80ae8558fa3a6238914135bfec"
+    },
+    "version" : "organization-recovery-receipt-v1",
+    "operator" : "91dbce86-7d5e-4580-8f99-c25fd96004c6",
+    "outcomes" : {
+      "missingDatasets" : 1,
+      "missingReleases" : 1,
+      "activeRunsFailed" : 0,
+      "allCredentialIdentitiesRetired" : 8,
+      "restoredCredentialsInvalidated" : 8,
+      "allImportAndDeliveryLeasesInvalidated" : true
+    },
+    "operation" : "41f25b70-6031-49de-99e3-88877cd03032",
+    "backupDigest" : "cd1287243a9ad4daf8c6b12f2c2a16efafc1d1a2f99f585f739ea93755e88090",
+    "databaseActor" : "recovery_operator",
+    "scientificDigestAfter" : "10f47df71d5152837300fb72df250c5cbdf06465f180c90d9a7aeaa9d308678f",
+    "scientificDigestBefore" : "10f47df71d5152837300fb72df250c5cbdf06465f180c90d9a7aeaa9d308678f"
+  }
+}
+
+reconcile: {
+  "operation" : "41f25b70-6031-49de-99e3-88877cd03032",
+  "phase" : "Opened",
+  "closed" : false,
+  "witnessAvailable" : true,
+  "admissionReady" : true,
+  "backup" : "cd1287243a9ad4daf8c6b12f2c2a16efafc1d1a2f99f585f739ea93755e88090",
+  "verification" : {
+    "at" : "2026-11-02T22:17:24.146479Z",
+    "barrier" : {
+      "at" : "2026-11-02T22:16:51.210029Z",
+      "epoch" : "1",
+      "reason" : "verified organization backup recovery",
+      "operator" : "147ad823bb18a485063d78080e3c55eea2438f430ef7c627e2c805aaff369a23",
+      "challenge" : "24fff52d-fbda-499e-8b21-de8a4802f0e5",
+      "operation" : "334db81f-333e-360f-adec-c801f80c105b",
+      "installation" : "c78aac99-b7ed-4e59-b4c8-328b766636a8"
+    },
+    "summary" : {
+      "head" : {
+        "epoch" : "1",
+        "writer" : null,
+        "barrier" : {
+          "at" : "2026-11-02T22:16:51.210029Z",
+          "epoch" : "1",
+          "reason" : "verified organization backup recovery",
+          "operator" : "147ad823bb18a485063d78080e3c55eea2438f430ef7c627e2c805aaff369a23",
+          "challenge" : "24fff52d-fbda-499e-8b21-de8a4802f0e5",
+          "operation" : "334db81f-333e-360f-adec-c801f80c105b",
+          "installation" : "c78aac99-b7ed-4e59-b4c8-328b766636a8"
+        },
+        "pending" : null,
+        "enrolled" : true,
+        "revision" : "38",
+        "sequence" : "80",
+        "appliedHash" : "e2d277eb15c14bc48aa5f72904830164d6f0a2cff91f09e81bba0d2e2b44343f",
+        "journalHash" : "d1a8642830dfaf19da4b73b3dade33db4032968cd216722688d3a2278169465a",
+        "capabilities" : "6616544f200829bbc14c9c7713b17e6c9a2c781abf569049ef1c04e7c23a5446",
+        "installation" : "c78aac99-b7ed-4e59-b4c8-328b766636a8"
+      },
+      "records" : "80",
+      "journalDigest" : "6c74cbec21b86d4d3889af871f0cf104f5b10a95f6e5c962ca10f3f35978ee3c",
+      "checkpointDigest" : "f7491502d9bbd04ff51c8698efa599fe490a21d24dfa70c3173eaf9cc2b75d2d",
+      "projectionDigest" : "892a803c8230580af4f31c68abcb81a7fe3c7e80ae8558fa3a6238914135bfec"
+    },
+    "version" : "organization-recovery-receipt-v1",
+    "operator" : "91dbce86-7d5e-4580-8f99-c25fd96004c6",
+    "outcomes" : {
+      "missingDatasets" : 1,
+      "missingReleases" : 1,
+      "activeRunsFailed" : 0,
+      "allCredentialIdentitiesRetired" : 8,
+      "restoredCredentialsInvalidated" : 8,
+      "allImportAndDeliveryLeasesInvalidated" : true
+    },
+    "operation" : "41f25b70-6031-49de-99e3-88877cd03032",
+    "backupDigest" : "cd1287243a9ad4daf8c6b12f2c2a16efafc1d1a2f99f585f739ea93755e88090",
+    "databaseActor" : "recovery_operator",
+    "scientificDigestAfter" : "10f47df71d5152837300fb72df250c5cbdf06465f180c90d9a7aeaa9d308678f",
+    "scientificDigestBefore" : "10f47df71d5152837300fb72df250c5cbdf06465f180c90d9a7aeaa9d308678f"
+  }
+}
+

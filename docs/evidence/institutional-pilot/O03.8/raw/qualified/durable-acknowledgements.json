@@ -1,0 +1,1256 @@
+[
+  {
+    "kind": "AddMember",
+    "revision": 19,
+    "certificate": {
+      "signed": {
+        "key": "06e3fd8fda29bb60ab59557de61edb0aecdb231134be30e75b455f8e1b792fa9",
+        "body": {
+          "at": "2026-11-02T22:32:58.075149547Z",
+          "kind": "COMMIT",
+          "command": {
+            "kind": "AddMember",
+            "epoch": "0",
+            "payload": "eyJhY3RvciI6IjdjYjY0NTBiLWU0MWYtNDNmNC04MDIwLTgwNjQxNDc0ZTMyZiIsImFwcHJvdmFsUmVmZXJlbmNlcyI6W10sImF0IjoiMjAyNi0xMS0wMlQyMjozMjo1Ny45NDQxNjBaIiwiY2hhbmdlcyI6W3siYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMS0wMlQyMjozMjoyOC45NTQ2NDNaIiwiZGVzY3JpcHRpb24iOiJQcml2YXRlIGxlZ2FjeSBtYXBwaW5nOyBubyB2ZXJpZmllZCBpZGVudGl0eSBpbmZlcnJlZCIsImdlbmVyYXRpb24iOjEsImlkIjoiZWNkNWY3NzEtODE0Mi0zM2EzLTkwZTktOTI0MzNiZTBmMjU5IiwibmFtZSI6IkxlZ2FjeSBtaWdyYXRpb24gbGFiIiwic3RhdHVzIjoiQWN0aXZlIn0sImJlZm9yZSI6eyJjcmVhdGVkQXQiOiIyMDI2LTExLTAyVDIyOjMyOjI4Ljk1NDY0M1oiLCJkZXNjcmlwdGlvbiI6IlByaXZhdGUgbGVnYWN5IG1hcHBpbmc7IG5vIHZlcmlmaWVkIGlkZW50aXR5IGluZmVycmVkIiwiZ2VuZXJhdGlvbiI6MCwiaWQiOiJlY2Q1Zjc3MS04MTQyLTMzYTMtOTBlOS05MjQzM2JlMGYyNTkiLCJuYW1lIjoiTGVnYWN5IG1pZ3JhdGlvbiBsYWIiLCJzdGF0dXMiOiJBY3RpdmUifSwia2luZCI6ImxhYiJ9LHsiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMS0wMlQyMjozMjo1Ny45NDQxNjBaIiwiZXhwaXJlc0F0IjpudWxsLCJnZW5lcmF0aW9uIjowLCJpZCI6ImI1YmI5YzM4LTRmYWItM2YwYy1hNzE4LTRlZGZhZmZiMWYyZSIsImxhYiI6ImVjZDVmNzcxLTgxNDItMzNhMy05MGU5LTkyNDMzYmUwZjI1OSIsInByaW5jaXBhbCI6ImI5YzM4NmI5LTJjNDktNDM5MS1hMGNkLTI5YjY3MWM5YTA0NSIsInJvbGUiOiJNZW1iZXIiLCJzdGF0dXMiOiJBY3RpdmUifSwiYmVmb3JlIjpudWxsLCJraW5kIjoibWVtYmVyc2hpcCJ9XSwiZGF0YWJhc2VBY3RvciI6ImNvbXBhdF9ydW50aW1lIiwiZXBvY2giOiIwIiwiZXZlbnQiOiI1MmE4MzI0ZC1mZTYxLTQyYzItOTAyOS0zNWYyMTA5MTk5NGQiLCJleHRyYSI6eyJjcmVhdGVkRGF0YXNldHMiOltdLCJpbnZhbGlkYXRpb25zIjp7fX0sImluc3RhbGxhdGlvbiI6IjkxNTRlY2E4LTc2YzktNDBhNi05MGY1LTA3YjEzMjllOTE0NyIsImludGVudERpZ2VzdCI6IjI1ODZiNGY4YmI1YTZiNjM5ZmVmZGQ1Y2Q3OTA4OWNkNWMwMzdmODhhYmVhMjc3NjJhMTY5ZDRhMmFiOWY1OTIiLCJrZXkiOiJiOTIwMDBjMjMzMmQ0YjhjODY4ODUyZjQ2N2I4YzE2OCIsImtpbmQiOiJBZGRNZW1iZXIiLCJwcmV2aW91c0hhc2giOiI0NGM0M2Q4MWQwODU0MWE4YzdlM2QxYTQ2OTg3OTNjYTUwYzgzODNkMDY1OWZhYmZlYzQyN2ZhZTc0MmY0M2M2IiwicHJldmlvdXNSZXZpc2lvbiI6IjE4IiwicmVhc29uIjoiQWRkTWVtYmVyIiwicmVxdWVzdCI6eyJ2YWx1ZSI6eyJjb21tYW5kIjp7IkFkZE1lbWJlciI6eyJleHBpcmVzQXQiOm51bGwsImlkIjoiYjViYjljMzgtNGZhYi0zZjBjLWE3MTgtNGVkZmFmZmIxZjJlIiwibGFiIjoiZWNkNWY3NzEtODE0Mi0zM2EzLTkwZTktOTI0MzNiZTBmMjU5IiwicHJpbmNpcGFsIjoiYjljMzg2YjktMmM0OS00MzkxLWEwY2QtMjliNjcxYzlhMDQ1Iiwicm9sZSI6Ik1lbWJlciJ9fSwiZXhwZWN0ZWQiOltbeyJMYWIiOnsiaWQiOiJlY2Q1Zjc3MS04MTQyLTMzYTMtOTBlOS05MjQzM2JlMGYyNTkifX0sMF1dLCJrZXkiOiJiOTIwMDBjMjMzMmQ0YjhjODY4ODUyZjQ2N2I4YzE2OCJ9LCJ2ZXJzaW9uIjoxfSwicmV2aXNpb24iOiIxOSIsInNjb3BlIjoibGFiOmVjZDVmNzcxLTgxNDItMzNhMy05MGU5LTkyNDMzYmUwZjI1OSIsInZlcnNpb24iOiJwb2xpY3ktbG9jYWwtdjIifQ",
+            "version": "policy-event-v1",
+            "revision": "19",
+            "operation": "52a8324d-fe61-42c2-9029-35f21091994d",
+            "appliedHash": "10c85d6f2aee7bea992a94d68acb06c94789605b05c9e26b630267e08b868066",
+            "capabilities": "6616544f200829bbc14c9c7713b17e6c9a2c781abf569049ef1c04e7c23a5446",
+            "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147",
+            "previousHash": "44c43d81d08541a8c7e3d1a4698793ca50c8383d0659fabfec427fae742f43c6",
+            "payloadDigest": "f827f2a7c4ec4d41b8e0be04e8bd76a728fb09ab820a56fcbda94984dd2ee652",
+            "previousRevision": "18"
+          },
+          "version": "policy-journal-v1",
+          "previous": "78cb0609fcc7bf95471509dc8d93a3804035ef99d0127e97fc03e09e26601781",
+          "sequence": "39",
+          "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147"
+        },
+        "version": "sanctity-policy-wire-v1"
+      },
+      "signature": "jLxrLhX-UV1AcxKcbGQNzvrHgUlI5UIC-aDXrUDYm5P-foXeKYlZzOLi-ihgpHbHzKskDTXQDW3PjKaAzwR0BA"
+    }
+  },
+  {
+    "kind": "AddParticipant",
+    "revision": 20,
+    "certificate": {
+      "signed": {
+        "key": "06e3fd8fda29bb60ab59557de61edb0aecdb231134be30e75b455f8e1b792fa9",
+        "body": {
+          "at": "2026-11-02T22:32:58.520230172Z",
+          "kind": "COMMIT",
+          "command": {
+            "kind": "AddParticipant",
+            "epoch": "0",
+            "payload": "eyJhY3RvciI6IjdjYjY0NTBiLWU0MWYtNDNmNC04MDIwLTgwNjQxNDc0ZTMyZiIsImFwcHJvdmFsUmVmZXJlbmNlcyI6W10sImF0IjoiMjAyNi0xMS0wMlQyMjozMjo1OC4zOTA0MTdaIiwiY2hhbmdlcyI6W3siYWZ0ZXIiOnsiYmFzaXMiOnsiTWVtYmVyc2hpcCI6eyJpZCI6ImI1YmI5YzM4LTRmYWItM2YwYy1hNzE4LTRlZGZhZmZiMWYyZSJ9fSwiY3JlYXRlZEF0IjoiMjAyNi0xMS0wMlQyMjozMjo1OC4zOTA0MTdaIiwiZXhwaXJlc0F0IjpudWxsLCJnZW5lcmF0aW9uIjowLCJpZCI6IjYxZDFhZWY1LTczMmItMzQ3OS04OGJjLWFhMWY2OTA0MzYyMSIsInByaW5jaXBhbCI6ImI5YzM4NmI5LTJjNDktNDM5MS1hMGNkLTI5YjY3MWM5YTA0NSIsInByb2plY3QiOiIyZTdjNTVkZi1kMzRkLTMxODYtYTE1YS05Y2RmOTE1YjgxMmMiLCJyb2xlIjoiUmVhZGVyIiwic3RhdHVzIjoiQWN0aXZlIn0sImJlZm9yZSI6bnVsbCwia2luZCI6InBhcnRpY2lwYXRpb24ifSx7ImFmdGVyIjp7ImNyZWF0ZWRBdCI6IjIwMjYtMTEtMDJUMjI6MzI6MjguOTU0NjQzWiIsImRlc2NyaXB0aW9uIjoiUHJpdmF0ZSBsZWdhY3kgbWFwcGluZzsgbm8gdmVyaWZpZWQgaWRlbnRpdHkgaW5mZXJyZWQiLCJnZW5lcmF0aW9uIjoxLCJpZCI6IjJlN2M1NWRmLWQzNGQtMzE4Ni1hMTVhLTljZGY5MTViODEyYyIsImxhYiI6ImVjZDVmNzcxLTgxNDItMzNhMy05MGU5LTkyNDMzYmUwZjI1OSIsIm5hbWUiOiJMZWdhY3kgcHJvamVjdCAyZTdjNTVkZiIsInN0YXR1cyI6IkFjdGl2ZSJ9LCJiZWZvcmUiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMS0wMlQyMjozMjoyOC45NTQ2NDNaIiwiZGVzY3JpcHRpb24iOiJQcml2YXRlIGxlZ2FjeSBtYXBwaW5nOyBubyB2ZXJpZmllZCBpZGVudGl0eSBpbmZlcnJlZCIsImdlbmVyYXRpb24iOjAsImlkIjoiMmU3YzU1ZGYtZDM0ZC0zMTg2LWExNWEtOWNkZjkxNWI4MTJjIiwibGFiIjoiZWNkNWY3NzEtODE0Mi0zM2EzLTkwZTktOTI0MzNiZTBmMjU5IiwibmFtZSI6IkxlZ2FjeSBwcm9qZWN0IDJlN2M1NWRmIiwic3RhdHVzIjoiQWN0aXZlIn0sImtpbmQiOiJwcm9qZWN0In1dLCJkYXRhYmFzZUFjdG9yIjoiY29tcGF0X3J1bnRpbWUiLCJlcG9jaCI6IjAiLCJldmVudCI6Ijc2ZDZkZjc5LTliZGItNGI1ZS1iMDNjLWIxNjgzMGZjMGNiNSIsImV4dHJhIjp7ImNyZWF0ZWREYXRhc2V0cyI6W10sImludmFsaWRhdGlvbnMiOnt9fSwiaW5zdGFsbGF0aW9uIjoiOTE1NGVjYTgtNzZjOS00MGE2LTkwZjUtMDdiMTMyOWU5MTQ3IiwiaW50ZW50RGlnZXN0IjoiYmU1OGYxZmM2YTNmOTZhY2U0NjE3NzNlZTFmYTYxYTViY2JmMGJiYTAwNTQ0OTBmZWMxMzNhYzE5YmY1ODgyYSIsImtleSI6IjNjMTA2ZThhYmVhYzRkMjQ4MmY2MTQ5MmY5ODkwYTY4Iiwia2luZCI6IkFkZFBhcnRpY2lwYW50IiwicHJldmlvdXNIYXNoIjoiMTBjODVkNmYyYWVlN2JlYTk5MmE5NGQ2OGFjYjA2Yzk0Nzg5NjA1YjA1YzllMjZiNjMwMjY3ZTA4Yjg2ODA2NiIsInByZXZpb3VzUmV2aXNpb24iOiIxOSIsInJlYXNvbiI6IkFkZFBhcnRpY2lwYW50IiwicmVxdWVzdCI6eyJ2YWx1ZSI6eyJjb21tYW5kIjp7IkFkZFBhcnRpY2lwYW50Ijp7ImJhc2lzIjp7Ik1lbWJlcnNoaXAiOnsiaWQiOiJiNWJiOWMzOC00ZmFiLTNmMGMtYTcxOC00ZWRmYWZmYjFmMmUifX0sImV4cGlyZXNBdCI6bnVsbCwiaWQiOiI2MWQxYWVmNS03MzJiLTM0NzktODhiYy1hYTFmNjkwNDM2MjEiLCJwcmluY2lwYWwiOiJiOWMzODZiOS0yYzQ5LTQzOTEtYTBjZC0yOWI2NzFjOWEwNDUiLCJwcm9qZWN0IjoiMmU3YzU1ZGYtZDM0ZC0zMTg2LWExNWEtOWNkZjkxNWI4MTJjIiwicm9sZSI6IlJlYWRlciJ9fSwiZXhwZWN0ZWQiOltbeyJNZW1iZXJzaGlwIjp7ImlkIjoiYjViYjljMzgtNGZhYi0zZjBjLWE3MTgtNGVkZmFmZmIxZjJlIn19LDBdLFt7IlByb2plY3QiOnsiaWQiOiIyZTdjNTVkZi1kMzRkLTMxODYtYTE1YS05Y2RmOTE1YjgxMmMifX0sMF1dLCJrZXkiOiIzYzEwNmU4YWJlYWM0ZDI0ODJmNjE0OTJmOTg5MGE2OCJ9LCJ2ZXJzaW9uIjoxfSwicmV2aXNpb24iOiIyMCIsInNjb3BlIjoicHJvamVjdDoyZTdjNTVkZi1kMzRkLTMxODYtYTE1YS05Y2RmOTE1YjgxMmMiLCJ2ZXJzaW9uIjoicG9saWN5LWxvY2FsLXYyIn0",
+            "version": "policy-event-v1",
+            "revision": "20",
+            "operation": "76d6df79-9bdb-4b5e-b03c-b16830fc0cb5",
+            "appliedHash": "13767e6ed29e23a5ac28d25f6ca02fd7f2776b9b897e9cfeb031444b7f1dd6f3",
+            "capabilities": "6616544f200829bbc14c9c7713b17e6c9a2c781abf569049ef1c04e7c23a5446",
+            "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147",
+            "previousHash": "10c85d6f2aee7bea992a94d68acb06c94789605b05c9e26b630267e08b868066",
+            "payloadDigest": "0c63aec7ec3d124aace508751eee7ab34374c9e663f3b2ae9db4e52fb15e6fde",
+            "previousRevision": "19"
+          },
+          "version": "policy-journal-v1",
+          "previous": "0ac9cc49f085af5af6320fc3ebeed8fa1cb47b56296cc28fe90a352d4d7c8204",
+          "sequence": "41",
+          "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147"
+        },
+        "version": "sanctity-policy-wire-v1"
+      },
+      "signature": "k1h_P3Sgw1IJ-6yzlCiT1GARkgrW27O_PznXppP4DVG_HG5PYG-C_8NmG53RD7hiY5sK9V2dAj-CAN8ly8N3Dg"
+    }
+  },
+  {
+    "kind": "CreateLab",
+    "revision": 4,
+    "certificate": {
+      "signed": {
+        "key": "06e3fd8fda29bb60ab59557de61edb0aecdb231134be30e75b455f8e1b792fa9",
+        "body": {
+          "at": "2026-11-02T22:32:44.620892430Z",
+          "kind": "COMMIT",
+          "command": {
+            "kind": "CreateLab",
+            "epoch": "0",
+            "payload": "eyJhY3RvciI6IjdjYjY0NTBiLWU0MWYtNDNmNC04MDIwLTgwNjQxNDc0ZTMyZiIsImFwcHJvdmFsUmVmZXJlbmNlcyI6W10sImF0IjoiMjAyNi0xMS0wMlQyMjozMjo0NC4zNTIyOTRaIiwiY2hhbmdlcyI6W3siYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMS0wMlQyMjozMjo0NC4zNTIyOTRaIiwiZGVzY3JpcHRpb24iOiIiLCJnZW5lcmF0aW9uIjowLCJpZCI6IjQ5ODQ0YTc4LWI0ZjctMzZjNS1iNTEzLTg5Y2NjYzIzMjFkMCIsIm5hbWUiOiJTb3VyY2UtbG9zcyBzZWNvbmQgbGFiIiwic3RhdHVzIjoiQWN0aXZlIn0sImJlZm9yZSI6bnVsbCwia2luZCI6ImxhYiJ9LHsiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMS0wMlQyMjozMjo0NC4zNTIyOTRaIiwiZXhwaXJlc0F0IjpudWxsLCJnZW5lcmF0aW9uIjowLCJpZCI6Ijg1MTdlOTQ2LWJkMzYtMzgwMy1hZjkyLWVhNTY5NTA4ZWNhMSIsImxhYiI6IjQ5ODQ0YTc4LWI0ZjctMzZjNS1iNTEzLTg5Y2NjYzIzMjFkMCIsInByaW5jaXBhbCI6IjdjYjY0NTBiLWU0MWYtNDNmNC04MDIwLTgwNjQxNDc0ZTMyZiIsInJvbGUiOiJBZG1pbiIsInN0YXR1cyI6IkFjdGl2ZSJ9LCJiZWZvcmUiOm51bGwsImtpbmQiOiJtZW1iZXJzaGlwIn1dLCJkYXRhYmFzZUFjdG9yIjoiY29tcGF0IiwiZXBvY2giOiIwIiwiZXZlbnQiOiJkOTRjMWYyNS1iODQ1LTQzMTUtYjJhNy05ZGM3ZmRmYzdhMTMiLCJleHRyYSI6eyJjcmVhdGVkRGF0YXNldHMiOltdLCJpbnZhbGlkYXRpb25zIjp7fX0sImluc3RhbGxhdGlvbiI6IjkxNTRlY2E4LTc2YzktNDBhNi05MGY1LTA3YjEzMjllOTE0NyIsImludGVudERpZ2VzdCI6ImI3ODUyNDc4NjVmOGRlY2YwNDlkN2U0Y2Q1MTRlNjI0NjZhOTcyMDc3ZDY4YmY5ZThlOWMzNzA1ZDY5Yzc2ZDEiLCJrZXkiOiJzb3VyY2UtbG9zcy1sYWIiLCJraW5kIjoiQ3JlYXRlTGFiIiwicHJldmlvdXNIYXNoIjoiYmIzODkyYTYxZmE4ZWYwNjNhMzFlNDg1YWIxMGUxOTEwNmM5YWJhZDRmY2NjMjI1OWU3MTM4YjI2MzM4ZWIxNyIsInByZXZpb3VzUmV2aXNpb24iOiIzIiwicmVhc29uIjoiQ3JlYXRlTGFiIiwicmVxdWVzdCI6eyJ2YWx1ZSI6eyJjb21tYW5kIjp7IkNyZWF0ZUxhYiI6eyJhZG1pbiI6IjdjYjY0NTBiLWU0MWYtNDNmNC04MDIwLTgwNjQxNDc0ZTMyZiIsImRlc2NyaXB0aW9uIjoiIiwiaWQiOiI0OTg0NGE3OC1iNGY3LTM2YzUtYjUxMy04OWNjY2MyMzIxZDAiLCJtZW1iZXJzaGlwIjoiODUxN2U5NDYtYmQzNi0zODAzLWFmOTItZWE1Njk1MDhlY2ExIiwibmFtZSI6IlNvdXJjZS1sb3NzIHNlY29uZCBsYWIifX0sImV4cGVjdGVkIjpbXSwia2V5Ijoic291cmNlLWxvc3MtbGFiIn0sInZlcnNpb24iOjF9LCJyZXZpc2lvbiI6IjQiLCJzY29wZSI6Imluc3RhbGxhdGlvbiIsInZlcnNpb24iOiJwb2xpY3ktbG9jYWwtdjIifQ",
+            "version": "policy-event-v1",
+            "revision": "4",
+            "operation": "d94c1f25-b845-4315-b2a7-9dc7fdfc7a13",
+            "appliedHash": "f85ac66881bfd68acc75ca70f24a9a2732dc0c620ca064b226b291ccf75f6eff",
+            "capabilities": "6616544f200829bbc14c9c7713b17e6c9a2c781abf569049ef1c04e7c23a5446",
+            "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147",
+            "previousHash": "bb3892a61fa8ef063a31e485ab10e19106c9abad4fccc2259e7138b26338eb17",
+            "payloadDigest": "8bd391e7434b4ac9dcee5b2de08fec8f31c283c18fa95a4ab261917985c16942",
+            "previousRevision": "3"
+          },
+          "version": "policy-journal-v1",
+          "previous": "21c41f8e238400281c1bbeeb3d20a15225952face794c5eec6900d970e95b756",
+          "sequence": "9",
+          "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147"
+        },
+        "version": "sanctity-policy-wire-v1"
+      },
+      "signature": "PApn_0eZN0bt12AR4I-mSGQ1aFfnDO-aWHXWE0EyX7rYMugSAwzNolLMRzCZZbMdEZ6RxLPMKD-nIr3NHXKZAQ"
+    }
+  },
+  {
+    "kind": "CreateProject",
+    "revision": 5,
+    "certificate": {
+      "signed": {
+        "key": "06e3fd8fda29bb60ab59557de61edb0aecdb231134be30e75b455f8e1b792fa9",
+        "body": {
+          "at": "2026-11-02T22:32:45.195546430Z",
+          "kind": "COMMIT",
+          "command": {
+            "kind": "CreateProject",
+            "epoch": "0",
+            "payload": "eyJhY3RvciI6IjdjYjY0NTBiLWU0MWYtNDNmNC04MDIwLTgwNjQxNDc0ZTMyZiIsImFwcHJvdmFsUmVmZXJlbmNlcyI6W10sImF0IjoiMjAyNi0xMS0wMlQyMjozMjo0NS4wODY5OTNaIiwiY2hhbmdlcyI6W3siYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMS0wMlQyMjozMjo0NC4zNTIyOTRaIiwiZGVzY3JpcHRpb24iOiIiLCJnZW5lcmF0aW9uIjoxLCJpZCI6IjQ5ODQ0YTc4LWI0ZjctMzZjNS1iNTEzLTg5Y2NjYzIzMjFkMCIsIm5hbWUiOiJTb3VyY2UtbG9zcyBzZWNvbmQgbGFiIiwic3RhdHVzIjoiQWN0aXZlIn0sImJlZm9yZSI6eyJjcmVhdGVkQXQiOiIyMDI2LTExLTAyVDIyOjMyOjQ0LjM1MjI5NFoiLCJkZXNjcmlwdGlvbiI6IiIsImdlbmVyYXRpb24iOjAsImlkIjoiNDk4NDRhNzgtYjRmNy0zNmM1LWI1MTMtODljY2NjMjMyMWQwIiwibmFtZSI6IlNvdXJjZS1sb3NzIHNlY29uZCBsYWIiLCJzdGF0dXMiOiJBY3RpdmUifSwia2luZCI6ImxhYiJ9LHsiYWZ0ZXIiOnsiYmFzaXMiOnsiSW5kZXBlbmRlbnQiOnt9fSwiY3JlYXRlZEF0IjoiMjAyNi0xMS0wMlQyMjozMjo0NS4wODY5OTNaIiwiZXhwaXJlc0F0IjpudWxsLCJnZW5lcmF0aW9uIjowLCJpZCI6ImIxNTc1NDMyLWRmMjYtM2Q1Zi05ZGFhLTlhOGFjODA4YmRiOSIsInByaW5jaXBhbCI6IjdjYjY0NTBiLWU0MWYtNDNmNC04MDIwLTgwNjQxNDc0ZTMyZiIsInByb2plY3QiOiIxODhjYzM2Yi1hODM5LTNmOWYtOTIzNS1lNDU0ZmQxMDZlODUiLCJyb2xlIjoiU3Rld2FyZCIsInN0YXR1cyI6IkFjdGl2ZSJ9LCJiZWZvcmUiOm51bGwsImtpbmQiOiJwYXJ0aWNpcGF0aW9uIn0seyJhZnRlciI6eyJjcmVhdGVkQXQiOiIyMDI2LTExLTAyVDIyOjMyOjQ1LjA4Njk5M1oiLCJkZXNjcmlwdGlvbiI6IiIsImdlbmVyYXRpb24iOjAsImlkIjoiMTg4Y2MzNmItYTgzOS0zZjlmLTkyMzUtZTQ1NGZkMTA2ZTg1IiwibGFiIjoiNDk4NDRhNzgtYjRmNy0zNmM1LWI1MTMtODljY2NjMjMyMWQwIiwibmFtZSI6IlNlY29uZCBwcm9qZWN0Iiwic3RhdHVzIjoiQWN0aXZlIn0sImJlZm9yZSI6bnVsbCwia2luZCI6InByb2plY3QifV0sImRhdGFiYXNlQWN0b3IiOiJjb21wYXRfcnVudGltZSIsImVwb2NoIjoiMCIsImV2ZW50IjoiOGM2YzhmMDMtMjcxYi00ZDZmLTk0M2ItZGZkZTZjZWM3ZjNkIiwiZXh0cmEiOnsiY3JlYXRlZERhdGFzZXRzIjpbXSwiaW52YWxpZGF0aW9ucyI6e319LCJpbnN0YWxsYXRpb24iOiI5MTU0ZWNhOC03NmM5LTQwYTYtOTBmNS0wN2IxMzI5ZTkxNDciLCJpbnRlbnREaWdlc3QiOiJkMDZhYWJlZDU3N2Y4MTUwYzliOTVjZTJiNGJkMTQ1Y2FiNmY3MzliZWI0ZDAzZWFiZWE4ZmNhMTQ2MDE3NjM2Iiwia2V5IjoiYWE2MmZmOWU2OGU3NGVkYWFjODkzZGFlNDI0ODUxOWMiLCJraW5kIjoiQ3JlYXRlUHJvamVjdCIsInByZXZpb3VzSGFzaCI6ImY4NWFjNjY4ODFiZmQ2OGFjYzc1Y2E3MGYyNGE5YTI3MzJkYzBjNjIwY2EwNjRiMjI2YjI5MWNjZjc1ZjZlZmYiLCJwcmV2aW91c1JldmlzaW9uIjoiNCIsInJlYXNvbiI6IkNyZWF0ZVByb2plY3QiLCJyZXF1ZXN0Ijp7InZhbHVlIjp7ImNvbW1hbmQiOnsiQ3JlYXRlUHJvamVjdCI6eyJkZXNjcmlwdGlvbiI6IiIsImlkIjoiMTg4Y2MzNmItYTgzOS0zZjlmLTkyMzUtZTQ1NGZkMTA2ZTg1IiwibGFiIjoiNDk4NDRhNzgtYjRmNy0zNmM1LWI1MTMtODljY2NjMjMyMWQwIiwibmFtZSI6IlNlY29uZCBwcm9qZWN0IiwicGFydGljaXBhdGlvbiI6ImIxNTc1NDMyLWRmMjYtM2Q1Zi05ZGFhLTlhOGFjODA4YmRiOSIsInN0ZXdhcmQiOiI3Y2I2NDUwYi1lNDFmLTQzZjQtODAyMC04MDY0MTQ3NGUzMmYifX0sImV4cGVjdGVkIjpbW3siTGFiIjp7ImlkIjoiNDk4NDRhNzgtYjRmNy0zNmM1LWI1MTMtODljY2NjMjMyMWQwIn19LDBdXSwia2V5IjoiYWE2MmZmOWU2OGU3NGVkYWFjODkzZGFlNDI0ODUxOWMifSwidmVyc2lvbiI6MX0sInJldmlzaW9uIjoiNSIsInNjb3BlIjoibGFiOjQ5ODQ0YTc4LWI0ZjctMzZjNS1iNTEzLTg5Y2NjYzIzMjFkMCIsInZlcnNpb24iOiJwb2xpY3ktbG9jYWwtdjIifQ",
+            "version": "policy-event-v1",
+            "revision": "5",
+            "operation": "8c6c8f03-271b-4d6f-943b-dfde6cec7f3d",
+            "appliedHash": "396405560d461a8c683f0c9fb331a9a535c62ab6a51042b14fdb13eac308d366",
+            "capabilities": "6616544f200829bbc14c9c7713b17e6c9a2c781abf569049ef1c04e7c23a5446",
+            "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147",
+            "previousHash": "f85ac66881bfd68acc75ca70f24a9a2732dc0c620ca064b226b291ccf75f6eff",
+            "payloadDigest": "f717e41e9e4156d34419a21b6843cda9cb7ca628f2f863f4b3900cfd054da176",
+            "previousRevision": "4"
+          },
+          "version": "policy-journal-v1",
+          "previous": "ee63e51576fbdb150156ca72dc7593addfb002a89969165fe3261911813f0d02",
+          "sequence": "11",
+          "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147"
+        },
+        "version": "sanctity-policy-wire-v1"
+      },
+      "signature": "MV5yplWxODBSMWotnP4M_ZdULFh9-p_H8R0xyictugcO7w9SlHYFs1u7bvnDgyOzD58oq2ISW8OqpvMAXGywAA"
+    }
+  },
+  {
+    "kind": "CredentialIssued",
+    "revision": 1,
+    "certificate": {
+      "signed": {
+        "key": "06e3fd8fda29bb60ab59557de61edb0aecdb231134be30e75b455f8e1b792fa9",
+        "body": {
+          "at": "2026-11-02T22:32:36.955592385Z",
+          "kind": "COMMIT",
+          "command": {
+            "kind": "CredentialIssued",
+            "epoch": "0",
+            "payload": "eyJhY3RvciI6IjdjYjY0NTBiLWU0MWYtNDNmNC04MDIwLTgwNjQxNDc0ZTMyZiIsImFwcHJvdmFsUmVmZXJlbmNlcyI6W10sImF0IjoiMjAyNi0xMS0wMlQyMjozMjozNi43NTI4MjZaIiwiY2hhbmdlcyI6eyJhZnRlciI6eyJleHBpcmVzQXQiOiIyMDI2LTExLTAyVDIzOjMyOjM2LjczNDU2MloiLCJpZCI6IjRmNDVmZmNkLThhYTgtNDBkYi1iYzk0LWI2YmFmMWU5MmJjMyIsImlzc3VlZEF0IjoiMjAyNi0xMS0wMlQyMjozMjozNi43MzQ1NjJaIiwibGFiZWwiOiJwcmUtYmFja3VwLW93bmVyIiwicHJpbmNpcGFsIjoiN2NiNjQ1MGItZTQxZi00M2Y0LTgwMjAtODA2NDE0NzRlMzJmIiwicmV2b2tlZEF0IjpudWxsfSwiYmVmb3JlIjpudWxsfSwiZGF0YWJhc2VBY3RvciI6ImNvbXBhdCIsImVwb2NoIjoiMCIsImV2ZW50IjoiMTU0Y2IzODAtMzMwMS00MzM0LTkzMDEtMDVjMmExNjczOTUyIiwiZXh0cmEiOnt9LCJpbnN0YWxsYXRpb24iOiI5MTU0ZWNhOC03NmM5LTQwYTYtOTBmNS0wN2IxMzI5ZTkxNDciLCJpbnRlbnREaWdlc3QiOiI1YzQ3Y2E4Nzk0N2Y1ZTdiM2M3NWVhMjZmZWMxMTkyYzEyNDlmZGZhZGViZmY1MzkzOGFhMTI3MmE1N2U3MTA5Iiwia2V5IjoiNGY0NWZmY2QtOGFhOC00MGRiLWJjOTQtYjZiYWYxZTkyYmMzIiwia2luZCI6IkNyZWRlbnRpYWxJc3N1ZWQiLCJwcmV2aW91c0hhc2giOiI5ZjNmMTk1M2U1NWU1MGM3ZDk2ZThlOWVjYTAzNjM0YjJkODUzZjU4NTYxMjExMjllZDBiN2NjNDU2OTIxNTYxIiwicHJldmlvdXNSZXZpc2lvbiI6IjAiLCJyZWFzb24iOiJDcmVkZW50aWFsSXNzdWVkIiwicmVxdWVzdCI6bnVsbCwicmV2aXNpb24iOiIxIiwic2NvcGUiOiJjcmVkZW50aWFsOjRmNDVmZmNkLThhYTgtNDBkYi1iYzk0LWI2YmFmMWU5MmJjMyIsInZlcnNpb24iOiJwb2xpY3ktbG9jYWwtdjIifQ",
+            "version": "policy-event-v1",
+            "revision": "1",
+            "operation": "154cb380-3301-4334-9301-05c2a1673952",
+            "appliedHash": "2d5ec7ca4caa16f021b6cbcd7dc90fae10f2164ff532d5a4cd5b2a648ba976f4",
+            "capabilities": "6616544f200829bbc14c9c7713b17e6c9a2c781abf569049ef1c04e7c23a5446",
+            "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147",
+            "previousHash": "9f3f1953e55e50c7d96e8e9eca03634b2d853f5856121129ed0b7cc456921561",
+            "payloadDigest": "043136b6629f13c6976c7f900eb10526b6457fa446a724684e1b618c7fcb893c",
+            "previousRevision": "0"
+          },
+          "version": "policy-journal-v1",
+          "previous": "856b0a87969ce768ef82f7cf0182de5c9e018b0edaa7d1ff7f1f102e25c33cb2",
+          "sequence": "3",
+          "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147"
+        },
+        "version": "sanctity-policy-wire-v1"
+      },
+      "signature": "7ROKOrOLm05HNtCqb9wGwBej0HAWzze-b8PGkoMZ71Rp1KgVkzdoEveX0m7Qc0f3TSjNZby02AEkWDAmlTklAA"
+    }
+  },
+  {
+    "kind": "CredentialIssued",
+    "revision": 10,
+    "certificate": {
+      "signed": {
+        "key": "06e3fd8fda29bb60ab59557de61edb0aecdb231134be30e75b455f8e1b792fa9",
+        "body": {
+          "at": "2026-11-02T22:32:49.439071876Z",
+          "kind": "COMMIT",
+          "command": {
+            "kind": "CredentialIssued",
+            "epoch": "0",
+            "payload": "eyJhY3RvciI6IjdjYjY0NTBiLWU0MWYtNDNmNC04MDIwLTgwNjQxNDc0ZTMyZiIsImFwcHJvdmFsUmVmZXJlbmNlcyI6W10sImF0IjoiMjAyNi0xMS0wMlQyMjozMjo0OS4yMzkzMDlaIiwiY2hhbmdlcyI6eyJhZnRlciI6eyJleHBpcmVzQXQiOiIyMDI2LTExLTAyVDIzOjMyOjQ5LjIwOTc4MFoiLCJpZCI6IjVkN2FhYWU0LWRlOWMtNDcwYi1iODczLTYwMjQ4OThiYWM2MiIsImlzc3VlZEF0IjoiMjAyNi0xMS0wMlQyMjozMjo0OS4yMDk3ODBaIiwibGFiZWwiOiJwcmUtYmFja3VwLWRpc2FibGVkIiwicHJpbmNpcGFsIjoiYmI0ZTI2MWMtMGFhZC00NDdiLThkMGEtZjQwYzAxNjJlODY1IiwicmV2b2tlZEF0IjpudWxsfSwiYmVmb3JlIjpudWxsfSwiZGF0YWJhc2VBY3RvciI6ImNvbXBhdCIsImVwb2NoIjoiMCIsImV2ZW50IjoiYjFhNTFjOTMtMTA1Yy00MTRlLThlYTctMDZiNDcxMjdkOThhIiwiZXh0cmEiOnt9LCJpbnN0YWxsYXRpb24iOiI5MTU0ZWNhOC03NmM5LTQwYTYtOTBmNS0wN2IxMzI5ZTkxNDciLCJpbnRlbnREaWdlc3QiOiJkMWQwZGRkZTYwMGI2ZDNkZTg2NTg5NjJjM2VmNWRkNDc0YjZmYjFjOTA5YTJjOWYzOTBiM2M5YzFlMTE4NmU1Iiwia2V5IjoiNWQ3YWFhZTQtZGU5Yy00NzBiLWI4NzMtNjAyNDg5OGJhYzYyIiwia2luZCI6IkNyZWRlbnRpYWxJc3N1ZWQiLCJwcmV2aW91c0hhc2giOiJmMjhiODk3ZDI2YmQ4ZjQyNWU0ODE5YmIyN2VlMzQ3YzFlZjIxMjQ2NGRjMzZlNWFjOTNiZDU3MmZhZjQwODI1IiwicHJldmlvdXNSZXZpc2lvbiI6IjkiLCJyZWFzb24iOiJDcmVkZW50aWFsSXNzdWVkIiwicmVxdWVzdCI6bnVsbCwicmV2aXNpb24iOiIxMCIsInNjb3BlIjoiY3JlZGVudGlhbDo1ZDdhYWFlNC1kZTljLTQ3MGItYjg3My02MDI0ODk4YmFjNjIiLCJ2ZXJzaW9uIjoicG9saWN5LWxvY2FsLXYyIn0",
+            "version": "policy-event-v1",
+            "revision": "10",
+            "operation": "b1a51c93-105c-414e-8ea7-06b47127d98a",
+            "appliedHash": "436429f0ab7f0fc257ff2177db2fda61b81ce5b8714af62edf1635ba578c5e48",
+            "capabilities": "6616544f200829bbc14c9c7713b17e6c9a2c781abf569049ef1c04e7c23a5446",
+            "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147",
+            "previousHash": "f28b897d26bd8f425e4819bb27ee347c1ef212464dc36e5ac93bd572faf40825",
+            "payloadDigest": "de26059107b452ce340640a62effe363888f18b3987b9f909417349b96655ecd",
+            "previousRevision": "9"
+          },
+          "version": "policy-journal-v1",
+          "previous": "c959420c88d14bb1346c71930b78143c18775eb25d1b3b89a24a372ff33832ed",
+          "sequence": "21",
+          "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147"
+        },
+        "version": "sanctity-policy-wire-v1"
+      },
+      "signature": "GCz9cRLVPU98R9mYyY4wgQP468ALB2Ngy4y51mZIJw8PVo5wp-pPA9KjhbRHQh3pnDm87xyjxFGv8Eg8b5KVCw"
+    }
+  },
+  {
+    "kind": "CredentialIssued",
+    "revision": 12,
+    "certificate": {
+      "signed": {
+        "key": "06e3fd8fda29bb60ab59557de61edb0aecdb231134be30e75b455f8e1b792fa9",
+        "body": {
+          "at": "2026-11-02T22:32:51.636388461Z",
+          "kind": "COMMIT",
+          "command": {
+            "kind": "CredentialIssued",
+            "epoch": "0",
+            "payload": "eyJhY3RvciI6IjdjYjY0NTBiLWU0MWYtNDNmNC04MDIwLTgwNjQxNDc0ZTMyZiIsImFwcHJvdmFsUmVmZXJlbmNlcyI6W10sImF0IjoiMjAyNi0xMS0wMlQyMjozMjo1MS40MzA4NDNaIiwiY2hhbmdlcyI6eyJhZnRlciI6eyJleHBpcmVzQXQiOiIyMDI2LTExLTAyVDIzOjMyOjUxLjM5MzYxNFoiLCJpZCI6IjYxYjgwMTJlLWRiYTgtNGVmNC1hNzljLTc5Nzg2ZmFkZTI5YiIsImlzc3VlZEF0IjoiMjAyNi0xMS0wMlQyMjozMjo1MS4zOTM2MTRaIiwibGFiZWwiOiJwcmUtYmFja3VwLWZpeGVkIiwicHJpbmNpcGFsIjoiNjAwNGE5MTktNmE1YS00Njc0LWFiNDYtY2JkMjQ2ZmQ4MTY5IiwicmV2b2tlZEF0IjpudWxsfSwiYmVmb3JlIjpudWxsfSwiZGF0YWJhc2VBY3RvciI6ImNvbXBhdCIsImVwb2NoIjoiMCIsImV2ZW50IjoiZTRjMjRlYjQtNWUwNi00YWJhLTk1NjktYTZhYWU3MTcxYzg2IiwiZXh0cmEiOnt9LCJpbnN0YWxsYXRpb24iOiI5MTU0ZWNhOC03NmM5LTQwYTYtOTBmNS0wN2IxMzI5ZTkxNDciLCJpbnRlbnREaWdlc3QiOiI3NjVmYjkwMjg2NzA2YTYyNjgxMGQyYjFiNzYwNzBhNGFhMjVmOTY4ZTgwMzYyNWQzYmJiYWI4MDFlODQ5YWYwIiwia2V5IjoiNjFiODAxMmUtZGJhOC00ZWY0LWE3OWMtNzk3ODZmYWRlMjliIiwia2luZCI6IkNyZWRlbnRpYWxJc3N1ZWQiLCJwcmV2aW91c0hhc2giOiI3ZGY2OGZlNzlkM2NmNjc0NGM3NjRjODM1OGM5NTZjZDc0NWJjOTljMmFlMTJkZDBkMmYyZjZlMjdlMzc0NmUwIiwicHJldmlvdXNSZXZpc2lvbiI6IjExIiwicmVhc29uIjoiQ3JlZGVudGlhbElzc3VlZCIsInJlcXVlc3QiOm51bGwsInJldmlzaW9uIjoiMTIiLCJzY29wZSI6ImNyZWRlbnRpYWw6NjFiODAxMmUtZGJhOC00ZWY0LWE3OWMtNzk3ODZmYWRlMjliIiwidmVyc2lvbiI6InBvbGljeS1sb2NhbC12MiJ9",
+            "version": "policy-event-v1",
+            "revision": "12",
+            "operation": "e4c24eb4-5e06-4aba-9569-a6aae7171c86",
+            "appliedHash": "13561b8d7244b18c654fe33fcdccd6dab53984650d13610cde22644d7477f374",
+            "capabilities": "6616544f200829bbc14c9c7713b17e6c9a2c781abf569049ef1c04e7c23a5446",
+            "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147",
+            "previousHash": "7df68fe79d3cf6744c764c8358c956cd745bc99c2ae12dd0d2f2f6e27e3746e0",
+            "payloadDigest": "ff3769eee467bb81f0e583c525efccb7a56a05125fb66d003b30717daa0bc898",
+            "previousRevision": "11"
+          },
+          "version": "policy-journal-v1",
+          "previous": "54de11bf26709abf16c554255c87566477dad31149ed4c2c11cc29a96427e90a",
+          "sequence": "25",
+          "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147"
+        },
+        "version": "sanctity-policy-wire-v1"
+      },
+      "signature": "8uio4_CZ75_vAeLFvBXmng5wJOWQ2zoq1l2d0oCwN96J2ilr6wyus9ZTRbEAefZlBkefbm1eUWAS6BpZreUwBw"
+    }
+  },
+  {
+    "kind": "CredentialIssued",
+    "revision": 14,
+    "certificate": {
+      "signed": {
+        "key": "06e3fd8fda29bb60ab59557de61edb0aecdb231134be30e75b455f8e1b792fa9",
+        "body": {
+          "at": "2026-11-02T22:32:53.484895337Z",
+          "kind": "COMMIT",
+          "command": {
+            "kind": "CredentialIssued",
+            "epoch": "0",
+            "payload": "eyJhY3RvciI6IjdjYjY0NTBiLWU0MWYtNDNmNC04MDIwLTgwNjQxNDc0ZTMyZiIsImFwcHJvdmFsUmVmZXJlbmNlcyI6W10sImF0IjoiMjAyNi0xMS0wMlQyMjozMjo1My4zMDA2MThaIiwiY2hhbmdlcyI6eyJhZnRlciI6eyJleHBpcmVzQXQiOiIyMDI2LTExLTAyVDIzOjMyOjUzLjI4MzU2MVoiLCJpZCI6IjQxZmM5MGYxLWQwOGUtNDQ1MS1hZDg3LWQ0YTE4M2VmYjU4ZCIsImlzc3VlZEF0IjoiMjAyNi0xMS0wMlQyMjozMjo1My4yODM1NjFaIiwibGFiZWwiOiJwcmUtYmFja3VwLWV4cGlyZWQiLCJwcmluY2lwYWwiOiI2M2ZlODM2NC1mY2ZhLTRmMTEtODc1Zi1jODY4MmIwMWZlYTciLCJyZXZva2VkQXQiOm51bGx9LCJiZWZvcmUiOm51bGx9LCJkYXRhYmFzZUFjdG9yIjoiY29tcGF0IiwiZXBvY2giOiIwIiwiZXZlbnQiOiI0MzVmNTliYS1jYTA2LTQ3YjMtODg1MS00NzRhNTBmYjY3ZjYiLCJleHRyYSI6e30sImluc3RhbGxhdGlvbiI6IjkxNTRlY2E4LTc2YzktNDBhNi05MGY1LTA3YjEzMjllOTE0NyIsImludGVudERpZ2VzdCI6ImNiMjY3OTg0YWFmNjZhMTcyYjJlYTY5ODY5OGQwZTk0MjVhZTc2ZGU4NGM1MmNhNzQ1ODZmMmFjNzc4NDMyZDkiLCJrZXkiOiI0MWZjOTBmMS1kMDhlLTQ0NTEtYWQ4Ny1kNGExODNlZmI1OGQiLCJraW5kIjoiQ3JlZGVudGlhbElzc3VlZCIsInByZXZpb3VzSGFzaCI6Ijg3YmEyMTRjN2ViYzI2NDk0OWQzODYxNTJiMThiNGZlODlhMGUwNjJlZjFhYjU3OWM5ZDlmYTMyMTNiMjg3N2IiLCJwcmV2aW91c1JldmlzaW9uIjoiMTMiLCJyZWFzb24iOiJDcmVkZW50aWFsSXNzdWVkIiwicmVxdWVzdCI6bnVsbCwicmV2aXNpb24iOiIxNCIsInNjb3BlIjoiY3JlZGVudGlhbDo0MWZjOTBmMS1kMDhlLTQ0NTEtYWQ4Ny1kNGExODNlZmI1OGQiLCJ2ZXJzaW9uIjoicG9saWN5LWxvY2FsLXYyIn0",
+            "version": "policy-event-v1",
+            "revision": "14",
+            "operation": "435f59ba-ca06-47b3-8851-474a50fb67f6",
+            "appliedHash": "1f0d7fbd43f13de936193572b455f10562e19754e492fe6b2ad0f1aa33d7c7e4",
+            "capabilities": "6616544f200829bbc14c9c7713b17e6c9a2c781abf569049ef1c04e7c23a5446",
+            "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147",
+            "previousHash": "87ba214c7ebc264949d386152b18b4fe89a0e062ef1ab579c9d9fa3213b2877b",
+            "payloadDigest": "6a15c641df73034d248fb256702ce980388323f6c897207aeeec95764c540a73",
+            "previousRevision": "13"
+          },
+          "version": "policy-journal-v1",
+          "previous": "9f768c4ef04d6c88ab27b1800f65d4b30d19c2908b42cb1c996643155e72bb22",
+          "sequence": "29",
+          "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147"
+        },
+        "version": "sanctity-policy-wire-v1"
+      },
+      "signature": "r93BvD3c6FK13FKmIxjhr8KGZD4Jb2sDCpeQC0pwUY7dXCysWzeup5CePgJ9RMbMzSvZi4IiyIlA7vyPWYK3Cg"
+    }
+  },
+  {
+    "kind": "CredentialIssued",
+    "revision": 16,
+    "certificate": {
+      "signed": {
+        "key": "06e3fd8fda29bb60ab59557de61edb0aecdb231134be30e75b455f8e1b792fa9",
+        "body": {
+          "at": "2026-11-02T22:32:55.505799921Z",
+          "kind": "COMMIT",
+          "command": {
+            "kind": "CredentialIssued",
+            "epoch": "0",
+            "payload": "eyJhY3RvciI6IjdjYjY0NTBiLWU0MWYtNDNmNC04MDIwLTgwNjQxNDc0ZTMyZiIsImFwcHJvdmFsUmVmZXJlbmNlcyI6W10sImF0IjoiMjAyNi0xMS0wMlQyMjozMjo1NS4zMDM0MjNaIiwiY2hhbmdlcyI6eyJhZnRlciI6eyJleHBpcmVzQXQiOiIyMDI2LTExLTAyVDIzOjMyOjU1LjI4NDg5MFoiLCJpZCI6IjM3YmE0ODYwLTViZmUtNDA0NS05ZmQwLWNlNmQ5ODIyNDg0MSIsImlzc3VlZEF0IjoiMjAyNi0xMS0wMlQyMjozMjo1NS4yODQ4OTBaIiwibGFiZWwiOiJwcmUtYmFja3VwLXBvc2l0aXZlIiwicHJpbmNpcGFsIjoiMTNiMmI0YjEtNWVhNS00Njk0LWEzOGUtMjZhZjM4NGIwM2Y2IiwicmV2b2tlZEF0IjpudWxsfSwiYmVmb3JlIjpudWxsfSwiZGF0YWJhc2VBY3RvciI6ImNvbXBhdCIsImVwb2NoIjoiMCIsImV2ZW50IjoiYzA3YjhiOWUtN2YyZS00MjkwLWExZDAtNWZhMjMxOGQ3NTU3IiwiZXh0cmEiOnt9LCJpbnN0YWxsYXRpb24iOiI5MTU0ZWNhOC03NmM5LTQwYTYtOTBmNS0wN2IxMzI5ZTkxNDciLCJpbnRlbnREaWdlc3QiOiI4ZWFlZDdhZGEzNWUyNzk0ZTkxZGUwZmZiOWVkM2IwYWQ4Y2M4YjVmODBjZWFmYjc2Nzk4ZjhiOWI3MTVmNGQ4Iiwia2V5IjoiMzdiYTQ4NjAtNWJmZS00MDQ1LTlmZDAtY2U2ZDk4MjI0ODQxIiwia2luZCI6IkNyZWRlbnRpYWxJc3N1ZWQiLCJwcmV2aW91c0hhc2giOiJiYTk3MTk3NjM0ZmFmYjU3MzEyMjYwZGQwYmMwNzMzN2I5ODE0M2UzMTk2MjUzNDg1YzUzZjJmNzVkYTQ1N2NlIiwicHJldmlvdXNSZXZpc2lvbiI6IjE1IiwicmVhc29uIjoiQ3JlZGVudGlhbElzc3VlZCIsInJlcXVlc3QiOm51bGwsInJldmlzaW9uIjoiMTYiLCJzY29wZSI6ImNyZWRlbnRpYWw6MzdiYTQ4NjAtNWJmZS00MDQ1LTlmZDAtY2U2ZDk4MjI0ODQxIiwidmVyc2lvbiI6InBvbGljeS1sb2NhbC12MiJ9",
+            "version": "policy-event-v1",
+            "revision": "16",
+            "operation": "c07b8b9e-7f2e-4290-a1d0-5fa2318d7557",
+            "appliedHash": "cd702bce5b3ae35c762172395d8ac510ced192264174accfddac813626936d73",
+            "capabilities": "6616544f200829bbc14c9c7713b17e6c9a2c781abf569049ef1c04e7c23a5446",
+            "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147",
+            "previousHash": "ba97197634fafb57312260dd0bc07337b98143e3196253485c53f2f75da457ce",
+            "payloadDigest": "25d2ed33763cdb887e8d419a9be4ddfd7a250d649880d6e19fa8ff9c48b1d8cc",
+            "previousRevision": "15"
+          },
+          "version": "policy-journal-v1",
+          "previous": "afc1ed1826b99bf51ed312c4a399b1e6fea03fc21fbf528dbc602086fead10e1",
+          "sequence": "33",
+          "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147"
+        },
+        "version": "sanctity-policy-wire-v1"
+      },
+      "signature": "WygkUx1LJ2UgnFnFn5K3E0Mu0SgzwQK22dSfDQNDscDCHRSoFcb4hL3Rqt_qtmGFiA6zUT4VvM_9bQozhtiFCg"
+    }
+  },
+  {
+    "kind": "CredentialIssued",
+    "revision": 18,
+    "certificate": {
+      "signed": {
+        "key": "06e3fd8fda29bb60ab59557de61edb0aecdb231134be30e75b455f8e1b792fa9",
+        "body": {
+          "at": "2026-11-02T22:32:57.632164380Z",
+          "kind": "COMMIT",
+          "command": {
+            "kind": "CredentialIssued",
+            "epoch": "0",
+            "payload": "eyJhY3RvciI6IjdjYjY0NTBiLWU0MWYtNDNmNC04MDIwLTgwNjQxNDc0ZTMyZiIsImFwcHJvdmFsUmVmZXJlbmNlcyI6W10sImF0IjoiMjAyNi0xMS0wMlQyMjozMjo1Ny40NDA5NTlaIiwiY2hhbmdlcyI6eyJhZnRlciI6eyJleHBpcmVzQXQiOiIyMDI2LTExLTAyVDIzOjMyOjU3LjQwODQxMFoiLCJpZCI6IjJiZDk1NmU4LTUzNTUtNGUyNC04M2YwLTM0NzVjZjJhMmJmNSIsImlzc3VlZEF0IjoiMjAyNi0xMS0wMlQyMjozMjo1Ny40MDg0MTBaIiwibGFiZWwiOiJwcmUtYmFja3VwLXN0ZXdhcmQiLCJwcmluY2lwYWwiOiIyOTk4YmEzNC05NTdmLTQzZDgtYjliZS02MTA2MTFkOTdlOTIiLCJyZXZva2VkQXQiOm51bGx9LCJiZWZvcmUiOm51bGx9LCJkYXRhYmFzZUFjdG9yIjoiY29tcGF0IiwiZXBvY2giOiIwIiwiZXZlbnQiOiJjODZiZjFmZS1jNTFkLTQzNmUtYjFjNC02OThjNTA0ZDQ0NjgiLCJleHRyYSI6e30sImluc3RhbGxhdGlvbiI6IjkxNTRlY2E4LTc2YzktNDBhNi05MGY1LTA3YjEzMjllOTE0NyIsImludGVudERpZ2VzdCI6Ijc5ZjFiOGQ0YjkwZDc0ZTA2YTllOTk5MDE2ZTNiOTM1OGI4YzAzMWYyZjc5MGU3OGM1MmQ2ZmZlMDA0NzE2NmUiLCJrZXkiOiIyYmQ5NTZlOC01MzU1LTRlMjQtODNmMC0zNDc1Y2YyYTJiZjUiLCJraW5kIjoiQ3JlZGVudGlhbElzc3VlZCIsInByZXZpb3VzSGFzaCI6IjBiNmZkZTNjZTRlNTY4YjY0YzdhN2QzMjhhYWZiN2FkNDdiZjFlNDQ4YmNiZWRiYjZhY2UyZDRlYmEzOWM2M2EiLCJwcmV2aW91c1JldmlzaW9uIjoiMTciLCJyZWFzb24iOiJDcmVkZW50aWFsSXNzdWVkIiwicmVxdWVzdCI6bnVsbCwicmV2aXNpb24iOiIxOCIsInNjb3BlIjoiY3JlZGVudGlhbDoyYmQ5NTZlOC01MzU1LTRlMjQtODNmMC0zNDc1Y2YyYTJiZjUiLCJ2ZXJzaW9uIjoicG9saWN5LWxvY2FsLXYyIn0",
+            "version": "policy-event-v1",
+            "revision": "18",
+            "operation": "c86bf1fe-c51d-436e-b1c4-698c504d4468",
+            "appliedHash": "44c43d81d08541a8c7e3d1a4698793ca50c8383d0659fabfec427fae742f43c6",
+            "capabilities": "6616544f200829bbc14c9c7713b17e6c9a2c781abf569049ef1c04e7c23a5446",
+            "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147",
+            "previousHash": "0b6fde3ce4e568b64c7a7d328aafb7ad47bf1e448bcbedbb6ace2d4eba39c63a",
+            "payloadDigest": "d8a7b1809defc5e26a25d1d0ad363dffacfc50ae17e47396142964d7d90b9753",
+            "previousRevision": "17"
+          },
+          "version": "policy-journal-v1",
+          "previous": "fdd833b09f4ad66442bb83473c43543ee543b7ec029da47fad8e1677306186c5",
+          "sequence": "37",
+          "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147"
+        },
+        "version": "sanctity-policy-wire-v1"
+      },
+      "signature": "fIwJym6gIXEphufISy-FCYsSEXUgSI4O5_-nZpAW6weUBIOkwRP4qIRdURaSfh9hIsQwIKkIzkaxB57VWMn-DQ"
+    }
+  },
+  {
+    "kind": "CredentialIssued",
+    "revision": 3,
+    "certificate": {
+      "signed": {
+        "key": "06e3fd8fda29bb60ab59557de61edb0aecdb231134be30e75b455f8e1b792fa9",
+        "body": {
+          "at": "2026-11-02T22:32:42.112001179Z",
+          "kind": "COMMIT",
+          "command": {
+            "kind": "CredentialIssued",
+            "epoch": "0",
+            "payload": "eyJhY3RvciI6IjdjYjY0NTBiLWU0MWYtNDNmNC04MDIwLTgwNjQxNDc0ZTMyZiIsImFwcHJvdmFsUmVmZXJlbmNlcyI6W10sImF0IjoiMjAyNi0xMS0wMlQyMjozMjo0MS45MDk3MjVaIiwiY2hhbmdlcyI6eyJhZnRlciI6eyJleHBpcmVzQXQiOiIyMDI2LTExLTAyVDIzOjMyOjQxLjg5NDQ5NVoiLCJpZCI6ImQ0ZWIyNDY5LTU5MzUtNDEzYi04ODRmLTM1NTU2MzY4ODcwNiIsImlzc3VlZEF0IjoiMjAyNi0xMS0wMlQyMjozMjo0MS44OTQ0OTVaIiwibGFiZWwiOiJwcmUtYmFja3VwLXJlY2lwaWVudCIsInByaW5jaXBhbCI6IjMxY2UwNGQ0LTBhYTAtNDM3Ni1hNzIwLWZlYjU0MzE5MGVlNCIsInJldm9rZWRBdCI6bnVsbH0sImJlZm9yZSI6bnVsbH0sImRhdGFiYXNlQWN0b3IiOiJjb21wYXQiLCJlcG9jaCI6IjAiLCJldmVudCI6IjBmNWNiOGZjLTc0YWItNDhiNC05NmU5LTFkZDVkYTBhNThiOCIsImV4dHJhIjp7fSwiaW5zdGFsbGF0aW9uIjoiOTE1NGVjYTgtNzZjOS00MGE2LTkwZjUtMDdiMTMyOWU5MTQ3IiwiaW50ZW50RGlnZXN0IjoiOWU1MGE4NjRkZWUzNzA1MGExNWRhZTVmMDNmODYzYWM3NWFiZTFkYzE4YzhlNThmNWU0YTVlNTQzOGI5OWFhOCIsImtleSI6ImQ0ZWIyNDY5LTU5MzUtNDEzYi04ODRmLTM1NTU2MzY4ODcwNiIsImtpbmQiOiJDcmVkZW50aWFsSXNzdWVkIiwicHJldmlvdXNIYXNoIjoiMmI3ZmIxNjA2Y2I1NzNjNTAzMzY4NzU4MWI5ODAyM2UyMmFmMDYyMjVhNTEzOGRlZTc2MmE5Yzk3ODZhNTkwNyIsInByZXZpb3VzUmV2aXNpb24iOiIyIiwicmVhc29uIjoiQ3JlZGVudGlhbElzc3VlZCIsInJlcXVlc3QiOm51bGwsInJldmlzaW9uIjoiMyIsInNjb3BlIjoiY3JlZGVudGlhbDpkNGViMjQ2OS01OTM1LTQxM2ItODg0Zi0zNTU1NjM2ODg3MDYiLCJ2ZXJzaW9uIjoicG9saWN5LWxvY2FsLXYyIn0",
+            "version": "policy-event-v1",
+            "revision": "3",
+            "operation": "0f5cb8fc-74ab-48b4-96e9-1dd5da0a58b8",
+            "appliedHash": "bb3892a61fa8ef063a31e485ab10e19106c9abad4fccc2259e7138b26338eb17",
+            "capabilities": "6616544f200829bbc14c9c7713b17e6c9a2c781abf569049ef1c04e7c23a5446",
+            "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147",
+            "previousHash": "2b7fb1606cb573c5033687581b98023e22af06225a5138dee762a9c9786a5907",
+            "payloadDigest": "3741b694ab6817a60d11016d9cf30409c180de72cb50c8a7b7e729dc8945c51d",
+            "previousRevision": "2"
+          },
+          "version": "policy-journal-v1",
+          "previous": "528932c3a812d0e387ea69063e902a03875add56de5749345130062a0bdf8546",
+          "sequence": "7",
+          "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147"
+        },
+        "version": "sanctity-policy-wire-v1"
+      },
+      "signature": "Rza225xP8ZKW8O-E1DGuDc05horAXdH7WMDT9TVcbsSUau3Tzpk5sb57aDTRBYYQBCHFNwE-94csOtPjyyflCw"
+    }
+  },
+  {
+    "kind": "CredentialIssued",
+    "revision": 8,
+    "certificate": {
+      "signed": {
+        "key": "06e3fd8fda29bb60ab59557de61edb0aecdb231134be30e75b455f8e1b792fa9",
+        "body": {
+          "at": "2026-11-02T22:32:47.579936292Z",
+          "kind": "COMMIT",
+          "command": {
+            "kind": "CredentialIssued",
+            "epoch": "0",
+            "payload": "eyJhY3RvciI6IjdjYjY0NTBiLWU0MWYtNDNmNC04MDIwLTgwNjQxNDc0ZTMyZiIsImFwcHJvdmFsUmVmZXJlbmNlcyI6W10sImF0IjoiMjAyNi0xMS0wMlQyMjozMjo0Ny4zODE3MjFaIiwiY2hhbmdlcyI6eyJhZnRlciI6eyJleHBpcmVzQXQiOiIyMDI2LTExLTAyVDIzOjMyOjQ3LjM2NTQxMFoiLCJpZCI6IjNmYWFhMTdhLTQ3YTYtNGExMC1hOGUzLWQyNDA2NmJhZGMzZCIsImlzc3VlZEF0IjoiMjAyNi0xMS0wMlQyMjozMjo0Ny4zNjU0MTBaIiwibGFiZWwiOiJwcmUtYmFja3VwLW1lbWJlciIsInByaW5jaXBhbCI6ImI5YzM4NmI5LTJjNDktNDM5MS1hMGNkLTI5YjY3MWM5YTA0NSIsInJldm9rZWRBdCI6bnVsbH0sImJlZm9yZSI6bnVsbH0sImRhdGFiYXNlQWN0b3IiOiJjb21wYXQiLCJlcG9jaCI6IjAiLCJldmVudCI6IjA1NGNkYzVmLWIyZjUtNGQ2MC1iNzJiLWIwMWQ4ZGRkZWZmZSIsImV4dHJhIjp7fSwiaW5zdGFsbGF0aW9uIjoiOTE1NGVjYTgtNzZjOS00MGE2LTkwZjUtMDdiMTMyOWU5MTQ3IiwiaW50ZW50RGlnZXN0IjoiMTYwNTExZDMyY2U5N2FhYWMyYWU0NTM1ZDEzMTIyZGE5OWY0OGI1OWZjNjE3MzE4ZTEwMjY2Y2Q2YTU0Y2RhZSIsImtleSI6IjNmYWFhMTdhLTQ3YTYtNGExMC1hOGUzLWQyNDA2NmJhZGMzZCIsImtpbmQiOiJDcmVkZW50aWFsSXNzdWVkIiwicHJldmlvdXNIYXNoIjoiMmFmNTYzYTE1NDJhMjNhOTFhMDM1YWFkOGIwNjRkNTc0ZGU5ZTk4NjE1YjI5MWZiY2E4YmIzMGVjYmIxYjA5ZiIsInByZXZpb3VzUmV2aXNpb24iOiI3IiwicmVhc29uIjoiQ3JlZGVudGlhbElzc3VlZCIsInJlcXVlc3QiOm51bGwsInJldmlzaW9uIjoiOCIsInNjb3BlIjoiY3JlZGVudGlhbDozZmFhYTE3YS00N2E2LTRhMTAtYThlMy1kMjQwNjZiYWRjM2QiLCJ2ZXJzaW9uIjoicG9saWN5LWxvY2FsLXYyIn0",
+            "version": "policy-event-v1",
+            "revision": "8",
+            "operation": "054cdc5f-b2f5-4d60-b72b-b01d8dddeffe",
+            "appliedHash": "d5872a059384148597364f28a7c100e99e28b847c76e566cac69d19c827405c9",
+            "capabilities": "6616544f200829bbc14c9c7713b17e6c9a2c781abf569049ef1c04e7c23a5446",
+            "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147",
+            "previousHash": "2af563a1542a23a91a035aad8b064d574de9e98615b291fbca8bb30ecbb1b09f",
+            "payloadDigest": "90d37948a51ca2673dc6a6f0cc2c495b87ec3023d1e331812fd788620279f4c6",
+            "previousRevision": "7"
+          },
+          "version": "policy-journal-v1",
+          "previous": "8c56ec02fb5f96e08938caf0790889bbb23ed08aad2f871bf1a15456d92c9596",
+          "sequence": "17",
+          "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147"
+        },
+        "version": "sanctity-policy-wire-v1"
+      },
+      "signature": "y6tDjYpG6fkNtHMg38ZOORCGRElSDdDl9-gh3zyGEu8hPrVCmXkTYHKHI1VNkCxZw09X-9kJwxgHQcekoh5AAg"
+    }
+  },
+  {
+    "kind": "CredentialRevoked",
+    "revision": 28,
+    "certificate": {
+      "signed": {
+        "key": "06e3fd8fda29bb60ab59557de61edb0aecdb231134be30e75b455f8e1b792fa9",
+        "body": {
+          "at": "2026-11-02T22:33:24.984927879Z",
+          "kind": "COMMIT",
+          "command": {
+            "kind": "CredentialRevoked",
+            "epoch": "0",
+            "payload": "eyJhY3RvciI6IjdjYjY0NTBiLWU0MWYtNDNmNC04MDIwLTgwNjQxNDc0ZTMyZiIsImFwcHJvdmFsUmVmZXJlbmNlcyI6W10sImF0IjoiMjAyNi0xMS0wMlQyMjozMzoyNC43NjI3MThaIiwiY2hhbmdlcyI6eyJiZWZvcmUiOm51bGwsImlkIjoiZDRlYjI0NjktNTkzNS00MTNiLTg4NGYtMzU1NTYzNjg4NzA2IiwicHJpbmNpcGFsIjoiMzFjZTA0ZDQtMGFhMC00Mzc2LWE3MjAtZmViNTQzMTkwZWU0IiwicmV2b2tlZEF0IjoiMjAyNi0xMS0wMlQyMjozMzoyNC43MzcyNDlaIn0sImRhdGFiYXNlQWN0b3IiOiJjb21wYXQiLCJlcG9jaCI6IjAiLCJldmVudCI6ImZmZDM4OTlhLWEwNWItNDBjOC04MDEzLTRmNDEwMGQwYzY2NCIsImV4dHJhIjp7fSwiaW5zdGFsbGF0aW9uIjoiOTE1NGVjYTgtNzZjOS00MGE2LTkwZjUtMDdiMTMyOWU5MTQ3IiwiaW50ZW50RGlnZXN0IjoiMWFkNTdhOTljMWJlNzE1NDI1MDAzZTA1YjRmM2RjNzY3MGI4YjUwYTI4ODI0ZTVjNmYwMmMzYTBmMDhmNWQ5ZiIsImtleSI6InJldm9rZTpkNGViMjQ2OS01OTM1LTQxM2ItODg0Zi0zNTU1NjM2ODg3MDYiLCJraW5kIjoiQ3JlZGVudGlhbFJldm9rZWQiLCJwcmV2aW91c0hhc2giOiJjN2VlODg2ZDY3MGMwZjNmOGQ1NjljNGNlMTk4ZWNhZmU1M2E2YzNjODY0ZDM0MzgxM2M3MTYzZWJlZjNjYjRkIiwicHJldmlvdXNSZXZpc2lvbiI6IjI3IiwicmVhc29uIjoiQ3JlZGVudGlhbFJldm9rZWQiLCJyZXF1ZXN0IjpudWxsLCJyZXZpc2lvbiI6IjI4Iiwic2NvcGUiOiJjcmVkZW50aWFsOmQ0ZWIyNDY5LTU5MzUtNDEzYi04ODRmLTM1NTU2MzY4ODcwNiIsInZlcnNpb24iOiJwb2xpY3ktbG9jYWwtdjIifQ",
+            "version": "policy-event-v1",
+            "revision": "28",
+            "operation": "ffd3899a-a05b-40c8-8013-4f4100d0c664",
+            "appliedHash": "f040f64501031421937da67517dde8d1afc9652290a9b7567b2e3bf1c670ef6a",
+            "capabilities": "6616544f200829bbc14c9c7713b17e6c9a2c781abf569049ef1c04e7c23a5446",
+            "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147",
+            "previousHash": "c7ee886d670c0f3f8d569c4ce198ecafe53a6c3c864d343813c7163ebef3cb4d",
+            "payloadDigest": "841029695dc19e38675d9eecefef9ede7ee65cacc7e1f75c845fb930a8b6ee47",
+            "previousRevision": "27"
+          },
+          "version": "policy-journal-v1",
+          "previous": "f3bbd53355dbc394526031882747cb975dd21cedaa02fc389448fd45444a0053",
+          "sequence": "57",
+          "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147"
+        },
+        "version": "sanctity-policy-wire-v1"
+      },
+      "signature": "rnCT--lnel18t-HMB7ewACTn8EFRIPhll38hCFZdoLi6TkxQl7vEWTch5afCcyV83cBYxmZ_OEMJsy5jWaDnAQ"
+    }
+  },
+  {
+    "kind": "DisablePrincipal",
+    "revision": 35,
+    "certificate": {
+      "signed": {
+        "key": "06e3fd8fda29bb60ab59557de61edb0aecdb231134be30e75b455f8e1b792fa9",
+        "body": {
+          "at": "2026-11-02T22:33:32.223869133Z",
+          "kind": "COMMIT",
+          "command": {
+            "kind": "DisablePrincipal",
+            "epoch": "0",
+            "payload": "eyJhY3RvciI6IjdjYjY0NTBiLWU0MWYtNDNmNC04MDIwLTgwNjQxNDc0ZTMyZiIsImFwcHJvdmFsUmVmZXJlbmNlcyI6W10sImF0IjoiMjAyNi0xMS0wMlQyMjozMzozMS45OTIxMDlaIiwiY2hhbmdlcyI6W3siYWZ0ZXIiOnsiYWN0aXZlIjpmYWxzZSwiY3JlYXRlZEF0IjoiMjAyNi0xMS0wMlQyMjozMjo0Ny45MDk3NjVaIiwiZ2VuZXJhdGlvbiI6MSwiaWQiOiJiYjRlMjYxYy0wYWFkLTQ0N2ItOGQwYS1mNDBjMDE2MmU4NjUiLCJsYWJlbCI6IkxvY2FsIHByaW5jaXBhbCJ9LCJiZWZvcmUiOnsiYWN0aXZlIjp0cnVlLCJjcmVhdGVkQXQiOiIyMDI2LTExLTAyVDIyOjMyOjQ3LjkwOTc2NVoiLCJnZW5lcmF0aW9uIjowLCJpZCI6ImJiNGUyNjFjLTBhYWQtNDQ3Yi04ZDBhLWY0MGMwMTYyZTg2NSIsImxhYmVsIjoiTG9jYWwgcHJpbmNpcGFsIn0sImtpbmQiOiJwcmluY2lwYWwifV0sImRhdGFiYXNlQWN0b3IiOiJjb21wYXQiLCJlcG9jaCI6IjAiLCJldmVudCI6ImYzZWM5ZjJkLWVhZjctNDgyOS1iYzU4LThiZWY2MzkxZTlhNCIsImV4dHJhIjp7ImNyZWF0ZWREYXRhc2V0cyI6W10sImludmFsaWRhdGlvbnMiOnsiY3JlZGVudGlhbHMiOlsiNWQ3YWFhZTQtZGU5Yy00NzBiLWI4NzMtNjAyNDg5OGJhYzYyIl0sImltcG9ydExlYXNlcyI6W10sInByaW5jaXBhbCI6ImJiNGUyNjFjLTBhYWQtNDQ3Yi04ZDBhLWY0MGMwMTYyZTg2NSIsInJldm9rZWRBdCI6IjIwMjYtMTEtMDIgMTc6MzM6MzEuOTkyMTA5LTA1In19LCJpbnN0YWxsYXRpb24iOiI5MTU0ZWNhOC03NmM5LTQwYTYtOTBmNS0wN2IxMzI5ZTkxNDciLCJpbnRlbnREaWdlc3QiOiJmMmQ3MTYzYjJjNGEzZGE4ZGQ4MGE5ODk0YjBjZjI1NWY4ZmZlNTZmNTEyMjE4NDE0MjQwY2EyOTE4OWE2NDdlIiwia2V5IjoicG9zdC1iYWNrdXAtZGlzYWJsZSIsImtpbmQiOiJEaXNhYmxlUHJpbmNpcGFsIiwicHJldmlvdXNIYXNoIjoiZWI4NGQ5YjRiNTVlOTMwZWVlZDAxM2JmYWM5YmFkMjU5OWMyZDgxYWMyMmNhOTk4OThhYTk1YWI5MGM4YmRkNiIsInByZXZpb3VzUmV2aXNpb24iOiIzNCIsInJlYXNvbiI6IkRpc2FibGVQcmluY2lwYWwiLCJyZXF1ZXN0Ijp7InZhbHVlIjp7ImNvbW1hbmQiOnsiRGlzYWJsZVByaW5jaXBhbCI6eyJpZCI6ImJiNGUyNjFjLTBhYWQtNDQ3Yi04ZDBhLWY0MGMwMTYyZTg2NSJ9fSwiZXhwZWN0ZWQiOltbeyJQcmluY2lwYWwiOnsiaWQiOiJiYjRlMjYxYy0wYWFkLTQ0N2ItOGQwYS1mNDBjMDE2MmU4NjUifX0sMF1dLCJrZXkiOiJwb3N0LWJhY2t1cC1kaXNhYmxlIn0sInZlcnNpb24iOjF9LCJyZXZpc2lvbiI6IjM1Iiwic2NvcGUiOiJwcmluY2lwYWw6YmI0ZTI2MWMtMGFhZC00NDdiLThkMGEtZjQwYzAxNjJlODY1IiwidmVyc2lvbiI6InBvbGljeS1sb2NhbC12MiJ9",
+            "version": "policy-event-v1",
+            "revision": "35",
+            "operation": "f3ec9f2d-eaf7-4829-bc58-8bef6391e9a4",
+            "appliedHash": "7862eac2bdce03d88378c247d42cde0c33a75a743d82a9434a751770db728e00",
+            "capabilities": "6616544f200829bbc14c9c7713b17e6c9a2c781abf569049ef1c04e7c23a5446",
+            "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147",
+            "previousHash": "eb84d9b4b55e930eeed013bfac9bad2599c2d81ac22ca99898aa95ab90c8bdd6",
+            "payloadDigest": "0d7a7e2d65dc946781d9ecd3abf53a6ef6f41dcda97ef3026800eba428a3fb59",
+            "previousRevision": "34"
+          },
+          "version": "policy-journal-v1",
+          "previous": "be92f11065944580cd8e57387e6fc377b2fd0fdc53b720d1d038a8f7d39f8a19",
+          "sequence": "71",
+          "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147"
+        },
+        "version": "sanctity-policy-wire-v1"
+      },
+      "signature": "bas4Mad68XvvBgotmKRwpMjSP23smv0F5B33TbRqmjyG52UU8kgcWnocKJcO6qMmw502h_Mmn8KApsvQD2RcDQ"
+    }
+  },
+  {
+    "kind": "EndMember",
+    "revision": 34,
+    "certificate": {
+      "signed": {
+        "key": "06e3fd8fda29bb60ab59557de61edb0aecdb231134be30e75b455f8e1b792fa9",
+        "body": {
+          "at": "2026-11-02T22:33:30.290170673Z",
+          "kind": "COMMIT",
+          "command": {
+            "kind": "EndMember",
+            "epoch": "0",
+            "payload": "eyJhY3RvciI6IjdjYjY0NTBiLWU0MWYtNDNmNC04MDIwLTgwNjQxNDc0ZTMyZiIsImFwcHJvdmFsUmVmZXJlbmNlcyI6W10sImF0IjoiMjAyNi0xMS0wMlQyMjozMzozMC4xMjQ5MjhaIiwiY2hhbmdlcyI6W3siYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMS0wMlQyMjozMjoyOC45NTQ2NDNaIiwiZGVzY3JpcHRpb24iOiJQcml2YXRlIGxlZ2FjeSBtYXBwaW5nOyBubyB2ZXJpZmllZCBpZGVudGl0eSBpbmZlcnJlZCIsImdlbmVyYXRpb24iOjIsImlkIjoiZWNkNWY3NzEtODE0Mi0zM2EzLTkwZTktOTI0MzNiZTBmMjU5IiwibmFtZSI6IkxlZ2FjeSBtaWdyYXRpb24gbGFiIiwic3RhdHVzIjoiQWN0aXZlIn0sImJlZm9yZSI6eyJjcmVhdGVkQXQiOiIyMDI2LTExLTAyVDIyOjMyOjI4Ljk1NDY0M1oiLCJkZXNjcmlwdGlvbiI6IlByaXZhdGUgbGVnYWN5IG1hcHBpbmc7IG5vIHZlcmlmaWVkIGlkZW50aXR5IGluZmVycmVkIiwiZ2VuZXJhdGlvbiI6MSwiaWQiOiJlY2Q1Zjc3MS04MTQyLTMzYTMtOTBlOS05MjQzM2JlMGYyNTkiLCJuYW1lIjoiTGVnYWN5IG1pZ3JhdGlvbiBsYWIiLCJzdGF0dXMiOiJBY3RpdmUifSwia2luZCI6ImxhYiJ9LHsiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMS0wMlQyMjozMjo1Ny45NDQxNjBaIiwiZXhwaXJlc0F0IjpudWxsLCJnZW5lcmF0aW9uIjoxLCJpZCI6ImI1YmI5YzM4LTRmYWItM2YwYy1hNzE4LTRlZGZhZmZiMWYyZSIsImxhYiI6ImVjZDVmNzcxLTgxNDItMzNhMy05MGU5LTkyNDMzYmUwZjI1OSIsInByaW5jaXBhbCI6ImI5YzM4NmI5LTJjNDktNDM5MS1hMGNkLTI5YjY3MWM5YTA0NSIsInJvbGUiOiJNZW1iZXIiLCJzdGF0dXMiOiJFbmRlZCJ9LCJiZWZvcmUiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMS0wMlQyMjozMjo1Ny45NDQxNjBaIiwiZXhwaXJlc0F0IjpudWxsLCJnZW5lcmF0aW9uIjowLCJpZCI6ImI1YmI5YzM4LTRmYWItM2YwYy1hNzE4LTRlZGZhZmZiMWYyZSIsImxhYiI6ImVjZDVmNzcxLTgxNDItMzNhMy05MGU5LTkyNDMzYmUwZjI1OSIsInByaW5jaXBhbCI6ImI5YzM4NmI5LTJjNDktNDM5MS1hMGNkLTI5YjY3MWM5YTA0NSIsInJvbGUiOiJNZW1iZXIiLCJzdGF0dXMiOiJBY3RpdmUifSwia2luZCI6Im1lbWJlcnNoaXAifSx7ImFmdGVyIjp7ImNyZWF0ZWRBdCI6IjIwMjYtMTEtMDJUMjI6MzI6MjguOTU0NjQzWiIsImRlc2NyaXB0aW9uIjoiUHJpdmF0ZSBsZWdhY3kgbWFwcGluZzsgbm8gdmVyaWZpZWQgaWRlbnRpdHkgaW5mZXJyZWQiLCJnZW5lcmF0aW9uIjo0LCJpZCI6IjJlN2M1NWRmLWQzNGQtMzE4Ni1hMTVhLTljZGY5MTViODEyYyIsImxhYiI6ImVjZDVmNzcxLTgxNDItMzNhMy05MGU5LTkyNDMzYmUwZjI1OSIsIm5hbWUiOiJMZWdhY3kgcHJvamVjdCAyZTdjNTVkZiIsInN0YXR1cyI6IkFjdGl2ZSJ9LCJiZWZvcmUiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMS0wMlQyMjozMjoyOC45NTQ2NDNaIiwiZGVzY3JpcHRpb24iOiJQcml2YXRlIGxlZ2FjeSBtYXBwaW5nOyBubyB2ZXJpZmllZCBpZGVudGl0eSBpbmZlcnJlZCIsImdlbmVyYXRpb24iOjMsImlkIjoiMmU3YzU1ZGYtZDM0ZC0zMTg2LWExNWEtOWNkZjkxNWI4MTJjIiwibGFiIjoiZWNkNWY3NzEtODE0Mi0zM2EzLTkwZTktOTI0MzNiZTBmMjU5IiwibmFtZSI6IkxlZ2FjeSBwcm9qZWN0IDJlN2M1NWRmIiwic3RhdHVzIjoiQWN0aXZlIn0sImtpbmQiOiJwcm9qZWN0In1dLCJkYXRhYmFzZUFjdG9yIjoiY29tcGF0X3J1bnRpbWUiLCJlcG9jaCI6IjAiLCJldmVudCI6IjA1ZjEwMzIyLTAwZWEtNDU1Zi04NmRkLTEwMWZhMjUxMmYxOCIsImV4dHJhIjp7ImNyZWF0ZWREYXRhc2V0cyI6W10sImludmFsaWRhdGlvbnMiOnt9fSwiaW5zdGFsbGF0aW9uIjoiOTE1NGVjYTgtNzZjOS00MGE2LTkwZjUtMDdiMTMyOWU5MTQ3IiwiaW50ZW50RGlnZXN0IjoiYjM0MWEzZWQ3ODQwNWU3YWEwZjM0MWQzMjMwYmUwNjkwY2E1NmM4ODNhMTY2YjhlM2FhZTBkNzE3M2FiY2I5ZCIsImtleSI6IjFkYjg4MzE1ZGE4YjRhYWRiNGIyN2JiMmQwZTVhYjk3Iiwia2luZCI6IkVuZE1lbWJlciIsInByZXZpb3VzSGFzaCI6ImYzOGQwOTJjNzBlZDBhNTZiYTIwZWZjZmI1NjlmZTc2ODQ5YTEyNDE1NzMxNjNiOTQ4YWQ2NDQ0ZjUyZmUwYjgiLCJwcmV2aW91c1JldmlzaW9uIjoiMzMiLCJyZWFzb24iOiJFbmRNZW1iZXIiLCJyZXF1ZXN0Ijp7InZhbHVlIjp7ImNvbW1hbmQiOnsiRW5kTWVtYmVyIjp7ImlkIjoiYjViYjljMzgtNGZhYi0zZjBjLWE3MTgtNGVkZmFmZmIxZjJlIn19LCJleHBlY3RlZCI6W1t7IkxhYiI6eyJpZCI6ImVjZDVmNzcxLTgxNDItMzNhMy05MGU5LTkyNDMzYmUwZjI1OSJ9fSwxXSxbeyJNZW1iZXJzaGlwIjp7ImlkIjoiYjViYjljMzgtNGZhYi0zZjBjLWE3MTgtNGVkZmFmZmIxZjJlIn19LDBdXSwia2V5IjoiMWRiODgzMTVkYThiNGFhZGI0YjI3YmIyZDBlNWFiOTcifSwidmVyc2lvbiI6MX0sInJldmlzaW9uIjoiMzQiLCJzY29wZSI6ImxhYjplY2Q1Zjc3MS04MTQyLTMzYTMtOTBlOS05MjQzM2JlMGYyNTkiLCJ2ZXJzaW9uIjoicG9saWN5LWxvY2FsLXYyIn0",
+            "version": "policy-event-v1",
+            "revision": "34",
+            "operation": "05f10322-00ea-455f-86dd-101fa2512f18",
+            "appliedHash": "eb84d9b4b55e930eeed013bfac9bad2599c2d81ac22ca99898aa95ab90c8bdd6",
+            "capabilities": "6616544f200829bbc14c9c7713b17e6c9a2c781abf569049ef1c04e7c23a5446",
+            "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147",
+            "previousHash": "f38d092c70ed0a56ba20efcfb569fe76849a1241573163b948ad6444f52fe0b8",
+            "payloadDigest": "dc64de7ea4bcf6dc2f1bf4af5635afc496b4feede6ac5e2f25d41605e944e461",
+            "previousRevision": "33"
+          },
+          "version": "policy-journal-v1",
+          "previous": "c02be61536c8971cc262abd219bd7030c065d6541b8ff3dd4e0759f10c36eeb7",
+          "sequence": "69",
+          "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147"
+        },
+        "version": "sanctity-policy-wire-v1"
+      },
+      "signature": "uU6y3o9fkaWbWXPINBLp_s9YULTLSw9wnC1eCgzP4Jcg6HiUn4vfTdpVaQp4LWODsnzUfo5oB0ZMWx0Lb7t-BQ"
+    }
+  },
+  {
+    "kind": "GrantIssued",
+    "revision": 11,
+    "certificate": {
+      "signed": {
+        "key": "06e3fd8fda29bb60ab59557de61edb0aecdb231134be30e75b455f8e1b792fa9",
+        "body": {
+          "at": "2026-11-02T22:32:49.928723127Z",
+          "kind": "COMMIT",
+          "command": {
+            "kind": "GrantIssued",
+            "epoch": "0",
+            "payload": "eyJhY3RvciI6IjdjYjY0NTBiLWU0MWYtNDNmNC04MDIwLTgwNjQxNDc0ZTMyZiIsImFwcHJvdmFsUmVmZXJlbmNlcyI6W10sImF0IjoiMjAyNi0xMS0wMlQyMjozMjo0OS43OTYwOTJaIiwiY2hhbmdlcyI6eyJhZnRlciI6eyJhY3Rpb25zIjpbIlJlYWRNZXRhZGF0YSJdLCJiYXNpcyI6eyJJbmRlcGVuZGVudCI6e319LCJjcmVhdGVkQXQiOiIyMDI2LTExLTAyVDIyOjMyOjQ5LjY5NDA1NVoiLCJleHBpcmVzQXQiOm51bGwsImdlbmVyYXRpb24iOjAsImlkIjoiM2QzMTcxNjQtNDc3OC00Yzk2LTg1ZTUtMWQ5MWQyZTU5ZjBjIiwiaXNzdWVyIjoiN2NiNjQ1MGItZTQxZi00M2Y0LTgwMjAtODA2NDE0NzRlMzJmIiwicmVjaXBpZW50IjoiNjAwNGE5MTktNmE1YS00Njc0LWFiNDYtY2JkMjQ2ZmQ4MTY5IiwicmV2b2tlZCI6ZmFsc2UsInNjb3BlIjp7ImRhdGFzZXQiOiI4ZGJjZDgyOC1kZjE2LTNiNDgtOTljZS1jMWVlNGZlNmFkNDAiLCJyZWxlYXNlIjpudWxsfX0sImJlZm9yZSI6bnVsbCwicHJpbmNpcGFsQ3JlYXRlZCI6eyJhY3RpdmUiOnRydWUsImNyZWF0ZWRBdCI6IjIwMjYtMTEtMDJUMjI6MzI6NDkuNzkyNjAyWiIsImdlbmVyYXRpb24iOjAsImlkIjoiNjAwNGE5MTktNmE1YS00Njc0LWFiNDYtY2JkMjQ2ZmQ4MTY5IiwibGFiZWwiOiJMb2NhbCBwcmluY2lwYWwifX0sImRhdGFiYXNlQWN0b3IiOiJjb21wYXRfcnVudGltZSIsImVwb2NoIjoiMCIsImV2ZW50IjoiYWEwY2YzODctMzVkNS00NDQyLThkNDMtY2VkMDk3Y2U2MDhkIiwiZXh0cmEiOnt9LCJpbnN0YWxsYXRpb24iOiI5MTU0ZWNhOC03NmM5LTQwYTYtOTBmNS0wN2IxMzI5ZTkxNDciLCJpbnRlbnREaWdlc3QiOiI2MTNiOTcxZTRlMGEwZTc3MGZkYzNlMjJhMGEwNmY4MTRmYTkzZGUyNTAyMjUzMTc0MzBiZTFjYWJlNGY0OWY4Iiwia2V5IjoiM2QzMTcxNjQtNDc3OC00Yzk2LTg1ZTUtMWQ5MWQyZTU5ZjBjIiwia2luZCI6IkdyYW50SXNzdWVkIiwicHJldmlvdXNIYXNoIjoiNDM2NDI5ZjBhYjdmMGZjMjU3ZmYyMTc3ZGIyZmRhNjFiODFjZTViODcxNGFmNjJlZGYxNjM1YmE1NzhjNWU0OCIsInByZXZpb3VzUmV2aXNpb24iOiIxMCIsInJlYXNvbiI6IkdyYW50SXNzdWVkIiwicmVxdWVzdCI6bnVsbCwicmV2aXNpb24iOiIxMSIsInNjb3BlIjoiZ3JhbnQ6M2QzMTcxNjQtNDc3OC00Yzk2LTg1ZTUtMWQ5MWQyZTU5ZjBjIiwidmVyc2lvbiI6InBvbGljeS1sb2NhbC12MiJ9",
+            "version": "policy-event-v1",
+            "revision": "11",
+            "operation": "aa0cf387-35d5-4442-8d43-ced097ce608d",
+            "appliedHash": "7df68fe79d3cf6744c764c8358c956cd745bc99c2ae12dd0d2f2f6e27e3746e0",
+            "capabilities": "6616544f200829bbc14c9c7713b17e6c9a2c781abf569049ef1c04e7c23a5446",
+            "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147",
+            "previousHash": "436429f0ab7f0fc257ff2177db2fda61b81ce5b8714af62edf1635ba578c5e48",
+            "payloadDigest": "73f128d761f8af6050f74bba6572ae2e5a3edd94e83cf0bae25fe490a6acbc3e",
+            "previousRevision": "10"
+          },
+          "version": "policy-journal-v1",
+          "previous": "ae3eaad20f24e6a283d172b989fd1e42e9e47e3c0be9046e4f7ad733b6839180",
+          "sequence": "23",
+          "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147"
+        },
+        "version": "sanctity-policy-wire-v1"
+      },
+      "signature": "r8m4ezx9vLMzlUBf2vOII4Jwqhpj6Z5KmqilwlHqzetnFLSmwpmGUyj-fLO69nJm-c0oVqBPis-D34h4diD6Bw"
+    }
+  },
+  {
+    "kind": "GrantIssued",
+    "revision": 13,
+    "certificate": {
+      "signed": {
+        "key": "06e3fd8fda29bb60ab59557de61edb0aecdb231134be30e75b455f8e1b792fa9",
+        "body": {
+          "at": "2026-11-02T22:32:52.091823211Z",
+          "kind": "COMMIT",
+          "command": {
+            "kind": "GrantIssued",
+            "epoch": "0",
+            "payload": "eyJhY3RvciI6IjdjYjY0NTBiLWU0MWYtNDNmNC04MDIwLTgwNjQxNDc0ZTMyZiIsImFwcHJvdmFsUmVmZXJlbmNlcyI6W10sImF0IjoiMjAyNi0xMS0wMlQyMjozMjo1MS45NjI2ODRaIiwiY2hhbmdlcyI6eyJhZnRlciI6eyJhY3Rpb25zIjpbIlJlYWRNZXRhZGF0YSJdLCJiYXNpcyI6eyJJbmRlcGVuZGVudCI6e319LCJjcmVhdGVkQXQiOiIyMDI2LTExLTAyVDIyOjMyOjUxLjg2NDg2N1oiLCJleHBpcmVzQXQiOm51bGwsImdlbmVyYXRpb24iOjAsImlkIjoiODFkODE5YWUtOWNlYi00ZTVkLWFhM2YtYTEyOGFhYjg3YTNjIiwiaXNzdWVyIjoiN2NiNjQ1MGItZTQxZi00M2Y0LTgwMjAtODA2NDE0NzRlMzJmIiwicmVjaXBpZW50IjoiNjNmZTgzNjQtZmNmYS00ZjExLTg3NWYtYzg2ODJiMDFmZWE3IiwicmV2b2tlZCI6ZmFsc2UsInNjb3BlIjp7ImRhdGFzZXQiOiI4ZGJjZDgyOC1kZjE2LTNiNDgtOTljZS1jMWVlNGZlNmFkNDAiLCJyZWxlYXNlIjpudWxsfX0sImJlZm9yZSI6bnVsbCwicHJpbmNpcGFsQ3JlYXRlZCI6eyJhY3RpdmUiOnRydWUsImNyZWF0ZWRBdCI6IjIwMjYtMTEtMDJUMjI6MzI6NTEuOTYwMTI0WiIsImdlbmVyYXRpb24iOjAsImlkIjoiNjNmZTgzNjQtZmNmYS00ZjExLTg3NWYtYzg2ODJiMDFmZWE3IiwibGFiZWwiOiJMb2NhbCBwcmluY2lwYWwifX0sImRhdGFiYXNlQWN0b3IiOiJjb21wYXRfcnVudGltZSIsImVwb2NoIjoiMCIsImV2ZW50IjoiZWFlZTYxOTMtN2E1Ni00YTYyLWFjMjMtM2I5M2M4M2QxZTE3IiwiZXh0cmEiOnt9LCJpbnN0YWxsYXRpb24iOiI5MTU0ZWNhOC03NmM5LTQwYTYtOTBmNS0wN2IxMzI5ZTkxNDciLCJpbnRlbnREaWdlc3QiOiIzMThhMjZmZmY1MDgzZTliZmJjZDFlNjcwMzk5ZTVmNzM1NmQ4Mjk0NDkyZTUyZGE1OTc4Y2VkNzIxZDc4YjYzIiwia2V5IjoiODFkODE5YWUtOWNlYi00ZTVkLWFhM2YtYTEyOGFhYjg3YTNjIiwia2luZCI6IkdyYW50SXNzdWVkIiwicHJldmlvdXNIYXNoIjoiMTM1NjFiOGQ3MjQ0YjE4YzY1NGZlMzNmY2RjY2Q2ZGFiNTM5ODQ2NTBkMTM2MTBjZGUyMjY0NGQ3NDc3ZjM3NCIsInByZXZpb3VzUmV2aXNpb24iOiIxMiIsInJlYXNvbiI6IkdyYW50SXNzdWVkIiwicmVxdWVzdCI6bnVsbCwicmV2aXNpb24iOiIxMyIsInNjb3BlIjoiZ3JhbnQ6ODFkODE5YWUtOWNlYi00ZTVkLWFhM2YtYTEyOGFhYjg3YTNjIiwidmVyc2lvbiI6InBvbGljeS1sb2NhbC12MiJ9",
+            "version": "policy-event-v1",
+            "revision": "13",
+            "operation": "eaee6193-7a56-4a62-ac23-3b93c83d1e17",
+            "appliedHash": "87ba214c7ebc264949d386152b18b4fe89a0e062ef1ab579c9d9fa3213b2877b",
+            "capabilities": "6616544f200829bbc14c9c7713b17e6c9a2c781abf569049ef1c04e7c23a5446",
+            "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147",
+            "previousHash": "13561b8d7244b18c654fe33fcdccd6dab53984650d13610cde22644d7477f374",
+            "payloadDigest": "960115dd7c4e8bf209a4eaf8d0d9a30db0bc1f0c89b550ca0e654d90815f799b",
+            "previousRevision": "12"
+          },
+          "version": "policy-journal-v1",
+          "previous": "364e23f0a98fd2e304cf6703cd21bad1e1eaf28c8c2cb57a8f0aef27466df32f",
+          "sequence": "27",
+          "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147"
+        },
+        "version": "sanctity-policy-wire-v1"
+      },
+      "signature": "44q1noIhAOmSnBSMYgo5Apli2R_RhW5CdNFyMCiiQjDgUc50Zj1h2oZpNKRj8mbMHdAmX3mW1eNk3UGWQUP4AQ"
+    }
+  },
+  {
+    "kind": "GrantIssued",
+    "revision": 15,
+    "certificate": {
+      "signed": {
+        "key": "06e3fd8fda29bb60ab59557de61edb0aecdb231134be30e75b455f8e1b792fa9",
+        "body": {
+          "at": "2026-11-02T22:32:54.048736879Z",
+          "kind": "COMMIT",
+          "command": {
+            "kind": "GrantIssued",
+            "epoch": "0",
+            "payload": "eyJhY3RvciI6IjdjYjY0NTBiLWU0MWYtNDNmNC04MDIwLTgwNjQxNDc0ZTMyZiIsImFwcHJvdmFsUmVmZXJlbmNlcyI6W10sImF0IjoiMjAyNi0xMS0wMlQyMjozMjo1My44Nzk5MjNaIiwiY2hhbmdlcyI6eyJhZnRlciI6eyJhY3Rpb25zIjpbIlJlYWRNZXRhZGF0YSJdLCJiYXNpcyI6eyJJbmRlcGVuZGVudCI6e319LCJjcmVhdGVkQXQiOiIyMDI2LTExLTAyVDIyOjMyOjUzLjc0MTg0M1oiLCJleHBpcmVzQXQiOm51bGwsImdlbmVyYXRpb24iOjAsImlkIjoiZjBhY2UwMDEtMjZkZi00MGI5LWExZmUtOGFlOTM0ZTNiYzRiIiwiaXNzdWVyIjoiN2NiNjQ1MGItZTQxZi00M2Y0LTgwMjAtODA2NDE0NzRlMzJmIiwicmVjaXBpZW50IjoiMTNiMmI0YjEtNWVhNS00Njk0LWEzOGUtMjZhZjM4NGIwM2Y2IiwicmV2b2tlZCI6ZmFsc2UsInNjb3BlIjp7ImRhdGFzZXQiOiI4ZGJjZDgyOC1kZjE2LTNiNDgtOTljZS1jMWVlNGZlNmFkNDAiLCJyZWxlYXNlIjpudWxsfX0sImJlZm9yZSI6bnVsbCwicHJpbmNpcGFsQ3JlYXRlZCI6eyJhY3RpdmUiOnRydWUsImNyZWF0ZWRBdCI6IjIwMjYtMTEtMDJUMjI6MzI6NTMuODc0NDQyWiIsImdlbmVyYXRpb24iOjAsImlkIjoiMTNiMmI0YjEtNWVhNS00Njk0LWEzOGUtMjZhZjM4NGIwM2Y2IiwibGFiZWwiOiJMb2NhbCBwcmluY2lwYWwifX0sImRhdGFiYXNlQWN0b3IiOiJjb21wYXRfcnVudGltZSIsImVwb2NoIjoiMCIsImV2ZW50IjoiMjJlNDYwZDEtOTVhOC00MzVmLWI4NDItYmZmNTZjNWQ0ZmExIiwiZXh0cmEiOnt9LCJpbnN0YWxsYXRpb24iOiI5MTU0ZWNhOC03NmM5LTQwYTYtOTBmNS0wN2IxMzI5ZTkxNDciLCJpbnRlbnREaWdlc3QiOiJjOWY1NTZhODA3NzQ4M2ZlMWQ2YWMxZWM1NmFjYjRhZGJhMmRlNjAxZTRjMjRhMjVhZjRiOTE0ZDU4MDMwNTk0Iiwia2V5IjoiZjBhY2UwMDEtMjZkZi00MGI5LWExZmUtOGFlOTM0ZTNiYzRiIiwia2luZCI6IkdyYW50SXNzdWVkIiwicHJldmlvdXNIYXNoIjoiMWYwZDdmYmQ0M2YxM2RlOTM2MTkzNTcyYjQ1NWYxMDU2MmUxOTc1NGU0OTJmZTZiMmFkMGYxYWEzM2Q3YzdlNCIsInByZXZpb3VzUmV2aXNpb24iOiIxNCIsInJlYXNvbiI6IkdyYW50SXNzdWVkIiwicmVxdWVzdCI6bnVsbCwicmV2aXNpb24iOiIxNSIsInNjb3BlIjoiZ3JhbnQ6ZjBhY2UwMDEtMjZkZi00MGI5LWExZmUtOGFlOTM0ZTNiYzRiIiwidmVyc2lvbiI6InBvbGljeS1sb2NhbC12MiJ9",
+            "version": "policy-event-v1",
+            "revision": "15",
+            "operation": "22e460d1-95a8-435f-b842-bff56c5d4fa1",
+            "appliedHash": "ba97197634fafb57312260dd0bc07337b98143e3196253485c53f2f75da457ce",
+            "capabilities": "6616544f200829bbc14c9c7713b17e6c9a2c781abf569049ef1c04e7c23a5446",
+            "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147",
+            "previousHash": "1f0d7fbd43f13de936193572b455f10562e19754e492fe6b2ad0f1aa33d7c7e4",
+            "payloadDigest": "4e140b26541bed09c418c97f8c268206c06a36ec041e728a3b75d741f72ba4a3",
+            "previousRevision": "14"
+          },
+          "version": "policy-journal-v1",
+          "previous": "c555ec5d93b6545956538c7a73572c46f50e9d4025f4fe668c28403a32153209",
+          "sequence": "31",
+          "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147"
+        },
+        "version": "sanctity-policy-wire-v1"
+      },
+      "signature": "sV3EHKOximt-XZTxvX4PqdnbT2y428sfrPFeJNfM9DxcFxyziXgI_YoqQ5QfKq1T7UMAdRVKbpFPykg81ZhiCw"
+    }
+  },
+  {
+    "kind": "GrantIssued",
+    "revision": 17,
+    "certificate": {
+      "signed": {
+        "key": "06e3fd8fda29bb60ab59557de61edb0aecdb231134be30e75b455f8e1b792fa9",
+        "body": {
+          "at": "2026-11-02T22:32:55.973737963Z",
+          "kind": "COMMIT",
+          "command": {
+            "kind": "GrantIssued",
+            "epoch": "0",
+            "payload": "eyJhY3RvciI6IjdjYjY0NTBiLWU0MWYtNDNmNC04MDIwLTgwNjQxNDc0ZTMyZiIsImFwcHJvdmFsUmVmZXJlbmNlcyI6W10sImF0IjoiMjAyNi0xMS0wMlQyMjozMjo1NS44MTU0NDFaIiwiY2hhbmdlcyI6eyJhZnRlciI6eyJhY3Rpb25zIjpbIlJlYWRNZXRhZGF0YSJdLCJiYXNpcyI6eyJJbmRlcGVuZGVudCI6e319LCJjcmVhdGVkQXQiOiIyMDI2LTExLTAyVDIyOjMyOjU1LjcxNTIyM1oiLCJleHBpcmVzQXQiOm51bGwsImdlbmVyYXRpb24iOjAsImlkIjoiMWVjZGNlN2QtNzZlMy00ZGU0LThlMWUtMDU0ODVmZjliZGNmIiwiaXNzdWVyIjoiN2NiNjQ1MGItZTQxZi00M2Y0LTgwMjAtODA2NDE0NzRlMzJmIiwicmVjaXBpZW50IjoiMjk5OGJhMzQtOTU3Zi00M2Q4LWI5YmUtNjEwNjExZDk3ZTkyIiwicmV2b2tlZCI6ZmFsc2UsInNjb3BlIjp7ImRhdGFzZXQiOiI4ZGJjZDgyOC1kZjE2LTNiNDgtOTljZS1jMWVlNGZlNmFkNDAiLCJyZWxlYXNlIjpudWxsfX0sImJlZm9yZSI6bnVsbCwicHJpbmNpcGFsQ3JlYXRlZCI6eyJhY3RpdmUiOnRydWUsImNyZWF0ZWRBdCI6IjIwMjYtMTEtMDJUMjI6MzI6NTUuODEzMzQ0WiIsImdlbmVyYXRpb24iOjAsImlkIjoiMjk5OGJhMzQtOTU3Zi00M2Q4LWI5YmUtNjEwNjExZDk3ZTkyIiwibGFiZWwiOiJMb2NhbCBwcmluY2lwYWwifX0sImRhdGFiYXNlQWN0b3IiOiJjb21wYXRfcnVudGltZSIsImVwb2NoIjoiMCIsImV2ZW50IjoiOTE1OGQyNDMtYjM5Mi00ZmE4LWI3ODktNzljODI5MGI2MWJjIiwiZXh0cmEiOnt9LCJpbnN0YWxsYXRpb24iOiI5MTU0ZWNhOC03NmM5LTQwYTYtOTBmNS0wN2IxMzI5ZTkxNDciLCJpbnRlbnREaWdlc3QiOiJjYTgyNzQzMDA1MTdhZWZiNGM1YjhiOGU2NmE5MWQwNzU3NDJkNDc0OTg2M2E1NjI0OWE0YTU4YjMxYWJjN2NhIiwia2V5IjoiMWVjZGNlN2QtNzZlMy00ZGU0LThlMWUtMDU0ODVmZjliZGNmIiwia2luZCI6IkdyYW50SXNzdWVkIiwicHJldmlvdXNIYXNoIjoiY2Q3MDJiY2U1YjNhZTM1Yzc2MjE3MjM5NWQ4YWM1MTBjZWQxOTIyNjQxNzRhY2NmZGRhYzgxMzYyNjkzNmQ3MyIsInByZXZpb3VzUmV2aXNpb24iOiIxNiIsInJlYXNvbiI6IkdyYW50SXNzdWVkIiwicmVxdWVzdCI6bnVsbCwicmV2aXNpb24iOiIxNyIsInNjb3BlIjoiZ3JhbnQ6MWVjZGNlN2QtNzZlMy00ZGU0LThlMWUtMDU0ODVmZjliZGNmIiwidmVyc2lvbiI6InBvbGljeS1sb2NhbC12MiJ9",
+            "version": "policy-event-v1",
+            "revision": "17",
+            "operation": "9158d243-b392-4fa8-b789-79c8290b61bc",
+            "appliedHash": "0b6fde3ce4e568b64c7a7d328aafb7ad47bf1e448bcbedbb6ace2d4eba39c63a",
+            "capabilities": "6616544f200829bbc14c9c7713b17e6c9a2c781abf569049ef1c04e7c23a5446",
+            "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147",
+            "previousHash": "cd702bce5b3ae35c762172395d8ac510ced192264174accfddac813626936d73",
+            "payloadDigest": "14a16848dc3ac19cea0bc9c42e7f630d7f40122861967b78eef2ee0e65850d8f",
+            "previousRevision": "16"
+          },
+          "version": "policy-journal-v1",
+          "previous": "2e2b7b0d20d4dfad95d64b872721afc8aa8948bd2d51599623fd135494aea4d3",
+          "sequence": "35",
+          "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147"
+        },
+        "version": "sanctity-policy-wire-v1"
+      },
+      "signature": "XubAiw84NjaEYWUf921YAnpSxCu0EUNCBHSazkjtWvvjNe-w7KA3As28aUDt5fg8c4-qDSZrSYW2CVAq9FDrBw"
+    }
+  },
+  {
+    "kind": "GrantIssued",
+    "revision": 2,
+    "certificate": {
+      "signed": {
+        "key": "06e3fd8fda29bb60ab59557de61edb0aecdb231134be30e75b455f8e1b792fa9",
+        "body": {
+          "at": "2026-11-02T22:32:40.687697012Z",
+          "kind": "COMMIT",
+          "command": {
+            "kind": "GrantIssued",
+            "epoch": "0",
+            "payload": "eyJhY3RvciI6IjdjYjY0NTBiLWU0MWYtNDNmNC04MDIwLTgwNjQxNDc0ZTMyZiIsImFwcHJvdmFsUmVmZXJlbmNlcyI6W10sImF0IjoiMjAyNi0xMS0wMlQyMjozMjo0MC40NzM0ODZaIiwiY2hhbmdlcyI6eyJhZnRlciI6eyJhY3Rpb25zIjpbIlJlYWRNZXRhZGF0YSIsIlJlYWRDb250ZW50Il0sImJhc2lzIjp7IkluZGVwZW5kZW50Ijp7fX0sImNyZWF0ZWRBdCI6IjIwMjYtMTEtMDJUMjI6MzI6NDAuMzY1NjM5WiIsImV4cGlyZXNBdCI6bnVsbCwiZ2VuZXJhdGlvbiI6MCwiaWQiOiIzMjJmOTU1ZC0xZjYxLTQzZDEtYjU5NS1iMjE1MjIyZGQyMDkiLCJpc3N1ZXIiOiI3Y2I2NDUwYi1lNDFmLTQzZjQtODAyMC04MDY0MTQ3NGUzMmYiLCJyZWNpcGllbnQiOiIzMWNlMDRkNC0wYWEwLTQzNzYtYTcyMC1mZWI1NDMxOTBlZTQiLCJyZXZva2VkIjpmYWxzZSwic2NvcGUiOnsiZGF0YXNldCI6IjA3NTBhYWI4LTY1ZDYtNDA4YS1hMzg0LTU2NmU4OTc1OTIyZCIsInJlbGVhc2UiOm51bGx9fSwiYmVmb3JlIjpudWxsLCJwcmluY2lwYWxDcmVhdGVkIjp7ImFjdGl2ZSI6dHJ1ZSwiY3JlYXRlZEF0IjoiMjAyNi0xMS0wMlQyMjozMjo0MC40NTE2NDhaIiwiZ2VuZXJhdGlvbiI6MCwiaWQiOiIzMWNlMDRkNC0wYWEwLTQzNzYtYTcyMC1mZWI1NDMxOTBlZTQiLCJsYWJlbCI6IkxvY2FsIHByaW5jaXBhbCJ9fSwiZGF0YWJhc2VBY3RvciI6ImNvbXBhdF9ydW50aW1lIiwiZXBvY2giOiIwIiwiZXZlbnQiOiJkODczM2E4NC0xOGJlLTQ1YmUtOTI3Mi0wNjQyMGM5ZTI5ZjUiLCJleHRyYSI6e30sImluc3RhbGxhdGlvbiI6IjkxNTRlY2E4LTc2YzktNDBhNi05MGY1LTA3YjEzMjllOTE0NyIsImludGVudERpZ2VzdCI6IjI0ZjBlOTQxZjI2ZGIwODM3MDI3YmRjOTllNzRhZGVmZGUwNjM0MGQ5MGEzZTE3ZjQ1ODE3NDM4MGYzODY4ODIiLCJrZXkiOiIzMjJmOTU1ZC0xZjYxLTQzZDEtYjU5NS1iMjE1MjIyZGQyMDkiLCJraW5kIjoiR3JhbnRJc3N1ZWQiLCJwcmV2aW91c0hhc2giOiIyZDVlYzdjYTRjYWExNmYwMjFiNmNiY2Q3ZGM5MGZhZTEwZjIxNjRmZjUzMmQ1YTRjZDViMmE2NDhiYTk3NmY0IiwicHJldmlvdXNSZXZpc2lvbiI6IjEiLCJyZWFzb24iOiJHcmFudElzc3VlZCIsInJlcXVlc3QiOm51bGwsInJldmlzaW9uIjoiMiIsInNjb3BlIjoiZ3JhbnQ6MzIyZjk1NWQtMWY2MS00M2QxLWI1OTUtYjIxNTIyMmRkMjA5IiwidmVyc2lvbiI6InBvbGljeS1sb2NhbC12MiJ9",
+            "version": "policy-event-v1",
+            "revision": "2",
+            "operation": "d8733a84-18be-45be-9272-06420c9e29f5",
+            "appliedHash": "2b7fb1606cb573c5033687581b98023e22af06225a5138dee762a9c9786a5907",
+            "capabilities": "6616544f200829bbc14c9c7713b17e6c9a2c781abf569049ef1c04e7c23a5446",
+            "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147",
+            "previousHash": "2d5ec7ca4caa16f021b6cbcd7dc90fae10f2164ff532d5a4cd5b2a648ba976f4",
+            "payloadDigest": "6d4f84c00bac81a3e28b848b0646ba1442458acff861e70e33b061453f41c40b",
+            "previousRevision": "1"
+          },
+          "version": "policy-journal-v1",
+          "previous": "ee232cda977bf8dc3989ecba8992002b6a84b0de80aafeacc04c96617cf33da2",
+          "sequence": "5",
+          "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147"
+        },
+        "version": "sanctity-policy-wire-v1"
+      },
+      "signature": "bLgx7-qAutlh8ZSuIOpb2cU3QGIcH5r0G_ua2TyoFM1ZHKYnXLhm3EVp1w3_H9tQpN2XVn_2L8K2pN2I2-9yCA"
+    }
+  },
+  {
+    "kind": "GrantIssued",
+    "revision": 22,
+    "certificate": {
+      "signed": {
+        "key": "06e3fd8fda29bb60ab59557de61edb0aecdb231134be30e75b455f8e1b792fa9",
+        "body": {
+          "at": "2026-11-02T22:33:01.179832965Z",
+          "kind": "COMMIT",
+          "command": {
+            "kind": "GrantIssued",
+            "epoch": "0",
+            "payload": "eyJhY3RvciI6IjdjYjY0NTBiLWU0MWYtNDNmNC04MDIwLTgwNjQxNDc0ZTMyZiIsImFwcHJvdmFsUmVmZXJlbmNlcyI6W10sImF0IjoiMjAyNi0xMS0wMlQyMjozMzowMS4wNTQ1NTBaIiwiY2hhbmdlcyI6eyJhZnRlciI6eyJhY3Rpb25zIjpbIlJlYWRNZXRhZGF0YSIsIlJlYWRDb250ZW50Il0sImJhc2lzIjp7IkluZGVwZW5kZW50Ijp7fX0sImNyZWF0ZWRBdCI6IjIwMjYtMTEtMDJUMjI6MzM6MDAuOTc3MjUzWiIsImV4cGlyZXNBdCI6bnVsbCwiZ2VuZXJhdGlvbiI6MCwiaWQiOiJkZDBjMzJiZS1lMGZmLTRmZDYtYjdhYi05MWQ5NTNiY2U0NTYiLCJpc3N1ZXIiOiI3Y2I2NDUwYi1lNDFmLTQzZjQtODAyMC04MDY0MTQ3NGUzMmYiLCJyZWNpcGllbnQiOiJiYjRlMjYxYy0wYWFkLTQ0N2ItOGQwYS1mNDBjMDE2MmU4NjUiLCJyZXZva2VkIjpmYWxzZSwic2NvcGUiOnsiZGF0YXNldCI6IjA3NTBhYWI4LTY1ZDYtNDA4YS1hMzg0LTU2NmU4OTc1OTIyZCIsInJlbGVhc2UiOm51bGx9fSwiYmVmb3JlIjpudWxsLCJwcmluY2lwYWxDcmVhdGVkIjpudWxsfSwiZGF0YWJhc2VBY3RvciI6ImNvbXBhdF9ydW50aW1lIiwiZXBvY2giOiIwIiwiZXZlbnQiOiJmY2E4MzFlMi03ZWU5LTQ3MTgtOWU4MS1hZjMzY2ZjYTQ5MTgiLCJleHRyYSI6e30sImluc3RhbGxhdGlvbiI6IjkxNTRlY2E4LTc2YzktNDBhNi05MGY1LTA3YjEzMjllOTE0NyIsImludGVudERpZ2VzdCI6ImQ3NWRlOWVhNTc0ZmVlNzJlMDAxYjBlOTI4ZTU4NmNmMjIxOTVjMWJiZjYwM2RhNDBmZTAwZjQ3Y2E3NGEwZWUiLCJrZXkiOiJkZDBjMzJiZS1lMGZmLTRmZDYtYjdhYi05MWQ5NTNiY2U0NTYiLCJraW5kIjoiR3JhbnRJc3N1ZWQiLCJwcmV2aW91c0hhc2giOiJkZmNkODE3NWJhZGI5ZWNkMmVlMWE1MWUwMzE4YTc3YzRlNzNiNDRiNDgzZjJlM2M3MjIzNWMzNjJkYTkzMTYyIiwicHJldmlvdXNSZXZpc2lvbiI6IjIxIiwicmVhc29uIjoiR3JhbnRJc3N1ZWQiLCJyZXF1ZXN0IjpudWxsLCJyZXZpc2lvbiI6IjIyIiwic2NvcGUiOiJncmFudDpkZDBjMzJiZS1lMGZmLTRmZDYtYjdhYi05MWQ5NTNiY2U0NTYiLCJ2ZXJzaW9uIjoicG9saWN5LWxvY2FsLXYyIn0",
+            "version": "policy-event-v1",
+            "revision": "22",
+            "operation": "fca831e2-7ee9-4718-9e81-af33cfca4918",
+            "appliedHash": "c57e18cf363d92f5f340b379e615dd3c8b98c28fdbebaa51136b58d42fe0d2c7",
+            "capabilities": "6616544f200829bbc14c9c7713b17e6c9a2c781abf569049ef1c04e7c23a5446",
+            "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147",
+            "previousHash": "dfcd8175badb9ecd2ee1a51e0318a77c4e73b44b483f2e3c72235c362da93162",
+            "payloadDigest": "9d56cddcdddebfa211b44c9c96702997b6f6c63b3ee9d037018837fe318ef7b9",
+            "previousRevision": "21"
+          },
+          "version": "policy-journal-v1",
+          "previous": "2cbbc80987eb6dad27cce0b61e43385ceb2112fc07bc5f26d5457dcda022ce46",
+          "sequence": "45",
+          "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147"
+        },
+        "version": "sanctity-policy-wire-v1"
+      },
+      "signature": "34YeHu240_TU7JfbWQuA-FMrsScfux5knGZxCtScJUoKvBcSSpdP_DCi5KzKOlyhxUDXS9DjoHK0Ej9gn4h9Ag"
+    }
+  },
+  {
+    "kind": "GrantIssued",
+    "revision": 23,
+    "certificate": {
+      "signed": {
+        "key": "06e3fd8fda29bb60ab59557de61edb0aecdb231134be30e75b455f8e1b792fa9",
+        "body": {
+          "at": "2026-11-02T22:33:01.486857341Z",
+          "kind": "COMMIT",
+          "command": {
+            "kind": "GrantIssued",
+            "epoch": "0",
+            "payload": "eyJhY3RvciI6IjdjYjY0NTBiLWU0MWYtNDNmNC04MDIwLTgwNjQxNDc0ZTMyZiIsImFwcHJvdmFsUmVmZXJlbmNlcyI6W10sImF0IjoiMjAyNi0xMS0wMlQyMjozMzowMS40MDU4ODJaIiwiY2hhbmdlcyI6eyJhZnRlciI6eyJhY3Rpb25zIjpbIlJlYWRNZXRhZGF0YSIsIlJlYWRDb250ZW50Il0sImJhc2lzIjp7IkluZGVwZW5kZW50Ijp7fX0sImNyZWF0ZWRBdCI6IjIwMjYtMTEtMDJUMjI6MzM6MDEuMzQ0MzkxWiIsImV4cGlyZXNBdCI6bnVsbCwiZ2VuZXJhdGlvbiI6MCwiaWQiOiI4ODc4NGRmZC01YmNhLTQxNDItOWQ3Ny0yNTA1Yjc2NGY3ODEiLCJpc3N1ZXIiOiI3Y2I2NDUwYi1lNDFmLTQzZjQtODAyMC04MDY0MTQ3NGUzMmYiLCJyZWNpcGllbnQiOiIxM2IyYjRiMS01ZWE1LTQ2OTQtYTM4ZS0yNmFmMzg0YjAzZjYiLCJyZXZva2VkIjpmYWxzZSwic2NvcGUiOnsiZGF0YXNldCI6IjA3NTBhYWI4LTY1ZDYtNDA4YS1hMzg0LTU2NmU4OTc1OTIyZCIsInJlbGVhc2UiOm51bGx9fSwiYmVmb3JlIjpudWxsLCJwcmluY2lwYWxDcmVhdGVkIjpudWxsfSwiZGF0YWJhc2VBY3RvciI6ImNvbXBhdF9ydW50aW1lIiwiZXBvY2giOiIwIiwiZXZlbnQiOiIzOTRiZTZjZC0wN2E5LTQ0MzEtYTMxZS05OTYyM2JlYmFjNzYiLCJleHRyYSI6e30sImluc3RhbGxhdGlvbiI6IjkxNTRlY2E4LTc2YzktNDBhNi05MGY1LTA3YjEzMjllOTE0NyIsImludGVudERpZ2VzdCI6IjM4ODYyMDUzNzU5ZDQ0MTMzNTUxYTQ0YTdmNjI0ODY0NjQxY2RmOGVjOTBiMGZjZWZiYTJlYTBlNTU0YjFkMTciLCJrZXkiOiI4ODc4NGRmZC01YmNhLTQxNDItOWQ3Ny0yNTA1Yjc2NGY3ODEiLCJraW5kIjoiR3JhbnRJc3N1ZWQiLCJwcmV2aW91c0hhc2giOiJjNTdlMThjZjM2M2Q5MmY1ZjM0MGIzNzllNjE1ZGQzYzhiOThjMjhmZGJlYmFhNTExMzZiNThkNDJmZTBkMmM3IiwicHJldmlvdXNSZXZpc2lvbiI6IjIyIiwicmVhc29uIjoiR3JhbnRJc3N1ZWQiLCJyZXF1ZXN0IjpudWxsLCJyZXZpc2lvbiI6IjIzIiwic2NvcGUiOiJncmFudDo4ODc4NGRmZC01YmNhLTQxNDItOWQ3Ny0yNTA1Yjc2NGY3ODEiLCJ2ZXJzaW9uIjoicG9saWN5LWxvY2FsLXYyIn0",
+            "version": "policy-event-v1",
+            "revision": "23",
+            "operation": "394be6cd-07a9-4431-a31e-99623bebac76",
+            "appliedHash": "6f6019172fa804b44bb17af57c3b9fac9f1b92a99f624ae76fd9f1b159717d1e",
+            "capabilities": "6616544f200829bbc14c9c7713b17e6c9a2c781abf569049ef1c04e7c23a5446",
+            "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147",
+            "previousHash": "c57e18cf363d92f5f340b379e615dd3c8b98c28fdbebaa51136b58d42fe0d2c7",
+            "payloadDigest": "0f882f79b39f1fe73303a7cb99318b9b580a42a7b2857edcbba8d01053158a1e",
+            "previousRevision": "22"
+          },
+          "version": "policy-journal-v1",
+          "previous": "1c082fa81db1b05093225d9e4d547518e0f28d789c63b347b8202d7604636256",
+          "sequence": "47",
+          "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147"
+        },
+        "version": "sanctity-policy-wire-v1"
+      },
+      "signature": "0NGzQa5RaW6MIoQrkDZR71w-hpsPVB3PL8Ydpi_LcWFAHfp7SvuX1sNeXIVWfreZOtYcSzrGN3e0X5BHD0SFCw"
+    }
+  },
+  {
+    "kind": "GrantIssued",
+    "revision": 24,
+    "certificate": {
+      "signed": {
+        "key": "06e3fd8fda29bb60ab59557de61edb0aecdb231134be30e75b455f8e1b792fa9",
+        "body": {
+          "at": "2026-11-02T22:33:01.818328757Z",
+          "kind": "COMMIT",
+          "command": {
+            "kind": "GrantIssued",
+            "epoch": "0",
+            "payload": "eyJhY3RvciI6IjdjYjY0NTBiLWU0MWYtNDNmNC04MDIwLTgwNjQxNDc0ZTMyZiIsImFwcHJvdmFsUmVmZXJlbmNlcyI6W10sImF0IjoiMjAyNi0xMS0wMlQyMjozMzowMS43MzQ2NjBaIiwiY2hhbmdlcyI6eyJhZnRlciI6eyJhY3Rpb25zIjpbIlJlYWRNZXRhZGF0YSIsIlJlYWRDb250ZW50Il0sImJhc2lzIjp7IkluZGVwZW5kZW50Ijp7fX0sImNyZWF0ZWRBdCI6IjIwMjYtMTEtMDJUMjI6MzM6MDEuNjcwNzQ1WiIsImV4cGlyZXNBdCI6bnVsbCwiZ2VuZXJhdGlvbiI6MCwiaWQiOiIyMWMxZGRiOS01ODVlLTRkYzItYmEyNi00MzlkNzUzM2I4ZWEiLCJpc3N1ZXIiOiI3Y2I2NDUwYi1lNDFmLTQzZjQtODAyMC04MDY0MTQ3NGUzMmYiLCJyZWNpcGllbnQiOiI2MDA0YTkxOS02YTVhLTQ2NzQtYWI0Ni1jYmQyNDZmZDgxNjkiLCJyZXZva2VkIjpmYWxzZSwic2NvcGUiOnsiZGF0YXNldCI6IjA3NTBhYWI4LTY1ZDYtNDA4YS1hMzg0LTU2NmU4OTc1OTIyZCIsInJlbGVhc2UiOiIzMWJlZWJiMi0xMTRlLTQ3YmQtYWMzOS0zYzIyMTRmNjZkMWIifX0sImJlZm9yZSI6bnVsbCwicHJpbmNpcGFsQ3JlYXRlZCI6bnVsbH0sImRhdGFiYXNlQWN0b3IiOiJjb21wYXRfcnVudGltZSIsImVwb2NoIjoiMCIsImV2ZW50IjoiNjk0MmM4MzktZmZjNC00ZmRhLWI4NzEtNTAzZjRkZGYzM2Q2IiwiZXh0cmEiOnt9LCJpbnN0YWxsYXRpb24iOiI5MTU0ZWNhOC03NmM5LTQwYTYtOTBmNS0wN2IxMzI5ZTkxNDciLCJpbnRlbnREaWdlc3QiOiI5MDNiNTJkZjU5NGVhMjE0ZmRmYmFkYzNhNGE1OGMzZmExZWZhZTJjZGFlMGEzNjA1N2U4MjRhZmRhMzg1MGZmIiwia2V5IjoiMjFjMWRkYjktNTg1ZS00ZGMyLWJhMjYtNDM5ZDc1MzNiOGVhIiwia2luZCI6IkdyYW50SXNzdWVkIiwicHJldmlvdXNIYXNoIjoiNmY2MDE5MTcyZmE4MDRiNDRiYjE3YWY1N2MzYjlmYWM5ZjFiOTJhOTlmNjI0YWU3NmZkOWYxYjE1OTcxN2QxZSIsInByZXZpb3VzUmV2aXNpb24iOiIyMyIsInJlYXNvbiI6IkdyYW50SXNzdWVkIiwicmVxdWVzdCI6bnVsbCwicmV2aXNpb24iOiIyNCIsInNjb3BlIjoiZ3JhbnQ6MjFjMWRkYjktNTg1ZS00ZGMyLWJhMjYtNDM5ZDc1MzNiOGVhIiwidmVyc2lvbiI6InBvbGljeS1sb2NhbC12MiJ9",
+            "version": "policy-event-v1",
+            "revision": "24",
+            "operation": "6942c839-ffc4-4fda-b871-503f4ddf33d6",
+            "appliedHash": "5569fce9810daf057bdd19534a63863ea1889bde440576a72b042107583a136a",
+            "capabilities": "6616544f200829bbc14c9c7713b17e6c9a2c781abf569049ef1c04e7c23a5446",
+            "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147",
+            "previousHash": "6f6019172fa804b44bb17af57c3b9fac9f1b92a99f624ae76fd9f1b159717d1e",
+            "payloadDigest": "63b4972c78f0f887c8421f71e8da68204e4057aea23c0385b8bea4587fecbd38",
+            "previousRevision": "23"
+          },
+          "version": "policy-journal-v1",
+          "previous": "3463fedb86cce4c719196290dafa70369f29b10f5a8d1639bced52a25859480d",
+          "sequence": "49",
+          "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147"
+        },
+        "version": "sanctity-policy-wire-v1"
+      },
+      "signature": "wGS6inkn-Jdi5bvnBkrHGsfFE0jS-aCmN29RfbQ-YAXDxeIRxoEUve8Gft2r1Ph-g4wPzT4Qy6fNJUxBpKW0AQ"
+    }
+  },
+  {
+    "kind": "GrantIssued",
+    "revision": 25,
+    "certificate": {
+      "signed": {
+        "key": "06e3fd8fda29bb60ab59557de61edb0aecdb231134be30e75b455f8e1b792fa9",
+        "body": {
+          "at": "2026-11-02T22:33:02.224768674Z",
+          "kind": "COMMIT",
+          "command": {
+            "kind": "GrantIssued",
+            "epoch": "0",
+            "payload": "eyJhY3RvciI6IjdjYjY0NTBiLWU0MWYtNDNmNC04MDIwLTgwNjQxNDc0ZTMyZiIsImFwcHJvdmFsUmVmZXJlbmNlcyI6W10sImF0IjoiMjAyNi0xMS0wMlQyMjozMzowMi4wNTg4NjVaIiwiY2hhbmdlcyI6eyJhZnRlciI6eyJhY3Rpb25zIjpbIlJlYWRNZXRhZGF0YSIsIlJlYWRDb250ZW50Il0sImJhc2lzIjp7IkluZGVwZW5kZW50Ijp7fX0sImNyZWF0ZWRBdCI6IjIwMjYtMTEtMDJUMjI6MzM6MDIuMDQzNDM0WiIsImV4cGlyZXNBdCI6IjIwMjYtMTEtMDJUMjI6MzM6MzEuODMwMzM5WiIsImdlbmVyYXRpb24iOjAsImlkIjoiNDA3Mjc4ODQtYjkyZC00N2FlLWE2YTYtMDg4NTQ2OTE2MGFmIiwiaXNzdWVyIjoiN2NiNjQ1MGItZTQxZi00M2Y0LTgwMjAtODA2NDE0NzRlMzJmIiwicmVjaXBpZW50IjoiNjNmZTgzNjQtZmNmYS00ZjExLTg3NWYtYzg2ODJiMDFmZWE3IiwicmV2b2tlZCI6ZmFsc2UsInNjb3BlIjp7ImRhdGFzZXQiOiIwNzUwYWFiOC02NWQ2LTQwOGEtYTM4NC01NjZlODk3NTkyMmQiLCJyZWxlYXNlIjpudWxsfX0sImJlZm9yZSI6bnVsbCwicHJpbmNpcGFsQ3JlYXRlZCI6bnVsbH0sImRhdGFiYXNlQWN0b3IiOiJjb21wYXRfcnVudGltZSIsImVwb2NoIjoiMCIsImV2ZW50IjoiNWI5NjRlMWMtMWE4NS00ODE1LTgyYTQtNjg4MjA5YzUwZDEyIiwiZXh0cmEiOnt9LCJpbnN0YWxsYXRpb24iOiI5MTU0ZWNhOC03NmM5LTQwYTYtOTBmNS0wN2IxMzI5ZTkxNDciLCJpbnRlbnREaWdlc3QiOiJmMmUzZTMwZWM4ZTBkYjU1MjcyMWZiZDNmYzMyNjI3MGFlNzA2MjI1NzgwMjJiOGI2NGY5ZGY3NTVmOGI2ZDMyIiwia2V5IjoiNDA3Mjc4ODQtYjkyZC00N2FlLWE2YTYtMDg4NTQ2OTE2MGFmIiwia2luZCI6IkdyYW50SXNzdWVkIiwicHJldmlvdXNIYXNoIjoiNTU2OWZjZTk4MTBkYWYwNTdiZGQxOTUzNGE2Mzg2M2VhMTg4OWJkZTQ0MDU3NmE3MmIwNDIxMDc1ODNhMTM2YSIsInByZXZpb3VzUmV2aXNpb24iOiIyNCIsInJlYXNvbiI6IkdyYW50SXNzdWVkIiwicmVxdWVzdCI6bnVsbCwicmV2aXNpb24iOiIyNSIsInNjb3BlIjoiZ3JhbnQ6NDA3Mjc4ODQtYjkyZC00N2FlLWE2YTYtMDg4NTQ2OTE2MGFmIiwidmVyc2lvbiI6InBvbGljeS1sb2NhbC12MiJ9",
+            "version": "policy-event-v1",
+            "revision": "25",
+            "operation": "5b964e1c-1a85-4815-82a4-688209c50d12",
+            "appliedHash": "831835e9e37c8ace8573bcd70f7088f63f654689d096141533fd73181845fd37",
+            "capabilities": "6616544f200829bbc14c9c7713b17e6c9a2c781abf569049ef1c04e7c23a5446",
+            "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147",
+            "previousHash": "5569fce9810daf057bdd19534a63863ea1889bde440576a72b042107583a136a",
+            "payloadDigest": "ae6d97a2e300ed47c907a53fe6ffe15895aaf9104e360daccff86ef3fb8e8f0a",
+            "previousRevision": "24"
+          },
+          "version": "policy-journal-v1",
+          "previous": "6e3c44c394d8bb92945b45d42651cc758bf92872d26552a9ff4b90e049f5243c",
+          "sequence": "51",
+          "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147"
+        },
+        "version": "sanctity-policy-wire-v1"
+      },
+      "signature": "0hWhvg0P_38satt_a9LGYKlRDCCkjZ4fpV2OdMj12p-1jEPkPg14jNeKllDThOOBWUjSMLbjCNNKFzSY2ONbBQ"
+    }
+  },
+  {
+    "kind": "GrantIssued",
+    "revision": 30,
+    "certificate": {
+      "signed": {
+        "key": "06e3fd8fda29bb60ab59557de61edb0aecdb231134be30e75b455f8e1b792fa9",
+        "body": {
+          "at": "2026-11-02T22:33:26.215610713Z",
+          "kind": "COMMIT",
+          "command": {
+            "kind": "GrantIssued",
+            "epoch": "0",
+            "payload": "eyJhY3RvciI6IjdjYjY0NTBiLWU0MWYtNDNmNC04MDIwLTgwNjQxNDc0ZTMyZiIsImFwcHJvdmFsUmVmZXJlbmNlcyI6W10sImF0IjoiMjAyNi0xMS0wMlQyMjozMzoyNi4xNDQ0MTJaIiwiY2hhbmdlcyI6eyJhZnRlciI6eyJhY3Rpb25zIjpbIlJlYWRNZXRhZGF0YSJdLCJiYXNpcyI6eyJJbmRlcGVuZGVudCI6e319LCJjcmVhdGVkQXQiOiIyMDI2LTExLTAyVDIyOjMzOjI2LjAzNTg2NloiLCJleHBpcmVzQXQiOm51bGwsImdlbmVyYXRpb24iOjAsImlkIjoiNTljMzAzMGYtNjkyOS00MTQxLWI3MzktYjc0YzgzYmI0ODlhIiwiaXNzdWVyIjoiN2NiNjQ1MGItZTQxZi00M2Y0LTgwMjAtODA2NDE0NzRlMzJmIiwicmVjaXBpZW50IjoiMzFjZTA0ZDQtMGFhMC00Mzc2LWE3MjAtZmViNTQzMTkwZWU0IiwicmV2b2tlZCI6ZmFsc2UsInNjb3BlIjp7ImRhdGFzZXQiOiIxZWYzMjM1Ni1lZDZiLTNhMjItOWE3My02MTkwMmQ4ZTU5NWMiLCJyZWxlYXNlIjpudWxsfX0sImJlZm9yZSI6bnVsbCwicHJpbmNpcGFsQ3JlYXRlZCI6bnVsbH0sImRhdGFiYXNlQWN0b3IiOiJjb21wYXRfcnVudGltZSIsImVwb2NoIjoiMCIsImV2ZW50IjoiMDAyMzM3OGQtNzMxOC00OTc1LWE1ZmMtMDFmNWE1NGUxZDUzIiwiZXh0cmEiOnt9LCJpbnN0YWxsYXRpb24iOiI5MTU0ZWNhOC03NmM5LTQwYTYtOTBmNS0wN2IxMzI5ZTkxNDciLCJpbnRlbnREaWdlc3QiOiI1OTAyMmYyYWEyOGMwZDg4OTYzN2Y1NjVjOWVjMGQ2MTBjMjdjMmQ1YzBlZGRlNjQyYmZkNjkwNjAyNGYxODhiIiwia2V5IjoiNTljMzAzMGYtNjkyOS00MTQxLWI3MzktYjc0YzgzYmI0ODlhIiwia2luZCI6IkdyYW50SXNzdWVkIiwicHJldmlvdXNIYXNoIjoiNWM4MWMyMDQ4N2Y5MTQxMzhjNzg4YWI5MGU5NTUwYmIzN2ZmMzc2ZjcyNjcyNDMzNDcyNWJkZGRmZGQwNDM5ZiIsInByZXZpb3VzUmV2aXNpb24iOiIyOSIsInJlYXNvbiI6IkdyYW50SXNzdWVkIiwicmVxdWVzdCI6bnVsbCwicmV2aXNpb24iOiIzMCIsInNjb3BlIjoiZ3JhbnQ6NTljMzAzMGYtNjkyOS00MTQxLWI3MzktYjc0YzgzYmI0ODlhIiwidmVyc2lvbiI6InBvbGljeS1sb2NhbC12MiJ9",
+            "version": "policy-event-v1",
+            "revision": "30",
+            "operation": "0023378d-7318-4975-a5fc-01f5a54e1d53",
+            "appliedHash": "a50086770eb506464ae75e8bbcb385c99328d938dc6100a556d5575ceded63aa",
+            "capabilities": "6616544f200829bbc14c9c7713b17e6c9a2c781abf569049ef1c04e7c23a5446",
+            "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147",
+            "previousHash": "5c81c20487f914138c788ab90e9550bb37ff376f726724334725bdddfdd0439f",
+            "payloadDigest": "6a2c14069f89c026e17d8bf6c4b80d7b0e2907e668a40096430c30a2c618c7a1",
+            "previousRevision": "29"
+          },
+          "version": "policy-journal-v1",
+          "previous": "bc96520929bc822f11cd2c36e128ac42ad2cf91c96dc02d238336b4399118a2c",
+          "sequence": "61",
+          "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147"
+        },
+        "version": "sanctity-policy-wire-v1"
+      },
+      "signature": "5dv0l7ppc8Vg6A7_2gBRuvM0CdaHIAesyiNIv_RLzEF0m9pEUyAjsT_8W6CCC0Rm9B3JUkZpHsNRB5h9cKtDDw"
+    }
+  },
+  {
+    "kind": "GrantIssued",
+    "revision": 32,
+    "certificate": {
+      "signed": {
+        "key": "06e3fd8fda29bb60ab59557de61edb0aecdb231134be30e75b455f8e1b792fa9",
+        "body": {
+          "at": "2026-11-02T22:33:28.760902298Z",
+          "kind": "COMMIT",
+          "command": {
+            "kind": "GrantIssued",
+            "epoch": "0",
+            "payload": "eyJhY3RvciI6IjdjYjY0NTBiLWU0MWYtNDNmNC04MDIwLTgwNjQxNDc0ZTMyZiIsImFwcHJvdmFsUmVmZXJlbmNlcyI6W10sImF0IjoiMjAyNi0xMS0wMlQyMjozMzoyOC43MDY5MDhaIiwiY2hhbmdlcyI6eyJhZnRlciI6eyJhY3Rpb25zIjpbIlJlYWRNZXRhZGF0YSJdLCJiYXNpcyI6eyJJbmRlcGVuZGVudCI6e319LCJjcmVhdGVkQXQiOiIyMDI2LTExLTAyVDIyOjMzOjI4LjU1MzAzN1oiLCJleHBpcmVzQXQiOm51bGwsImdlbmVyYXRpb24iOjAsImlkIjoiZDZiODRjMjctYjMzYy00YTg2LWI0OWEtMGJlOGU0NDVmN2I2IiwiaXNzdWVyIjoiN2NiNjQ1MGItZTQxZi00M2Y0LTgwMjAtODA2NDE0NzRlMzJmIiwicmVjaXBpZW50IjoiMzFjZTA0ZDQtMGFhMC00Mzc2LWE3MjAtZmViNTQzMTkwZWU0IiwicmV2b2tlZCI6ZmFsc2UsInNjb3BlIjp7ImRhdGFzZXQiOiIwNzUwYWFiOC02NWQ2LTQwOGEtYTM4NC01NjZlODk3NTkyMmQiLCJyZWxlYXNlIjoiMWMwMzc3YWItNDdjMi00YjM1LTgxYjEtYTRlYThjMmUxNTY1In19LCJiZWZvcmUiOm51bGwsInByaW5jaXBhbENyZWF0ZWQiOm51bGx9LCJkYXRhYmFzZUFjdG9yIjoiY29tcGF0X3J1bnRpbWUiLCJlcG9jaCI6IjAiLCJldmVudCI6IjhmNTY1MTQwLTE0ZTAtNDM4MS1iOWZlLThmYjEyYWZkNmUwZiIsImV4dHJhIjp7fSwiaW5zdGFsbGF0aW9uIjoiOTE1NGVjYTgtNzZjOS00MGE2LTkwZjUtMDdiMTMyOWU5MTQ3IiwiaW50ZW50RGlnZXN0IjoiNWRhNjVkNGRkOTE2ZThjOTAwMWQ0MWQ5NDk2Y2VmMWQ3NTQ0MWM5NTI5M2ZlZjlkOWVmM2VjODUwMDkwMWIyZSIsImtleSI6ImQ2Yjg0YzI3LWIzM2MtNGE4Ni1iNDlhLTBiZThlNDQ1ZjdiNiIsImtpbmQiOiJHcmFudElzc3VlZCIsInByZXZpb3VzSGFzaCI6Ijg0ZTNiYzBjZTk5MTYxOGVmNGRmMTY5Mzk3OGQ3MTYyOGEzNTVhYzg2NjIyMmE3OGZhZGZjMWY5M2FkNWI1NGMiLCJwcmV2aW91c1JldmlzaW9uIjoiMzEiLCJyZWFzb24iOiJHcmFudElzc3VlZCIsInJlcXVlc3QiOm51bGwsInJldmlzaW9uIjoiMzIiLCJzY29wZSI6ImdyYW50OmQ2Yjg0YzI3LWIzM2MtNGE4Ni1iNDlhLTBiZThlNDQ1ZjdiNiIsInZlcnNpb24iOiJwb2xpY3ktbG9jYWwtdjIifQ",
+            "version": "policy-event-v1",
+            "revision": "32",
+            "operation": "8f565140-14e0-4381-b9fe-8fb12afd6e0f",
+            "appliedHash": "81b041edfb2f33b9cd1d9d6c5801255c4d55d002f1b28ef8827818b44fc864a9",
+            "capabilities": "6616544f200829bbc14c9c7713b17e6c9a2c781abf569049ef1c04e7c23a5446",
+            "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147",
+            "previousHash": "84e3bc0ce991618ef4df1693978d71628a355ac866222a78fadfc1f93ad5b54c",
+            "payloadDigest": "5324959f187f081d0a2d7f7d408f942ba2f633818c7b27b5fdf36a5667cd68b3",
+            "previousRevision": "31"
+          },
+          "version": "policy-journal-v1",
+          "previous": "35609ad4229f5548ab603f0558b0036d17433f21f0f6ff447fd54fa87bc71988",
+          "sequence": "65",
+          "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147"
+        },
+        "version": "sanctity-policy-wire-v1"
+      },
+      "signature": "vQ3bkk1pX1w39cKjjbGaTgYk3ZmogFNTgJUl9qor1fTNnqkzEwvOSfgSOg9Yzg0_sQUFDeAEZ5_c8JwW1StuBA"
+    }
+  },
+  {
+    "kind": "GrantIssued",
+    "revision": 36,
+    "certificate": {
+      "signed": {
+        "key": "06e3fd8fda29bb60ab59557de61edb0aecdb231134be30e75b455f8e1b792fa9",
+        "body": {
+          "at": "2026-11-02T22:33:32.560299758Z",
+          "kind": "COMMIT",
+          "command": {
+            "kind": "GrantIssued",
+            "epoch": "0",
+            "payload": "eyJhY3RvciI6IjdjYjY0NTBiLWU0MWYtNDNmNC04MDIwLTgwNjQxNDc0ZTMyZiIsImFwcHJvdmFsUmVmZXJlbmNlcyI6W10sImF0IjoiMjAyNi0xMS0wMlQyMjozMzozMi40ODM5MDJaIiwiY2hhbmdlcyI6eyJhZnRlciI6eyJhY3Rpb25zIjpbIlJlYWRNZXRhZGF0YSIsIlJlYWRDb250ZW50Il0sImJhc2lzIjp7IkluZGVwZW5kZW50Ijp7fX0sImNyZWF0ZWRBdCI6IjIwMjYtMTEtMDJUMjI6MzM6MzIuNDA2ODgzWiIsImV4cGlyZXNBdCI6bnVsbCwiZ2VuZXJhdGlvbiI6MCwiaWQiOiJkMDU1OGZkMy01Y2I4LTQzMDktOTJlOS01MTA4OWNlZTc0ZGEiLCJpc3N1ZXIiOiI3Y2I2NDUwYi1lNDFmLTQzZjQtODAyMC04MDY0MTQ3NGUzMmYiLCJyZWNpcGllbnQiOiI3Y2I2NDUwYi1lNDFmLTQzZjQtODAyMC04MDY0MTQ3NGUzMmYiLCJyZXZva2VkIjpmYWxzZSwic2NvcGUiOnsiZGF0YXNldCI6IjA3NTBhYWI4LTY1ZDYtNDA4YS1hMzg0LTU2NmU4OTc1OTIyZCIsInJlbGVhc2UiOm51bGx9fSwiYmVmb3JlIjpudWxsLCJwcmluY2lwYWxDcmVhdGVkIjpudWxsfSwiZGF0YWJhc2VBY3RvciI6ImNvbXBhdF9ydW50aW1lIiwiZXBvY2giOiIwIiwiZXZlbnQiOiIzMDc1NzA5Ny1lZGRhLTQ5ODAtYjMzNC1kN2NkNmNmYjgxZmQiLCJleHRyYSI6e30sImluc3RhbGxhdGlvbiI6IjkxNTRlY2E4LTc2YzktNDBhNi05MGY1LTA3YjEzMjllOTE0NyIsImludGVudERpZ2VzdCI6IjM5NTZhZDg2ZDBmOTJlZjg5M2VkZmI4YzVhNzJhMGMyMjRkZTU4NGExYmJmZjIwMDkzYmUyYjBjYzIyMjkyZmUiLCJrZXkiOiJkMDU1OGZkMy01Y2I4LTQzMDktOTJlOS01MTA4OWNlZTc0ZGEiLCJraW5kIjoiR3JhbnRJc3N1ZWQiLCJwcmV2aW91c0hhc2giOiI3ODYyZWFjMmJkY2UwM2Q4ODM3OGMyNDdkNDJjZGUwYzMzYTc1YTc0M2Q4MmE5NDM0YTc1MTc3MGRiNzI4ZTAwIiwicHJldmlvdXNSZXZpc2lvbiI6IjM1IiwicmVhc29uIjoiR3JhbnRJc3N1ZWQiLCJyZXF1ZXN0IjpudWxsLCJyZXZpc2lvbiI6IjM2Iiwic2NvcGUiOiJncmFudDpkMDU1OGZkMy01Y2I4LTQzMDktOTJlOS01MTA4OWNlZTc0ZGEiLCJ2ZXJzaW9uIjoicG9saWN5LWxvY2FsLXYyIn0",
+            "version": "policy-event-v1",
+            "revision": "36",
+            "operation": "30757097-edda-4980-b334-d7cd6cfb81fd",
+            "appliedHash": "46966aec76cdcb37302aca8241e6aff058e905b8a585a0e3886db711c0a8fc33",
+            "capabilities": "6616544f200829bbc14c9c7713b17e6c9a2c781abf569049ef1c04e7c23a5446",
+            "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147",
+            "previousHash": "7862eac2bdce03d88378c247d42cde0c33a75a743d82a9434a751770db728e00",
+            "payloadDigest": "1bf283bbda438c847db52d6f83196556b33895780d4653029641afe5bbfad059",
+            "previousRevision": "35"
+          },
+          "version": "policy-journal-v1",
+          "previous": "3aa6ffb1783466a926a22eeafc6e66f0af32bbf3cf3b30fd1a51164cbf54cdad",
+          "sequence": "73",
+          "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147"
+        },
+        "version": "sanctity-policy-wire-v1"
+      },
+      "signature": "R9uiTrLYhfsc_whkG0RAO8wQPQR6qRacwATSDfgvLloH22xjyV5chqufARHjVtWDe871ffkYWJPFKq5HpxzuDQ"
+    }
+  },
+  {
+    "kind": "GrantIssued",
+    "revision": 7,
+    "certificate": {
+      "signed": {
+        "key": "06e3fd8fda29bb60ab59557de61edb0aecdb231134be30e75b455f8e1b792fa9",
+        "body": {
+          "at": "2026-11-02T22:32:46.213978875Z",
+          "kind": "COMMIT",
+          "command": {
+            "kind": "GrantIssued",
+            "epoch": "0",
+            "payload": "eyJhY3RvciI6IjdjYjY0NTBiLWU0MWYtNDNmNC04MDIwLTgwNjQxNDc0ZTMyZiIsImFwcHJvdmFsUmVmZXJlbmNlcyI6W10sImF0IjoiMjAyNi0xMS0wMlQyMjozMjo0Ni4wMzEwNDNaIiwiY2hhbmdlcyI6eyJhZnRlciI6eyJhY3Rpb25zIjpbIlJlYWRNZXRhZGF0YSJdLCJiYXNpcyI6eyJJbmRlcGVuZGVudCI6e319LCJjcmVhdGVkQXQiOiIyMDI2LTExLTAyVDIyOjMyOjQ1Ljk0MjE3M1oiLCJleHBpcmVzQXQiOm51bGwsImdlbmVyYXRpb24iOjAsImlkIjoiY2NhODcyYjYtZWU2YS00ZTBkLTk5YjctY2U1NjdmNWM4YmM0IiwiaXNzdWVyIjoiN2NiNjQ1MGItZTQxZi00M2Y0LTgwMjAtODA2NDE0NzRlMzJmIiwicmVjaXBpZW50IjoiYjljMzg2YjktMmM0OS00MzkxLWEwY2QtMjliNjcxYzlhMDQ1IiwicmV2b2tlZCI6ZmFsc2UsInNjb3BlIjp7ImRhdGFzZXQiOiI4ZGJjZDgyOC1kZjE2LTNiNDgtOTljZS1jMWVlNGZlNmFkNDAiLCJyZWxlYXNlIjpudWxsfX0sImJlZm9yZSI6bnVsbCwicHJpbmNpcGFsQ3JlYXRlZCI6eyJhY3RpdmUiOnRydWUsImNyZWF0ZWRBdCI6IjIwMjYtMTEtMDJUMjI6MzI6NDYuMDI2NjE4WiIsImdlbmVyYXRpb24iOjAsImlkIjoiYjljMzg2YjktMmM0OS00MzkxLWEwY2QtMjliNjcxYzlhMDQ1IiwibGFiZWwiOiJMb2NhbCBwcmluY2lwYWwifX0sImRhdGFiYXNlQWN0b3IiOiJjb21wYXRfcnVudGltZSIsImVwb2NoIjoiMCIsImV2ZW50IjoiYmUzMTExOTUtOGQwNS00ZGUxLTg3NjctYzRlM2YxNmUyNGRkIiwiZXh0cmEiOnt9LCJpbnN0YWxsYXRpb24iOiI5MTU0ZWNhOC03NmM5LTQwYTYtOTBmNS0wN2IxMzI5ZTkxNDciLCJpbnRlbnREaWdlc3QiOiJiZWM5ZjhmYmY4ZTFiZmY4YWYxY2VkNjAxMGE3ZjMwZmRiMDk0YmUyMzhmMmIyNjgxYTY2ZTYxMjA4OWQ4ZjA0Iiwia2V5IjoiY2NhODcyYjYtZWU2YS00ZTBkLTk5YjctY2U1NjdmNWM4YmM0Iiwia2luZCI6IkdyYW50SXNzdWVkIiwicHJldmlvdXNIYXNoIjoiMzFkZGM4NzUwZTM4NDFmYmU1ZjljOTFkZDYxYzlmZGRhODA4OTM0ZWE5YThkOTVkNmVmMjc3MGUyYTM4OTJkZiIsInByZXZpb3VzUmV2aXNpb24iOiI2IiwicmVhc29uIjoiR3JhbnRJc3N1ZWQiLCJyZXF1ZXN0IjpudWxsLCJyZXZpc2lvbiI6IjciLCJzY29wZSI6ImdyYW50OmNjYTg3MmI2LWVlNmEtNGUwZC05OWI3LWNlNTY3ZjVjOGJjNCIsInZlcnNpb24iOiJwb2xpY3ktbG9jYWwtdjIifQ",
+            "version": "policy-event-v1",
+            "revision": "7",
+            "operation": "be311195-8d05-4de1-8767-c4e3f16e24dd",
+            "appliedHash": "2af563a1542a23a91a035aad8b064d574de9e98615b291fbca8bb30ecbb1b09f",
+            "capabilities": "6616544f200829bbc14c9c7713b17e6c9a2c781abf569049ef1c04e7c23a5446",
+            "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147",
+            "previousHash": "31ddc8750e3841fbe5f9c91dd61c9fdda808934ea9a8d95d6ef2770e2a3892df",
+            "payloadDigest": "1692123fdab0cecc84ad45ebb355b2655e7c80c1f4d8f700287b93b3be2e37fc",
+            "previousRevision": "6"
+          },
+          "version": "policy-journal-v1",
+          "previous": "80b8108046960c4968a14d0fbd93dbdc3cfd553767e4f08db41d7996c5e217f3",
+          "sequence": "15",
+          "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147"
+        },
+        "version": "sanctity-policy-wire-v1"
+      },
+      "signature": "PJAkfU8SsPZbnhTxKgxbRdEIV4TtkPjnDTY_faL11o77qhYfPljMiHzURmGr-H7ftZkSgWTuGCRCtB1LMgetBg"
+    }
+  },
+  {
+    "kind": "GrantIssued",
+    "revision": 9,
+    "certificate": {
+      "signed": {
+        "key": "06e3fd8fda29bb60ab59557de61edb0aecdb231134be30e75b455f8e1b792fa9",
+        "body": {
+          "at": "2026-11-02T22:32:48.034176584Z",
+          "kind": "COMMIT",
+          "command": {
+            "kind": "GrantIssued",
+            "epoch": "0",
+            "payload": "eyJhY3RvciI6IjdjYjY0NTBiLWU0MWYtNDNmNC04MDIwLTgwNjQxNDc0ZTMyZiIsImFwcHJvdmFsUmVmZXJlbmNlcyI6W10sImF0IjoiMjAyNi0xMS0wMlQyMjozMjo0Ny45MTIxMDhaIiwiY2hhbmdlcyI6eyJhZnRlciI6eyJhY3Rpb25zIjpbIlJlYWRNZXRhZGF0YSJdLCJiYXNpcyI6eyJJbmRlcGVuZGVudCI6e319LCJjcmVhdGVkQXQiOiIyMDI2LTExLTAyVDIyOjMyOjQ3LjgyMzU3NVoiLCJleHBpcmVzQXQiOm51bGwsImdlbmVyYXRpb24iOjAsImlkIjoiZDU2NDRkNTMtM2ZiYS00NzdhLThlMTgtMTQ5YjkzY2JhZGVjIiwiaXNzdWVyIjoiN2NiNjQ1MGItZTQxZi00M2Y0LTgwMjAtODA2NDE0NzRlMzJmIiwicmVjaXBpZW50IjoiYmI0ZTI2MWMtMGFhZC00NDdiLThkMGEtZjQwYzAxNjJlODY1IiwicmV2b2tlZCI6ZmFsc2UsInNjb3BlIjp7ImRhdGFzZXQiOiI4ZGJjZDgyOC1kZjE2LTNiNDgtOTljZS1jMWVlNGZlNmFkNDAiLCJyZWxlYXNlIjpudWxsfX0sImJlZm9yZSI6bnVsbCwicHJpbmNpcGFsQ3JlYXRlZCI6eyJhY3RpdmUiOnRydWUsImNyZWF0ZWRBdCI6IjIwMjYtMTEtMDJUMjI6MzI6NDcuOTA5NzY1WiIsImdlbmVyYXRpb24iOjAsImlkIjoiYmI0ZTI2MWMtMGFhZC00NDdiLThkMGEtZjQwYzAxNjJlODY1IiwibGFiZWwiOiJMb2NhbCBwcmluY2lwYWwifX0sImRhdGFiYXNlQWN0b3IiOiJjb21wYXRfcnVudGltZSIsImVwb2NoIjoiMCIsImV2ZW50IjoiMGNhYTlkOTAtYWY0NS00ZDYxLTkwNGEtMmRiMzYwZDZjNTI3IiwiZXh0cmEiOnt9LCJpbnN0YWxsYXRpb24iOiI5MTU0ZWNhOC03NmM5LTQwYTYtOTBmNS0wN2IxMzI5ZTkxNDciLCJpbnRlbnREaWdlc3QiOiIwYmM2YTMwNGUxYmZlNDc1ZTA1MGM5NzA1MmNjNzEyNTA2OTJlZmExNTIzNTBlMzNmMmZmN2E1MjEwODY1N2VlIiwia2V5IjoiZDU2NDRkNTMtM2ZiYS00NzdhLThlMTgtMTQ5YjkzY2JhZGVjIiwia2luZCI6IkdyYW50SXNzdWVkIiwicHJldmlvdXNIYXNoIjoiZDU4NzJhMDU5Mzg0MTQ4NTk3MzY0ZjI4YTdjMTAwZTk5ZTI4Yjg0N2M3NmU1NjZjYWM2OWQxOWM4Mjc0MDVjOSIsInByZXZpb3VzUmV2aXNpb24iOiI4IiwicmVhc29uIjoiR3JhbnRJc3N1ZWQiLCJyZXF1ZXN0IjpudWxsLCJyZXZpc2lvbiI6IjkiLCJzY29wZSI6ImdyYW50OmQ1NjQ0ZDUzLTNmYmEtNDc3YS04ZTE4LTE0OWI5M2NiYWRlYyIsInZlcnNpb24iOiJwb2xpY3ktbG9jYWwtdjIifQ",
+            "version": "policy-event-v1",
+            "revision": "9",
+            "operation": "0caa9d90-af45-4d61-904a-2db360d6c527",
+            "appliedHash": "f28b897d26bd8f425e4819bb27ee347c1ef212464dc36e5ac93bd572faf40825",
+            "capabilities": "6616544f200829bbc14c9c7713b17e6c9a2c781abf569049ef1c04e7c23a5446",
+            "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147",
+            "previousHash": "d5872a059384148597364f28a7c100e99e28b847c76e566cac69d19c827405c9",
+            "payloadDigest": "b8cadd67cb1761e13158d1ed5d53cae4f2f325908f5c2d52fcef7b46e5ca6b30",
+            "previousRevision": "8"
+          },
+          "version": "policy-journal-v1",
+          "previous": "88eb84a33371449c7ca979db8f2b57e23242d34e1dda753a1a0d0e4ade5d68b7",
+          "sequence": "19",
+          "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147"
+        },
+        "version": "sanctity-policy-wire-v1"
+      },
+      "signature": "x3_xTvqi7NECi0dcW5OpFMDQAXx59iknReMJD5hXZNg3IsaRsWFaloXuizUpBVyuM_0da4DVrdHmcMPmWdfZDQ"
+    }
+  },
+  {
+    "kind": "GrantRevoked",
+    "revision": 27,
+    "certificate": {
+      "signed": {
+        "key": "06e3fd8fda29bb60ab59557de61edb0aecdb231134be30e75b455f8e1b792fa9",
+        "body": {
+          "at": "2026-11-02T22:33:23.406094795Z",
+          "kind": "COMMIT",
+          "command": {
+            "kind": "GrantRevoked",
+            "epoch": "0",
+            "payload": "eyJhY3RvciI6IjdjYjY0NTBiLWU0MWYtNDNmNC04MDIwLTgwNjQxNDc0ZTMyZiIsImFwcHJvdmFsUmVmZXJlbmNlcyI6W10sImF0IjoiMjAyNi0xMS0wMlQyMjozMzoyMy4yNzQ5MDFaIiwiY2hhbmdlcyI6eyJhZnRlciI6eyJhY3Rpb25zIjpbIlJlYWRDb250ZW50IiwiUmVhZE1ldGFkYXRhIl0sImJhc2lzIjp7IkluZGVwZW5kZW50Ijp7fX0sImNyZWF0ZWRBdCI6IjIwMjYtMTEtMDJUMjI6MzI6NDAuMzY1NjM5WiIsImV4cGlyZXNBdCI6bnVsbCwiZ2VuZXJhdGlvbiI6MSwiaWQiOiIzMjJmOTU1ZC0xZjYxLTQzZDEtYjU5NS1iMjE1MjIyZGQyMDkiLCJpc3N1ZXIiOiI3Y2I2NDUwYi1lNDFmLTQzZjQtODAyMC04MDY0MTQ3NGUzMmYiLCJyZWNpcGllbnQiOiIzMWNlMDRkNC0wYWEwLTQzNzYtYTcyMC1mZWI1NDMxOTBlZTQiLCJyZXZva2VkIjp0cnVlLCJzY29wZSI6eyJkYXRhc2V0IjoiMDc1MGFhYjgtNjVkNi00MDhhLWEzODQtNTY2ZTg5NzU5MjJkIiwicmVsZWFzZSI6bnVsbH19LCJiZWZvcmUiOnsiYWN0aW9ucyI6WyJSZWFkQ29udGVudCIsIlJlYWRNZXRhZGF0YSJdLCJiYXNpcyI6eyJJbmRlcGVuZGVudCI6e319LCJjcmVhdGVkQXQiOiIyMDI2LTExLTAyVDIyOjMyOjQwLjM2NTYzOVoiLCJleHBpcmVzQXQiOm51bGwsImdlbmVyYXRpb24iOjAsImlkIjoiMzIyZjk1NWQtMWY2MS00M2QxLWI1OTUtYjIxNTIyMmRkMjA5IiwiaXNzdWVyIjoiN2NiNjQ1MGItZTQxZi00M2Y0LTgwMjAtODA2NDE0NzRlMzJmIiwicmVjaXBpZW50IjoiMzFjZTA0ZDQtMGFhMC00Mzc2LWE3MjAtZmViNTQzMTkwZWU0IiwicmV2b2tlZCI6ZmFsc2UsInNjb3BlIjp7ImRhdGFzZXQiOiIwNzUwYWFiOC02NWQ2LTQwOGEtYTM4NC01NjZlODk3NTkyMmQiLCJyZWxlYXNlIjpudWxsfX0sInJldm9rZWRBdCI6IjIwMjYtMTEtMDJUMjI6MzM6MjMuMjYyNDM1WiJ9LCJkYXRhYmFzZUFjdG9yIjoiY29tcGF0X3J1bnRpbWUiLCJlcG9jaCI6IjAiLCJldmVudCI6IjhjMDBmYzY0LWEzMGQtNDMzMC04NDEyLWE5ZGQ4YjAwMmMyZSIsImV4dHJhIjp7fSwiaW5zdGFsbGF0aW9uIjoiOTE1NGVjYTgtNzZjOS00MGE2LTkwZjUtMDdiMTMyOWU5MTQ3IiwiaW50ZW50RGlnZXN0IjoiMGI0ZDQ1N2JjMWM0YjkxYWM0NDhjNTM3ZWEyMTMwNWFjMjVkMzJkYTY0NDViMDNlNTM4MTlhOGQzZGE0MTRjNiIsImtleSI6InJldm9rZTozMjJmOTU1ZC0xZjYxLTQzZDEtYjU5NS1iMjE1MjIyZGQyMDkiLCJraW5kIjoiR3JhbnRSZXZva2VkIiwicHJldmlvdXNIYXNoIjoiMGE4ODIzN2YwODhkMGE5MTc1ZTdhMTNjNzE2Y2YxOGZkNWIyYTJiNjg3NDg5ODZmZGIxNGIzZGQ5ODg0YmFlMSIsInByZXZpb3VzUmV2aXNpb24iOiIyNiIsInJlYXNvbiI6IkdyYW50UmV2b2tlZCIsInJlcXVlc3QiOm51bGwsInJldmlzaW9uIjoiMjciLCJzY29wZSI6ImdyYW50OjMyMmY5NTVkLTFmNjEtNDNkMS1iNTk1LWIyMTUyMjJkZDIwOSIsInZlcnNpb24iOiJwb2xpY3ktbG9jYWwtdjIifQ",
+            "version": "policy-event-v1",
+            "revision": "27",
+            "operation": "8c00fc64-a30d-4330-8412-a9dd8b002c2e",
+            "appliedHash": "c7ee886d670c0f3f8d569c4ce198ecafe53a6c3c864d343813c7163ebef3cb4d",
+            "capabilities": "6616544f200829bbc14c9c7713b17e6c9a2c781abf569049ef1c04e7c23a5446",
+            "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147",
+            "previousHash": "0a88237f088d0a9175e7a13c716cf18fd5b2a2b68748986fdb14b3dd9884bae1",
+            "payloadDigest": "ca2e03f5363982c6fd9727f38846fa795591d374135008bacaa8d866f579154b",
+            "previousRevision": "26"
+          },
+          "version": "policy-journal-v1",
+          "previous": "bbc14b22335fc1bf6f700aa592fa38200c79ab9aa3bd7765815059485a82bf02",
+          "sequence": "55",
+          "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147"
+        },
+        "version": "sanctity-policy-wire-v1"
+      },
+      "signature": "0qyFqfe3uu1Svx7rV3FBkhLQe4IqxvRC9AkznvCjC9FEBqNBupkIL1JRQscE-acfjilGnAvwCFAYyVQI_KE8DQ"
+    }
+  },
+  {
+    "kind": "GrantRevoked",
+    "revision": 31,
+    "certificate": {
+      "signed": {
+        "key": "06e3fd8fda29bb60ab59557de61edb0aecdb231134be30e75b455f8e1b792fa9",
+        "body": {
+          "at": "2026-11-02T22:33:26.547019547Z",
+          "kind": "COMMIT",
+          "command": {
+            "kind": "GrantRevoked",
+            "epoch": "0",
+            "payload": "eyJhY3RvciI6IjdjYjY0NTBiLWU0MWYtNDNmNC04MDIwLTgwNjQxNDc0ZTMyZiIsImFwcHJvdmFsUmVmZXJlbmNlcyI6W10sImF0IjoiMjAyNi0xMS0wMlQyMjozMzoyNi4zODAyMDVaIiwiY2hhbmdlcyI6eyJhZnRlciI6eyJhY3Rpb25zIjpbIlJlYWRNZXRhZGF0YSJdLCJiYXNpcyI6eyJJbmRlcGVuZGVudCI6e319LCJjcmVhdGVkQXQiOiIyMDI2LTExLTAyVDIyOjMzOjI2LjAzNTg2NloiLCJleHBpcmVzQXQiOm51bGwsImdlbmVyYXRpb24iOjEsImlkIjoiNTljMzAzMGYtNjkyOS00MTQxLWI3MzktYjc0YzgzYmI0ODlhIiwiaXNzdWVyIjoiN2NiNjQ1MGItZTQxZi00M2Y0LTgwMjAtODA2NDE0NzRlMzJmIiwicmVjaXBpZW50IjoiMzFjZTA0ZDQtMGFhMC00Mzc2LWE3MjAtZmViNTQzMTkwZWU0IiwicmV2b2tlZCI6dHJ1ZSwic2NvcGUiOnsiZGF0YXNldCI6IjFlZjMyMzU2LWVkNmItM2EyMi05YTczLTYxOTAyZDhlNTk1YyIsInJlbGVhc2UiOm51bGx9fSwiYmVmb3JlIjp7ImFjdGlvbnMiOlsiUmVhZE1ldGFkYXRhIl0sImJhc2lzIjp7IkluZGVwZW5kZW50Ijp7fX0sImNyZWF0ZWRBdCI6IjIwMjYtMTEtMDJUMjI6MzM6MjYuMDM1ODY2WiIsImV4cGlyZXNBdCI6bnVsbCwiZ2VuZXJhdGlvbiI6MCwiaWQiOiI1OWMzMDMwZi02OTI5LTQxNDEtYjczOS1iNzRjODNiYjQ4OWEiLCJpc3N1ZXIiOiI3Y2I2NDUwYi1lNDFmLTQzZjQtODAyMC04MDY0MTQ3NGUzMmYiLCJyZWNpcGllbnQiOiIzMWNlMDRkNC0wYWEwLTQzNzYtYTcyMC1mZWI1NDMxOTBlZTQiLCJyZXZva2VkIjpmYWxzZSwic2NvcGUiOnsiZGF0YXNldCI6IjFlZjMyMzU2LWVkNmItM2EyMi05YTczLTYxOTAyZDhlNTk1YyIsInJlbGVhc2UiOm51bGx9fSwicmV2b2tlZEF0IjoiMjAyNi0xMS0wMlQyMjozMzoyNi4zNzc1NjZaIn0sImRhdGFiYXNlQWN0b3IiOiJjb21wYXRfcnVudGltZSIsImVwb2NoIjoiMCIsImV2ZW50IjoiNDcxYTYwM2EtYzQ2OS00YjZlLWE3ZWQtNzBiZDA1NzNjMzEzIiwiZXh0cmEiOnt9LCJpbnN0YWxsYXRpb24iOiI5MTU0ZWNhOC03NmM5LTQwYTYtOTBmNS0wN2IxMzI5ZTkxNDciLCJpbnRlbnREaWdlc3QiOiJiM2FkOTI2MTdjNGVlYjE3YTE1YmZkMDNkMjQzMTZjMjUzNTM1MjBlNzBkMDcwZDVhYmU0M2YxMDNlNjg3ZDhiIiwia2V5IjoicmV2b2tlOjU5YzMwMzBmLTY5MjktNDE0MS1iNzM5LWI3NGM4M2JiNDg5YSIsImtpbmQiOiJHcmFudFJldm9rZWQiLCJwcmV2aW91c0hhc2giOiJhNTAwODY3NzBlYjUwNjQ2NGFlNzVlOGJiY2IzODVjOTkzMjhkOTM4ZGM2MTAwYTU1NmQ1NTc1Y2VkZWQ2M2FhIiwicHJldmlvdXNSZXZpc2lvbiI6IjMwIiwicmVhc29uIjoiR3JhbnRSZXZva2VkIiwicmVxdWVzdCI6bnVsbCwicmV2aXNpb24iOiIzMSIsInNjb3BlIjoiZ3JhbnQ6NTljMzAzMGYtNjkyOS00MTQxLWI3MzktYjc0YzgzYmI0ODlhIiwidmVyc2lvbiI6InBvbGljeS1sb2NhbC12MiJ9",
+            "version": "policy-event-v1",
+            "revision": "31",
+            "operation": "471a603a-c469-4b6e-a7ed-70bd0573c313",
+            "appliedHash": "84e3bc0ce991618ef4df1693978d71628a355ac866222a78fadfc1f93ad5b54c",
+            "capabilities": "6616544f200829bbc14c9c7713b17e6c9a2c781abf569049ef1c04e7c23a5446",
+            "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147",
+            "previousHash": "a50086770eb506464ae75e8bbcb385c99328d938dc6100a556d5575ceded63aa",
+            "payloadDigest": "4af3ea61c32fe2006f23f000a38432e0cf31108164ab34f8ca2ced5de5587cda",
+            "previousRevision": "30"
+          },
+          "version": "policy-journal-v1",
+          "previous": "94c81199b4aba95dfcd59210e817a9322f85d1e8d199a780a7588675cb8dd747",
+          "sequence": "63",
+          "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147"
+        },
+        "version": "sanctity-policy-wire-v1"
+      },
+      "signature": "d7tx1duoZ2dsTEae0jWHKgdYeAKke4qug9UCPUmdtQI2tuYnJ8P9L971uC6Wu19qbsyB-Ni9_DkiUBIw3sfTDA"
+    }
+  },
+  {
+    "kind": "GrantRevoked",
+    "revision": 33,
+    "certificate": {
+      "signed": {
+        "key": "06e3fd8fda29bb60ab59557de61edb0aecdb231134be30e75b455f8e1b792fa9",
+        "body": {
+          "at": "2026-11-02T22:33:29.116752423Z",
+          "kind": "COMMIT",
+          "command": {
+            "kind": "GrantRevoked",
+            "epoch": "0",
+            "payload": "eyJhY3RvciI6IjdjYjY0NTBiLWU0MWYtNDNmNC04MDIwLTgwNjQxNDc0ZTMyZiIsImFwcHJvdmFsUmVmZXJlbmNlcyI6W10sImF0IjoiMjAyNi0xMS0wMlQyMjozMzoyOC45OTkzMDNaIiwiY2hhbmdlcyI6eyJhZnRlciI6eyJhY3Rpb25zIjpbIlJlYWRNZXRhZGF0YSJdLCJiYXNpcyI6eyJJbmRlcGVuZGVudCI6e319LCJjcmVhdGVkQXQiOiIyMDI2LTExLTAyVDIyOjMzOjI4LjU1MzAzN1oiLCJleHBpcmVzQXQiOm51bGwsImdlbmVyYXRpb24iOjEsImlkIjoiZDZiODRjMjctYjMzYy00YTg2LWI0OWEtMGJlOGU0NDVmN2I2IiwiaXNzdWVyIjoiN2NiNjQ1MGItZTQxZi00M2Y0LTgwMjAtODA2NDE0NzRlMzJmIiwicmVjaXBpZW50IjoiMzFjZTA0ZDQtMGFhMC00Mzc2LWE3MjAtZmViNTQzMTkwZWU0IiwicmV2b2tlZCI6dHJ1ZSwic2NvcGUiOnsiZGF0YXNldCI6IjA3NTBhYWI4LTY1ZDYtNDA4YS1hMzg0LTU2NmU4OTc1OTIyZCIsInJlbGVhc2UiOiIxYzAzNzdhYi00N2MyLTRiMzUtODFiMS1hNGVhOGMyZTE1NjUifX0sImJlZm9yZSI6eyJhY3Rpb25zIjpbIlJlYWRNZXRhZGF0YSJdLCJiYXNpcyI6eyJJbmRlcGVuZGVudCI6e319LCJjcmVhdGVkQXQiOiIyMDI2LTExLTAyVDIyOjMzOjI4LjU1MzAzN1oiLCJleHBpcmVzQXQiOm51bGwsImdlbmVyYXRpb24iOjAsImlkIjoiZDZiODRjMjctYjMzYy00YTg2LWI0OWEtMGJlOGU0NDVmN2I2IiwiaXNzdWVyIjoiN2NiNjQ1MGItZTQxZi00M2Y0LTgwMjAtODA2NDE0NzRlMzJmIiwicmVjaXBpZW50IjoiMzFjZTA0ZDQtMGFhMC00Mzc2LWE3MjAtZmViNTQzMTkwZWU0IiwicmV2b2tlZCI6ZmFsc2UsInNjb3BlIjp7ImRhdGFzZXQiOiIwNzUwYWFiOC02NWQ2LTQwOGEtYTM4NC01NjZlODk3NTkyMmQiLCJyZWxlYXNlIjoiMWMwMzc3YWItNDdjMi00YjM1LTgxYjEtYTRlYThjMmUxNTY1In19LCJyZXZva2VkQXQiOiIyMDI2LTExLTAyVDIyOjMzOjI4Ljk5NjY3NFoifSwiZGF0YWJhc2VBY3RvciI6ImNvbXBhdF9ydW50aW1lIiwiZXBvY2giOiIwIiwiZXZlbnQiOiJiMTdkNjVjMi0yZDFjLTQ0YjItYTQxOS1kYjc4NjNhZTI2MjgiLCJleHRyYSI6e30sImluc3RhbGxhdGlvbiI6IjkxNTRlY2E4LTc2YzktNDBhNi05MGY1LTA3YjEzMjllOTE0NyIsImludGVudERpZ2VzdCI6ImFjNjJlODAyMmIxMWEyM2QyNDY1NWE5NTM1OTFkNDI4YWNjYzVhN2Q3MDVkODgyOGY4MjYyZGUxYzEyNzI1MTYiLCJrZXkiOiJyZXZva2U6ZDZiODRjMjctYjMzYy00YTg2LWI0OWEtMGJlOGU0NDVmN2I2Iiwia2luZCI6IkdyYW50UmV2b2tlZCIsInByZXZpb3VzSGFzaCI6IjgxYjA0MWVkZmIyZjMzYjljZDFkOWQ2YzU4MDEyNTVjNGQ1NWQwMDJmMWIyOGVmODgyNzgxOGI0NGZjODY0YTkiLCJwcmV2aW91c1JldmlzaW9uIjoiMzIiLCJyZWFzb24iOiJHcmFudFJldm9rZWQiLCJyZXF1ZXN0IjpudWxsLCJyZXZpc2lvbiI6IjMzIiwic2NvcGUiOiJncmFudDpkNmI4NGMyNy1iMzNjLTRhODYtYjQ5YS0wYmU4ZTQ0NWY3YjYiLCJ2ZXJzaW9uIjoicG9saWN5LWxvY2FsLXYyIn0",
+            "version": "policy-event-v1",
+            "revision": "33",
+            "operation": "b17d65c2-2d1c-44b2-a419-db7863ae2628",
+            "appliedHash": "f38d092c70ed0a56ba20efcfb569fe76849a1241573163b948ad6444f52fe0b8",
+            "capabilities": "6616544f200829bbc14c9c7713b17e6c9a2c781abf569049ef1c04e7c23a5446",
+            "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147",
+            "previousHash": "81b041edfb2f33b9cd1d9d6c5801255c4d55d002f1b28ef8827818b44fc864a9",
+            "payloadDigest": "7456cb79e6437cf8a5f91d4461151c4fd841eec46b9ae7cc914dc7b45a7d5841",
+            "previousRevision": "32"
+          },
+          "version": "policy-journal-v1",
+          "previous": "2c6729d171860ff88e38bcb15308fd1b2053824e36e557cac4234106dfafe784",
+          "sequence": "67",
+          "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147"
+        },
+        "version": "sanctity-policy-wire-v1"
+      },
+      "signature": "5xLpjMNl7Tf3nvFmoKMyyydFi0oyxPBe6R21XbHgj0TrPDDWgTYZoFNZtFlq59UKA1yuF2lu70Oi83BgNlArAw"
+    }
+  },
+  {
+    "kind": "PlaceNewDataset",
+    "revision": 26,
+    "certificate": {
+      "signed": {
+        "key": "06e3fd8fda29bb60ab59557de61edb0aecdb231134be30e75b455f8e1b792fa9",
+        "body": {
+          "at": "2026-11-02T22:33:19.743851752Z",
+          "kind": "COMMIT",
+          "command": {
+            "kind": "PlaceNewDataset",
+            "epoch": "0",
+            "payload": "eyJhY3RvciI6IjdjYjY0NTBiLWU0MWYtNDNmNC04MDIwLTgwNjQxNDc0ZTMyZiIsImFwcHJvdmFsUmVmZXJlbmNlcyI6W10sImF0IjoiMjAyNi0xMS0wMlQyMjozMzoxOS41MjUyNTJaIiwiY2hhbmdlcyI6W3siYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMS0wMlQyMjozMzoxOS41MjUyNTJaIiwiZGF0YXNldCI6IjFiYjJjODk0LTI2N2ItMzdmYi1hNjJkLTE3NzEyMDRkNWYxMCIsImdlbmVyYXRpb24iOjAsImxhYmVsIjpudWxsLCJwb2xpY3kiOiJFeHBsaWNpdE9ubHkiLCJwcm9qZWN0IjoiMmU3YzU1ZGYtZDM0ZC0zMTg2LWExNWEtOWNkZjkxNWI4MTJjIn0sImJlZm9yZSI6bnVsbCwia2luZCI6InBsYWNlbWVudCJ9LHsiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMS0wMlQyMjozMjoyOC45NTQ2NDNaIiwiZGVzY3JpcHRpb24iOiJQcml2YXRlIGxlZ2FjeSBtYXBwaW5nOyBubyB2ZXJpZmllZCBpZGVudGl0eSBpbmZlcnJlZCIsImdlbmVyYXRpb24iOjIsImlkIjoiMmU3YzU1ZGYtZDM0ZC0zMTg2LWExNWEtOWNkZjkxNWI4MTJjIiwibGFiIjoiZWNkNWY3NzEtODE0Mi0zM2EzLTkwZTktOTI0MzNiZTBmMjU5IiwibmFtZSI6IkxlZ2FjeSBwcm9qZWN0IDJlN2M1NWRmIiwic3RhdHVzIjoiQWN0aXZlIn0sImJlZm9yZSI6eyJjcmVhdGVkQXQiOiIyMDI2LTExLTAyVDIyOjMyOjI4Ljk1NDY0M1oiLCJkZXNjcmlwdGlvbiI6IlByaXZhdGUgbGVnYWN5IG1hcHBpbmc7IG5vIHZlcmlmaWVkIGlkZW50aXR5IGluZmVycmVkIiwiZ2VuZXJhdGlvbiI6MSwiaWQiOiIyZTdjNTVkZi1kMzRkLTMxODYtYTE1YS05Y2RmOTE1YjgxMmMiLCJsYWIiOiJlY2Q1Zjc3MS04MTQyLTMzYTMtOTBlOS05MjQzM2JlMGYyNTkiLCJuYW1lIjoiTGVnYWN5IHByb2plY3QgMmU3YzU1ZGYiLCJzdGF0dXMiOiJBY3RpdmUifSwia2luZCI6InByb2plY3QifSx7ImFmdGVyIjp7ImNyZWF0ZWRBdCI6IjIwMjYtMTEtMDJUMjI6MzM6MTkuNTI1MjUyWiIsImRhdGFzZXQiOiIxYmIyYzg5NC0yNjdiLTM3ZmItYTYyZC0xNzcxMjA0ZDVmMTAiLCJnZW5lcmF0aW9uIjowLCJpZCI6IjNlZTlmMWNjLWVhMGUtMzdiNS1hZGFkLWE3ZmJhM2UzMWVjZSIsInByaW5jaXBhbCI6IjdjYjY0NTBiLWU0MWYtNDNmNC04MDIwLTgwNjQxNDc0ZTMyZiIsInN0YXR1cyI6IkFjdGl2ZSJ9LCJiZWZvcmUiOm51bGwsImtpbmQiOiJzdGV3YXJkc2hpcCJ9XSwiZGF0YWJhc2VBY3RvciI6ImNvbXBhdCIsImVwb2NoIjoiMCIsImV2ZW50IjoiZjZjMzc5YjktMzNmMC00NjRjLThhZTItYWQ3ODQxZmVjZWVkIiwiZXh0cmEiOnsiY3JlYXRlZERhdGFzZXRzIjpbeyJhdHRyaWJ1dGVkQ3VyYXRvciI6IjdjYjY0NTBiLWU0MWYtNDNmNC04MDIwLTgwNjQxNDc0ZTMyZiIsImN1c3RvZGlhbiI6ImI0NmQ5YTg0LWY0ZWQtNGQyOC1hYmNlLWE5NjI0NmIyMmQ0MyIsImlkIjoiMWJiMmM4OTQtMjY3Yi0zN2ZiLWE2MmQtMTc3MTIwNGQ1ZjEwIn1dLCJpbnZhbGlkYXRpb25zIjp7fX0sImluc3RhbGxhdGlvbiI6IjkxNTRlY2E4LTc2YzktNDBhNi05MGY1LTA3YjEzMjllOTE0NyIsImludGVudERpZ2VzdCI6ImE2ODY4MmI5OTgxODM4ZmNiYjA0NDQyYzA4NGZhZDYwOWZiYjIzN2VmYzRjZmJhMTA3M2RiZmIzNmUyM2RlMDUiLCJrZXkiOiJwZW5kaW5nLXJlY292ZXJ5LXdvcmsiLCJraW5kIjoiUGxhY2VOZXdEYXRhc2V0IiwicHJldmlvdXNIYXNoIjoiODMxODM1ZTllMzdjOGFjZTg1NzNiY2Q3MGY3MDg4ZjYzZjY1NDY4OWQwOTYxNDE1MzNmZDczMTgxODQ1ZmQzNyIsInByZXZpb3VzUmV2aXNpb24iOiIyNSIsInJlYXNvbiI6IlBsYWNlTmV3RGF0YXNldCIsInJlcXVlc3QiOnsidmFsdWUiOnsiY29tbWFuZCI6eyJQbGFjZU5ld0RhdGFzZXQiOnsiZGF0YXNldCI6IjFiYjJjODk0LTI2N2ItMzdmYi1hNjJkLTE3NzEyMDRkNWYxMCIsImxhYmVsIjpudWxsLCJwcm9qZWN0IjoiMmU3YzU1ZGYtZDM0ZC0zMTg2LWExNWEtOWNkZjkxNWI4MTJjIiwic3Rld2FyZHNoaXAiOiIzZWU5ZjFjYy1lYTBlLTM3YjUtYWRhZC1hN2ZiYTNlMzFlY2UifX0sImV4cGVjdGVkIjpbW3siUHJvamVjdCI6eyJpZCI6IjJlN2M1NWRmLWQzNGQtMzE4Ni1hMTVhLTljZGY5MTViODEyYyJ9fSwxXV0sImtleSI6InBlbmRpbmctcmVjb3Zlcnktd29yayJ9LCJ2ZXJzaW9uIjoxfSwicmV2aXNpb24iOiIyNiIsInNjb3BlIjoiZGF0YXNldDoxYmIyYzg5NC0yNjdiLTM3ZmItYTYyZC0xNzcxMjA0ZDVmMTAiLCJ2ZXJzaW9uIjoicG9saWN5LWxvY2FsLXYyIn0",
+            "version": "policy-event-v1",
+            "revision": "26",
+            "operation": "f6c379b9-33f0-464c-8ae2-ad7841feceed",
+            "appliedHash": "0a88237f088d0a9175e7a13c716cf18fd5b2a2b68748986fdb14b3dd9884bae1",
+            "capabilities": "6616544f200829bbc14c9c7713b17e6c9a2c781abf569049ef1c04e7c23a5446",
+            "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147",
+            "previousHash": "831835e9e37c8ace8573bcd70f7088f63f654689d096141533fd73181845fd37",
+            "payloadDigest": "b2f188ff7accfe7dae1bd72461633e5299b3c9d85d1b988a9ab73250b91946bd",
+            "previousRevision": "25"
+          },
+          "version": "policy-journal-v1",
+          "previous": "dfc8a05178976d7ca4b1eadda68e7f60b399d61b039c3448ef70015943c2ec53",
+          "sequence": "53",
+          "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147"
+        },
+        "version": "sanctity-policy-wire-v1"
+      },
+      "signature": "1s1E0tInXrZED9X5VJ04y0G9A_zxwQtroRjal5oP3Otcpll1JkET0k_IloFS9YImdiz4wCqNgnttJSOJe0j4BQ"
+    }
+  },
+  {
+    "kind": "PlaceNewDataset",
+    "revision": 29,
+    "certificate": {
+      "signed": {
+        "key": "06e3fd8fda29bb60ab59557de61edb0aecdb231134be30e75b455f8e1b792fa9",
+        "body": {
+          "at": "2026-11-02T22:33:25.811242588Z",
+          "kind": "COMMIT",
+          "command": {
+            "kind": "PlaceNewDataset",
+            "epoch": "0",
+            "payload": "eyJhY3RvciI6IjdjYjY0NTBiLWU0MWYtNDNmNC04MDIwLTgwNjQxNDc0ZTMyZiIsImFwcHJvdmFsUmVmZXJlbmNlcyI6W10sImF0IjoiMjAyNi0xMS0wMlQyMjozMzoyNS42ODU5NzFaIiwiY2hhbmdlcyI6W3siYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMS0wMlQyMjozMzoyNS42ODU5NzFaIiwiZGF0YXNldCI6IjFlZjMyMzU2LWVkNmItM2EyMi05YTczLTYxOTAyZDhlNTk1YyIsImdlbmVyYXRpb24iOjAsImxhYmVsIjpudWxsLCJwb2xpY3kiOiJFeHBsaWNpdE9ubHkiLCJwcm9qZWN0IjoiMmU3YzU1ZGYtZDM0ZC0zMTg2LWExNWEtOWNkZjkxNWI4MTJjIn0sImJlZm9yZSI6bnVsbCwia2luZCI6InBsYWNlbWVudCJ9LHsiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMS0wMlQyMjozMjoyOC45NTQ2NDNaIiwiZGVzY3JpcHRpb24iOiJQcml2YXRlIGxlZ2FjeSBtYXBwaW5nOyBubyB2ZXJpZmllZCBpZGVudGl0eSBpbmZlcnJlZCIsImdlbmVyYXRpb24iOjMsImlkIjoiMmU3YzU1ZGYtZDM0ZC0zMTg2LWExNWEtOWNkZjkxNWI4MTJjIiwibGFiIjoiZWNkNWY3NzEtODE0Mi0zM2EzLTkwZTktOTI0MzNiZTBmMjU5IiwibmFtZSI6IkxlZ2FjeSBwcm9qZWN0IDJlN2M1NWRmIiwic3RhdHVzIjoiQWN0aXZlIn0sImJlZm9yZSI6eyJjcmVhdGVkQXQiOiIyMDI2LTExLTAyVDIyOjMyOjI4Ljk1NDY0M1oiLCJkZXNjcmlwdGlvbiI6IlByaXZhdGUgbGVnYWN5IG1hcHBpbmc7IG5vIHZlcmlmaWVkIGlkZW50aXR5IGluZmVycmVkIiwiZ2VuZXJhdGlvbiI6MiwiaWQiOiIyZTdjNTVkZi1kMzRkLTMxODYtYTE1YS05Y2RmOTE1YjgxMmMiLCJsYWIiOiJlY2Q1Zjc3MS04MTQyLTMzYTMtOTBlOS05MjQzM2JlMGYyNTkiLCJuYW1lIjoiTGVnYWN5IHByb2plY3QgMmU3YzU1ZGYiLCJzdGF0dXMiOiJBY3RpdmUifSwia2luZCI6InByb2plY3QifSx7ImFmdGVyIjp7ImNyZWF0ZWRBdCI6IjIwMjYtMTEtMDJUMjI6MzM6MjUuNjg1OTcxWiIsImRhdGFzZXQiOiIxZWYzMjM1Ni1lZDZiLTNhMjItOWE3My02MTkwMmQ4ZTU5NWMiLCJnZW5lcmF0aW9uIjowLCJpZCI6IjU4NTBkYjZkLThlNjgtM2E3Zi1hYzI0LWIyNjAzYmEwMzgwYSIsInByaW5jaXBhbCI6IjdjYjY0NTBiLWU0MWYtNDNmNC04MDIwLTgwNjQxNDc0ZTMyZiIsInN0YXR1cyI6IkFjdGl2ZSJ9LCJiZWZvcmUiOm51bGwsImtpbmQiOiJzdGV3YXJkc2hpcCJ9XSwiZGF0YWJhc2VBY3RvciI6ImNvbXBhdF9ydW50aW1lIiwiZXBvY2giOiIwIiwiZXZlbnQiOiIzZWY4Yjc4ZS0zOWIwLTQyODYtYTExNi01Yzk0NjdkM2IwNTkiLCJleHRyYSI6eyJjcmVhdGVkRGF0YXNldHMiOlt7ImF0dHJpYnV0ZWRDdXJhdG9yIjoiN2NiNjQ1MGItZTQxZi00M2Y0LTgwMjAtODA2NDE0NzRlMzJmIiwiY3VzdG9kaWFuIjoiYjQ2ZDlhODQtZjRlZC00ZDI4LWFiY2UtYTk2MjQ2YjIyZDQzIiwiaWQiOiIxZWYzMjM1Ni1lZDZiLTNhMjItOWE3My02MTkwMmQ4ZTU5NWMifV0sImludmFsaWRhdGlvbnMiOnt9fSwiaW5zdGFsbGF0aW9uIjoiOTE1NGVjYTgtNzZjOS00MGE2LTkwZjUtMDdiMTMyOWU5MTQ3IiwiaW50ZW50RGlnZXN0IjoiNjg5ODlmYTc3ZTZkNDllMDY5OTYzYTkwMDhkYTNiNjljMzQ4MDMzNDBlMGIxYjM5YWJkYTcyMTBjYzgxNWI0YiIsImtleSI6InBvc3QtYmFja3VwLWRhdGEiLCJraW5kIjoiUGxhY2VOZXdEYXRhc2V0IiwicHJldmlvdXNIYXNoIjoiZjA0MGY2NDUwMTAzMTQyMTkzN2RhNjc1MTdkZGU4ZDFhZmM5NjUyMjkwYTliNzU2N2IyZTNiZjFjNjcwZWY2YSIsInByZXZpb3VzUmV2aXNpb24iOiIyOCIsInJlYXNvbiI6IlBsYWNlTmV3RGF0YXNldCIsInJlcXVlc3QiOnsidmFsdWUiOnsiY29tbWFuZCI6eyJQbGFjZU5ld0RhdGFzZXQiOnsiZGF0YXNldCI6IjFlZjMyMzU2LWVkNmItM2EyMi05YTczLTYxOTAyZDhlNTk1YyIsImxhYmVsIjpudWxsLCJwcm9qZWN0IjoiMmU3YzU1ZGYtZDM0ZC0zMTg2LWExNWEtOWNkZjkxNWI4MTJjIiwic3Rld2FyZHNoaXAiOiI1ODUwZGI2ZC04ZTY4LTNhN2YtYWMyNC1iMjYwM2JhMDM4MGEifX0sImV4cGVjdGVkIjpbW3siUHJvamVjdCI6eyJpZCI6IjJlN2M1NWRmLWQzNGQtMzE4Ni1hMTVhLTljZGY5MTViODEyYyJ9fSwyXV0sImtleSI6InBvc3QtYmFja3VwLWRhdGEifSwidmVyc2lvbiI6MX0sInJldmlzaW9uIjoiMjkiLCJzY29wZSI6ImRhdGFzZXQ6MWVmMzIzNTYtZWQ2Yi0zYTIyLTlhNzMtNjE5MDJkOGU1OTVjIiwidmVyc2lvbiI6InBvbGljeS1sb2NhbC12MiJ9",
+            "version": "policy-event-v1",
+            "revision": "29",
+            "operation": "3ef8b78e-39b0-4286-a116-5c9467d3b059",
+            "appliedHash": "5c81c20487f914138c788ab90e9550bb37ff376f726724334725bdddfdd0439f",
+            "capabilities": "6616544f200829bbc14c9c7713b17e6c9a2c781abf569049ef1c04e7c23a5446",
+            "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147",
+            "previousHash": "f040f64501031421937da67517dde8d1afc9652290a9b7567b2e3bf1c670ef6a",
+            "payloadDigest": "d832fa4f7341bae3027461568d68037204eb815457499c43032a2a8220b02b96",
+            "previousRevision": "28"
+          },
+          "version": "policy-journal-v1",
+          "previous": "839a8f582541784a2ad6fd07890ce9ac614f566844daaa3c02fe0ee13d87d8f7",
+          "sequence": "59",
+          "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147"
+        },
+        "version": "sanctity-policy-wire-v1"
+      },
+      "signature": "jDfJq83sx62y8-fBbXUV0y22Z5Acc1JBRpSGMbL9lR-qAKjaOSMEbeb666GW7xT7vmMNeBkj9b7uscmGXJZbBQ"
+    }
+  },
+  {
+    "kind": "PlaceNewDataset",
+    "revision": 6,
+    "certificate": {
+      "signed": {
+        "key": "06e3fd8fda29bb60ab59557de61edb0aecdb231134be30e75b455f8e1b792fa9",
+        "body": {
+          "at": "2026-11-02T22:32:45.749576Z",
+          "kind": "COMMIT",
+          "command": {
+            "kind": "PlaceNewDataset",
+            "epoch": "0",
+            "payload": "eyJhY3RvciI6IjdjYjY0NTBiLWU0MWYtNDNmNC04MDIwLTgwNjQxNDc0ZTMyZiIsImFwcHJvdmFsUmVmZXJlbmNlcyI6W10sImF0IjoiMjAyNi0xMS0wMlQyMjozMjo0NS41NTkwODVaIiwiY2hhbmdlcyI6W3siYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMS0wMlQyMjozMjo0NS41NTkwODVaIiwiZGF0YXNldCI6IjhkYmNkODI4LWRmMTYtM2I0OC05OWNlLWMxZWU0ZmU2YWQ0MCIsImdlbmVyYXRpb24iOjAsImxhYmVsIjpudWxsLCJwb2xpY3kiOiJFeHBsaWNpdE9ubHkiLCJwcm9qZWN0IjoiMTg4Y2MzNmItYTgzOS0zZjlmLTkyMzUtZTQ1NGZkMTA2ZTg1In0sImJlZm9yZSI6bnVsbCwia2luZCI6InBsYWNlbWVudCJ9LHsiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMS0wMlQyMjozMjo0NS4wODY5OTNaIiwiZGVzY3JpcHRpb24iOiIiLCJnZW5lcmF0aW9uIjoxLCJpZCI6IjE4OGNjMzZiLWE4MzktM2Y5Zi05MjM1LWU0NTRmZDEwNmU4NSIsImxhYiI6IjQ5ODQ0YTc4LWI0ZjctMzZjNS1iNTEzLTg5Y2NjYzIzMjFkMCIsIm5hbWUiOiJTZWNvbmQgcHJvamVjdCIsInN0YXR1cyI6IkFjdGl2ZSJ9LCJiZWZvcmUiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMS0wMlQyMjozMjo0NS4wODY5OTNaIiwiZGVzY3JpcHRpb24iOiIiLCJnZW5lcmF0aW9uIjowLCJpZCI6IjE4OGNjMzZiLWE4MzktM2Y5Zi05MjM1LWU0NTRmZDEwNmU4NSIsImxhYiI6IjQ5ODQ0YTc4LWI0ZjctMzZjNS1iNTEzLTg5Y2NjYzIzMjFkMCIsIm5hbWUiOiJTZWNvbmQgcHJvamVjdCIsInN0YXR1cyI6IkFjdGl2ZSJ9LCJraW5kIjoicHJvamVjdCJ9LHsiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMS0wMlQyMjozMjo0NS41NTkwODVaIiwiZGF0YXNldCI6IjhkYmNkODI4LWRmMTYtM2I0OC05OWNlLWMxZWU0ZmU2YWQ0MCIsImdlbmVyYXRpb24iOjAsImlkIjoiNGIyM2NiZmMtMTdiZC0zMGFmLTgzMjMtZGE5NGFjMjFlZDc2IiwicHJpbmNpcGFsIjoiN2NiNjQ1MGItZTQxZi00M2Y0LTgwMjAtODA2NDE0NzRlMzJmIiwic3RhdHVzIjoiQWN0aXZlIn0sImJlZm9yZSI6bnVsbCwia2luZCI6InN0ZXdhcmRzaGlwIn1dLCJkYXRhYmFzZUFjdG9yIjoiY29tcGF0X3J1bnRpbWUiLCJlcG9jaCI6IjAiLCJldmVudCI6IjVkNGU3M2QwLTM2ZTItNGM5Yy04N2I0LWQzM2Y1NDU4YzlhYyIsImV4dHJhIjp7ImNyZWF0ZWREYXRhc2V0cyI6W3siYXR0cmlidXRlZEN1cmF0b3IiOiI3Y2I2NDUwYi1lNDFmLTQzZjQtODAyMC04MDY0MTQ3NGUzMmYiLCJjdXN0b2RpYW4iOiJiNDZkOWE4NC1mNGVkLTRkMjgtYWJjZS1hOTYyNDZiMjJkNDMiLCJpZCI6IjhkYmNkODI4LWRmMTYtM2I0OC05OWNlLWMxZWU0ZmU2YWQ0MCJ9XSwiaW52YWxpZGF0aW9ucyI6e319LCJpbnN0YWxsYXRpb24iOiI5MTU0ZWNhOC03NmM5LTQwYTYtOTBmNS0wN2IxMzI5ZTkxNDciLCJpbnRlbnREaWdlc3QiOiI0MzhiOWNjZmE2MWJkZDVmNTAwYmFhY2NmN2I2Y2NkZDJmN2RjMDJiNTlkNDgzMzMzMzNlZDU2YmE0ZDgyYjUxIiwia2V5IjoiOGU4ZmQxYmNiZjkxNGIyYmI1ZmZiODMyN2QxODQxZWEiLCJraW5kIjoiUGxhY2VOZXdEYXRhc2V0IiwicHJldmlvdXNIYXNoIjoiMzk2NDA1NTYwZDQ2MWE4YzY4M2YwYzlmYjMzMWE5YTUzNWM2MmFiNmE1MTA0MmIxNGZkYjEzZWFjMzA4ZDM2NiIsInByZXZpb3VzUmV2aXNpb24iOiI1IiwicmVhc29uIjoiUGxhY2VOZXdEYXRhc2V0IiwicmVxdWVzdCI6eyJ2YWx1ZSI6eyJjb21tYW5kIjp7IlBsYWNlTmV3RGF0YXNldCI6eyJkYXRhc2V0IjoiOGRiY2Q4MjgtZGYxNi0zYjQ4LTk5Y2UtYzFlZTRmZTZhZDQwIiwibGFiZWwiOm51bGwsInByb2plY3QiOiIxODhjYzM2Yi1hODM5LTNmOWYtOTIzNS1lNDU0ZmQxMDZlODUiLCJzdGV3YXJkc2hpcCI6IjRiMjNjYmZjLTE3YmQtMzBhZi04MzIzLWRhOTRhYzIxZWQ3NiJ9fSwiZXhwZWN0ZWQiOltbeyJQcm9qZWN0Ijp7ImlkIjoiMTg4Y2MzNmItYTgzOS0zZjlmLTkyMzUtZTQ1NGZkMTA2ZTg1In19LDBdXSwia2V5IjoiOGU4ZmQxYmNiZjkxNGIyYmI1ZmZiODMyN2QxODQxZWEifSwidmVyc2lvbiI6MX0sInJldmlzaW9uIjoiNiIsInNjb3BlIjoiZGF0YXNldDo4ZGJjZDgyOC1kZjE2LTNiNDgtOTljZS1jMWVlNGZlNmFkNDAiLCJ2ZXJzaW9uIjoicG9saWN5LWxvY2FsLXYyIn0",
+            "version": "policy-event-v1",
+            "revision": "6",
+            "operation": "5d4e73d0-36e2-4c9c-87b4-d33f5458c9ac",
+            "appliedHash": "31ddc8750e3841fbe5f9c91dd61c9fdda808934ea9a8d95d6ef2770e2a3892df",
+            "capabilities": "6616544f200829bbc14c9c7713b17e6c9a2c781abf569049ef1c04e7c23a5446",
+            "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147",
+            "previousHash": "396405560d461a8c683f0c9fb331a9a535c62ab6a51042b14fdb13eac308d366",
+            "payloadDigest": "652275f29522af75c3aa56646d6f53b31d81ffc8ba5ec9ef10a982945137ce2a",
+            "previousRevision": "5"
+          },
+          "version": "policy-journal-v1",
+          "previous": "f3b33eac74cae02ef4062fd5eca373f597bdf305ef3544ed85295e7af9943ac1",
+          "sequence": "13",
+          "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147"
+        },
+        "version": "sanctity-policy-wire-v1"
+      },
+      "signature": "s6pt4_ymYvcb8DSEeFHq8SWHUVyoxxJP8r-H5unPSX5BtyQwLLApkwxgTSDW56ceBbXSvN3Hj9HB6lUjvp5YBQ"
+    }
+  },
+  {
+    "kind": "SetInheritance",
+    "revision": 21,
+    "certificate": {
+      "signed": {
+        "key": "06e3fd8fda29bb60ab59557de61edb0aecdb231134be30e75b455f8e1b792fa9",
+        "body": {
+          "at": "2026-11-02T22:32:59.320885006Z",
+          "kind": "COMMIT",
+          "command": {
+            "kind": "SetInheritance",
+            "epoch": "0",
+            "payload": "eyJhY3RvciI6IjdjYjY0NTBiLWU0MWYtNDNmNC04MDIwLTgwNjQxNDc0ZTMyZiIsImFwcHJvdmFsUmVmZXJlbmNlcyI6W10sImF0IjoiMjAyNi0xMS0wMlQyMjozMjo1OS4xOTQ2OTBaIiwiY2hhbmdlcyI6W3siYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMS0wMlQyMjozMjoyOC45NTQ2NDNaIiwiZGF0YXNldCI6IjA3NTBhYWI4LTY1ZDYtNDA4YS1hMzg0LTU2NmU4OTc1OTIyZCIsImdlbmVyYXRpb24iOjEsImxhYmVsIjpudWxsLCJwb2xpY3kiOiJQcm9qZWN0TWVtYmVycyIsInByb2plY3QiOiIyZTdjNTVkZi1kMzRkLTMxODYtYTE1YS05Y2RmOTE1YjgxMmMifSwiYmVmb3JlIjp7ImNyZWF0ZWRBdCI6IjIwMjYtMTEtMDJUMjI6MzI6MjguOTU0NjQzWiIsImRhdGFzZXQiOiIwNzUwYWFiOC02NWQ2LTQwOGEtYTM4NC01NjZlODk3NTkyMmQiLCJnZW5lcmF0aW9uIjowLCJsYWJlbCI6bnVsbCwicG9saWN5IjoiRXhwbGljaXRPbmx5IiwicHJvamVjdCI6IjJlN2M1NWRmLWQzNGQtMzE4Ni1hMTVhLTljZGY5MTViODEyYyJ9LCJraW5kIjoicGxhY2VtZW50In1dLCJkYXRhYmFzZUFjdG9yIjoiY29tcGF0X3J1bnRpbWUiLCJlcG9jaCI6IjAiLCJldmVudCI6IjBmMjhiMTJlLTlhZGUtNDhlMy04MDhjLTFkZDc5NzkzMDI5ZiIsImV4dHJhIjp7ImNyZWF0ZWREYXRhc2V0cyI6W10sImludmFsaWRhdGlvbnMiOnt9fSwiaW5zdGFsbGF0aW9uIjoiOTE1NGVjYTgtNzZjOS00MGE2LTkwZjUtMDdiMTMyOWU5MTQ3IiwiaW50ZW50RGlnZXN0IjoiN2Q2Mjk5ZTU0ZTBkNWZkYzRiNzg2NWNjZjU1OGNkNTJhOTZjODhjMzEwNWQ0NDUwYjdhZTliMzQ2MmIyYzE0YyIsImtleSI6ImFjMDk4MmIxNTQwMzQ0ZjBhYmQxZDcwN2Y2NjMzMTk3Iiwia2luZCI6IlNldEluaGVyaXRhbmNlIiwicHJldmlvdXNIYXNoIjoiMTM3NjdlNmVkMjllMjNhNWFjMjhkMjVmNmNhMDJmZDdmMjc3NmI5Yjg5N2U5Y2ZlYjAzMTQ0NGI3ZjFkZDZmMyIsInByZXZpb3VzUmV2aXNpb24iOiIyMCIsInJlYXNvbiI6IlNldEluaGVyaXRhbmNlIiwicmVxdWVzdCI6eyJ2YWx1ZSI6eyJjb21tYW5kIjp7IlNldEluaGVyaXRhbmNlIjp7ImNvbmZpcm1lZEltcGFjdCI6eyJnZW5lcmF0aW9uIjoxLCJwcm9qZWN0IjoiMmU3YzU1ZGYtZDM0ZC0zMTg2LWExNWEtOWNkZjkxNWI4MTJjIiwicmVjaXBpZW50cyI6eyI3Y2I2NDUwYi1lNDFmLTQzZjQtODAyMC04MDY0MTQ3NGUzMmYiOiJTdGV3YXJkIiwiYjljMzg2YjktMmM0OS00MzkxLWEwY2QtMjliNjcxYzlhMDQ1IjoiUmVhZGVyIn19LCJkYXRhc2V0IjoiMDc1MGFhYjgtNjVkNi00MDhhLWEzODQtNTY2ZTg5NzU5MjJkIiwicG9saWN5IjoiUHJvamVjdE1lbWJlcnMifX0sImV4cGVjdGVkIjpbW3siUGxhY2VtZW50Ijp7ImlkIjoiMDc1MGFhYjgtNjVkNi00MDhhLWEzODQtNTY2ZTg5NzU5MjJkIn19LDBdLFt7IlByb2plY3QiOnsiaWQiOiIyZTdjNTVkZi1kMzRkLTMxODYtYTE1YS05Y2RmOTE1YjgxMmMifX0sMV1dLCJrZXkiOiJhYzA5ODJiMTU0MDM0NGYwYWJkMWQ3MDdmNjYzMzE5NyJ9LCJ2ZXJzaW9uIjoxfSwicmV2aXNpb24iOiIyMSIsInNjb3BlIjoiZGF0YXNldDowNzUwYWFiOC02NWQ2LTQwOGEtYTM4NC01NjZlODk3NTkyMmQiLCJ2ZXJzaW9uIjoicG9saWN5LWxvY2FsLXYyIn0",
+            "version": "policy-event-v1",
+            "revision": "21",
+            "operation": "0f28b12e-9ade-48e3-808c-1dd79793029f",
+            "appliedHash": "dfcd8175badb9ecd2ee1a51e0318a77c4e73b44b483f2e3c72235c362da93162",
+            "capabilities": "6616544f200829bbc14c9c7713b17e6c9a2c781abf569049ef1c04e7c23a5446",
+            "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147",
+            "previousHash": "13767e6ed29e23a5ac28d25f6ca02fd7f2776b9b897e9cfeb031444b7f1dd6f3",
+            "payloadDigest": "a03a348df3006c16d8123c52d695396904ec90539d2acceda56f6cc26ee4ff60",
+            "previousRevision": "20"
+          },
+          "version": "policy-journal-v1",
+          "previous": "54429f67a6a75c14d08674be6426353a349643a840c681d7a158664c0b654100",
+          "sequence": "43",
+          "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147"
+        },
+        "version": "sanctity-policy-wire-v1"
+      },
+      "signature": "AW8eRxfsrOe5RhVCIpig9zxn22XrHE09_hI1wGJwM3P7PxOsq7xsDqCumQ0gTa1qSPjhZNS8XkAce6T7UmhPDw"
+    }
+  },
+  {
+    "kind": "SetInheritance",
+    "revision": 37,
+    "certificate": {
+      "signed": {
+        "key": "06e3fd8fda29bb60ab59557de61edb0aecdb231134be30e75b455f8e1b792fa9",
+        "body": {
+          "at": "2026-11-02T22:33:33.416844425Z",
+          "kind": "COMMIT",
+          "command": {
+            "kind": "SetInheritance",
+            "epoch": "0",
+            "payload": "eyJhY3RvciI6IjdjYjY0NTBiLWU0MWYtNDNmNC04MDIwLTgwNjQxNDc0ZTMyZiIsImFwcHJvdmFsUmVmZXJlbmNlcyI6W10sImF0IjoiMjAyNi0xMS0wMlQyMjozMzozMy4zMjg3NDhaIiwiY2hhbmdlcyI6W3siYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMS0wMlQyMjozMjoyOC45NTQ2NDNaIiwiZGF0YXNldCI6IjA3NTBhYWI4LTY1ZDYtNDA4YS1hMzg0LTU2NmU4OTc1OTIyZCIsImdlbmVyYXRpb24iOjIsImxhYmVsIjpudWxsLCJwb2xpY3kiOiJFeHBsaWNpdE9ubHkiLCJwcm9qZWN0IjoiMmU3YzU1ZGYtZDM0ZC0zMTg2LWExNWEtOWNkZjkxNWI4MTJjIn0sImJlZm9yZSI6eyJjcmVhdGVkQXQiOiIyMDI2LTExLTAyVDIyOjMyOjI4Ljk1NDY0M1oiLCJkYXRhc2V0IjoiMDc1MGFhYjgtNjVkNi00MDhhLWEzODQtNTY2ZTg5NzU5MjJkIiwiZ2VuZXJhdGlvbiI6MSwibGFiZWwiOm51bGwsInBvbGljeSI6IlByb2plY3RNZW1iZXJzIiwicHJvamVjdCI6IjJlN2M1NWRmLWQzNGQtMzE4Ni1hMTVhLTljZGY5MTViODEyYyJ9LCJraW5kIjoicGxhY2VtZW50In1dLCJkYXRhYmFzZUFjdG9yIjoiY29tcGF0X3J1bnRpbWUiLCJlcG9jaCI6IjAiLCJldmVudCI6IjMzOTU3MjdjLTUzN2QtNGU3MS1iZGI4LTIyMjUzMGRkMTFiZSIsImV4dHJhIjp7ImNyZWF0ZWREYXRhc2V0cyI6W10sImludmFsaWRhdGlvbnMiOnt9fSwiaW5zdGFsbGF0aW9uIjoiOTE1NGVjYTgtNzZjOS00MGE2LTkwZjUtMDdiMTMyOWU5MTQ3IiwiaW50ZW50RGlnZXN0IjoiODdlOGMyZGY0M2ExOGFmZGU1YTAwYTliZDNkNTM2ZDcwMDlkYWRhYzQzMDVkYjU0ZjRjZjFlODVmYjk3MjYzZSIsImtleSI6Ijc2YzEzZjUyZGM5NjRjMzJhNWFmNjhjNDA1NDQ4ZTNhIiwia2luZCI6IlNldEluaGVyaXRhbmNlIiwicHJldmlvdXNIYXNoIjoiNDY5NjZhZWM3NmNkY2IzNzMwMmFjYTgyNDFlNmFmZjA1OGU5MDViOGE1ODVhMGUzODg2ZGI3MTFjMGE4ZmMzMyIsInByZXZpb3VzUmV2aXNpb24iOiIzNiIsInJlYXNvbiI6IlNldEluaGVyaXRhbmNlIiwicmVxdWVzdCI6eyJ2YWx1ZSI6eyJjb21tYW5kIjp7IlNldEluaGVyaXRhbmNlIjp7ImNvbmZpcm1lZEltcGFjdCI6eyJnZW5lcmF0aW9uIjo0LCJwcm9qZWN0IjoiMmU3YzU1ZGYtZDM0ZC0zMTg2LWExNWEtOWNkZjkxNWI4MTJjIiwicmVjaXBpZW50cyI6eyI3Y2I2NDUwYi1lNDFmLTQzZjQtODAyMC04MDY0MTQ3NGUzMmYiOiJTdGV3YXJkIn19LCJkYXRhc2V0IjoiMDc1MGFhYjgtNjVkNi00MDhhLWEzODQtNTY2ZTg5NzU5MjJkIiwicG9saWN5IjoiRXhwbGljaXRPbmx5In19LCJleHBlY3RlZCI6W1t7IlBsYWNlbWVudCI6eyJpZCI6IjA3NTBhYWI4LTY1ZDYtNDA4YS1hMzg0LTU2NmU4OTc1OTIyZCJ9fSwxXSxbeyJQcm9qZWN0Ijp7ImlkIjoiMmU3YzU1ZGYtZDM0ZC0zMTg2LWExNWEtOWNkZjkxNWI4MTJjIn19LDRdXSwia2V5IjoiNzZjMTNmNTJkYzk2NGMzMmE1YWY2OGM0MDU0NDhlM2EifSwidmVyc2lvbiI6MX0sInJldmlzaW9uIjoiMzciLCJzY29wZSI6ImRhdGFzZXQ6MDc1MGFhYjgtNjVkNi00MDhhLWEzODQtNTY2ZTg5NzU5MjJkIiwidmVyc2lvbiI6InBvbGljeS1sb2NhbC12MiJ9",
+            "version": "policy-event-v1",
+            "revision": "37",
+            "operation": "3395727c-537d-4e71-bdb8-222530dd11be",
+            "appliedHash": "3592290a2f0554f85e9f31cf1f84a2cf3260563f5ea16a6f50256f49ed591514",
+            "capabilities": "6616544f200829bbc14c9c7713b17e6c9a2c781abf569049ef1c04e7c23a5446",
+            "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147",
+            "previousHash": "46966aec76cdcb37302aca8241e6aff058e905b8a585a0e3886db711c0a8fc33",
+            "payloadDigest": "0af71973f0498b6113fb1e365db2d93bba2dbdebb165d070e20cf79a9e1974b1",
+            "previousRevision": "36"
+          },
+          "version": "policy-journal-v1",
+          "previous": "7340b936cf695f164e740adbf021de7c2ea1e3fffceb889c3aa2ecbecbd5f64d",
+          "sequence": "75",
+          "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147"
+        },
+        "version": "sanctity-policy-wire-v1"
+      },
+      "signature": "aanEuuVHh3uJFr5tNajcgAzV9yUHJOrnuCdXDMjFt0s6upGi5ZK0EG7a3MZWhwJufZ0Xd3fkDQ7ch5NjbrJRAQ"
+    }
+  },
+  {
+    "kind": "TransferSteward",
+    "revision": 38,
+    "certificate": {
+      "signed": {
+        "key": "06e3fd8fda29bb60ab59557de61edb0aecdb231134be30e75b455f8e1b792fa9",
+        "body": {
+          "at": "2026-11-02T22:33:34.040774217Z",
+          "kind": "COMMIT",
+          "command": {
+            "kind": "TransferSteward",
+            "epoch": "0",
+            "payload": "eyJhY3RvciI6IjdjYjY0NTBiLWU0MWYtNDNmNC04MDIwLTgwNjQxNDc0ZTMyZiIsImFwcHJvdmFsUmVmZXJlbmNlcyI6W10sImF0IjoiMjAyNi0xMS0wMlQyMjozMzozMy45NjAwNjhaIiwiY2hhbmdlcyI6W3siYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMS0wMlQyMjozMjoyOC45NTQ2NDNaIiwiZGF0YXNldCI6IjA3NTBhYWI4LTY1ZDYtNDA4YS1hMzg0LTU2NmU4OTc1OTIyZCIsImdlbmVyYXRpb24iOjMsImxhYmVsIjpudWxsLCJwb2xpY3kiOiJFeHBsaWNpdE9ubHkiLCJwcm9qZWN0IjoiMmU3YzU1ZGYtZDM0ZC0zMTg2LWExNWEtOWNkZjkxNWI4MTJjIn0sImJlZm9yZSI6eyJjcmVhdGVkQXQiOiIyMDI2LTExLTAyVDIyOjMyOjI4Ljk1NDY0M1oiLCJkYXRhc2V0IjoiMDc1MGFhYjgtNjVkNi00MDhhLWEzODQtNTY2ZTg5NzU5MjJkIiwiZ2VuZXJhdGlvbiI6MiwibGFiZWwiOm51bGwsInBvbGljeSI6IkV4cGxpY2l0T25seSIsInByb2plY3QiOiIyZTdjNTVkZi1kMzRkLTMxODYtYTE1YS05Y2RmOTE1YjgxMmMifSwia2luZCI6InBsYWNlbWVudCJ9LHsiYWZ0ZXIiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMS0wMlQyMjozMzozMy45NjAwNjhaIiwiZGF0YXNldCI6IjA3NTBhYWI4LTY1ZDYtNDA4YS1hMzg0LTU2NmU4OTc1OTIyZCIsImdlbmVyYXRpb24iOjAsImlkIjoiYTZmMDdhZTMtZjAwYy0zZjZjLWJjYzMtMWRlNTdiYjNkMjM1IiwicHJpbmNpcGFsIjoiMjk5OGJhMzQtOTU3Zi00M2Q4LWI5YmUtNjEwNjExZDk3ZTkyIiwic3RhdHVzIjoiQWN0aXZlIn0sImJlZm9yZSI6bnVsbCwia2luZCI6InN0ZXdhcmRzaGlwIn0seyJhZnRlciI6eyJjcmVhdGVkQXQiOiIyMDI2LTExLTAyVDIyOjMyOjI4Ljk1NDY0M1oiLCJkYXRhc2V0IjoiMDc1MGFhYjgtNjVkNi00MDhhLWEzODQtNTY2ZTg5NzU5MjJkIiwiZ2VuZXJhdGlvbiI6MSwiaWQiOiIwZWE0N2JiMi1iODc2LTM3NjktOTE0ZC1hOTc0NjQzYmE0ZjEiLCJwcmluY2lwYWwiOiI3Y2I2NDUwYi1lNDFmLTQzZjQtODAyMC04MDY0MTQ3NGUzMmYiLCJzdGF0dXMiOiJFbmRlZCJ9LCJiZWZvcmUiOnsiY3JlYXRlZEF0IjoiMjAyNi0xMS0wMlQyMjozMjoyOC45NTQ2NDNaIiwiZGF0YXNldCI6IjA3NTBhYWI4LTY1ZDYtNDA4YS1hMzg0LTU2NmU4OTc1OTIyZCIsImdlbmVyYXRpb24iOjAsImlkIjoiMGVhNDdiYjItYjg3Ni0zNzY5LTkxNGQtYTk3NDY0M2JhNGYxIiwicHJpbmNpcGFsIjoiN2NiNjQ1MGItZTQxZi00M2Y0LTgwMjAtODA2NDE0NzRlMzJmIiwic3RhdHVzIjoiQWN0aXZlIn0sImtpbmQiOiJzdGV3YXJkc2hpcCJ9XSwiZGF0YWJhc2VBY3RvciI6ImNvbXBhdF9ydW50aW1lIiwiZXBvY2giOiIwIiwiZXZlbnQiOiJmOWIzMGM2OS00MDY2LTQ3MzEtODRhZS03NjljMjA0MjUxMjYiLCJleHRyYSI6eyJjcmVhdGVkRGF0YXNldHMiOltdLCJpbnZhbGlkYXRpb25zIjp7fX0sImluc3RhbGxhdGlvbiI6IjkxNTRlY2E4LTc2YzktNDBhNi05MGY1LTA3YjEzMjllOTE0NyIsImludGVudERpZ2VzdCI6ImE3NmZlMGUxODY1NTZkZjI1NWZlZjZlNTE2ZWJiOTM2ZmEyOWJlYTcyMjRkMDViZTFkMWYyNTBlZTZkN2I0MTIiLCJrZXkiOiJkNGI2ZmNlYTMyYWI0YWQzOWQ1ZWQxYjBjNWQ4NzAwOSIsImtpbmQiOiJUcmFuc2ZlclN0ZXdhcmQiLCJwcmV2aW91c0hhc2giOiIzNTkyMjkwYTJmMDU1NGY4NWU5ZjMxY2YxZjg0YTJjZjMyNjA1NjNmNWVhMTZhNmY1MDI1NmY0OWVkNTkxNTE0IiwicHJldmlvdXNSZXZpc2lvbiI6IjM3IiwicmVhc29uIjoiVHJhbnNmZXJTdGV3YXJkIiwicmVxdWVzdCI6eyJ2YWx1ZSI6eyJjb21tYW5kIjp7IlRyYW5zZmVyU3Rld2FyZCI6eyJmcm9tIjoiMGVhNDdiYjItYjg3Ni0zNzY5LTkxNGQtYTk3NDY0M2JhNGYxIiwicHJpbmNpcGFsIjoiMjk5OGJhMzQtOTU3Zi00M2Q4LWI5YmUtNjEwNjExZDk3ZTkyIiwidG8iOiJhNmYwN2FlMy1mMDBjLTNmNmMtYmNjMy0xZGU1N2JiM2QyMzUifX0sImV4cGVjdGVkIjpbW3siUGxhY2VtZW50Ijp7ImlkIjoiMDc1MGFhYjgtNjVkNi00MDhhLWEzODQtNTY2ZTg5NzU5MjJkIn19LDJdLFt7IlN0ZXdhcmRzaGlwIjp7ImlkIjoiMGVhNDdiYjItYjg3Ni0zNzY5LTkxNGQtYTk3NDY0M2JhNGYxIn19LDBdXSwia2V5IjoiZDRiNmZjZWEzMmFiNGFkMzlkNWVkMWIwYzVkODcwMDkifSwidmVyc2lvbiI6MX0sInJldmlzaW9uIjoiMzgiLCJzY29wZSI6ImRhdGFzZXQ6MDc1MGFhYjgtNjVkNi00MDhhLWEzODQtNTY2ZTg5NzU5MjJkIiwidmVyc2lvbiI6InBvbGljeS1sb2NhbC12MiJ9",
+            "version": "policy-event-v1",
+            "revision": "38",
+            "operation": "f9b30c69-4066-4731-84ae-769c20425126",
+            "appliedHash": "4ac64bfa66c60ef6f3f90fc70e7eca1800644062cabf73d529270bc31d79d86c",
+            "capabilities": "6616544f200829bbc14c9c7713b17e6c9a2c781abf569049ef1c04e7c23a5446",
+            "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147",
+            "previousHash": "3592290a2f0554f85e9f31cf1f84a2cf3260563f5ea16a6f50256f49ed591514",
+            "payloadDigest": "d724710f91cf0cadde1acbc732ae3d616cd75563cb17bd7419a90596d6f7b4df",
+            "previousRevision": "37"
+          },
+          "version": "policy-journal-v1",
+          "previous": "15bff3b0c163aade14bd9ee99840fb386db3dca83d9623cc1ca61bd01bcf3db1",
+          "sequence": "77",
+          "installation": "9154eca8-76c9-40a6-90f5-07b1329e9147"
+        },
+        "version": "sanctity-policy-wire-v1"
+      },
+      "signature": "eMmF0ibn6rdnqgFu-jp0jqKyWIzU1uAeOYsIvCo7K-OFEQpULrAssNHscIhFWFU_sCtWVc3DZq6Y438ltysbDA"
+    }
+  }
+]

@@ -1,0 +1,176 @@
+{
+  "schemaVersion": 1,
+  "status": "passed",
+  "at": "2026-11-02T22:38:25.724814+00:00",
+  "sourceCommit": "2c9229ea6559a58985804279f091ca18edadfe63",
+  "sourceSha256": {
+    "docs/backup-bundle.md": "e933732e60f8236b4db6972a91185bcfaf2e0999c257537d3886c4e7830bfda3",
+    "docs/core-hardening-plan.md": "c4f5fc33a8b8b464158319d925fc46b4829a087fb687a9830f0c8ddc2fa944d4",
+    "docs/implementation-plan.md": "7f25e65cf1d5cb6493d0937ffea7fb730acdafc497ec27df1af5758fbc0215b2",
+    "docs/institutional-pilot-epics.md": "461c987542101ee31c74178db9a735842b042cb968fd474b20b049cfe2b3ad29",
+    "docs/institutional-readiness-plan.md": "6e36d73ad04aec83e2dc98d8e375bf51079e4c0b14e707b5811d44a0eedc0308",
+    "docs/local-demo-plan.md": "73ddeb7fa055d92179762d9d2ce9b1773135069639e37afb9712338570bf3b31",
+    "docs/organization-recovery.md": "15a1e190181b87768e75f732be0d6abe63be693a41d90e46c3dafe1a40f3b523",
+    "docs/policy-catalog.md": "fdd0eb09e36a9d607bcf69a0ada2aed7e1ae2ed50db061b6d23edcdb02eeeb3a",
+    "docs/policy-transactions.md": "3bc67ebbdacd3fdd2d1b75cfd306c6e7598a36a5f03fa6598fc342464daa0a02",
+    "docs/policy-witness.md": "cb5f3dac034c4135b9540a083397c245a5dad6b3fbb64bb449ffb15c7c506b24",
+    "docs/service-distribution.md": "a7d4a36c49c72fefc9157d4849ea005eb733d47b9d21e803aa92f4142b7e2b07",
+    "modules/integration/src/test/scala/sanctity/postgres/OrganizationRecoveryQualification.scala": "6ef2cd669c576ddf3d6a1da585931e82867d53d7d484ebacb1ea9370193178eb",
+    "modules/integration/src/test/scala/sanctity/postgres/PolicyIntegrationSuite.scala": "a94c01f47170b38c924615f43489aa93ece394d9f9075ade7709bd9c417d1502",
+    "modules/integration/src/test/scala/sanctity/postgres/RecoveryDeliveryQualification.scala": "2b4228492d3dbd4a987cfed200d234582c2c466a2dbe437f47e3adc3f1a64ab2",
+    "modules/integration/src/test/scala/sanctity/postgres/RecoveryWorkQualification.scala": "91e634d822d7188550f1461ee1a8374fa2e1a0d5dc2da51bb27ef27d6b9a2bc5",
+    "modules/integration/src/test/scala/sanctity/postgres/TransactionSuite.scala": "389a9c75c7fcb56f68e8a69e41caa1e05f89b8aa1451cd54eb141edde4e13782",
+    "modules/postgres/src/main/resources/sanctity/postgres/V014__organization_recovery.sql": "90e61a8711d1659f775c4505fcb30d9337c711745424100021adfbcf74484db4",
+    "modules/postgres/src/main/scala/sanctity/policy/PolicyJournal.scala": "f508510d43af9129f5f9c0b22f11f0770c19fb0c55b47a35b07930bdcd03ebe0",
+    "modules/postgres/src/main/scala/sanctity/policy/PolicyWitnessStore.scala": "49a6d200fe99933662c5d2ebb1b2b4a553a8678483e4f031fc643b3eab9d6c9b",
+    "modules/postgres/src/main/scala/sanctity/postgres/OrganizationRecovery.scala": "68b8470797b4370cbc4656696a73c64a6256d1168ad08990b8a45103b9840494",
+    "modules/postgres/src/main/scala/sanctity/postgres/PolicyBridge.scala": "95cc015188af725b45030b49b546a5514c7bf1adef986afcb1f4b261a786ace7",
+    "modules/postgres/src/main/scala/sanctity/postgres/PostgresDatabase.scala": "4b98d62360fea89234e346ec651646ef0159633a27ff3e79d05332883eaa6e8d",
+    "modules/postgres/src/main/scala/sanctity/postgres/PostgresPolicy.scala": "36566ebfd97f30d36b89bca90ade329115733884b628a8e052d4db4c24955c24",
+    "modules/postgres/src/main/scala/sanctity/postgres/RecoveryBundleRestore.scala": "c7268c2d409e6a214b0bd51999fe05c8259c23a180ed77b4cba2abdd5a2afdee",
+    "modules/postgres/src/main/scala/sanctity/postgres/RecoveryJournal.scala": "9c9c870a88cfc3793fb3431d9c7d1e8e09248b3fbae3ff9f8deeb58f4fdd72e4",
+    "modules/postgres/src/main/scala/sanctity/postgres/RecoveryProjection.scala": "1622de236f7043fdcb9e4b051dd6a3dd6f59ea18a835f3f20f35e97e2ab35fc6",
+    "modules/postgres/src/test/scala/sanctity/policy/PolicyJournalSuite.scala": "40e4aba2bb05e4b685deaebb73a13bad547196d419830a9608d2ee48e584c73b",
+    "modules/service/src/main/scala/sanctity/app/BackupCli.scala": "2dd9c676535d818b53f6e57884f8f5a1361006ef421eb7fd4d3f6bc2931703d1",
+    "modules/service/src/main/scala/sanctity/app/OrganizationRecoveryCli.scala": "1079ba9afe1217b6a2af3ca12100ddf1e70247102f7b7d4721a8bb8da915fe74",
+    "modules/service/src/main/scala/sanctity/app/ServiceMain.scala": "0745851ba835d318730fc80472b783d84173dccdc1c6d051fa3632741831ab9a",
+    "scripts/check-isolated-backup.py": "2f2508b685087be181afaa54bf6a69616b3295ec74d7db95f9b358202e7ea33d",
+    "scripts/check-organization-recovery.py": "c4e6c44cdb5d1b9c454903dd20eacac1dffa65a9491a54fdc9c3941a4bbe52f3",
+    "scripts/organization-recovery-isolation.py": "e14f6b7378bd12a8c4a5e4b01df1d4e96777d1c2a1e4f707abb5b3796325fc31",
+    "scripts/package-service.py": "63bf3707daf58e10bd611f0ea4614733e4174a94c6a7f164ffb3286f470269af"
+  },
+  "artifactSha256": "e0a1b338405871e6e3d47956d014747466799f71644c4cf6bbd60664dae0b772",
+  "manifestSha256": "740a5ed67538fb7023e0b688013e95d0d165414b6db5b22ceb0b8878dc1b663b",
+  "sourceInventorySha256": "0607b356981cb6bc603b391f4f29e590781aad130dc24dd3fd478ef73e9813d0",
+  "runtimeJarCount": 49,
+  "schemaVersionFrom": 13,
+  "schemaVersionTo": 14,
+  "supportedPredecessorSha256": "8c5f11f521e6e53d98f200758a909959243ff7606a3da880433715a3f6ea050d",
+  "runtime": {
+    "java": "openjdk version \"21.0.12.1\" 2026-08-18 LTS\nOpenJDK Runtime Environment Temurin-21.0.12.1+1 (build 21.0.12.1+1-LTS)\nOpenJDK 64-Bit Server VM Temurin-21.0.12.1+1 (build 21.0.12.1+1-LTS, mixed mode, sharing)",
+    "python": "3.13.4"
+  },
+  "postgresImage": "postgres@sha256:b0f9560a2de083e2cc7382e75f808c7381a32852a7ec49117deedb300e552b24",
+  "qualificationHarnessSha256": "7549a6ebff6c2e8c54fb6176e8c549e75640644ea892611cbcaf6786b342ee31",
+  "qualifiedScripts": {
+    "check-organization-recovery.py": "c4e6c44cdb5d1b9c454903dd20eacac1dffa65a9491a54fdc9c3941a4bbe52f3",
+    "organization-recovery-isolation.py": "e14f6b7378bd12a8c4a5e4b01df1d4e96777d1c2a1e4f707abb5b3796325fc31",
+    "check-isolated-backup.py": "2f2508b685087be181afaa54bf6a69616b3295ec74d7db95f9b358202e7ea33d",
+    "backup-store.py": "c48032e46cb1ca44b5f29e0ec4976d51faedfd55e68dc25fe67fa8089b77a4ac",
+    "check-upgrade-compatibility.py": "274334cb40f99350aa2c7a95c1633c166539b11d0982334ed2e7d01fc50ed63d"
+  },
+  "limitations": [
+    "Synthetic local engineering only; no institutional human acceptance.",
+    "Separate OS identities and containers share one physical host; off-host/physical failure-domain acceptance remains O03.3/Q03.1/SITE01.",
+    "Institutional/provider identity, sponsorship, browser sessions and future lifecycle/retention/hold capabilities are unsupported and require separate recovery qualification.",
+    "Java 21 and PostgreSQL 17 are qualified; newer Java and other PostgreSQL versions are not qualified by this receipt.",
+    "The shared uncommitted scientific tranche is excluded from this isolated committed-source qualification."
+  ],
+  "task": "O03.7",
+  "mote": "bd-01M4XPDDP01BGZJJ73Z32TFCC1",
+  "acceptance": {
+    "1": "Exact H03.1 schema-13 bundle and source artifact restore into fresh targets; storage hashes and catalog import/closure/session are atomic. Incompatible artifact, corrupt/missing objects and unknown enabled profile refuse. A second cycle consumes a current schema-14 backup.",
+    "2": "Fresh authenticated barrier, five-second drain, contiguous signed enrollment/prefix/full transcript, typed generations and schemas. Unavailable/stale/truncated/reordered/tampered evidence and unresolved PREPARE refuse; live old writer is fenced.",
+    "3": "All 26 producers are compared against actual PostgreSQL policy in integration tests; legacy v1 projection also passes. Retained science/attribution stays exact. Missing dataset/release policy is tombstoned and ID reuse fails.",
+    "4": "Every restored bearer/credential identity and import/delivery lease is invalidated. Old tokens/leases fail; governed new credentials and pending-work reacquisition succeed. Current expiry is enforced; unknown enabled capabilities refuse.",
+    "5": "Durable receipt binds backup, exact barrier/head/epoch, operator and actual DB actor. Seven process kills cover before/after apply, release, receipt and opening. Lost release response retries exactly; unavailable new writer leaves catalog closed. A second cycle rotates another fresh writer.",
+    "6": "Packaged preview/verify/reconcile/status, embedded local runbook, operator-only recovery and closed startup/worker probes pass. All issued bearer/worker-secret canaries are absent from evidence. Legacy organization capture/reconcile remains refused."
+  },
+  "checks": [
+    "qualified-schema13-predecessor-backup-captured",
+    "wrong-source-artifact-corrupt-and-missing-objects-refused-before-target-mutation",
+    "unavailable-stale-truncated-reordered-tampered-witness-evidence-refuses-recovery",
+    "unresolved-prepare-refuses-recovery-without-inventing-an-outcome",
+    "unknown-enabled-capability-profile-refused",
+    "preview-authenticates-current-history-without-changing-target",
+    "atomic-closed-restore-migration-barrier-drain-and-old-writer-fencing",
+    "closed-catalog-denies-data-workers-api-startup-runtime-recovery-and-legacy-capture",
+    "process-kill-before-apply-retains-Verified",
+    "process-kill-after-apply-retains-Applied",
+    "process-kill-before-release-retains-Applied",
+    "process-kill-after-release-before-receipt-retains-Applied",
+    "process-kill-after-release-receipt-retains-Released",
+    "process-kill-before-open-retains-Released",
+    "new-writer-not-admitted-leaves-signed-release-durable-and-catalog-closed",
+    "process-kill-after-open-retains-Opened",
+    "absent-dataset-and-release-restrictions-retained-and-scientific-id-reuse-refused",
+    "reconcile-preserves-independent-science-oracle-and-applies-post-backup-restrictions",
+    "old-import-and-delivery-leases-denied-and-pending-work-reacquired",
+    "old-bearers-denied-fresh-governed-credentials-enforce-current-access-and-exact-bytes",
+    "schema14-backup-second-recovery-replays-prior-release-and-rotates-another-fresh-writer",
+    "all-issued-bearer-and-worker-lease-secret-canaries-absent-from-retained-evidence"
+  ],
+  "packagedChecks": 22,
+  "inputsFrozenThroughoutRun": true,
+  "reproduction": {
+    "build": "python3 scripts/package-service.py --output NEW_PACKAGE_DIRECTORY",
+    "harness": "sbt integration/Test/compile; jar cf QUALIFICATION_JAR -C modules/integration/target/scala-3.3.8/test-classes .",
+    "command": "python3 scripts/check-organization-recovery.py QUALIFIED_H03_1_ZIP CURRENT_ZIP --harness QUALIFICATION_JAR --output NEW_EVIDENCE_DIRECTORY",
+    "raw": "raw/qualified/receipt.json"
+  },
+  "regression": {
+    "aggregateUnitTests": 443,
+    "postgresIntegrationTests": 296,
+    "postgresCrashRetryRestore": "passed",
+    "policyIntegrationTestsIncludingV1V2Projection": 26,
+    "packagedRuntimeChecks": 11,
+    "historicalUpgrade": "passed",
+    "historicalOracleSha256": "9fa0e0e2eab7d5fe13b12802cec35de6e07ff7ec59a7f4c3db7c1827ef1dfd4d",
+    "historicalFixtureManifestSha256": "4c3175c029633999c779d9d12ea4b829f8f09821af1d4fc7b8e429deeab5b5d1"
+  },
+  "failedAttemptNotes": {
+    "o037-recovery-01": "Valid multi-permission grant replay refused; set serialization order required normalization.",
+    "o037-recovery-02": "Diagnostic confirmed previous-generation mismatch from permission set ordering.",
+    "o037-recovery-03": "Engine path worked; test expected 403 while protected HTTP denial is 404.",
+    "o037-recovery-05": "Fixture used an unrecognized custodian; use the installation recognized custodian.",
+    "o037-recovery-07": "Synthetic PREPARE fixture used default v1 envelope for an enrolled v2 installation; producer correctly refused.",
+    "o037-qualified-01": "Second cycle opened; test hard-coded epoch 3 although the first enrollment starts at zero. Derive next epoch from the prior signed receipt."
+  },
+  "retainedEarlierAttempts": [
+    {
+      "directory": "o037-recovery-01",
+      "status": "failed",
+      "evidence": "raw/o037-recovery-01"
+    },
+    {
+      "directory": "o037-recovery-02",
+      "status": "failed",
+      "evidence": "raw/o037-recovery-02"
+    },
+    {
+      "directory": "o037-recovery-03",
+      "status": "failed",
+      "evidence": "raw/o037-recovery-03"
+    },
+    {
+      "directory": "o037-recovery-04",
+      "status": "passed",
+      "evidence": "raw/o037-recovery-04"
+    },
+    {
+      "directory": "o037-recovery-05",
+      "status": "failed",
+      "evidence": "raw/o037-recovery-05"
+    },
+    {
+      "directory": "o037-recovery-06",
+      "status": "passed",
+      "evidence": "raw/o037-recovery-06"
+    },
+    {
+      "directory": "o037-recovery-07",
+      "status": "failed",
+      "evidence": "raw/o037-recovery-07"
+    },
+    {
+      "directory": "o037-recovery-08",
+      "status": "passed",
+      "evidence": "raw/o037-recovery-08"
+    },
+    {
+      "directory": "o037-qualified-01",
+      "status": "failed",
+      "evidence": "raw/o037-qualified-01"
+    }
+  ]
+}

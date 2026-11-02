@@ -1,0 +1,29 @@
+{
+  "serverUid": "10004:10004",
+  "serverMounts": [
+    {
+      "destination": "/store",
+      "type": "volume",
+      "writable": true
+    },
+    {
+      "destination": "/trust",
+      "type": "volume",
+      "writable": false
+    },
+    {
+      "destination": "/app/backup-store.py",
+      "type": "bind",
+      "writable": false
+    }
+  ],
+  "readerUid": "10005:10005",
+  "readerMounts": [
+    "/recovery",
+    "/reader",
+    "/app/backup-store.py"
+  ],
+  "sourceStorageMounted": false,
+  "sourceDatabaseCredentialsPassed": false,
+  "transport": "HTTP on isolated local test network"
+}

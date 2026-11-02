@@ -1,0 +1,23 @@
+{
+  "status": "passed",
+  "checks": [
+    "qualified-schema13-predecessor-backup-captured",
+    "wrong-source-artifact-corrupt-and-missing-objects-refused-before-target-mutation",
+    "unavailable-stale-truncated-reordered-tampered-witness-evidence-refuses-recovery",
+    "preview-authenticates-current-history-without-changing-target",
+    "atomic-closed-restore-migration-barrier-drain-and-old-writer-fencing",
+    "process-kill-before-apply-retains-Verified",
+    "process-kill-after-apply-retains-Applied",
+    "process-kill-before-release-retains-Applied",
+    "process-kill-after-release-before-receipt-retains-Applied",
+    "process-kill-after-release-receipt-retains-Released",
+    "process-kill-before-open-retains-Released",
+    "new-writer-not-admitted-leaves-signed-release-durable-and-catalog-closed",
+    "process-kill-after-open-retains-Opened",
+    "absent-dataset-and-release-restrictions-retained-and-scientific-id-reuse-refused",
+    "reconcile-preserves-independent-science-oracle-and-applies-post-backup-restrictions",
+    "old-bearers-denied-fresh-governed-credentials-enforce-current-access-and-exact-bytes"
+  ],
+  "predecessorSha256": "8c5f11f521e6e53d98f200758a909959243ff7606a3da880433715a3f6ea050d",
+  "artifactSha256": "08a049cd8dac14f8c36feff441ac5375665bb5000aee4991f7c06a4d472f37fb"
+}

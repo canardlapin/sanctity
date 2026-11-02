@@ -1,0 +1,31 @@
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 238B 0.0s done
+#1 DONE 0.1s
+
+#2 [internal] load metadata for docker.io/library/eclipse-temurin@sha256:000fd431958bc81a24abe1e8e5f0f0fd3ae365a594bd50aadb20696805f9408c
+#2 DONE 0.7s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.1s
+
+#4 [1/2] FROM docker.io/library/eclipse-temurin@sha256:000fd431958bc81a24abe1e8e5f0f0fd3ae365a594bd50aadb20696805f9408c
+#4 resolve docker.io/library/eclipse-temurin@sha256:000fd431958bc81a24abe1e8e5f0f0fd3ae365a594bd50aadb20696805f9408c 0.0s done
+#4 CACHED
+
+#5 [2/2] RUN groupadd -g 10001 witness && useradd -u 10001 -g witness witness
+#5 DONE 0.8s
+
+#6 exporting to image
+#6 exporting layers 0.1s done
+#6 exporting manifest sha256:f5d1b14764803483d6fb9c997431ef7a84bcc29103d6b9adcba115fad7c34ec0 0.0s done
+#6 exporting config sha256:99b71832346f2ac823d7225b909fca3333f86b7f2503923e5cc1e9bd3387adf3 0.0s done
+#6 exporting attestation manifest sha256:b8d5abfb2fe3439e06dd3fcaed3b7b35a9c5e25fd58e8424d7628a47b95faee5 0.0s done
+#6 exporting manifest list sha256:84457dc59aafc8e74f92911b76c137e4289db7608984e701579514a85124239d 0.0s done
+#6 naming to docker.io/library/sanctity-source-loss-6ba7ce414b8c:witness done
+#6 unpacking to docker.io/library/sanctity-source-loss-6ba7ce414b8c:witness 0.0s done
+#6 DONE 0.3s
+
+View build details: docker-desktop://dashboard/build/desktop-linux/desktop-linux/qrxxu40gznpgw9txli3m00qje

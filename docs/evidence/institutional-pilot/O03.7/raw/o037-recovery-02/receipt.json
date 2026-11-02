@@ -1,0 +1,8 @@
+{
+  "status": "failed",
+  "checks": [
+    "qualified-schema13-predecessor-backup-captured"
+  ],
+  "predecessorSha256": "8c5f11f521e6e53d98f200758a909959243ff7606a3da880433715a3f6ea050d",
+  "artifactSha256": "88918894dc08199f33b8b3fdcf8dbb3db5d353941f2974b4d05a0b50ea1bbba0"
+}

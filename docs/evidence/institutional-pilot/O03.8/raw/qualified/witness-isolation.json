@@ -1,0 +1,41 @@
+{
+  "witnessImage": "sha256:7faa5f993ad7c5ab206a53da0f9108b4f7d5259ffee086772674925d3c10b81f",
+  "jreBase": "eclipse-temurin@sha256:000fd431958bc81a24abe1e8e5f0f0fd3ae365a594bd50aadb20696805f9408c",
+  "witnessUser": "10001:10001",
+  "readOnlyRoot": true,
+  "capDrop": [
+    "ALL"
+  ],
+  "securityOptions": [
+    "no-new-privileges"
+  ],
+  "mounts": [
+    {
+      "destination": "/opt/runtime",
+      "type": "bind",
+      "writable": false
+    },
+    {
+      "destination": "/work",
+      "type": "volume",
+      "writable": true
+    },
+    {
+      "destination": "/trust",
+      "type": "volume",
+      "writable": false
+    }
+  ],
+  "publishedPorts": {
+    "9444/tcp": [
+      {
+        "HostIp": "127.0.0.1",
+        "HostPort": "63801"
+      }
+    ]
+  },
+  "sourceDatabaseEnvironmentPresent": false,
+  "forwarderUser": "10006:10006",
+  "forwarderMounts": [],
+  "tlsTerminatedByForwarder": false
+}

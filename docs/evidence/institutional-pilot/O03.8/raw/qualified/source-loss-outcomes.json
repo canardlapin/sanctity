@@ -1,0 +1,22 @@
+{
+  "zeroLostAcknowledgedRestrictions": true,
+  "scientificDataLossAtBackupPoint": 0,
+  "postBackupScienceOutsideRecoveryPoint": "one release intentionally absent and tombstoned",
+  "catalogVerifiedSeconds": 48.575,
+  "catalogOpenedSeconds": 87.643,
+  "apiAvailableSeconds": 105.833,
+  "verifiedFullExportSeconds": 141.503,
+  "totalRehearsalAfterIsolationSeconds": 143.775,
+  "observedPostBackupScientificLoss": {
+    "emptyDatasets": 1,
+    "releases": 1
+  },
+  "freshAuthorizedRead": true,
+  "newStewardManageAccess": true,
+  "formerStewardManageAccess": false,
+  "removedMembershipRead": false,
+  "disabledCredentialAdmission": false,
+  "expiredShareRead": false,
+  "fixedReleaseBoundaryRetained": true,
+  "allOldTokensDenied": true
+}

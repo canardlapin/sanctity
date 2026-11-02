@@ -1,0 +1,42 @@
+{
+  "status": "failed",
+  "checks": [
+    "qualified-schema13-predecessor-backup-captured",
+    "wrong-source-artifact-corrupt-and-missing-objects-refused-before-target-mutation",
+    "unavailable-stale-truncated-reordered-tampered-witness-evidence-refuses-recovery",
+    "unresolved-prepare-refuses-recovery-without-inventing-an-outcome",
+    "unknown-enabled-capability-profile-refused",
+    "preview-authenticates-current-history-without-changing-target",
+    "atomic-closed-restore-migration-barrier-drain-and-old-writer-fencing",
+    "closed-catalog-denies-data-workers-api-startup-runtime-recovery-and-legacy-capture",
+    "process-kill-before-apply-retains-Verified",
+    "process-kill-after-apply-retains-Applied",
+    "process-kill-before-release-retains-Applied",
+    "process-kill-after-release-before-receipt-retains-Applied",
+    "process-kill-after-release-receipt-retains-Released",
+    "process-kill-before-open-retains-Released",
+    "new-writer-not-admitted-leaves-signed-release-durable-and-catalog-closed",
+    "process-kill-after-open-retains-Opened",
+    "absent-dataset-and-release-restrictions-retained-and-scientific-id-reuse-refused",
+    "reconcile-preserves-independent-science-oracle-and-applies-post-backup-restrictions",
+    "old-import-and-delivery-leases-denied-and-pending-work-reacquired",
+    "old-bearers-denied-fresh-governed-credentials-enforce-current-access-and-exact-bytes"
+  ],
+  "at": "2026-11-02T22:27:43.845717+00:00",
+  "isolated": false,
+  "scripts": {
+    "check-organization-recovery.py": "a9de2092fd6ccf9e762a6a7d6f3c83188dc727363503e2ec3bcec5bbe3767ad4",
+    "organization-recovery-isolation.py": "e14f6b7378bd12a8c4a5e4b01df1d4e96777d1c2a1e4f707abb5b3796325fc31",
+    "check-isolated-backup.py": "2f2508b685087be181afaa54bf6a69616b3295ec74d7db95f9b358202e7ea33d",
+    "backup-store.py": "c48032e46cb1ca44b5f29e0ec4976d51faedfd55e68dc25fe67fa8089b77a4ac"
+  },
+  "harnessSha256": "7549a6ebff6c2e8c54fb6176e8c549e75640644ea892611cbcaf6786b342ee31",
+  "runtime": {
+    "java": "openjdk version \"21.0.12.1\" 2026-08-18 LTS\nOpenJDK Runtime Environment Temurin-21.0.12.1+1 (build 21.0.12.1+1-LTS)\nOpenJDK 64-Bit Server VM Temurin-21.0.12.1+1 (build 21.0.12.1+1-LTS, mixed mode, sharing)",
+    "python": "3.13.4"
+  },
+  "postgresImage": "postgres@sha256:b0f9560a2de083e2cc7382e75f808c7381a32852a7ec49117deedb300e552b24",
+  "scope": "Synthetic local closed recovery and source isolation; no institutional or physical failure-domain acceptance.",
+  "predecessorSha256": "8c5f11f521e6e53d98f200758a909959243ff7606a3da880433715a3f6ea050d",
+  "artifactSha256": "e0a1b338405871e6e3d47956d014747466799f71644c4cf6bbd60664dae0b772"
+}

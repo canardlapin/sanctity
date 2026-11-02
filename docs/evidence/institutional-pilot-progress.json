@@ -1,6 +1,6 @@
 {
-  "schemaVersion": 16,
-  "at": "2026-11-02T02:31:53.390183+00:00",
+  "schemaVersion": 17,
+  "at": "2026-11-02T22:41:43.616460+00:00",
   "program": "bd-01M4W3ZN8Z16J30J8EYPWQERQC",
   "immediateMilestone": {
     "key": "EP0",
@@ -13,7 +13,7 @@
     "mote": "bd-01M4X8M8Y18BD586KA2AD1BMH9",
     "plan": "docs/core-hardening-plan.md"
   },
-  "updateKind": "Verified isolated backup engineering complete; closed organization restore is next.",
+  "updateKind": "Current-capability closed recovery and source-isolation engineering complete; identity/session and institutional gates remain open.",
   "baseline": {
     "commit": "95763adf94e1a9977b1cad73a92e842564448013",
     "published": true,
@@ -26,18 +26,16 @@
   },
   "countsByOriginalTag": {
     "pilot-task": {
-      "open": 61,
-      "closed": 23,
-      "doing": 1
+      "open": 60,
+      "closed": 25,
+      "doing": 0
     },
     "pilot-gate": {
       "open": 23,
       "closed": 3
     }
   },
-  "activeWork": [
-    "O03.7"
-  ],
+  "activeWork": [],
   "recoveryOrder": [
     "F03.4",
     "O03.7.R1",
@@ -62,7 +60,6 @@
     "O01.4: Exercise packaged install, upgrade and release evidence in CI",
     "O02.1: Expose liveness, readiness and redacted request diagnostics",
     "O02.3: Enforce admission limits across requests, streams and background work",
-    "H03.1: Implement verified backup automation against an isolated test store",
     "W02.1: Page release inventories and history without loading whole responses",
     "W02.2: Persist assigned curation tasks, notes and review state"
   ],
@@ -108,14 +105,19 @@
     "F03 engineering review",
     "O03.7.R1",
     "F02 engineering review",
-    "H03.1"
+    "H03.1",
+    "O03.7",
+    "O03.8"
   ],
   "currentQualification": {
-    "sourceCommit": "e94f88d",
-    "aggregateTests": 440,
-    "integrationTests": 292,
+    "sourceCommit": "2c9229ea6559a58985804279f091ca18edadfe63",
+    "artifactSha256": "e0a1b338405871e6e3d47956d014747466799f71644c4cf6bbd60664dae0b772",
+    "aggregateTests": 443,
+    "integrationTests": 296,
     "postgresCrashRestore": "passed",
-    "receipt": "docs/evidence/institutional-pilot/F03.4/receipt.json"
+    "packagedRuntimeChecks": 11,
+    "historicalUpgrade": "passed; unchanged oracle",
+    "receipt": "docs/evidence/institutional-pilot/O03.7/receipt.json"
   },
   "backupQualification": {
     "sourceCommit": "2fd2b3eaca3a5ed4bacc7573608ebf5f4d7a81c4",
@@ -124,5 +126,38 @@
     "unitTests": 78,
     "historicalUpgrade": "passed",
     "receipt": "docs/evidence/institutional-pilot/H03.1/receipt.json"
+  },
+  "recoveryQualification": {
+    "sourceCommit": "2c9229ea6559a58985804279f091ca18edadfe63",
+    "artifactSha256": "e0a1b338405871e6e3d47956d014747466799f71644c4cf6bbd60664dae0b772",
+    "closedRestoreChecks": 22,
+    "sourceIsolationChecks": 26,
+    "schema13To14": "passed",
+    "subsequentSchema14Recovery": "passed",
+    "sourceIsolationOutcomes": {
+      "zeroLostAcknowledgedRestrictions": true,
+      "scientificDataLossAtBackupPoint": 0,
+      "postBackupScienceOutsideRecoveryPoint": "one release intentionally absent and tombstoned",
+      "catalogVerifiedSeconds": 48.575,
+      "catalogOpenedSeconds": 87.643,
+      "apiAvailableSeconds": 105.833,
+      "verifiedFullExportSeconds": 141.503,
+      "totalRehearsalAfterIsolationSeconds": 143.775,
+      "observedPostBackupScientificLoss": {
+        "emptyDatasets": 1,
+        "releases": 1
+      },
+      "freshAuthorizedRead": true,
+      "newStewardManageAccess": true,
+      "formerStewardManageAccess": false,
+      "removedMembershipRead": false,
+      "disabledCredentialAdmission": false,
+      "expiredShareRead": false,
+      "fixedReleaseBoundaryRetained": true,
+      "allOldTokensDenied": true
+    },
+    "coreReceipt": "docs/evidence/institutional-pilot/O03.7/receipt.json",
+    "sourceIsolationReceipt": "docs/evidence/institutional-pilot/O03.8/receipt.json",
+    "scope": "Synthetic local engineering; original disposable source removed, separate witness/store/reader identities on one host."
   }
 }

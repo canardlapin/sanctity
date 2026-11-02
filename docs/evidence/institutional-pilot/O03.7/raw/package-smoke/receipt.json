@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "artifact": "sanctity-0.1.0-SNAPSHOT.zip",
+  "artifactSha256": "e0a1b338405871e6e3d47956d014747466799f71644c4cf6bbd60664dae0b772",
+  "postgresImage": "postgres@sha256:b0f9560a2de083e2cc7382e75f808c7381a32852a7ec49117deedb300e552b24",
+  "checks": [
+    "exact payload/dependency digests, runtime resources, licenses and module exclusion",
+    "Java-only launcher with spaces, no source/build-tool PATH, version/help and invalid command",
+    "invalid database/secret/origin/port/storage settings fail closed with canary-free diagnostics",
+    "packaged SQL migrations applied and repeated successfully",
+    "runtime cannot migrate/bootstrap/issue credentials/capture policy; privileged login cannot serve",
+    "trusted create, private credential issuance and native import from packaged resources",
+    "unbootstrapped startup denied; private reviewed organization preview and idempotent bootstrap",
+    "live port collision and Host/Origin checks resist forwarded-header substitution",
+    "live console, anonymous denial, authenticated identity, accepted head and byte-exact HTTP delivery",
+    "legacy policy capture refused after organization bootstrap; live credential revocation",
+    "packaged SIGTERM/SIGKILL restart preserves exact accepted release/bytes and credential revocation"
+  ],
+  "status": "passed",
+  "scope": "Synthetic single-host Java-only packaged runtime; not institutional qualification",
+  "manifestSha256": "740a5ed67538fb7023e0b688013e95d0d165414b6db5b22ceb0b8878dc1b663b",
+  "sourceInventorySha256": "0607b356981cb6bc603b391f4f29e590781aad130dc24dd3fd478ef73e9813d0",
+  "runtimeJarCount": 49,
+  "versionOutput": "Sanctity 0.1.0-SNAPSHOT (Scala 3.3.8; Java 21+)",
+  "postgresVersion": "postgres (PostgreSQL) 17.11"
+}

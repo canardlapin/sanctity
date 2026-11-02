@@ -1,0 +1,10 @@
+{
+  "status": "failed",
+  "checks": [
+    "qualified-schema13-predecessor-backup-captured",
+    "wrong-source-artifact-corrupt-and-missing-objects-refused-before-target-mutation",
+    "unavailable-stale-truncated-reordered-tampered-witness-evidence-refuses-recovery"
+  ],
+  "predecessorSha256": "8c5f11f521e6e53d98f200758a909959243ff7606a3da880433715a3f6ea050d",
+  "artifactSha256": "08a049cd8dac14f8c36feff441ac5375665bb5000aee4991f7c06a4d472f37fb"
+}

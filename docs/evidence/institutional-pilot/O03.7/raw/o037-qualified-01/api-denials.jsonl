@@ -1,0 +1,5 @@
+{"path": "/v1/datasets/564a5de7-bf86-4772-bf28-a1e4cb553142/releases/c374fe27-d4fc-4420-a7f6-f227d60dcafd", "status": 503, "body": "{\"error\":\"authentication_unavailable\"}"}
+{"path": "/v1/datasets/564a5de7-bf86-4772-bf28-a1e4cb553142/releases/c374fe27-d4fc-4420-a7f6-f227d60dcafd", "status": 401, "body": "{\"error\":\"unauthorized\"}"}
+{"path": "/v1/datasets/564a5de7-bf86-4772-bf28-a1e4cb553142/releases/c374fe27-d4fc-4420-a7f6-f227d60dcafd", "status": 401, "body": "{\"error\":\"unauthorized\"}"}
+{"path": "/v1/datasets/564a5de7-bf86-4772-bf28-a1e4cb553142/releases/c374fe27-d4fc-4420-a7f6-f227d60dcafd", "status": 404, "body": "{\"error\":\"not_found\"}"}
+{"path": "/v1/datasets/df577f1a-5a70-418a-bb09-031fc34db32f/releases/ab517a2a-595d-4222-8bad-ba38632c38cc", "status": 404, "body": "{\"error\":\"not_found\"}"}

@@ -1,0 +1,23 @@
+{
+  "originalContainerRemoved": true,
+  "originalStorageRemoved": true,
+  "originalImportSourceRemoved": true,
+  "originalPackageRemoved": true,
+  "originalCaptureDirectoryRemoved": true,
+  "targetContainer": "9eb5e80608b8a553404e536da58bd462d0d8a06a013f3d9646c4d17086b193f7",
+  "targetHasSourceMounts": false,
+  "targetDatabaseRole": "recovery_operator",
+  "originalDatabaseCredentialsReused": false,
+  "originalDatabaseConnectionReused": false,
+  "backupReadByUid": "10005:10005",
+  "witnessUid": "10001:10001",
+  "witnessMounts": [
+    "/work",
+    "/trust",
+    "/opt/runtime"
+  ],
+  "witnessHasSourceMounts": false,
+  "witnessHasSourceDatabaseEnvironment": false,
+  "sourceUrlDigest": "e426868171168b7ff4968d40db9e579164afc57fc6df5d49ed52a79c5b0efce8",
+  "targetUrlDigest": "c7f7d38d369c199bf7edaf0217199d81f22f3447b4507a92441596bfe3120bf0"
+}
