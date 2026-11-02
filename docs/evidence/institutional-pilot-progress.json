@@ -1,6 +1,6 @@
 {
-  "schemaVersion": 14,
-  "at": "2026-11-02T01:48:20.212039+00:00",
+  "schemaVersion": 15,
+  "at": "2026-11-02T02:03:43.429987+00:00",
   "program": "bd-01M4W3ZN8Z16J30J8EYPWQERQC",
   "immediateMilestone": {
     "key": "EP0",
@@ -13,7 +13,7 @@
     "mote": "bd-01M4X8M8Y18BD586KA2AD1BMH9",
     "plan": "docs/core-hardening-plan.md"
   },
-  "updateKind": "F03.4 implemented and F03 engineering review passed; recovery capability compatibility in progress.",
+  "updateKind": "F03 and F02 engineering reviews complete; versioned witness compatibility qualified; verified backup implementation underway.",
   "baseline": {
     "commit": "95763adf94e1a9977b1cad73a92e842564448013",
     "published": true,
@@ -26,17 +26,17 @@
   },
   "countsByOriginalTag": {
     "pilot-task": {
-      "open": 63,
+      "open": 62,
       "closed": 22,
-      "doing": 0
+      "doing": 1
     },
     "pilot-gate": {
-      "open": 24,
-      "closed": 2
+      "open": 23,
+      "closed": 3
     }
   },
   "activeWork": [
-    "O03.7.R1"
+    "H03.1"
   ],
   "recoveryOrder": [
     "F03.4",
@@ -53,7 +53,9 @@
       "O03.7",
       "O03.8"
     ],
-    "reason": "Seven newer organization commands and move inventory lack independent witness/checkpoint support."
+    "reason": "Seven newer organization commands and move inventory lack independent witness/checkpoint support.",
+    "status": "resolved",
+    "receipt": "docs/evidence/institutional-pilot/O03.7.R1/receipt.json"
   },
   "nextReadyEngineering": [
     "F04.1: Add verified institutional identity bindings and provider configuration",
@@ -98,12 +100,14 @@
   "limitations": [
     "F03 engineering review closes only implemented authority coverage; institutional/provider, scale and recovery gates remain open.",
     "Shared uncommitted scientific work is excluded from the committed baseline qualification.",
-    "F02.3 child qualification remains local engineering; F02 review cannot close before newer commands work under independent policy.",
+    "Existing v1 installations retain their profile and refuse newer commands; no in-place upgrade is implied.",
     "Institutional identity, off-host failure-domain, lifecycle and integrated-release gates remain open."
   ],
   "completedThisTranche": [
     "F03.4",
-    "F03 engineering review"
+    "F03 engineering review",
+    "O03.7.R1",
+    "F02 engineering review"
   ],
   "currentQualification": {
     "sourceCommit": "e94f88d",

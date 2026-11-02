@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<testsuite hostname="BUC-GW01.local" name="sanctity.postgres.PolicyIntegrationSuite" tests="26" errors="0" failures="0" skipped="0" time="31.816" timestamp="2026-11-01T20:54:28">
+          <properties>
+      <property name="java.specification.version" value="21"/><property name="sun.jnu.encoding" value="UTF-8"/><property name="sun.arch.data.model" value="64"/><property name="java.vendor.url" value="https://adoptium.net/"/><property name="jline.terminal" value="none"/><property name="sun.boot.library.path" value="/Users/bbuchsbaum/Library/Java/JavaVirtualMachines/temurin-21.0.12.1+1.jdk/Contents/Home/lib"/><property name="sun.java.command" value="/Users/bbuchsbaum/.local/share/sbt/1.13.0/bin/sbt-launch.jar postgres/test integration/testOnly sanctity.postgres.PolicyIntegrationSuite sanctity.postgres.PolicyReceiptCompatibilitySuite"/><property name="jdk.debug" value="release"/><property name="java.specification.vendor" value="Oracle Corporation"/><property name="java.version.date" value="2026-08-18"/><property name="java.home" value="/Users/bbuchsbaum/Library/Java/JavaVirtualMachines/temurin-21.0.12.1+1.jdk/Contents/Home"/><property name="file.separator" value="/"/><property name="java.vm.compressedOopsMode" value="Zero based"/><property name="line.separator" value="
+"/><property name="java.vm.specification.vendor" value="Oracle Corporation"/><property name="java.specification.name" value="Java Platform API Specification"/><property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/><property name="java.runtime.version" value="21.0.12.1+1-LTS"/><property name="user.name" value="bbuchsbaum"/><property name="log4j.ignoreTCL" value="true"/><property name="file.encoding" value="UTF-8"/><property name="java.vendor.version" value="Temurin-21.0.12.1+1"/><property name="java.io.tmpdir" value="/var/folders/f8/k46hqpm95mn7ns9f7wxw88640000gp/T/"/><property name="java.version" value="21.0.12.1"/><property name="java.vm.specification.name" value="Java Virtual Machine Specification"/><property name="native.encoding" value="US-ASCII"/><property name="java.library.path" value="/Users/bbuchsbaum/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:."/><property name="stderr.encoding" value="US-ASCII"/><property name="java.vendor" value="Eclipse Adoptium"/><property name="scala.ext.dirs" value="/Users/bbuchsbaum/.sbt/1.0/java9-rt-ext-eclipse_adoptium_21_0_12_1"/><property name="sun.io.unicode.encoding" value="UnicodeBig"/><property name="socksNonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/><property name="java.class.path" value="/Users/bbuchsbaum/.local/share/sbt/1.13.0/bin/sbt-launch.jar"/><property name="java.vm.vendor" value="Eclipse Adoptium"/><property name="jline.shutdownhook" value="false"/><property name="user.timezone" value="America/Toronto"/><property name="java.vm.specification.version" value="21"/><property name="os.name" value="Mac OS X"/><property name="sun.java.launcher" value="SUN_STANDARD"/><property name="user.country" value="CA"/><property name="http.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/><property name="sun.cpu.endian" value="little"/><property name="user.home" value="/Users/bbuchsbaum"/><property name="user.language" value="en"/><property name="sbt.script" value="/Users/bbuchsbaum/.local/bin/sbt"/><property name="sbt.ipcsocket.tmpdir" value="/var/folders/f8/k46hqpm95mn7ns9f7wxw88640000gp/T/.sbt1b8b7ae4/ipcsocket"/><property name="swoval.tmpdir" value="/var/folders/f8/k46hqpm95mn7ns9f7wxw88640000gp/T/.sbt1b8b7ae4/swoval"/><property name="apple.awt.application.name" value="Boot"/><property name="jline.esc.timeout" value="0"/><property name="ftp.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/><property name="stdout.encoding" value="US-ASCII"/><property name="path.separator" value=":"/><property name="os.version" value="15.1.1"/><property name="jna.nosys" value="true"/><property name="java.runtime.name" value="OpenJDK Runtime Environment"/><property name="java.vm.name" value="OpenJDK 64-Bit Server VM"/><property name="java.vendor.url.bug" value="https://github.com/adoptium/adoptium-support/issues"/><property name="user.dir" value="/private/tmp/sanctity-recovery-20261101/work"/><property name="os.arch" value="aarch64"/><property name="java.vm.info" value="mixed mode, sharing"/><property name="java.vm.version" value="21.0.12.1+1-LTS"/><property name="java.class.version" value="65.0"/>
+    </properties>
+          <testcase classname="sanctity.postgres.PolicyIntegrationSuite" name="fenced enrollment captures complete current state and preserves original history" time="1.581">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PolicyIntegrationSuite" name="all nineteen supported mutation classes receive exact independent COMMIT acknowledgements" time="3.286">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PolicyIntegrationSuite" name="all seven governed v2 commands receive independent acknowledgements and preserve move history" time="1.9">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PolicyIntegrationSuite" name="v1 catalogs retain their exact profile and refuse v2-only changes without effects" time="0.677">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PolicyIntegrationSuite" name="v2 enrollment captures existing move records while v1 refuses that historical producer" time="0.449">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PolicyIntegrationSuite" name="failed event insertion rolls back effects and proves live ABORT without a committed event" time="0.491">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PolicyIntegrationSuite" name="lost PREPARE response leaves no local effects and cannot abort from restarted absence" time="0.536">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PolicyIntegrationSuite" name="lost COMMIT acknowledgement preserves local restriction and resolves without repeating effects" time="0.717">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PolicyIntegrationSuite" name="credential issuance with lost acknowledgement never duplicates a retained operation ID" time="0.524">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PolicyIntegrationSuite" name="barrier fences the running service even if local epoch and heads are unchanged" time="0.45">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PolicyIntegrationSuite" name="absolute five-second admission expires an idle transaction and rolls it back" time="5.97">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PolicyIntegrationSuite" name="expired admission drains a running server query after earlier work consumed its budget" time="5.633">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PolicyIntegrationSuite" name="unsupported lifecycle and eligibility are refused at enrollment and live admission" time="0.444">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PolicyIntegrationSuite" name="missing independent trust and a restored older local head both fail admission" time="0.482">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PolicyIntegrationSuite" name="enrollment retires the old runtime login and a fresh least-privilege login can acknowledge grant changes" time="0.704">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PolicyIntegrationSuite" name="lost enrollment response stays closed and resumes with the exact retained checkpoint" time="0.466">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PolicyIntegrationSuite" name="retrying an interrupted v1 enrollment retains its original checkpoint and profile" time="0.473">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PolicyIntegrationSuite" name="unsupported historical producer prevents enrollment without a partial fence" time="0.344">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PolicyIntegrationSuite" name="stored acknowledgement signatures are verified before trusting a durable receipt" time="0.556">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PolicyIntegrationSuite" name="locally committed pending restriction governs reads and blocks overtaking until witness resolution" time="1.775">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PolicyIntegrationSuite" name="oversized complete checkpoint is refused without truncation or partial enrollment" time="0.455">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PolicyIntegrationSuite" name="independent offboarding invalidation is atomic with its event and denies cached credentials" time="0.874">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PolicyIntegrationSuite" name="lost local COMMIT response reports unknown and resolves the exact committed event under a new live guard" time="0.516">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PolicyIntegrationSuite" name="historical organization-local-v1 framing enrolls without rewriting its payload or identity" time="0.599">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PolicyIntegrationSuite" name="HTTP distinguishes unknown and pending outcomes and never attaches a durable success header to either" time="1.602">
+                      
+                    </testcase><testcase classname="sanctity.postgres.PolicyIntegrationSuite" name="historical LocalOnly events cannot acquire an acknowledgement by inserting a separate receipt" time="0.312">
+                      
+                    </testcase>
+          <system-out><![CDATA[]]></system-out>
+          <system-err><![CDATA[]]></system-err>
+        </testsuite>

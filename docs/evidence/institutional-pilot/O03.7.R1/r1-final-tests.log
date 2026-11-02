@@ -1,0 +1,33 @@
+postgres (PostgreSQL) 17.11
+[info] welcome to sbt 1.10.5 (Eclipse Adoptium Java 21.0.12.1)
+[info] loading project definition from /private/tmp/sanctity-recovery-20261101/work/project
+[info] loading settings for project root from build.sbt ...
+[info] loading settings for project bids4s-19f022d002f69292dec056eb0762b877438c47305cee6c176adf3e0f780e9146-build from plugins.sbt ...
+[info] loading project definition from /private/tmp/sanctity-recovery-20261101/work/target/source-dependencies/bids4s-19f022d002f69292dec056eb0762b877438c47305cee6c176adf3e0f780e9146/project
+[info] loading settings for project root from build.sbt ...
+[info] resolving key references (17509 settings) ...
+[info] set current project to sanctity (in build file:/private/tmp/sanctity-recovery-20261101/work/)
+Test run sanctity.policy.PolicyJournalSuite started
+sanctity.policy.PolicyJournalSuite: finished 1.469s
+Test run sanctity.policy.PolicyJournalSuite finished: 0 failed, 0 ignored, 18 total 1.477s
+Test run sanctity.policy.PolicyWireSuite started
+sanctity.policy.PolicyWireSuite: finished 0.025s
+Test run sanctity.policy.PolicyWireSuite finished: 0 failed, 0 ignored, 19 total 0.025s
+Test run sanctity.policy.PolicyTransportSuite started
+sanctity.policy.PolicyTransportSuite: finished 27.253s
+Test run sanctity.policy.PolicyTransportSuite finished: 0 failed, 0 ignored, 13 total 27.253s
+Test run sanctity.postgres.PersistenceSuite started
+sanctity.postgres.PersistenceSuite: finished 0.143s
+Test run sanctity.postgres.PersistenceSuite finished: 0 failed, 0 ignored, 19 total 0.144s
+[info] Passed: Total 69, Failed 0, Errors 0, Passed 69
+[success] Total time: 30 s, completed Nov 1, 2026, 8:53:48 p.m.
+[info] compiling 1 Scala source to /private/tmp/sanctity-recovery-20261101/work/modules/integration/target/scala-3.3.8/test-classes ...
+[info] done compiling
+Test run sanctity.postgres.PolicyIntegrationSuite started
+sanctity.postgres.PolicyIntegrationSuite: finished 35.17s
+Test run sanctity.postgres.PolicyIntegrationSuite finished: 0 failed, 0 ignored, 26 total 35.177s
+Test run sanctity.postgres.PolicyReceiptCompatibilitySuite started
+sanctity.postgres.PolicyReceiptCompatibilitySuite: finished 0.004s
+Test run sanctity.postgres.PolicyReceiptCompatibilitySuite finished: 0 failed, 0 ignored, 3 total 0.004s
+[info] Passed: Total 29, Failed 0, Errors 0, Passed 29
+[success] Total time: 40 s, completed Nov 1, 2026, 8:54:28 p.m.
