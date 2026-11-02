@@ -1,0 +1,16 @@
+Traceback (most recent call last):
+  File "/private/tmp/sanctity-recovery-20261101/work/scripts/check-isolated-backup.py", line 318, in <module>
+    if __name__=='__main__':main()
+                            ~~~~^^
+  File "/private/tmp/sanctity-recovery-20261101/work/scripts/check-isolated-backup.py", line 305, in main
+    qualify(artifact,root,output,checks)
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/sanctity-recovery-20261101/work/scripts/check-isolated-backup.py", line 204, in qualify
+    correction=f.json('/v1/datasets/'+dataset+'/releases/'+imported['release']+'/corrections',token,
+        {'path':'README','text':'Synthetic replacement after backup snapshot.\n','reason':'Backup concurrency fixture'},status=201)
+  File "/private/tmp/sanctity-recovery-20261101/work/scripts/check-upgrade-compatibility.py", line 175, in json
+    require(code == status, "HTTP outcome differs: " + path)
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/sanctity-recovery-20261101/work/scripts/check-upgrade-compatibility.py", line 46, in require
+    raise AssertionError(message)
+AssertionError: HTTP outcome differs: /v1/datasets/e4b1b233-b5be-429a-a465-eb04363b93f7/releases/8c400388-fefd-4b6c-be94-e2b2fcc31d30/corrections

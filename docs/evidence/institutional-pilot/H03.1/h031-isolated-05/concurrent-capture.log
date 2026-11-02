@@ -1,0 +1,9 @@
+{
+  "status" : "verified",
+  "bundle" : "519db400d21399e859fedd99341b44bc60503a0872405e4e37d98a5b3a2ff2ca",
+  "objects" : 2,
+  "bytes" : 2494820,
+  "elapsedMilliseconds" : 5908,
+  "checkpointDigest" : "1573e5c05e878e96d5e670438dfff2c69a2c4d19577e7ac7ede7e28bfa5d0c19",
+  "policyHeadDigest" : "504b00588109025f75e9b477ce659800a1307eac40289f7bfbed8930b4b24d1a"
+}

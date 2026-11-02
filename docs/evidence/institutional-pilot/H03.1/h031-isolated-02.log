@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/private/tmp/sanctity-recovery-20261101/work/scripts/check-isolated-backup.py", line 318, in <module>
+    if __name__=='__main__':main()
+                            ~~~~^^
+  File "/private/tmp/sanctity-recovery-20261101/work/scripts/check-isolated-backup.py", line 305, in main
+    qualify(artifact,root,output,checks)
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/sanctity-recovery-20261101/work/scripts/check-isolated-backup.py", line 208, in qualify
+    release.touch();assert p.wait(timeout=90)==0
+                           ^^^^^^^^^^^^^^^^^^^^^
+AssertionError

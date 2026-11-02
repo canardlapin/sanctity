@@ -1,0 +1,15 @@
+Traceback (most recent call last):
+  File "/private/tmp/sanctity-recovery-20261101/work/scripts/check-isolated-backup.py", line 328, in <module>
+    if __name__=='__main__':main()
+                            ~~~~^^
+  File "/private/tmp/sanctity-recovery-20261101/work/scripts/check-isolated-backup.py", line 315, in main
+    qualify(artifact,root,output,checks)
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/sanctity-recovery-20261101/work/scripts/check-isolated-backup.py", line 287, in qualify
+    scheduled=run([sys.executable,HERE/'backup-store.py','schedule','--url',url,'--token-file',writerfile,'--allow-insecure-test',
+        '--capture-command',command,'--staging-root',captures,'--interval','1','--count','2'],env=f.env,timeout=180)
+  File "/private/tmp/sanctity-recovery-20261101/work/scripts/check-isolated-backup.py", line 106, in run
+    assert (p.returncode != 0) if fail else (p.returncode == 0), 'fixture command failed: '+Path(args[0]).name+': '+p.stdout.decode(errors='replace')[:1200]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: fixture command failed: python3.13: {"status": "failed", "detail": "backup operation refused; inspect protected configuration and retained incomplete attempt"}
+

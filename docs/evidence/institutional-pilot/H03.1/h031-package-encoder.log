@@ -1,0 +1,65 @@
+[info] welcome to sbt 1.10.5 (Eclipse Adoptium Java 21.0.12.1)
+[info] loading project definition from /private/tmp/sanctity-recovery-20261101/work/project
+[info] loading settings for project root from build.sbt ...
+[info] loading settings for project bids4s-19f022d002f69292dec056eb0762b877438c47305cee6c176adf3e0f780e9146-build from plugins.sbt ...
+[info] loading project definition from /private/tmp/sanctity-recovery-20261101/work/target/source-dependencies/bids4s-19f022d002f69292dec056eb0762b877438c47305cee6c176adf3e0f780e9146/project
+[info] loading settings for project root from build.sbt ...
+[info] resolving key references (17509 settings) ...
+[info] set current project to sanctity (in build file:/private/tmp/sanctity-recovery-20261101/work/)
+[success] Total time: 0 s, completed Nov 1, 2026, 9:19:28 p.m.
+[success] Total time: 0 s, completed Nov 1, 2026, 9:19:28 p.m.
+[success] Total time: 0 s, completed Nov 1, 2026, 9:19:28 p.m.
+[success] Total time: 0 s, completed Nov 1, 2026, 9:19:28 p.m.
+[success] Total time: 0 s, completed Nov 1, 2026, 9:19:28 p.m.
+[success] Total time: 0 s, completed Nov 1, 2026, 9:19:28 p.m.
+[success] Total time: 0 s, completed Nov 1, 2026, 9:19:28 p.m.
+[info] compiling 19 Scala sources to /private/tmp/sanctity-recovery-20261101/work/modules/kernel/target/scala-3.3.8/classes ...
+[info] done compiling
+[info] compiling 18 Scala sources to /private/tmp/sanctity-recovery-20261101/work/modules/application/target/scala-3.3.8/classes ...
+[info] done compiling
+[info] compiling 23 Scala sources to /private/tmp/sanctity-recovery-20261101/work/modules/bids/target/scala-3.3.8/classes ...
+[info] compiling 4 Scala sources to /private/tmp/sanctity-recovery-20261101/work/modules/http/target/scala-3.3.8/classes ...
+[info] compiling 20 Scala sources to /private/tmp/sanctity-recovery-20261101/work/modules/postgres/target/scala-3.3.8/classes ...
+[info] compiling 4 Scala sources to /private/tmp/sanctity-recovery-20261101/work/modules/objects/target/scala-3.3.8/classes ...
+[info] done compiling
+[error] -- [E007] Type Mismatch Error: /private/tmp/sanctity-recovery-20261101/work/modules/postgres/src/main/scala/sanctity/postgres/BackupBundle.scala:38:50 
+[error] 38 |    .fold(_ => throw PolicyFailure("backup-json"),identity)
+[error]    |                                                  ^^^^^^^^
+[error]    |                             Found:    String
+[error]    |                             Required: io.circe.Json
+[error]    |
+[error]    |                             The following import might fix the problem:
+[error]    |
+[error]    |                               import io.circe.Encoder.encodeString
+[error]    |
+[error]    |
+[error]    | longer explanation available when compiling with `-explain`
+[info] done compiling
+[error] -- [E007] Type Mismatch Error: /private/tmp/sanctity-recovery-20261101/work/modules/postgres/src/main/scala/sanctity/postgres/BackupBundle.scala:155:131 
+[error] 155 |              val entry = JsonCodecs.decode[sanctity.kernel.Entry](r.getString(1)).fold(p => throw sanctity.application.Failure(p),identity)
+[error]     |                                                                                                                                   ^^^^^^^^
+[error]     |                             Found:    io.circe.Json => String
+[error]     |                             Required: sanctity.kernel.Entry => String
+[error]     |
+[error]     | longer explanation available when compiling with `-explain`
+[error] -- [E006] Not Found Error: /private/tmp/sanctity-recovery-20261101/work/modules/postgres/src/main/scala/sanctity/postgres/BackupBundle.scala:157:58 
+[error] 157 |                case sanctity.kernel.Entry.File(_,_,b) => b.digest.value -> b.size
+[error]     |                                                          ^
+[error]     |                                                          Not found: b
+[error]     |
+[error]     | longer explanation available when compiling with `-explain`
+[info] done compiling
+[error] three errors found
+[error] (postgres / Compile / compileIncremental) Compilation failed
+[error] Total time: 20 s, completed Nov 1, 2026, 9:19:48 p.m.
+Traceback (most recent call last):
+  File "/private/tmp/sanctity-recovery-20261101/work/scripts/package-service.py", line 173, in <module>
+    main()
+    ~~~~^^
+  File "/private/tmp/sanctity-recovery-20261101/work/scripts/package-service.py", line 142, in main
+    subprocess.run(BUILD_COMMAND, cwd=ROOT, check=True)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bbuchsbaum/homebrew/Cellar/python@3.13/3.13.4/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 577, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['sbt', 'kernel/clean', 'application/clean', 'bids/clean', 'objects/clean', 'postgres/clean', 'http/clean', 'service/clean', 'service/inputs']' returned non-zero exit status 1.

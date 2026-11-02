@@ -1,0 +1,162 @@
+{
+  "schemaVersion": 1,
+  "task": "H03.1",
+  "mote": "bd-01M4X8MA9J2FXA82A9RVB85YD9",
+  "status": "passed",
+  "at": "2026-11-02T02:31:53.390183+00:00",
+  "sourceCommit": "2fd2b3eaca3a5ed4bacc7573608ebf5f4d7a81c4",
+  "sourceSha256": {
+    "docs/backup-bundle.md": "1717c353852cc53fb998841540e43c434660ec1475295981d79f4ac5c416af17",
+    "modules/postgres/src/main/scala/sanctity/postgres/BackupBundle.scala": "2c15bdf1bbf9bf68d9b7338a9ed83847e79e4a6c06f4fa76ce2363d29b4c8751",
+    "modules/service/src/main/scala/sanctity/app/BackupCli.scala": "04f1988d98fd80459db32b226eb1d14773ac7904328caf85fee7579da2788049",
+    "modules/service/src/main/scala/sanctity/app/ServiceMain.scala": "77396b88803a7433ec384cfd6cf8ac45d6faf8fd0f2501921b3fdd902af64c81",
+    "scripts/backup-store.py": "c48032e46cb1ca44b5f29e0ec4976d51faedfd55e68dc25fe67fa8089b77a4ac",
+    "scripts/check-isolated-backup.py": "016b3bc6cba968b896a22432d7fd094598afd13e540f6bb20292893673c6dfaa"
+  },
+  "artifactSha256": "8c5f11f521e6e53d98f200758a909959243ff7606a3da880433715a3f6ea050d",
+  "bundleVersion": "sanctity-backup-v2",
+  "configurationIdentity": {
+    "fixtureScriptSha256": "016b3bc6cba968b896a22432d7fd094598afd13e540f6bb20292893673c6dfaa",
+    "postgresImage": "postgres@sha256:b0f9560a2de083e2cc7382e75f808c7381a32852a7ec49117deedb300e552b24",
+    "storeImage": "python@sha256:2d44738ebf4ce5f63b9d9ea871e9c7cfdc0426f7b0c97cac915fd88ded1d86bb",
+    "installation": "f61e3c20-b6a9-4acf-9465-008b83c4acb0",
+    "writerFingerprint": "0b944bd2ccdedb6f3a9d640e2927082d48f35bcd033b1dbdaebfd6d093b88aba",
+    "signingKey": "RFC8032 public synthetic test vector in qualification script",
+    "serviceUid": "10004:10004",
+    "recoveryUid": "10005:10005",
+    "storeMounts": "dedicated store and protected token volumes plus read-only transport script; no source storage or database credentials",
+    "runtime": "Temurin 21.0.12.1; host Python 3.13.4; PostgreSQL 17.11; pinned Python 3.13 store image"
+  },
+  "verification": {
+    "packagedScenarios": 15,
+    "checks": [
+      "packaged-snapshot-allows-concurrent-policy-and-scientific-publication",
+      "ordinary-runtime-database-role-cannot-capture-an-operator-backup",
+      "packaged-verifier-refuses-missing-corrupt-extra-aliased-and-unknown-version-bundles",
+      "dump-restores-exact-historical-head-policy-and-object-inventory-into-closed-probe",
+      "killed-capture-never-publishes-and-new-attempt-succeeds",
+      "hung-dump-terminated-at-configured-deadline-with-no-published-bundle",
+      "missing-or-corrupt-source-object-refuses-publication",
+      "writer-cannot-read-reader-cannot-write-and-unknown-token-denied",
+      "incomplete-and-corrupt-staging-unpublished-retry-verifies-and-published-bytes-immutable",
+      "interrupted-copy-excluded-from-inventory-with-age-bytes-and-policy-head-diagnostics",
+      "store-restart-and-separate-reader-fetch-all-verified-bytes-without-source-mounts",
+      "recovery-os-user-cannot-open-service-volume",
+      "bounded-two-run-capture-copy-schedule-produces-distinct-verified-bundles",
+      "reader-refuses-corrupted-and-missing-published-files-without-publishing-a-local-restore",
+      "unavailable-independent-witness-refuses-new-backup-point"
+    ],
+    "serviceUnitTests": 9,
+    "postgresUnitTests": 69,
+    "historicalPackagedUpgrade": "passed; unchanged oracle",
+    "dumpProbe": "fresh private database, closed before any runtime; exact historical release/policy/object inventory"
+  },
+  "acceptance": {
+    "1": "One exported MVCC snapshot and exact hash inventories; running jars/source/artifact and schema identified; partial/corrupt attempts unpublished.",
+    "2": "Bounded dump and copies, explicit retries and two-run schedule; separately permissioned container volumes and credentials; concurrency, interruption, missing/corrupt objects and access denials observed.",
+    "3": "Verified publication status, age, bytes, objects, checkpoint/head diagnostics and policy-link digest retained; exact restore format documented; local host only.",
+    "4": "Versioned v2 bundle carries supported profile and signed enrollment/checkpoint linkage; O03.7 consumer must freshly join the live witness before opening."
+  },
+  "failedAttempts": [
+    {
+      "runs": [
+        "01"
+      ],
+      "reason": "fixture attempted a large README text correction outside supported bounds; replaced with supported dataset metadata correction"
+    },
+    {
+      "runs": [
+        "02"
+      ],
+      "reason": "backup incorrectly reused numeric-free policy canonical encoder; separate integer-capable backup encoder fixes Scala/Python identity"
+    },
+    {
+      "runs": [
+        "03",
+        "04",
+        "05"
+      ],
+      "reason": "Docker restart reallocated the random host port; reader container remained healthy while host schedule used stale endpoint; final harness rediscovers it"
+    },
+    {
+      "run": "package-encoder",
+      "reason": "new digest function shadowed identity; renamed manifestDigest; final package compiles"
+    }
+  ],
+  "commands": [
+    "python3 scripts/package-service.py --output target/service-h031-qualified",
+    "python3 scripts/check-isolated-backup.py target/service-h031-qualified/sanctity-0.1.0-SNAPSHOT.zip --output target/h031-isolated-06",
+    "sbt service/test postgres/test",
+    "python3 scripts/check-upgrade-compatibility.py verify --artifact ARTIFACT --fixture RETAINED_CORPUS --output NEW_DIRECTORY --organization --modern"
+  ],
+  "limitations": [
+    "No off-host or institutional disaster recovery claim.",
+    "HTTP is explicitly a local test transport; deployed clients require HTTPS.",
+    "Closed dump probe does not authorize organization restore reopening; O03.7 and O03.8 remain separate gates.",
+    "No organization barrier release or reopening in this task. O03.7 and O03.8 remain open.",
+    "Inventory verification denotes publication, not a fresh full disk scrub. Recovery downloads recheck all bytes.",
+    "No source object garbage collector is supported; a future collector must coordinate backup retention."
+  ],
+  "evidenceSha256": {
+    "TEST-sanctity.app.ServiceConfigurationSuite.xml": "9313c28ca328a7a06cb476fb36f2148813bd372ed8afac4435c5e923d4c0c8a6",
+    "TEST-sanctity.policy.PolicyJournalSuite.xml": "85ed05c39f9faf9ccb18763c23ed39b962e4f92a49f9a51dedabed6f031c4e1c",
+    "TEST-sanctity.policy.PolicyTransportSuite.xml": "ce1869e9ea0928bc8ae1af8617e03d17d8b91fac1aec3dcf785b9d5bea8565f4",
+    "TEST-sanctity.policy.PolicyWireSuite.xml": "6234a622cc671e585488de0339a27cf6a25f4cf11f48b4667e05730d89a6481e",
+    "TEST-sanctity.postgres.PersistenceSuite.xml": "ea851d80aecb13a153d5eae38d876f236672ceadf54bede24d88d624ad06c84d",
+    "build-receipt.json": "3844ad369bc6b3519d0d15ecb7323b7dcca4f074d4241d908cf9a8f978a83c33",
+    "h031-historical-upgrade/receipt.json": "19432a7135f1ca8ff6c58b075d2a2e18b355d3015b8e7a67ec186bb0e81e6daa",
+    "h031-historical-upgrade/service.log": "d649607530e49d01afa1f036c20a06ab82d8deb0f24dc969e00d1a277370e27f",
+    "h031-historical-upgrade.log": "fd0fc6d735967693a154ad81b602a104905cc07bb185dba47b552e80f67855c5",
+    "h031-isolated-01/concurrent-capture.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "h031-isolated-01/receipt.json": "7978c17e27b903d9e2269473dcbdde825889a0ec0c2fad46f27def14eeb53986",
+    "h031-isolated-01/runtime.log": "d649607530e49d01afa1f036c20a06ab82d8deb0f24dc969e00d1a277370e27f",
+    "h031-isolated-01/witness.log": "5e7001658e8f39d28228e5a535c50674b6cf4e735538888055c6fb0fe549a9f3",
+    "h031-isolated-01.log": "ca5554fa43a6595495bd4339ecfa270580342f9970109a7e10d1cee47a0d6f42",
+    "h031-isolated-02/concurrent-capture.log": "98a88bf9a3dc84d3527ce88c55808e78b56a260e722b1335eb91cc4d3ee00f0a",
+    "h031-isolated-02/receipt.json": "7978c17e27b903d9e2269473dcbdde825889a0ec0c2fad46f27def14eeb53986",
+    "h031-isolated-02/runtime.log": "d649607530e49d01afa1f036c20a06ab82d8deb0f24dc969e00d1a277370e27f",
+    "h031-isolated-02/witness.log": "5e7001658e8f39d28228e5a535c50674b6cf4e735538888055c6fb0fe549a9f3",
+    "h031-isolated-02.log": "829da871c1034d002882b49376fbfccd1f7897b88ba51aa52e05e61584b3781a",
+    "h031-isolated-03/concurrent-capture.log": "cf6857f19c2e191929467c9bf9f0b1a698835fdec449c71e348bbb78fe441b8c",
+    "h031-isolated-03/isolation.json": "87b4df7a49fd23bd00cc59ff612f77f69afa25120fd08f941798f766a1a860db",
+    "h031-isolated-03/receipt.json": "2f38b2ad0c171e7199bb0ca21556289181291a7bb72dd5eee33bfaa5fa487000",
+    "h031-isolated-03/runtime.log": "d649607530e49d01afa1f036c20a06ab82d8deb0f24dc969e00d1a277370e27f",
+    "h031-isolated-03/witness.log": "5e7001658e8f39d28228e5a535c50674b6cf4e735538888055c6fb0fe549a9f3",
+    "h031-isolated-03.log": "ec1c9f17e22e7d6e8e9cfb5565a8a8c8ddcbfd2ffa6757430e49b5a7d52f04a8",
+    "h031-isolated-04/concurrent-capture.log": "8f7f6aa07f217e7f595328e1326ea7d1a233b92cc10ff653deb19ecc6ee50582",
+    "h031-isolated-04/isolation.json": "2b741c0e7c548fa8b77fac2bd53d03276970995d32caae85f285409d196eacef",
+    "h031-isolated-04/receipt.json": "2f38b2ad0c171e7199bb0ca21556289181291a7bb72dd5eee33bfaa5fa487000",
+    "h031-isolated-04/runtime.log": "d649607530e49d01afa1f036c20a06ab82d8deb0f24dc969e00d1a277370e27f",
+    "h031-isolated-04/witness.log": "5e7001658e8f39d28228e5a535c50674b6cf4e735538888055c6fb0fe549a9f3",
+    "h031-isolated-04.log": "1b8319c71850e6b9189e5b0dc6c21e75c889696350f9b6396dbb5a06ca4bf72f",
+    "h031-isolated-05/concurrent-capture.log": "9114a7fdfb78a7ae2b79bb63e4918b38812f995a8af666b71032826bfb92b64e",
+    "h031-isolated-05/isolation.json": "9ae0b1ed7091894daaf4dccd7159896c5ed6825a18bc945d13eebb9454fafed4",
+    "h031-isolated-05/receipt.json": "2f38b2ad0c171e7199bb0ca21556289181291a7bb72dd5eee33bfaa5fa487000",
+    "h031-isolated-05/runtime.log": "d649607530e49d01afa1f036c20a06ab82d8deb0f24dc969e00d1a277370e27f",
+    "h031-isolated-05/witness.log": "5e7001658e8f39d28228e5a535c50674b6cf4e735538888055c6fb0fe549a9f3",
+    "h031-isolated-05.log": "896674f1754ebf0317cb73fc8da6b0187d754ede4052fd7ed63fd53e741201b2",
+    "h031-isolated-06/bundle-manifest.json": "74bd78f0aff2f7f29647ac5244e0aab8fea07c37344db8433e38c9dcd872114d",
+    "h031-isolated-06/concurrent-capture.log": "fab932f04ed0705b68ffdce7407d1a6e4bbaba0ee57f173dc9f251f4658cc344",
+    "h031-isolated-06/inventory.json": "5095a30f282cde91353013f4e1993a3bbb372bcc095f38643f68bb8df84cbaef",
+    "h031-isolated-06/isolation.json": "87b4df7a49fd23bd00cc59ff612f77f69afa25120fd08f941798f766a1a860db",
+    "h031-isolated-06/receipt.json": "cf112f9982568ac8a65e55d89928ca81740980eceb9bf73efd087a07eb5209fa",
+    "h031-isolated-06/restart-endpoint.json": "83d6d05b36b5b3504bb3fdf9c738c35792988a4642ebbfcc39659e3e9c8f6086",
+    "h031-isolated-06/runtime.log": "d649607530e49d01afa1f036c20a06ab82d8deb0f24dc969e00d1a277370e27f",
+    "h031-isolated-06/schedule.log": "3247c441f3246b188431067620ea01cd2d21d458af4bf8a398412c6c151cd67b",
+    "h031-isolated-06/store.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "h031-isolated-06/witness.log": "5e7001658e8f39d28228e5a535c50674b6cf4e735538888055c6fb0fe549a9f3",
+    "h031-isolated-06.log": "470b453aa1b4bc7197318b81c8a017409edcd7e12cfd8d6f120d84bc7ed337b3",
+    "h031-package-bounded.log": "72f4643e584288cbfaceace4b3d2c58ddd037a53eac68eda69e9e41624738db0",
+    "h031-package-encoder.log": "333c325c8c238006f90b153fd21f9ede134ad4a6d8dd4939eda41279e30a7a98",
+    "h031-package-final.log": "454eae7079c757d533b144ca540c36435511e622d87ed2f105b16cf5ecfc0161",
+    "h031-package-qualified.log": "b1305fd32d962e5f75954874dda31ce26c6e2d9a6c880e61d011244da5471f4a",
+    "h031-package.log": "10ad0f0f4432a0b14c68f042815e79e8ed4b435ce73ff824d9ea876acbff8bf7",
+    "h031-schedule-diagnostic/isolation.json": "87b4df7a49fd23bd00cc59ff612f77f69afa25120fd08f941798f766a1a860db",
+    "h031-schedule-diagnostic/runtime.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "h031-schedule-diagnostic/store.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "h031-schedule-diagnostic/witness.log": "5e7001658e8f39d28228e5a535c50674b6cf4e735538888055c6fb0fe549a9f3",
+    "h031-schedule-diagnostic.log": "fe0f0b85a58cca4dbe352de09bbcb330cade77a63128c2cf097dd9d23bd0c571",
+    "h031-unit.log": "d508741e3776d32f933cb6c80ad1eb955f7adf9b65ea22975b709258b30cf1a5",
+    "manifest.json": "6359058c836b6b034c3bd78cbbae3bb464707c20379edd9bfbceea00e64103d8"
+  }
+}

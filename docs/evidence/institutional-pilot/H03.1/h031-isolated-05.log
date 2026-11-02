@@ -1,0 +1,27 @@
+Traceback (most recent call last):
+  File "/private/tmp/sanctity-recovery-20261101/work/scripts/check-isolated-backup.py", line 328, in <module>
+    if __name__=='__main__':main()
+                            ~~~~^^
+  File "/private/tmp/sanctity-recovery-20261101/work/scripts/check-isolated-backup.py", line 315, in main
+    qualify(artifact,root,output,checks)
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/sanctity-recovery-20261101/work/scripts/check-isolated-backup.py", line 287, in qualify
+    scheduled=run([sys.executable,'-c',"import runpy; runpy.run_path("+repr(str(HERE/'backup-store.py'))+",run_name='fixture')['main']()",'schedule','--url',url,'--token-file',writerfile,'--allow-insecure-test',
+        '--capture-command',command,'--staging-root',captures,'--interval','1','--count','2'],env=f.env,timeout=180)
+  File "/private/tmp/sanctity-recovery-20261101/work/scripts/check-isolated-backup.py", line 106, in run
+    assert (p.returncode != 0) if fail else (p.returncode == 0), 'fixture command failed: '+Path(args[0]).name+': '+(p.stdout+p.stderr).decode(errors='replace')[:2200]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: fixture command failed: python3.13: Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import runpy; runpy.run_path('/private/tmp/sanctity-recovery-20261101/work/scripts/backup-store.py',run_name='fixture')['main']()
+                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/private/tmp/sanctity-recovery-20261101/work/scripts/backup-store.py", line 361, in main
+    results.append(push(output, args.url, token, insecure))
+                   ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/sanctity-recovery-20261101/work/scripts/backup-store.py", line 294, in push
+    code, result = request(url, token, 'POST', '/v2/publish/' + key, body=canonical(manifest), insecure=insecure, allowed=(200, 409))
+                   ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/sanctity-recovery-20261101/work/scripts/backup-store.py", line 286, in request
+    raise RuntimeError('backup transport unavailable') from None
+RuntimeError: backup transport unavailable
+

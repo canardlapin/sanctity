@@ -1,6 +1,6 @@
 {
-  "schemaVersion": 15,
-  "at": "2026-11-02T02:03:43.429987+00:00",
+  "schemaVersion": 16,
+  "at": "2026-11-02T02:31:53.390183+00:00",
   "program": "bd-01M4W3ZN8Z16J30J8EYPWQERQC",
   "immediateMilestone": {
     "key": "EP0",
@@ -13,7 +13,7 @@
     "mote": "bd-01M4X8M8Y18BD586KA2AD1BMH9",
     "plan": "docs/core-hardening-plan.md"
   },
-  "updateKind": "F03 and F02 engineering reviews complete; versioned witness compatibility qualified; verified backup implementation underway.",
+  "updateKind": "Verified isolated backup engineering complete; closed organization restore is next.",
   "baseline": {
     "commit": "95763adf94e1a9977b1cad73a92e842564448013",
     "published": true,
@@ -26,8 +26,8 @@
   },
   "countsByOriginalTag": {
     "pilot-task": {
-      "open": 62,
-      "closed": 22,
+      "open": 61,
+      "closed": 23,
       "doing": 1
     },
     "pilot-gate": {
@@ -36,7 +36,7 @@
     }
   },
   "activeWork": [
-    "H03.1"
+    "O03.7"
   ],
   "recoveryOrder": [
     "F03.4",
@@ -107,7 +107,8 @@
     "F03.4",
     "F03 engineering review",
     "O03.7.R1",
-    "F02 engineering review"
+    "F02 engineering review",
+    "H03.1"
   ],
   "currentQualification": {
     "sourceCommit": "e94f88d",
@@ -115,5 +116,13 @@
     "integrationTests": 292,
     "postgresCrashRestore": "passed",
     "receipt": "docs/evidence/institutional-pilot/F03.4/receipt.json"
+  },
+  "backupQualification": {
+    "sourceCommit": "2fd2b3eaca3a5ed4bacc7573608ebf5f4d7a81c4",
+    "artifactSha256": "8c5f11f521e6e53d98f200758a909959243ff7606a3da880433715a3f6ea050d",
+    "packagedScenarios": 15,
+    "unitTests": 78,
+    "historicalUpgrade": "passed",
+    "receipt": "docs/evidence/institutional-pilot/H03.1/receipt.json"
   }
 }

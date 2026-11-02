@@ -1,0 +1,71 @@
+{
+  "bundles": [
+    {
+      "ageSeconds": 2.60392,
+      "bundle": "305f842f55409912fe7d6a4f14bf9f0faf22d7548403e06a3d23e457f26810f0",
+      "bytes": 2499456,
+      "createdAt": "2026-11-02T02:29:41.078795Z",
+      "objects": 3,
+      "policyHead": {
+        "appliedHash": "38b3c55faba1f154a8cbad4430d3d502bee4f28e397830832946b73891270b36",
+        "barrier": null,
+        "capabilities": "6616544f200829bbc14c9c7713b17e6c9a2c781abf569049ef1c04e7c23a5446",
+        "enrolled": true,
+        "epoch": "0",
+        "installation": "f61e3c20-b6a9-4acf-9465-008b83c4acb0",
+        "journalHash": "2030f72cc5d53be24a5838556ab9c74d6e6d72c65ca9824dc18e3658244491c4",
+        "pending": null,
+        "revision": "1",
+        "sequence": "3",
+        "writer": "0b944bd2ccdedb6f3a9d640e2927082d48f35bcd033b1dbdaebfd6d093b88aba"
+      },
+      "policyLinkSha256": "99ddae4530654244eb4d77ac34d97d15b9e763ad3e81eb742883443256cdeba9",
+      "verifiedAtPublication": true
+    },
+    {
+      "ageSeconds": 41.901802,
+      "bundle": "74bd78f0aff2f7f29647ac5244e0aab8fea07c37344db8433e38c9dcd872114d",
+      "bytes": 2494734,
+      "createdAt": "2026-11-02T02:29:01.781007Z",
+      "objects": 2,
+      "policyHead": {
+        "appliedHash": "5c7174f3f3270ce70727745cf59f71e15972e5c3e8459a67ce4552985b30d335",
+        "barrier": null,
+        "capabilities": "6616544f200829bbc14c9c7713b17e6c9a2c781abf569049ef1c04e7c23a5446",
+        "enrolled": true,
+        "epoch": "0",
+        "installation": "f61e3c20-b6a9-4acf-9465-008b83c4acb0",
+        "journalHash": "bd9de7edd606b3d33cea6994e037aac7ea5a5b67839c950c82a40861faf40ae2",
+        "pending": null,
+        "revision": "0",
+        "sequence": "1",
+        "writer": "0b944bd2ccdedb6f3a9d640e2927082d48f35bcd033b1dbdaebfd6d093b88aba"
+      },
+      "policyLinkSha256": "8f20438008bacd3cf0a7bc8935c18cf37299cabd45be881d98baf6a1621efc4f",
+      "verifiedAtPublication": true
+    },
+    {
+      "ageSeconds": 0.095352,
+      "bundle": "9df10317971d36870fdc562f3c46b149e68fdbc01a2b9f030f3ee5f7426a230a",
+      "bytes": 2499456,
+      "createdAt": "2026-11-02T02:29:43.587536Z",
+      "objects": 3,
+      "policyHead": {
+        "appliedHash": "38b3c55faba1f154a8cbad4430d3d502bee4f28e397830832946b73891270b36",
+        "barrier": null,
+        "capabilities": "6616544f200829bbc14c9c7713b17e6c9a2c781abf569049ef1c04e7c23a5446",
+        "enrolled": true,
+        "epoch": "0",
+        "installation": "f61e3c20-b6a9-4acf-9465-008b83c4acb0",
+        "journalHash": "2030f72cc5d53be24a5838556ab9c74d6e6d72c65ca9824dc18e3658244491c4",
+        "pending": null,
+        "revision": "1",
+        "sequence": "3",
+        "writer": "0b944bd2ccdedb6f3a9d640e2927082d48f35bcd033b1dbdaebfd6d093b88aba"
+      },
+      "policyLinkSha256": "99ddae4530654244eb4d77ac34d97d15b9e763ad3e81eb742883443256cdeba9",
+      "verifiedAtPublication": true
+    }
+  ],
+  "version": 1
+}

@@ -1,0 +1,15 @@
+{
+  "status": "failed",
+  "completedChecks": [
+    "packaged-snapshot-allows-concurrent-policy-and-scientific-publication",
+    "dump-restores-exact-historical-head-policy-and-object-inventory-into-closed-probe",
+    "killed-capture-never-publishes-and-new-attempt-succeeds",
+    "hung-dump-terminated-at-configured-deadline-with-no-published-bundle",
+    "missing-or-corrupt-source-object-refuses-publication",
+    "writer-cannot-read-reader-cannot-write-and-unknown-token-denied",
+    "incomplete-and-corrupt-staging-unpublished-retry-verifies-and-published-bytes-immutable",
+    "interrupted-copy-excluded-from-inventory-with-age-bytes-and-policy-head-diagnostics",
+    "store-restart-and-separate-reader-fetch-all-verified-bytes-without-source-mounts",
+    "recovery-os-user-cannot-open-service-volume"
+  ]
+}

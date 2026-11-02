@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "status": "passed",
+  "artifactSha256": "8c5f11f521e6e53d98f200758a909959243ff7606a3da880433715a3f6ea050d",
+  "transportScriptSha256": "c48032e46cb1ca44b5f29e0ec4976d51faedfd55e68dc25fe67fa8089b77a4ac",
+  "checks": [
+    "packaged-snapshot-allows-concurrent-policy-and-scientific-publication",
+    "ordinary-runtime-database-role-cannot-capture-an-operator-backup",
+    "packaged-verifier-refuses-missing-corrupt-extra-aliased-and-unknown-version-bundles",
+    "dump-restores-exact-historical-head-policy-and-object-inventory-into-closed-probe",
+    "killed-capture-never-publishes-and-new-attempt-succeeds",
+    "hung-dump-terminated-at-configured-deadline-with-no-published-bundle",
+    "missing-or-corrupt-source-object-refuses-publication",
+    "writer-cannot-read-reader-cannot-write-and-unknown-token-denied",
+    "incomplete-and-corrupt-staging-unpublished-retry-verifies-and-published-bytes-immutable",
+    "interrupted-copy-excluded-from-inventory-with-age-bytes-and-policy-head-diagnostics",
+    "store-restart-and-separate-reader-fetch-all-verified-bytes-without-source-mounts",
+    "recovery-os-user-cannot-open-service-volume",
+    "bounded-two-run-capture-copy-schedule-produces-distinct-verified-bundles",
+    "reader-refuses-corrupted-and-missing-published-files-without-publishing-a-local-restore",
+    "unavailable-independent-witness-refuses-new-backup-point"
+  ],
+  "postgresImage": "postgres@sha256:b0f9560a2de083e2cc7382e75f808c7381a32852a7ec49117deedb300e552b24",
+  "storeImage": "python@sha256:2d44738ebf4ce5f63b9d9ea871e9c7cfdc0426f7b0c97cac915fd88ded1d86bb",
+  "scope": "Synthetic local snapshot and isolated backup publication engineering",
+  "limitations": [
+    "No off-host or institutional disaster recovery claim.",
+    "HTTP is explicitly a local test transport; deployed clients require HTTPS.",
+    "Closed dump probe does not authorize organization restore reopening; O03.7 and O03.8 remain separate gates."
+  ]
+}
