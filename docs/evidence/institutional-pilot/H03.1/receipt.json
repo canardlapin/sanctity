@@ -62,7 +62,7 @@
       "runs": [
         "01"
       ],
-      "reason": "fixture attempted a large README text correction outside supported bounds; replaced with supported dataset metadata correction"
+      "reason": "fixture attempted README correction, which is not a supported authored companion document; replaced with supported dataset_description.json correction"
     },
     {
       "runs": [
