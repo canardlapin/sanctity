@@ -350,7 +350,23 @@ def verify(f, fixture, modern, organization=False):
     require(f.json(root, tokens["owner"])["head"] == oracle["head"], "historical head changed")
     for release in oracle["releases"]:
         path = root + "/releases/" + release["id"]
-        require(f.json(path, tokens["owner"]) == release["representation"], "historical interpretation/representation changed")
+        observed = f.json(path, tokens["owner"])
+        expected = release["representation"]
+        # The frozen pre-console response predates the additive provenance panel.
+        # Preserve every original field exactly, including scientific identities,
+        # while rejecting any other unreviewed response-shape change.
+        extra = set(observed) - set(expected)
+        require(extra <= ({"provenance"} if modern else set()), "unexpected release response fields")
+        require({k: v for k, v in observed.items() if k not in extra} == expected,
+                "historical interpretation/representation changed")
+        if "provenance" in extra:
+            provenance = observed["provenance"]
+            require(isinstance(provenance, dict) and set(provenance) == {
+                "kind", "reason", "proposedBy", "proposedAt", "acceptedBy", "changesFromParent"},
+                "unexpected provenance representation")
+            require(provenance["acceptedBy"] == oracle["principals"]["owner"] and
+                    provenance["proposedBy"] == oracle["principals"]["owner"],
+                    "owner provenance identity changed")
         for name, wanted in release["files"].items():
             status, data = f.http(path + "/file?path=" + urllib.parse.quote(name), tokens["owner"])
             require(status == 200 and digest(data) == wanted["sha256"] and len(data) == wanted["size"], "historical export differs")

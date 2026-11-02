@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "/tmp/sanctity-recovery-20261101/diagnose-representation.py", line 433, in <module>
+    main()
+    ~~~~^^
+  File "/tmp/sanctity-recovery-20261101/diagnose-representation.py", line 421, in main
+    receipt["observed"] = freeze(f, fixture) if args.mode == "freeze" else verify(f, fixture, args.modern, args.organization)
+                                                                           ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/sanctity-recovery-20261101/diagnose-representation.py", line 355, in verify
+    require(observed == release["representation"], "historical interpretation/representation changed")
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/sanctity-recovery-20261101/diagnose-representation.py", line 46, in require
+    raise AssertionError(message)
+AssertionError: historical interpretation/representation changed

@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "/private/tmp/sanctity-recovery-20261101/repo/scripts/check-upgrade-compatibility.py", line 431, in <module>
+    main()
+    ~~~~^^
+  File "/private/tmp/sanctity-recovery-20261101/repo/scripts/check-upgrade-compatibility.py", line 419, in main
+    receipt["observed"] = freeze(f, fixture) if args.mode == "freeze" else verify(f, fixture, args.modern, args.organization)
+                                                                           ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/sanctity-recovery-20261101/repo/scripts/check-upgrade-compatibility.py", line 353, in verify
+    require(f.json(path, tokens["owner"]) == release["representation"], "historical interpretation/representation changed")
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/sanctity-recovery-20261101/repo/scripts/check-upgrade-compatibility.py", line 46, in require
+    raise AssertionError(message)
+AssertionError: historical interpretation/representation changed

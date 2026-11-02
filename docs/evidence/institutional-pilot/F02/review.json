@@ -16,7 +16,7 @@
     },
     {
       "criterion": "reference/SQL agreement, concurrency, upgrade preservation and denied changes",
-      "result": "current regression passes; independent new-command and historical packaged qualification remain required"
+      "result": "current regression and packaged historical upgrade pass; independent new-command support remains required"
     }
   ],
   "blocker": {
@@ -40,7 +40,15 @@
     "integrationTests": 278,
     "postgresCrashAndRestore": "pass",
     "consoleGate": "pass; current 30/30 UI plus behavior; seven historical regressions reproduced",
-    "realBackend": "pass; ten scenarios plus PostgreSQL persistence"
+    "realBackend": "pass; ten scenarios plus PostgreSQL persistence",
+    "historicalUpgrade": {
+      "status": "passed",
+      "runtime": "Temurin 21.0.12.1",
+      "receipt": "historical-upgrade.json",
+      "artifactSha256": "723e8c3bfd9a163ab3ff3c68f43fbaec0d4634fd385a415cc4ef96663cb712ed",
+      "harnessSha256": "274334cb40f99350aa2c7a95c1633c166539b11d0982334ed2e7d01fc50ed63d",
+      "comparison": "unchanged oracle and every historical field; explicitly checked additive provenance"
+    }
   },
   "failedAttempts": [
     {
@@ -50,6 +58,14 @@
     {
       "log": "baseline-postgres-retry.log",
       "reason": "unit and integration passed; backup demo failed because selected Python lacked hashlib.file_digest; unchanged rerun with Python 3.13 passed"
+    },
+    {
+      "log": "baseline-upgrade.log",
+      "reason": "unqualified Java 25 misidentifies IOApp main thread and loses nonzero exit; unchanged Java 21 passed interruption checks"
+    },
+    {
+      "log": "baseline-upgrade-java21.log",
+      "reason": "exact whole-response check predates additive provenance; diagnostic comparison found no changed historical fields; harness now checks the explicit addition without changing the oracle"
     }
   ],
   "publication": {
@@ -68,6 +84,12 @@
     "baseline-postgres-retry.log": "d429d2981f3763485c7bd493d7bafaf85f9a9da0e4d7f1dc3053170216623e45",
     "baseline-postgres-python313.log": "d0e6c4f47a2ee5b908639b109eb5350ed9424fbbb0bbb7c64a7e4f7bd767de5c",
     "baseline-console.log": "aa0208e76a493e1452ed4d3157e57a647e87c7f6545cf954e53c495958b10628",
-    "baseline-backend.log": "710775d9a2e678829b22189957a327968dfe7867af99af2cb54ca800735187b9"
+    "baseline-backend.log": "710775d9a2e678829b22189957a327968dfe7867af99af2cb54ca800735187b9",
+    "baseline-upgrade-java21.log": "150efcc6c108b61fca68bce1cad44a9c9c1656bf13cd53ca116575ad40f08c21",
+    "baseline-upgrade-additive.log": "e812e8e613bc5b459804ef42356e38be43b9bfb0358e7bb874abc904232058b7",
+    "baseline-upgrade-diagnostic.log": "a417a620d0d997244507a461b6eb7c8ce5a0dade76be834e4b2453a12ac10e36",
+    "baseline-package.log": "95039c8ea8f4da737495881c9995b6e61b2761886cfb63aba461396a1730aac2",
+    "baseline-representation-diagnostic.log": "ba18ccdcbe7c63e781defa3ef5ce26e1881b39ecf92f2073d30197107ccb2847",
+    "baseline-upgrade.log": "2335e0a561ec32e217282582926601257fa9b624ff1841698996073cb9f6c431"
   }
 }
