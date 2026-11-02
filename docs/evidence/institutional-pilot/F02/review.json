@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "task": "F02",
+  "at": "2026-11-02T01:33:48.339380+00:00",
+  "status": "open-blocked",
+  "sourceCommit": "95763adf94e1a9977b1cad73a92e842564448013",
+  "scope": "Exact committed tree in isolated clone; shared scientific working changes excluded.",
+  "review": [
+    {
+      "criterion": "checked organization migrations and records; historical identity preserved",
+      "result": "covered by child receipts and current OrganizationPersistenceSuite"
+    },
+    {
+      "criterion": "explicit private migration and audited stewardship transfer",
+      "result": "local-engineering tests pass; independent-policy support incomplete"
+    },
+    {
+      "criterion": "reference/SQL agreement, concurrency, upgrade preservation and denied changes",
+      "result": "current regression passes; independent new-command and historical packaged qualification remain required"
+    }
+  ],
+  "blocker": {
+    "mote": "bd-01M6CXT4PQ8PT5QZY35WW7K7TK",
+    "work": "O03.7.R1",
+    "missingEventKinds": [
+      "RenameDataset",
+      "TransferSteward",
+      "RequestMove",
+      "ApproveMove",
+      "CommitMove",
+      "WithdrawMove",
+      "RecoverSteward"
+    ],
+    "missingCheckpointTable": "organization_move",
+    "rule": "Do not change the signed v1 capability identity silently; retain historic receipts and explicit unsupported-profile refusals."
+  },
+  "validation": {
+    "aggregateTests": 432,
+    "appTests": 303,
+    "integrationTests": 278,
+    "postgresCrashAndRestore": "pass",
+    "consoleGate": "pass; current 30/30 UI plus behavior; seven historical regressions reproduced",
+    "realBackend": "pass; ten scenarios plus PostgreSQL persistence"
+  },
+  "failedAttempts": [
+    {
+      "log": "baseline-postgres.log",
+      "reason": "sandbox cannot write sbt boot lock; no tests run"
+    },
+    {
+      "log": "baseline-postgres-retry.log",
+      "reason": "unit and integration passed; backup demo failed because selected Python lacked hashlib.file_digest; unchanged rerun with Python 3.13 passed"
+    }
+  ],
+  "publication": {
+    "remote": "https://github.com/canardlapin/sanctity",
+    "branch": "main",
+    "verifiedHead": "95763adf94e1a9977b1cad73a92e842564448013",
+    "account": "canardlapin"
+  },
+  "limitations": [
+    "No F02 parent closure. Child receipts retain their original scope.",
+    "No institutional/provider, off-host or full recovery acceptance.",
+    "Earlier 507 application / 339 integration counts are not the exact committed baseline counts."
+  ],
+  "inputs": {
+    "baseline-postgres.log": "3c42007f130579158361246fb55ca53b3d9931d9bc7127aae70dfba5af1917dc",
+    "baseline-postgres-retry.log": "d429d2981f3763485c7bd493d7bafaf85f9a9da0e4d7f1dc3053170216623e45",
+    "baseline-postgres-python313.log": "d0e6c4f47a2ee5b908639b109eb5350ed9424fbbb0bbb7c64a7e4f7bd767de5c",
+    "baseline-console.log": "aa0208e76a493e1452ed4d3157e57a647e87c7f6545cf954e53c495958b10628",
+    "baseline-backend.log": "710775d9a2e678829b22189957a327968dfe7867af99af2cb54ca800735187b9"
+  }
+}

@@ -1,6 +1,6 @@
 {
-  "schemaVersion": 12,
-  "at": "2026-10-15T04:02:29.036780+00:00",
+  "schemaVersion": 13,
+  "at": "2026-11-02T01:34:21.978121+00:00",
   "program": "bd-01M4W3ZN8Z16J30J8EYPWQERQC",
   "immediateMilestone": {
     "key": "EP0",
@@ -13,103 +13,57 @@
     "mote": "bd-01M4X8M8Y18BD586KA2AD1BMH9",
     "plan": "docs/core-hardening-plan.md"
   },
-  "counts": {
-    "requiredEpics": 8,
-    "conditionalEpics": 2,
-    "gates": 26,
-    "tasks": 85,
-    "requiredTasks": 79,
-    "conditionalTasks": 6,
-    "taskKinds": {
-      "engineering": 66,
-      "mixed": 7,
-      "institutional": 12
-    },
-    "totalNodesIncludingProgram": 122,
-    "closedTasks": 18,
-    "closedGates": 1,
-    "closedEpics": 0
+  "updateKind": "Verified committed baseline published; F02 parent review remains blocked; F03.4 in progress.",
+  "baseline": {
+    "commit": "95763adf94e1a9977b1cad73a92e842564448013",
+    "published": true,
+    "aggregateTests": 432,
+    "integrationTests": 278,
+    "postgresGate": "pass",
+    "consoleGate": "pass",
+    "backendScenarios": 10,
+    "review": "docs/evidence/institutional-pilot/F02/review.json"
   },
-  "completed": [
-    "F01",
-    "F01.1",
-    "F01.2",
-    "F01.3",
-    "F02.1",
-    "F02.2",
-    "F03.1",
-    "F03.2",
-    "H04.1",
-    "H06.2",
-    "L01.1",
-    "O01.1",
-    "O01.2",
-    "O01.3",
-    "O03.1",
-    "O03.6",
-    "O03.6.1",
-    "O03.6.2",
-    "O03.6.3"
+  "countsByOriginalTag": {
+    "pilot-task": {
+      "open": 63,
+      "closed": 21,
+      "doing": 1
+    },
+    "pilot-gate": {
+      "open": 25,
+      "closed": 1
+    }
+  },
+  "activeWork": [
+    "F03.4"
   ],
-  "completedThisTranche": [
-    "O03.6.3",
-    "O03.6"
-  ],
-  "updateKind": "Integrated process qualification and unchanged parent review complete; isolated backup automation is the next recovery prerequisite",
-  "nextReadyEngineering": [
-    "F02.3",
-    "F03.3",
+  "recoveryOrder": [
     "F03.4",
-    "F04.1",
+    "O03.7.R1",
     "H03.1",
-    "O01.4",
-    "O02.1",
-    "O02.3"
+    "O03.7",
+    "O03.8"
   ],
-  "recommendedFirstWork": [
-    "H03.1"
-  ],
-  "independentlyReadyRecoveryWork": [
-    "H03.1"
-  ],
-  "recoveryPriority": {
-    "status": "Independent current-authority durability is qualified. H03.1 backup automation is next; O03.7 remains blocked by H03.1, and O03.8 remains open.",
-    "reason": "Restore organization-enabled catalogs without resurrecting post-backup revocations; user approved making tested recovery the next core milestone.",
-    "orderedWork": [
-      "F03.1",
-      "F03.2",
-      "H03.1",
-      "O03.6",
+  "newBlocker": {
+    "key": "O03.7.R1",
+    "mote": "bd-01M6CXT4PQ8PT5QZY35WW7K7TK",
+    "blocks": [
+      "F02",
       "O03.7",
-      "F02.3",
-      "F03.3",
-      "F03.4",
       "O03.8"
     ],
-    "independentlyReady": [
-      "H03.1"
-    ],
-    "exit": "Packaged current-capability backup-change-isolate-restore succeeds with exact retained science, legitimate access and zero restored revoked permissions; corrupt/stale/unknown evidence stays closed.",
-    "fullIntegration": [
-      "O03.2",
-      "O03.4",
-      "O03.5",
-      "O04.1",
-      "O04.3",
-      "H03",
-      "H00"
-    ],
-    "deferredQualification": [
-      "O03.3",
-      "Q03.1"
-    ],
-    "orderingRule": "Schedule this sequence before browser workspace expansion; only true prerequisites are hard edges. Keep at most two compatible implementation tasks active. Future identity/session/lifecycle features must join the same journal and full restore qualification before final acceptance.",
-    "witnessSlices": [
-      "O03.6.1",
-      "O03.6.2",
-      "O03.6.3"
-    ]
+    "reason": "Seven newer organization commands and move inventory lack independent witness/checkpoint support."
   },
+  "nextReadyEngineering": [
+    "F04.1: Add verified institutional identity bindings and provider configuration",
+    "O01.4: Exercise packaged install, upgrade and release evidence in CI",
+    "O02.1: Expose liveness, readiness and redacted request diagnostics",
+    "O02.3: Enforce admission limits across requests, streams and background work",
+    "H03.1: Implement verified backup automation against an isolated test store",
+    "W02.1: Page release inventories and history without loading whole responses",
+    "W02.2: Persist assigned curation tasks, notes and review state"
+  ],
   "areaStatus": {
     "H01": {
       "mote": "bd-01M4X8M9386WG7Z2RW1J2C2RBB",
@@ -140,197 +94,11 @@
       "status": "open"
     }
   },
-  "checks": {
-    "all122MoteCriteriaParentsDependenciesAndStatuses": "pass",
-    "parentAcceptanceUnchanged": true,
-    "acyclic": true,
-    "onlyO0363AndParentClosed": true,
-    "readyQueueMatchesGraph": true,
-    "preservedHistoricalReceiptInputs": 2395,
-    "allCurrentQualificationInputHashesMatch": true,
-    "historicalSourceIdentityPreserved": true,
-    "currentDocumentLinksResolved": 170,
-    "publishedTaskTablesMatch": true,
-    "moteDoctorAndFsck": "pass",
-    "activeCoreClaimsAndReservations": 0,
-    "unrelatedDoingWorkExcludedFromAudit": 7,
-    "diffWhitespace": "pass"
-  },
-  "validationReceipt": "docs/evidence/institutional-pilot/O03.6.3/coordination-verification.json",
-  "lastImplementationEvidence": {
-    "receipt": "docs/evidence/institutional-pilot/O03.6.3/receipt.json",
-    "completed": [
-      "O03.6.3",
-      "O03.6"
-    ],
-    "verification": {
-      "distinctTests": 250,
-      "suites": {
-        "sanctity.postgres.PolicyReceiptCompatibilitySuite": 3,
-        "sanctity.postgres.CurrentAuthoritySuite": 44,
-        "sanctity.postgres.TransactionSuite": 10,
-        "sanctity.postgres.HttpSuite": 8,
-        "sanctity.postgres.OrganizationPersistenceSuite": 11,
-        "sanctity.postgres.ServicePrivilegesSuite": 4,
-        "sanctity.postgres.PolicyIntegrationSuite": 22,
-        "sanctity.postgres.PersistenceSuite": 19,
-        "sanctity.policy.PolicyTransportSuite": 13,
-        "sanctity.policy.PolicyWireSuite": 19,
-        "sanctity.policy.PolicyJournalSuite": 17,
-        "sanctity.app.ServiceConfigurationSuite": 9,
-        "sanctity.app.OrganizationSuite": 14,
-        "sanctity.app.OrganizationAuthoritySuite": 57
-      },
-      "distinctProcessCases": 33,
-      "caseNames": [
-        "acknowledged-primary-loss",
-        "altered-client-trust",
-        "barrier-running-service-and-permit-drain",
-        "bounded-finalization-drain",
-        "empty-witness-refusal",
-        "exact-retry-and-adversarial-wire",
-        "lost-primary-unresolved-prepare",
-        "packaged-http-barrier-fencing",
-        "pending-restriction-no-overtaking",
-        "primary-after-local-commit",
-        "primary-after-receipt-commit",
-        "primary-before-local-commit",
-        "primary-before-prepare",
-        "primary-before-receipt-commit",
-        "primary-before-receipt-insert",
-        "primary-lost-local-response",
-        "primary-lost-receipt-response",
-        "setup",
-        "store-capability",
-        "store-foreign",
-        "store-gap",
-        "store-payload",
-        "store-reorder",
-        "witness-abort-head",
-        "witness-abort-record",
-        "witness-commit-head",
-        "witness-commit-record",
-        "witness-enroll-head",
-        "witness-enroll-record",
-        "witness-prepare-head",
-        "witness-prepare-record",
-        "witness-recovery_barrier-head",
-        "witness-recovery_barrier-record"
-      ],
-      "primaryBoundaries": 8,
-      "witnessRecordAndHeadBoundaries": 10,
-      "packagedServiceChecks": 11,
-      "packagedWitnessChecks": 7,
-      "packagedCatalogChecks": 10,
-      "historicalUpgrade": {
-        "completedRetry": "same identity; newer head preserved",
-        "currentGrantDecisions": 8,
-        "driftAndNewerSchema": "refused without repair",
-        "exactHistoricalFiles": 4,
-        "historicalReleasesAndInterpretations": 2,
-        "historicalTablesUnchanged": 14,
-        "interruptedImport": "same operation; exact bytes; one acceptance across retries",
-        "oldBinaryRefusesV008": true,
-        "organizationBootstrap": "explicit reviewed mapping; same genesis on retry; private placement; legacy recovery fenced",
-        "organizationMigrationInterrupted": true,
-        "revokedCredential": "denied and historical row unchanged",
-        "runtimeProfile": "separate login"
-      },
-      "drainSeconds": 4.913771,
-      "finalizationDrainSeconds": 5.000123,
-      "finalizationMeasurement": "PostgreSQL transaction-timeout/disconnection timestamps; excludes Docker polling latency",
-      "finalizationSchedulingToleranceSeconds": 0.25,
-      "pollingToleranceSeconds": 0.25,
-      "packagedHttpBeforeAndAfterBarrier": [
-        200,
-        503
-      ],
-      "failures": 0,
-      "errors": 0,
-      "skipped": 0,
-      "counting": "Latest passing regression reports; 33 distinct process case names across the current-artifact matrix and finalizer runs. Repeated setup is counted once. Initial failed fixture attempts are retained, not counted as passes."
-    },
-    "scope": "Integrated current-authority process interruption, storage isolation, fencing and exact-outcome qualification, including repair of server-side phase deadlines."
-  },
-  "inputs": {
-    "docs/policy-process-qualification.md": "c35017ffaa87d487cdb24bfc21ea3690ec4e3b6c54d7a5305a55cd2b6b7305a7",
-    "docs/policy-catalog.md": "c9edc2fdfe50bdfeba18f16cdafa894c8d2502e5f6373bddf9a14e8a085e1b69",
-    "docs/policy-witness.md": "58bffc50405a9f4f32baf7689b1a8d60fe5983cfb8c1f61395117dcb97d2ccb5",
-    "docs/policy-transactions.md": "fc67fff0ec20444809a4eee09760d4539638eb19da8341d1887c0441a07f041e",
-    "docs/core-hardening-plan.md": "8ec79eb856956457949131ec49b96d08975f64e9ddd35d3376a7f663f8acb665",
-    "docs/institutional-pilot-epics.md": "9a624817bf915a9c1909e99bfa13e191a5f73b93a969776b98d799dd959a39fb",
-    "docs/implementation-plan.md": "4c6fe9a5b60aa18480e06e2d98839456ed0d34aa234fdd8d1eb36ec245088d14",
-    "docs/local-demo-plan.md": "d4f84a11e05aa6990258a63a3ed9c80ca07984a9d708a8094ebd263c52954223",
-    "docs/institutional-readiness-plan.md": "444d24114e41238bcc47bb1918eaea4d0023df9a61d116676bad576c0479ce58",
-    "docs/evidence/institutional-pilot/O03.6.3/receipt.json": "1fbf6ab2386d994e6a9d58e8c86538200c67681c6a64b6f028786e5a06fd797e",
-    "docs/institutional-readiness-backlog.json": "d742d31cbefda29c4f1d73221ed25e03608c88d96c354c49431e722d11038c3f",
-    "docs/evidence/institutional-readiness-motes.json": "a08826a91bfc7895c68a8cc6fe320b870f3f3412e4d0be5559fcc09f5cdc8d23",
-    "docs/evidence/institutional-pilot/O03.6.3/parent-acceptance-review.json": "b904f5e3a6996cd3fd732f2878d0368f2c76ff033b9b1bab308eaad7e213415f",
-    "docs/evidence/institutional-pilot/O03.6/receipt.json": "98988932883b255f0c059321aaa7a5e55871d1cb08387bed78a0957efd2a814d",
-    "docs/evidence/institutional-pilot/O03.6.3/before.zip": "528197a9073bec3a55b437f80bec88bbe06953704248be7169e499de5c05748e",
-    "docs/evidence/institutional-pilot/O03.6.3/coordination-verification.py": "839942d4dbcd3c7909a2110e96594afb682b12e2746855447e533738faef5616"
-  },
+  "previousSnapshot": "docs/evidence/institutional-pilot/F02/progress-before-20261101.json",
   "limitations": [
-    "Same Docker host/physical disk; no off-host persistence, physical power-loss or institutional approval claim.",
-    "Independent policy mode requires PostgreSQL 17 transaction_timeout; older versions refuse independent admission.",
-    "No barrier release, policy replay or organization restore: H03.1 and O03.7/O03.8 remain required.",
-    "Current nineteen authority kinds only; full identity/session/lifecycle and institutional qualification remain O03.2/O03.3/SITE01.",
-    "F03.4 retains continuous byte-stream and external-worker checks; this qualifies SQL admission and actual API authentication.",
-    "H04.2 retains scale/performance qualification; five-second SQL permits and the bounded finalization phase keep their documented availability limits.",
-    "Synthetic keys and data; the Docker/database operator is trusted. Test-only JDBC/after-force controls are separate from the service artifact.",
-    "All six core reviews and H00 remain open; no complete demo or institutional acceptance."
-  ],
-  "previousImplementationEvidence": {
-    "receipt": "docs/evidence/institutional-pilot/O03.6.2/receipt.json",
-    "completed": [
-      "O03.6.2"
-    ],
-    "verification": {
-      "distinctTests": 441,
-      "suites": {
-        "sanctity.policy.PolicyJournalSuite": 17,
-        "sanctity.policy.PolicyTransportSuite": 13,
-        "sanctity.policy.PolicyWireSuite": 19,
-        "sanctity.postgres.PersistenceSuite": 19,
-        "sanctity.app.ServiceConfigurationSuite": 9,
-        "sanctity.postgres.ConsoleSuite": 1,
-        "sanctity.postgres.CurrentAuthoritySuite": 44,
-        "sanctity.postgres.HttpSuite": 8,
-        "sanctity.postgres.OperationsSuite": 5,
-        "sanctity.postgres.OrganizationPersistenceSuite": 11,
-        "sanctity.postgres.PolicyIntegrationSuite": 21,
-        "sanctity.postgres.PolicyReceiptCompatibilitySuite": 3,
-        "sanctity.postgres.PostgresLifecycleSuite": 183,
-        "sanctity.postgres.ProcessingRecoverySuite": 3,
-        "sanctity.postgres.ServicePrivilegesSuite": 4,
-        "sanctity.postgres.TransactionSuite": 10,
-        "sanctity.app.OrganizationAuthoritySuite": 57,
-        "sanctity.app.OrganizationSuite": 14
-      },
-      "policyIntegrationTests": 21,
-      "supportedMutationKinds": 19,
-      "packagedServiceChecks": 11,
-      "packagedWitnessChecks": 7,
-      "packagedCatalogChecks": 10,
-      "historicalUpgrade": {
-        "completedRetry": "same identity; newer head preserved",
-        "currentGrantDecisions": 8,
-        "driftAndNewerSchema": "refused without repair",
-        "exactHistoricalFiles": 4,
-        "historicalReleasesAndInterpretations": 2,
-        "historicalTablesUnchanged": 14,
-        "interruptedImport": "same operation; exact bytes; one acceptance across retries",
-        "oldBinaryRefusesV008": true,
-        "organizationBootstrap": "explicit reviewed mapping; same genesis on retry; private placement; legacy recovery fenced",
-        "organizationMigrationInterrupted": true,
-        "revokedCredential": "denied and historical row unchanged",
-        "runtimeProfile": "separate login"
-      },
-      "failures": 0,
-      "errors": 0,
-      "skipped": 0,
-      "strategy": "Complete PostgreSQL regression and witness/service/reference tests, followed by focused policy/HTTP/current-authority tests for explicit response status additions. Latest passing XML reports retained; no duplicate executions counted as distinct tests."
-    },
-    "scope": "Current-catalog fenced enrollment, synchronous policy acknowledgement, exact outcome resolution, protected trust and bounded SQL admission; local engineering qualification."
-  }
+    "No new implementation or acceptance gate is closed by this update.",
+    "Shared uncommitted scientific work is excluded from the committed baseline qualification.",
+    "F02.3 child qualification remains local engineering; F02 review cannot close before newer commands work under independent policy.",
+    "Institutional identity, off-host failure-domain, lifecycle and integrated-release gates remain open."
+  ]
 }

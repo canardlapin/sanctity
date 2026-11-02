@@ -1,0 +1,30 @@
+Console backend evidence: /private/tmp/sanctity-recovery-20261101/repo/target/console-backend.0jzGFj
+
+added 4 packages in 573ms
+[info] welcome to sbt 1.10.5 (Eclipse Adoptium Java 21.0.12.1)
+[info] loading project definition from /private/tmp/sanctity-recovery-20261101/repo/project
+[info] loading settings for project root from build.sbt ...
+[info] loading settings for project bids4s-19f022d002f69292dec056eb0762b877438c47305cee6c176adf3e0f780e9146-build from plugins.sbt ...
+[info] loading project definition from /private/tmp/sanctity-recovery-20261101/repo/target/source-dependencies/bids4s-19f022d002f69292dec056eb0762b877438c47305cee6c176adf3e0f780e9146/project
+[info] loading settings for project root from build.sbt ...
+[info] resolving key references (17508 settings) ...
+[info] set current project to sanctity (in build file:/private/tmp/sanctity-recovery-20261101/repo/)
+Test run sanctity.postgres.ConsoleSuite started
+sanctity.postgres.ConsoleSuite: finished 3.145s
+Test run sanctity.postgres.ConsoleSuite finished: 0 failed, 0 ignored, 1 total 3.152s
+[info] Passed: Total 1, Failed 0, Errors 0, Passed 1
+[success] Total time: 5 s, completed Nov 1, 2026, 8:32:21 p.m.
+[info] running (fork) sanctity.postgres.ConsoleRehearsal 
+[info] PASS authentication
+[info] PASS directory-navigation
+[info] PASS metadata-and-relationships
+[info] PASS subject-sidecar
+[info] PASS frozen-query
+[info] PASS concurrent-correction
+[info] PASS table-correction
+[info] PASS fixed-release-grant
+[info] PASS revocation
+[info] PASS transport
+[info] PostgreSQL persistence after browser/server shutdown: PASS
+[success] Total time: 16 s, completed Nov 1, 2026, 8:32:37 p.m.
+Real-backend console rehearsal: PASS (10 scenarios plus PostgreSQL persistence). Evidence: /private/tmp/sanctity-recovery-20261101/repo/target/console-backend.0jzGFj

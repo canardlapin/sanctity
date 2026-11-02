@@ -1,0 +1,230 @@
+
+added 4 packages in 1s
+npm notice
+npm notice New patch version of npm available! 12.2.0 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice
+ui connect @1440 light: PASS
+ui connect @390 light: PASS
+ui connect @1440 dark: PASS
+ui project @1440 light: PASS
+ui project @390 light: PASS
+ui project @1440 dark: PASS
+ui release @1440 light: PASS
+ui release @390 light: PASS
+ui release @1440 dark: PASS
+ui release-empty @1440 light: PASS
+ui release-empty @390 light: PASS
+ui release-empty @1440 dark: PASS
+ui assessment @1440 light: PASS
+ui assessment @390 light: PASS
+ui assessment @1440 dark: PASS
+ui relationships @1440 light: PASS
+ui relationships @390 light: PASS
+ui relationships @1440 dark: PASS
+ui correction @1440 light: PASS
+ui correction @390 light: PASS
+ui correction @1440 dark: PASS
+ui correction-blocked @1440 light: PASS
+ui correction-blocked @390 light: PASS
+ui correction-blocked @1440 dark: PASS
+ui query @1440 light: PASS
+ui query @390 light: PASS
+ui query @1440 dark: PASS
+ui access @1440 light: PASS
+ui access @390 light: PASS
+ui access @1440 dark: PASS
+ui summary: 30/30 PASS
+behaviour no-inline-style c-4f18-a5d9-0e6c1b2f8a73: PASS 0 elements
+behaviour no-inline-style c-4f18-a5d9-0e6c1b2f8a73: PASS 0 elements
+behaviour no-inline-style 5d9-0e6c1b2f8a73/correct: PASS 0 elements
+behaviour no-inline-style 9c21-6f0a3d9e8b14/access: PASS 0 elements
+behaviour no-inline-style #/: PASS 0 elements
+behaviour focus-after-folder: PASS d:sub-01
+behaviour focus-after-file: PASS f:participants.tsv
+behaviour tab-arrow-focus: PASS Assessment4
+behaviour tab-keeps-file: PASS #/d/b7e3c1d2-5a4f-4e8b-9c21-6f0a3d9e8b14/r/9d4b2e61-7a3c-4f18-a5d9-0e6c1b2f8a73?path=README
+behaviour no-stale-preview: PASS
+behaviour no-delegation-offer: PASS
+behaviour exact-decimal: PASS {"releases":[{"dataset":"b7e3c1d2-5a4f-4e8b-9c21-6f0a3d9e8b14","release":"9d4b2e61-7a3c-4f18-a5d9-0e6c1b2f8a73"}],"participants":{"op":"fieldAtLeast","name":"ag
+behaviour mobile-inspector-visible: PASS inspector top 176
+behaviour no-double-click-revoke: PASS deletes 0
+behaviour escape-cancels-revoke: PASS
+behaviour dropdown-switch-keeps-preview: PASS
+behaviour access-no-release-scope: PASS
+behaviour compact-digest-chips: PASS max chip height 25
+behaviour mobile-diff-readable: PASS path lines 2
+behaviour back-to-edit-focus: PASS {"id":"c-text","kept":true}
+behaviour non-head-correction-warned: PASS
+behaviour no-route-race: PASS
+behaviour single-revoke-request: PASS deletes 1
+behaviour revoked-grant-recorded: PASS
+behaviour enter-adds-release: PASS {"h":"#/d/b7e3c1d2-5a4f-4e8b-9c21-6f0a3d9e8b14/query?release=9d4b2e61-7a3c-4f18-a5d9-0e6c1b2f8a73","added":true}
+behaviour pager-focus: PASS pager-prev
+behaviour assessment-compact-390: PASS height 1982
+behaviour receipt-identity-verified: PASS matches 3
+behaviour blocked-line-flagged: PASS
+behaviour finding-cause-shown: PASS why lines 2
+behaviour inspector-header-check: PASS
+behaviour no-false-resolved: PASS
+behaviour no-grant-leak: PASS {"rows":0,"nullKey":null}
+behaviour check-inputs-named: PASS
+behaviour add-sidecar-resolves: PASS add link 1, tag Resolved
+behaviour new-finding-moved-facts: PASS Re-checked because task-nback_bold.json is an input of bids-mri-header-consistency-v1. Changed: timingMetadata.RepetitionTime.value 1.5 → 1.8.
+behaviour row-findings-grouped: PASS 1 entries
+behaviour fieldmap-direction: PASS sub-01/func/sub-01_task-nback_run-1_bold.nii.gz => sub-01/fmap/sub-01_dir-AP_epi.nii.gz
+behaviour access-round-trip-fresh: PASS 1 rows
+behaviour mobile-tree-folds: PASS {"fold":true,"gap":127}
+behaviour new-sidecar-path-validated: PASS Use a path relative to the dataset root, without “.” or “..” segments.
+behaviour edited-new-path-kept: PASS {"hash":"#/d/b7e3c1d2-5a4f-4e8b-9c21-6f0a3d9e8b14/r/9d4b2e61-7a3c-4f18-a5d9-0e6c1b2f8a73/correct?path=sub-04/sub-04_task-rest_bold.json","h1":"Add sub-04_task-rest_bold.json"}
+behaviour grouped-rows-listed: PASS EventsOutsideWindow 2 occurrences Recorded warning event extends beyond the recorded comparison window ending at 405.0 s; review timing alignment rows 50, 51 co
+behaviour tr-mismatch-key-facts: PASS Authored RepetitionTime 1.5 s Header volume spacing 2 s
+behaviour subject-sidecar-inherits: PASS {"files":["sub-04/func/sub-04_task-rest_bold.nii.gz"],"tag":"Resolved"}
+behaviour inert-sidecar-warns: PASS The new sidecar changes no file’s effective metadata. BIDS inheritance applies it only to 
+behaviour dot-json-refused: PASS {"msg":"Name the sidecar after the files it applies to, such as sub-02_task-nback_bold.json.","inv":"true","head":false}
+behaviour grant-revoke-visible-mobile: PASS {"left":29,"right":361,"vw":390,"label":"Revoke grant c8248d0f","overflow":0}
+behaviour selection-readable-mobile: PASS {"session":false,"tallest":36,"overflow":0}
+behaviour fold-follows-viewport: PASS 1 → 0
+behaviour actions-error-described: PASS {"desc":["g-act-err"],"focus":"act-ReadMetadata"}
+behaviour head-keeps-draft: PASS {"note":true,"kept":true}
+behaviour carried-draft-no-lost-update: PASS {"text":"{ \"TaskName\": \"nback\", \"RepetitionTime\": 1.5, \"EchoTime\": 0.03, \"FlipAngle\": 60,","note":true,"earlier":true}
+behaviour grouped-mismatch-key-facts: PASS Authored RepetitionTime 1.8 s Header volume spacing 1.5 s
+behaviour blocked-preview-error-first: PASS {"hs":["Blocking and new findings","Not evaluated after this change","Unchanged findings"],"first":"Blocks acceptance"}
+behaviour row-lists-readable: PASS 78.0 s; review timing alignment rows listed by file column 1
+behaviour odd-path-refused task-nback_bold.json/x.json: PASS {"inv":"true","head":false}
+behaviour odd-path-refused sub-03/ .json: PASS {"inv":"true","head":false}
+behaviour resize-keeps-focus: PASS {"focus":"tree-filter","value":"nback"}
+behaviour companion-correction-offered: PASS {"link":1,"groups":["Sidecars","Event and behavioural tables","DWI gradients"],"selected":"sub-03/func/sub-03_task-nback_run-1_events.tsv"}
+behaviour table-tab-separator: PASS {"tail":"412.0\t","focus":"c-text","left":"c-reason"}
+behaviour table-width-refused: PASS {"msg":"Row 7 has 1 column; the header has 3. Separate columns with tabs, not spaces.","inv":"true","posts":0}
+behaviour table-correction-accepted: PASS {"first":"Table change","focused":"preview-head","rows":["49","50","50","51","51"],"chg":4,"spoken":true,"gap":true,"meta":false,"tag":"Resolved","accept":true,"matches":3,"step":"3Accepted"}
+behaviour table-blocked-row-marked: PASS {"seal":"Not admissible","flagged":["10"],"sr":"Changed to, blocked by a finding","first":"EventsNumber","accept":true,"hint":true,"why":"NewEventsNumberBlocks acceptanceexpected bounded decimal seconds or n/a row 10 column 1Re-checked because sub-03/func/sub-03_task-nback_run-1_events.tsv is an input of bids-events-content-v1. Changed:"}
+behaviour beh-correction-checked: PASS {"first":"BehaviouralResponseTime","flagged":["3"]}
+behaviour gradient-correction-checked: PASS {"head":"Gradient change","first":"DwiBvalCount","msg":"64 b-values for 65 image volumes"}
+behaviour table-carried-no-lost-update: PASS {"note":true,"earlier":true,"colleague":true,"mine":false}
+behaviour table-preview-mobile: PASS {"overflow":0,"table":true,"focused":"preview-head","changeFirst":true,"seen":true}
+behaviour policy-unknown-revoke: PASS {"alert":"Grant 8efedef7: revocation not confirmed. Outcome unknown. The repository cannot tell whet","table":"8efedef7 6c1d8e2a Release 9d4b2e61 Read metadata Revoke","open":true}
+behaviour policy-pending-grant: PASS {"alert":"Not confirmed. An access change is recorded but its independent policy acknowledgement is pending (operation 4f6c2a1e-8b","rows":0}
+behaviour fix-offered-where-editable: PASS {"fixes":["Fix: edit sub-03/func/sub-03_task-nback_run-1_events.tsv","Fix: add sub-04/func/sub-04_task-rest_bold.json"],"transform":[false]}
+behaviour fix-tr-suggests-sidecar: PASS {"h1":"Add sub-04_task-rest_bold.json","path":"sub-04/func/sub-04_task-rest_bold.json","text":"{\n  \"RepetitionTime\": 2\n}\n","note":"Suggested fix for MriRepetitionTimeMismatch. Adds this sidecar for this run only, setting ","reason":"","focus":"c-text","cancel":"#/d/b7e3c1d2-5a4f-4e8b-9c21-6f0a3d9e8b14/r/9d4b2e61-7a3c-4f18-a5d9-0e6c1b2f8a73?tab=assessment","tag":"Resolved","accept":true}
+behaviour fix-events-selects-row: PASS {"sel":"405.75\t2.0\t0back","line":50,"scrolled":true,"note":"Suggested fix for EventsOutsideWindow. Rows 50, 51 are flagged; the first is selected in the editor.","focus":"c-text"}
+behaviour fix-in-inspector-head-only: PASS {"head":["Fix: add sub-04/func/sub-04_task-rest_bold.json"],"earlier":"#/d/b7e3c1d2-5a4f-4e8b-9c21-6f0a3d9e8b14/r/1c9a4e70-2b3d-4f5e-8a61-7d2c9b0e3f45","old":0}
+behaviour metadata-changes-grouped: PASS {"entries":1,"summary":"4 files with the same change","files":4,"rows":1,"chip":"4 files affected"}
+behaviour candidate-identifiers-folded: PASS {"tech":true,"closed":true,"chipsInside":6,"outside":["Reason","Against"],"order":true,"reason":true}
+behaviour receipt-restates-change: PASS {"change":"Edited task-nback_bold.json FlipAngle 52° → 60° in 4 files","crumb":"Release 7e7c01f9 (new head)","href":"#/d/b7e3c1d2-5a4f-4e8b-9c21-6f0a3d9e8b14/r/7e7c01f9-f1d2-42b3-bca7-30880fa5d0a8?path=task-nback_bold.json","tech":true,"alert":false}
+behaviour receipt-table-change: PASS Edited sub-03/func/sub-03_task-nback_run-1_events.tsv 2 rows changed No longer reported: EventsOutsideWindow
+behaviour tree-folder-findings: PASS {"flags":{"sub-01":null,"sub-02":null,"sub-03":"2","sub-04":"2"},"files":["sub-03_task-nback_run-1_events.tsv","sub-04_task-rest_bold.nii.gz"]}
+behaviour release-overview: PASS {"tally":["4","62","4"],"types":6,"fixes":2,"codes":["EventsOutsideWindow","MriRepetitionTimeMismatch","MriTransformUnavailable"]}
+behaviour release-story: PASS {"line":"Correction Scanner protocol gives sub-02 n-back TR 2.0 s accepted by you","summary":"1 file changed · 1 finding resolved since the previous release","added":["sub-02/func/sub-02_task-nback_run-1_bold.json"],"grid":"ADDED · 1 sub-02/func/sub-02_task-nback_run-1_bold.json RESOLVED · 1 MriRepetitionTimeMismatch","lineage":["Release 1c9a4e70, accepted Sep 18, 2026, 05:12 AM EDT, Import: Native BIDS import","Release 5e2f8a13, accepted Sep 29, 2026, 10:47 AM EDT, Correction: Scanner protocol gives sub-02 n-back TR 2.0 s","Release 9d4b2e61, accepted Oct 8, 2026, 12:03 PM EDT, Import: Re-import with the custodian contact note (viewing)"]}
+behaviour relationships-by-subject: PASS {"subjects":["sub-01","sub-02","sub-03","sub-04"],"visible":"func/sub-01_task-nback_run-1_bold.nii.gz","full":"sub-01/func/sub-01_task-nback_run-1_bold.nii.gz","filtered":["sub-03"]}
+behaviour query-operator-readable: PASS {"390":[true,true],"1440":[true,true]}
+behaviour release-and-editor-layout: PASS {"actions":["Propose correction"],"width":874,"rows":14,"aside":false,"folded":true}
+behaviour home-lists-directories: PASS {"h1":"Labs and projects","sections":["Memory & Cognition Lab","Projects in other labs","Shared with you"],"rows":["Episodic sequence memory","Resting-state reliability","Scanner archive","Cross-site harmonisation","Episodic sequence memory — MRI pilot"],"uuidInput":false}
+behaviour navigate-by-name: PASS {"projectFocus":"main","hash":"#/d/b7e3c1d2-5a4f-4e8b-9c21-6f0a3d9e8b14/r/9d4b2e61-7a3c-4f18-a5d9-0e6c1b2f8a73","crumbs":["Memory & Cognition Lab","Episodic sequence memory","Episodic sequence memory — MRI pilot","Release"],"back":"#/p/0b6e3f9a-1d24-4c8e-b7a5-9e2f4d1c6a80"}
+behaviour project-paging-and-search: PASS {"before":50,"after":{"rows":60,"more":false,"focus":"Archive scan 51","status":"60 datasets, all shown."},"search":{"focus":"dir-q","name":"Archive scan 07"}}
+behaviour directory-restart-on-change: PASS {"notice":"The datasets you can see changed while you were paging. This is the current list.","rows":50}
+behaviour no-organization-fallback: PASS {"notice":"This repository has no lab or project directory yet. Open a dataset by its identifier.","rows":0}
+behaviour denied-directory-link: PASS {"h1":"Nothing here","text":"Nothing hereThis lab or project does not exist, or you no longer have access to it. Sanctity does not distinguish the two.Back to labs and projects"}
+behaviour failures: 0
+layout shift current/release.html @390: initial-shift-sum=0.0000 -> PASS
+layout shift current/release.html @1440: initial-shift-sum=0.0000 -> PASS
+layout shift current/correction.html @390: initial-shift-sum=0.0000 -> PASS
+layout shift current/correction.html @1440: initial-shift-sum=0.0002 -> PASS
+layout shift current/connect.html @390: initial-shift-sum=0.0000 -> PASS
+layout shift current/connect.html @1440: initial-shift-sum=0.0000 -> PASS
+syntax PASS
+gate exit 0
+behaviour no-inline-style c-4f18-a5d9-0e6c1b2f8a73: PASS 0 elements
+behaviour no-inline-style c-4f18-a5d9-0e6c1b2f8a73: PASS 0 elements
+behaviour no-inline-style 5d9-0e6c1b2f8a73/correct: PASS 0 elements
+behaviour no-inline-style 9c21-6f0a3d9e8b14/access: PASS 0 elements
+behaviour no-inline-style #/: PASS 0 elements
+behaviour focus-after-folder: PASS d:sub-01
+behaviour focus-after-file: PASS f:participants.tsv
+behaviour tab-arrow-focus: PASS Assessment4
+behaviour tab-keeps-file: PASS #/d/b7e3c1d2-5a4f-4e8b-9c21-6f0a3d9e8b14/r/9d4b2e61-7a3c-4f18-a5d9-0e6c1b2f8a73?path=README
+behaviour no-stale-preview: PASS
+behaviour no-delegation-offer: PASS
+behaviour exact-decimal: PASS {"releases":[{"dataset":"b7e3c1d2-5a4f-4e8b-9c21-6f0a3d9e8b14","release":"9d4b2e61-7a3c-4f18-a5d9-0e6c1b2f8a73"}],"participants":{"op":"fieldAtLeast","name":"ag
+behaviour mobile-inspector-visible: PASS inspector top 176
+behaviour no-double-click-revoke: PASS deletes 0
+behaviour escape-cancels-revoke: PASS
+behaviour dropdown-switch-keeps-preview: PASS
+behaviour access-no-release-scope: PASS
+behaviour compact-digest-chips: PASS max chip height 25
+behaviour mobile-diff-readable: PASS path lines 2
+behaviour back-to-edit-focus: PASS {"id":"c-text","kept":true}
+behaviour non-head-correction-warned: PASS
+behaviour no-route-race: PASS
+behaviour single-revoke-request: PASS deletes 1
+behaviour revoked-grant-recorded: PASS
+behaviour enter-adds-release: PASS {"h":"#/d/b7e3c1d2-5a4f-4e8b-9c21-6f0a3d9e8b14/query?release=9d4b2e61-7a3c-4f18-a5d9-0e6c1b2f8a73","added":true}
+behaviour pager-focus: PASS pager-prev
+behaviour assessment-compact-390: PASS height 1642
+behaviour receipt-identity-verified: PASS matches 3
+behaviour blocked-line-flagged: PASS
+behaviour finding-cause-shown: PASS why lines 2
+behaviour inspector-header-check: PASS
+behaviour no-false-resolved: PASS
+behaviour no-grant-leak: PASS {"rows":0,"nullKey":null}
+behaviour check-inputs-named: PASS
+behaviour add-sidecar-resolves: PASS add link 1, tag Resolved
+behaviour new-finding-moved-facts: PASS Re-checked because task-nback_bold.json is an input of bids-mri-header-consistency-v1. Changed: timingMetadata.RepetitionTime.value 1.5 → 1.8.
+behaviour row-findings-grouped: PASS 1 entries
+behaviour fieldmap-direction: PASS sub-01/func/sub-01_task-nback_run-1_bold.nii.gz => sub-01/fmap/sub-01_dir-AP_epi.nii.gz
+behaviour access-round-trip-fresh: PASS 1 rows
+behaviour mobile-tree-folds: FAIL {"fold":false,"gap":137}
+behaviour new-sidecar-path-validated: PASS Use a path relative to the dataset root, without “.” or “..” segments.
+behaviour edited-new-path-kept: PASS {"hash":"#/d/b7e3c1d2-5a4f-4e8b-9c21-6f0a3d9e8b14/r/9d4b2e61-7a3c-4f18-a5d9-0e6c1b2f8a73/correct?path=sub-04/sub-04_task-rest_bold.json","h1":"Add sub-04_task-rest_bold.json"}
+behaviour grouped-rows-listed: PASS EventsOutsideWindow 2 occurrences Recorded warning event extends beyond the recorded comparison window ending at 405.0 s; review timing alignment rows 50, 51 co
+behaviour tr-mismatch-key-facts: PASS Authored RepetitionTime 1.5 s Header volume spacing 2 s
+behaviour subject-sidecar-inherits: PASS {"files":["sub-04/func/sub-04_task-rest_bold.nii.gz"],"tag":"Resolved"}
+behaviour inert-sidecar-warns: PASS The new sidecar changes no file’s effective metadata. BIDS inheritance applies it only to 
+behaviour dot-json-refused: PASS {"msg":"Name the sidecar after the files it applies to, such as sub-02_task-nback_bold.json.","inv":"true","head":false}
+behaviour grant-revoke-visible-mobile: PASS {"left":29,"right":361,"vw":390,"label":"Revoke grant 97bb6bd9","overflow":0}
+behaviour selection-readable-mobile: PASS {"session":false,"tallest":36,"overflow":0}
+behaviour fold-follows-viewport: FAIL 0 → 1
+behaviour actions-error-described: PASS {"desc":["g-act-err"],"focus":"act-ReadMetadata"}
+behaviour head-keeps-draft: FAIL {"note":false,"kept":true}
+behaviour carried-draft-no-lost-update: FAIL {"text":"{ \"TaskName\": \"nback\", \"RepetitionTime\": 1.5, \"EchoTime\": 0.031, \"FlipAngle\": 52","note":false,"earlier":false}
+behaviour grouped-mismatch-key-facts: FAIL
+behaviour blocked-preview-error-first: FAIL {"hs":["No longer reported","Findings after this change"],"first":"Recorded warning"}
+behaviour row-lists-readable: FAIL 378.0 s; review timing alignment rows listed by filecolumn 1
+behaviour odd-path-refused task-nback_bold.json/x.json: FAIL {"head":true}
+behaviour odd-path-refused sub-03/ .json: FAIL {"head":true}
+behaviour resize-keeps-focus: FAIL {"focus":"","value":""}
+behaviour companion-correction-offered: FAIL threw: page.click: Timeout 30000ms exceeded.
+behaviour table-tab-separator: FAIL {"tail":"\n412.0","focus":"c-reason","left":""}
+behaviour table-width-refused: FAIL {"msg":"The replacement is not valid JSON: Unexpected token 'o', \"onset\tdura\"... is not valid JSON","inv":"true","posts":0}
+behaviour table-correction-accepted: FAIL threw: page.waitForSelector: Timeout 5000ms exceeded.
+behaviour table-blocked-row-marked: FAIL threw: page.waitForSelector: Timeout 5000ms exceeded.
+behaviour beh-correction-checked: FAIL threw: page.waitForFunction: Timeout 5000ms exceeded.
+behaviour gradient-correction-checked: FAIL threw: page.waitForSelector: Timeout 5000ms exceeded.
+behaviour table-carried-no-lost-update: FAIL threw: page.evaluate: Error: invalid_request
+behaviour table-preview-mobile: FAIL threw: page.waitForSelector: Timeout 5000ms exceeded.
+behaviour policy-unknown-revoke: FAIL {"alert":"Grant 6906237d was not revoked. Request failed (policy_outcome_unknown:4f6c2a1e-8b3d-4e7a-","table":"6906237d 6c1d8e2a Release 9d4b2e61 Read metadata Revoke","open":true}
+behaviour policy-pending-grant: FAIL {"alert":"Request failed (policy_pending:4f6c2a1e-8b3d-4e7a-9c05-2d1e7f9a3b68).","rows":0}
+behaviour fix-offered-where-editable: FAIL {"fixes":[],"transform":[false]}
+behaviour fix-tr-suggests-sidecar: FAIL threw: page.waitForSelector: Timeout 5000ms exceeded.
+behaviour fix-events-selects-row: FAIL threw: page.waitForSelector: Timeout 5000ms exceeded.
+behaviour fix-in-inspector-head-only: FAIL {"head":[],"earlier":"#/d/b7e3c1d2-5a4f-4e8b-9c21-6f0a3d9e8b14/r/1c9a4e70-2b3d-4f5e-8a61-7d2c9b0e3f45","old":0}
+behaviour metadata-changes-grouped: FAIL {"entries":4,"summary":"","files":0,"rows":4,"chip":"4 files affected"}
+behaviour candidate-identifiers-folded: FAIL threw: page.evaluate: TypeError: Cannot read properties of null (reading 'contains')
+behaviour receipt-restates-change: FAIL threw: page.waitForFunction: Timeout 5000ms exceeded.
+behaviour receipt-table-change: FAIL threw: page.waitForSelector: Timeout 5000ms exceeded.
+behaviour tree-folder-findings: FAIL threw: page.check: Timeout 30000ms exceeded.
+behaviour release-overview: FAIL threw: page.waitForSelector: Timeout 5000ms exceeded.
+behaviour release-story: FAIL threw: page.waitForSelector: Timeout 5000ms exceeded.
+behaviour relationships-by-subject: FAIL threw: page.waitForSelector: Timeout 5000ms exceeded.
+behaviour query-operator-readable: FAIL {"390":[true,true],"1440":[false,true]}
+behaviour release-and-editor-layout: FAIL {"actions":["Query","Propose correction"],"width":631,"rows":12,"aside":true,"folded":false}
+behaviour home-lists-directories: FAIL threw: page.waitForSelector: Timeout 5000ms exceeded.
+behaviour navigate-by-name: FAIL threw: page.waitForSelector: Timeout 5000ms exceeded.
+behaviour project-paging-and-search: FAIL threw: page.waitForSelector: Timeout 5000ms exceeded.
+behaviour directory-restart-on-change: FAIL threw: page.waitForSelector: Timeout 5000ms exceeded.
+behaviour no-organization-fallback: FAIL threw: page.waitForSelector: Timeout 5000ms exceeded.
+behaviour denied-directory-link: FAIL threw: page.waitForSelector: Timeout 5000ms exceeded.
+behaviour failures: 41
+Console evidence: /private/tmp/sanctity-recovery-20261101/repo/target/console-check.JfShoL
+Current gate: PASS; seven v4f regressions: PASS
