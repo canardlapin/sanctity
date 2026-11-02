@@ -27,7 +27,7 @@ compat = module('compat', 'check-upgrade-compatibility.py')
 store = module('store', 'backup-store.py')
 
 @contextlib.contextmanager
-def source_fixture(artifact, root, output):
+def source_fixture(artifact, root, output, prepare_source=None):
     trust = root/'trust'; trust.mkdir(mode=0o700)
     password = 'synthetic-policy-package-only'
     keytool = str(Path(os.environ['JAVA_HOME'])/'bin/keytool') if os.environ.get('JAVA_HOME') else shutil.which('keytool')
@@ -55,6 +55,7 @@ def source_fixture(artifact, root, output):
         source = root/'source'; source.mkdir()
         (source/'dataset_description.json').write_text('{"Name":"Backup synthetic","BIDSVersion":"1.10.0","DatasetType":"raw"}')
         (source/'README').write_bytes(b'Synthetic backup fixture.\n' * 90000)
+        if prepare_source: prepare_source(source)
         imported = f.cli('repository','import',principal,dataset,str(source),str(f.storage),'backup-fixture')
         preview = root/'preview.json'
         f.cli('migrate','--organization-preview',principal,str(preview))

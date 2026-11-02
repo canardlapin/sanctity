@@ -33,7 +33,7 @@ object PolicyCapabilities:
     if value == digest then inventory else governedInventory
 
 /** A signed record reducer, shared by the live witness and offline verification.
-  * Recovery barriers can close admission, but this component cannot reopen a catalog.
+  * Recovery release rotates writer identity; it never opens a catalog by itself.
   */
 object PolicyJournal:
   import PolicyWire.*
@@ -46,7 +46,7 @@ object PolicyJournal:
       enrolled: Boolean = false, writer: Option[String] = None,
       pending: Option[Json] = None, barrier: Option[Json] = None,
       events: Map[String, (Json, String)] = Map.empty,
-      capabilities: String = PolicyCapabilities.digest):
+      capabilities: String = PolicyCapabilities.digest, retiredWriters: Set[String] = Set.empty):
     def current: Json = obj("installation" -> str(installation), "sequence" -> str(sequence.toString),
       "journalHash" -> str(journalHash), "epoch" -> str(epoch.toString), "revision" -> str(revision.toString),
       "appliedHash" -> str(appliedHash), "enrolled" -> Json.fromBoolean(enrolled),
@@ -134,6 +134,22 @@ object PolicyJournal:
         check(!state.events.contains(text(command,"operation")), "operation-used")
         // Preserve an unresolved intent. A barrier never makes its outcome disappear.
         state.copy(epoch=increment(state.epoch),writer=None,barrier=Some(command),
+          retiredWriters=state.retiredWriters ++ state.writer,
+          events=state.events.updated(text(command,"operation"),command -> kind))
+      case "RECOVERY_RELEASE" =>
+        fields(command,Set("operation","installation","barrier","epoch","revision","appliedHash",
+          "writer","receiptDigest","operator","at"))
+        id(text(command,"operation")); id(text(command,"barrier")); instant(text(command,"at"))
+        hash(text(command,"writer")); hash(text(command,"receiptDigest")); hash(text(command,"operator"))
+        check(state.enrolled && state.pending.isEmpty && state.barrier.nonEmpty && state.writer.isEmpty,"release-closed-state")
+        val barrier = state.barrier.get
+        check(text(command,"installation") == state.installation &&
+          text(command,"barrier") == text(barrier,"operation") && text(command,"operator") == text(barrier,"operator") &&
+          natural(text(command,"epoch")) == state.epoch && natural(text(command,"revision")) == state.revision &&
+          text(command,"appliedHash") == state.appliedHash,"release-binding")
+        check(!state.retiredWriters(text(command,"writer")) && text(command,"writer") != text(command,"operator"),"fresh-writer-required")
+        check(!state.events.contains(text(command,"operation")),"operation-used")
+        state.copy(writer=Some(text(command,"writer")),barrier=None,
           events=state.events.updated(text(command,"operation"),command -> kind))
       case _ => throw PolicyFailure("record-kind")
 

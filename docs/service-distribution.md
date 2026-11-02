@@ -12,6 +12,12 @@ database credentials and the explicit origin before opening a listener. Configur
 proxy, supervision and separate database-role templates are included. The retained historical corpus qualifies the V008 organization cutover; the complete
 installation/upgrade rehearsal remains O01.4.
 
+The local [organization recovery runbook](organization-recovery.md) ships in
+this distribution. It documents `recovery preview`, `verify`, `reconcile` and
+`status`, supported source artifacts, independent trust rotation, closed phases
+and interrupted-work handling. PostgreSQL 17 `pg_restore` and `psql` are additional
+operator tools for restoring; ordinary service operation does not need them.
+
 ## Build and identity
 
 Build prerequisites: Java 21, sbt 1.10.5, Python 3.9+ and network access or populated

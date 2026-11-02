@@ -11,7 +11,8 @@ import scala.jdk.CollectionConverters.*
 
 /** Single installation, single writer process. Journal files and head are forced before
   * acknowledgment. Startup verifies every signature and transition. No automatic init,
-  * truncation, repair, key replacement, rollback or recovery-opening path exists.
+  * truncation, repair, key replacement or rollback exists. A signed release requires
+  * the recovery identity and an exact barrier/head; catalog opening is separate.
   */
 final class PolicyWitnessStore private (
     root: Path, installation: String, key: PrivateKey, public: PublicKey,
@@ -90,7 +91,7 @@ final class PolicyWitnessStore private (
             cas()
             result(Some(append(action,command)))
           case _ => retry(action) { throw PolicyFailure("preparation-required") }
-      case "RECOVERY_BARRIER" =>
+      case "RECOVERY_BARRIER" | "RECOVERY_RELEASE" =>
         check(role == "recovery" && text(command,"operator") == certificate, "role")
         retry(action) { cas(); result(Some(append(action,command))) }
       case "RECORD" =>

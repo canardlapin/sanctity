@@ -87,7 +87,7 @@ final class PostgresPolicy[F[_]: Async] private[postgres](db: PostgresDatabase[F
     * deployment step provisions a fresh ordinary login for the witness-aware binary.
     * Privileged operators remain explicit trusted operators, never runtime identities.
     */
-  private def retireRuntime(c: Connection): Unit =
+  private[postgres] def retireRuntime(c: Connection): Unit =
     val schema = rows(c,"SELECT current_schema()")(_.getString(1)).head
     val roles = rows(c,"""SELECT r.rolname FROM pg_roles r WHERE r.rolcanlogin AND NOT r.rolsuper
       AND r.rolname<>current_user AND r.oid<>(SELECT nspowner FROM pg_namespace WHERE nspname=current_schema())

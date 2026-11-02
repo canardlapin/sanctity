@@ -87,15 +87,16 @@ see [its evidence](evidence/institutional-pilot/F03.2/receipt.json) and
 **Recovery work:** O03.6 now has ordered child slices: O03.6.1 standalone witness,
 O03.6.2 catalog integration, O03.6.3 integrated fault qualification. All three and
 [the unchanged parent review](evidence/institutional-pilot/O03.6/receipt.json) are complete.
-H03.1 verified backup automation is next; the other ready work
-is F02.3, F03.3, F03.4, F04.1, O01.4, O02.1 and O02.3.
+F02/F03 engineering, H03.1 verified backups and O03.7/O03.8 local recovery are
+complete for current capabilities. Ready independent work includes F04.1, O01.4,
+O02.1 and O02.3; identity/session and institutional gates remain open.
 O03.6.1 is complete with [77 tests and 18 packaged checks](evidence/institutional-pilot/O03.6.1/receipt.json);
 O03.6.2 is complete with [441 distinct tests, 28 packaged checks and historical upgrade verification](evidence/institutional-pilot/O03.6.2/receipt.json).
 O03.6.3 is complete with [33 process cases, 250 authority regressions, 28 packaged checks and historical upgrade verification](evidence/institutional-pilot/O03.6.3/receipt.json).
 See [the qualification guide](policy-process-qualification.md), [catalog operator guide](policy-catalog.md)
-and [witness contract](policy-witness.md). O03.7 remains blocked by H03.1.
-H03.1 and O03.6 feed O03.7 restore, and
-O03.8 rehearses recovery after F02.3/F03.3/F03.4. Full identity/session integration
+and [witness contract](policy-witness.md). H03.1, O03.7 and O03.8 now pass their
+current-capability engineering checks, including removal of the disposable source
+before fresh restore. See the [recovery runbook](organization-recovery.md). Full identity/session integration
 remains required in O03.2/O03.4/O03.5. See the [recovery-priority plan](core-hardening-plan.md#next-core-milestone-tested-recovery-for-organization-catalogs).
 
 Execution order for the independent tracks:

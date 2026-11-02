@@ -1,12 +1,12 @@
 # Catalog enrollment and policy acknowledgement
 
 O03.6.2 connects the current catalog to the [policy witness](policy-witness.md).
-It remains a local engineering deployment. It does not enable organization restore,
-qualify a separate physical failure domain, or supply institutional identity and
-lifecycle administration. O03.6.3 supplies the passing
+It remains a local engineering deployment. Institutional identity, lifecycle
+administration and a separate physical failure domain retain their acceptance gates. O03.6.3 supplies the passing
 [integrated crash and fencing qualification](policy-process-qualification.md), including
 actual packaged HTTP-service fencing. All six unchanged O03.6 criteria pass.
-O03.7 and O03.8 still own replay and restore rehearsals; H03.1 backup automation is next.
+H03.1 verified backups and O03.7/O03.8 closed restore/source isolation are qualified
+for current capabilities. Use the [recovery runbook](organization-recovery.md).
 
 ## Trust and installation
 

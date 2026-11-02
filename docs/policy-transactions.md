@@ -70,7 +70,8 @@ implemented here**. F04/O04 must introduce governed commands, events and tests
 through the same boundary before those capabilities can be enabled. SQL fixture
 writes in the matrix tests do not constitute those administration features.
 Legacy recovery invalidation remains confined to uninitialized catalogs;
-organization recovery is still closed pending H03.1 and O03.7/O03.8.
+organization recovery uses the separately qualified [closed operator engine](organization-recovery.md)
+and current independent witness, never a restored permission row.
 
 ## Local event and independent witness boundary
 

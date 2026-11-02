@@ -52,9 +52,9 @@ final class PostgresDatabase[F[_]] private[postgres] (
 
   def catalog(ids: IdSource[F]): PostgresCatalog[F] = new PostgresCatalog(transactor, ids)
 
-  private def migrations: F[Vector[(Int, String, String)]] =
+  private[postgres] def migrations: F[Vector[(Int, String, String)]] =
     F.blocking {
-      Vector("V001__catalog.sql", "V002__authority.sql", "V003__queries.sql", "V004__operations.sql", "V005__credentials.sql", "V006__processing.sql", "V007__publication.sql", "V008__organization.sql", "V009__current_authority.sql", "V010__policy_witness.sql", "V011__governed_organization.sql", "V012__dataset_moves.sql", "V013__dataset_labels.sql").zipWithIndex.map { (name, index) =>
+      Vector("V001__catalog.sql", "V002__authority.sql", "V003__queries.sql", "V004__operations.sql", "V005__credentials.sql", "V006__processing.sql", "V007__publication.sql", "V008__organization.sql", "V009__current_authority.sql", "V010__policy_witness.sql", "V011__governed_organization.sql", "V012__dataset_moves.sql", "V013__dataset_labels.sql", "V014__organization_recovery.sql").zipWithIndex.map { (name, index) =>
         val stream = Option(getClass.getResourceAsStream(s"/sanctity/postgres/$name"))
           .getOrElse(throw Failure(Problem.Operational("missing catalog migration")))
         val source = try new String(stream.readAllBytes(), StandardCharsets.UTF_8) finally stream.close()
@@ -96,6 +96,10 @@ final class PostgresDatabase[F[_]] private[postgres] (
             AND c.relkind IN ('r','p','v','m','f') AND
             (has_table_privilege(c.oid,'INSERT,UPDATE,DELETE,TRUNCATE,REFERENCES,TRIGGER')
               OR has_any_column_privilege(c.oid,'INSERT,UPDATE,REFERENCES')))
+        AND NOT has_table_privilege('organization_recovery_session','INSERT,UPDATE,DELETE,TRUNCATE')
+        AND NOT has_any_column_privilege('organization_recovery_session','INSERT,UPDATE')
+        AND NOT has_table_privilege('organization_recovery_tombstone','INSERT,UPDATE,DELETE,TRUNCATE')
+        AND NOT has_any_column_privilege('organization_recovery_tombstone','INSERT,UPDATE')
         AND NOT has_table_privilege('schema_migration','INSERT,UPDATE,DELETE,TRUNCATE')
         AND NOT has_any_column_privilege('schema_migration','INSERT,UPDATE')
         AND NOT has_column_privilege('repository_state','recovery_required','UPDATE')

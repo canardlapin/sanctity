@@ -177,5 +177,7 @@ enrollment, synchronous acknowledgement and bounded SQL admission; see
 [operator guide](policy-catalog.md). O03.6.3 now qualifies the integrated crash and
 fencing behavior in [33 process cases](evidence/institutional-pilot/O03.6.3/receipt.json);
 all six unchanged [O03.6 criteria](evidence/institutional-pilot/O03.6/receipt.json) pass.
-Next is H03.1 verified backup automation, followed by O03.7/O03.8 restore work. These local
-checks do not qualify a recoverable installation, institutional pilot or complete demo.
+H03.1 verified backups and O03.7/O03.8 closed restore/source isolation now pass for
+current local capabilities. See the [recovery runbook](organization-recovery.md).
+Institutional identity/session integration, physical failure-domain acceptance and
+the complete demo retain their separate gates.

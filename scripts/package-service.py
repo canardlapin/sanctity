@@ -37,7 +37,7 @@ def json_bytes(value):
 
 def sources():
     files = [ROOT / "build.sbt", ROOT / "vendor/bids4s-source.zip", ROOT / "vendor/bids4s-source.json",
-             ROOT / "scripts/package-service.py", ROOT / "docs/service-distribution.md"]
+             ROOT / "scripts/package-service.py", ROOT / "docs/service-distribution.md", ROOT / "docs/organization-recovery.md"]
     files += [p for p in (ROOT / "project").iterdir() if p.is_file()]
     files += [p for p in (ROOT / "docs/deployment").glob("*.example") if p.is_file()]
     # processing-mri contributes to the existing semantic BuildIdentity, but is not a runtime dependency.
@@ -70,6 +70,7 @@ def assemble(inputs, source_inventory):
     if not re.fullmatch(r"[A-Za-z0-9._-]+", version):
         raise ValueError("unsafe application version")
     contents = {"bin/sanctity": LAUNCHER, "README.md": (ROOT / "docs/service-distribution.md").read_bytes(),
+                "organization-recovery.md": (ROOT / "docs/organization-recovery.md").read_bytes(),
                 "metadata/source.json": json_bytes(source_inventory),
                 "metadata/bids4s-source.json": (ROOT / "vendor/bids4s-source.json").read_bytes(),
                 "licenses/bids4s-LICENSE": verify_upstream(tree.attrib["upstreamSha256"])}

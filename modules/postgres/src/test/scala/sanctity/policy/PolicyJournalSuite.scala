@@ -106,6 +106,56 @@ final class PolicyJournalSuite extends munit.FunSuite:
     assertEquals(closed.epoch,1L)
     for kind <- Vector("PREPARE","COMMIT","ABORT","RELEASE") do intercept[PolicyFailure](step(closed,kind,e))
   }
+  test("recovery release binds the barrier and permanently retires every old writer") {
+    def release(s: PolicyJournal.State, writer: String): Json = obj("operation" -> str(operation()),
+      "installation" -> str(installation),"barrier" -> field(s.barrier.get,"operation"),
+      "epoch" -> str(s.epoch.toString),"revision" -> str(s.revision.toString),"appliedHash" -> str(s.appliedHash),
+      "writer" -> str(writer),"receiptDigest" -> str("a"*64),"operator" -> str(recovery),"at" -> str(now.toString))
+    val closed = step(enrolled,"RECOVERY_BARRIER",barrier(enrolled))
+    val command = release(closed,"3"*64)
+    intercept[PolicyFailure](step(closed,"RECOVERY_RELEASE",change(command,"writer",writer)))
+    for (key,value) <- Vector("barrier" -> operation(),"epoch" -> "9","revision" -> "9", "appliedHash" -> zero,
+        "installation" -> operation(),"operator" -> ("4"*64),"writer" -> recovery) do
+      intercept[PolicyFailure](step(closed,"RECOVERY_RELEASE",change(command,key,value)))
+    val opened = step(closed,"RECOVERY_RELEASE",command)
+    assertEquals(opened.writer,Some("3"*64))
+    assertEquals(opened.revision,closed.revision)
+    assertEquals(opened.retiredWriters,Set(writer))
+    intercept[PolicyFailure](step(opened,"RECOVERY_RELEASE",command))
+    val again = step(opened,"RECOVERY_BARRIER",barrier(opened))
+    for retired <- Vector(writer,"3"*64) do
+      intercept[PolicyFailure](step(again,"RECOVERY_RELEASE",release(again,retired)))
+    val pending = step(enrolled,"PREPARE",event(enrolled))
+    val unresolved = step(pending,"RECOVERY_BARRIER",barrier(pending))
+    intercept[PolicyFailure](step(unresolved,"RECOVERY_RELEASE",release(unresolved,"4"*64)))
+  }
+  test("signed release retries exactly across witness restart and keeps the old identity fenced") {
+    val root = directory(); val keys = KeyPairGenerator.getInstance("Ed25519").generateKeyPair()
+    val path = root.resolve("store")
+    try
+      PolicyWitnessStore.initialize(path,installation,keys.getPrivate,keys.getPublic)
+      var store = PolicyWitnessStore.open(path,installation,keys.getPrivate,keys.getPublic)
+      try
+        val enrolledReply = store.execute("recovery",recovery,request("ENROLL",enrollment()))
+        val head = field(enrolledReply,"current")
+        val close = barrier(enrolled)
+        val closed = store.execute("recovery",recovery,request("RECOVERY_BARRIER",close,natural(text(head,"sequence")),text(head,"journalHash")))
+        val h = field(closed,"current")
+        val command = obj("operation" -> str(operation()),"installation" -> str(installation),"barrier" -> field(close,"operation"),
+          "epoch" -> field(h,"epoch"),"revision" -> field(h,"revision"),"appliedHash" -> field(h,"appliedHash"),
+          "writer" -> str("3"*64),"receiptDigest" -> str("a"*64),"operator" -> str(recovery),"at" -> str(now.toString))
+        val req = request("RECOVERY_RELEASE",command,natural(text(h,"sequence")),text(h,"journalHash"))
+        intercept[PolicyFailure](store.execute("writer",writer,req))
+        val released = store.execute("recovery",recovery,req)
+        store.close(); store = PolicyWitnessStore.open(path,installation,keys.getPrivate,keys.getPublic)
+        assertEquals(store.execute("recovery",recovery,req),released)
+        intercept[PolicyFailure](store.execute("writer",writer,request("CURRENT",obj())))
+        assertEquals(field(store.execute("writer","3"*64,request("CURRENT",obj())),"current"),field(released,"current"))
+        intercept[PolicyFailure](store.execute("recovery",recovery,
+          request("RECOVERY_RELEASE",change(command,"receiptDigest","b"*64))))
+      finally store.close()
+    finally remove(root)
+  }
   test("reordered, missing, unknown, foreign and changed-head records are rejected") {
     val initial = enrolled
     val r = PolicyJournal.record(initial,"PREPARE",event(initial),now)

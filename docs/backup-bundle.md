@@ -125,4 +125,6 @@ credentials is mounted into it or the store.
 
 All data are synthetic. Separate containers on one host do not establish off-host
 durability, institutional media acceptance, or disaster recovery. H03.1 establishes
-backup engineering only; O03.7/O03.8 and O03.3/SITE01 retain their separate gates.
+backup engineering. O03.7/O03.8 separately qualify the current-capability
+[closed restore and source-isolation path](organization-recovery.md). O03.3/SITE01
+and institutional identity/session/lifecycle gates remain open.

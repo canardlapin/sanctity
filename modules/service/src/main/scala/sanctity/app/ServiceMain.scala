@@ -22,6 +22,8 @@ object ServiceMain:
       case "serve" :: Nil => ApiServer.main(Array.empty)
       case "migrate" :: rest => MigrationCli.main(rest.toArray)
       case "repository" :: rest => RepositoryCli.main(rest.toArray)
+      case "recovery" :: rest if rest.headOption.exists(Set("preview","verify","status")) ||
+          (rest.headOption.contains("reconcile") && rest.size == 5) => OrganizationRecoveryCli.main(rest.toArray)
       case "recovery" :: rest => RecoveryCli.main(rest.toArray)
       case "backup" :: rest => BackupCli.main(rest.toArray)
       case "organization" :: rest => OrganizationCli.main(rest.toArray)

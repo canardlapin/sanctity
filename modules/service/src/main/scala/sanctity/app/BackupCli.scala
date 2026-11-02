@@ -12,7 +12,7 @@ import scala.jdk.CollectionConverters.*
 /** Captures only from an operator connection; writer trust remains outside backups. */
 object BackupCli extends ProtectedIOApp:
   import PolicyWire.{check,field,text,obj,str}
-  private def artifact(path: Path): Json =
+  private[app] def artifact(path: Path, requireRunning: Boolean = true): Json =
     check(Files.size(path) <= 512L*1024*1024,"backup-artifact-bound")
     val zip = new ZipFile(path.toFile)
     try
@@ -54,9 +54,9 @@ object BackupCli extends ProtectedIOApp:
         Path.of(text(j,"path")).getFileName.toString -> text(j,"sha256")).toMap
       check(expected.size == dependencies.size,"backup-artifact-duplicate")
       val active = System.getProperty("java.class.path").split(File.pathSeparator).toVector.map(Path.of(_))
-      check(active.forall(p => Files.isRegularFile(p) && p.getFileName.toString.endsWith(".jar")) &&
+      check(!requireRunning || (active.forall(p => Files.isRegularFile(p) && p.getFileName.toString.endsWith(".jar")) &&
         active.map(_.getFileName.toString).distinct.size == active.size &&
-        active.map(p => p.getFileName.toString -> BackupBundle.hashFile(p)).toMap == expected,"backup-running-artifact")
+        active.map(p => p.getFileName.toString -> BackupBundle.hashFile(p)).toMap == expected),"backup-running-artifact")
       obj("sha256" -> str(BackupBundle.hashFile(path)),"manifestSha256" -> str(PolicyWire.digest(bytes)),
         "sourceInventorySha256" -> field(manifest,"sourceInventorySha256"),"version" -> field(manifest,"version"))
     finally zip.close()

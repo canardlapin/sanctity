@@ -38,15 +38,12 @@ O03.6.2 adds [qualified catalog enrollment, synchronous acknowledgment and bound
 with an [operator guide](policy-catalog.md). O03.6.3 now passes the
 [integrated process qualification](evidence/institutional-pilot/O03.6.3/receipt.json),
 and all six unchanged [O03.6 parent criteria](evidence/institutional-pilot/O03.6/receipt.json)
-are complete. Next is H03.1 verified backup automation; it still blocks O03.7.
-Organization-aware
-recovery remains unavailable until the subsequent restore work is qualified.
-Prioritize H03.1, then O03.7/O03.8 restore and source-isolation qualification
-before browser workspace expansion; F02.3/F03.3/F03.4 provide its administration and
-access prerequisites. Existing O03.2/O03.4/O03.5 retain full identity/session coverage.
-Explicit stewardship and exact grants already govern migrated data; inherited roles,
-public administration and independent recovery remain open. All six area reviews and
-institutional readiness remain open.
+are complete. F02 and F03 engineering reviews, H03.1 verified backups and
+O03.7/O03.8 closed recovery/source isolation are now complete for current capabilities.
+The [recovery runbook](organization-recovery.md) and receipts bind that local result.
+F04.1 institutional identity, O03.2/O03.4/O03.5 identity/session recovery, physical
+failure-domain qualification and all six core area reviews remain open. Browser
+workspace expansion does not discharge those obligations.
 
 The work-package evidence and original pilot phases below remain useful history and
 requirements. Their completion is not implied by the new institutional-beta plan;

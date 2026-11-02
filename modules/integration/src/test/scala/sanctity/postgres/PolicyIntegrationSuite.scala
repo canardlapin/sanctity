@@ -54,6 +54,43 @@ final class PolicyIntegrationSuite extends FunSuite:
     _ <- Resource.eval(if enroll then e.enroll.void else IO.unit)
   yield e).use(run).unsafeRunSync()
 
+  private def verifyRecoveryProjection(e: Env): IO[Unit] =
+    import io.circe.syntax.*
+    import OrganizationCodecs.given
+    for
+      projection <- IO.blocking {
+        val current = e.witness.current
+        var journal = PolicyJournal.State(e.trust.installation)
+        var projection: Option[RecoveryProjection.Projection] = None
+        for n <- 1L to PolicyWire.natural(text(current,"sequence")) do
+          val certificate = field(e.witness.command("RECORD",obj("sequence" -> str(n.toString))),"record")
+          val record = e.witness.recovery.verifyRecord(certificate)
+          journal = PolicyJournal.applyRecord(journal,record)
+          text(record,"kind") match
+            case "ENROLL" => projection = Some(RecoveryProjection.initial(field(record,"command")))
+            case "COMMIT" => projection = Some(RecoveryProjection.committed(projection.get,field(record,"command"),certificate))
+            case "RECOVERY_RELEASE" => projection = Some(RecoveryProjection.released(projection.get,field(field(record,"command"),"at")))
+            case _ => ()
+        assertEquals(journal.current,current)
+        projection.get
+      }
+      snapshot <- e.db.organization.snapshot
+      grants <- e.query(PolicySql.grants)
+      _ =
+        def rows[A: io.circe.Encoder](values: Iterable[A], key: String = "id"): Map[String,Json] =
+          values.map(_.asJson).map(j => text(j,key) -> j).toMap
+        assertEquals(projection.records("principal"),rows(snapshot.principals.values))
+        assertEquals(projection.records("lab"),rows(snapshot.labs.values))
+        assertEquals(projection.records("project"),rows(snapshot.projects.values))
+        assertEquals(projection.records("membership"),rows(snapshot.memberships.values))
+        assertEquals(projection.records("participation"),rows(snapshot.participations.values))
+        assertEquals(projection.records("placement"),rows(snapshot.placements.values,"dataset"))
+        assertEquals(projection.records("stewardship"),rows(snapshot.stewardships.values))
+        assertEquals(projection.records("link"),rows(snapshot.links.values))
+        assertEquals(projection.records("move"),rows(snapshot.moves.values))
+        assertEquals(projection.grants.view.mapValues(_.as[OrganizationAuthority.PolicyGrant].toOption.get).toMap,grants.map(g => g.id.render -> g).toMap)
+    yield ()
+
   private def runtime(e: Env): Resource[IO, Env] =
     val role = "policy_governed_" + UUID.randomUUID().toString.replace("-","")
     val password = UUID.randomUUID().toString
@@ -97,7 +134,7 @@ final class PolicyIntegrationSuite extends FunSuite:
       val project = OrganizationMigration.project(e.f.system.dataset)
       for
         person <- ids.next[PrincipalTag]
-        grant <- checked(e.db.catalog(ids).grant(e.ctx,e.dataset,person,None,Set(Action.ReadMetadata)))
+        grant <- checked(e.db.catalog(ids).grant(e.ctx,e.dataset,person,None,Set(Action.ReadMetadata,Action.ReadContent)))
         credentialId <- ids.next[CredentialTag]
         credential <- checked(e.db.credentials(ids).issueOnce(credentialId,person,"one",600))
         _ <- checked(e.db.credentials(ids).revoke(credential.id))
@@ -132,6 +169,7 @@ final class PolicyIntegrationSuite extends FunSuite:
         _ = assertEquals(acknowledgements,kinds.size.toLong)
         state <- IO.blocking(e.witness.current)
         _ = assert(field(state,"pending").isNull)
+        _ <- verifyRecoveryProjection(e)
       yield ()
     }
   }
@@ -176,6 +214,7 @@ final class PolicyIntegrationSuite extends FunSuite:
         _ = assertEquals(afterRestart,beforeRestart)
         ready <- r.db.policy.readiness
         _ = assertEquals(text(ready,"capabilities"),PolicyCapabilities.governedDigest)
+        _ <- verifyRecoveryProjection(e)
       yield ()
     } }
   }
@@ -197,6 +236,7 @@ final class PolicyIntegrationSuite extends FunSuite:
       _ = assertEquals(text(ready,"capabilities"),PolicyCapabilities.digest)
       current <- IO.blocking(e.witness.current)
       _ = assert(field(current,"pending").isNull)
+      _ <- verifyRecoveryProjection(e)
     yield () }
   }
 

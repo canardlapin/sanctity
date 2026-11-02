@@ -3,16 +3,19 @@
 O03.6.1 supplies the independently running journal component for
 [ADR 004](decisions/004-policy-durability.md). O03.6.2 adds
 [catalog enrollment, synchronous acknowledgements and runtime admission](policy-catalog.md).
-Unenrolled and historical receipts remain `LocalOnly`; organization-aware restore
-remains blocked. O03.6.3 supplies the passing
+Unenrolled and historical receipts remain `LocalOnly`. Current-capability organization
+restore is qualified separately through the closed recovery engine. O03.6.3 supplies the passing
 [integrated process qualification](policy-process-qualification.md). All six original
 O03.6 acceptance criteria passed the [unchanged parent review](evidence/institutional-pilot/O03.6/receipt.json).
-H03.1 backup automation is next; O03.7/O03.8 restore work remains open.
+H03.1, O03.7 and O03.8 now supply verified backups, closed recovery and a local
+source-isolation rehearsal. See the [operator runbook](organization-recovery.md);
+institutional identity/session and physical failure-domain gates remain open.
 
 ## Contract and wire format
 
 `PolicyCapabilities.inventory` is the versioned, hashed capability agreement. It names
-the nineteen current mutation kinds in [the transaction inventory](policy-transactions.md).
+the immutable v1 set of nineteen mutation kinds and the separately enrolled v2
+set of twenty-six kinds in [the transaction inventory](policy-transactions.md).
 Identity, sponsorship, sessions, lifecycle, retention and holds are unsupported producers.
 An unknown capability hash, event kind or wire version is refused. The existing
 eligibility/lifecycle columns are inventoried by O03.6.2; unsupported nondefault
@@ -59,7 +62,8 @@ with a one-time enrollment record. It does not advance or replace prior catalog 
 An empty store is unenrolled and not ready. Re-enrollment, key replacement and
 implicit initialization are refused.
 
-Subsequent records are `PREPARE`, `COMMIT`, `ABORT` and `RECOVERY_BARRIER`:
+Subsequent records are `PREPARE`, `COMMIT`, `ABORT`, `RECOVERY_BARRIER` and
+`RECOVERY_RELEASE`:
 
 - PREPARE compares both journal and policy heads, retains the entire exact event,
   and occupies the single pending slot. No different event can overtake it.
@@ -72,9 +76,12 @@ Subsequent records are `PREPARE`, `COMMIT`, `ABORT` and `RECOVERY_BARRIER`:
   outcome is rejected.
 - A recovery barrier advances the epoch, clears the permitted writer and preserves
   any unresolved preparation. It fences subsequent witness requests from that writer.
-  This component has no release/reopen endpoint. O03.6.2 bounds admitted SQL work
-  and enforces fresh witness admission; O03.6.3 qualifies the combined process-failure
-  and old-service fencing matrix.
+  O03.6.2 bounds admitted SQL work and enforces fresh witness admission.
+- RECOVERY_RELEASE requires the exact barrier, no pending preparation and the
+  recovery operator identity. It binds the current epoch/head, a new writer and
+  recovery-receipt digest. Retired writers cannot be admitted again. Exact release
+  retries survive restart. The catalog opens only after its local receipt and
+  release certificate are durable and the new writer authenticates a fresh head.
 
 Each signed record is written to a new file, forced, atomically renamed, and its
 directory forced. The signed head marker is then replaced and forced before success.

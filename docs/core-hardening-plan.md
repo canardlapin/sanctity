@@ -253,18 +253,22 @@ upgrade. Separate stores, restrictive enrollment, interrupted commits, exact ret
 primary loss and independent old-writer fencing are qualified for current authority.
 All six unchanged parent criteria pass; see [the qualification receipt](evidence/institutional-pilot/O03.6.3/receipt.json),
 [parent review](evidence/institutional-pilot/O03.6/receipt.json) and
-[reproduction guide](policy-process-qualification.md). Organization restore remains open.
+[reproduction guide](policy-process-qualification.md). Closed current-capability
+organization restore is now qualified separately by O03.7/O03.8.
 
-**Next queue:** H03.1, verified backup automation against an isolated test store.
-O03.6 is complete; H03.1 remains the blocker for O03.7.
-O03.7 joins the journal and backup outputs; O03.8 qualifies the resulting path after
-F02.3 and F03.3/F03.4. Bring this recovery milestone forward before browser workspace
-expansion. F04.1, O01.4, O02.1 and O02.3 remain independently ready, but readiness
-does not change the recovery priority. Use the preserved historical baseline for
-every candidate; do not regenerate its oracle.
+**Recovery milestone completed for current capabilities:** F02/F03 engineering,
+H03.1 verified isolated backups, O03.7 closed restore and O03.8 source-isolation
+rehearsal now pass. See the [operator runbook](organization-recovery.md),
+[O03.7 receipt](evidence/institutional-pilot/O03.7/receipt.json) and
+[O03.8 receipt](evidence/institutional-pilot/O03.8/receipt.json).
+F04.1 institutional identity, O01.4 install/upgrade qualification, O02.1 diagnostics
+and O02.3 admission limits remain independent next work. O03.2/O03.4/O03.5 retain
+full identity/session recovery; no local rehearsal closes institutional or
+physical failure-domain gates. Keep the historical oracle frozen.
 
 All six area reviews remain open. T1 strengthens H01/H06 and establishes H04's oracle;
-storage controls, independent recovery and complete workflows remain unqualified.
+storage controls, institutional/physical recovery and complete workflows retain
+their separate qualification gates.
 T2 contains schema and authority integration risk, so continue one reviewable task at
 a time (two-active upper bound) and review after the first migration/protocol pair.
 No delivery date or institution-level capacity estimate is inferred from this tranche.

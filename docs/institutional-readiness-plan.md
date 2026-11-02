@@ -171,9 +171,11 @@ frozen workload budgets. O03.1's durability contract and F02.2's PostgreSQL orga
 migration are also complete; [T2 evidence](evidence/core-hardening-t2/receipt.json) binds
 their qualification. F03.1/F03.2 now qualify current authority, and the three O03.6
 slices pass the [unchanged independent-durability review](evidence/institutional-pilot/O03.6/receipt.json).
-Next is H03.1 verified backup automation; O03.7/O03.8 still own current-capability
-organization restore. O03.2 retains full identity/session integration, and institutional
-failure-domain qualification remains open. These are foundational results; all
+H03.1 verified backup automation and O03.7/O03.8 current-capability organization
+restore/source isolation now pass their local engineering checks. The
+[operator runbook](organization-recovery.md) records the closed workflow. O03.2
+retains full identity/session integration, and institutional failure-domain
+qualification remains open. These are foundational results; all
 six area reviews remain open. The [five core tranches](core-hardening-plan.md#delivery-order)
 coordinate authority, storage/recovery, workflows, measurement and release acceptance.
 Operation and recovery work must not wait until the interface is finished. The detailed dependency graph is retained in
