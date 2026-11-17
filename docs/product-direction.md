@@ -52,12 +52,12 @@ Arguing "replace Brain-CODE" is weak: the two systems serve different purposes, 
 Brain-CODE already covers more data types than Sanctity does. The stronger case
 is this:
 
-> **Sanctity is the institution's governed working repository. Brain-CODE,
-> CONP and OpenNeuro are publication and consortium destinations.**
-> Labs curate, version, review and share data internally in Sanctity under
-> institutional control. When a study is ready, Sanctity exports an exact,
-> verified BIDS release for deposit. The institution never loses its
-> authoritative copy, its history or its access decisions.
+> **Sanctity can be the institution's working repository, its long-term research
+> archive, or both.** Labs curate and share exact releases under institutional
+> control. A finished study can be deposited directly into Sanctity and remain
+> discoverable there under the institution's retention and access policies.
+> Labs can also export a verified BIDS release to a publication or consortium
+> destination such as Brain-CODE, CONP or OpenNeuro.
 
 What Sanctity offers that a deposit platform does not:
 

@@ -1,11 +1,13 @@
 # Sanctity core vision
 
-Restated 13 October 2026 from the original vision and the product owner's clarification.
+Restated 13 October 2026. Updated 17 November 2026 to clarify archival use and collaboration across institutions.
 
-Sanctity is a BIDS-native research data repository where labs organize projects,
-manage and understand their data, control access, and collaborate through an
-excellent interface. It connects QA, visualization, preprocessing, and eventually
-analysis to versioned data through a small, dependable processing framework.
+Sanctity is a BIDS-native research data repository for active studies and long-term
+archives. Labs can curate a study as it grows, share a precise selection, or
+deposit a finished collection for others to find and use years later. The same
+release identifies what was accepted in each case. Through the interface,
+researchers can inspect the data and its history. QA, visualization, preprocessing
+and eventually analysis can build on those exact releases.
 
 ## The core promise
 
@@ -22,14 +24,22 @@ accepted history and BIDS exports agree. Product trust also means that people ca
 understand what is happening, who has access, what requires attention, and who is
 responsible for it. Both are necessary to deliver the repository.
 
+A collection deposited once is a complete use of Sanctity. Years after the
+original team has left, a researcher with permission should be able to find it
+by its description, see who now holds custody, inspect the inventory and retrieve
+the exact files retained under the archive's policy. This applies equally to a
+fully assessed BIDS study and a collection known only by its description and files.
+
 ## Product priorities
 
 1. **Dependable data stewardship.** Preserve content, provenance and accepted history;
    support ingestion, discovery, curation, retrieval and tested recovery.
 2. **An excellent working interface.** Make common journeys clear and complete,
    including errors, interrupted work, conflicting edits and accessible navigation.
-3. **Labs, projects and collaboration.** Organize datasets and responsibilities;
-   provide understandable memberships, permissions, sharing and offboarding.
+3. **Collaboration across labs and institutions.** A steward can name the release
+   or subset another lab may use, explain the grant and end future access. Design
+   for collaborators at another institution from the outset. The first deployment
+   can serve several labs and approved external guests from one installation.
 4. **A useful processing framework.** Bind tools and their results to exact inputs,
    current authority and normal derivative admission. QA and visualization are early
    consumers of this framework; additional analysis capabilities follow demonstrated

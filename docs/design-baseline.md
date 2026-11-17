@@ -33,6 +33,8 @@ Two complementary objects organize the system:
 
 **A Release is an accepted scientific state.** It binds exact content, a selected interpretation, and admission evidence. Acceptance does not mean external publication.
 
+An archival deposit can complete its lifecycle at the first accepted release. Its catalog description, inventory, custody and access history must support discovery and retrieval even if nobody ever edits or processes the collection. An active study uses the same records and adds releases as it grows. Scientific profiles determine what can be interpreted or checked about each release. The institution's retention policy determines which content it keeps.
+
 **A ScientificView is a fixed scientific selection and prepared representation.** It is the common object for bounded querying, sharing, export, and processing. Its content identity does not grant access.
 
 The shared lifecycle is:
@@ -203,6 +205,8 @@ Cache immutable prepared content by identity, then reauthorize its use. Neither 
 ## Authority and collaboration
 
 Model durable actors separately from login providers and data custody.
+
+Design for two cases from the outset. On one installation, two labs or an approved external guest can collaborate through scoped grants. If two institutions operate separate installations, a release reference crossing that boundary must identify its issuing repository. The source authorizes disclosure of a specific release or prepared view. A receiving repository that accepts a copy records the permitted provenance, assigns local custody and governs subsequent access to that copy. These are requirements for a future exchange. The first deployment uses the [single-institution organization model](decisions/001-institutional-organization.md).
 
 | Concept | Purpose |
 | --- | --- |
