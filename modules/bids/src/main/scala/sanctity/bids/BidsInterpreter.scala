@@ -232,7 +232,7 @@ final class BidsInterpreter[F[_]: Async](store: BlobStore[F], context: BidsConte
     else json.fold(
       Right(JsonValue.Null),
       value => Right(JsonValue.Bool(value)),
-      number => number.toBigDecimal.filter(BidsInterpreter.recordable).toRight("number is too long to record exactly").flatMap { exact =>
+      number => BidsInterpreter.decimal(number).flatMap { exact =>
         val approximate = exact.toDouble
         Either.cond(approximate.isFinite, JsonValue.Num(approximate), "number is outside the double-precision range")
       },
@@ -247,7 +247,7 @@ final class BidsInterpreter[F[_]: Async](store: BlobStore[F], context: BidsConte
     else json.fold(
       Right(MetadataValue.Null),
       value => Right(MetadataValue.Flag(value)),
-      number => number.toBigDecimal.filter(BidsInterpreter.recordable).toRight("number is too long to record exactly").map(MetadataValue.Number.apply),
+      number => BidsInterpreter.decimal(number).map(MetadataValue.Number.apply),
       value => Right(MetadataValue.Text(value)),
       values => values.traverse(authored(_, depth + 1)).map(MetadataValue.Array.apply),
       fields => fields.toVector.traverse((key, value) => authored(value, depth + 1).map(key -> _)).map(v => MetadataValue.Record(v.toMap))
@@ -264,8 +264,11 @@ final class BidsInterpreter[F[_]: Async](store: BlobStore[F], context: BidsConte
 object BidsInterpreter:
   val RelationshipVersion: String = "bids-mri-relationships-v7"
 
-  /** Bounds the digits kept for one number; far beyond anything a measurement carries. */
-  private[bids] def recordable(number: BigDecimal): Boolean = number.precision <= 128 && math.abs(number.scale.toLong) <= 400
+  /** Apply measurement bounds to the value. Redundant fractional zeros remain in the retained source bytes. */
+  private def decimal(number: io.circe.JsonNumber): Either[String, BigDecimal] =
+    number.toBigDecimal.map(n => BigDecimal(n.bigDecimal.stripTrailingZeros))
+      .filter(n => n.precision <= 128 && math.abs(n.scale.toLong) <= 400)
+      .toRight("number is too long to record exactly")
 
   /** The value the library computes with: every number as its nearest double, as `metadata` renders it. */
   private[bids] def computed(value: MetadataValue): MetadataValue = value match

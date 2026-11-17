@@ -301,7 +301,7 @@ abstract class CatalogCoverageSuite extends FunSuite:
         // and in an assessed one. 9007199254740993 is the first integer a double cannot hold.
         exact <- imported { at =>
           write(at, eegSidecar, s"""{"TaskName":"rest","SamplingFrequency":$longNumber}""")
-          write(at, SyntheticFixture.sharedSidecar, """{"TaskName":"rest","RepetitionTime":1.5,"Counter":9007199254740993}""")
+          write(at, SyntheticFixture.sharedSidecar, s"""{"TaskName":"rest","RepetitionTime":1.5${"0" * 150},"Counter":9007199254740993}""")
         }
         _ = assert(exact.candidate.assessment.admissible, exact.candidate.assessment.errors.toString)
         _ = assertEquals(exact.candidate.interpretation.byPath(p(eegHeader)).fields("SamplingFrequency").value, MetadataValue.Number(BigDecimal(longNumber)))
