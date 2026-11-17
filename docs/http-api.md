@@ -272,6 +272,12 @@ of files. Each file entry also carries its `group` and `level`.
 `levels` is `null` for a release interpreted before levels were recorded. An
 archive has no scientific query index, so `POST /v1/selections` refuses it.
 
+The described data types follow the file rules of the BIDS schema and are tested
+against the names in the public BIDS example datasets. Metadata numbers are
+reported with every digit the sidecar wrote. Files under `stimuli/` may have any
+name. A `participants.tsv` that cannot be read produces a `ParticipantTable`
+finding naming the row or column at fault.
+
 `archive_description.json` requires a `Name`. `Description`, `License` and
 `DatasetDOI` are text. `Authors`, `Keywords`, `DataTypes`, `Funding` and
 `ReferencesAndLinks` are lists of text.

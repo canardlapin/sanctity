@@ -316,12 +316,14 @@ abstract class CatalogLifecycleSuite extends CatalogSubsetSuite:
     }
   }
 
-  test("malformed, duplicate-key, invalid, and numerically lossy metadata remain rejected candidates") {
+  // A number with more digits than a double holds was once refused as lossy. It is now recorded exactly as written
+  // (see CoverageLevelsSuite), so nothing is lost and it is no longer a reason to refuse a sidecar. A number too
+  // long to record at all is still refused; that case is tested there as well.
+  test("malformed, duplicate-key and invalid metadata remain rejected candidates") {
     fixture { (s, root) =>
       accepted(s, root).flatMap { initial =>
         Vector("""{"RepetitionTime":}""", """{"RepetitionTime":1,"RepetitionTime":2}""",
-          """{"RepetitionTime":-2}""", """{"RepetitionTime":1.5,"Large":9007199254740993}""",
-          """{"RepetitionTime":1.5,}""").traverse_ { json =>
+          """{"RepetitionTime":-2}""", """{"RepetitionTime":1.5,}""").traverse_ { json =>
           correction(s, initial.release, json).flatMap { edit =>
             IO(assert(!edit.candidate.assessment.admissible)) *>
               s.repository.accept(s.context, edit.candidate.id, key(json)).map(result => assert(result.isLeft))

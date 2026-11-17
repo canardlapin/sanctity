@@ -378,6 +378,17 @@ and store an archive, all in the browser on a freshly started instance.
   description (K1). Views, derivatives and processing are still not reachable
   over HTTP, and MRI has not been extracted into a modality of its own (K2).
   New modalities register in `RepositoryBidsContext`.
+- **The data-type rules are checked against the BIDS schema and real names.**
+  They follow the schema's file rules (bids-specification `f9d3b8a`, schema
+  1.11.3-dev). A fixture of 3,869 file paths from 39 public BIDS example
+  datasets is accepted in full, apart from one stray non-BIDS file. Fourteen of
+  23 example datasets import cleanly end to end; eight of the rest fail only on
+  their empty placeholder MRI images, and one has a duplicated sidecar key.
+  A published EEG study (Matching Pennies) is kept as a fixture.
+- **Three real-data problems found that way are fixed.** Sidecar numbers keep
+  every digit as written. A participant table that cannot be read is a finding
+  that names the row, not a failed import, and a byte-order mark is ignored.
+  Stimulus files may have any name.
 - **Limits of this step.** Recordings stored as directories (CTF `.ds`, MEF3)
   are preserved, not described. File moves and removals are not yet offered
   for described data types. Processing-input planning still expects the older

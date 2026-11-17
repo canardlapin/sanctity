@@ -259,6 +259,72 @@ abstract class CatalogCoverageSuite extends FunSuite:
     }
   }
 
+  test("a published EEG study is accepted as it stands") {
+    fixture { (s, _) =>
+      val study = Path.of(getClass.getResource("/multimodal-conformance/eeg-matchingpennies/dataset").toURI)
+      val header = "sub-05/eeg/sub-05_task-matchingpennies_eeg.vhdr"
+      for
+        preview <- checked(repo(s).importNative(s.context, s.dataset.id, new NativeDirectorySource[IO](study)))
+        _ = assertEquals(preview.candidate.assessment.errors, Vector.empty)
+        receipt <- checked(repo(s).accept(s.context, preview.candidate.id, key("published-eeg")))
+        release <- checked(s.catalog.release(s.context, receipt.release))
+        summary = release.interpretation.levels.map(_.summary.map((group, level, files) => (group, level) -> files).toMap).getOrElse(fail("no levels"))
+        _ = assertEquals(release.manifest.files.size, 54)
+        _ = assertEquals(summary.get("eeg" -> CoverageLevel.Described), Some(35))
+        _ = assertEquals(summary.get("sourcedata" -> CoverageLevel.Preserved), Some(7))
+        _ = assertEquals(summary.get("code" -> CoverageLevel.Preserved), Some(2))
+        _ = assertEquals(summary.keys.filter(_._1 == "eeg").toSet, Set("eeg" -> CoverageLevel.Described))
+        // Seven participants, each with one recording stored as three BrainVision files.
+        recordings <- checked(s.catalog.select(s.context, Vector(release.ref), ScientificQuery(artifacts = ArtifactPredicate.Suffix("eeg"))))
+        _ = assertEquals(recordings.hits.map(_.participant).distinct.size, 7)
+        _ = assertEquals(recordings.hits.size, 21)
+        // The task-level sidecar at the root reaches every recording.
+        metadata <- checked(repo(s).explain(s.context, release.ref, p(header)))
+        _ = assertEquals(metadata.fields("TaskName").origin, p("task-matchingpennies_eeg.json"))
+        _ = assert(metadata.fields.contains("SamplingFrequency"), metadata.fields.keys.toString)
+      yield ()
+    }
+  }
+
+  test("real-world irregularities are read, reported or kept, and never abort an import") {
+    fixture { (s, root) =>
+      val longNumber = "89.47720185999999"
+      def imported(change: Path => Unit): IO[Preview] =
+        for
+          at <- fresh(root)
+          _ <- described(at)
+          _ <- IO.blocking(change(at))
+          preview <- checked(repo(s).importNative(s.context, s.dataset.id, new NativeDirectorySource[IO](at)))
+        yield preview
+      for
+        // A number with more digits than a double holds is recorded exactly as written, in a described sidecar
+        // and in an assessed one. 9007199254740993 is the first integer a double cannot hold.
+        exact <- imported { at =>
+          write(at, eegSidecar, s"""{"TaskName":"rest","SamplingFrequency":$longNumber}""")
+          write(at, SyntheticFixture.sharedSidecar, """{"TaskName":"rest","RepetitionTime":1.5,"Counter":9007199254740993}""")
+        }
+        _ = assert(exact.candidate.assessment.admissible, exact.candidate.assessment.errors.toString)
+        _ = assertEquals(exact.candidate.interpretation.byPath(p(eegHeader)).fields("SamplingFrequency").value, MetadataValue.Number(BigDecimal(longNumber)))
+        _ = assertEquals(exact.candidate.interpretation.byPath(p(bold)).fields("Counter").value, MetadataValue.Number(BigDecimal("9007199254740993")))
+        _ = assertEquals(exact.candidate.interpretation.byPath(p(bold)).fields("RepetitionTime").value, MetadataValue.Number(BigDecimal("1.5")))
+        // A number too long to record is a finding against its file.
+        endless <- imported(write(_, eegSidecar, s"""{"TaskName":"rest","SamplingFrequency":0.${"1" * 200}}"""))
+        _ = assert(endless.candidate.assessment.errors.exists(f => f.code == "InvalidJson" && f.path.contains(p(eegSidecar))))
+        // A byte-order mark and trailing blank lines, as spreadsheet exports leave them, are ignored.
+        exported <- imported(write(_, "participants.tsv", "\uFEFFparticipant_id\tage\nsub-01\t25\nsub-02\t31\n\n"))
+        _ = assert(exported.candidate.assessment.admissible, exported.candidate.assessment.errors.toString)
+        _ = assertEquals(exported.candidate.interpretation.participants.map(_.participant), Vector("sub-01", "sub-02"))
+        // A table that cannot be read is a finding that names the row at fault.
+        broken <- imported(write(_, "participants.tsv", "participant_id\tage\nsub-01\t25\nsub-01\t31\n"))
+        _ = assertEquals(broken.candidate.assessment.errors.map(f => f.code -> f.message), Vector("ParticipantTable" -> "participant sub-01 appears more than once"))
+        // Stimulus files may have any name.
+        named <- imported(at => { write(at, "stimuli/stim_107_CRF-1_01.png", "placeholder image\n"); write(at, "stimuli/notes.txt", "free text\n") })
+        _ = assert(named.candidate.assessment.admissible, named.candidate.assessment.errors.toString)
+        _ = assert(!named.candidate.assessment.findings.exists(_.path.exists(_.value.startsWith("stimuli/"))))
+      yield ()
+    }
+  }
+
 final class CoverageLevelsSuite extends CatalogCoverageSuite:
   protected def fixture(run: (RepositorySystem, Path) => IO[Unit]): Unit =
     Resource.make(IO.blocking(Files.createTempDirectory("sanctity-coverage-test-")))(TestFiles.remove)

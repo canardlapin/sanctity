@@ -30,6 +30,7 @@ object BidsScopes:
   private val assessedDocuments = Set("dataset_description.json", "participants.tsv", "participants.json")
   private val describedDocuments = Set("README", "README.md", "README.rst", "README.txt", "CHANGES", "LICENSE", "CITATION.cff", ".bidsignore")
   private val namingCodes = Set("InvalidName", "InvalidEntity", "MissingRequiredField", "InvalidPath")
+  private val unrecognizedCodes = Set("UnrecognizedFile", "UnsupportedFileRole")
   private val context = RepositoryBidsContext.Repository
 
   private def parts(path: RelPath): Vector[String] = path.value.split('/').toVector
@@ -84,10 +85,13 @@ object BidsScopes:
           s"$count preserved inside recording directories under '$root' folders; recordings stored as directories are not interpreted yet"))
     }
 
-  /** Under the inclusive policy a badly named file in a described data type is kept and reported, not refused. */
+  /** BIDS sets no naming rules for stimulus files, so name findings about them are dropped under either policy.
+    * Under the inclusive policy a badly named file in a described data type is kept and reported, not refused.
+    */
   def relax(findings: Vector[Finding], policy: AdmissionPolicy): Vector[Finding] =
-    if policy == AdmissionPolicy.Strict then findings
-    else findings.map { f =>
+    val named = findings.filterNot(f => (namingCodes ++ unrecognizedCodes)(f.code) && f.path.exists(_.value.startsWith("stimuli/")))
+    if policy == AdmissionPolicy.Strict then named
+    else named.map { f =>
       val described = f.path.flatMap(datatypeFolder).flatMap(RepositoryBidsContext.modalityOfFolder).exists(_.level == CoverageLevel.Described)
       if f.severity == Severity.Error && namingCodes(f.code) && described then
         f.copy(severity = Severity.Warning, message = f.message + "; the file is preserved without description")

@@ -41,16 +41,20 @@ final class BidsInterpreter[F[_]: Async](store: BlobStore[F], context: BidsConte
             obj <- value match
               case obj: JsonValue.Obj => Right(obj)
               case _ => Left("metadata must be a JSON object")
-          yield obj
+            written <- json.asObject.toRight("metadata must be a JSON object").flatMap(_.toVector.traverse((k, v) => authored(v).map(k -> _)))
+          yield obj -> written.toMap
           file.path -> parsed
         }
       }
-      participants <- manifest.files.find(_.path.value == "participants.tsv").traverse { file =>
+      table <- manifest.files.find(_.path.value == "participants.tsv").traverse { file =>
         Checked.lift[F, Unit](Either.cond(file.blob.size <= jsonLimit, (), Problem.LimitExceeded("participant table exceeds 4 MiB"))) *>
-          store.read(file.blob).compile.to(Array).flatMap(bytes => Checked.lift[F, ParticipantTable.Table](ParticipantTable.parse(bytes)))
-            .map(ParticipantTable.facts)
+          store.read(file.blob).compile.to(Array).map(bytes => file.path -> ParticipantTable.parse(bytes))
       }
-      result <- Checked.lift[F, (Interpretation, Assessment)](interpret(manifest, decoded, participants.getOrElse(Vector.empty)))
+      // A table the profile cannot read is reported against the file; it does not abort the preparation.
+      participantFindings = table.toVector.collect { case (path, Left(reason)) => Finding("ParticipantTable", Severity.Error, Some(path), reason) }
+      participants = table.flatMap(_._2.toOption).map(ParticipantTable.facts).getOrElse(Vector.empty)
+      exact = decoded.collect { case (path, Right((_, written))) => path -> written }.toMap
+      result <- Checked.lift[F, (Interpretation, Assessment)](interpret(manifest, decoded.map((path, r) => path -> r.map(_._1)), exact, participants))
       (initial, assessment) = result
       enriched <- new StimulusBindings[F](store).enrich(manifest, initial)
       (interpretation, stimulusFindings) = enriched
@@ -60,9 +64,10 @@ final class BidsInterpreter[F[_]: Async](store: BlobStore[F], context: BidsConte
       eventChecks <- new EventContentChecks[F](store).assess(manifest, interpretation, headers)
       echoChecks <- new MultiEchoChecks[F](store).assess(manifest, interpretation, headers)
       sbrefChecks <- Checked.lift[F, Vector[ContentCheck]](SbrefBindings.assess(manifest, interpretation, headers))
-    yield interpretation -> Assessment.from(interpretation, assessment.policy, assessment.findings ++ stimulusFindings, dwiChecks ++ eventChecks ++ headerChecks ++ echoChecks ++ sbrefChecks)
+    yield interpretation -> Assessment.from(interpretation, assessment.policy, assessment.findings ++ stimulusFindings ++ participantFindings, dwiChecks ++ eventChecks ++ headerChecks ++ echoChecks ++ sbrefChecks)
 
-  private def interpret(manifest: Manifest, decoded: Vector[(RelPath, Either[String, JsonValue.Obj])], participants: Vector[ParticipantFacts]): Either[Problem, (Interpretation, Assessment)] =
+  private def interpret(manifest: Manifest, decoded: Vector[(RelPath, Either[String, JsonValue.Obj])],
+      exact: Map[RelPath, Map[String, MetadataValue]], participants: Vector[ParticipantFacts]): Either[Problem, (Interpretation, Assessment)] =
     val checked = BidsManifest.fromRelativePathsChecked(manifest.files.map(_.path.value), context = context)
     val sidecars = decoded.collect { case (path, Right(json)) => BidsPath(path.value) -> json }.toMap
     val resolver = BidsMetadataResolver(checked.value, sidecars)
@@ -98,9 +103,14 @@ final class BidsInterpreter[F[_]: Async](store: BlobStore[F], context: BidsConte
         case Right(resolved) =>
           resolutions += resolved
           BidsMetadataValidation.resolvedSidecar(BidsPath(file.path.value), resolved.metadata).foreach(issue => findings += finding(issue))
+          // A field's value is recorded as its source wrote it. The library's double is used only to compute with.
+          def written(source: RelPath, name: String, computed: JsonValue): MetadataValue =
+            val approximate = metadata(computed)
+            exact.get(source).flatMap(_.get(name)).filter(v => BidsInterpreter.computed(v) == approximate).getOrElse(approximate)
           val fields = resolved.metadata.fields.map { (name, value) =>
-            name -> EffectiveField(metadata(value), relative(resolved.origins(name)),
-              resolved.history(name).map(c => Contribution(relative(c.source), metadata(c.value))))
+            val origin = relative(resolved.origins(name))
+            name -> EffectiveField(written(origin, name, value), origin,
+              resolved.history(name).map(c => Contribution(relative(c.source), written(relative(c.source), name, c.value))))
           }
           Some(ArtifactMetadata(file.path, fields, resolved.sources.map(s => relative(s.path)), resolved.datasetRoot.map(relative)))
     }
@@ -222,14 +232,25 @@ final class BidsInterpreter[F[_]: Async](store: BlobStore[F], context: BidsConte
     else json.fold(
       Right(JsonValue.Null),
       value => Right(JsonValue.Bool(value)),
-      number => number.toBigDecimal.toRight("unsupported JSON number").flatMap { exact =>
+      number => number.toBigDecimal.filter(BidsInterpreter.recordable).toRight("number is too long to record exactly").flatMap { exact =>
         val approximate = exact.toDouble
-        Either.cond(approximate.isFinite && BigDecimal(approximate.toString) == exact,
-          JsonValue.Num(approximate), "number cannot be represented faithfully by this bids4s profile")
+        Either.cond(approximate.isFinite, JsonValue.Num(approximate), "number is outside the double-precision range")
       },
       value => Right(JsonValue.Str(value)),
       values => values.traverse(value => convert(value, depth + 1)).map(JsonValue.Arr.apply),
       fields => fields.toVector.traverse((key, value) => convert(value, depth + 1).map(key -> _)).map(v => JsonValue.Obj(v.toMap))
+    )
+
+  /** A sidecar value exactly as written: numbers keep every digit. */
+  private def authored(json: Json, depth: Int = 0): Either[String, MetadataValue] =
+    if depth > 128 then Left("reference metadata nesting limit is 128")
+    else json.fold(
+      Right(MetadataValue.Null),
+      value => Right(MetadataValue.Flag(value)),
+      number => number.toBigDecimal.filter(BidsInterpreter.recordable).toRight("number is too long to record exactly").map(MetadataValue.Number.apply),
+      value => Right(MetadataValue.Text(value)),
+      values => values.traverse(authored(_, depth + 1)).map(MetadataValue.Array.apply),
+      fields => fields.toVector.traverse((key, value) => authored(value, depth + 1).map(key -> _)).map(v => MetadataValue.Record(v.toMap))
     )
 
   private def metadata(value: JsonValue): MetadataValue = value match
@@ -242,6 +263,16 @@ final class BidsInterpreter[F[_]: Async](store: BlobStore[F], context: BidsConte
 
 object BidsInterpreter:
   val RelationshipVersion: String = "bids-mri-relationships-v7"
+
+  /** Bounds the digits kept for one number; far beyond anything a measurement carries. */
+  private[bids] def recordable(number: BigDecimal): Boolean = number.precision <= 128 && math.abs(number.scale.toLong) <= 400
+
+  /** The value the library computes with: every number as its nearest double, as `metadata` renders it. */
+  private[bids] def computed(value: MetadataValue): MetadataValue = value match
+    case MetadataValue.Number(n) => MetadataValue.Number(BigDecimal(n.toDouble.toString))
+    case MetadataValue.Array(values) => MetadataValue.Array(values.map(computed))
+    case MetadataValue.Record(fields) => MetadataValue.Record(fields.view.mapValues(computed).toMap)
+    case other => other
 
   def describe(context: BidsContext): SemanticContext =
     SemanticContext.from(context.name, context.specificationVersion, context.coverage, context.registryTokens,
