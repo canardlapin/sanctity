@@ -75,7 +75,9 @@ def main():
     parser.add_argument("--receipt", type=pathlib.Path)
     args = parser.parse_args()
     if args.demo_log:
-        matches = re.findall(r"^\[info\] (/[^\n]+sanctity-behavioural-demo-[^\n]+)$", args.demo_log.read_text(), re.MULTILINE)
+        # sbt colours its output on hosted runners even when piped; match the plain text.
+        log = re.sub(r"\x1b\[[0-9;]*[A-Za-z]", "", args.demo_log.read_text())
+        matches = re.findall(r"^\[info\] (/[^\n]+sanctity-behavioural-demo-[^\n]+)$", log, re.MULTILINE)
         if len(matches) != 1:
             parser.error("demo log must identify exactly one retained BehaviouralDemo workspace")
         workspace = pathlib.Path(matches[0])
