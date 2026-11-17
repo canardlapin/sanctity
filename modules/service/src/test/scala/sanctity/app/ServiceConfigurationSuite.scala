@@ -125,6 +125,73 @@ final class ServiceConfigurationSuite extends FunSuite:
     }
   }
 
+  test("only the explicit container mode binds beyond loopback, and it keeps the loopback origin") {
+    fixture { (_, values) =>
+      val container = values + ("SANCTITY_DEPLOYMENT_MODE" -> "container")
+      for
+        default <- ServiceConfiguration.load(values)
+        _ = assertEquals(default.bindAddress, "127.0.0.1")
+        proxy <- ServiceConfiguration.load(values ++ Map("SANCTITY_DEPLOYMENT_MODE" -> "proxy",
+          "SANCTITY_PUBLIC_ORIGIN" -> "https://repository.example.org"))
+        _ = assertEquals(proxy.bindAddress, "127.0.0.1")
+        c <- ServiceConfiguration.load(container + ("SANCTITY_HTTP_PORT" -> "9090"))
+        _ = assertEquals(c.bindAddress, "0.0.0.0")
+        _ = assertEquals(c.publicOrigin, "http://127.0.0.1:9090")
+        _ = assertEquals(c.authority, "127.0.0.1:9090")
+        explicit <- ServiceConfiguration.load(container + ("SANCTITY_PUBLIC_ORIGIN" -> "http://127.0.0.1:8080"))
+        _ = assertEquals(explicit.authority, "127.0.0.1:8080")
+        // The wider listener never widens the origin: no wildcard, name, other port, HTTPS or foreign host.
+        _ <- Vector("http://0.0.0.0:8080", "http://localhost:8080", "http://127.0.0.1:8081",
+          "https://repository.example.org", s"http://$canary.invalid:8080").foldLeft(IO.unit)((io, origin) =>
+          io *> denied(container + ("SANCTITY_PUBLIC_ORIGIN" -> origin)))
+        // No setting names an address: the mode alone selects it.
+        ignored <- ServiceConfiguration.load(values ++ Map("SANCTITY_BIND_ADDRESS" -> "0.0.0.0", "SANCTITY_HTTP_BIND" -> "0.0.0.0"))
+        _ = assertEquals(ignored.bindAddress, "127.0.0.1")
+      yield ()
+    }
+  }
+
+  test("a container listener binds every interface and still refuses every Host but the loopback origin") {
+    val app: HttpApp[IO] = Kleisli(_ => IO.pure(Response[IO]().withEntity("served")))
+    // One request over a real socket: the JDK client cannot send a Host that differs from its URI.
+    def status(port: Int, host: String, origin: Option[String] = None): IO[String] = IO.blocking {
+      val socket = new java.net.Socket(java.net.InetAddress.getLoopbackAddress, port)
+      try
+        socket.setSoTimeout(5000)
+        val request = s"GET / HTTP/1.1\r\nHost: $host\r\n" + origin.fold("")(o => s"Origin: $o\r\n") + "Connection: close\r\n\r\n"
+        socket.getOutputStream.write(request.getBytes(java.nio.charset.StandardCharsets.US_ASCII))
+        socket.getOutputStream.flush()
+        new java.io.BufferedReader(new java.io.InputStreamReader(socket.getInputStream, java.nio.charset.StandardCharsets.US_ASCII))
+          .readLine().split(" ")(1)
+      finally socket.close()
+    }
+    (for
+      loopback <- ApiServer.server(0, app, 1.second).use(s => IO(s.address.getAddress))
+      _ = assert(loopback.isLoopbackAddress, "the default listener must stay on loopback")
+      // The guard names the port it serves, which is known only once the listener is bound.
+      bound <- Deferred[IO, Int]
+      guarded: HttpApp[IO] = Kleisli(req => bound.get.flatMap(p => ProtectedOrigin(app, s"127.0.0.1:$p", s"http://127.0.0.1:$p")(req)))
+      _ <- ApiServer.server(0, guarded, 1.second, ServiceConfiguration.containerAddress).use { server =>
+        val port = server.address.getPort
+        for
+          _ <- bound.complete(port)
+          _ = assert(server.address.getAddress.isAnyLocalAddress, "container mode must listen on the container's interfaces")
+          ok <- status(port, s"127.0.0.1:$port", Some(s"http://127.0.0.1:$port"))
+          _ = assertEquals(ok, "200")
+          // What a client on the container network or a LAN would send: the address or name it actually reached.
+          address <- status(port, s"172.18.0.3:$port")
+          _ = assertEquals(address, "400")
+          name <- status(port, s"sanctity:$port")
+          _ = assertEquals(name, "400")
+          wildcard <- status(port, s"0.0.0.0:$port")
+          _ = assertEquals(wildcard, "400")
+          foreign <- status(port, s"127.0.0.1:$port", Some("http://attacker.invalid"))
+          _ = assertEquals(foreign, "403")
+        yield ()
+      }
+    yield ()).unsafeRunSync()
+  }
+
   test("Host, Origin, duplicate fields and cross-site requests enforce the configured boundary") {
     val app: HttpApp[IO] = Kleisli(req => IO.pure(Response[IO]().withEntity(req.headers.toString)))
     val guard = ProtectedOrigin(app, "repository.example.org", "https://repository.example.org")
