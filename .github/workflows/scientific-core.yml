@@ -4,12 +4,15 @@ on:
   pull_request:
 permissions:
   contents: read
+env:
+  JDK_JAVA_OPTIONS: -Dsbt.override.build.repos=true -Dsbt.repository.config=${{ github.workspace }}/.github/sbt-repositories
+  COURSIER_REPOSITORIES: https://repo.maven.apache.org/maven2
 jobs:
   streaming-tables:
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     env:
-      JDK_JAVA_OPTIONS: -XX:ActiveProcessorCount=4
+      JDK_JAVA_OPTIONS: -XX:ActiveProcessorCount=4 -Dsbt.override.build.repos=true -Dsbt.repository.config=${{ github.workspace }}/.github/sbt-repositories
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4

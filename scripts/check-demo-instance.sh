@@ -140,7 +140,7 @@ assert len({lab["id"] for lab in summary["labs"]}) == 2 and len({lab["project"][
 ok("directories", "; ".join(f"{lab['name']} > {lab['project']['name']} ({len(lab['datasets'])} datasets)" for lab in summary["labs"]))
 
 # (d) Each seeded dataset has an accepted head release with a non-empty inventory and the fixture's exact bytes.
-described, findings = [], []
+described = []
 for lab in summary["labs"]:
     lead = tokens[lab["lead"]]
     for dataset in lab["datasets"]:
@@ -156,9 +156,13 @@ for lab in summary["labs"]:
             status, content, headers = call(f"/v1/datasets/{dataset['id']}/releases/{head}/file?path=" + urllib.parse.quote(path), lead)
             digest = hashlib.sha256((fixture / path).read_bytes()).hexdigest()
             assert status == 200 and hashlib.sha256(content).hexdigest() == digest == headers["X-Sanctity-SHA256"], f"{dataset['label']}: {path} bytes differ"
-        findings.append(len(release["assessment"]["findings"]))
-        described.append(f"{dataset['label']}: {len(files)} files, {findings[-1]} findings")
-assert sum(1 for n in findings if n > 0) >= 2, "the seed should show findings in at least two datasets"
+        assessment = release["assessment"]
+        assert assessment["findings"] == [], f"{dataset['label']}: unexpected findings {assessment['findings']}"
+        checked = {c["target"] for c in assessment["checks"]}
+        extension = "_beh.tsv" if "/face-behavioural/" in dataset["fixture"] else "_bold.nii"
+        targets = [p for p in files if p.endswith((extension, extension + ".gz"))]
+        assert targets and set(targets) <= checked, f"{dataset['label']}: missing scientific checks for {targets}"
+        described.append(f"{dataset['label']}: {len(files)} files, {len(checked)} checked targets")
 ok("releases", "; ".join(described))
 
 # (e) A person from one lab cannot read the other lab's private dataset, project or lab.
