@@ -82,6 +82,18 @@ Use `-Dsanctity.bids4s.path=/absolute/path/bids4s` as an explicit upstream devel
 
 The pinned application baseline is Scala 3.3.8, Cats Effect 3.5.7, FS2 3.11.0, http4s 0.23.30, Circe 0.14.10, Doobie 1.0.0-RC6, PostgreSQL JDBC 42.7.14 and MUnit 1.3.0. PostgreSQL checks use version 17.11.
 
+## Run a seeded local instance
+
+With Docker running, one command builds the packaged service, starts it with PostgreSQL 17 and seeds two labs:
+
+```sh
+python3 scripts/demo-instance.py up               # prints the console address and demo credentials
+python3 scripts/demo-instance.py down             # stops it; data is kept
+python3 scripts/demo-instance.py down --volumes   # deletes it
+```
+
+Open the printed address (`http://127.0.0.1:8080/` by default) and sign in with a printed access token. The console then works against the real API and database: two labs, their projects, three accepted datasets with files and findings, and four people whose access differs. [The distribution guide](docs/service-distribution.md#local-container-demonstration) lists what is seeded and what the demonstration leaves out. `bash scripts/check-demo-instance.sh` starts a separate instance, checks it with real requests and removes it.
+
 ## Modules and public contracts
 
 | Module | Responsibility |

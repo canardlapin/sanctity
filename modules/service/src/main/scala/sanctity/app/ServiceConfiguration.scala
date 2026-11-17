@@ -20,11 +20,16 @@ trait ProtectedIOApp extends IOApp:
 
 final class ServiceConfiguration private[app] (
     val database: DatabaseConfig, val storage: Path, val port: Int,
-    val publicOrigin: String, val authority: String, val shutdownTimeout: FiniteDuration
+    val publicOrigin: String, val authority: String, val shutdownTimeout: FiniteDuration,
+    val bindAddress: String
 ):
   override def toString: String = "ServiceConfiguration(<protected>)"
 
 object ServiceConfiguration:
+  /** The listener's default address. Only the explicit `container` deployment mode selects another one. */
+  val loopbackAddress = "127.0.0.1"
+  /** Every interface of a container's private network namespace; the runtime publishes the port on host loopback. */
+  val containerAddress = "0.0.0.0"
   private val noFollow = LinkOption.NOFOLLOW_LINKS
   private val directoryMode = PosixFilePermissions.fromString("rwx------")
   private val fileMode = PosixFilePermissions.fromString("rw-------")
@@ -122,15 +127,17 @@ object ServiceConfiguration:
         requireSetting(uri.getHost != null && uri.getUserInfo == null && uri.getRawQuery == null &&
           uri.getFragment == null && uri.getRawPath == "" &&
           (uri.getPort == -1 || uri.getPort > 0 && uri.getPort <= 65535), "public origin")
+        // A container cannot be reached on its own loopback interface. `container` widens the bind address only:
+        // the origin, and therefore the Host and Origin every request must carry, stays the loopback one.
         requireSetting(mode match
-          case "loopback" => origin == local
+          case "loopback" | "container" => origin == local
           case "proxy" => uri.getScheme == "https" && origin == origin.toLowerCase(java.util.Locale.ROOT)
           case _ => false,
           "deployment mode/public origin")
-        (port, origin, uri.getRawAuthority, seconds.seconds)
+        (port, origin, uri.getRawAuthority, seconds.seconds, if mode == "container" then containerAddress else loopbackAddress)
       }.handleErrorWith(_ => IO.raiseError(ConfigurationFailure("HTTP port, origin or shutdown settings")))
       root <- prepareStorage(values)
-    yield new ServiceConfiguration(db, root, network._1, network._2, network._3, network._4)
+    yield new ServiceConfiguration(db, root, network._1, network._2, network._3, network._4, network._5)
 
   /** Deliberately discard nested JDBC, filesystem, proxy and driver exception messages. */
   def exit(action: IO[Unit]): IO[ExitCode] = action.as(ExitCode.Success).handleErrorWith {

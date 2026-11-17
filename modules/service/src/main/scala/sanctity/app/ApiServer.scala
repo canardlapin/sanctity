@@ -12,10 +12,13 @@ import sanctity.http.{ConsoleAssets, RepositoryHttp}
 import sanctity.objects.FileBlobStore
 import scala.concurrent.duration.*
 
-/** Loopback-only service origin. A TLS reverse proxy is the external transport boundary. */
+/** Loopback service origin. A TLS reverse proxy is the external transport boundary. The listener binds loopback
+  * unless the explicit `container` deployment mode selects the container's interfaces; the origin never widens.
+  */
 object ApiServer extends ProtectedIOApp:
-  private[app] def server(port: Int, app: HttpApp[IO], shutdown: FiniteDuration): Resource[IO, Server] =
-    EmberServerBuilder.default[IO].withHost(Host.fromString("127.0.0.1").get).withPort(Port.fromInt(port).get)
+  private[app] def server(port: Int, app: HttpApp[IO], shutdown: FiniteDuration,
+      bindAddress: String = ServiceConfiguration.loopbackAddress): Resource[IO, Server] =
+    EmberServerBuilder.default[IO].withHost(Host.fromString(bindAddress).get).withPort(Port.fromInt(port).get)
       .withMaxConnections(64).withMaxHeaderSize(16384).withRequestHeaderReceiveTimeout(10.seconds)
       .withIdleTimeout(60.seconds).withShutdownTimeout(shutdown).withHttpApp(app)
       .withConnectionErrorHandler { case _ => IO.unit }
@@ -41,8 +44,11 @@ object ApiServer extends ProtectedIOApp:
             organization=Some(db.organization))
           slots <- Semaphore[IO](8)
           protectedApp = ProtectedOrigin(ConsoleAssets.withApi(api.app), config.authority, config.publicOrigin)
-          _ <- server(config.port, protectedApp.mapF(response => slots.permit.use(_ => response)), config.shutdownTimeout)
-            .use(_ => IO.println("Sanctity API and console started on the configured loopback origin.") *> IO.never)
+          started = if config.bindAddress == ServiceConfiguration.loopbackAddress
+            then "Sanctity API and console started on the configured loopback origin."
+            else "Sanctity API and console started for the configured loopback origin, listening on every interface of this container."
+          _ <- server(config.port, protectedApp.mapF(response => slots.permit.use(_ => response)), config.shutdownTimeout, config.bindAddress)
+            .use(_ => IO.println(started) *> IO.never)
         yield ()
       }
     yield ()
