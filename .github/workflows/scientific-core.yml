@@ -6,7 +6,7 @@ permissions:
   contents: read
 env:
   JDK_JAVA_OPTIONS: -Dsbt.override.build.repos=true -Dsbt.repository.config=${{ github.workspace }}/.github/sbt-repositories
-  COURSIER_REPOSITORIES: https://repo.maven.apache.org/maven2
+  COURSIER_REPOSITORIES: https://repo.maven.apache.org/maven2|https://maven-central.storage-download.googleapis.com/maven2
 jobs:
   streaming-tables:
     runs-on: ubuntu-24.04
