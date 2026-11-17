@@ -35,8 +35,9 @@ rejected. `manifest.json` records application, Scala, sbt, upstream and dependen
 versions, hashes, reported licenses and embedded notices. `metadata/source.json`
 identifies the actual build inputs, including uncommitted files; a Git revision alone
 is insufficient. Source paths are repository-relative; no cache paths or environment
-secrets are shipped. The source inventory includes processing code because the
-existing scientific BuildIdentity uses it, but its executable module is excluded.
+secrets are shipped. The package includes MRI derivative readers and profile definitions.
+The separate processing module contributes to the scientific build identity. Its local
+execution adapters and Python recipes stay outside the service distribution.
 
 The adjacent `.sha256` file identifies the ZIP; obtain that digest through a trusted
 release channel before installation. The manifest identifies every packaged payload
@@ -275,13 +276,14 @@ policy or reopen a restored V008 installation. Independent recovery under ADR004
 O03.2; keep organization-enabled restores closed until that protocol is implemented.
 
 Credential issuance writes a new mode-0600 file and does not print its secret. Native
-intake is a trusted local-directory operation. Recovery capture contains sensitive
+intake accepts trusted local directories through the operator command and authenticated
+file inventories and bytes through the browser upload API. Recovery capture contains sensitive
 policy: use a protected directory. Reconciliation needs independently trusted current
 policy; possession of a digest beside an old backup does not establish freshness.
 Independent durable policy recovery remains O03.
 
 The distribution includes the existing API, console assets, SQL migrations, native
-BIDS intake and recovery mechanisms. It excludes development demos, test libraries,
+BIDS and archive intake, derivative admission and recovery mechanisms. It excludes development demos, test libraries,
 DICOM/XNAT adapters and optional numerical processing recipes. Those can be added
 through explicitly qualified distributions later. The source-development `app/runMain`
 commands remain available through the app's dependency on the service module.

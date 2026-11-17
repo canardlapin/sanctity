@@ -28,7 +28,7 @@ final class MriInputPlanner extends InputPlanner:
           case _ => false
         }
       check("contract", None, known, RequirementStatus.Unsupported, Vector.empty, "Supported contract: MRI header QC v3 with declared anatomy/events/complete-fieldmap-family requirements")
-      check("interpretation", None, interpretation.profile.context.contains(BidsInterpreter.describe(bids4s.BidsContext.Default)),
+      check("interpretation", None, interpretation.profile.context.exists(MriInputPlanner.contexts),
         RequirementStatus.Unsupported, Vector.empty, "The input planner requires its qualified semantic context")
       check("admission", None, assessment.admissible, RequirementStatus.Disallowed, Vector.empty, "Input assessment has no admission errors")
       val facts = interpretation.facts.map(f => f.path -> f).toMap
@@ -100,4 +100,5 @@ final class MriInputPlanner extends InputPlanner:
       Right(InputReadiness(manifest.id, interpretation.id, assessment.id, contract, roots, checks.result()))
 
 object MriInputPlanner:
+  private val contexts = Set(bids4s.BidsContext.Default, RepositoryBidsContext.Repository).map(BidsInterpreter.describe)
   val Contract: InputContract = InputContract("sanctity.mri-header-qc", "3")

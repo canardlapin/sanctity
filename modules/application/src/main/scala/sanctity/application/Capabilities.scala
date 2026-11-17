@@ -48,6 +48,7 @@ trait BlobStore[F[_]]:
   def verify(blob: BlobRef): F[Unit]
 
 trait SemanticInterpreter[F[_]]:
+  def editableCompanions: Set[String] = Set("dwi.bval", "dwi.bvec", "events.tsv", "beh.tsv")
   def prepare(manifest: Manifest): F[(Interpretation, Assessment)]
   def prepare(manifest: Manifest, @scala.annotation.unused activity: Activity): F[(Interpretation, Assessment)] = prepare(manifest)
 

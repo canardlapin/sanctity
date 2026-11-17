@@ -2,7 +2,9 @@ package sanctity.bids
 
 import cats.effect.Async
 import cats.syntax.all.*
-import sanctity.application.{BlobStore, SemanticInterpreter}
+import io.circe.jawn.JawnParser
+import java.nio.ByteBuffer
+import sanctity.application.{BlobStore, Checked, SemanticInterpreter}
 import sanctity.kernel.*
 
 /** Chooses how a dataset is read from what its content declares.
@@ -11,12 +13,44 @@ import sanctity.kernel.*
   * The declaration is part of the versioned content, so a release and its export describe themselves, and changing a
   * collection from one kind to the other is an ordinary new release.
   */
-final class DatasetInterpreter[F[_]: Async](store: BlobStore[F], policy: AdmissionPolicy = AdmissionPolicy.Inclusive)
+final class DatasetInterpreter[F[_]: Async](store: BlobStore[F], policy: AdmissionPolicy = AdmissionPolicy.Inclusive,
+    additional: Vector[DerivativeProfile[F]] = Vector.empty[DerivativeProfile[F]])
     extends SemanticInterpreter[F]:
   private val bids = new RepositoryBidsInterpreter[F](store, policy)
   private val archive = new ArchiveInterpreter[F](store)
 
-  def prepare(manifest: Manifest): F[(Interpretation, Assessment)] =
+  private val derivatives = DerivativeProfile("SanctityHeaderQc", Set(QcDerivativeFormat.Version),
+    QcDerivativeFormat.Producer, new QcDerivativeInterpreter[F](store)) +: additional
+  require(derivatives.map(_.field).distinct.size == derivatives.size && derivatives.map(_.producer).distinct.size == derivatives.size)
+  private val parser = new JawnParser(Some(4 * 1024 * 1024), allowDuplicateKeys = false)
+
+  override def editableCompanions: Set[String] = RepositoryBidsContext.Modalities.flatMap(_.rules.toVector.flatMap(_.editable)).toSet
+
+  def prepare(manifest: Manifest): F[(Interpretation, Assessment)] = choose(manifest, None, Vector.empty)
+  override def prepare(manifest: Manifest, activity: Activity): F[(Interpretation, Assessment)] = choose(manifest, Some(activity), Vector.empty)
+  override def prepare(manifest: Manifest, activity: Activity, sources: Vector[Release]): F[(Interpretation, Assessment)] =
+    choose(manifest, Some(activity), sources)
+
+  private def choose(manifest: Manifest, activity: Option[Activity], sources: Vector[Release]): F[(Interpretation, Assessment)] =
+    val receipt = activity.flatMap(_.processing)
+    def read(interpreter: SemanticInterpreter[F]) =
+      activity.fold(interpreter.prepare(manifest))(a => interpreter.prepare(manifest, a, sources))
+    manifest.byPath.get(RelPath.from(DatasetInterpreter.BidsDescriptor).toOption.get) match
+      case Some(file: Entry.File) if !manifest.files.exists(_.path.value == ArchiveInterpreter.Descriptor) =>
+        Checked.lift[F, Unit](Either.cond(file.blob.size <= 4L * 1024 * 1024, (), Problem.LimitExceeded("dataset description exceeds 4 MiB"))) *>
+          store.read(file.blob).compile.to(Array).flatMap { bytes =>
+            val declaration = parser.parseByteBuffer(ByteBuffer.wrap(bytes)).toOption
+            val selected = derivatives.filter(p => declaration.exists(j => j.hcursor.get[String]("DatasetType").contains("derivative") &&
+              j.hcursor.downField(p.field).get[String]("Profile").exists(p.versions)))
+            (selected, receipt) match
+              case (Vector(profile), p) if p.forall(_.producer.name == profile.producer) => read(profile.interpreter)
+              case (Vector(), None) => ordinary(manifest)
+              case _ => Checked.lift[F, (Interpretation, Assessment)](Left(Problem.Unsupported("derivative declaration and processing recipe must agree")))
+          }
+      case _ if receipt.nonEmpty => Checked.lift[F, (Interpretation, Assessment)](Left(Problem.Unsupported("processing requires one derivative description")))
+      case _ => ordinary(manifest)
+
+  private def ordinary(manifest: Manifest): F[(Interpretation, Assessment)] =
     val root = manifest.files.map(_.path.value).toSet
     val described = root(DatasetInterpreter.BidsDescriptor)
     val archived = root(ArchiveInterpreter.Descriptor)
@@ -33,3 +67,5 @@ final class DatasetInterpreter[F[_]: Async](store: BlobStore[F], policy: Admissi
 
 object DatasetInterpreter:
   val BidsDescriptor: String = "dataset_description.json"
+
+final case class DerivativeProfile[F[_]](field: String, versions: Set[String], producer: String, interpreter: SemanticInterpreter[F])

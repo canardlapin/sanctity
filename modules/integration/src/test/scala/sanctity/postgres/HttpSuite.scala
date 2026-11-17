@@ -1,6 +1,7 @@
 package sanctity.postgres
 
 import cats.effect.{IO, Ref}
+import cats.syntax.all.*
 import cats.effect.unsafe.implicits.global
 import com.comcast.ip4s.{Host, Port}
 import doobie.implicits.*
@@ -11,7 +12,8 @@ import org.http4s.*
 import org.http4s.ember.client.EmberClientBuilder
 import org.http4s.ember.server.EmberServerBuilder
 import org.typelevel.ci.CIString
-import sanctity.app.SyntheticFixture
+import sanctity.app.{ApiServer, ServiceInterpreters, SyntheticFixture}
+import sanctity.bids.{MriInputPlanner, QcDerivativeFormat}
 import sanctity.application.*
 import sanctity.http.RepositoryHttp
 import sanctity.kernel.*
@@ -33,6 +35,114 @@ final class HttpSuite extends FunSuite:
     checked(f.system.repository.importNative(f.system.context, f.system.dataset.id, new NativeDirectorySource[IO](f.root.resolve("source"))))
       .flatMap(p => checked(f.system.repository.accept(f.system.context, p.candidate.id, key("initial"))))
   private def endpoint(r: ReleaseRef): String = s"/v1/datasets/${r.dataset.render}/releases/${r.release.render}"
+
+  test("one upload protocol admits raw, archival and declared QC data and fences growth retries") {
+    PostgresFixture.resource.use { f =>
+      val ids = IdSource.random[IO]
+      val app = ApiServer.routes(f.database, f.system.store, ids)
+      def response(req: Request[IO], status: Status) =
+        app.run(req).flatMap(r => r.as[String].map { body =>
+          assertEquals(r.status, status, s"${req.method} ${req.uri}: $body")
+          new JawnParser().parse(body).getOrElse(Json.Null)
+        })
+      def inventory(files: Map[String, String], base: Option[String], replace: Vector[String]) = Json.obj(
+        "base" -> base.fold(Json.Null)(Json.fromString), "replace" -> Json.arr(replace.map(Json.fromString)*),
+        "files" -> Json.arr(files.toVector.sortBy(_._1).map { (name, value) =>
+          val bytes = value.getBytes(java.nio.charset.StandardCharsets.UTF_8)
+          Json.obj("path" -> Json.fromString(name), "size" -> Json.fromInt(bytes.length),
+            "sha256" -> Json.fromString(Digest.bytes(bytes).value))
+        }*))
+      def begin(token: String, dataset: DatasetId, k: String, files: Map[String, String],
+          base: Option[String] = None, replace: Vector[String] = Vector.empty, status: Status = Status.Created) =
+        response(request(Method.POST, s"/v1/datasets/${dataset.render}/uploads", token, Some(inventory(files, base, replace)))
+          .putHeaders(Header.Raw(CIString("Idempotency-Key"), k)), status)
+      def put(token: String, op: String, name: String, data: String, status: Status) =
+        response(request(Method.PUT, s"/v1/uploads/$op/file?path=$name", token).withEntity(data)
+          .putHeaders(Header.Raw(CIString("Content-Type"), "application/octet-stream")), status)
+      def post(token: String, op: String, action: String, status: Status) =
+        response(request(Method.POST, s"/v1/uploads/$op/$action", token), status)
+      def publishFiles(token: String, dataset: DatasetId, files: Map[String, String]) =
+        for
+          session <- begin(token, dataset, "upload-initial", files)
+          op = string(session, "id")
+          _ <- post(token, op, "preview", Status.Conflict)
+          _ <- files.toVector.traverse_((name, value) => put(token, op, name, value, Status.NoContent))
+          preview <- post(token, op, "preview", Status.Ok)
+          _ = assert(preview.hcursor.downField("candidate").downField("assessment").get[Boolean]("admissible").contains(true), preview.noSpaces)
+          accepted <- post(token, op, "accept", Status.Ok)
+          replay <- post(token, op, "accept", Status.Ok)
+          _ = assertEquals(accepted, replay)
+          id = accepted.hcursor.downField("ref").get[String]("release").toOption.get
+          release <- response(request(Method.GET, s"/v1/datasets/${dataset.render}/releases/$id", token), Status.Ok)
+        yield (id, release)
+      for
+        token <- checked(credentials(f).issue(f.system.context.principal, "curator", 1800)).map(_.secret)
+        recording = "sub-01/beh/sub-01_task-choice_beh.tsv"
+        raw = Map("dataset_description.json" -> """{"Name":"Raw","DatasetType":"raw","BIDSVersion":"1.11.2"}""",
+          "task-choice_beh.json" -> """{"TaskName":"choice","response":{"Description":"Response"}}""", recording -> "response\nleft\n")
+        first <- publishFiles(token, f.system.dataset.id, raw)
+        _ = assertEquals(string(first._2, "profile"), "sanctity-bids-v1")
+        viewDataset <- f.system.repository.create(f.system.context, f.system.dataset.custodian)
+        selected <- response(request(Method.POST, "/v1/selections", token, Some(Json.obj(
+          "releases" -> Json.arr(first._2.hcursor.downField("ref").focus.get),
+          "artifacts" -> Json.obj("op" -> Json.fromString("suffix"), "value" -> Json.fromString("beh"))))), Status.Created)
+        view <- response(request(Method.POST, s"/v1/datasets/${viewDataset.id.render}/views", token, Some(Json.obj(
+          "source" -> first._2.hcursor.downField("ref").focus.get, "selection" -> Json.fromString(string(selected, "id")),
+          "modality" -> Json.fromString("beh"), "disclosure" -> Json.obj("behaviour" -> Json.arr(Json.fromString("response")))))), Status.Created)
+        _ = assert(view.hcursor.downField("candidate").downField("assessment").get[Boolean]("admissible").contains(true), view.noSpaces)
+        archive <- f.system.repository.create(f.system.context, f.system.dataset.custodian)
+        archived <- publishFiles(token, archive.id, Map("archive_description.json" -> """{"Name":"Protocol"}""", "notes.txt" -> "first"))
+        _ = assertEquals(string(archived._2, "profile"), "sanctity-archive-v1")
+        derivative <- f.system.repository.create(f.system.context, f.system.dataset.custodian)
+        run <- ids.next[RunTag]
+        source = ReleaseRef(f.system.dataset.id, Id.parse[ReleaseTag](first._1).toOption.get)
+        sourceUri = QcDerivativeFormat.sourceUri(source)
+        blob = BlobRef.from(Digest.bytes(Array.emptyByteArray), 0).toOption.get
+        producer = ProducerIdentity(QcDerivativeFormat.Producer, "1", blob, "fixture")
+        descriptor = Json.obj("Name" -> Json.fromString("Header QC"), "BIDSVersion" -> Json.fromString("1.11.2"),
+          "DatasetType" -> Json.fromString("derivative"), "GeneratedBy" -> Json.arr(Json.obj("Name" -> Json.fromString(producer.name), "Version" -> Json.fromString("1"))),
+          "DatasetLinks" -> Json.obj("input" -> Json.fromString(sourceUri)),
+          "SourceDatasets" -> Json.arr(Json.obj("URL" -> Json.fromString(sourceUri), "Version" -> Json.fromString(first._1))),
+          "SanctityHeaderQc" -> QcDerivativeFormat.declaration(run, source, blob.digest, producer, Map.empty))
+        image = path("sub-01/func/sub-01_task-rest_bold.nii")
+        qc <- publishFiles(token, derivative.id, Map("dataset_description.json" -> descriptor.noSpaces, "qc.json" -> QcDerivativeFormat.sidecar(Vector(image)).noSpaces,
+          "qc.tsv" -> (QcDerivativeFormat.Columns.mkString("\t") + "\n" + image.value + "\t2\t2\t2\t3\t2\t2\n")))
+        _ = assertEquals(string(qc._2, "profile"), "sanctity-header-qc-v2")
+        _ = assert(qc._2.hcursor.downField("assessment").get[Vector[Json]]("findings").toOption.get.exists(j => string(j, "code") == "QcDeclaredProvenance"))
+        edit = Map("notes.txt" -> "next")
+        _ <- begin(token, archive.id, "without-confirmation", edit, Some(archived._1), status = Status.Conflict)
+        session <- begin(token, archive.id, "confirmed", edit, Some(archived._1), edit.keys.toVector)
+        op = string(session, "id")
+        _ <- put(token, op, "notes.txt", "nope", Status.BadRequest)
+        _ <- post(token, op, "preview", Status.Conflict)
+        _ <- put(token, op, "notes.txt", "next", Status.NoContent)
+        _ <- put(token, op, "notes.txt", "next", Status.NoContent)
+        other <- begin(token, archive.id, "parallel", Map("other.txt" -> "other"), Some(archived._1))
+        alternate = string(other, "id")
+        _ <- put(token, alternate, "other.txt", "other", Status.NoContent)
+        _ <- post(token, alternate, "preview", Status.Ok)
+        _ <- post(token, op, "preview", Status.Ok)
+        _ <- post(token, op, "accept", Status.Ok)
+        _ <- post(token, alternate, "accept", Status.Conflict)
+        again <- begin(token, archive.id, "confirmed", edit, Some(archived._1), edit.keys.toVector)
+        _ = assertEquals(string(again, "id"), op)
+        _ <- begin(token, archive.id, "different-key", edit, Some(archived._1), edit.keys.toVector, Status.Conflict)
+      yield ()
+    }.unsafeRunSync()
+  }
+
+  test("MRI header QC readiness uses the checks from the service's raw dataset interpreter") {
+    PostgresFixture.resource.use { f =>
+      val repo = new NativeRepository(f.system.catalog, f.system.store, ServiceInterpreters(f.system.store), IdSource.random[IO])
+      for
+        preview <- checked(repo.importNative(f.system.context, f.system.dataset.id, new NativeDirectorySource[IO](f.root.resolve("source"))))
+        c = preview.candidate
+        roots = c.interpretation.facts.filter(f => f.suffix == "bold" && f.extension == "nii" && f.participant == "sub-01").map(_.path)
+        readiness <- Checked.lift[IO, InputReadiness](new MriInputPlanner().assess(c.manifest, c.interpretation, c.assessment, roots, MriInputPlanner.Contract))
+        _ = assert(readiness.ready, readiness.requirements.filter(_.status != RequirementStatus.Satisfied).toString)
+      yield ()
+    }.unsafeRunSync()
+  }
 
   test("credentials store only digests, expire, rotate independently and cannot provision an unknown principal") {
     PostgresFixture.resource.use { f =>

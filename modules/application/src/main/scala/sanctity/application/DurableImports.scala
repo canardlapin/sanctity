@@ -20,10 +20,11 @@ final class DurableImports[F[_]: Async](catalog: Catalog[F], journal: ImportJour
         Problem.LimitExceeded("import requires at most 10000 unique source entries")))
     }
 
-  def begin(ctx: AccessContext, dataset: DatasetId, key: IdempotencyKey, source: NativeSource[F]): F[Either[Problem, ImportOperation]] =
+  def begin(ctx: AccessContext, dataset: DatasetId, key: IdempotencyKey, source: NativeSource[F],
+      plan: ImportPlan = ImportPlan()): F[Either[Problem, ImportOperation]] =
     Checked.attempt {
       checked(catalog.check(ctx, dataset, Action.Propose)) *>
-        inventory(source).flatMap(entries => checked(journal.begin(ctx, dataset, key, source.label, entries)))
+        inventory(source).flatMap(entries => checked(journal.begin(ctx, dataset, key, source.label, entries, plan)))
     }
 
   def resume(ctx: AccessContext, id: OperationId, source: NativeSource[F], publish: Boolean = false): F[Either[Problem, ImportOperation]] =
@@ -55,9 +56,10 @@ final class DurableImports[F[_]: Async](catalog: Catalog[F], journal: ImportJour
             _ <- if acquired.candidate.nonEmpty then Async[F].unit else
               val directories = acquired.inventory.collect { case SourceEntry.Directory(p) => Entry.Directory(p) }
               for
-                manifest <- Checked.lift[F, Manifest](Manifest.from(directories ++ acquired.acquired))
+                base <- acquired.plan.base.traverse(r => checked(catalog.release(ctx, ReleaseRef(initial.dataset, r))))
+                manifest <- Checked.lift[F, Manifest](acquired.plan.manifest(base.map(_.manifest), directories ++ acquired.acquired))
                 now <- Clock[F].realTimeInstant
-                draft <- checked(catalog.draft(ctx, initial.dataset, None, manifest,
+                draft <- checked(catalog.draft(ctx, initial.dataset, acquired.plan.base, manifest,
                   Activity(ActivityKind.NativeImport, ctx.principal, "Resumable inventoried import", Some(initial.source), now, evidence = source.evidence, retained = source.retainedEvidence)))
                 preview <- checked(repository.prepare(ctx, draft.id))
                 _ <- checked(journal.bind(ctx, lease, preview.candidate.id))

@@ -49,7 +49,7 @@ final class OrganizationRecovery[F[_]: Async](db: PostgresDatabase[F], config: D
     check(text(s.plan,"storageIdentity") == PolicyWire.digest(storage.toString.getBytes(java.nio.charset.StandardCharsets.UTF_8)),"recovery-storage-binding")
   private def compatible(manifest: Json): F[Vector[(Int,String,String)]] = db.migrations.map { expected =>
     val source = field(manifest,"migrations").asArray.get
-    check(Set(13,14)(source.size) && source.toVector == expected.take(source.size).map((n,h,_) => obj("version" -> Json.fromInt(n),"checksum" -> str(h))),"recovery-schema-compatibility")
+    check(Set(13,14,15)(source.size) && source.toVector == expected.take(source.size).map((n,h,_) => obj("version" -> Json.fromInt(n),"checksum" -> str(h))),"recovery-schema-compatibility")
     check(text(manifest,"schema") == config.schema && field(manifest,"capabilities") ==
       PolicyCapabilities.description(text(field(manifest,"policyHead"),"capabilities")),"recovery-capability-compatibility")
     expected

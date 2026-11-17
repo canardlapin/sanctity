@@ -92,7 +92,7 @@ python3 scripts/demo-instance.py down             # stops it; data is kept
 python3 scripts/demo-instance.py down --volumes   # deletes it
 ```
 
-Open the printed address (`http://127.0.0.1:8080/` by default) and sign in with a printed access token. The console then works against the real API and database: two labs, their projects, three accepted datasets with files and findings, and four people whose access differs. [The distribution guide](docs/service-distribution.md#local-container-demonstration) lists what is seeded and what the demonstration leaves out. `bash scripts/check-demo-instance.sh` starts a separate instance, checks it with real requests and removes it.
+Open the printed address (`http://127.0.0.1:8080/` by default) and sign in with a printed access token. The console then works against the real API and database: two labs, their projects, three accepted datasets with files and recorded assessments, and four people whose access differs. [The distribution guide](docs/service-distribution.md#local-container-demonstration) lists what is seeded and what the demonstration leaves out. `bash scripts/check-demo-instance.sh` starts a separate instance, checks it with real requests and removes it.
 
 ## Modules and public contracts
 
@@ -104,7 +104,8 @@ Open the printed address (`http://127.0.0.1:8080/` by default) and sign in with 
 | `objects` | Immutable filesystem bytes, verification, inventory, isolated exports, bounded process resources |
 | `postgres` | Incremental checked migrations, catalog transactions, SQL queries, grants, operations, delivery leases, recovery |
 | `import-dicom` | Pinned conversion, explicit versioned mapping, output accounting, source evidence |
-| `processing-mri` | Header QC and temporal image statistics through one durable local runner; payload qualification, image derivative admission and resumable collection |
+| `mri-profiles` | MRI payload, geometry and derivative admission checks used by the service and by the local runner |
+| `processing-mri` | Header QC and temporal image statistics through a durable local runner and resumable output collection |
 | `import-xnat` | Qualified resource references, HTTP acquisition, pagination, declared ZIP export import |
 | `http` | Authenticated workflow routes, strict request grammar, explicit public JSON representations |
 | `service` | Packaged API/console server, migration and trusted operator/import/credential/recovery entry points |

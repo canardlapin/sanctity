@@ -2,6 +2,7 @@ package sanctity.http
 
 import io.circe.{Decoder, Json}
 import io.circe.jawn.JawnParser
+import sanctity.application.{ImportPlan, SourceEntry}
 import sanctity.kernel.*
 import cats.syntax.all.*
 import java.nio.ByteBuffer
@@ -64,6 +65,37 @@ private[http] object RequestJson:
     get[Option[String]](j, "description").flatMap(d => OrganizationDescription.from(d.getOrElse("")).leftMap(_ => invalid))
   def expiry(j: Json): Either[Problem, Option[java.time.Instant]] =
     get[Option[String]](j, "expiresAt").flatMap(_.traverse(t => Try(java.time.Instant.parse(t)).toEither.leftMap(_ => invalid)))
+  def upload(j: Json): Either[Problem, (ImportPlan, Vector[SourceEntry.File])] =
+    for
+      _ <- fields(j, Set("base", "replace", "files"))
+      _ <- Either.cond(j.hcursor.downField("base").succeeded, (), invalid)
+      base <- get[Option[String]](j, "base").flatMap(_.traverse(Id.parse[ReleaseTag]))
+      replacements <- get[Vector[String]](j, "replace").flatMap(_.traverse(RelPath.from))
+      _ <- Either.cond(replacements.distinct.size == replacements.size, (), invalid)
+      entries <- get[Vector[Json]](j, "files")
+      files <- entries.traverse { f =>
+        for
+          _ <- fields(f, Set("path", "size", "sha256"))
+          path <- get[String](f, "path").flatMap(RelPath.from)
+          size <- get[Long](f, "size")
+          sha <- get[String](f, "sha256").flatMap(Digest.from)
+        yield (SourceEntry.File(path, size, sha.value): SourceEntry.File)
+      }
+    yield (ImportPlan(base, replacements.toSet), files)
+
+  def disclosure(j: Json): Either[Problem, DisclosureProfile] =
+    def columns(name: String) = get[Option[Set[String]]](j, name)
+    for
+      _ <- fields(j, Set("participants", "metadata", "events", "sessions", "scans", "behaviour"))
+      participants <- columns("participants")
+      metadata <- columns("metadata")
+      events <- columns("events")
+      sessions <- columns("sessions")
+      scans <- columns("scans")
+      behaviour <- columns("behaviour")
+    yield DisclosureProfile(participants.getOrElse(Set.empty), metadata.getOrElse(Set.empty), events,
+      sessions.getOrElse(Set.empty), scans.getOrElse(Set.empty), behaviour)
+
   def ref(j: Json): Either[Problem, ReleaseRef] =
     for
       _ <- fields(j, Set("dataset", "release"))

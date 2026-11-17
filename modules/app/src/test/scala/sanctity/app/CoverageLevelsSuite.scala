@@ -99,6 +99,43 @@ abstract class CatalogCoverageSuite extends FunSuite:
     val found = r.interpretation.levels.flatMap(_.byPath.get(p(path))).getOrElse(fail(s"no level for $path"))
     found.group -> found.level
 
+  test("a native archive can grow from a pinned release and replace only named files") {
+    fixture { (s, root) =>
+      val notes = p("lab/notes.txt")
+      val added = root.resolve("additions")
+      val uploads = new NativeDirectorySource[IO](added)
+      for
+        at <- fresh(root)
+        _ <- IO.blocking {
+          write(at, "archive_description.json", archiveDescription)
+          write(at, notes.value, "first\n")
+          write(added, notes.value, "revised\n")
+          write(added, "lab/new.txt", "second visit\n")
+        }
+        base <- accepted(s, at)
+        unconfirmed <- repo(s).importNative(s.context, s.dataset.id, uploads, ImportPlan(Some(base.ref.release)))
+        _ = assert(unconfirmed.left.exists(_.isInstanceOf[Problem.Conflict]))
+        plan = ImportPlan(Some(base.ref.release), Set(notes))
+        proposed <- checked(repo(s).importNative(s.context, s.dataset.id, uploads, plan))
+        _ = assertEquals(proposed.contentChanges.map(_.path).toSet, Set(notes, p("lab/new.txt")))
+        initial = base.manifest.byPath(notes).asInstanceOf[Entry.File]
+        replacement = proposed.candidate.manifest.byPath(notes).asInstanceOf[Entry.File]
+        _ = assertEquals(replacement.artifact, initial.artifact)
+        _ = assertNotEquals(replacement.blob, initial.blob)
+        result <- checked(repo(s).accept(s.context, proposed.candidate.id, key("next-archive")))
+        again <- repo(s).importNative(s.context, s.dataset.id, uploads, plan)
+        _ = assert(again.left.exists(_.isInstanceOf[Problem.Conflict]))
+        _ <- checked(repo(s).exportFull(s.context, base.ref, new DirectoryExport[IO](root.resolve("old-export"))))
+        _ <- checked(repo(s).exportFull(s.context, result.release, new DirectoryExport[IO](root.resolve("new-export"))))
+        _ <- IO.blocking {
+          assertEquals(Files.mismatch(at.resolve(notes.value), root.resolve("old-export").resolve(notes.value)), -1L)
+          assertEquals(Files.mismatch(added.resolve(notes.value), root.resolve("new-export").resolve(notes.value)), -1L)
+          assert(!Files.exists(root.resolve("old-export/lab/new.txt")))
+        }
+      yield ()
+    }
+  }
+
   test("a mixed study is accepted with one level for every file") {
     fixture { (s, root) =>
       for

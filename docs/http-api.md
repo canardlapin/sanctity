@@ -217,7 +217,23 @@ for a release without a parent; otherwise it compares files with the parent
 release, with exact counts and at most 200 paths per group. It lists paths only,
 never digests or source labels.
 
-### Upgrades and re-assessment
+### Browser uploads and dataset growth
+
+In the console, open a project, choose **New dataset**, and enter a name and a custodian ID recognized by the installation. Open **Upload a dataset** and select the dataset folder. To add a session later, open **Add files** on the current release, select the session folder, and set its destination, for example `sub-01/ses-02`. Review any listed replacements, upload the files, inspect the proposed changes and findings, then accept. A reload after the last file reopens the preview. For a partial transfer, reselect the same folder and destination to resume at the next missing file.
+
+| Request | Result |
+| --- | --- |
+| `POST /v1/datasets/{dataset}/uploads` with `Idempotency-Key` | Opens or resumes an operation for the caller, dataset and exact inventory. The JSON body requires `base` (null for the first release), `replace` (the exact paths to overwrite) and `files` (path, byte size and lowercase SHA-256 for each file). |
+| `PUT /v1/uploads/{operation}/file?path=…` | Receives raw `application/octet-stream` bytes and checkpoints the file after size and digest verification. |
+| `GET /v1/uploads/{operation}` | Returns the verified paths, completion status and any candidate or acceptance receipt. |
+| `POST /v1/uploads/{operation}/preview` | Assesses the complete proposed release and shows the differences from its base. Repeating the request reopens the same candidate. |
+| `POST /v1/uploads/{operation}/accept` | Publishes an admissible candidate if its base is still the head. Retries return the original receipt. A competing acceptance returns HTTP 409. |
+
+Raw BIDS, declared header QC derivatives and archival collections use these same requests. Imported QC carries a finding identifying its provenance as externally declared. Archive payloads retain their original paths and bytes. Uploads allow up to 2 GiB per file, 8 GiB per operation and 10,000 entries including directories in the combined inventory. The general HTTP JSON document limits also apply. The folder picker uploads files and their parent directories. Empty directories can be preserved through the native directory importer.
+
+For a disclosed subset, send `POST /v1/datasets/{destination}/views` with a pinned `source` release reference, a frozen `selection` ID, `modality` (`mri` or `beh`), and a `disclosure` object listing permitted field names. The response is a preview. Use the candidate acceptance endpoint to publish it.
+
+## Upgrades and re-assessment
 
 Each release records the build of the rules that read it. After the service is
 upgraded, that build differs for every existing release. This does not block work:
@@ -430,7 +446,7 @@ An authenticated mutation may return 404 if its credential is revoked between au
 
 `scripts/check-postgres.sh` runs the HTTP tests against disposable PostgreSQL, including a real Ember server/client, correction and retry, exact bytes, fixed-release sharing, frozen selections, invalid requests, stale authenticated contexts, chunk-boundary revocation and recovery credential invalidation. The ordinary suite checks the strict JSON and query grammar.
 
-The current engineering priority is the [scientific core](scientific-core.md). A later identity adapter will need: verified issuer/subject bindings, account lifecycle and membership, authentication assurance and recovery reconciliation. General uploads, remote view preparation, full-dataset archive delivery, browser sessions, audit/metrics endpoints, deployment TLS/rate limits and large-response pagination are not part of this HTTP profile.
+The current engineering priority is the [scientific core](scientific-core.md). A later identity adapter will need: verified issuer/subject bindings, account lifecycle and membership, authentication assurance and recovery reconciliation. Full-dataset archive delivery, browser sessions, audit/metrics endpoints, deployment TLS/rate limits and large-response pagination are not part of this HTTP profile.
 
 Protocol reference: [RFC 6750 bearer-token usage](https://www.rfc-editor.org/rfc/rfc6750). The adapter uses the [http4s 0.23 DSL](https://http4s.org/v0.23/docs/dsl.html); the application pins 0.23.30.
 

@@ -93,7 +93,9 @@ def main():
                     check(required in entries, "missing entry point/resource: " + required)
                 check(any(p.endswith(".sql") for p in entries), "SQL migrations missing")
                 check(any(p.endswith("index.html") for p in entries), "console missing")
-                check(not any(p.startswith(("sanctity/processing/", "munit/")) or p == "sanctity/app/Demo.class"
+                check("sanctity/processing/TemporalDerivativeInterpreter.class" in entries, "derivative reader missing")
+                check(not any(p.startswith(("sanctity/processing/Local", "sanctity/processing/MriQcProducer",
+                                            "sanctity/processing/TemporalProducer", "munit/")) or p == "sanctity/app/Demo.class"
                               or p.endswith(".py") for p in entries), "development/analysis payload in runtime")
                 receipt["manifestSha256"] = sha(z.read(prefix + "/manifest.json"))
                 receipt["sourceInventorySha256"] = manifest["sourceInventorySha256"]

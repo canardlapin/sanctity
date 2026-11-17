@@ -12,7 +12,7 @@ import xml.etree.ElementTree as ET
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-MODULES = ("kernel", "application", "bids", "objects", "postgres", "http", "service")
+MODULES = ("kernel", "application", "bids", "objects", "postgres", "http", "mri-profiles", "service")
 BUILD_COMMAND = ["sbt", *(module + "/clean" for module in MODULES), "service/inputs"]
 LAUNCHER = b'''#!/bin/sh
 set -eu
@@ -40,9 +40,11 @@ def sources():
              ROOT / "scripts/package-service.py", ROOT / "docs/service-distribution.md", ROOT / "docs/organization-recovery.md"]
     files += [p for p in (ROOT / "project").iterdir() if p.is_file()]
     files += [p for p in (ROOT / "docs/deployment").glob("*.example") if p.is_file()]
-    # processing-mri contributes to the existing semantic BuildIdentity, but is not a runtime dependency.
+    # The scientific build identity also includes the separate execution module.
     for module in (*MODULES, "processing-mri"):
-        files += [p for p in (ROOT / "modules" / module / "src/main").rglob("*") if p.is_file()]
+        main = ROOT / "modules" / module / "src/main"
+        files += [p for p in main.rglob("*") if p.is_file() and
+                  not any(part.startswith(".") for part in p.relative_to(main).parts)]
     return {p.relative_to(ROOT).as_posix(): digest(p.read_bytes()) for p in sorted(set(files))}
 
 

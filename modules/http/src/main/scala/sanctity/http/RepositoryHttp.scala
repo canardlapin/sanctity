@@ -15,7 +15,9 @@ import sanctity.kernel.*
 /** Public v1 workflow adapter. No arbitrary filesystem paths, blobs, manifests, or caller contexts are accepted. */
 final class RepositoryHttp[F[_]](
     catalog: Catalog[F], repository: NativeRepository[F], authenticator: Authenticator[F],
-    independentPolicy: Boolean = false, organization: Option[OrganizationService[F]] = None
+    independentPolicy: Boolean = false, organization: Option[OrganizationService[F]] = None,
+    views: Map[String, ScientificViews[F]] = Map.empty[String, ScientificViews[F]],
+    uploads: Option[BrowserUploads[F]] = None
 )(using F: Async[F]) extends Http4sDsl[F]:
   import PublicJson as Out
   import RequestJson as In
@@ -41,6 +43,15 @@ final class RepositoryHttp[F[_]](
     case _: Problem.LimitExceeded => error(Status.PayloadTooLarge, "limit_exceeded")
     case _: Problem.Integrity | _: Problem.Operational => error(Status.InternalServerError, "repository_failure")
     case _ => error(Status.BadRequest, "invalid_request")
+
+  private def uploadService = lift(uploads.toRight(Problem.NotFound("route", "uploads")))
+  private def uploadState(op: ImportOperation): Json = Json.obj(
+    "id" -> Json.fromString(op.id.render), "dataset" -> Json.fromString(op.dataset.render),
+    "base" -> op.plan.base.fold(Json.Null)(r => Json.fromString(r.render)),
+    "complete" -> Json.fromBoolean(op.acquired.size == op.inventory.count(_.isInstanceOf[SourceEntry.File])),
+    "received" -> Json.arr(op.acquired.map(f => Json.fromString(f.path.value))*),
+    "candidate" -> op.candidate.fold(Json.Null)(id => Json.fromString(id.render)),
+    "receipt" -> op.receipt.fold(Json.Null)(Out.receipt))
 
   private def org: F[OrganizationService[F]] =
     organization.fold(F.raiseError[OrganizationService[F]](Failure(Problem.NotFound("route", "organization"))))(F.pure)
@@ -224,6 +235,50 @@ final class RepositoryHttp[F[_]](
     case DELETE -> Root / "v1" / "datasets" / d / "grants" / g =>
       (id[DatasetTag](d), id[GrantTag](g)).tupled.flatMap((ds, grant) => checked(catalog.revoke(ctx, ds, grant)))
         .as(policyAcknowledged(Response[F](Status.NoContent)))
+    case POST -> Root / "v1" / "datasets" / d / "uploads" =>
+      for
+        service <- uploadService
+        dataset <- id[DatasetTag](d)
+        _ <- checked(catalog.check(ctx, dataset, Action.Propose))
+        key <- header(req, "Idempotency-Key").flatMap(k => lift(IdempotencyKey.from(k)))
+        request <- body(req).flatMap(b => lift(In.upload(b)))
+        (plan, files) = request
+        op <- checked(service.begin(ctx, dataset, key, plan, files))
+        response <- json(uploadState(op), Status.Created)
+      yield response
+    case GET -> Root / "v1" / "uploads" / u =>
+      (uploadService, id[OperationTag](u)).tupled.flatMap((service, operation) =>
+        checked(service.get(ctx, operation))).flatMap(op => json(uploadState(op)))
+    case PUT -> Root / "v1" / "uploads" / u / "file" =>
+      for
+        service <- uploadService
+        operation <- id[OperationTag](u)
+        file <- path(req)
+        _ <- lift(Either.cond(req.contentType.exists(_.mediaType == MediaType.application.`octet-stream`) &&
+          req.headers.headers.forall(h => h.name != CIString("Content-Encoding") || h.value.equalsIgnoreCase("identity")),
+          (), Problem.Unsupported("expected uncompressed file bytes")))
+        _ <- checked(service.put(ctx, operation, file, req.body))
+      yield Response[F](Status.NoContent)
+    case POST -> Root / "v1" / "uploads" / u / "preview" =>
+      (uploadService, id[OperationTag](u)).tupled.flatMap((service, operation) =>
+        checked(service.preview(ctx, operation))).flatMap(p => json(Out.preview(p)))
+    case POST -> Root / "v1" / "uploads" / u / "accept" =>
+      (uploadService, id[OperationTag](u)).tupled.flatMap((service, operation) =>
+        checked(service.accept(ctx, operation))).flatMap(r => json(Out.receipt(r)))
+    case POST -> Root / "v1" / "datasets" / d / "views" =>
+      for
+        destination <- id[DatasetTag](d)
+        _ <- checked(catalog.check(ctx, destination, Action.Propose))
+        b <- body(req)
+        _ <- lift(In.fields(b, Set("source", "selection", "modality", "disclosure")))
+        source <- lift(In.get[Json](b, "source").flatMap(In.ref))
+        selection <- lift(In.get[String](b, "selection").flatMap(Digest.from).map(SelectionId.apply))
+        modality <- lift(In.get[String](b, "modality"))
+        compiler <- lift(views.get(modality).toRight(Problem.Unsupported("no view compiler for this modality")))
+        disclosure <- lift(In.get[Json](b, "disclosure").flatMap(In.disclosure))
+        preview <- checked(compiler.prepare(ctx, source, selection, destination, disclosure))
+        response <- json(Out.preview(preview), Status.Created)
+      yield response
     case POST -> Root / "v1" / "selections" =>
       for
         b <- body(req)

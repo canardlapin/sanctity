@@ -1,5 +1,8 @@
 # Sanctity build plan: a clean kernel, a working product, a convincing demo
 
+
+**17 November implementation update.** The service uses a common admission workflow for raw BIDS, registered derivatives and archives. MRI and behavioural checks and view rules are registered by modality. The project console supports dataset creation, initial folder upload and additions against the current release. The browser rehearsal creates two sessions and checks both full exports independently after shutdown. Institutional sign-in and full-release download over HTTP remain open. The inventory below describes the starting point for the plan.
+
 Written 17 November 2026 from a first-hand read of the code, the console and the
 tests. It turns the [product direction](product-direction.md) into concrete design
 decisions and ordered work. Nothing below is claimed as implemented unless it

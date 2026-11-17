@@ -19,14 +19,17 @@ final class NativeRepository[F[_]](
 
   def create(ctx: AccessContext, custodian: CustodianId): F[Dataset] = catalog.create(ctx, custodian)
 
-  def importNative(ctx: AccessContext, datasetId: DatasetId, source: NativeSource[F]): F[Either[Problem, Preview]] =
+  def importNative(ctx: AccessContext, datasetId: DatasetId, source: NativeSource[F],
+      plan: ImportPlan = ImportPlan()): F[Either[Problem, Preview]] =
     Checked.attempt {
       for
         _ <- catalog.check(ctx, datasetId, Action.Propose).flatMap(Checked.lift[F, Unit])
         dataset <- catalog.dataset(ctx, datasetId).flatMap(Checked.lift[F, Dataset])
-        _ <- Checked.lift[F, Unit](Either.cond(dataset.head.isEmpty, (), Problem.Conflict("native import requires an empty dataset")))
+        _ <- Checked.lift[F, Unit](Either.cond(dataset.head == plan.base, (), Problem.Conflict("import base differs from the dataset head")))
         inventory <- source.entries.take(maxEntries.toLong + 1).compile.toVector
         _ <- Checked.lift[F, Unit](Either.cond(inventory.size <= maxEntries, (), Problem.LimitExceeded(s"reference inventory exceeds $maxEntries entries")))
+        previous <- plan.base.traverse(r => catalog.release(ctx, ReleaseRef(datasetId, r)).flatMap(Checked.lift[F, Release])).map(_.map(_.manifest))
+        _ <- Checked.lift[F, Unit](plan.validate(previous, inventory.map(e => e.path -> e.isInstanceOf[SourceEntry.File])))
         entries <- inventory.traverse {
           case SourceEntry.Directory(path) => F.pure[Entry](Entry.Directory(path))
           case file: SourceEntry.File =>
@@ -37,10 +40,10 @@ final class NativeRepository[F[_]](
               _ <- Checked.lift[F, Unit](Either.cond(blob.size == file.size, (), Problem.Integrity(s"source size changed: ${file.path.value}")))
             yield Entry.File(file.path, artifact, blob)
         }
-        manifest <- Checked.lift[F, Manifest](Manifest.from(entries))
+        manifest <- Checked.lift[F, Manifest](plan.manifest(previous, entries))
         now <- Clock[F].realTimeInstant
-        activity = Activity(ActivityKind.NativeImport, ctx.principal, "Native BIDS import", Some(source.label), now, evidence = source.evidence, retained = source.retainedEvidence)
-        draft <- catalog.draft(ctx, datasetId, None, manifest, activity).flatMap(Checked.lift[F, Draft])
+        activity = Activity(ActivityKind.NativeImport, ctx.principal, "Native directory import", Some(source.label), now, evidence = source.evidence, retained = source.retainedEvidence)
+        draft <- catalog.draft(ctx, datasetId, plan.base, manifest, activity).flatMap(Checked.lift[F, Draft])
         preview <- prepareInternal(ctx, draft)
       yield preview
     }
@@ -51,7 +54,7 @@ final class NativeRepository[F[_]](
   /** Bounded authored companion edit; scientific selection is reassessed through ordinary admission. */
   def correctCompanion(ctx: AccessContext, base: ReleaseRef, path: RelPath, text: String, reason: String): F[Either[Problem, Preview]] =
     val name = path.fileName
-    val supported = Vector("dwi.bval", "dwi.bvec", "events.tsv", "beh.tsv").exists(s => name == s || name.endsWith("_" + s))
+    val supported = semantics.editableCompanions.exists(s => name == s || name.endsWith("_" + s))
     correctDocument(ctx, base, path, text, reason, supported)
 
   private def correctDocument(ctx: AccessContext, base: ReleaseRef, path: RelPath, text: String, reason: String,
@@ -183,6 +186,19 @@ final class NativeRepository[F[_]](
       _ <- if draft.activity.kind == ActivityKind.Reinterpretation then F.unit
         else (before.toVector ++ projected).filter(_.interpretation.profile != interpretation.profile).traverse_(readsAsRecorded(ctx, _, interpretation.profile))
       candidate <- catalog.prepared(ctx, draft.id, draft.generation, interpretation, assessment).flatMap(Checked.lift[F, Candidate])
+      result <- changes(candidate, before)
+    yield result
+
+  def preview(ctx: AccessContext, id: CandidateId): F[Either[Problem, Preview]] = Checked.attempt {
+    for
+      candidate <- catalog.candidate(ctx, id).flatMap(Checked.lift[F, Candidate])
+      before <- candidate.base.traverse(r => catalog.release(ctx, ReleaseRef(candidate.dataset, r)).flatMap(Checked.lift[F, Release]))
+      result <- changes(candidate, before)
+    yield result
+  }
+
+  private def changes(candidate: Candidate, before: Option[Release]): F[Preview] =
+    for
       empty <- Checked.lift[F, Manifest](Manifest.from(Vector.empty))
       changes = before.fold(empty)(_.manifest).diff(candidate.manifest)
       impact = before.fold(Vector.empty[ArtifactImpact])(r => Impact.between(r.interpretation, candidate.interpretation))

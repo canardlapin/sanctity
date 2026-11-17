@@ -8,7 +8,8 @@ import sanctity.kernel.CoverageLevel
   * A modality owns the names in its datatype folders. `Assessed` modalities also contribute content checks;
   * `Described` modalities are interpreted from names and sidecar metadata alone.
   */
-final case class BidsModality(id: String, title: String, level: CoverageLevel, specs: Vector[BidsDatatypeSpec]):
+final case class BidsModality(id: String, title: String, level: CoverageLevel, specs: Vector[BidsDatatypeSpec],
+    rules: Option[ModalityRules] = None):
   val folders: Set[String] = specs.map(_.folder).toSet
 
 /** The single naming context for repository datasets. Adding a data type means adding a modality here. */
@@ -41,9 +42,6 @@ object RepositoryBidsContext:
     raw(name, folder, entities, kind("physio", "tsv.gz", "json"), kind("physioevents", "tsv.gz", "json"), kind("stim", "tsv.gz", "json"))
   private def photo(name: String, folder: String): BidsDatatypeSpec =
     raw(name, folder, base :+ optional(Acquisition), kind("photo", images*))
-
-  private val behavioural = raw("beh", "beh", Vector(required(Subject), optional(Session), required(Task), optional(Acquisition), index(Run)),
-    kind("beh", "tsv", "json"), kind("events", "tsv", "json"))
 
   /** EEG and intracranial EEG share every rule except the recording formats. */
   private def electrophysiology(folder: String, formats: String*): Vector[BidsDatatypeSpec] = Vector(
@@ -99,8 +97,8 @@ object RepositoryBidsContext:
 
   /** Registration order is significant: the first specification that accepts a name wins. */
   val Modalities: Vector[BidsModality] = Vector(
-    BidsModality("mri", "MRI", CoverageLevel.Assessed, BidsRegistry.Builtin.specs),
-    BidsModality("beh", "Behaviour", CoverageLevel.Assessed, Vector(behavioural)),
+    MriModality.descriptor,
+    BehaviouralModality.descriptor,
     BidsModality("eeg", "EEG", CoverageLevel.Described, eeg),
     BidsModality("ieeg", "Intracranial EEG", CoverageLevel.Described, ieeg),
     BidsModality("meg", "MEG", CoverageLevel.Described, meg),

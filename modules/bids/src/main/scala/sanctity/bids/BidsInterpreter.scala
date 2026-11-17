@@ -1,6 +1,6 @@
 package sanctity.bids
 
-import bids4s.{BidsContext, BidsCompanionResolver, BidsCompanionKind, BidsCompanionOutcome, BidsFieldmapResolver, BidsMetadataResolution, BidsIssue, BidsIssueSeverity, BidsManifest, BidsMetadataResolver, BidsMetadataValidation, BidsPath, JsonValue}
+import bids4s.{BidsContext, BidsMetadataResolution, BidsIssue, BidsIssueSeverity, BidsManifest, BidsMetadataResolver, BidsMetadataValidation, BidsPath, JsonValue}
 import cats.effect.Async
 import cats.syntax.all.*
 import io.circe.Json
@@ -13,7 +13,8 @@ import java.nio.charset.{CodingErrorAction, StandardCharsets}
 import scala.util.Try
 
 /** Bounded reference profile. This is not an external BIDS conformance validator. */
-final class BidsInterpreter[F[_]: Async](store: BlobStore[F], context: BidsContext = BidsContext.Default) extends SemanticInterpreter[F]:
+final class BidsInterpreter[F[_]: Async](store: BlobStore[F], context: BidsContext = BidsContext.Default,
+    rules: Vector[ModalityRules] = Vector(MriModality)) extends SemanticInterpreter[F]:
   private val jsonLimit = 4L * 1024 * 1024
   private val totalLimit = 32L * 1024 * 1024
   private val parser = new JawnParser(maxValueSize = Some(4 * 1024 * 1024), allowDuplicateKeys = false)
@@ -56,15 +57,14 @@ final class BidsInterpreter[F[_]: Async](store: BlobStore[F], context: BidsConte
       exact = decoded.collect { case (path, Right((_, written))) => path -> written }.toMap
       result <- Checked.lift[F, (Interpretation, Assessment)](interpret(manifest, decoded.map((path, r) => path -> r.map(_._1)), exact, participants))
       (initial, assessment) = result
-      enriched <- new StimulusBindings[F](store).enrich(manifest, initial)
-      (interpretation, stimulusFindings) = enriched
-      inspected <- new MriHeaderChecks[F](store).inspect(manifest, interpretation)
-      (headerChecks, headers) = inspected
-      dwiChecks <- new DwiContentChecks[F](store).assess(manifest, interpretation, headers)
-      eventChecks <- new EventContentChecks[F](store).assess(manifest, interpretation, headers)
-      echoChecks <- new MultiEchoChecks[F](store).assess(manifest, interpretation, headers)
-      sbrefChecks <- Checked.lift[F, Vector[ContentCheck]](SbrefBindings.assess(manifest, interpretation, headers))
-    yield interpretation -> Assessment.from(interpretation, assessment.policy, assessment.findings ++ stimulusFindings ++ participantFindings, dwiChecks ++ eventChecks ++ headerChecks ++ echoChecks ++ sbrefChecks)
+      reviewed <- rules.foldLeftM((initial, Vector.empty[ContentCheck], Vector.empty[Finding])) {
+        case ((current, checks, findings), rule) =>
+          rule.assess(store, context, manifest, current).map { (next, added, reported) =>
+            (next, checks ++ added, findings ++ reported)
+          }
+      }
+      (interpretation, checks, findings) = reviewed
+    yield interpretation -> Assessment.from(interpretation, assessment.policy, assessment.findings ++ findings ++ participantFindings, checks)
 
   private def interpret(manifest: Manifest, decoded: Vector[(RelPath, Either[String, JsonValue.Obj])],
       exact: Map[RelPath, Map[String, MetadataValue]], participants: Vector[ParticipantFacts]): Either[Problem, (Interpretation, Assessment)] =
@@ -123,97 +123,11 @@ final class BidsInterpreter[F[_]: Async](store: BlobStore[F], context: BidsConte
       }
     val facts = artifacts.flatMap(a => artifactFact(a.path))
     val resolved = resolutions.result().map(m => m.target -> m).toMap
-    val families = bids4s.BidsPhaseDifferenceResolver.fromResolved(checked.value, resolved)
-    families.issues.foreach(i => findings += Finding("Phasediff" + i.code.toString, Severity.Error, Some(relative(i.path)), i.message))
-    val familyLinks = families.groups.map { g =>
-      ScientificRelationship(relative(g.phase), "bids.phasediff-magnitudes", g.magnitudes.map(relative), None,
-        g.magnitudes.map(p => RelationshipEvidence.CompanionSelection(relative(g.phase), relative(p),
-          bids4s.BidsPhaseDifferenceResolver.Version, g.datasetRoot.map(relative), g.entities, Vector(relative(p)))))
-    }
-    val echoes = bids4s.BidsMultiEchoResolver.fromResolved(checked.value, resolved)
-    echoes.issues.foreach(i => findings += Finding("MultiEcho" + i.code.toString, Severity.Error, Some(relative(i.path)), i.message))
-    val echoLinks = echoes.groups.flatMap { g =>
-      g.members.map { member =>
-        ScientificRelationship(relative(member), "bids.multi-echo-bold", g.members.filterNot(_ == member).map(relative), None,
-          g.members.filterNot(_ == member).map(p => RelationshipEvidence.CompanionSelection(relative(member), relative(p),
-            bids4s.BidsMultiEchoResolver.Version, g.datasetRoot.map(relative), g.entities, Vector(relative(p)))) ++
-            g.evidence.map(e => RelationshipEvidence(relative(e.artifact), relative(e.document), e.field)))
-      }
-    }
-    val (resolvedSbrefs, sbrefFindings) = SbrefBindings.resolve(targets.flatMap(f => artifactFact(f.path)))
-    val resolvedArtifacts = artifacts.map(_.path).toSet
-    val sbrefLinks = resolvedSbrefs.filter(r => (r.from +: r.to).forall(resolvedArtifacts))
-    if sbrefLinks.size != resolvedSbrefs.size then
-      findings += Finding("SbrefMetadata", Severity.Error, None, "Applicable SBRef or BOLD metadata could not be resolved")
-    sbrefFindings.foreach(findings += _)
-    val fieldmaps = BidsFieldmapResolver.fromResolved(checked.value, resolved)
-    val phasePairs = bids4s.BidsPhasePairResolver.fromResolved(checked.value, resolved)
-    phasePairs.issues.foreach(i => findings += Finding("PhasePair" + i.code.toString, Severity.Error, Some(relative(i.path)), i.message))
-    val pairLinks = phasePairs.groups.flatMap { g =>
-      g.members.map { member =>
-        ScientificRelationship(relative(member), "bids.phase-pair-family", g.members.filterNot(_ == member).map(relative), None,
-          g.members.filterNot(_ == member).map(p => RelationshipEvidence.CompanionSelection(relative(member), relative(p),
-            bids4s.BidsPhasePairResolver.Version, g.datasetRoot.map(relative), g.entities, Vector(relative(p)))) ++
-            g.evidence.map(e => RelationshipEvidence(relative(e.artifact), relative(e.document), e.field)))
-      }
-    }
-    fieldmaps.issues.foreach { issue =>
-      findings += Finding("Fieldmap" + issue.code.toString, if issue.isError then Severity.Error else Severity.Warning,
-        Some(relative(issue.path)), issue.field.fold(issue.message)(f => s"$f: ${issue.message}"))
-    }
-    val links = fieldmaps.associations.map { a =>
-      ScientificRelationship(relative(a.target), a.mechanism match
-        case bids4s.BidsFieldmapMechanism.B0FieldSource => "bids.b0-field-source"
-        case bids4s.BidsFieldmapMechanism.IntendedFor => "bids.intended-for",
-        a.sources.map(relative), a.identifier,
-        a.evidence.map(e => RelationshipEvidence(relative(e.artifact), relative(e.document), e.field)))
-    }
-    val companionResolver = BidsCompanionResolver(checked.value)
-    val resolvedPaths = artifacts.map(_.path).toSet
-    val companionLinks = artifacts.flatMap { artifact =>
-      context.parseGeneric(artifact.path.fileName).toOption.toVector
-        .filter(n => Set("nii", "nii.gz")(n.extension)).flatMap { name =>
-          val kinds = name.kind match
-            case "dwi" => Vector(BidsCompanionKind.Bval, BidsCompanionKind.Bvec)
-            case "bold" => Vector(BidsCompanionKind.Events)
-            case _ => Vector.empty
-          val selected = kinds.flatMap { kind =>
-            companionResolver.resolve(BidsPath(artifact.path.value), kind) match
-              case Left(error) =>
-                findings += Finding("CompanionResolution", Severity.Error, Some(artifact.path), error.message)
-                None
-              case Right(resolution) => resolution.outcome match
-                case BidsCompanionOutcome.Selected(candidate) =>
-                  if resolution.applicable.forall(c => resolvedPaths(relative(c.path))) then
-                    Some(candidate -> RelationshipEvidence.CompanionSelection(artifact.path, relative(candidate.path),
-                      BidsCompanionResolver.Version + ":" + kind.toString, resolution.datasetRoot.map(relative),
-                      candidate.matchedEntities, resolution.applicable.map(c => relative(c.path))))
-                  else
-                    findings += Finding("CompanionMetadata", Severity.Error, Some(artifact.path),
-                      "an applicable companion has unresolved metadata")
-                    None
-                case BidsCompanionOutcome.Missing =>
-                  if kind != BidsCompanionKind.Events || !name.entities.get(bids4s.EntityKey.Task).contains("rest") then
-                    findings += Finding("CompanionMissing" + kind.toString,
-                      if kind == BidsCompanionKind.Events then Severity.Warning else Severity.Error,
-                      Some(artifact.path), s"no applicable ${kind.suffix}.${kind.extension} companion")
-                  None
-                case BidsCompanionOutcome.Ambiguous(paths) =>
-                  findings += Finding("CompanionAmbiguous", Severity.Error, Some(artifact.path),
-                    s"${kind.toString}: multiple applicable files at one level: ${paths.map(_.value).mkString(", ")}")
-                  None
-                case other =>
-                  findings += Finding("CompanionUnsupported", Severity.Error, Some(artifact.path), other.toString)
-                  None
-          }
-          if selected.isEmpty || selected.size != kinds.size then Vector.empty
-          else Vector(ScientificRelationship(artifact.path,
-            if name.kind == "dwi" then "bids.dwi-gradients" else "bids.task-events",
-            selected.map((c, _) => relative(c.path)), None, selected.map(_._2)))
-        }
-    }
+    val targetFacts = targets.flatMap(f => artifactFact(f.path))
+    val contributions = rules.map(_.relationships(checked.value, resolved, artifacts, targetFacts))
+    contributions.foreach((_, issues) => findings ++= issues)
     for
-      graph <- RelationshipGraph.from(BidsInterpreter.RelationshipVersion, links ++ companionLinks ++ familyLinks ++ pairLinks ++ echoLinks ++ sbrefLinks, artifacts, evidenceVersion = 2)
+      graph <- RelationshipGraph.from(BidsInterpreter.RelationshipVersion, contributions.flatMap(_._1), artifacts, evidenceVersion = 2)
       interpretation <- Interpretation.from(manifest.id, profile, artifacts, facts, participants, Some("scientific-query-v1"), Some(graph),
         sidecars.get(BidsPath("dataset_description.json")).flatMap(_.fields.get("BIDSVersion")).collect { case JsonValue.Str(v) => v })
     yield interpretation -> Assessment.from(interpretation, "reference-admission-v10", findings.result())

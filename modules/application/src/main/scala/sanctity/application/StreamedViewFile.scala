@@ -26,18 +26,19 @@ private[application] object ViewStream:
     }
 
   /** Verify even stores supplied by other adapters; EOF is part of success. */
-  def verified[F[_]: Async](bytes: Stream[F, Byte], blob: BlobRef): Stream[F, Byte] =
+  def verified[F[_]: Async](bytes: Stream[F, Byte], blob: BlobRef,
+      mismatch: Problem = Problem.Integrity("stream differs from its source blob")): Stream[F, Byte] =
     Stream.eval(Async[F].delay(MessageDigest.getInstance("SHA-256"))).flatMap { md =>
       Stream.eval(cats.effect.Ref.of[F, Long](0L)).flatMap { count =>
         bytes.chunkN(ChunkSize).evalTap { c =>
           count.updateAndGet(n => Math.addExact(n, c.size.toLong)).flatMap { size =>
-            Checked.lift[F, Unit](Either.cond(size <= blob.size, (), Problem.Integrity("streamed view input exceeds its source blob size"))) *>
+            Checked.lift[F, Unit](Either.cond(size <= blob.size, (), mismatch)) *>
               Async[F].delay(md.update(c.toArray))
           }
         }.unchunks ++ Stream.exec {
           count.get.flatMap { size =>
             Async[F].delay(Digest.from(md.digest().map(b => f"${b & 0xff}%02x").mkString)).flatMap { actual =>
-              Checked.lift[F, Unit](Either.cond(size == blob.size && actual.contains(blob.digest), (), Problem.Integrity("streamed view input differs from its source blob")))
+              Checked.lift[F, Unit](Either.cond(size == blob.size && actual.contains(blob.digest), (), mismatch))
             }
           }
         }

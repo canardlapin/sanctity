@@ -20,7 +20,7 @@ abstract class CatalogProcessingSuite extends CatalogGeneratedQuerySuite:
   private val query = ScientificQuery(artifacts = ArtifactPredicate.All(Vector(ArtifactPredicate.Suffix("bold"), ArtifactPredicate.Entity("sub", "01"))))
   private def inputs(s: RepositorySystem) = new ProcessingInputs[IO](s.catalog, s.repository,
     new ScientificViews[IO](s.catalog, s.store, s.repository, new MriViewCompiler, IdSource.random[IO]), new MriInputPlanner)
-  private def derivatives(s: RepositorySystem) = new NativeRepository[IO](s.catalog, s.store, new QcDerivativeInterpreter[IO](s.store), IdSource.random[IO])
+  private def derivatives(s: RepositorySystem) = new NativeRepository[IO](s.catalog, s.store, new DatasetInterpreter[IO](s.store), IdSource.random[IO])
   private def submissions(s: RepositorySystem) = new DerivativeSubmissions[IO](s.catalog, s.store, derivatives(s), IdSource.random[IO])
   private def producer(s: RepositorySystem) = new MriQcProducer[IO](s.catalog, s.store, s.repository, IdSource.random[IO], Path.of("/usr/bin/python3"))
   private def accepted(s: RepositorySystem, root: Path): IO[Release] =

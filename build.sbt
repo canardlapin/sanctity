@@ -52,7 +52,7 @@ lazy val bids = project.in(file("modules/bids")).dependsOn(application, bids4sCo
     }
     val upstream = ((bids4sDirectory / "modules/core/shared/src/main") ** "*.scala").get ++
       ((bids4sDirectory / "modules/core/jvm/src/main") ** "*.scala").get ++ Seq(bids4sDirectory / "build.sbt")
-    val own = Seq("kernel", "application", "bids", "processing-mri").flatMap(m => ((root / "modules" / m / "src/main") ** "*.scala").get) ++ ((root / "modules/processing-mri/src/main/resources") ** "*").get.filter(_.isFile) ++ Seq(root / "build.sbt")
+    val own = Seq("kernel", "application", "bids", "mri-profiles", "processing-mri").flatMap(m => ((root / "modules" / m / "src/main") ** "*.scala").get) ++ ((root / "modules/processing-mri/src/main/resources") ** "*").get.filter(_.isFile) ++ Seq(root / "build.sbt")
     val output = (Compile / sourceManaged).value / "sanctity/bids/BuildIdentity.scala"
     IO.write(output, "package sanctity.bids\nobject BuildIdentity:\n" +
       "  val bids4s: String = \"sha256:" + fingerprint(bids4sDirectory, upstream) + "\"\n" +
@@ -77,7 +77,10 @@ lazy val postgres = project.in(file("modules/postgres")).dependsOn(application).
   scalacOptions += "-Xmax-inlines:64"
 )
 lazy val importDicom = project.in(file("modules/import-dicom")).dependsOn(bids, objects).settings(common)
-lazy val processingMri = project.in(file("modules/processing-mri")).dependsOn(bids, objects).settings(common)
+lazy val mriProfiles = Project("mri-profiles", file("modules/mri-profiles")).dependsOn(bids).settings(common).settings(
+  libraryDependencies += "co.fs2" %% "fs2-io" % "3.11.0"
+)
+lazy val processingMri = project.in(file("modules/processing-mri")).dependsOn(mriProfiles, objects).settings(common)
 lazy val importXnat = project.in(file("modules/import-xnat")).dependsOn(application, objects).settings(common).settings(
   libraryDependencies ++= Seq("org.http4s" %% "http4s-ember-client" % "0.23.30", "io.circe" %% "circe-jawn" % "0.14.10")
 )
@@ -91,7 +94,7 @@ lazy val http = project.in(file("modules/http")).dependsOn(application).settings
 lazy val integration = project.in(file("modules/integration")).dependsOn(app % "compile->compile;test->test,compile", postgres % "test->test").settings(common).settings(
   Test / parallelExecution := false
 )
-lazy val service = project.in(file("modules/service")).dependsOn(bids, objects, postgres, http).settings(common).settings(
+lazy val service = project.in(file("modules/service")).dependsOn(bids, objects, postgres, http, mriProfiles).settings(common).settings(
   Compile / mainClass := Some("sanctity.app.ServiceMain"),
   Compile / resourceGenerators += Def.task {
     val output = (Compile / resourceManaged).value / "sanctity/service-build.properties"
@@ -104,6 +107,7 @@ lazy val service = project.in(file("modules/service")).dependsOn(bids, objects, 
       (kernel / Compile / classDirectory).value -> (kernel / Compile / packageBin).value,
       (application / Compile / classDirectory).value -> (application / Compile / packageBin).value,
       (bids / Compile / classDirectory).value -> (bids / Compile / packageBin).value,
+      (mriProfiles / Compile / classDirectory).value -> (mriProfiles / Compile / packageBin).value,
       (objects / Compile / classDirectory).value -> (objects / Compile / packageBin).value,
       (postgres / Compile / classDirectory).value -> (postgres / Compile / packageBin).value,
       (http / Compile / classDirectory).value -> (http / Compile / packageBin).value,
@@ -120,7 +124,7 @@ lazy val app = project.in(file("modules/app")).dependsOn(service, importDicom, i
   Compile / run / fork := true,
   Compile / mainClass := Some("sanctity.app.Demo")
 )
-lazy val root = project.in(file(".")).aggregate(kernel, application, bids, objects, postgres, importDicom, importXnat, http, processingMri, service, app).settings(
+lazy val root = project.in(file(".")).aggregate(kernel, application, bids, objects, postgres, importDicom, importXnat, http, mriProfiles, processingMri, service, app).settings(
   name := "sanctity",
   publish / skip := true
 )

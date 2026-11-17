@@ -334,6 +334,62 @@ const accept = async (page, status = 200) => {
     await capture(owner, 'grant-revoked-390');
     check(stage, 'Confirmed revocation denies fresh metadata/file requests and removes the recipient view after reload.');
 
+    stage = 'second-session-upload';
+    await owner.goto(config.baseUrl + '/#/p/' + config.project);
+    await owner.getByText('New dataset', { exact: true }).click();
+    await owner.getByLabel('Dataset name', { exact: true }).fill('Two visits');
+    await owner.getByLabel('Custodian ID', { exact: true }).fill(config.custodian);
+    const creating = owner.waitForResponse(r => r.request().method() === 'POST' && r.url().endsWith('/datasets'));
+    await owner.getByRole('button', { name: 'Create dataset', exact: true }).click();
+    const created = await creating;
+    assert.equal(created.status(), 201, await created.text());
+    persisted.growthDataset = (await created.json()).created.dataset;
+    const first = path.join(output, 'first-session'), both = path.join(output, 'both-sessions');
+    const visit = n => 'sub-01/ses-0' + n + '/beh/sub-01_ses-0' + n + '_task-choice_beh.tsv';
+    function write(at, name, text) {
+      fs.mkdirSync(path.dirname(path.join(at, name)), { recursive: true });
+      fs.writeFileSync(path.join(at, name), text);
+    }
+    write(first, 'dataset_description.json', '{"Name":"Two visits","BIDSVersion":"1.11.2","DatasetType":"raw"}\n');
+    write(first, 'task-choice_beh.json', '{"TaskName":"choice","response":{"Description":"Chosen direction"}}\n');
+    write(first, visit(1), 'response\nleft\n');
+    fs.cpSync(first, both, { recursive: true });
+    write(both, visit(2), 'response\nright\n');
+    async function upload(folder, target, link, reload) {
+      await owner.getByRole('link', { name: link, exact: true }).click();
+      await owner.getByLabel('Choose a folder').setInputFiles(folder);
+      await owner.getByLabel('Place its contents in').fill(target);
+      const pending = owner.waitForResponse(r => r.request().method() === 'POST' && r.url().endsWith('/preview'));
+      await owner.getByRole('button', { name: 'Upload and preview' }).click();
+      const response = await pending;
+      assert.equal(response.status(), 200, await response.text());
+      const preview = await response.json();
+      assert(preview.candidate.assessment.admissible, JSON.stringify(preview.candidate.assessment.findings));
+      if (reload) {
+        assert.deepEqual(preview.contentChanges.filter(c => c.after?.kind === 'file').map(c => c.path), [visit(2)]);
+        const again = owner.waitForResponse(r => r.url().endsWith('/preview'));
+        await owner.reload();
+        assert.equal((await (await again).json()).candidate.id, preview.candidate.id);
+        await capture(owner, 'second-session-preview');
+      }
+      const accepted = owner.waitForResponse(r => r.request().method() === 'POST' && r.url().endsWith('/accept'));
+      await owner.getByRole('button', { name: 'Accept release', exact: true }).click();
+      const result = await accepted;
+      assert.equal(result.status(), 200, await result.text());
+      const release = (await result.json()).ref.release;
+      await owner.getByRole('tab', { name: /^Files/ }).waitFor();
+      return release;
+    }
+    persisted.growthBase = await upload(first, '', 'Upload a dataset', false);
+    persisted.growthHead = await upload(path.join(both, 'sub-01/ses-02'), 'sub-01/ses-02', 'Add files', true);
+    const atRelease = r => '/v1/datasets/' + persisted.growthDataset + '/releases/' + r;
+    const historical = await json(ownerApi, atRelease(persisted.growthBase));
+    assert(!historical.entries.some(e => e.path === visit(2)));
+    const grown = await json(ownerApi, atRelease(persisted.growthHead));
+    assert.deepEqual(grown.assessment.checks.filter(c => c.target.endsWith('_beh.tsv')).map(c => c.target).sort(),
+      [visit(1), visit(2)]);
+    check(stage, 'Created a project dataset, uploaded two visits separately and resumed the second preview after reload. Both tables received behavioural content checks.');
+
     stage = 'transport';
     assert.equal(pageErrors.length, 0, pageErrors.join('\n'));
     assert(!requests.some(r => r.path.endsWith('/demo.js')));
