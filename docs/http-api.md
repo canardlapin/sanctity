@@ -216,6 +216,47 @@ for a release without a parent; otherwise it compares files with the parent
 release, with exact counts and at most 200 paths per group. It lists paths only,
 never digests or source labels.
 
+### Data types and coverage levels
+
+A dataset declares its kind in its own content. A root `dataset_description.json`
+makes it a BIDS dataset; a root `archive_description.json` makes it an archive.
+Exactly one of the two is required.
+
+A release and a candidate report `levels`: what the repository did with each group
+of files. Each file entry also carries its `group` and `level`.
+
+| Level | What the repository did | What it claims |
+| --- | --- | --- |
+| `assessed` | Ran the content checks listed in the assessment | The stated checks passed or produced the listed findings |
+| `described` | Read the BIDS name and sidecar metadata and indexed them for queries | The description is consistent; the recording was not opened |
+| `preserved` | Stored the bytes, digest and path | Nothing about meaning |
+
+```json
+{
+  "version": "sanctity-coverage-levels-v1",
+  "summary": [
+    { "group": "eeg", "level": "described", "files": 6 },
+    { "group": "func", "level": "assessed", "files": 3 },
+    { "group": "sourcedata", "level": "preserved", "files": 1 }
+  ]
+}
+```
+
+- **Assessed:** MRI (`anat`, `func`, `dwi`, `fmap`) and behavioural tables (`beh`).
+- **Described:** `eeg`, `ieeg`, `meg`, `nirs`, `pet`, `perf` and `motion`.
+- **Preserved:** `sourcedata/`, `code/`, `derivatives/` and `phenotype/`; any other
+  top-level directory; data types without an installed profile; files inside a
+  recording stored as a directory; and every file of an archive except its
+  description. Each of the last four produces one warning per directory or data
+  type, never one per file.
+
+`levels` is `null` for a release interpreted before levels were recorded. An
+archive has no scientific query index, so `POST /v1/selections` refuses it.
+
+`archive_description.json` requires a `Name`. `Description`, `License` and
+`DatasetDOI` are text. `Authors`, `Keywords`, `DataTypes`, `Funding` and
+`ReferencesAndLinks` are lists of text.
+
 ## Organization administration
 
 Governed organization commands (F02.3) run as the authenticated principal. Each is

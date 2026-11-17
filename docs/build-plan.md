@@ -359,6 +359,24 @@ agents. They are estimates, to be revised after stage 1.
 *Exit:* sign in, create a dataset, upload MRI and EEG, see findings, fix, accept,
 and store an archive, all in the browser on a freshly started instance.
 
+*Progress, 17 November:*
+
+- **Package 4 (K3) is done.** Every file has a recorded level. EEG, iEEG, MEG,
+  NIRS, PET, perfusion and motion are described from names and sidecar metadata
+  and can be queried beside MRI. Content without a profile is kept and labelled.
+  A root `archive_description.json` makes a collection an archive.
+- **Package 3 is half done.** K5 is in: coverage levels are the first named
+  section of the interpretation identity, and a golden test pins the earlier
+  encoding. K6 (re-assessment after upgrades) is not started.
+- **Package 2 is part done.** The service chooses the interpreter from the root
+  description (K1). Views, derivatives and processing are still not reachable
+  over HTTP, and MRI has not been extracted into a modality of its own (K2).
+  New modalities register in `RepositoryBidsContext`.
+- **Limits of this step.** Recordings stored as directories (CTF `.ds`, MEF3)
+  are preserved, not described. File moves and removals are not yet offered
+  for described data types. Processing-input planning still expects the older
+  MRI-only context.
+
 **Stage 2: the multi-modal story (about 3 weeks)**
 
 | # | Package | Days | Needs |

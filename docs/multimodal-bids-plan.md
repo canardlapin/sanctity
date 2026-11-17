@@ -79,6 +79,14 @@ explain the blocker. Existing accepted releases stay readable under their record
 coverage. A separate archival-only admission policy would require its own scope;
 it is not silently introduced here.
 
+**Amended 17 November 2026.** That scope now exists. The [build plan](build-plan.md)
+(change K3) records a coverage level for every file. Under the default inclusive
+policy, content without an assessed profile is accepted as *described* or
+*preserved* and labelled as such; it never receives a validity badge. The strict
+policy keeps the rule above. EEG, iEEG, MEG, NIRS, PET, perfusion and motion are
+described from names and sidecar metadata; the milestones below remain the route
+to assessing them.
+
 ## Starting architecture and required changes
 
 These are the current seams to use; names below describe present code, not new APIs

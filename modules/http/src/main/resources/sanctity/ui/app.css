@@ -475,6 +475,7 @@ details.explainer[open] summary { margin-bottom: 10px; }
 .overview .tally { max-width: 460px; }
 .type-list { display: flex; flex-wrap: wrap; gap: 6px; }
 .type-list li { display: inline-flex; gap: 8px; padding: 4px 10px; border: 1px solid var(--rule); border-radius: 999px; font-size: 13px; }
+.type-list .ok { color: var(--ok); }
 .attn { gap: 10px; align-items: center; padding: 6px 0; border-bottom: 1px dashed var(--rule); }
 .attn .sev { display: inline-flex; }
 .attn .chip { margin-left: auto; }

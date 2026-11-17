@@ -664,6 +664,17 @@
     if (tab === 'files') filesPanel(panel, d, r, rel, selected, my, isHead, goTab);
   }
 
+  // What the repository did with each data type. A level describes the repository's work, never the data's quality.
+  const LEVELS = ['assessed', 'described', 'preserved'];
+  function coverageSection(levels) {
+    const groups = new Map();
+    levels.summary.forEach(s => { const g = groups.get(s.group) || { total: 0, by: {} }; g.by[s.level] = s.files; g.total += s.files; groups.set(s.group, g); });
+    return h('section', { class: 'stack s8' }, h('h3', { class: 'overline' }, 'Coverage by data type'),
+      h('ul', { class: 'type-list' }, [...groups].sort((x, y) => y[1].total - x[1].total).map(([g, v]) => h('li', {}, h('span', { class: 'mono' }, g),
+        LEVELS.filter(l => v.by[l]).map(l => h('span', { class: l === 'assessed' ? 'ok' : 'muted' }, v.by[l] + ' ' + l))))),
+      h('p', { class: 'small muted' }, 'Assessed: content checks ran. Described: names and metadata were read; recordings were not opened. Preserved: stored exactly, without interpretation.'));
+  }
+
   // With no file chosen, the inspector summarises the release: what it contains and what needs attention.
   const DATATYPES = new Set(['anat', 'func', 'dwi', 'fmap', 'perf', 'beh', 'eeg', 'meg', 'ieeg', 'pet', 'micr', 'nirs', 'motion']);
   function releaseOverview(d, r, rel, isHead, goTab) {
@@ -683,7 +694,7 @@
         h('p', { class: 'small muted' }, 'Choose a file to see its effective metadata, where each value comes from, and the acquisitions it is linked to.')),
       h('div', { class: 'tally' }, tally(subjects.size, subjects.size === 1 ? 'subject' : 'subjects'), tally(files.length, 'files'),
         h('div', { class: a.findings.length ? (a.findings.some(f => f.severity === 'Error') ? 'err' : 'warn') : '' }, h('b', {}, String(a.findings.length)), h('span', {}, a.findings.length === 1 ? 'finding' : 'findings'))),
-      h('section', { class: 'stack s8' }, h('h3', { class: 'overline' }, 'Files by data type'),
+      rel.levels ? coverageSection(rel.levels) : h('section', { class: 'stack s8' }, h('h3', { class: 'overline' }, 'Files by data type'),
         h('ul', { class: 'type-list' }, [...byType].sort((x, y) => y[1] - x[1]).map(([t, n]) => h('li', {}, h('span', { class: 'mono' }, t), h('span', { class: 'muted' }, String(n)))))),
       h('section', { class: 'stack s8' }, h('h3', { class: 'overline' }, 'Needs attention'),
         codes.size ? [h('ul', { class: 'stack s4' }, [...codes].sort((x, y) => (y[1].err - x[1].err) || (y[1].n - x[1].n)).map(([code, v]) => h('li', { class: 'attn row' },

@@ -1729,6 +1729,13 @@
               "size": {
                 "type": "integer",
                 "format": "int64"
+              },
+              "group": {
+                "type": "string",
+                "description": "The data type or area the file belongs to, for example func, eeg or dataset. Present when levels were recorded."
+              },
+              "level": {
+                "$ref": "#/components/schemas/CoverageLevel"
               }
             },
             "required": [
@@ -1791,6 +1798,17 @@
                 "type": "null"
               }
             ]
+          },
+          "levels": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CoverageLevels"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Null for content interpreted before coverage levels were recorded."
           }
         },
         "required": [
@@ -1803,7 +1821,8 @@
           "assessment",
           "acceptedAt",
           "entries",
-          "relationships"
+          "relationships",
+          "levels"
         ]
       },
       "Candidate": {
@@ -1840,6 +1859,17 @@
           },
           "assessment": {
             "$ref": "#/components/schemas/Assessment"
+          },
+          "levels": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CoverageLevels"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Null for content interpreted before coverage levels were recorded."
           }
         },
         "required": [
@@ -1849,7 +1879,8 @@
           "generation",
           "manifest",
           "interpretation",
-          "assessment"
+          "assessment",
+          "levels"
         ]
       },
       "EffectiveField": {
@@ -2668,6 +2699,52 @@
             }
           }
         }
+      },
+      "CoverageLevel": {
+        "enum": [
+          "preserved",
+          "described",
+          "assessed"
+        ],
+        "description": "What the repository did with the file: stored it only, read its name and metadata, or ran content checks."
+      },
+      "CoverageLevels": {
+        "type": "object",
+        "additionalProperties": false,
+        "description": "What the repository did with each group of files. A level describes the repository's work, not the quality of the data.",
+        "properties": {
+          "version": {
+            "type": "string"
+          },
+          "summary": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "group": {
+                  "type": "string"
+                },
+                "level": {
+                  "$ref": "#/components/schemas/CoverageLevel"
+                },
+                "files": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "required": [
+                "group",
+                "level",
+                "files"
+              ]
+            }
+          }
+        },
+        "required": [
+          "version",
+          "summary"
+        ]
       }
     }
   }

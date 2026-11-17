@@ -255,11 +255,23 @@
     const a = r.activity;
     return { kind: a.kind, reason: a.reason, proposedBy: a.by, proposedAt: a.at, acceptedBy: ME, changesFromParent: changes };
   }
+  // Coverage levels as the service reports them: what the repository did with each group of files.
+  const ASSESSED = new Set(['anat', 'func', 'dwi', 'fmap', 'beh']), DESCRIBED = new Set(['eeg', 'ieeg', 'meg', 'nirs', 'pet', 'perf', 'motion']);
+  function levelsOf(entries) {
+    const counts = new Map();
+    entries.filter(e => e.kind === 'file').forEach(e => {
+      const parts = e.path.split('/'), type = parts.slice(0, -1).reverse().find(x => ASSESSED.has(x) || DESCRIBED.has(x));
+      const group = type || (parts.length === 1 || /^sub-/.test(parts[0]) ? 'dataset' : parts[0] === 'stimuli' ? 'stimuli' : 'other');
+      const level = type ? (ASSESSED.has(type) ? 'assessed' : 'described') : group === 'dataset' ? 'assessed' : 'preserved';
+      counts.set(group + ' ' + level, (counts.get(group + ' ' + level) || 0) + 1);
+    });
+    return { version: 'sanctity-coverage-levels-v1', summary: [...counts].sort().map(([k, files]) => ({ group: k.split(' ')[0], level: k.split(' ')[1], files })) };
+  }
   function releaseJson(id) {
     const r = releases.get(id), i = interpret(r.texts);
     const ident = r.identity || identityOf(r.texts);
     return { ref: { dataset: DS, release: id }, parent: r.parent, manifest: ident.manifest, interpretation: ident.interpretation,
-      profile: behavioural(r.texts) ? 'native-mri-behavioural-v1' : 'native-reference-v7', coverage: 'Context-selected bids4s names and JSON inheritance; basic description/timing checks. Explicit NIfTI B0 fieldmap groups and IntendedFor links. Inherited DWI gradients and BOLD event companions. Bounded MRI dimensions, units and TR/header comparison; discrepancies remain observations. No full BIDS conformance validation.' + (behavioural(r.texts) ? ' Strict bounded behavioural tables, optional corresponding events and local stimuli; no behavioural clock qualification.' : ''), assessment: { ...assessment(id, i, r.texts), id: ident.assessment }, acceptedAt: r.acceptedAt, entries: i.entries,
+      profile: behavioural(r.texts) ? 'native-mri-behavioural-v1' : 'native-reference-v7', coverage: 'Context-selected bids4s names and JSON inheritance; basic description/timing checks. Explicit NIfTI B0 fieldmap groups and IntendedFor links. Inherited DWI gradients and BOLD event companions. Bounded MRI dimensions, units and TR/header comparison; discrepancies remain observations. No full BIDS conformance validation.' + (behavioural(r.texts) ? ' Strict bounded behavioural tables, optional corresponding events and local stimuli; no behavioural clock qualification.' : ''), assessment: { ...assessment(id, i, r.texts), id: ident.assessment }, acceptedAt: r.acceptedAt, entries: i.entries, levels: levelsOf(i.entries),
       relationships: { version: 'bids-fieldmap-associations-v1+bids-mri-companions-v1+bids-phasediff-family-v1', evidenceVersion: 2, links: i.links }, provenance: provenance(r) };
   }
 

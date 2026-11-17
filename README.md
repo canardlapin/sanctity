@@ -42,6 +42,7 @@ engineering order, acceptance criteria and integrated release review.
 | XNAT | Authenticated API streams, explicit resource inventories, experiment pagination, checksums, source-change checks, matching resource ZIP import |
 | HTTP and operator CLI | Revocable principal credentials, release/metadata inspection, correction and acceptance, fixed-release grants, frozen queries, guarded file streams, resumable local import |
 | Service distribution | Pinned Java runtime artifact with API/console, migrations and trusted operator commands; source/dependency/digest/license inventory and disposable PostgreSQL install smoke |
+| Data types and coverage | BIDS datasets and archives, declared by a root `dataset_description.json` or `archive_description.json`; a recorded level for every file (assessed, described or preserved); EEG, iEEG, MEG, NIRS, PET, perfusion and motion described from names and sidecar metadata; content without a profile kept and labelled, never refused under the default policy |
 | Browser console | Release/file inspection, metadata origins, findings/relationships, sidecar correction and conflict recovery, frozen queries and access actions over the same API; [bounded console adoption](docs/implementation-plan.md#console-baseline-and-adoption) is recorded, with screen-reader use unverified |
 
 These are bounded implementations with executable evidence. Institutional identity integration, full conformance, representative scientific qualification, production migration and performance remain open.
