@@ -24,49 +24,78 @@ object RepositoryBidsContext:
   private def raw(name: String, folder: String, entities: Vector[EntityRule], kinds: BidsKind*): BidsDatatypeSpec =
     BidsDatatypeSpec(name, folder, DatatypeScope.Raw, entities, kinds.toVector)
 
+  // The described data types follow the file rules of the BIDS schema (bids-specification f9d3b8a, schema 1.11.3-dev:
+  // rules/files/raw/{eeg,ieeg,meg,nirs,pet,perf,motion,channels,photo,task,events}.yaml). One specification here is one
+  // schema rule: a set of suffixes that share entities. Recordings the schema stores as directories (.ds/, .mefd/,
+  // .ome.zarr/ and BTi/4D) are preserved by BidsScopes, not named here. The schema lets a MEG head shape have any
+  // extension; the common ones are listed.
+  private val base = Vector(required(Subject), optional(Session))
+  private val recording = base ++ Vector(optional(Acquisition), index(Run))
+  private val task = recording :+ required(Task)
+  private val sampled = optional(custom("recording"))
+  private val processing = optional(custom("proc"))
   private val images = Vector("jpg", "png", "tif")
-  private val recording = Vector(required(Subject), optional(Session), required(Task), optional(Acquisition), index(Run))
-  private val placed = Vector(required(Subject), optional(Session), optional(Acquisition), optional(Space))
-  private val unplaced = Vector(required(Subject), optional(Session), optional(Acquisition))
-  private val tables = Vector(kind("channels", "tsv", "json"), kind("events", "tsv", "json"))
+  private val channels = kind("channels", "json", "tsv")
+  private val events = kind("events", "tsv", "json")
+  private def timeseries(name: String, folder: String, entities: Vector[EntityRule]): BidsDatatypeSpec =
+    raw(name, folder, entities, kind("physio", "tsv.gz", "json"), kind("physioevents", "tsv.gz", "json"), kind("stim", "tsv.gz", "json"))
+  private def photo(name: String, folder: String): BidsDatatypeSpec =
+    raw(name, folder, base :+ optional(Acquisition), kind("photo", images*))
 
-  private val behavioural = raw("beh", "beh", recording, kind("beh", "tsv", "json"), kind("events", "tsv", "json"))
+  private val behavioural = raw("beh", "beh", Vector(required(Subject), optional(Session), required(Task), optional(Acquisition), index(Run)),
+    kind("beh", "tsv", "json"), kind("events", "tsv", "json"))
 
-  private val eeg = Vector(
-    raw("eeg", "eeg", recording, (kind("eeg", "edf", "vhdr", "vmrk", "eeg", "set", "fdt", "bdf", "json") +: tables)*),
-    raw("eeg-layout", "eeg", placed, kind("electrodes", "tsv", "json"), kind("coordsystem", "json"), kind("photo", images*)),
-    raw("eeg-physio", "eeg", recording :+ optional(custom("recording")), kind("physio", "tsv.gz", "json"), kind("stim", "tsv.gz", "json")))
+  /** EEG and intracranial EEG share every rule except the recording formats. */
+  private def electrophysiology(folder: String, formats: String*): Vector[BidsDatatypeSpec] = Vector(
+    raw(folder, folder, task, kind(folder, formats*), channels, events),
+    raw(s"$folder-electrodes", folder, recording ++ Vector(optional(Task), optional(Space)), kind("electrodes", "json", "tsv")),
+    raw(s"$folder-coordsystem", folder, base ++ Vector(optional(Task), optional(Acquisition), optional(Space)), kind("coordsystem", "json")),
+    photo(s"$folder-photo", folder),
+    timeseries(s"$folder-timeseries", folder, task :+ sampled))
 
-  private val ieeg = Vector(
-    raw("ieeg", "ieeg", recording, (kind("ieeg", "edf", "vhdr", "vmrk", "eeg", "set", "fdt", "nwb", "json") +: tables)*),
-    raw("ieeg-layout", "ieeg", placed, kind("electrodes", "tsv", "json"), kind("coordsystem", "json"), kind("photo", images*)))
+  private val eeg = electrophysiology("eeg", "json", "edf", "vhdr", "vmrk", "eeg", "set", "fdt", "bdf")
+  private val ieeg = electrophysiology("ieeg", "json", "edf", "vhdr", "eeg", "vmrk", "set", "fdt", "nwb")
 
   private val meg = Vector(
-    raw("meg", "meg", recording ++ Vector(optional(custom("proc")), index(custom("split"))),
-      (kind("meg", "fif", "sqd", "con", "raw", "ave", "mrk", "kdf", "chn", "trg", "json") +: tables)*),
-    raw("meg-calibration", "meg", Vector(required(Subject), optional(Session), EntityRule(Acquisition, required = true, Some("calibration|crosstalk"))),
-      kind("meg", "dat", "fif")),
-    raw("meg-layout", "meg", unplaced, kind("coordsystem", "json"), kind("headshape", "pos", "elp", "hsp"), kind("photo", images*)),
-    raw("meg-markers", "meg", Vector(required(Subject), optional(Session), optional(Task), optional(Acquisition), optional(Space)),
-      kind("markers", "sqd", "mrk")))
+    raw("meg", "meg", task ++ Vector(processing, index(custom("split"))),
+      kind("meg", "json", "fif", "sqd", "con", "raw", "ave", "mrk", "kdf", "mhd", "raw.mhd", "trg", "chn")),
+    raw("meg-channels", "meg", task :+ processing, channels),
+    raw("meg-events", "meg", task, events),
+    raw("meg-calibration", "meg", base :+ EntityRule(Acquisition, required = true, Some("calibration")), kind("meg", "dat")),
+    raw("meg-crosstalk", "meg", base :+ EntityRule(Acquisition, required = true, Some("crosstalk")), kind("meg", "fif")),
+    raw("meg-headshape", "meg", base :+ optional(Acquisition), kind("headshape", "pos", "elp", "hsp", "txt")),
+    raw("meg-markers", "meg", base ++ Vector(optional(Task), optional(Acquisition), optional(Space)), kind("markers", "sqd", "mrk")),
+    raw("meg-coordsystem", "meg", base ++ Vector(optional(Task), optional(Acquisition)), kind("coordsystem", "json")),
+    raw("meg-electrodes", "meg", recording ++ Vector(optional(Task), optional(Space), processing), kind("electrodes", "json", "tsv")),
+    photo("meg-photo", "meg"),
+    timeseries("meg-timeseries", "meg", task ++ Vector(sampled, processing)))
 
   private val nirs = Vector(
-    raw("nirs", "nirs", recording, (kind("nirs", "snirf", "json") +: tables)*),
-    raw("nirs-layout", "nirs", unplaced, kind("optodes", "tsv", "json"), kind("coordsystem", "json"), kind("photo", images*)))
+    raw("nirs", "nirs", task, kind("nirs", "snirf", "json"), channels, events),
+    raw("nirs-optodes", "nirs", base :+ optional(Acquisition), kind("optodes", "tsv", "json")),
+    raw("nirs-coordsystem", "nirs", base ++ Vector(optional(Task), optional(Acquisition)), kind("coordsystem", "json")),
+    photo("nirs-photo", "nirs"),
+    timeseries("nirs-timeseries", "nirs", task :+ sampled))
 
-  private val tracer = Vector(required(Subject), optional(Session), optional(Task), optional(custom("trc")), optional(Reconstruction), index(Run))
+  private val tracer = base ++ Vector(optional(Task), optional(custom("trc")), optional(Reconstruction), index(Run))
   private val pet = Vector(
-    raw("pet", "pet", tracer, kind("pet", "nii.gz", "nii", "json"), kind("events", "tsv", "json")),
-    raw("pet-blood", "pet", tracer :+ required(custom("recording")), kind("blood", "tsv", "json")))
+    raw("pet", "pet", tracer, kind("pet", "nii.gz", "nii", "json"), events),
+    raw("pet-blood", "pet", tracer :+ required(custom("recording")), kind("blood", "tsv", "json")),
+    timeseries("pet-timeseries", "pet", base ++ Vector(index(Run), required(Task), sampled, optional(custom("trc")), optional(Reconstruction))))
 
+  private val labelled = recording ++ Vector(optional(Reconstruction), optional(Direction))
+  private val perfusionImage = labelled ++ Vector(optional(custom("part")), index(Echo))
   private val perfusion = Vector(
-    raw("perf", "perf", Vector(required(Subject), optional(Session), optional(Acquisition), optional(Reconstruction), optional(Direction), index(Run)),
-      kind("asl", "nii.gz", "nii", "json"), kind("m0scan", "nii.gz", "nii", "json"), kind("aslcontext", "tsv"), kind("asllabeling", "jpg")))
+    raw("perf", "perf", perfusionImage, kind("asl", "nii.gz", "nii", "json"), kind("m0scan", "nii.gz", "nii", "json")),
+    raw("perf-norf", "perf", perfusionImage :+ optional(Modality), kind("noRF", "nii.gz", "nii", "json")),
+    raw("perf-context", "perf", labelled, kind("aslcontext", "tsv")),
+    raw("perf-labeling", "perf", recording :+ optional(Reconstruction), kind("asllabeling", images*)),
+    timeseries("perf-timeseries", "perf", labelled :+ sampled))
 
-  private val tracked = Vector(required(Subject), optional(Session), required(Task), optional(Acquisition), index(Run))
   private val motion = Vector(
-    raw("motion", "motion", tracked :+ required(custom("tracksys")), kind("motion", "tsv", "json"), kind("channels", "tsv", "json")),
-    raw("motion-events", "motion", tracked :+ optional(custom("tracksys")), kind("events", "tsv", "json")))
+    raw("motion", "motion", task :+ required(custom("tracksys")), kind("motion", "tsv", "json"), channels),
+    raw("motion-events", "motion", task :+ optional(custom("tracksys")), events),
+    timeseries("motion-timeseries", "motion", task ++ Vector(sampled, optional(custom("tracksys")))))
 
   /** Registration order is significant: the first specification that accepts a name wins. */
   val Modalities: Vector[BidsModality] = Vector(
