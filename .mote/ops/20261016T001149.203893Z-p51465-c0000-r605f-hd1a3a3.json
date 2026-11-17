@@ -1,0 +1,1 @@
+{"actor":"claude-console","entity":"bd-01M50P5503S3BQC1P2MHB3NWC4","kind":"reserve_open","mode":"exclusive","op":"20261016T001149.203893Z-p51465-c0000-r605f-hd1a3a3","paths":["tests/console/rehearsal.js"],"reservation_id":"rv-01M510SYJKG1A4TTJ6KP2RC1XK","ts":"2026-10-16T00:11:49.203893Z","ttl_s":3600,"v":2}

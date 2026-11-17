@@ -1,0 +1,1 @@
+{"actor":"claude-console","entity":"bd-01M519PN97QJYXRP5T5KRZSSNC","kind":"reserve_open","mode":"exclusive","op":"20261016T030259.597923Z-p54289-c0000-r0a7e-h961b56","paths":["modules/postgres/src/main/resources/sanctity/postgres/V011__governed_organization.sql"],"reservation_id":"rv-01M51AKC8DHT3EJS7ESX1XYQX9","ts":"2026-10-16T03:02:59.597923Z","ttl_s":3600,"v":2}

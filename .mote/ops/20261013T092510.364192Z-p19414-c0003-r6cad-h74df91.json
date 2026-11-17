@@ -1,0 +1,1 @@
+{"actor":"codex-analysis-inputs","entity":"bd-01M4T95H55YA91AVCCX84KRZ8A","kind":"note","note_kind":"progress","op":"20261013T092510.364192Z-p19414-c0003-r6cad-h74df91","text":"Default dependency now verifies exact source archive, retaining explicit sibling development override. Clean-source CI follows final source pin.","ts":"2026-10-13T09:25:10.364192Z","v":1}

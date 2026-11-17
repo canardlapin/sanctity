@@ -1,0 +1,1 @@
+{"actor":"claude-console","entity":"bd-01M50P54K6E6RBFB4XX0ZBQ9YD","kind":"reserve_open","mode":"exclusive","op":"20261015T212807.790714Z-p28727-c0000-r0b7e-h7a9f48","paths":["modules/http/src/main/resources/sanctity/ui/app.js"],"reservation_id":"rv-01M50QE7BESHRHKMCR40DZ0TH7","ts":"2026-10-15T21:28:07.790714Z","ttl_s":3600,"v":2}

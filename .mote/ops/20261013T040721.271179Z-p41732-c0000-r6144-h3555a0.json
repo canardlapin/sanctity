@@ -1,0 +1,1 @@
+{"actor":"codex-night-implementation","entity":"bd-01M4SJZ2KTW7HKS0YMB01NAP07","kind":"reserve_open","mode":"exclusive","op":"20261013T040721.271179Z-p41732-c0000-r6144-h3555a0","paths":["modules/postgres/src/main/scala/sanctity/postgres/PostgresCatalog.scala"],"reservation_id":"rv-01M4SQ32DQ7F1SBS9YBD4T8SYN","ts":"2026-10-13T04:07:21.271179Z","ttl_s":7200,"v":2}

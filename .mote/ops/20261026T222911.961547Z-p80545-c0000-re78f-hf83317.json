@@ -1,0 +1,1 @@
+{"actor":"claude-console","entity":"bd-01M519M84WJC6PTFTQAW1EX4QM","kind":"reserve_open","mode":"exclusive","op":"20261026T222911.961547Z-p80545-c0000-re78f-hf83317","paths":["modules/postgres/src/main/scala/sanctity/postgres/PostgresCatalog.scala"],"reservation_id":"rv-01M5X59YMST5GP55ENW561SGHN","ts":"2026-10-26T22:29:11.961547Z","ttl_s":3600,"v":2}

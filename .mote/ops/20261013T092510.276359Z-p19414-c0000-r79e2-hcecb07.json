@@ -1,0 +1,1 @@
+{"actor":"codex-analysis-inputs","entity":"bd-01M4T95H55YA91AVCCX84KRZ8A","kind":"reserve_open","mode":"exclusive","op":"20261013T092510.276359Z-p19414-c0000-r79e2-hcecb07","paths":["build.sbt","vendor","scripts/check-clean-source.sh"],"reservation_id":"rv-01M4T990G4NYVB5QT1AKSEQW2A","ts":"2026-10-13T09:25:10.276359Z","ttl_s":3600,"v":2}
