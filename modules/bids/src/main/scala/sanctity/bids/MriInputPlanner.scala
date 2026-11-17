@@ -46,6 +46,16 @@ final class MriInputPlanner extends InputPlanner:
         val metadata = interpretation.byPath.get(f.path)
         val fields = metadata.fold(Map.empty[String, EffectiveField])(_.fields)
         val sources = metadata.toVector.flatMap(_.sources)
+        val timingInputs = (Vector(f.path -> "image") ++ sources.distinct.sorted(Ordering.by[RelPath, String](_.value))
+          .zipWithIndex.map((p, n) => p -> s"metadata-$n")).flatMap { (p, role) =>
+            manifest.byPath.get(p).collect { case file: Entry.File => CheckInput(role, p, file.blob) }
+          }.sortBy(_.role)
+        val timingChecks = assessment.checks.filter(c => c.target == f.path && c.rule == BoldTimingChecks.Rule)
+        check("sampling-metadata", Some(f.path), timingChecks.size == 1 &&
+          timingInputs.size == sources.distinct.size + 1 && timingChecks.head.inputs == timingInputs &&
+          timingChecks.head.facts.get("consistent").contains(MetadataValue.Flag(true)) &&
+          !timingChecks.head.findings.exists(_.severity == Severity.Error), RequirementStatus.Missing,
+          Vector(f.path) ++ sources, "Exact BOLD image and metadata require volume/slice timing assessment; optional slice mapping may be unavailable")
         check("regular-timing", Some(f.path), fields.get("RepetitionTime").exists(_.value match
           case MetadataValue.Number(n) => n > 0
           case _ => false) && !fields.contains("VolumeTiming"), RequirementStatus.Unsupported, sources,

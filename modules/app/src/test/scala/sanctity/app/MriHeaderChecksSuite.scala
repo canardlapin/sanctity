@@ -86,6 +86,6 @@ final class MriHeaderChecksSuite extends FunSuite:
       _ = assertEquals(count, 1)
       _ = assert(result._2.admissible, result._2.errors.toString)
       _ = assertEquals(result._2.checks.map(_.target).distinct, Vector(imagePath))
-      _ = assertEquals(result._2.checks.size, 2)
+      _ = assertEquals(result._2.checks.size, 3)
     yield ()).unsafeRunSync()
   }

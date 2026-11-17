@@ -1,0 +1,1 @@
+Synthetic tone instruction: 440 Hz for one second.

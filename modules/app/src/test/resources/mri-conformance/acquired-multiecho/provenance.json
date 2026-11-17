@@ -1,0 +1,153 @@
+{
+  "kind": "acquired-temporal-excerpt",
+  "license": "CC0-1.0",
+  "repository": "OpenNeuroDatasets/ds000258",
+  "commit": "0f274e6244a246ba7588cab117326fd90aa75fa1",
+  "datasetDOI": "10.18112/openneuro.ds000258.v1.0.1",
+  "generatorSha256": "7f6bc2fc829495910fba1b9a3d1d34df82f87a7f87793d64af95f572eaccf7f6",
+  "transform": "Retain original header/extension bytes and first four volume arrays; replace dim[4] with 4 in original byte order; remove gzip wrapping.",
+  "sources": [
+    {
+      "echo": 1,
+      "originalPath": "sub-04570/func/sub-04570_task-rest_echo-1_bold.nii.gz",
+      "sourceUrl": "https://s3.amazonaws.com/openneuro.org/ds000258/sub-04570/func/sub-04570_task-rest_echo-1_bold.nii.gz",
+      "gitAnnexPointerUrl": "https://raw.githubusercontent.com/OpenNeuroDatasets/ds000258/0f274e6244a246ba7588cab117326fd90aa75fa1/sub-04570/func/sub-04570_task-rest_echo-1_bold.nii.gz",
+      "size": 36673739,
+      "md5": "efe83e5b93049914394e44e2f270f338",
+      "sha256": "750ea027375e88e66b102c31afec4e67667bc780335a5fbe9557c111fbe15ad5",
+      "originalDimensions": [
+        64,
+        64,
+        30,
+        239
+      ],
+      "metadataSha256": "6d6d6a4954665347e11c5e2ae6a86034d09287589f0cb7857e721d5535f3d741",
+      "retainedVolumes": [
+        0,
+        4
+      ],
+      "endian": ">",
+      "outputPath": "sub-04570/func/sub-04570_task-rest_echo-1_bold.nii",
+      "outputSha256": "ff7f45d346c19fbf422c6a2860a3d622d2821208beb52fbbc4ce99feb9e9bfff",
+      "retainedVoxelSha256": "fa196cf779a5951a1bd469e53e944574d24154c4a6ac2dbeea3012118bb2638b"
+    },
+    {
+      "echo": 2,
+      "originalPath": "sub-04570/func/sub-04570_task-rest_echo-2_bold.nii.gz",
+      "sourceUrl": "https://s3.amazonaws.com/openneuro.org/ds000258/sub-04570/func/sub-04570_task-rest_echo-2_bold.nii.gz",
+      "gitAnnexPointerUrl": "https://raw.githubusercontent.com/OpenNeuroDatasets/ds000258/0f274e6244a246ba7588cab117326fd90aa75fa1/sub-04570/func/sub-04570_task-rest_echo-2_bold.nii.gz",
+      "size": 33615110,
+      "md5": "a3233f49653222ca852e8f314ed3107c",
+      "sha256": "f3f403c91e6b86868ff117c47004329972b5a23357e3e84a1a99d0f6e423fa8b",
+      "originalDimensions": [
+        64,
+        64,
+        30,
+        239
+      ],
+      "metadataSha256": "790e8c0fdbb3165f8f632050bbbad7f5e457b154243e87d6ba8201bc85660629",
+      "retainedVolumes": [
+        0,
+        4
+      ],
+      "endian": ">",
+      "outputPath": "sub-04570/func/sub-04570_task-rest_echo-2_bold.nii",
+      "outputSha256": "ffa2366e00c1638d6b0732634fb15c4272fe788e3fdf1910fe5b5e84a2939455",
+      "retainedVoxelSha256": "068ccdad6f08fe7e4f90e64229122e37e72c761e2f18540f3b85d041fc0de693"
+    },
+    {
+      "echo": 3,
+      "originalPath": "sub-04570/func/sub-04570_task-rest_echo-3_bold.nii.gz",
+      "sourceUrl": "https://s3.amazonaws.com/openneuro.org/ds000258/sub-04570/func/sub-04570_task-rest_echo-3_bold.nii.gz",
+      "gitAnnexPointerUrl": "https://raw.githubusercontent.com/OpenNeuroDatasets/ds000258/0f274e6244a246ba7588cab117326fd90aa75fa1/sub-04570/func/sub-04570_task-rest_echo-3_bold.nii.gz",
+      "size": 31581196,
+      "md5": "dde5fdb1167f36f3b43d3503498d83bc",
+      "sha256": "6418fd121ffed02ad914c1e5449b97c4638693de35d84839bc36d5dfa923b866",
+      "originalDimensions": [
+        64,
+        64,
+        30,
+        239
+      ],
+      "metadataSha256": "65c173d45589d6cfb466cd7c5ada12fc7f801a72014b8a7fd2ee176429941308",
+      "retainedVolumes": [
+        0,
+        4
+      ],
+      "endian": ">",
+      "outputPath": "sub-04570/func/sub-04570_task-rest_echo-3_bold.nii",
+      "outputSha256": "2edb55000d31d4677c7adb3930d496b11cd0d5b7c2d1f840e6e05e40894ce8e8",
+      "retainedVoxelSha256": "d3d3369471ce29e4f64c51f0c4bd62ad1abedcced15f80b444e855d0b9c6978d"
+    },
+    {
+      "echo": 4,
+      "originalPath": "sub-04570/func/sub-04570_task-rest_echo-4_bold.nii.gz",
+      "sourceUrl": "https://s3.amazonaws.com/openneuro.org/ds000258/sub-04570/func/sub-04570_task-rest_echo-4_bold.nii.gz",
+      "gitAnnexPointerUrl": "https://raw.githubusercontent.com/OpenNeuroDatasets/ds000258/0f274e6244a246ba7588cab117326fd90aa75fa1/sub-04570/func/sub-04570_task-rest_echo-4_bold.nii.gz",
+      "size": 30181598,
+      "md5": "a9d822e584e34d3c5dc8429a70ea8dd1",
+      "sha256": "89c4cbc1c657ebaddd0d18316dbe553f470d4cd5ac0b8b3eed6e3ee45748ec5c",
+      "originalDimensions": [
+        64,
+        64,
+        30,
+        239
+      ],
+      "metadataSha256": "dfc0eb151ab5e87fedd65c3b8b88cac5ceb8d715a31c1ee7a4b4584e44c05293",
+      "retainedVolumes": [
+        0,
+        4
+      ],
+      "endian": ">",
+      "outputPath": "sub-04570/func/sub-04570_task-rest_echo-4_bold.nii",
+      "outputSha256": "c1f107ac95add409b516c69568b1f423ab37e89f4dfa9c6bb5a938b7ed70a7f0",
+      "retainedVoxelSha256": "3a44231b7ffa53342df6469af007001c187db0ddd6c2b75ab48a5af392998a69"
+    }
+  ],
+  "files": {
+    "LICENSE": {
+      "size": 70,
+      "sha256": "d0afab4329feecfe30a7c1cca897c3fa248f6443e43aac9ae1ecc8f6fd2e3660"
+    },
+    "README": {
+      "size": 257,
+      "sha256": "06abd3c9bdbb88b4e94c74618e0e9d236180037d5ff41518be7082d26d98e10b"
+    },
+    "dataset_description.json": {
+      "size": 623,
+      "sha256": "1fa806c97fbacb86d4e64d0c47be3272ecb885a7519e0086f85349d7be3c3ec4"
+    },
+    "sub-04570/func/sub-04570_task-rest_echo-1_bold.json": {
+      "size": 823,
+      "sha256": "6d6d6a4954665347e11c5e2ae6a86034d09287589f0cb7857e721d5535f3d741"
+    },
+    "sub-04570/func/sub-04570_task-rest_echo-1_bold.nii": {
+      "size": 983392,
+      "sha256": "ff7f45d346c19fbf422c6a2860a3d622d2821208beb52fbbc4ce99feb9e9bfff"
+    },
+    "sub-04570/func/sub-04570_task-rest_echo-2_bold.json": {
+      "size": 823,
+      "sha256": "790e8c0fdbb3165f8f632050bbbad7f5e457b154243e87d6ba8201bc85660629"
+    },
+    "sub-04570/func/sub-04570_task-rest_echo-2_bold.nii": {
+      "size": 983392,
+      "sha256": "ffa2366e00c1638d6b0732634fb15c4272fe788e3fdf1910fe5b5e84a2939455"
+    },
+    "sub-04570/func/sub-04570_task-rest_echo-3_bold.json": {
+      "size": 823,
+      "sha256": "65c173d45589d6cfb466cd7c5ada12fc7f801a72014b8a7fd2ee176429941308"
+    },
+    "sub-04570/func/sub-04570_task-rest_echo-3_bold.nii": {
+      "size": 983392,
+      "sha256": "2edb55000d31d4677c7adb3930d496b11cd0d5b7c2d1f840e6e05e40894ce8e8"
+    },
+    "sub-04570/func/sub-04570_task-rest_echo-4_bold.json": {
+      "size": 822,
+      "sha256": "dfc0eb151ab5e87fedd65c3b8b88cac5ceb8d715a31c1ee7a4b4584e44c05293"
+    },
+    "sub-04570/func/sub-04570_task-rest_echo-4_bold.nii": {
+      "size": 983392,
+      "sha256": "c1f107ac95add409b516c69568b1f423ab37e89f4dfa9c6bb5a938b7ed70a7f0"
+    }
+  }
+}

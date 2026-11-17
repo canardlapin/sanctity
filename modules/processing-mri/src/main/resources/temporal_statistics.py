@@ -1,4 +1,4 @@
-"""Qualified bounded temporal statistics v1. Invoked by the trusted local adapter."""
+"""Qualified bounded per-image temporal statistics v1/v2. Invoked by the trusted local adapter."""
 import gzip
 import hashlib
 import json
@@ -37,8 +37,17 @@ def checked_path(root, name):
 
 def compute(request, inputs, outputs):
     runtime()
-    if request["parameters"] != PARAMETERS or not 1 <= len(request["rows"]) <= 8:
+    version = request.get("contract", "1")
+    if version not in ("1", "2", "3") or request["parameters"] != PARAMETERS or not 1 <= len(request["rows"]) <= (16 if version in ("2", "3") else 8):
         raise ValueError("unsupported recipe request")
+    if sum(row["size"] for row in request["rows"]) > MAX_BYTES:
+        raise ValueError("input series exceed total 8 GiB budget")
+    paths = [row["path"] for row in request["rows"]]
+    emitted = [spec[key] for row in request["rows"] for spec in row["outputs"] for key in ("path", "sidecarPath")]
+    if len(set(paths)) != len(paths) or len(set(emitted)) != len(emitted) or "dataset_description.json" in emitted:
+        raise ValueError("duplicate input or output paths")
+    if any([spec["statistic"] for spec in row["outputs"]] != ["mean", "stddev"] for row in request["rows"]):
+        raise ValueError("requires exactly mean and population SD per source")
     outputs.mkdir()
     scratch = outputs.parent / "scratch"
     scratch.mkdir()
@@ -95,7 +104,7 @@ def compute(request, inputs, outputs):
             header["slice_duration"] = 0
             header["toffset"] = 0
             header["xyzt_units"] = int(header["xyzt_units"]) & 7
-            header["descrip"] = b"Sanctity temporal statistics v1"
+            header["descrip"] = ("Sanctity temporal statistics v" + version).encode("ascii")
             header["aux_file"] = b""
             header["cal_min"] = 0
             header["cal_max"] = 0

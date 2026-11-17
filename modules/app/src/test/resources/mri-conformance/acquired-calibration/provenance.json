@@ -1,0 +1,83 @@
+{
+  "kind": "acquired-independent-calibration-samples",
+  "sources": [
+    {
+      "dataset": "ds001734",
+      "commit": "0ad017e7f83ecda943fb85cc93bb3a8a122b2e60",
+      "datasetDOI": "10.18112/openneuro.ds001734.v1.0.5",
+      "license": "CC0-1.0",
+      "url": "https://s3.amazonaws.com/openneuro.org/ds001734/sub-001/func/sub-001_task-MGT_run-01_sbref.nii.gz",
+      "pointerUrl": "https://raw.githubusercontent.com/OpenNeuroDatasets/ds001734/0ad017e7f83ecda943fb85cc93bb3a8a122b2e60/sub-001/func/sub-001_task-MGT_run-01_sbref.nii.gz",
+      "path": "ds001734/sub-001/func/sub-001_task-MGT_run-01_sbref.nii.gz",
+      "size": 1589657,
+      "md5": "b99728736109b1b28323a22cfa3b86cb",
+      "sha256": "216055011c3c84db89bcb1832255de24bcc219ac90789177ab8a19ab4036a515",
+      "transform": "None; original compressed bytes retained."
+    },
+    {
+      "dataset": "ds004146",
+      "commit": "8aaf9b5ddfd7290a264ff6a41ff52d7df8b33102",
+      "datasetDOI": "doi:10.18112/openneuro.ds004146.v1.0.0",
+      "license": "CC0-1.0",
+      "url": "https://s3.amazonaws.com/openneuro.org/ds004146/sub-0001/ses-02/fmap/sub-0001_ses-02_dir-AP_epi.nii.gz",
+      "pointerUrl": "https://raw.githubusercontent.com/OpenNeuroDatasets/ds004146/8aaf9b5ddfd7290a264ff6a41ff52d7df8b33102/sub-0001/ses-02/fmap/sub-0001_ses-02_dir-AP_epi.nii.gz",
+      "path": "ds004146/sub-0001/ses-02/fmap/sub-0001_ses-02_dir-AP_epi.nii.gz",
+      "size": 2139759,
+      "md5": "b4dc80fc8660ea7f1e2d2031acabce9a",
+      "sha256": "53b4fd4730a2f6babea73642807186c61d3d636de4541cb303953db7466a46d7",
+      "transform": "None; original compressed bytes retained."
+    },
+    {
+      "dataset": "ds004146",
+      "commit": "8aaf9b5ddfd7290a264ff6a41ff52d7df8b33102",
+      "datasetDOI": "doi:10.18112/openneuro.ds004146.v1.0.0",
+      "license": "CC0-1.0",
+      "url": "https://s3.amazonaws.com/openneuro.org/ds004146/sub-0001/ses-02/fmap/sub-0001_ses-02_dir-PA_epi.nii.gz",
+      "pointerUrl": "https://raw.githubusercontent.com/OpenNeuroDatasets/ds004146/8aaf9b5ddfd7290a264ff6a41ff52d7df8b33102/sub-0001/ses-02/fmap/sub-0001_ses-02_dir-PA_epi.nii.gz",
+      "path": "ds004146/sub-0001/ses-02/fmap/sub-0001_ses-02_dir-PA_epi.nii.gz",
+      "size": 2121839,
+      "md5": "f81f3408e84cbad1c57f83fc88c1a695",
+      "sha256": "34c74b9a8077dfbc296389aef8c21b288f16c0afeef12f4def921ce258f20068",
+      "transform": "None; original compressed bytes retained."
+    }
+  ],
+  "generatorSha256": "eb9ab1c44d685130de3378ec4415ca90d6cac5ad152a5894464b2eb33e7e0db3",
+  "files": {
+    "README": {
+      "size": 360,
+      "sha256": "103feb1537f001ad04f81bf215b04a153ee3fc72fe21027e6a795b7b18d78f00"
+    },
+    "ds001734/dataset_description.json": {
+      "size": 1277,
+      "sha256": "d5e0ecdfaa3e92a6a5fe46c214fdefee25c268553dc68a8394d71bc59033e8b4"
+    },
+    "ds001734/sub-001/func/sub-001_task-MGT_run-01_sbref.nii.gz": {
+      "size": 1589657,
+      "sha256": "216055011c3c84db89bcb1832255de24bcc219ac90789177ab8a19ab4036a515"
+    },
+    "ds001734/task-MGT_sbref.json": {
+      "size": 223,
+      "sha256": "7260085bad74770c42270ba90bdf0e21bedb1d070d82e203a8431cdb01707c51"
+    },
+    "ds004146/dataset_description.json": {
+      "size": 3869,
+      "sha256": "b3a00473602d1119343e6d9e41334836427e989c54c0dbff0e6369d333ba0306"
+    },
+    "ds004146/sub-0001/ses-02/fmap/sub-0001_ses-02_dir-AP_epi.json": {
+      "size": 2047,
+      "sha256": "2cf7f128a297fc48d6c036cc1c32e484f06f6533ec51c446ac9d6b00daaef0a5"
+    },
+    "ds004146/sub-0001/ses-02/fmap/sub-0001_ses-02_dir-AP_epi.nii.gz": {
+      "size": 2139759,
+      "sha256": "53b4fd4730a2f6babea73642807186c61d3d636de4541cb303953db7466a46d7"
+    },
+    "ds004146/sub-0001/ses-02/fmap/sub-0001_ses-02_dir-PA_epi.json": {
+      "size": 2030,
+      "sha256": "723deb92ba25dccae788fe4bf78f1e62de3ef2e567d16ed39e9b1440f7b8b905"
+    },
+    "ds004146/sub-0001/ses-02/fmap/sub-0001_ses-02_dir-PA_epi.nii.gz": {
+      "size": 2121839,
+      "sha256": "34c74b9a8077dfbc296389aef8c21b288f16c0afeef12f4def921ce258f20068"
+    }
+  }
+}

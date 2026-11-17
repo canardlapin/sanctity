@@ -66,10 +66,11 @@ The native and PostgreSQL slices now extend across the four requested areas: sci
 | WP-11 / WP-12 | MRI closure/compiler v8 with context identity, localized events/gradients, participant/session/scan projection, EPI/phasediff/phase-pair and multi-echo closure, local stimulus assets and reference rewriting, exact transformation receipts, export/re-import equivalence and fixed-release sharing; hidden-column noninterference; versioned readiness, frozen MRI header-QC bundles and creator-only private inputs under current source authority | Additional dependency/recipe profiles, bounded delegation and institutional approval |
 | WP-13 | Pinned real dcm2niix conversion; explicit mapping/supplements/exclusions; retained input/output/log evidence; independent synthetic voxel/world-coordinate check | Scanner/vendor fixtures, representative geometry/timing review, automatic mapping and assignment registry |
 | WP-14 | Explicit XNAT API resource inventories and ZIP exports; streaming/checksums, experiment paging, source-change checks, local HTTP/API-export equivalence | Named installation, project/session/assessor survey, custom fields, participant reconciliation, full migration report and cutover |
-| WP-15 | External header-QC producer, exact input bundle/target/request/software/output receipts, explicit derivative profile, separately governed destination, staged/resumable collection, source-bound returned-value checks, durable local runs, explicit-base replacement releases, full scalar payload assessment, qualified temporal mean/SD maps through a common recipe interface and atomic admission | General execution scheduling, remote run credentials, stronger sandboxing, broader analysis/derivative qualification |
+| WP-15 | External header-QC producer, exact input bundle/target/request/software/output receipts, explicit derivative profile, separately governed destination, staged/resumable collection, source-bound returned-value checks, durable local runs, explicit-base replacement releases, full scalar payload assessment, qualified single- and multi-echo temporal mean/SD maps, coded geometry evidence and acquired-data qualification through a common recipe interface and atomic admission | General execution scheduling, remote run credentials, stronger sandboxing, broader analysis/derivative qualification |
 
 The current implementation represents a prepared view as an ordinary release in a separate dataset, accompanied by projection evidence. This reuses acceptance, immutable interpretation, export, custody and grants. A saved query remains a separate frozen selection. Source disclosure authority is required for a separately shared projected release; recipients can read that release without source access. Private processing bundles use a distinct activity kind and require their creator to retain current access to the fixed source; they cannot acquire independent sharing grants.
 
+Latest completed scientific tranche: [BOLD timing evidence, motes and qualification](bold-timing-plan.md).
 The subsequent F01 contracts, O01.1 service artifact and L01.1 demo contract are
 complete. Current engineering follows [EP9 and its ordered tranches](core-hardening-plan.md);
 the [epic and task guide](institutional-pilot-epics.md) retains later institutional work.
@@ -160,6 +161,21 @@ failure shows that one is necessary. Reopen design review only for such evidence
 or a deliberately expanded workflow.
 
 ### Verification record
+
+The [multi-echo temporal tranche](multiecho-temporal-plan.md) completed on **13
+October 2026** with **485 tests passed** (320 ordinary, 165 PostgreSQL), including
+138 shared lifecycle cases per catalog. Actual crash/retry and coordinated restore
+with current revocation passed. The isolated source build passed all 320 ordinary
+tests. Independent verification checked 2,687,048 multi-echo output voxels and all
+22 legacy numerical cases; the acquired four-echo fixture reproduced byte-for-byte.
+The demo produced six verified maps from one selected echo's three-image family,
+with retained-output publication, immutable history and current authority.
+[Exact source/command receipt](evidence/multiecho-temporal-verification.json) and
+[demo receipt](evidence/multiecho-temporal-demo.json) record the evidence and limits.
+All 16 work items and the epic are closed in mote. The upstream pin is unchanged;
+hosted CI remains a future execution.
+
+
 
 The coherent-analysis-input tranche's final gate on **13 October 2026** passed
 **414 Sanctity tests**: **265 ordinary and 149 PostgreSQL**, including **122 shared
@@ -699,3 +715,19 @@ Then select a production execution backend and qualify a real fMRIPrep workflow 
 OpenNeuro/DataLad exchange, DRS retrieval, further GA4GH integrations, and additional storage adapters remain separate qualified integrations. They inherit the same scientific object and authority rules.
 
 Success for this plan is a core whose next adapter needs a new interpreter or capability implementation, with no exception to the meaning of accepted data.
+
+
+### SBRef/calibration tranche — 13 October 2026
+
+The [16-mote calibration plan](calibration-input-plan.md) extends the scientific
+core with functional SBRef relationships, coherent view/curation behavior and
+versioned calibration readiness. The new contract retains complete functional
+inputs and runs the existing temporal recipe; it performs no distortion
+correction. Final qualification evidence is recorded in that plan and mote.
+
+### BOLD timing slice — 13 October 2026
+
+The [six-item timing plan](bold-timing-plan.md) closes the events-dependent timing
+assessment gap and adds bounded slice-axis evidence. It covers every BOLD image,
+coherent metadata projection, exact processing-input evidence and shared catalog
+lifecycle tests. Qualification and mote IDs are retained with that plan.

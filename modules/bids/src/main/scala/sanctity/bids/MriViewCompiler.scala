@@ -1,6 +1,6 @@
 package sanctity.bids
 
-import bids4s.{BidsContext, CheckedEvents, CheckedTsv, EventTiming}
+import bids4s.{BidsContext, CheckedEvents, CheckedTsv}
 import cats.syntax.all.*
 import io.circe.{Json, Printer}
 import io.circe.jawn.JawnParser
@@ -15,8 +15,8 @@ final class MriViewCompiler(bidsContext: BidsContext = BidsContext.Default) exte
   private val parser = new JawnParser(maxValueSize = Some(4 * 1024 * 1024), allowDuplicateKeys = false)
   private val referenceFields = Set("IntendedFor", "B0FieldSource", "B0FieldIdentifier")
   private val forbidden = Set("Sources", "RawSources", "AssociatedEmptyRoom", "M0Scan", "AnatomicalLandmarkCoordinates")
-  private val supportedKinds = Set("bids.b0-field-source", "bids.intended-for", "bids.dwi-gradients", "bids.task-events", "bids.phasediff-magnitudes", "bids.phase-pair-family", "bids.multi-echo-bold", "bids.event-stimuli")
-  private val structural = EventTiming.Fields ++ Set("TaskName", "PhaseEncodingDirection", "TotalReadoutTime", "EchoTime1", "EchoTime2", "EchoTime")
+  private val supportedKinds = Set("bids.b0-field-source", "bids.intended-for", "bids.dwi-gradients", "bids.task-events", "bids.phasediff-magnitudes", "bids.phase-pair-family", "bids.multi-echo-bold", "bids.event-stimuli", SbrefBindings.Kind)
+  private val structural = BoldTimingChecks.Fields ++ Set("TaskName", "PhaseEncodingDirection", "TotalReadoutTime", "EchoTime1", "EchoTime2", "EchoTime")
   private val fieldmapSuffixes = Set("epi", "phasediff", "phase1", "phase2", "magnitude1", "magnitude2")
   private val imageExtensions = Set("nii", "nii.gz")
 
@@ -28,11 +28,11 @@ final class MriViewCompiler(bidsContext: BidsContext = BidsContext.Default) exte
     val selected = selection.hits.map(_.path).toSet
     // A suffix query can include local gradients/tables. They are permitted only if
     // covered by the closure of selected primary images; they never create new roots.
-    val roots = selected.filter(p => facts.get(p).exists(f => imageExtensions(f.extension) && !fieldmapSuffixes(f.suffix)))
+    val roots = selected.filter(p => facts.get(p).exists(f => imageExtensions(f.extension) && !fieldmapSuffixes(f.suffix) && f.suffix != "sbref"))
     def supported(f: ArtifactFacts): Boolean =
-      imageExtensions(f.extension) && Set("T1w", "T2w", "bold", "dwi")(f.suffix) &&
+      imageExtensions(f.extension) && Set("T1w", "T2w", "bold", "dwi", "sbref")(f.suffix) &&
         !f.entities.keySet.exists(Set("part", "chunk", "recording", "sample", "flip", "inv", "mt")) &&
-        (!f.entities.contains("echo") || f.suffix == "bold")
+        (!f.entities.contains("echo") || Set("bold", "sbref")(f.suffix))
     for
       _ <- require(source.interpretation.profile.context.contains(BidsInterpreter.describe(bidsContext)),
         "source interpretation context differs from the compiler; explicitly reinterpret before transforming")
@@ -59,7 +59,7 @@ final class MriViewCompiler(bidsContext: BidsContext = BidsContext.Default) exte
       _ <- require(images.forall(f => supported(f) || (fieldmapSuffixes(f.suffix) && !f.entities.keySet.exists(Set("echo", "part", "chunk")))),
         "subset supports explicit EPI and resolved phasediff or phase-pair families")
       echoMembers = closure.relationships.filter(r => r.kind == "bids.multi-echo-bold" && roots(r.from)).flatMap(_.to).toSet
-      _ <- require(images.forall(f => roots(f.path) || echoMembers(f.path) || fieldmapSuffixes(f.suffix)), "dependency would add an unselected primary acquisition")
+      _ <- require(images.forall(f => roots(f.path) || echoMembers(f.path) || fieldmapSuffixes(f.suffix) || (f.suffix == "sbref" && closure.relationships.exists(r => r.kind == SbrefBindings.Kind && r.to.contains(f.path)))), "dependency would add an unselected primary acquisition")
       _ <- require(images.forall(f => selection.hits.exists(_.participant == f.participant)), "dependency crosses the selected participant scope")
       _ <- require(closure.relationships.filter(r => Set("bids.b0-field-source", "bids.intended-for")(r.kind))
         .forall(_.to.forall(p => facts.get(p).exists(f => fieldmapSuffixes(f.suffix)))), "fieldmap source is outside the supported MRI family profile")
@@ -70,7 +70,7 @@ final class MriViewCompiler(bidsContext: BidsContext = BidsContext.Default) exte
       _ <- images.traverse_ { f =>
         val expected = f.suffix match
           case "T1w" | "T2w" => "anat"
-          case "bold" => "func"
+          case "bold" | "sbref" => "func"
           case "dwi" => "dwi"
           case _ => "fmap"
         val directory = f.participant + f.session.fold("")("/" + _) + "/" + expected
@@ -78,7 +78,7 @@ final class MriViewCompiler(bidsContext: BidsContext = BidsContext.Default) exte
       }
       _ <- images.traverse_ { f =>
         val companions = source.interpretation.facts.filter(c => c.participant == f.participant && c.session == f.session &&
-          Set("sbref", "physio", "stim", "fieldmap")(c.suffix))
+          Set("physio", "stim", "fieldmap")(c.suffix))
         // Conservatively reject applicable companions outside the recorded vocabulary.
         require(!companions.exists(c => c.entities.forall { (k, v) =>
           f.entities.get(k).forall(w => equivalent(k, v, w))
@@ -247,7 +247,7 @@ final class MriViewCompiler(bidsContext: BidsContext = BidsContext.Default) exte
         outputs.size <= 10000 && outputs.map(_.collisionKey).distinct.size == outputs.size,
         "subset output has conflicting paths or exceeds 10000 files").map { _ =>
         ProjectionPlan(kept, made, ProjectionEvidence(source.ref, selection.id, profile.id,
-          "sanctity-mri-view-v8:" + BidsInterpreter.describe(bidsContext).id.value, made.map(_._1)), proof, decisions)
+          "sanctity-mri-view-v10:" + BidsInterpreter.describe(bidsContext).id.value, made.map(_._1)), proof, decisions)
       }
     }
 

@@ -11,11 +11,11 @@ import sanctity.kernel.*
   * removal of B0 group declarations. Unsupported reference vocabularies fail closed.
   */
 final class BidsChangeCompiler(bidsContext: BidsContext = BidsContext.Default) extends ScientificChangeCompiler:
-  val identity: String = "sanctity-bids-file-edits-v4:" + BuildIdentity.bids4s + ":" + BuildIdentity.sanctity + ":" + BidsInterpreter.describe(bidsContext).id.value
+  val identity: String = "sanctity-bids-file-edits-v5:" + BuildIdentity.bids4s + ":" + BuildIdentity.sanctity + ":" + BidsInterpreter.describe(bidsContext).id.value
   private val parser = new JawnParser(maxValueSize = Some(4 * 1024 * 1024), allowDuplicateKeys = false)
   private val printer = Printer.spaces2.copy(sortKeys = true)
   private val unsupportedReferences = Set("Sources", "RawSources", "AssociatedEmptyRoom", "M0Scan", "DatasetLinks")
-  private val suffixes = Set("T1w", "T2w", "bold", "dwi", "epi", "events", "phasediff", "phase1", "phase2", "magnitude1", "magnitude2") ++
+  private val suffixes = Set("T1w", "T2w", "bold", "sbref", "dwi", "epi", "events", "phasediff", "phase1", "phase2", "magnitude1", "magnitude2") ++
     (if bidsContext.name == RepositoryBidsContext.Behavioural.name then Set("beh") else Set.empty[String])
   private val extensions = Set("nii", "nii.gz", "json", "bval", "bvec", "tsv")
 
@@ -33,6 +33,22 @@ final class BidsChangeCompiler(bidsContext: BidsContext = BidsContext.Default) e
         !source.manifest.files.exists(f => f.path.fileName == "dataset_description.json" && f.path.parent.nonEmpty),
         "file edits require the current single raw dataset relationship profile")
       _ <- if bidsContext.name == RepositoryBidsContext.Behavioural.name then BehaviouralEdits.validate(source, edits, bidsContext) else Right(())
+      _ <- source.interpretation.relationships.toVector.flatMap(_.relationships).filter(_.kind == SbrefBindings.Kind).traverse_ { r =>
+        val members = r.from +: r.to
+        val affected = edits.filter(e => members.contains(e.source))
+        val destinations = affected.flatMap(e => e.destination.map(e.source -> _)).toMap
+        def entities(p: RelPath) = bidsContext.parseGeneric(p.fileName).toOption.map(n =>
+          SbrefBindings.normalized(n.entities.values.map((k, v) => k.short -> v).toMap))
+        val coherent = destinations.isEmpty || (for
+          bold <- destinations.get(r.from).flatMap(entities)
+          ref <- destinations.get(r.to.head).flatMap(entities)
+          oldRef <- entities(r.to.head)
+        yield (bold - "echo") == (ref - "echo") && ref.contains("echo") == oldRef.contains("echo") &&
+          ref.get("echo").forall(e => bold.get("echo").contains(e))).contains(true)
+        require(affected.isEmpty || (affected.map(_.source).toSet == members.toSet &&
+          affected.map(_.destination.isEmpty).distinct.size == 1 && coherent),
+          "BOLD and its SBRef images must move with matching acquisition/echo entities or be removed together")
+      }
       _ <- source.interpretation.relationships.toVector.flatMap(_.relationships).filter(_.kind == "bids.multi-echo-bold").traverse_ { r =>
         val members = (r.to :+ r.from).toSet
         val affected = edits.filter(e => members(e.source))
@@ -59,6 +75,9 @@ final class BidsChangeCompiler(bidsContext: BidsContext = BidsContext.Default) e
           _ <- require(suffixes(from.kind) && extensions(from.extension) &&
             !edit.source.value.split('/').exists(Set("derivatives", "sourcedata", "stimuli", "code", "phenotype")),
             "edit profile supports MRI images, sidecars, events and gradients; summary tables and dataset structure need another profile")
+          _ <- require(from.kind != "sbref" || !Set("nii", "nii.gz")(from.extension) ||
+            edit.source.parent.exists(_.fileName == "func"),
+            "SBRef image edits currently require the functional BOLD/reference association profile")
           _ <- edit.destination.traverse_ { to =>
             for
               target <- name(to)

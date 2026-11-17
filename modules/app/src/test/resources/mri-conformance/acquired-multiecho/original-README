@@ -1,0 +1,21 @@
+## Subjects
+There are 89 subject datasets, collected from consenting neurotypical subjects with standard inclusion/exclusion criteria (English speaking, right handed, no history of neurological or psychiatric illness) and the protocol was approved by the Cambridge IRB (LREC 11/EE/0198). Collection of the data was funded by MRC P008747/1 (V.V.)
+
+## Experimental Tasks
+BOLD data were collected eyes open at rest looking at a white screen. 4 echoes of a single 9.84 min multi-echo BOLD run, the echos are each single volumes.
+
+## Data Acquisition
+Data were acquired with a Siemens Trio 3T MRI Scanner and a 32-channel receive-only head coil. Functional images of 139 volumes (9.84 min) were acquired with an ME EPI sequence with online reconstruction [repetition time (TR), 2.47 s; flip angle, 78°; matrix size, 64 × 64; in-plane resolution, 3.75 mm; field of view (FOV), 240 mm; 32 oblique slices, alternating slice acquisition slice thickness 4.4 mm with 10% gap (ascending interleaved order, i.e., "alt+z2" in AFNI coding); iPAT factor, 3; bandwidth (BW) = 1,698 Hz/pixel; TE = 12, 28, 44, and 60 ms].
+
+Anatomical images were acquired using a T1-weighted magnetization prepared rapid gradient echo (MPRAGE) sequence [176 × 240 FOV; 1-mm in-plane resolution; inversion time (TI), 1,100 ms].
+
+## Comments added by Openfmri Curators
+
+### Defacing
+
+Pydeface was used on all anatomical images to ensure de-identification of subjects. The code
+can be found at https://github.com/poldracklab/pydeface
+
+### Quality Control
+
+MRIQC was run on the dataset. Results are located in derivatives/mriqc. Learn more about it here: https://mriqc.readthedocs.io/en/stable/

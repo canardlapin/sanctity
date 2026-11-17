@@ -1,0 +1,6 @@
+{
+  "PhaseEncodingDirection": "j",
+  "TotalReadoutTime": 0.05,
+  "TaskName": "cue",
+  "EchoTime": 0.01
+}

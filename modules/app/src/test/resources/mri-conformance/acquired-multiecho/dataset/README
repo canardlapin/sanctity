@@ -1,0 +1,3 @@
+Acquired OpenNeuro ds000258 sub-04570, first four volumes of each of four echoes.
+Retained voxel bytes and spatial/scaling headers are unchanged. Temporal dim[4] is 4.
+Small software qualification excerpt; not a complete run or scanner/clinical validation.

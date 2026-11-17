@@ -16,7 +16,7 @@ import scala.util.Try
 final class TemporalDerivativeInterpreter[F[_]: Async](store: BlobStore[F]) extends SemanticInterpreter[F]:
   private val parser = new JawnParser(maxValueSize = Some(1024 * 1024), allowDuplicateKeys = false)
   private val payload = new NiftiPayload[F](store)
-  private val profile = SemanticProfile(TemporalStatistics.Profile, BuildIdentity.bids4s, BuildIdentity.sanctity,
+  private def profile(version: String) = SemanticProfile(TemporalStatistics.profile(version), BuildIdentity.bids4s, BuildIdentity.sanctity,
     "Repository-local temporal mean/population-SD maps. Full payload, source grid, request and provenance checks; numerical correctness qualified by independent fixtures, not per-run recomputation.")
   def prepare(manifest: Manifest): F[(Interpretation, Assessment)] = assess(manifest, None, Vector.empty)
   override def prepare(manifest: Manifest, activity: Activity): F[(Interpretation, Assessment)] = assess(manifest, activity.processing, Vector.empty)
@@ -32,15 +32,19 @@ final class TemporalDerivativeInterpreter[F[_]: Async](store: BlobStore[F]) exte
 
   private def assess(manifest: Manifest, receipt: Option[ProcessingEvidence], sources: Vector[Release]): F[(Interpretation, Assessment)] =
     for
-      _ <- Checked.lift[F, Unit](Either.cond(manifest.files.size <= 1 + 4 * TemporalStatistics.MaxTargets, (), Problem.LimitExceeded("temporal profile exceeds eight series")))
+      _ <- Checked.lift[F, Unit](Either.cond(manifest.files.size <= 1 + 4 * TemporalStatistics.MaxExpandedTargets, (), Problem.LimitExceeded("temporal profile exceeds sixteen expanded series")))
       descriptionFile <- Checked.lift[F, Entry.File](manifest.files.find(_.path.value == "dataset_description.json").toRight(Problem.InvalidManifest("missing derivative description")))
       description <- json(descriptionFile.blob)
+      version <- Checked.lift[F, String](description.hcursor.downField("SanctityTemporalStatistics").get[String]("Profile").toOption
+        .flatMap(p => if p == TemporalStatistics.Profile then Some("1") else if p == TemporalStatistics.MultiEchoProfile then Some("2") else if p == TemporalStatistics.CalibratedProfile then Some("3") else None)
+        .toRight(Problem.Unsupported("unknown temporal derivative profile")))
+      contract = if version == "3" then TemporalStatistics.CalibratedContract else if version == "2" then TemporalStatistics.MultiEchoContract else TemporalStatistics.Contract
       docs <- manifest.files.filter(f => f.path.value.endsWith(".json") && f != descriptionFile).traverse(f => json(f.blob).map(f.path -> _)).map(_.toMap)
       targets <- Checked.lift[F, Vector[RelPath]](docs.values.toVector.traverse { j =>
         j.hcursor.get[Vector[String]]("Sources").toOption.filter(_.size == 1).flatMap(_.headOption).filter(_.startsWith("bids:input:"))
           .toRight(Problem.InvalidManifest("map needs one qualified source path")).flatMap(s => RelPath.from(s.stripPrefix("bids:input:")))
       }.map(_.distinct.sortBy(_.value)))
-      _ <- Checked.lift[F, Unit](Either.cond(targets.nonEmpty && targets.size <= TemporalStatistics.MaxTargets &&
+      _ <- Checked.lift[F, Unit](Either.cond(targets.nonEmpty && targets.size <= TemporalStatistics.maxTargets(contract) &&
         manifest.files.map(_.path.value).toSet == TemporalStatistics.files(targets), (), Problem.InvalidManifest("unexpected temporal map inventory")))
       images <- targets.traverse { source => TemporalStatistics.Statistics.traverse { statistic =>
         val f = manifest.files.find(_.path == TemporalStatistics.output(source, statistic)).get
@@ -53,7 +57,7 @@ final class TemporalDerivativeInterpreter[F[_]: Async](store: BlobStore[F]) exte
           if !ok then findings += Finding(code, Severity.Error, Some(at), message)
         val d = description.hcursor
         val declaration = d.downField("SanctityTemporalStatistics")
-        check(d.get[String]("DatasetType").contains("derivative") && declaration.get[String]("Profile").contains(TemporalStatistics.Profile),
+        check(d.get[String]("DatasetType").contains("derivative") && declaration.get[String]("Profile").contains(TemporalStatistics.profile(version)),
           "TemporalProfile", descriptionFile.path, "Expected explicit derivative and temporal-statistics profile")
         BidsJson.parseObject(QcDerivativeFormat.render(description)).foreach { value =>
           BidsMetadataValidation.datasetDescription(BidsPath(descriptionFile.path.value), value).foreach { i =>
@@ -73,11 +77,13 @@ final class TemporalDerivativeInterpreter[F[_]: Async](store: BlobStore[F]) exte
           d.get[Json]("SourceDatasets").contains(Json.arr(Json.obj("URL" -> Json.fromString(QcDerivativeFormat.sourceUri(ref)), "Version" -> Json.fromString(ref.release.render))))),
           "TemporalSource", descriptionFile.path, "Source release declaration and links must agree")
         check(declaration.get[Json]("Parameters").contains(QcDerivativeFormat.parameters(TemporalStatistics.Parameters)) &&
-          d.get[Json]("GeneratedBy").contains(Json.arr(Json.obj("Name" -> Json.fromString(TemporalStatistics.Producer), "Version" -> Json.fromString("1")))),
+          d.get[Json]("GeneratedBy").contains(Json.arr(Json.obj("Name" -> Json.fromString(TemporalStatistics.Producer), "Version" -> Json.fromString(version)))),
           "TemporalRecipe", descriptionFile.path, "Unsupported recipe or parameters")
-        val input = receipt.flatMap(p => sources.find(r => p.validateInput(r).isRight && r.activity.bundle.exists(_.readiness.contract == TemporalStatistics.Contract)))
-        val bound = receipt.forall(p => p.matches(manifest) && p.targets == targets && p.producer.name == TemporalStatistics.Producer &&
-          p.producer.version == "1" && p.parameters == TemporalStatistics.Parameters && input.exists(r =>
+        val input = receipt.flatMap(p => sources.find(r => p.validateInput(r).isRight && r.activity.bundle.exists(_.readiness.contract == contract)))
+        val ready = input.forall(r => new TemporalInputPlanner().assess(r.manifest, r.interpretation, r.assessment,
+          r.activity.bundle.get.readiness.roots, contract).exists(_.ready))
+        val bound = ready && receipt.forall(p => p.matches(manifest) && p.targets == targets && p.producer.name == TemporalStatistics.Producer &&
+          p.producer.version == version && p.parameters == TemporalStatistics.Parameters && input.exists(r =>
             description == TemporalStatistics.description(p.invocation, r, p.producer) && request.contains(TemporalStatistics.request(p.invocation, r, p.producer))))
         check(bound && (receipt.isEmpty || input.nonEmpty), "TemporalReceipt", descriptionFile.path, "Output, input contract or retained request differs from execution evidence")
         if receipt.isEmpty then findings += Finding("TemporalDeclaredProvenance", Severity.Warning, Some(descriptionFile.path),
@@ -87,9 +93,10 @@ final class TemporalDerivativeInterpreter[F[_]: Async](store: BlobStore[F]) exte
         val facts = Vector.newBuilder[ArtifactFacts]
         val checks = images.traverse { (source, statistic, f, result) =>
           val sidecar = TemporalStatistics.sidecarPath(source, statistic)
-          check(docs.get(sidecar).contains(TemporalStatistics.sidecar(source, statistic)), "TemporalSidecar", sidecar, "Map metadata differs from profile/source")
+          check(docs.get(sidecar).contains(TemporalStatistics.sidecar(source, statistic, version)), "TemporalSidecar", sidecar, "Map metadata differs from profile/source")
           val name = bids4s.BidsContext.Default.parsePath(BidsPath(source.value)).toOption
-          check(name.exists(n => n.kind == "bold" && Set("nii", "nii.gz")(n.extension)), "TemporalSourcePath", sidecar, "Source must be a BOLD image")
+          check(name.exists(n => n.kind == "bold" && Set("nii", "nii.gz")(n.extension) &&
+            (Set("2", "3")(version) || !n.entities.values.keys.exists(_.short == "echo"))), "TemporalSourcePath", sidecar, "Source must be a BOLD image")
           val entities = name.toVector.flatMap(_.entities.values.map((k, v) => k.short -> v)).toMap
           val fields = Map("Statistic" -> MetadataValue.Text(statistic), "Sources" -> MetadataValue.Array(Vector(MetadataValue.Text("bids:input:" + source.value))),
             "Algorithm" -> MetadataValue.Text("shifted-welford-v1"), "Ddof" -> MetadataValue.Number(0))
@@ -103,11 +110,19 @@ final class TemporalDerivativeInterpreter[F[_]: Async](store: BlobStore[F]) exte
           result.left.foreach(p => error(false, "TemporalPayload", p.message))
           result.foreach(o => error(o.header.dimensions.size == 3 && o.header.datatype == 64 && o.scaling.slope == 1 && o.scaling.intercept == 0 &&
             (statistic != "stddev" || o.minimum >= 0), "TemporalMap", "Expected finite unscaled float64 3D map and nonnegative standard deviation"))
+          if Set("2", "3")(version) then result.foreach(o => error(NiftiGeometry.inspect(o.header).isRight,
+            "TemporalCodedGeometry", "Output requires qualified coded geometry"))
           val external = input.toVector.flatMap { r => r.manifest.files.find(_.path == source).map(f => ReleasedArtifact(r.ref, r.interpretation.id, r.assessment.id, source, f.blob)) }
           input.foreach { r =>
-            val evidence = r.assessment.checks.find(c => c.target == source && c.rule == NiftiPayload.Rule && c.facts.get("complete").contains(MetadataValue.Flag(true)))
-            error(evidence.nonEmpty && result.exists(o => NiftiPayload.geometry(o.header).forall((k, v) => evidence.get.facts.get(k).contains(v))),
-              "TemporalGeometry", "Output grid/transforms must match assessed source geometry exactly")
+            val evidence = r.assessment.checks.find(c => c.target == source && c.rule == NiftiPayload.Rule && c.findings.isEmpty &&
+              c.facts.get("complete").contains(MetadataValue.Flag(true)) && r.manifest.files.find(_.path == source)
+                .exists(f => c.inputs == Vector(CheckInput("image", source, f.blob))))
+            val sourceGeometry = evidence.fold(Map.empty[String, MetadataValue]) { c =>
+              if Set("2", "3")(version) && c.facts.get("qfac").contains(MetadataValue.Number(0)) then c.facts.updated("qfac", MetadataValue.Number(1))
+              else c.facts
+            }
+            error(evidence.nonEmpty && result.exists(o => NiftiPayload.geometry(o.header).forall((k, v) => sourceGeometry.get(k).contains(v))),
+              "TemporalGeometry", "Output grid/transforms must preserve assessed source declarations; v2/v3 permit NIfTI qfac=0 to +1 normalization")
           }
           val metric = TemporalStatistics.metric(statistic)
           val metricValue = result.toOption.map(o => BigDecimal(o.mean.toString))
@@ -121,11 +136,11 @@ final class TemporalDerivativeInterpreter[F[_]: Async](store: BlobStore[F]) exte
         }
         for
           mapChecks <- checks
-          interpreted <- Interpretation.from(manifest.id, profile, metadata.result(), facts.result(), queryVersion = Some("scientific-query-v1"),
+          interpreted <- Interpretation.from(manifest.id, profile(version), metadata.result(), facts.result(), queryVersion = Some("scientific-query-v1"),
             declaredBidsVersion = d.get[String]("BIDSVersion").toOption, observations = observations.result())
           receiptChecks <- receipt.toVector.traverse { p => ContentCheck.from("processing-receipt-v1", descriptionFile.path,
             manifest.files.zipWithIndex.map((f, i) => CheckInput(s"output-$i", f.path, f.blob)),
             Map("receipt" -> MetadataValue.Text(p.id.value), "matches" -> MetadataValue.Flag(bound)), Vector.empty) }
-        yield interpreted -> Assessment.from(interpreted, TemporalStatistics.Profile, findings.result(), mapChecks ++ receiptChecks)
+        yield interpreted -> Assessment.from(interpreted, TemporalStatistics.profile(version), findings.result(), mapChecks ++ receiptChecks)
       }
     yield result

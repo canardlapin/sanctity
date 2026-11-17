@@ -85,7 +85,7 @@ abstract class CatalogSubsetSuite extends CatalogChangeSuite:
         _ = assert(preview.candidate.assessment.admissible, preview.candidate.assessment.errors.toString)
         accepted <- checked(s.repository.accept(s.context, preview.candidate.id, key("subset")))
         subset <- checked(s.catalog.release(s.context, accepted.release))
-        _ = assertEquals(subset.activity.projection.get.compiler, "sanctity-mri-view-v8:" + source.interpretation.profile.context.get.id.value)
+        _ = assertEquals(subset.activity.projection.get.compiler, "sanctity-mri-view-v10:" + source.interpretation.profile.context.get.id.value)
         receipt = subset.activity.projection.get.receipt.get
         _ = assert(receipt.matches(subset.manifest))
         _ = assertEquals(receipt.sourceContent, source.manifest.id)

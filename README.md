@@ -363,3 +363,32 @@ previously pinned Deno 2.5.4 executable at `target/conformance-tools/deno` (or
 `--deno /path/to/deno`). [Plan, motes and limits](docs/analysis-input-plan.md).
 Echo combination, SBRef, physiology, HED and scanner/registration qualification
 remain outside this profile.
+
+### Multi-echo temporal maps
+
+Opt into `PayloadBidsInterpreter(store, qualifyGeometry = true)` and
+`TemporalStatistics.MultiEchoContract` to process complete recorded echo families.
+Selecting one echo produces independent temporal mean/population-SD maps for every
+member, with exact source provenance and coded geometry qualification. The earlier
+single-echo contract remains supported.
+
+```sh
+export SANCTITY_MRI_PYTHON="$PWD/target/mri-python/bin/python"
+sbt 'app/runMain sanctity.app.MultiEchoTemporalDemo'
+target/mri-python/bin/python scripts/check-multiecho-temporal.py target/multiecho-qualification
+```
+
+The demo selects one echo, publishes six maps from three images after removing the
+execution workspace, verifies immutable history, and exercises current revocation.
+See the [plan, scientific limits and evidence](docs/multiecho-temporal-plan.md).
+
+
+Functional SBRef and explicit calibration bundles are documented in the
+[calibration plan](docs/calibration-input-plan.md). Run `sanctity.app.CalibrationInputDemo`
+with the pinned MRI Python environment to exercise complete functional inputs,
+per-echo mean/SD processing, publication, history and current authority.
+
+The [BOLD timing slice](docs/bold-timing-plan.md) assesses volume and slice timing
+even without an events table. It records explicit NIfTI slice-axis evidence and
+preserves slice direction through views and corrections. Reproduce independent
+header observations with `target/mri-python/bin/python scripts/check-bold-timing.py`.

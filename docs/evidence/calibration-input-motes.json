@@ -1,0 +1,170 @@
+{
+  "epic": "bd-01M4VWBJBBAC5HNMBGVWECDCH5",
+  "items": [
+    {
+      "key": "S1",
+      "id": "bd-01M4VWBJD5AR50PCCPRCXD7A9E",
+      "title": "Define bounded functional SBRef associations",
+      "dependsOn": [],
+      "acceptance": "Exact participant/session/directory and normalized acquisition entities; shared unindexed or complete indexed references, explicit ambiguity; document policy separately from BIDS validity."
+    },
+    {
+      "key": "S2",
+      "id": "bd-01M4VWBJEZPVJ6FMP619C6E36N",
+      "title": "Assess SBRef metadata and single-volume headers",
+      "dependsOn": [
+        "S1"
+      ],
+      "acceptance": "Bound header observations and relevant effective metadata origins; reject malformed rank or metadata without requiring BOLD timing semantics."
+    },
+    {
+      "key": "S3",
+      "id": "bd-01M4VWBJH6YM33EV5DDB8VW23Q",
+      "title": "Retain exact SBRef relationship evidence",
+      "dependsOn": [
+        "S1",
+        "S2"
+      ],
+      "acceptance": "Version semantic profile and graph; deterministic companion-selection evidence, ambiguity diagnostics and exact closure."
+    },
+    {
+      "key": "S4",
+      "id": "bd-01M4VWBJKS7QBJ0Z4NSQ4NN6BF",
+      "title": "Include SBRef in functional subset views",
+      "dependsOn": [
+        "S3"
+      ],
+      "acceptance": "Retain bytes, flatten approved metadata, preserve fieldmap dependencies, roundtrip complete reference closure."
+    },
+    {
+      "key": "S5",
+      "id": "bd-01M4VWBJNTWHZV9DDFY9QWBC8A",
+      "title": "Curate BOLD and SBRef associations coherently",
+      "dependsOn": [
+        "S3"
+      ],
+      "acceptance": "Atomic image family moves/removal, preserve indexed/shared association, reject partial edits; metadata correction remains independent."
+    },
+    {
+      "key": "C1",
+      "id": "bd-01M4VWBJQVV76KH50NTJRX9M31",
+      "title": "Declare calibrated functional readiness contracts",
+      "dependsOn": [
+        "S4"
+      ],
+      "acceptance": "Opt-in versioned requirements for optional/required reference and explicit EPI pair calibration, separate from existing processing algorithm."
+    },
+    {
+      "key": "C2",
+      "id": "bd-01M4VWBJT2N147XDKSRXDCHTG1",
+      "title": "Check calibration direction and readout metadata",
+      "dependsOn": [
+        "C1"
+      ],
+      "acceptance": "Require explicit source families, valid axis/sign and positive readout times; opposite directions under bounded same-grid policy."
+    },
+    {
+      "key": "C3",
+      "id": "bd-01M4VWBJW5VZ90XD6QGCQAK91X",
+      "title": "Bind reference and calibration geometry evidence",
+      "dependsOn": [
+        "C1"
+      ],
+      "acceptance": "Opt-in complete payload and coded geometry on companions with exact pairwise image/metadata binding; matching declarations are not registration."
+    },
+    {
+      "key": "C4",
+      "id": "bd-01M4VWBJYBWCENCA2K3HPHDVPP",
+      "title": "Report missing and ambiguous calibration clearly",
+      "dependsOn": [
+        "C2",
+        "C3"
+      ],
+      "acceptance": "Deterministic readiness evidence and actionable missing/ambiguous/unsupported/disallowed requirements, no proximity guessing."
+    },
+    {
+      "key": "Q1",
+      "id": "bd-01M4VWBK0TEM134RKBGHNHQD08",
+      "title": "Retain licensed acquired reference/calibration fixtures",
+      "dependsOn": [],
+      "acceptance": "Pin primary source, license, source hashes and honest bounded transformations; exercise actual BOLD/SBRef/EPI declarations."
+    },
+    {
+      "key": "Q2",
+      "id": "bd-01M4VWBK2RWX1T2FRS2GZSHSC1",
+      "title": "Qualify malformed calibration boundaries",
+      "dependsOn": [
+        "S5",
+        "C4"
+      ],
+      "acceptance": "Authored cases cover incomplete/mixed references, metadata, payload, geometry, evidence substitution, cross-session and family edits."
+    },
+    {
+      "key": "Q3",
+      "id": "bd-01M4VWBK55HS6HP0C22Z2CT41P",
+      "title": "Compare validator and export re-import evidence",
+      "dependsOn": [
+        "S4",
+        "Q1"
+      ],
+      "acceptance": "Pinned official validator observations distinct from recipe policy; independent geometry/bytes and complete export re-import comparisons."
+    },
+    {
+      "key": "L1",
+      "id": "bd-01M4VWBK7EWGGF4CW10TSKZCXQ",
+      "title": "Freeze complete calibrated bundles on both catalogs",
+      "dependsOn": [
+        "C4"
+      ],
+      "acceptance": "One BOLD selects complete echo/reference/events/stimuli/declared fieldmap closure; private bundle source evidence immutable."
+    },
+    {
+      "key": "L2",
+      "id": "bd-01M4VWBK9CVFVZY8JVXCCN4R21",
+      "title": "Execute existing recipes on qualified bundles",
+      "dependsOn": [
+        "L1"
+      ],
+      "acceptance": "Use existing temporal-statistics maps with exact input contract and bundle provenance; calibration companions do not change algorithm."
+    },
+    {
+      "key": "L3",
+      "id": "bd-01M4VWBKBGZ4FBAWJ44QA505A6",
+      "title": "Qualify calibration publication history and authority",
+      "dependsOn": [
+        "L2"
+      ],
+      "acceptance": "Workspace-loss publication/retry; corrections preserve history; current source policy gates private access/new publication."
+    },
+    {
+      "key": "L4",
+      "id": "bd-01M4VWBKDPFZYQHWH8BQPVJYCV",
+      "title": "Retain executable calibration demonstration and full gate",
+      "dependsOn": [
+        "L3",
+        "Q2",
+        "Q3"
+      ],
+      "acceptance": "Run ordinary/PostgreSQL/crash/restore and isolated source checks; retain demo, independent numerical evidence and final source receipt."
+    }
+  ],
+  "verifiedStatuses": {
+    "bd-01M4VWBJBBAC5HNMBGVWECDCH5": "closed",
+    "bd-01M4VWBJD5AR50PCCPRCXD7A9E": "closed",
+    "bd-01M4VWBJEZPVJ6FMP619C6E36N": "closed",
+    "bd-01M4VWBJH6YM33EV5DDB8VW23Q": "closed",
+    "bd-01M4VWBJKS7QBJ0Z4NSQ4NN6BF": "closed",
+    "bd-01M4VWBJNTWHZV9DDFY9QWBC8A": "closed",
+    "bd-01M4VWBJQVV76KH50NTJRX9M31": "closed",
+    "bd-01M4VWBJT2N147XDKSRXDCHTG1": "closed",
+    "bd-01M4VWBJW5VZ90XD6QGCQAK91X": "closed",
+    "bd-01M4VWBJYBWCENCA2K3HPHDVPP": "closed",
+    "bd-01M4VWBK0TEM134RKBGHNHQD08": "closed",
+    "bd-01M4VWBK2RWX1T2FRS2GZSHSC1": "closed",
+    "bd-01M4VWBK55HS6HP0C22Z2CT41P": "closed",
+    "bd-01M4VWBK7EWGGF4CW10TSKZCXQ": "closed",
+    "bd-01M4VWBK9CVFVZY8JVXCCN4R21": "closed",
+    "bd-01M4VWBKBGZ4FBAWJ44QA505A6": "closed",
+    "bd-01M4VWBKDPFZYQHWH8BQPVJYCV": "closed"
+  }
+}

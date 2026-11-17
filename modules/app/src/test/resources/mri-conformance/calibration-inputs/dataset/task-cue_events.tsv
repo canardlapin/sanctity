@@ -1,0 +1,5 @@
+onset	duration	trial_type	stim_file
+0	1	visual	images/red.ppm
+2	1	auditory	tone.txt
+4	1	visual	images/red.ppm
+5	0	catch	n/a

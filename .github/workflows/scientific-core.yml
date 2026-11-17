@@ -84,10 +84,23 @@ jobs:
       - run: bash scripts/setup-mri-python.sh
       - run: bash scripts/check-clean-source.sh
       - run: bash scripts/check-postgres.sh
-      - name: Independent behavioural qualification
+      - name: Independent scientific qualification
         run: |
+          target/mri-python/bin/python scripts/check-temporal-statistics.py --qualify target/temporal-qualification
+          target/mri-python/bin/python scripts/check-multiecho-temporal.py target/multiecho-qualification
+          target/mri-python/bin/python scripts/check-multiecho-temporal.py target/calibration-qualification --contract 3
+          target/mri-python/bin/python scripts/check-bold-timing.py
           sbt 'app/runMain sanctity.app.BehaviouralDemo' | tee target/behavioural-demo.log
           python3 scripts/check-behavioural.py --demo-log target/behavioural-demo.log --receipt target/behavioural-independent.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: temporal-numerical-evidence
+          path: |
+            target/temporal-qualification/report.json
+            target/multiecho-qualification/report.json
+            target/calibration-qualification/report.json
+          if-no-files-found: warn
       - name: Portable upstream semantics and public consumers
         run: |
           revision=$(sed -n 's/^sha256=//p' project/bids4s-source.properties)

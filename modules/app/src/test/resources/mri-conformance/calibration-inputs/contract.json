@@ -1,0 +1,87 @@
+{
+  "scope": "Independent BIDS conformance observations and stricter calibrated-v3 policy expectations; no ignored validator issues.",
+  "cases": [
+    {
+      "name": "complete",
+      "calibratedReady": true
+    },
+    {
+      "name": "missing-reference",
+      "delete": [
+        "sub-01/func/sub-01_task-cue_run-01_sbref.nii",
+        "sub-01/func/sub-01_task-cue_run-01_sbref.json"
+      ],
+      "calibratedReady": false
+    },
+    {
+      "name": "missing-readout",
+      "jsonRemove": {
+        "sub-01/func/sub-01_task-cue_run-01_sbref.json": [
+          "TotalReadoutTime"
+        ]
+      },
+      "calibratedReady": false
+    },
+    {
+      "name": "same-direction",
+      "jsonFields": {
+        "sub-01/fmap/sub-01_dir-PA_epi.json": {
+          "PhaseEncodingDirection": "j"
+        }
+      },
+      "calibratedReady": false
+    },
+    {
+      "name": "wrong-axis",
+      "jsonFields": {
+        "sub-01/fmap/sub-01_dir-PA_epi.json": {
+          "PhaseEncodingDirection": "i-"
+        }
+      },
+      "calibratedReady": false
+    },
+    {
+      "name": "reference-shift",
+      "floatPatches": {
+        "sub-01/func/sub-01_task-cue_run-01_sbref.nii": {
+          "268": 1
+        }
+      },
+      "calibratedReady": false
+    },
+    {
+      "name": "epi-shift",
+      "floatPatches": {
+        "sub-01/fmap/sub-01_dir-AP_epi.nii": {
+          "292": 1
+        }
+      },
+      "calibratedReady": false
+    },
+    {
+      "name": "reference-rank",
+      "copy": {
+        "sub-01/func/sub-01_task-cue_run-01_echo-1_bold.nii": "sub-01/func/sub-01_task-cue_run-01_sbref.nii"
+      },
+      "calibratedReady": false
+    },
+    {
+      "name": "invalid-direction",
+      "jsonFields": {
+        "sub-01/fmap/sub-01_dir-PA_epi.json": {
+          "PhaseEncodingDirection": "AP"
+        }
+      },
+      "calibratedReady": false
+    },
+    {
+      "name": "negative-readout",
+      "jsonFields": {
+        "sub-01/fmap/sub-01_dir-PA_epi.json": {
+          "TotalReadoutTime": -0.1
+        }
+      },
+      "calibratedReady": false
+    }
+  ]
+}

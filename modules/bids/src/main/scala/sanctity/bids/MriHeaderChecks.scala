@@ -13,9 +13,10 @@ final class MriHeaderChecks[F[_]](store: BlobStore[F])(using F: Async[F]):
 
   def inspect(manifest: Manifest, interpretation: Interpretation): F[(Vector[ContentCheck], Map[RelPath, Either[DwiIssue, NiftiHeaderFacts]])] =
     val files = manifest.files.map(f => f.path -> f).toMap
-    val targets = interpretation.facts.filter(f => Set("nii", "nii.gz")(f.extension) && MriHeaderConsistency.SupportedSuffixes(f.suffix))
+    val targets = interpretation.facts.filter(f => Set("nii", "nii.gz")(f.extension) && (MriHeaderConsistency.SupportedSuffixes(f.suffix) || f.suffix == "sbref"))
     for
-      headers <- targets.traverse(f => reader.read(files(f.path)).map(f.path -> _)).map(_.toMap)
+      observed <- targets.traverse(f => reader.observe(files(f.path)).map(f.path -> _)).map(_.toMap)
+      headers = observed.map((p, value) => p -> value.map(_.header))
       checks <- targets.traverse { target =>
         val image = files(target.path)
         val metadata = interpretation.byPath(target.path)
@@ -41,7 +42,8 @@ final class MriHeaderChecks[F[_]](store: BlobStore[F])(using F: Async[F]):
             common ++ header.toOption.toVector.flatMap(observations), findings))
         yield check
       }
-    yield (checks, headers)
+      timing <- Checked.lift[F, Vector[ContentCheck]](BoldTimingChecks.assess(manifest, interpretation, observed))
+    yield (checks ++ timing, headers)
 
   private def number(n: Double): MetadataValue =
     if n.isFinite then MetadataValue.Number(BigDecimal(n.toString))

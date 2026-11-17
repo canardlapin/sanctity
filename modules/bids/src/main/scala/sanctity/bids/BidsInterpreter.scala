@@ -18,8 +18,8 @@ final class BidsInterpreter[F[_]: Async](store: BlobStore[F], context: BidsConte
   private val totalLimit = 32L * 1024 * 1024
   private val parser = new JawnParser(maxValueSize = Some(4 * 1024 * 1024), allowDuplicateKeys = false)
   val profile: SemanticProfile = SemanticProfile(
-    "native-reference-v9", BuildIdentity.bids4s, BuildIdentity.sanctity,
-    "Context-selected bids4s names and JSON inheritance; basic description/timing checks. Strict participant TSV and scoped query facts. Explicit NIfTI B0 fieldmap groups and IntendedFor links. Inherited DWI gradients and BOLD event companions. DWI gradient parsing, scalar NIfTI-1/2 header counts and versioned norm checks. Strict selected BOLD event tables, explicit regular/variable timing context and contextual warnings. Phase-difference and phase1/phase2 magnitude families with exact echo-time origins. Bounded MRI dimensions, units, coded transform structure and TR/header comparison; discrepancies remain observations. Multi-echo BOLD families and local event stimulus references. No HED validation, anatomical alignment, gradient orientation, gzip payload or full BIDS conformance validation.",
+    "native-reference-v11", BuildIdentity.bids4s, BuildIdentity.sanctity,
+    "Context-selected bids4s names and JSON inheritance; basic description/timing checks. Strict participant TSV and scoped query facts. Explicit NIfTI B0 fieldmap groups and IntendedFor links. Inherited DWI gradients and BOLD event companions. DWI gradient parsing, scalar NIfTI-1/2 header counts and versioned norm checks. Strict selected BOLD event tables, explicit regular/variable timing context and contextual warnings. Phase-difference and phase1/phase2 magnitude families with exact echo-time origins. Bounded MRI dimensions, units, coded transform structure and TR/header comparison; discrepancies remain observations. Multi-echo BOLD families, exact functional SBRef companions and local event stimulus references. Every-BOLD volume and slice timing with declared NIfTI slice-axis evidence. No HED validation, anatomical alignment, gradient orientation, gzip payload or full BIDS conformance validation.",
     Some(BidsInterpreter.describe(context))
   )
 
@@ -59,7 +59,8 @@ final class BidsInterpreter[F[_]: Async](store: BlobStore[F], context: BidsConte
       dwiChecks <- new DwiContentChecks[F](store).assess(manifest, interpretation, headers)
       eventChecks <- new EventContentChecks[F](store).assess(manifest, interpretation, headers)
       echoChecks <- new MultiEchoChecks[F](store).assess(manifest, interpretation, headers)
-    yield interpretation -> Assessment.from(interpretation, assessment.policy, assessment.findings ++ stimulusFindings, dwiChecks ++ eventChecks ++ headerChecks ++ echoChecks)
+      sbrefChecks <- Checked.lift[F, Vector[ContentCheck]](SbrefBindings.assess(manifest, interpretation, headers))
+    yield interpretation -> Assessment.from(interpretation, assessment.policy, assessment.findings ++ stimulusFindings, dwiChecks ++ eventChecks ++ headerChecks ++ echoChecks ++ sbrefChecks)
 
   private def interpret(manifest: Manifest, decoded: Vector[(RelPath, Either[String, JsonValue.Obj])], participants: Vector[ParticipantFacts]): Either[Problem, (Interpretation, Assessment)] =
     val checked = BidsManifest.fromRelativePathsChecked(manifest.files.map(_.path.value), context = context)
@@ -103,14 +104,14 @@ final class BidsInterpreter[F[_]: Async](store: BlobStore[F], context: BidsConte
           }
           Some(ArtifactMetadata(file.path, fields, resolved.sources.map(s => relative(s.path)), resolved.datasetRoot.map(relative)))
     }
-    val facts = artifacts.flatMap { artifact =>
-      context.parsePath(BidsPath(artifact.path.value)).toOption.flatMap { name =>
+    def artifactFact(path: RelPath): Option[ArtifactFacts] =
+      context.parsePath(BidsPath(path.value)).toOption.flatMap { name =>
         val entities = name.entities.values.map((key, value) => key.short -> value).toMap
         entities.get("sub").map { subject =>
-          ArtifactFacts(artifact.path, s"sub-$subject", entities.get("ses").map("ses-" + _), name.kind, name.extension, entities)
+          ArtifactFacts(path, s"sub-$subject", entities.get("ses").map("ses-" + _), name.kind, name.extension, entities)
         }
       }
-    }
+    val facts = artifacts.flatMap(a => artifactFact(a.path))
     val resolved = resolutions.result().map(m => m.target -> m).toMap
     val families = bids4s.BidsPhaseDifferenceResolver.fromResolved(checked.value, resolved)
     families.issues.foreach(i => findings += Finding("Phasediff" + i.code.toString, Severity.Error, Some(relative(i.path)), i.message))
@@ -129,6 +130,12 @@ final class BidsInterpreter[F[_]: Async](store: BlobStore[F], context: BidsConte
             g.evidence.map(e => RelationshipEvidence(relative(e.artifact), relative(e.document), e.field)))
       }
     }
+    val (resolvedSbrefs, sbrefFindings) = SbrefBindings.resolve(targets.flatMap(f => artifactFact(f.path)))
+    val resolvedArtifacts = artifacts.map(_.path).toSet
+    val sbrefLinks = resolvedSbrefs.filter(r => (r.from +: r.to).forall(resolvedArtifacts))
+    if sbrefLinks.size != resolvedSbrefs.size then
+      findings += Finding("SbrefMetadata", Severity.Error, None, "Applicable SBRef or BOLD metadata could not be resolved")
+    sbrefFindings.foreach(findings += _)
     val fieldmaps = BidsFieldmapResolver.fromResolved(checked.value, resolved)
     val phasePairs = bids4s.BidsPhasePairResolver.fromResolved(checked.value, resolved)
     phasePairs.issues.foreach(i => findings += Finding("PhasePair" + i.code.toString, Severity.Error, Some(relative(i.path)), i.message))
@@ -196,10 +203,10 @@ final class BidsInterpreter[F[_]: Async](store: BlobStore[F], context: BidsConte
         }
     }
     for
-      graph <- RelationshipGraph.from(BidsInterpreter.RelationshipVersion, links ++ companionLinks ++ familyLinks ++ pairLinks ++ echoLinks, artifacts, evidenceVersion = 2)
+      graph <- RelationshipGraph.from(BidsInterpreter.RelationshipVersion, links ++ companionLinks ++ familyLinks ++ pairLinks ++ echoLinks ++ sbrefLinks, artifacts, evidenceVersion = 2)
       interpretation <- Interpretation.from(manifest.id, profile, artifacts, facts, participants, Some("scientific-query-v1"), Some(graph),
         sidecars.get(BidsPath("dataset_description.json")).flatMap(_.fields.get("BIDSVersion")).collect { case JsonValue.Str(v) => v })
-    yield interpretation -> Assessment.from(interpretation, "reference-admission-v8", findings.result())
+    yield interpretation -> Assessment.from(interpretation, "reference-admission-v10", findings.result())
 
   // All paths here originate in the already checked repository manifest.
   private def relative(path: BidsPath): RelPath =
@@ -234,13 +241,13 @@ final class BidsInterpreter[F[_]: Async](store: BlobStore[F], context: BidsConte
     case JsonValue.Null => MetadataValue.Null
 
 object BidsInterpreter:
-  val RelationshipVersion: String = "bids-mri-relationships-v6"
+  val RelationshipVersion: String = "bids-mri-relationships-v7"
 
   def describe(context: BidsContext): SemanticContext =
     SemanticContext.from(context.name, context.specificationVersion, context.coverage, context.registryTokens,
       context.ruleVersions ++ Map("repository-query" -> "scientific-query-v1",
-        "events" -> bids4s.CheckedEvents.Version, "event-timing" -> bids4s.EventTiming.Version,
+        "bold-timing" -> BoldTimingChecks.Version, "events" -> bids4s.CheckedEvents.Version, "event-timing" -> bids4s.EventTiming.Version,
         "dwi" -> bids4s.DwiConsistency.Version, "nifti" -> bids4s.NiftiHeaderFacts.Version, "mri-header" -> bids4s.MriHeaderConsistency.Version,
         "phase-pair" -> bids4s.BidsPhasePairResolver.Version,
-        "multi-echo" -> bids4s.BidsMultiEchoResolver.Version, "stimuli" -> bids4s.BidsStimulusResolver.Version))
+        "sbref" -> SbrefBindings.Version, "multi-echo" -> bids4s.BidsMultiEchoResolver.Version, "stimuli" -> bids4s.BidsStimulusResolver.Version))
       .fold(p => throw sanctity.application.Failure(p), identity)

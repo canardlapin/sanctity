@@ -1,0 +1,339 @@
+{
+  "bids4sFingerprint": "sha256:2577f05b60ca05900991bfc054a276461d1339164d0359a0b21e2464e4cff346",
+  "bundle": "67d6ba8bafadfd24921e6424351ac75c921caf8100dd51efde9f705f3923082e",
+  "contract": "3",
+  "correctedSource": "61cccee9-4fe3-4742-ad21-eab5295a9ca8",
+  "executionWorkspaceRemoved": true,
+  "fieldmaps": [
+    "sub-01/fmap/sub-01_dir-AP_epi.nii",
+    "sub-01/fmap/sub-01_dir-PA_epi.nii"
+  ],
+  "independentlyCheckedMapVoxels": 48,
+  "input": "464ea6e8-782a-4d86-9eea-b6cb1f63610d",
+  "inputs": [
+    {
+      "path": "dataset_description.json",
+      "sha256": "3ebc57010e680de709e663ea529991e613ea32c94e23d38af28d9def30f92377",
+      "size": 118
+    },
+    {
+      "path": "participants.tsv",
+      "sha256": "a3f1467aa0689eb2dbe516c699225bc68f31b230bf81232c712b756ffa41fcdb",
+      "size": 22
+    },
+    {
+      "path": "stimuli/images/red.ppm",
+      "sha256": "c940efc28573af63c6ebbfeb23e69ded35c645b0dca6c4553d62aa1977912614",
+      "size": 19
+    },
+    {
+      "path": "stimuli/tone.txt",
+      "sha256": "e3261777de92fc9a6f050d601fac3516f07cbd19fd3b7f2d28cf8aa5d5aeeb23",
+      "size": 51
+    },
+    {
+      "path": "sub-01/fmap/sub-01_dir-AP_epi.json",
+      "sha256": "966bc8acd0a08070278fe736fe5ed5bd7e61887244da03fe4b295a7bd39bce79",
+      "size": 98
+    },
+    {
+      "path": "sub-01/fmap/sub-01_dir-AP_epi.nii",
+      "sha256": "1ec7946abcc743a564f946fff73303277d6abb45efaa9039af2a078ccfc320f1",
+      "size": 384
+    },
+    {
+      "path": "sub-01/fmap/sub-01_dir-PA_epi.json",
+      "sha256": "894d763351296aedfbe2ecbb510d9fcfeba8076f2576b90100fdb067a04ac6a4",
+      "size": 99
+    },
+    {
+      "path": "sub-01/fmap/sub-01_dir-PA_epi.nii",
+      "sha256": "29964e1e14829babcec01f6af89685164ac975f0af656b73e776bef0a23924ae",
+      "size": 384
+    },
+    {
+      "path": "sub-01/func/sub-01_task-cue_run-01_echo-1_bold.json",
+      "sha256": "8b35836e6279c77187e6f4182c2cc1fde4506206793bf84e4594f114c36b74db",
+      "size": 163
+    },
+    {
+      "path": "sub-01/func/sub-01_task-cue_run-01_echo-1_bold.nii",
+      "sha256": "00147f06726a8784000000e5e4b53af3b129cae87938103d4abc721919ca924d",
+      "size": 448
+    },
+    {
+      "path": "sub-01/func/sub-01_task-cue_run-01_echo-2_bold.json",
+      "sha256": "a156a82e345612032ca8c2679bfac1561e32b3ad1508667c31bdf9efcd5aa26e",
+      "size": 163
+    },
+    {
+      "path": "sub-01/func/sub-01_task-cue_run-01_echo-2_bold.nii",
+      "sha256": "61f0b5cb032dcad33f6bee27474a71ac490b05209c353a99ca36933ad8e7e849",
+      "size": 448
+    },
+    {
+      "path": "sub-01/func/sub-01_task-cue_run-01_echo-3_bold.json",
+      "sha256": "14ccfefb3f9c51d2368ae37b650803225f8cb06e0a44b190215b71b3e242e62b",
+      "size": 163
+    },
+    {
+      "path": "sub-01/func/sub-01_task-cue_run-01_echo-3_bold.nii",
+      "sha256": "7a3294c16b677b225230927794fdc7f05487cfc3bd9a0458c760a5f702ecf15d",
+      "size": 448
+    },
+    {
+      "path": "sub-01/func/sub-01_task-cue_run-01_events.json",
+      "sha256": "b78856c9db0eac72d637c60d99223ef1a132130e33ed119d4907d88d3f2d51e6",
+      "size": 135
+    },
+    {
+      "path": "sub-01/func/sub-01_task-cue_run-01_events.tsv",
+      "sha256": "480644b94220319a9c401d7241149cf8b70e22656a372318cd3dfa71662be989",
+      "size": 124
+    },
+    {
+      "path": "sub-01/func/sub-01_task-cue_run-01_sbref.json",
+      "sha256": "76ca8f7cee44f44afab6f25630eeaf50f2a231d6f9088956420aa73f9a57509e",
+      "size": 109
+    },
+    {
+      "path": "sub-01/func/sub-01_task-cue_run-01_sbref.nii",
+      "sha256": "7124ebfabab6c59ae0c7e4d6d6640df2d0c0ca574b0d47df6b7b14c937e52f90",
+      "size": 384
+    }
+  ],
+  "maps": 6,
+  "output": "b7d7b207-dba1-4765-93d1-1ea4678b5627",
+  "outputs": [
+    {
+      "path": "dataset_description.json",
+      "sha256": "a239f5f95ae1d6c7ca213532af68aed14433246ef8d43678b23b557a04a82f53",
+      "size": 1203
+    },
+    {
+      "path": "sub-01/func/sub-01_task-cue_run-01_echo-1_desc-temporalMean_statmap.json",
+      "sha256": "861c9c78f2c33140e5495cc31bacc6bf040f3d3e870a4bb87bb3c1d62b4fbf9b",
+      "size": 647
+    },
+    {
+      "path": "sub-01/func/sub-01_task-cue_run-01_echo-1_desc-temporalMean_statmap.nii",
+      "sha256": "1ed5c7c6f9b7050cb25b23ea6d5ed962ed0c07f028beabc9e7d91c2742e1ebe5",
+      "size": 416
+    },
+    {
+      "path": "sub-01/func/sub-01_task-cue_run-01_echo-1_desc-temporalStddev_statmap.json",
+      "sha256": "ea16163aff477d8f60b6a05643c819dfb83007510f465d33111fe64bd8aaf8ad",
+      "size": 649
+    },
+    {
+      "path": "sub-01/func/sub-01_task-cue_run-01_echo-1_desc-temporalStddev_statmap.nii",
+      "sha256": "c8260d94d9b5e6f886aa87627672a6293b57c774fa5453bfd18cf5bde4f8bc60",
+      "size": 416
+    },
+    {
+      "path": "sub-01/func/sub-01_task-cue_run-01_echo-2_desc-temporalMean_statmap.json",
+      "sha256": "5b76afd737ff84cdb39fd1b45aaff31e29cc97096f11ba48d0aa904ec6a58991",
+      "size": 647
+    },
+    {
+      "path": "sub-01/func/sub-01_task-cue_run-01_echo-2_desc-temporalMean_statmap.nii",
+      "sha256": "e12013f0b861cf4c85380179018ff300f141acc11eed66a342c7d1fefa153f0d",
+      "size": 416
+    },
+    {
+      "path": "sub-01/func/sub-01_task-cue_run-01_echo-2_desc-temporalStddev_statmap.json",
+      "sha256": "9aae540898400eca078fb90871744ad117701f2b8c38e45b8dd4599224456592",
+      "size": 649
+    },
+    {
+      "path": "sub-01/func/sub-01_task-cue_run-01_echo-2_desc-temporalStddev_statmap.nii",
+      "sha256": "c8260d94d9b5e6f886aa87627672a6293b57c774fa5453bfd18cf5bde4f8bc60",
+      "size": 416
+    },
+    {
+      "path": "sub-01/func/sub-01_task-cue_run-01_echo-3_desc-temporalMean_statmap.json",
+      "sha256": "5a5c5db309a3f6d9f1fceabe4a3d29a76ce986f7bf2efa6d044f8dafa6bab6ca",
+      "size": 647
+    },
+    {
+      "path": "sub-01/func/sub-01_task-cue_run-01_echo-3_desc-temporalMean_statmap.nii",
+      "sha256": "c6e803dfa8719a88360bbfcbf708c10f0ed41a1b58362df31f86fe01ffa91c2e",
+      "size": 416
+    },
+    {
+      "path": "sub-01/func/sub-01_task-cue_run-01_echo-3_desc-temporalStddev_statmap.json",
+      "sha256": "b2ca42e7068c23087feb8cd88670b70134558840540b06b0c7dede44f80d7a82",
+      "size": 649
+    },
+    {
+      "path": "sub-01/func/sub-01_task-cue_run-01_echo-3_desc-temporalStddev_statmap.nii",
+      "sha256": "c8260d94d9b5e6f886aa87627672a6293b57c774fa5453bfd18cf5bde4f8bc60",
+      "size": 416
+    }
+  ],
+  "processedEchoes": 3,
+  "processing": "20aeaa28d8799fcd65b94873c6b85d1cfefacaea4bbdc6a60e865902f5e97b27",
+  "publication": "28eaefc687ed88d7fa3307a2dce28bb57739fef59479cef493bd595bac2fd9cc",
+  "reference": "sub-01/func/sub-01_task-cue_run-01_sbref.nii",
+  "revokedInputDenied": true,
+  "revokedPublicationDenied": true,
+  "run": "50d24e2b-0b9d-4ef8-a5e1-5c91e09abf68",
+  "selectedEchoes": 1,
+  "source": "a7c3d0c6-9b58-4666-a166-2b9eeed782fb",
+  "sourceFingerprint": "sha256:e9add4d7967d336efac343e5242d468cfbbe419214793cf6f8820ef798284cf2",
+  "workspace": "target/calibration-input-demo-4090410948156844899",
+  "independentVerification": {
+    "inputFilesVerified": 18,
+    "outputFilesVerified": 13,
+    "requestSha256": "fd6ac01d964d726fe63d0ecc425acc8ecd47503f2410dddb28737d637e44dc80",
+    "numerical": {
+      "checkedOutputVoxels": 48,
+      "maximumAbsoluteError": 0.0,
+      "absoluteTolerance": 1e-10,
+      "relativeTolerance": 1e-12
+    },
+    "officialRoundtrip": {
+      "case": "roundtrip",
+      "officialErrors": [],
+      "officialWarnings": [
+        [
+          "JSON_KEY_RECOMMENDED",
+          "GeneratedBy"
+        ],
+        [
+          "JSON_KEY_RECOMMENDED",
+          "HEDVersion"
+        ],
+        [
+          "JSON_KEY_RECOMMENDED",
+          "SourceDatasets"
+        ],
+        [
+          "NO_AUTHORS",
+          "Authors"
+        ],
+        [
+          "README_FILE_MISSING",
+          ""
+        ],
+        [
+          "SIDECAR_KEY_RECOMMENDED",
+          "CogAtlasID"
+        ],
+        [
+          "SIDECAR_KEY_RECOMMENDED",
+          "CogPOID"
+        ],
+        [
+          "SIDECAR_KEY_RECOMMENDED",
+          "CoilCombinationMethod"
+        ],
+        [
+          "SIDECAR_KEY_RECOMMENDED",
+          "DeviceSerialNumber"
+        ],
+        [
+          "SIDECAR_KEY_RECOMMENDED",
+          "DwellTime"
+        ],
+        [
+          "SIDECAR_KEY_RECOMMENDED",
+          "EchoTime"
+        ],
+        [
+          "SIDECAR_KEY_RECOMMENDED",
+          "FlipAngle"
+        ],
+        [
+          "SIDECAR_KEY_RECOMMENDED",
+          "InstitutionAddress"
+        ],
+        [
+          "SIDECAR_KEY_RECOMMENDED",
+          "InstitutionName"
+        ],
+        [
+          "SIDECAR_KEY_RECOMMENDED",
+          "InstitutionalDepartmentName"
+        ],
+        [
+          "SIDECAR_KEY_RECOMMENDED",
+          "Instructions"
+        ],
+        [
+          "SIDECAR_KEY_RECOMMENDED",
+          "MRAcquisitionType"
+        ],
+        [
+          "SIDECAR_KEY_RECOMMENDED",
+          "MagneticFieldStrength"
+        ],
+        [
+          "SIDECAR_KEY_RECOMMENDED",
+          "Manufacturer"
+        ],
+        [
+          "SIDECAR_KEY_RECOMMENDED",
+          "ManufacturersModelName"
+        ],
+        [
+          "SIDECAR_KEY_RECOMMENDED",
+          "MatrixCoilMode"
+        ],
+        [
+          "SIDECAR_KEY_RECOMMENDED",
+          "NonlinearGradientCorrection"
+        ],
+        [
+          "SIDECAR_KEY_RECOMMENDED",
+          "PulseSequenceDetails"
+        ],
+        [
+          "SIDECAR_KEY_RECOMMENDED",
+          "PulseSequenceType"
+        ],
+        [
+          "SIDECAR_KEY_RECOMMENDED",
+          "ReceiveCoilActiveElements"
+        ],
+        [
+          "SIDECAR_KEY_RECOMMENDED",
+          "ReceiveCoilName"
+        ],
+        [
+          "SIDECAR_KEY_RECOMMENDED",
+          "ScanningSequence"
+        ],
+        [
+          "SIDECAR_KEY_RECOMMENDED",
+          "SequenceName"
+        ],
+        [
+          "SIDECAR_KEY_RECOMMENDED",
+          "SequenceVariant"
+        ],
+        [
+          "SIDECAR_KEY_RECOMMENDED",
+          "SoftwareVersions"
+        ],
+        [
+          "SIDECAR_KEY_RECOMMENDED",
+          "StationName"
+        ],
+        [
+          "SIDECAR_KEY_RECOMMENDED",
+          "StimulusPresentation"
+        ],
+        [
+          "SIDECAR_KEY_RECOMMENDED",
+          "TaskDescription"
+        ],
+        [
+          "TOO_FEW_AUTHORS",
+          ""
+        ]
+      ]
+    },
+    "runtimeFingerprintVerifiedAgainstCurrentSources": true
+  }
+}

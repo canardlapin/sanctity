@@ -16,7 +16,7 @@ import scala.concurrent.duration.*
   */
 final class TemporalProducer[F[_]: Async](catalog: Catalog[F], store: BlobStore[F], repository: NativeRepository[F],
     ids: IdSource[F], python: Path) extends LocalRecipe[F]:
-  def supports(contract: InputContract): Boolean = contract == TemporalStatistics.Contract
+  def supports(contract: InputContract): Boolean = TemporalStatistics.supports(contract)
   private val F = Async[F]
   private val environment = Some(Map("PATH" -> "/usr/bin:/bin", "LC_ALL" -> "C", "PYTHONNOUSERSITE" -> "1", "OPENBLAS_NUM_THREADS" -> "1", "OMP_NUM_THREADS" -> "1"))
 
@@ -33,7 +33,7 @@ final class TemporalProducer[F[_]: Async](catalog: Catalog[F], store: BlobStore[
         release <- catalog.release(ctx, input).flatMap(Checked.lift[F, Release])
         bundle <- Checked.lift[F, BundleEvidence](release.activity.bundle.filter(_.matches(release.manifest,
           release.interpretation, release.assessment, release.activity.projection)).toRight(Problem.Unsupported("producer requires an accepted processing bundle")))
-        _ <- Checked.lift[F, Unit](Either.cond(supports(bundle.readiness.contract), (), Problem.Unsupported("requires temporal statistics input contract v1")))
+        _ <- Checked.lift[F, Unit](Either.cond(supports(bundle.readiness.contract), (), Problem.Unsupported("requires temporal statistics input contract v1, v2 or calibrated v3")))
         ready <- Checked.lift[F, InputReadiness](new TemporalInputPlanner().assess(release.manifest, release.interpretation, release.assessment,
           bundle.readiness.roots, bundle.readiness.contract))
         _ <- Checked.lift[F, Unit](Either.cond(ready.ready && release.manifest.files.map(f => BigInt(f.blob.size)).sum <= NiftiPayload.MaxBytes,
@@ -54,7 +54,7 @@ final class TemporalProducer[F[_]: Async](catalog: Catalog[F], store: BlobStore[
         }
         version <- ManagedProcess.run[F](Vector(python.toAbsolutePath.toString, "-I", workspace.resolve("producer.py").toString, "--identity"), workspace, 30.seconds, 1024, environment)
         _ <- Checked.lift[F, Unit](Either.cond(version.exitCode == 0, (), Problem.Operational("cannot identify Python runtime")))
-        producer = ProducerIdentity(TemporalStatistics.Producer, "1", codeBlob,
+        producer = ProducerIdentity(TemporalStatistics.Producer, bundle.readiness.contract.version, codeBlob,
           new String(version.output.toArray, StandardCharsets.UTF_8).trim + ";sha256:" + executableDigest.value)
         invocation <- run.fold(ids.next[RunTag])(F.pure)
         roots = bundle.readiness.roots

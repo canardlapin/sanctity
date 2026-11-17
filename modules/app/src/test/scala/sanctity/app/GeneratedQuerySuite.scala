@@ -7,7 +7,7 @@ import sanctity.kernel.*
 import sanctity.objects.NativeDirectorySource
 import java.nio.file.Path
 
-abstract class CatalogGeneratedQuerySuite extends CatalogTemporalSuite:
+abstract class CatalogGeneratedQuerySuite extends CatalogCalibrationInputSuite with BoldTimingCases:
   protected def fixture(run: (RepositorySystem, Path) => IO[Unit]): Unit
   private def checked[A](f: IO[Either[Problem, A]]): IO[A] = f.flatMap(Checked.lift[IO, A])
   private def key(s: String): IdempotencyKey = IdempotencyKey.from(s).toOption.get

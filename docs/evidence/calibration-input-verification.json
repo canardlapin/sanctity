@@ -1,0 +1,2564 @@
+{
+  "completed": "2026-10-13",
+  "scope": "SBRef and calibration-aware functional bundles",
+  "sourceFingerprint": "sha256:e9add4d7967d336efac343e5242d468cfbbe419214793cf6f8820ef798284cf2",
+  "bids4sFingerprint": "sha256:2577f05b60ca05900991bfc054a276461d1339164d0359a0b21e2464e4cff346",
+  "upstreamArchiveSha256": "19f022d002f69292dec056eb0762b877438c47305cee6c176adf3e0f780e9146",
+  "tests": {
+    "ordinary": 415,
+    "postgresql": 201,
+    "sharedLifecycleEachCatalog": 174,
+    "isolatedOrdinary": 415,
+    "total": 616
+  },
+  "gates": {
+    "databaseCrashRetry": true,
+    "closedRestore": true,
+    "currentPolicyReconciliationAndRevocation": true,
+    "isolatedSourcesMatch": true,
+    "diffCheck": true,
+    "all16MotesAndEpicClosed": true
+  },
+  "numerical": {
+    "1": {
+      "cases": 22,
+      "checkedOutputVoxels": 1129616,
+      "maximumAbsoluteError": 6.821210263296962e-13,
+      "rejectedRequests": 0
+    },
+    "2": {
+      "cases": 9,
+      "checkedOutputVoxels": 2687048,
+      "maximumAbsoluteError": 6.821210263296962e-13,
+      "rejectedRequests": 7
+    },
+    "3": {
+      "cases": 9,
+      "checkedOutputVoxels": 2687048,
+      "maximumAbsoluteError": 6.821210263296962e-13,
+      "rejectedRequests": 7
+    }
+  },
+  "independentImages": 9,
+  "independentInputVoxels": 4607200,
+  "officialCases": 10,
+  "acquiredEpiMaximumCornerDistanceMm": 4.772346267546532,
+  "reproducedFiles": {
+    "acquired-calibration": 10,
+    "calibration-inputs": 22
+  },
+  "demo": "docs/evidence/calibration-input-demo.json",
+  "workspaces": {
+    "recovery": "target/postgres-check.RMm2zz",
+    "isolatedBuild": "target/clean-source.8uvmNr",
+    "demo": "target/calibration-input-demo-4090410948156844899"
+  },
+  "logs": {
+    "target/calibration-postgres-complete.log": "b8f22ff93a22a5f380ddbdd7c202eed8640c3b3a53a03b89d45ed53b47cc2a04",
+    "target/calibration-clean-source-complete.log": "87c535679e3a1360bd244a9be680b0f9d7c3d701f1028144b5524357099f654a",
+    "target/calibration-demo-complete.log": "bd3f645716151c75f82da5e1582e06859667f20940f695256ddfca01bc90af4c",
+    "target/calibration-roundtrip-complete.log": "a42c256d66031eec755d5a4bdf1419571179f662a70c0db5e53e5e66c9d5e1b4"
+  },
+  "sourceSnapshot": {
+    "baseRevision": "eff6e100ea3a2101809e366578e47d07375c2f00",
+    "archive": "sanctity.zip",
+    "sha256": "567b8c6ebc849e09f70d14dec0dc1a1fa148da5c65d925315e348d9a96703570",
+    "files": [
+      {
+        "path": ".github/workflows/scientific-core.yml",
+        "size": 3134,
+        "sha256": "50f8552e79f6f148254e3d9d52e4ece88c1119baed0816624c22a02dfaeea8af"
+      },
+      {
+        "path": ".gitignore",
+        "size": 79,
+        "sha256": "aa52fc2f33418fbd39bb8eb72eef06780e5469b41aeb358366f7808bc98464bc"
+      },
+      {
+        "path": "README.md",
+        "size": 30268,
+        "sha256": "f49f34a6d993d7361919791f71f812641440c467c76d29d5c45ae20c67d3ea67"
+      },
+      {
+        "path": "build.sbt",
+        "size": 5310,
+        "sha256": "5f68b88aad4a5597bc5a41aef5d4b84ac83af22515ff1bb344819d7820b20d39"
+      },
+      {
+        "path": "docs/analysis-input-plan.md",
+        "size": 12349,
+        "sha256": "973967c754ccc989737efbffec0fed21b90b735941e7149ebffa30e90912a010"
+      },
+      {
+        "path": "docs/bids4s-integration.md",
+        "size": 20245,
+        "sha256": "6e8a2b4967bfa89cd3b482aec8266f03b4b912afb35d2ab18475d85fe269c3b3"
+      },
+      {
+        "path": "docs/calibration-input-plan.md",
+        "size": 14526,
+        "sha256": "362b032f01102c9d84b4c30d9a102867c6e424f8231ea3aa88e5215a65887f2c"
+      },
+      {
+        "path": "docs/decisions-and-evidence.md",
+        "size": 47406,
+        "sha256": "237a9af6c1bd562dd0c17eda03e0177a11b24c37531dac38a5ef6b7c3acb1e4e"
+      },
+      {
+        "path": "docs/design-baseline.md",
+        "size": 30759,
+        "sha256": "545ff95a57037733e5aa6884d666c7ce3cf7417cc39ec17b4268efa23986f836"
+      },
+      {
+        "path": "docs/evidence/analysis-input-demo.json",
+        "size": 3748,
+        "sha256": "71d49bca3f1073c2f0212e7612d9834122bf0bcd3163384178d78083ca67191a"
+      },
+      {
+        "path": "docs/evidence/analysis-input-motes.json",
+        "size": 702,
+        "sha256": "6a6e400b8d85ad309b14978063e7c9daace7f89e6ac519994043572ce6cff2d3"
+      },
+      {
+        "path": "docs/evidence/analysis-input-verification.json",
+        "size": 40061,
+        "sha256": "bd7c5edf8b1fc1d24d6e72e4f3d3cebb911d709327866bc3221e873c7d4cf78d"
+      },
+      {
+        "path": "docs/evidence/calibration-input-demo.json",
+        "size": 10315,
+        "sha256": "71554dde9040585670a850fb054776b61e3cb0ef3b4a3e249cb6dae6aaca8f2e"
+      },
+      {
+        "path": "docs/evidence/calibration-input-motes.json",
+        "size": 6424,
+        "sha256": "f118a564386404703ea676482d3ebc21ca5525b1aaf173a993c92545415547d3"
+      },
+      {
+        "path": "docs/evidence/calibration-numerical-v1.json",
+        "size": 8298,
+        "sha256": "7bfdb732bb7af97898c32347b3c467c5a7f30e8c8937bcc0d8162c1aa8ef7e24"
+      },
+      {
+        "path": "docs/evidence/calibration-numerical-v2.json",
+        "size": 26881,
+        "sha256": "e7b13f11987a398aa218511f0b2c84f0ac6dcd997e61c9fc9ab6df196554d573"
+      },
+      {
+        "path": "docs/evidence/calibration-numerical-v3.json",
+        "size": 26883,
+        "sha256": "e94e49ca4e22b5787c278bae1be3f5ced0d7a73681a52ecec15c1e3144c0c990"
+      },
+      {
+        "path": "docs/evidence/console/adoption.json",
+        "size": 4636,
+        "sha256": "2a4b513babc5ca5786bc6610795a62befa29b7df58124c400495bc9164ab64f1"
+      },
+      {
+        "path": "docs/evidence/console/backend/backend.log",
+        "size": 1602,
+        "sha256": "e0d131e7a2c2ffeb3f1ab6af658168e43332ce8df8e61cced02179ec0bba46d5"
+      },
+      {
+        "path": "docs/evidence/console/backend/browser.json",
+        "size": 13287,
+        "sha256": "b0f242fd29f04d0c6ff428c4b5a8a4512611e090270a89b54b4e780609df61e2"
+      },
+      {
+        "path": "docs/evidence/console/backend/browser.log",
+        "size": 174,
+        "sha256": "4c3a06a112eded56ad4a4b91c36bbd2297f461557614af036b98d639a4195f2a"
+      },
+      {
+        "path": "docs/evidence/console/backend/conflict-accepted-390.png",
+        "size": 203742,
+        "sha256": "306017e327a2c7f73bba7d67846b30b754e5be2495a020da61755911200eccf7"
+      },
+      {
+        "path": "docs/evidence/console/backend/conflict-recovery-390.png",
+        "size": 121253,
+        "sha256": "840767ef01c79bf4f67b5f8b7fb83eca77ce6d37f3b8dbdb8b7e4b20a3cdd48c"
+      },
+      {
+        "path": "docs/evidence/console/backend/grant-revoked-390.png",
+        "size": 96961,
+        "sha256": "9c415ba3e32edf8aaf481143aed23ae0ab260f819c82ce6fecb33927a65a5abf"
+      },
+      {
+        "path": "docs/evidence/console/backend/metadata-desktop.png",
+        "size": 319944,
+        "sha256": "057a780ca4c3aee617e8cd5395f03241eaf6515250f902c9d60b629738dafd45"
+      },
+      {
+        "path": "docs/evidence/console/backend/persistence.json",
+        "size": 225,
+        "sha256": "a388dab9660ce4e023794b69a1b02c5a60698c1d346d1189d818c2b85a6c9cb3"
+      },
+      {
+        "path": "docs/evidence/console/backend/postgres-image.txt",
+        "size": 81,
+        "sha256": "78ffec564de5efa7e48a889a3432a48b0062abd83e7a9303b49593667cd6e408"
+      },
+      {
+        "path": "docs/evidence/console/backend/postgres-version.txt",
+        "size": 28,
+        "sha256": "016ef00235d07eb1664b764dc7e7ab4f76986ae460d5c159a0fe682598286606"
+      },
+      {
+        "path": "docs/evidence/console/backend/query-desktop.png",
+        "size": 53344,
+        "sha256": "28614f1900e96c8d703f385c1a3a049657f514121a16f173bff33a13779198bb"
+      },
+      {
+        "path": "docs/evidence/console/backend/receipt.json",
+        "size": 19656,
+        "sha256": "ca57e8fbc3a7ecfefa347c70a1c71c3f4a4603d20b57fa36b6a6d03bfcc533e6"
+      },
+      {
+        "path": "docs/evidence/console/backend/recipient-fixed-release-390.png",
+        "size": 226227,
+        "sha256": "d9fb6b4f2602c7ba4682688046b661c52224d0f83212fdcbe50eac222c7f250e"
+      },
+      {
+        "path": "docs/evidence/console/backend/subject-sidecar-preview.png",
+        "size": 247541,
+        "sha256": "3e474c441fdcf5f3e086e18a9f705fe36ed05b6ca8d6dfbf522d98a9260adce4"
+      },
+      {
+        "path": "docs/evidence/console/browser-session/conflict-accepted-1440.png",
+        "size": 261789,
+        "sha256": "0f36a923f50ceb73da25c8937631a26ed80334367cb9ebc7ad54a9131ea5c730"
+      },
+      {
+        "path": "docs/evidence/console/browser-session/conflict-accepted-390.png",
+        "size": 208795,
+        "sha256": "a6bf4e164702de312e63f3bcd75a1c62a731d50ff430fc055a0fc6dc86724591"
+      },
+      {
+        "path": "docs/evidence/console/browser-session/conflict-accepted.txt",
+        "size": 1983,
+        "sha256": "d2c0a76ef78cf5cf2565732cdf976e2f445285753ef22999fde76d7efc1c85ee"
+      },
+      {
+        "path": "docs/evidence/console/browser-session/conflict-recovery-1440.png",
+        "size": 157796,
+        "sha256": "f1c69ce6a10146c6ef163f59b479e920e819d9fa3059707b80c455e632b9df73"
+      },
+      {
+        "path": "docs/evidence/console/browser-session/conflict-recovery-390.png",
+        "size": 128937,
+        "sha256": "e4f35012cb147d0278df2d22094a585a06d25d7306c17f8cbee7ddc58a63e114"
+      },
+      {
+        "path": "docs/evidence/console/browser-session/conflict-recovery.txt",
+        "size": 1755,
+        "sha256": "0e76aeaf6bfdfe3af5cd3e994fccdb0d1dfe31039039a0efd473fa89ac09fc0c"
+      },
+      {
+        "path": "docs/evidence/console/browser-session/grant-1440.png",
+        "size": 106145,
+        "sha256": "1cfde038fed2b91f01fd8e68bedd08bf52262bf35c42f60e8507c976f564c8ef"
+      },
+      {
+        "path": "docs/evidence/console/browser-session/grant-390.png",
+        "size": 96846,
+        "sha256": "044c12e6d384f7f4bcec6b5e202176ecbb0a6d46a7206bff3587ef70865929f3"
+      },
+      {
+        "path": "docs/evidence/console/browser-session/grant.txt",
+        "size": 662,
+        "sha256": "6c6607e994a1f7db95834c32a1ae9bea323555adab60f2a54965017e91b5b47d"
+      },
+      {
+        "path": "docs/evidence/console/browser-session/metadata-1440.png",
+        "size": 282328,
+        "sha256": "54529d22bd352f10c4fbc1923133f2e0b5215bbb9b5a1bda2329bc0874f23690"
+      },
+      {
+        "path": "docs/evidence/console/browser-session/metadata-390.png",
+        "size": 284363,
+        "sha256": "a399afa91907d7b7f335f24d0a239a715e1ddbeb291e823286d87df793807417"
+      },
+      {
+        "path": "docs/evidence/console/browser-session/metadata.txt",
+        "size": 2394,
+        "sha256": "560543c4bb24cf0cc0d83e106619d35e3ebd111a4321ea3c0599fa9c95520619"
+      },
+      {
+        "path": "docs/evidence/console/browser-session/native-desktop.json",
+        "size": 1047,
+        "sha256": "bf014574927b0822c84a68b389e4e2d10ab61fc2cf0604902bc49f5359c9f2ee"
+      },
+      {
+        "path": "docs/evidence/console/browser-session/query-1440.png",
+        "size": 67909,
+        "sha256": "3daa8d6482a526c422fc0c0f5bc6c4bc4747142a1f37a453b0c1ad2f6508acbf"
+      },
+      {
+        "path": "docs/evidence/console/browser-session/query-390.png",
+        "size": 64577,
+        "sha256": "0a9b4b8ab7d925792606137637f7cef29ffdd892b5b7d4eec094217b978cf447"
+      },
+      {
+        "path": "docs/evidence/console/browser-session/query.txt",
+        "size": 435,
+        "sha256": "52d29271570e8b65a69191ed661b3c980b761bab78a3c9362c7ab50319c8f562"
+      },
+      {
+        "path": "docs/evidence/console/browser-session/receipt.json",
+        "size": 8360,
+        "sha256": "4a739d26acb972a158ec5b9b3dec803a187928b5e7105976337ca8ce3c32ec07"
+      },
+      {
+        "path": "docs/evidence/console/browser-session/relationships-1440.png",
+        "size": 329723,
+        "sha256": "614e66e82af97cb52c55b7a3215678a1482077151e5de3855bc3794d064f0940"
+      },
+      {
+        "path": "docs/evidence/console/browser-session/relationships-390.png",
+        "size": 322610,
+        "sha256": "009256659eacc51d2f93f01a4f82fda37459a26e2f060df2cee09bb8dfdf993d"
+      },
+      {
+        "path": "docs/evidence/console/browser-session/relationships.txt",
+        "size": 3080,
+        "sha256": "6449f582ae61399d90e3593523ca9a11534d43c4ba614bece59cba894721971a"
+      },
+      {
+        "path": "docs/evidence/console/browser-session/revoked-1440.png",
+        "size": 109152,
+        "sha256": "6a5992cf91a2c78024d7ae9a78cff391c5fd5aef114c28c67da4d7262b8cdc9a"
+      },
+      {
+        "path": "docs/evidence/console/browser-session/revoked-390.png",
+        "size": 98976,
+        "sha256": "9c3516a9da080ff6fe308daec04710e0bf039a383261b1bfa187ed4e337f638a"
+      },
+      {
+        "path": "docs/evidence/console/browser-session/revoked.txt",
+        "size": 690,
+        "sha256": "132324683ece293d99cc47d91e7cebbe81cbea1692b717a69c86e53abd2b176b"
+      },
+      {
+        "path": "docs/evidence/console/browser-session/sidecar-accepted-1440.png",
+        "size": 287881,
+        "sha256": "ce220183f3bf8b85a76a64a2e75c359b4e72796038299d8aaac36bef8520c8da"
+      },
+      {
+        "path": "docs/evidence/console/browser-session/sidecar-accepted-390.png",
+        "size": 234494,
+        "sha256": "55f123c5b6c2930c6abbc8ffe3b74b1c46dfcda913cafec05df5c29f918752ba"
+      },
+      {
+        "path": "docs/evidence/console/browser-session/sidecar-accepted.txt",
+        "size": 2484,
+        "sha256": "86f6f3829c1b7f170428a2398dfd5ad56d045999dc24672ed11e2e40bc185c96"
+      },
+      {
+        "path": "docs/evidence/console/browser-session/sidecar-preview-1440.png",
+        "size": 240110,
+        "sha256": "85e5a6ca2166e9c47c2ad600656fdafce0ba6bb3fe48b66014ce1f06bd2da48f"
+      },
+      {
+        "path": "docs/evidence/console/browser-session/sidecar-preview-390.png",
+        "size": 224057,
+        "sha256": "3cee05f31528acf77a11c3c7fdc0a678a640a90315e1c959b64ff0ef2b0daf22"
+      },
+      {
+        "path": "docs/evidence/console/browser-session/sidecar-preview.txt",
+        "size": 2066,
+        "sha256": "bfcfef7f503c3cbc37a91274b0e6e8bc2ab022caf984712f125fe9a59bcaca31"
+      },
+      {
+        "path": "docs/evidence/console/browser/current.log",
+        "size": 6021,
+        "sha256": "3fcd321a559e9e7b5e51a48a361b186cf5fe6af1c86f2a3a7c836194e72b422e"
+      },
+      {
+        "path": "docs/evidence/console/browser/receipt.json",
+        "size": 15107,
+        "sha256": "7bfcf54cd67dc0db150d4f8b47d57e22165df473cbd8215c9d746c81d55ec35e"
+      },
+      {
+        "path": "docs/evidence/console/browser/v4f.log",
+        "size": 4553,
+        "sha256": "32ac782d8ae65074151cd0b6302ba0876c4c659b79598639df9bebb2a03bce84"
+      },
+      {
+        "path": "docs/evidence/console/original/RESUME.md",
+        "size": 1363,
+        "sha256": "ba894a6bdfa81e90e4c065e6c0a48396bf2c632949a5b14299ac5c3bc1118481"
+      },
+      {
+        "path": "docs/evidence/console/original/RUBRIC.md",
+        "size": 2386,
+        "sha256": "e6f8af5ae73d3c854fcaa508c1a014f2d4d450f2710f7d9345d92e53b24074a5"
+      },
+      {
+        "path": "docs/evidence/console/original/build.sh",
+        "size": 1362,
+        "sha256": "d6ed750a2a6ef20e1129f60e24a258e12db577235c4f42a01845ca09891647d5"
+      },
+      {
+        "path": "docs/evidence/console/original/changes-v4d.txt",
+        "size": 4407,
+        "sha256": "bfaf60d2a4052611861c1b5ed2976a368079cb15207ddc665761c9cbe586c370"
+      },
+      {
+        "path": "docs/evidence/console/original/changes-v4f.txt",
+        "size": 1528,
+        "sha256": "8c3e7bee45a61b4a53d47d172ab4e525eb3da1b39a628b5967c21a4e6e2259e3"
+      },
+      {
+        "path": "docs/evidence/console/original/changes-v4g.txt",
+        "size": 1792,
+        "sha256": "b92553c63d9f4ea7c5bd0c05e433e3d0ea1d7b740735ba3c2456ae7f400c537e"
+      },
+      {
+        "path": "docs/evidence/console/original/checks/behaviour.js",
+        "size": 39554,
+        "sha256": "f1659273bbf745650dd7600be5342a386552d4437fe09a63ebd2ccd196d7083c"
+      },
+      {
+        "path": "docs/evidence/console/original/checks/run.sh",
+        "size": 621,
+        "sha256": "f1dc0cc90511138527d113c7afcfa605f7408261ce852b1bbdaa969468bd9d27"
+      },
+      {
+        "path": "docs/evidence/console/original/checks/ui.js",
+        "size": 2507,
+        "sha256": "dd095e3689e62db33ce4a4dff28dda37e47bc402d579cab632055710e96afb32"
+      },
+      {
+        "path": "docs/evidence/console/original/critiques/v4d-function.md",
+        "size": 12381,
+        "sha256": "2c801b4fb79fcd52f07f54736e56e0cae87ca3d090effd1018f0f7997d3c8e5b"
+      },
+      {
+        "path": "docs/evidence/console/original/critiques/v4d-user.md",
+        "size": 15801,
+        "sha256": "4dd52f2e584dccfda2024b25b71d6db34736fc8caa147a4e66945a1e78a5d0fe"
+      },
+      {
+        "path": "docs/evidence/console/original/critiques/v4d-visual.md",
+        "size": 11437,
+        "sha256": "77c21b1eaa425683f85ee7c733e7b1830a262aa3bcad348902a732744852dbb9"
+      },
+      {
+        "path": "docs/evidence/console/original/critiques/v4f-function.md",
+        "size": 14945,
+        "sha256": "89f623ed27f2ae9417d7b7a232c33702c7bc61112f0f82909caf9a93bb5b8319"
+      },
+      {
+        "path": "docs/evidence/console/original/critiques/v4f-user.md",
+        "size": 16059,
+        "sha256": "22195537febd500116f4551fc74a09011956f492a58a37104ad5cf344a17e2e2"
+      },
+      {
+        "path": "docs/evidence/console/original/critiques/v4f-visual.md",
+        "size": 13040,
+        "sha256": "5fd5382229fa6fb493f36a613646e5c92793c5a6b906538ae9d1808608fe216b"
+      },
+      {
+        "path": "docs/evidence/console/original/hillclimb.json",
+        "size": 2098,
+        "sha256": "034376b5a2805b00e053219cf00c3616a931fbf7e7ca02470db2a61cbd0b01cd"
+      },
+      {
+        "path": "docs/evidence/console/original/logs/gate-v4d.log",
+        "size": 3920,
+        "sha256": "85882e5efdda0588c507ded1a6adc24c1cf85a7ea1609316a37afc5f96e62423"
+      },
+      {
+        "path": "docs/evidence/console/original/logs/gate-v4f.log",
+        "size": 5223,
+        "sha256": "2b76b10de854f09d2e1e09264b8a904c9cfd05d28e83eab013a95f106250182c"
+      },
+      {
+        "path": "docs/evidence/console/original/logs/gate-v4g.log",
+        "size": 5997,
+        "sha256": "6641c573dbfae98323026840e02efb200a0f1600f59451506939354f37f86bf6"
+      },
+      {
+        "path": "docs/evidence/console/original/out/v4f/SOURCE.txt",
+        "size": 831,
+        "sha256": "b03ae3eca0bb0521be5700ef9697d8eb8521786047bbf499ff614130797bf142"
+      },
+      {
+        "path": "docs/evidence/console/original/out/v4f/access.html",
+        "size": 830,
+        "sha256": "af3807d1b2934de1517fe4a63a34550676cb3dbdb35bdbc936842087e9af06cc"
+      },
+      {
+        "path": "docs/evidence/console/original/out/v4f/app.css",
+        "size": 34186,
+        "sha256": "fda41a14baa6e30c5666c5106870052dc3cca0196b4f82f3c630607b91fc34d5"
+      },
+      {
+        "path": "docs/evidence/console/original/out/v4f/app.js",
+        "size": 100552,
+        "sha256": "298c38ec9013226f8411d1b857eed983816e2c40dedd83473c39d559d066ab7c"
+      },
+      {
+        "path": "docs/evidence/console/original/out/v4f/assessment.html",
+        "size": 834,
+        "sha256": "73b7624d8ef6de8581d7351a812332dd19b1c35183e6743331c2bed8803c9c1d"
+      },
+      {
+        "path": "docs/evidence/console/original/out/v4f/connect.html",
+        "size": 831,
+        "sha256": "dc074a76b905b1f4c2b3c82010bce326e0281aa19286f83a28561d052b47906c"
+      },
+      {
+        "path": "docs/evidence/console/original/out/v4f/correction-blocked.html",
+        "size": 842,
+        "sha256": "ce6b53f3316b4486cb3936913ec471c6e015acabdf7c8049f1e9a51e9a5fe0b1"
+      },
+      {
+        "path": "docs/evidence/console/original/out/v4f/correction.html",
+        "size": 834,
+        "sha256": "0d6cd4d58946d4aa5283f114e41e86f4f7dc15c0dce6096d271257b5d40133b9"
+      },
+      {
+        "path": "docs/evidence/console/original/out/v4f/demo.js",
+        "size": 23330,
+        "sha256": "cc6ebcd860a7f77660acd105bc41c717c5d6b3457b4ffad307dd89f93ef81b1b"
+      },
+      {
+        "path": "docs/evidence/console/original/out/v4f/drive.js",
+        "size": 1544,
+        "sha256": "a6ae2f189e98713d95242a1c8e549c72bca7d57239d43a4d5b506b0dc0f62bbd"
+      },
+      {
+        "path": "docs/evidence/console/original/out/v4f/index.html",
+        "size": 729,
+        "sha256": "3098e794d6a8fbb68b1dacc0b29481040579267ec75d36696de17e4c7f230cfa"
+      },
+      {
+        "path": "docs/evidence/console/original/out/v4f/query.html",
+        "size": 829,
+        "sha256": "ede4f38b9b37036188770ba95314d2999f29e0541697be8caf581d2bceda2b5a"
+      },
+      {
+        "path": "docs/evidence/console/original/out/v4f/relationships.html",
+        "size": 837,
+        "sha256": "06c01f7a874ed0850c83eccabf975bbb8b0e1b8072ab6771d5c8c7cb44edd6c1"
+      },
+      {
+        "path": "docs/evidence/console/original/out/v4f/release-empty.html",
+        "size": 837,
+        "sha256": "95381bd2f32d4c7aa3994858641c948bc78392cdf34c37e7b17418f2f56dc5e7"
+      },
+      {
+        "path": "docs/evidence/console/original/out/v4f/release.html",
+        "size": 831,
+        "sha256": "9076b0affd3ac1d9ae19d17f87e126686304503c7cb7b04f50ac6ead8a868999"
+      },
+      {
+        "path": "docs/evidence/console/original/out/v4f/spec-access.js",
+        "size": 439,
+        "sha256": "c93833261a2166bd079a75df9704c95ba57d91b999364b4fb8ef5bb478580607"
+      },
+      {
+        "path": "docs/evidence/console/original/out/v4f/spec-assessment.js",
+        "size": 256,
+        "sha256": "db55bde2b8d2c9d4de8085f50ae0e6c3090fcd31b4a63b2fb9b84ccfe2fd0760"
+      },
+      {
+        "path": "docs/evidence/console/original/out/v4f/spec-connect.js",
+        "size": 131,
+        "sha256": "6183273110938234c49877f744ae7e17ca568104c1abfa18e36dbec2763a225f"
+      },
+      {
+        "path": "docs/evidence/console/original/out/v4f/spec-correction-blocked.js",
+        "size": 475,
+        "sha256": "927499aa1416c8f70ab24461749ccb0c71988315e4999b377a6b1278dc15eb10"
+      },
+      {
+        "path": "docs/evidence/console/original/out/v4f/spec-correction.js",
+        "size": 514,
+        "sha256": "36e52a46d772fa92cb2d62e251ce3d6918c66e976677eda6a0f26350f0afa045"
+      },
+      {
+        "path": "docs/evidence/console/original/out/v4f/spec-query.js",
+        "size": 399,
+        "sha256": "9f5b56ceba0cbc3058ebdaa5fc8a7c698ba75b138c7587a51f19b2ac2ff32ea7"
+      },
+      {
+        "path": "docs/evidence/console/original/out/v4f/spec-relationships.js",
+        "size": 255,
+        "sha256": "4a87d80b8eba40bcd0d01a27fdb5cba277e8138b303d2d73e92314eedb4f73a9"
+      },
+      {
+        "path": "docs/evidence/console/original/out/v4f/spec-release-empty.js",
+        "size": 244,
+        "sha256": "a887da6ed2904fa2025e43159c1ebacdb96c27bac2ce368701f01b77a3796b2b"
+      },
+      {
+        "path": "docs/evidence/console/original/out/v4f/spec-release.js",
+        "size": 299,
+        "sha256": "7e198adbbbef75e78d78f6e02fe188b3d374f43e05c094b23e74add37cffbed9"
+      },
+      {
+        "path": "docs/evidence/console/original/out/v4g/SOURCE.txt",
+        "size": 776,
+        "sha256": "3aec70b4382fa7fae921a925cfef5643c7e86f03b611e54d0c01ed6d9871c63f"
+      },
+      {
+        "path": "docs/evidence/console/original/out/v4g/access.html",
+        "size": 830,
+        "sha256": "af3807d1b2934de1517fe4a63a34550676cb3dbdb35bdbc936842087e9af06cc"
+      },
+      {
+        "path": "docs/evidence/console/original/out/v4g/app.css",
+        "size": 34556,
+        "sha256": "3834f94d9646970715a107d1c335820fed0fe0e2fa1a23df34c50d0db3d1f30e"
+      },
+      {
+        "path": "docs/evidence/console/original/out/v4g/app.js",
+        "size": 104841,
+        "sha256": "319f893c99b486652136d0ed6ae3fd84794f63af1a3ae6c3f77f7795113b6d99"
+      },
+      {
+        "path": "docs/evidence/console/original/out/v4g/assessment.html",
+        "size": 834,
+        "sha256": "73b7624d8ef6de8581d7351a812332dd19b1c35183e6743331c2bed8803c9c1d"
+      },
+      {
+        "path": "docs/evidence/console/original/out/v4g/connect.html",
+        "size": 831,
+        "sha256": "dc074a76b905b1f4c2b3c82010bce326e0281aa19286f83a28561d052b47906c"
+      },
+      {
+        "path": "docs/evidence/console/original/out/v4g/correction-blocked.html",
+        "size": 842,
+        "sha256": "ce6b53f3316b4486cb3936913ec471c6e015acabdf7c8049f1e9a51e9a5fe0b1"
+      },
+      {
+        "path": "docs/evidence/console/original/out/v4g/correction.html",
+        "size": 834,
+        "sha256": "0d6cd4d58946d4aa5283f114e41e86f4f7dc15c0dce6096d271257b5d40133b9"
+      },
+      {
+        "path": "docs/evidence/console/original/out/v4g/demo.js",
+        "size": 23330,
+        "sha256": "cc6ebcd860a7f77660acd105bc41c717c5d6b3457b4ffad307dd89f93ef81b1b"
+      },
+      {
+        "path": "docs/evidence/console/original/out/v4g/drive.js",
+        "size": 1544,
+        "sha256": "a6ae2f189e98713d95242a1c8e549c72bca7d57239d43a4d5b506b0dc0f62bbd"
+      },
+      {
+        "path": "docs/evidence/console/original/out/v4g/index.html",
+        "size": 729,
+        "sha256": "3098e794d6a8fbb68b1dacc0b29481040579267ec75d36696de17e4c7f230cfa"
+      },
+      {
+        "path": "docs/evidence/console/original/out/v4g/query.html",
+        "size": 829,
+        "sha256": "ede4f38b9b37036188770ba95314d2999f29e0541697be8caf581d2bceda2b5a"
+      },
+      {
+        "path": "docs/evidence/console/original/out/v4g/relationships.html",
+        "size": 837,
+        "sha256": "06c01f7a874ed0850c83eccabf975bbb8b0e1b8072ab6771d5c8c7cb44edd6c1"
+      },
+      {
+        "path": "docs/evidence/console/original/out/v4g/release-empty.html",
+        "size": 837,
+        "sha256": "95381bd2f32d4c7aa3994858641c948bc78392cdf34c37e7b17418f2f56dc5e7"
+      },
+      {
+        "path": "docs/evidence/console/original/out/v4g/release.html",
+        "size": 831,
+        "sha256": "9076b0affd3ac1d9ae19d17f87e126686304503c7cb7b04f50ac6ead8a868999"
+      },
+      {
+        "path": "docs/evidence/console/original/out/v4g/spec-access.js",
+        "size": 439,
+        "sha256": "c93833261a2166bd079a75df9704c95ba57d91b999364b4fb8ef5bb478580607"
+      },
+      {
+        "path": "docs/evidence/console/original/out/v4g/spec-assessment.js",
+        "size": 256,
+        "sha256": "db55bde2b8d2c9d4de8085f50ae0e6c3090fcd31b4a63b2fb9b84ccfe2fd0760"
+      },
+      {
+        "path": "docs/evidence/console/original/out/v4g/spec-connect.js",
+        "size": 131,
+        "sha256": "6183273110938234c49877f744ae7e17ca568104c1abfa18e36dbec2763a225f"
+      },
+      {
+        "path": "docs/evidence/console/original/out/v4g/spec-correction-blocked.js",
+        "size": 475,
+        "sha256": "927499aa1416c8f70ab24461749ccb0c71988315e4999b377a6b1278dc15eb10"
+      },
+      {
+        "path": "docs/evidence/console/original/out/v4g/spec-correction.js",
+        "size": 514,
+        "sha256": "36e52a46d772fa92cb2d62e251ce3d6918c66e976677eda6a0f26350f0afa045"
+      },
+      {
+        "path": "docs/evidence/console/original/out/v4g/spec-query.js",
+        "size": 399,
+        "sha256": "9f5b56ceba0cbc3058ebdaa5fc8a7c698ba75b138c7587a51f19b2ac2ff32ea7"
+      },
+      {
+        "path": "docs/evidence/console/original/out/v4g/spec-relationships.js",
+        "size": 255,
+        "sha256": "4a87d80b8eba40bcd0d01a27fdb5cba277e8138b303d2d73e92314eedb4f73a9"
+      },
+      {
+        "path": "docs/evidence/console/original/out/v4g/spec-release-empty.js",
+        "size": 244,
+        "sha256": "a887da6ed2904fa2025e43159c1ebacdb96c27bac2ce368701f01b77a3796b2b"
+      },
+      {
+        "path": "docs/evidence/console/original/out/v4g/spec-release.js",
+        "size": 299,
+        "sha256": "7e198adbbbef75e78d78f6e02fe188b3d374f43e05c094b23e74add37cffbed9"
+      },
+      {
+        "path": "docs/evidence/console/original/package-lock.json",
+        "size": 2024,
+        "sha256": "3a4090f30ff4b1a8fcc6b330059b0667f79bbb8098f0b0abb7ce7c8890790a21"
+      },
+      {
+        "path": "docs/evidence/console/original/package.json",
+        "size": 282,
+        "sha256": "941347c20a7563f0c0c410d8e48fc90b6c57a6070ea42ddb623d1c713dcfce7a"
+      },
+      {
+        "path": "docs/evidence/console/original/scripts/checks/cls.js",
+        "size": 2011,
+        "sha256": "1209f86da9cc58029d8de92a62672ea0daeb30ceb925e7b8ad6f236082f26112"
+      },
+      {
+        "path": "docs/evidence/console/original/scripts/lib.js",
+        "size": 2452,
+        "sha256": "d638b68f538cf10a7f27a33fd205aed21be22d0fe5381fda9ebeff16f6279183"
+      },
+      {
+        "path": "docs/evidence/console/original/shots/v4g-review/access-390.png",
+        "size": 89594,
+        "sha256": "706a53e8347e756aa6eba15bcab21cb5000aaee0fc012d9623be52b66238b538"
+      },
+      {
+        "path": "docs/evidence/console/original/shots/v4g-review/assessment.png",
+        "size": 170865,
+        "sha256": "09fa425f62f2270701957c13aaef3eab384ad39b8a5405fa8728661a8167b88a"
+      },
+      {
+        "path": "docs/evidence/console/original/shots/v4g-review/decision-1.8.png",
+        "size": 172049,
+        "sha256": "62056857d17f63e22ea313f097b9d3cd9cf45663f0ca0f47b6e31ba789139694"
+      },
+      {
+        "path": "docs/evidence/console/original/shots/v4g-review/inspector-rest.png",
+        "size": 281289,
+        "sha256": "d580c211102c1a58aa4361d56f8057d71a2609cdf3baf878fd1b20f9f7ec0d25"
+      },
+      {
+        "path": "docs/evidence/console/original/shots/v4g-review/preview.png",
+        "size": 237435,
+        "sha256": "e048ec67494af2e2a4e6e991215f37400092061450e4e01cc3d455cb1e0dd3a2"
+      },
+      {
+        "path": "docs/evidence/console/original/shots/v4g-review/selection-390.png",
+        "size": 64512,
+        "sha256": "c0cea561c84b1d4e45015ac2aef7547bd08802ff16b403f18cb23d84c11463e8"
+      },
+      {
+        "path": "docs/evidence/console/original/specimens/drive.js",
+        "size": 1544,
+        "sha256": "a6ae2f189e98713d95242a1c8e549c72bca7d57239d43a4d5b506b0dc0f62bbd"
+      },
+      {
+        "path": "docs/evidence/console/original/specimens/specs.json",
+        "size": 2225,
+        "sha256": "ae4e6034fe41575ef53bf9b5db354fa34579795068c54e1624ddd40630a1d0ac"
+      },
+      {
+        "path": "docs/evidence/console/original/voiceover-script.md",
+        "size": 1922,
+        "sha256": "6846bf803a81031ea1a5166124c8e27e00e80405a89cb8728c07e57ebff8b85e"
+      },
+      {
+        "path": "docs/evidence/console/postgres.json",
+        "size": 928,
+        "sha256": "2704d760b05f8d345d9774b674c4ea78142769ec0fc07a7260e868ac3fb9ac11"
+      },
+      {
+        "path": "docs/evidence/console/postgres.log",
+        "size": 15450,
+        "sha256": "f3ea70fa839d031abd0497780e4af60d45cec6c28c2b7e5d9ea8001a7254c706"
+      },
+      {
+        "path": "docs/evidence/console/recovery-manifest.json",
+        "size": 17944,
+        "sha256": "ef98db0a5870960f0727ad48e234c690e1dbd4fed0eb1e631706340cce8a8e08"
+      },
+      {
+        "path": "docs/evidence/console/voiceover-fixture.json",
+        "size": 628,
+        "sha256": "8ad9390cac74345249d88c951bd906dc77e4842fc047f6a86bd4b381acf8010a"
+      },
+      {
+        "path": "docs/evidence/console/voiceover.json",
+        "size": 1809,
+        "sha256": "701ab719fb9bd6f65b64ae495fd074e91b51d804c28c69e38d59663fb989b5b7"
+      },
+      {
+        "path": "docs/evidence/multiecho-temporal-demo.json",
+        "size": 6327,
+        "sha256": "7db100ff9c1323fb4ba3c882efb66cecfcaf63230ff7722184df852f12c6efc8"
+      },
+      {
+        "path": "docs/evidence/multiecho-temporal-legacy-qualification.json",
+        "size": 8304,
+        "sha256": "a67cf6c9fc56e6b5647bcdba95340c48101c4151bd71a8ecfc1598af11502c20"
+      },
+      {
+        "path": "docs/evidence/multiecho-temporal-motes.json",
+        "size": 702,
+        "sha256": "b71ef81953299f2535838e73dbca7b2b32ee265d197bc4cf906f8e01cf5bdf24"
+      },
+      {
+        "path": "docs/evidence/multiecho-temporal-qualification.json",
+        "size": 26767,
+        "sha256": "b482fb8946f0f637559bf957f18cbdbb13129062ad06f89621db7ad07e23063c"
+      },
+      {
+        "path": "docs/evidence/multiecho-temporal-verification.json",
+        "size": 64193,
+        "sha256": "f9db8e3fad88a9520970c3b690ba37bddb399bf00e8ce3fe76b74fe0fb80b02a"
+      },
+      {
+        "path": "docs/evidence/night-tranche-verification.json",
+        "size": 44563,
+        "sha256": "c2356306bd3795cb14d778f515f6c79d175aec6d37f94d9efcb83722bf612e14"
+      },
+      {
+        "path": "docs/evidence/phase-pair-fixture.json",
+        "size": 2898,
+        "sha256": "d2b09abae04d31b4e771eba2eecf9898dadf6b51884cc0e083624f194596132c"
+      },
+      {
+        "path": "docs/evidence/publication-demo.json",
+        "size": 2934,
+        "sha256": "90de0dc7b01c4fa4e4a31310fad588f31cbd7abf38bbccc2121cce75898fbf85"
+      },
+      {
+        "path": "docs/evidence/query-scale-controlled-after.json",
+        "size": 240601,
+        "sha256": "77437cb4d7f1096a12c8a6b08c62b869c7225f28cfafe02d53ccb3615c46506f"
+      },
+      {
+        "path": "docs/evidence/query-scale-controlled-before.json",
+        "size": 228025,
+        "sha256": "94ed33ccca277688cb8934869a70c765c9fccb138fc9fb9c885aba1e78cc3e32"
+      },
+      {
+        "path": "docs/evidence/query-scale-repeat-after.json",
+        "size": 237529,
+        "sha256": "d5a7491a533576e308b67c22619e266e7e29074b0c73448461e97a98b0540fb8"
+      },
+      {
+        "path": "docs/evidence/query-scale-repeat-before.json",
+        "size": 237518,
+        "sha256": "176c31cf43d0eeddac1e27f504df620a921c8434bd155a61a94453920262d9a6"
+      },
+      {
+        "path": "docs/evidence/query-scale-summary.json",
+        "size": 9337,
+        "sha256": "be4ab06feef9873af24a6f3fc9d9bea937a60ea31b70f0d43c997e3343ec8c8b"
+      },
+      {
+        "path": "docs/evidence/temporal-qualification.json",
+        "size": 8310,
+        "sha256": "5395005b443389c554830c57cdcf1e09392b2fb64bd009b6b3f3b37f3577969f"
+      },
+      {
+        "path": "docs/http-api.md",
+        "size": 17216,
+        "sha256": "4aeb7aef75b206f828f0033557322ecfa648b1c7f8d90ab644823489cfdc03ab"
+      },
+      {
+        "path": "docs/http-api.openapi.json",
+        "size": 70179,
+        "sha256": "718de3a1f28716017e1c747d3438cb33d9ecd2be11ec02f874f4cbcbbcccd745"
+      },
+      {
+        "path": "docs/implementation-plan.md",
+        "size": 69352,
+        "sha256": "85b46216d241f30e942beca1df40424d5db66024289a29ec8b8c897040f72aef"
+      },
+      {
+        "path": "docs/multiecho-temporal-plan.md",
+        "size": 14554,
+        "sha256": "c4df251e8b57a5e8f72af0741045ca1dfbbe2870f9fe098e6daf159965f83cf3"
+      },
+      {
+        "path": "docs/prd.md",
+        "size": 50058,
+        "sha256": "54331162352e3ce7e377ac76f8910a5419073b6cab1e20f939b31b3e5ab327e8"
+      },
+      {
+        "path": "docs/scientific-core.md",
+        "size": 86583,
+        "sha256": "8d93e03001135601f36850ae7ec144c89282e40267c458700b770d49f0edb89c"
+      },
+      {
+        "path": "modules/app/src/main/scala/sanctity/app/AnalysisInputsDemo.scala",
+        "size": 8177,
+        "sha256": "386342fd9f895e36558cc080587025e4b02b8c6329ec6d93fb0690f85acf3ea1"
+      },
+      {
+        "path": "modules/app/src/main/scala/sanctity/app/ApiServer.scala",
+        "size": 1959,
+        "sha256": "45423cd8a39bc736215e214c30be4b56288ceac50f5ffdbbcbdea76da2ae8343"
+      },
+      {
+        "path": "modules/app/src/main/scala/sanctity/app/CalibrationInputDemo.scala",
+        "size": 9770,
+        "sha256": "d47789061b0fba8564b04d684aba81b087e15f8d632290ad63f3c8727053ae23"
+      },
+      {
+        "path": "modules/app/src/main/scala/sanctity/app/Demo.scala",
+        "size": 3999,
+        "sha256": "c69cf6a6ab26ceb967bc2aad45d16cec7a2bec13dea2704936f47d0eb91ea958"
+      },
+      {
+        "path": "modules/app/src/main/scala/sanctity/app/DicomDemo.scala",
+        "size": 2534,
+        "sha256": "450430b5bb2acfe84c45bd3f2b90b9f8d17b0c2112ef15db7a3901fde78cefaa"
+      },
+      {
+        "path": "modules/app/src/main/scala/sanctity/app/MultiEchoTemporalDemo.scala",
+        "size": 9348,
+        "sha256": "bf277533755d7a9c717473815f1042cdbb0f1fc23776f78b7c6bdf51c4ad286b"
+      },
+      {
+        "path": "modules/app/src/main/scala/sanctity/app/PostgresDemo.scala",
+        "size": 5627,
+        "sha256": "0808e5865f735198b19a4d39383c98f130c011759cf0ed48bc783fbe446e6052"
+      },
+      {
+        "path": "modules/app/src/main/scala/sanctity/app/ProcessingDemo.scala",
+        "size": 8262,
+        "sha256": "34fb63f9ef09164a655d50efd7d15102eec2022837d67667c008a661340e3efd"
+      },
+      {
+        "path": "modules/app/src/main/scala/sanctity/app/PublicationRecoveryDemo.scala",
+        "size": 9926,
+        "sha256": "25e36feb6b171201a9e07487edc3dfdf94a4bb1c2bb8ade6850a928bc2823cf2"
+      },
+      {
+        "path": "modules/app/src/main/scala/sanctity/app/RecoveryCli.scala",
+        "size": 1948,
+        "sha256": "df06458bf6213e109efb129758914583a9e774204f0f8e53201a03e451772c1b"
+      },
+      {
+        "path": "modules/app/src/main/scala/sanctity/app/RecoveryDemo.scala",
+        "size": 3148,
+        "sha256": "8c8e411722bd644104ef5ea97198715bec53892c5229df5d82f7f65078e2c59a"
+      },
+      {
+        "path": "modules/app/src/main/scala/sanctity/app/ReferenceSystem.scala",
+        "size": 936,
+        "sha256": "dae41c30da27e0ca30fef4ed2081cdccf9116eef553dcb125698f9ebea91b0fe"
+      },
+      {
+        "path": "modules/app/src/main/scala/sanctity/app/RepositoryCli.scala",
+        "size": 4762,
+        "sha256": "28f41cff1aab87a00616511d7505700a93f5530de0c19e31492b41fd4bede089"
+      },
+      {
+        "path": "modules/app/src/main/scala/sanctity/app/SyntheticFixture.scala",
+        "size": 2090,
+        "sha256": "9ee4be06ba64bab3456498bbcfc6a80b98d38d94e255bd7529c858794be8c3ab"
+      },
+      {
+        "path": "modules/app/src/main/scala/sanctity/app/TemporalDemo.scala",
+        "size": 12985,
+        "sha256": "4aae52b7c23cb662e1c5c829c1312286104faca34d508561708609ba1b30e556"
+      },
+      {
+        "path": "modules/app/src/test/resources/conformance/README.md",
+        "size": 3197,
+        "sha256": "53508fd27ee3d8d912a2b7b7583d43861641839cef5441ec7f5beb2f959b2f1c"
+      },
+      {
+        "path": "modules/app/src/test/resources/conformance/bids-examples.zip",
+        "size": 167325,
+        "sha256": "bcb1391fb39857d8df9f055e196f5a53f0540076903a5c1f5210dd8d7212021e"
+      },
+      {
+        "path": "modules/app/src/test/resources/conformance/cases.json",
+        "size": 1113,
+        "sha256": "d573c1505cd66957281513578bee72f64156ae935a059d1e88041a4161a2597d"
+      },
+      {
+        "path": "modules/app/src/test/resources/conformance/deno.lock",
+        "size": 22053,
+        "sha256": "a51f70a2caf4196adf4503ee30fccdff7e73108bb524cb012d83293f45601d15"
+      },
+      {
+        "path": "modules/app/src/test/resources/conformance/official-results.json",
+        "size": 1420,
+        "sha256": "3b521f00d976aa5a3eb20d1c5dd5e733cfb2f7360c79bb8bf86f1369f38b3206"
+      },
+      {
+        "path": "modules/app/src/test/resources/conformance/schema-1.11.1.json.gz",
+        "size": 114178,
+        "sha256": "f9e901e073c3e6dea842ef008e70a25bb64dceb382943e2e4f93d19315cd05a2"
+      },
+      {
+        "path": "modules/app/src/test/resources/conformance/schema-LICENSE.txt",
+        "size": 18690,
+        "sha256": "91d38a3defa044ca6c20417e19a232068e824d3de575014d0ad4cc833bc99cc7"
+      },
+      {
+        "path": "modules/app/src/test/resources/conformance/source.json",
+        "size": 43776,
+        "sha256": "b5066734163fc4d596b95440998975977a46775f2ebdb7ddef96128e9eaff9a3"
+      },
+      {
+        "path": "modules/app/src/test/resources/conformance/validator-config.json",
+        "size": 37,
+        "sha256": "38054e5f1ceedd0d25d10e9d8e5c65adc1edc69dcc842e0875292d6e807fe9ba"
+      },
+      {
+        "path": "modules/app/src/test/resources/conformance/validator.json",
+        "size": 338,
+        "sha256": "19c653533cd59a274c0786ca0e435cf0af276a7987803bbfbe2b34e1368daf03"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/COPYING",
+        "size": 9830,
+        "sha256": "5ab0638392203d737b4d6c70e3920a61888efdee7de84a8374f3626522306dc7"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/README.md",
+        "size": 5955,
+        "sha256": "c47af46adcd466649619366bca7c956cdebaba2d63ebacd34fc5ead37e39cda5"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/acquired-calibration/README",
+        "size": 360,
+        "sha256": "103feb1537f001ad04f81bf215b04a153ee3fc72fe21027e6a795b7b18d78f00"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/acquired-calibration/ds001734/dataset_description.json",
+        "size": 1277,
+        "sha256": "d5e0ecdfaa3e92a6a5fe46c214fdefee25c268553dc68a8394d71bc59033e8b4"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/acquired-calibration/ds001734/sub-001/func/sub-001_task-MGT_run-01_sbref.nii.gz",
+        "size": 1589657,
+        "sha256": "216055011c3c84db89bcb1832255de24bcc219ac90789177ab8a19ab4036a515"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/acquired-calibration/ds001734/task-MGT_sbref.json",
+        "size": 223,
+        "sha256": "7260085bad74770c42270ba90bdf0e21bedb1d070d82e203a8431cdb01707c51"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/acquired-calibration/ds004146/dataset_description.json",
+        "size": 3869,
+        "sha256": "b3a00473602d1119343e6d9e41334836427e989c54c0dbff0e6369d333ba0306"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/acquired-calibration/ds004146/sub-0001/ses-02/fmap/sub-0001_ses-02_dir-AP_epi.json",
+        "size": 2047,
+        "sha256": "2cf7f128a297fc48d6c036cc1c32e484f06f6533ec51c446ac9d6b00daaef0a5"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/acquired-calibration/ds004146/sub-0001/ses-02/fmap/sub-0001_ses-02_dir-AP_epi.nii.gz",
+        "size": 2139759,
+        "sha256": "53b4fd4730a2f6babea73642807186c61d3d636de4541cb303953db7466a46d7"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/acquired-calibration/ds004146/sub-0001/ses-02/fmap/sub-0001_ses-02_dir-PA_epi.json",
+        "size": 2030,
+        "sha256": "723deb92ba25dccae788fe4bf78f1e62de3ef2e567d16ed39e9b1440f7b8b905"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/acquired-calibration/ds004146/sub-0001/ses-02/fmap/sub-0001_ses-02_dir-PA_epi.nii.gz",
+        "size": 2121839,
+        "sha256": "34c74b9a8077dfbc296389aef8c21b288f16c0afeef12f4def921ce258f20068"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/acquired-calibration/provenance.json",
+        "size": 4029,
+        "sha256": "bc16a5f96d492b7b9ed512739056c40e7592e1d686320b4edf91769053b72e77"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/acquired-multiecho/dataset/LICENSE",
+        "size": 70,
+        "sha256": "d0afab4329feecfe30a7c1cca897c3fa248f6443e43aac9ae1ecc8f6fd2e3660"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/acquired-multiecho/dataset/README",
+        "size": 257,
+        "sha256": "06abd3c9bdbb88b4e94c74618e0e9d236180037d5ff41518be7082d26d98e10b"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/acquired-multiecho/dataset/dataset_description.json",
+        "size": 623,
+        "sha256": "1fa806c97fbacb86d4e64d0c47be3272ecb885a7519e0086f85349d7be3c3ec4"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/acquired-multiecho/dataset/sub-04570/func/sub-04570_task-rest_echo-1_bold.json",
+        "size": 823,
+        "sha256": "6d6d6a4954665347e11c5e2ae6a86034d09287589f0cb7857e721d5535f3d741"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/acquired-multiecho/dataset/sub-04570/func/sub-04570_task-rest_echo-1_bold.nii",
+        "size": 983392,
+        "sha256": "ff7f45d346c19fbf422c6a2860a3d622d2821208beb52fbbc4ce99feb9e9bfff"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/acquired-multiecho/dataset/sub-04570/func/sub-04570_task-rest_echo-2_bold.json",
+        "size": 823,
+        "sha256": "790e8c0fdbb3165f8f632050bbbad7f5e457b154243e87d6ba8201bc85660629"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/acquired-multiecho/dataset/sub-04570/func/sub-04570_task-rest_echo-2_bold.nii",
+        "size": 983392,
+        "sha256": "ffa2366e00c1638d6b0732634fb15c4272fe788e3fdf1910fe5b5e84a2939455"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/acquired-multiecho/dataset/sub-04570/func/sub-04570_task-rest_echo-3_bold.json",
+        "size": 823,
+        "sha256": "65c173d45589d6cfb466cd7c5ada12fc7f801a72014b8a7fd2ee176429941308"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/acquired-multiecho/dataset/sub-04570/func/sub-04570_task-rest_echo-3_bold.nii",
+        "size": 983392,
+        "sha256": "2edb55000d31d4677c7adb3930d496b11cd0d5b7c2d1f840e6e05e40894ce8e8"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/acquired-multiecho/dataset/sub-04570/func/sub-04570_task-rest_echo-4_bold.json",
+        "size": 822,
+        "sha256": "dfc0eb151ab5e87fedd65c3b8b88cac5ceb8d715a31c1ee7a4b4584e44c05293"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/acquired-multiecho/dataset/sub-04570/func/sub-04570_task-rest_echo-4_bold.nii",
+        "size": 983392,
+        "sha256": "c1f107ac95add409b516c69568b1f423ab37e89f4dfa9c6bb5a938b7ed70a7f0"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/acquired-multiecho/original-README",
+        "size": 1659,
+        "sha256": "af798d36f7c069f42ada86dfec518051e4f389f06139d44bc9b8da08f46c274b"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/acquired-multiecho/original-dataset-description.json",
+        "size": 579,
+        "sha256": "a1a114cb0750883b196bec922aac0bb67e768f0a21bd19c8c57449801ef05ab0"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/acquired-multiecho/provenance.json",
+        "size": 6639,
+        "sha256": "decf0ce8aa54a77681c0a6a872b3318dcf31d290b0215aaf201a5493ba0312f8"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/analysis-inputs/contract.json",
+        "size": 2712,
+        "sha256": "9a604805fe67501183d3777e5dc868bf9a06c8aa506cd456b7e8082011be5a72"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/analysis-inputs/dataset/LICENSE",
+        "size": 70,
+        "sha256": "d0afab4329feecfe30a7c1cca897c3fa248f6443e43aac9ae1ecc8f6fd2e3660"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/analysis-inputs/dataset/README",
+        "size": 101,
+        "sha256": "3cf6e8c7c51b497474af492c1d0dce85c74031567879129fa4d1bae2e53d58f1"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/analysis-inputs/dataset/dataset_description.json",
+        "size": 170,
+        "sha256": "4a16ae3fc70e922e4c708a30001a7e078857c89587b4f528bac31e7f9f1cf655"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/analysis-inputs/dataset/stimuli/images/red.ppm",
+        "size": 19,
+        "sha256": "c940efc28573af63c6ebbfeb23e69ded35c645b0dca6c4553d62aa1977912614"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/analysis-inputs/dataset/stimuli/tone.txt",
+        "size": 51,
+        "sha256": "e3261777de92fc9a6f050d601fac3516f07cbd19fd3b7f2d28cf8aa5d5aeeb23"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/analysis-inputs/dataset/stimuli/unreferenced.json",
+        "size": 69,
+        "sha256": "4ce96cfbf05ebd9039619709a2b7d6d77eba6797c7d3362720231febdd291a1c"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/analysis-inputs/dataset/sub-01/func/sub-01_task-cue_run-01_echo-1_bold.json",
+        "size": 23,
+        "sha256": "53e162a71c9f4f1b412318d0104f76d61c314b1b5db70c308b78158d6e0f2ee5"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/analysis-inputs/dataset/sub-01/func/sub-01_task-cue_run-01_echo-1_bold.nii",
+        "size": 448,
+        "sha256": "00147f06726a8784000000e5e4b53af3b129cae87938103d4abc721919ca924d"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/analysis-inputs/dataset/sub-01/func/sub-01_task-cue_run-01_echo-2_bold.json",
+        "size": 23,
+        "sha256": "33740ae0cc64e38ddc2c9416a6c633eff4289490438643f26a4d625dd1dfc145"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/analysis-inputs/dataset/sub-01/func/sub-01_task-cue_run-01_echo-2_bold.nii",
+        "size": 448,
+        "sha256": "61f0b5cb032dcad33f6bee27474a71ac490b05209c353a99ca36933ad8e7e849"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/analysis-inputs/dataset/sub-01/func/sub-01_task-cue_run-01_echo-3_bold.json",
+        "size": 23,
+        "sha256": "af32954d486a6b5ef8bf048c6cc47eb8e989aa75a59dfd50ce17051e68b158f2"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/analysis-inputs/dataset/sub-01/func/sub-01_task-cue_run-01_echo-3_bold.nii",
+        "size": 448,
+        "sha256": "7a3294c16b677b225230927794fdc7f05487cfc3bd9a0458c760a5f702ecf15d"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/analysis-inputs/dataset/task-cue_bold.json",
+        "size": 49,
+        "sha256": "2a53db7a693995adaed20128c581b753714840049101f87602be04fa1a03c453"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/analysis-inputs/dataset/task-cue_events.json",
+        "size": 131,
+        "sha256": "ef10f23148aef2f30e20709c8a50398078530f12e78229215ea4f4725b1c8ab9"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/analysis-inputs/dataset/task-cue_events.tsv",
+        "size": 124,
+        "sha256": "480644b94220319a9c401d7241149cf8b70e22656a372318cd3dfa71662be989"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/analysis-inputs/official-results.json",
+        "size": 3224,
+        "sha256": "86855ff7742084ee1dc5117439f0785aea570cd647b9b760e52830af5b8fc574"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/analysis-inputs/provenance.json",
+        "size": 3047,
+        "sha256": "08b4bfcd98dee6b1ae40bad4df19d468368b8a2d50e0f403b63a91ec0a7ff4bc"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/anatomical.nii",
+        "size": 68002,
+        "sha256": "1c089f37b6597a38bb4157a1e1b3f7f13f1bc9d4e7a8cfdfaf91d85cd8f66594"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/calibration-inputs/contract.json",
+        "size": 2051,
+        "sha256": "130c13cec9d9ff61a2b0366dc1fa940de4ea8a7d7d2d245092ce8e761d0d8a6b"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/calibration-inputs/dataset/LICENSE",
+        "size": 70,
+        "sha256": "d0afab4329feecfe30a7c1cca897c3fa248f6443e43aac9ae1ecc8f6fd2e3660"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/calibration-inputs/dataset/README",
+        "size": 101,
+        "sha256": "3cf6e8c7c51b497474af492c1d0dce85c74031567879129fa4d1bae2e53d58f1"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/calibration-inputs/dataset/dataset_description.json",
+        "size": 170,
+        "sha256": "4a16ae3fc70e922e4c708a30001a7e078857c89587b4f528bac31e7f9f1cf655"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/calibration-inputs/dataset/stimuli/images/red.ppm",
+        "size": 19,
+        "sha256": "c940efc28573af63c6ebbfeb23e69ded35c645b0dca6c4553d62aa1977912614"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/calibration-inputs/dataset/stimuli/tone.txt",
+        "size": 51,
+        "sha256": "e3261777de92fc9a6f050d601fac3516f07cbd19fd3b7f2d28cf8aa5d5aeeb23"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/calibration-inputs/dataset/stimuli/unreferenced.json",
+        "size": 69,
+        "sha256": "4ce96cfbf05ebd9039619709a2b7d6d77eba6797c7d3362720231febdd291a1c"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/calibration-inputs/dataset/sub-01/fmap/sub-01_dir-AP_epi.json",
+        "size": 95,
+        "sha256": "c511b03eaef773aaa1fbf75d4651d63fdb6b05d3ef9e7ec179d6ea3b7da79296"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/calibration-inputs/dataset/sub-01/fmap/sub-01_dir-AP_epi.nii",
+        "size": 384,
+        "sha256": "1ec7946abcc743a564f946fff73303277d6abb45efaa9039af2a078ccfc320f1"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/calibration-inputs/dataset/sub-01/fmap/sub-01_dir-PA_epi.json",
+        "size": 96,
+        "sha256": "61b336c2a5ffb8366740a0b47a2ceffb249f888557622aea3cb2b37d6e02cdaa"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/calibration-inputs/dataset/sub-01/fmap/sub-01_dir-PA_epi.nii",
+        "size": 384,
+        "sha256": "29964e1e14829babcec01f6af89685164ac975f0af656b73e776bef0a23924ae"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/calibration-inputs/dataset/sub-01/func/sub-01_task-cue_run-01_echo-1_bold.json",
+        "size": 23,
+        "sha256": "53e162a71c9f4f1b412318d0104f76d61c314b1b5db70c308b78158d6e0f2ee5"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/calibration-inputs/dataset/sub-01/func/sub-01_task-cue_run-01_echo-1_bold.nii",
+        "size": 448,
+        "sha256": "00147f06726a8784000000e5e4b53af3b129cae87938103d4abc721919ca924d"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/calibration-inputs/dataset/sub-01/func/sub-01_task-cue_run-01_echo-2_bold.json",
+        "size": 23,
+        "sha256": "33740ae0cc64e38ddc2c9416a6c633eff4289490438643f26a4d625dd1dfc145"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/calibration-inputs/dataset/sub-01/func/sub-01_task-cue_run-01_echo-2_bold.nii",
+        "size": 448,
+        "sha256": "61f0b5cb032dcad33f6bee27474a71ac490b05209c353a99ca36933ad8e7e849"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/calibration-inputs/dataset/sub-01/func/sub-01_task-cue_run-01_echo-3_bold.json",
+        "size": 23,
+        "sha256": "af32954d486a6b5ef8bf048c6cc47eb8e989aa75a59dfd50ce17051e68b158f2"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/calibration-inputs/dataset/sub-01/func/sub-01_task-cue_run-01_echo-3_bold.nii",
+        "size": 448,
+        "sha256": "7a3294c16b677b225230927794fdc7f05487cfc3bd9a0458c760a5f702ecf15d"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/calibration-inputs/dataset/sub-01/func/sub-01_task-cue_run-01_sbref.json",
+        "size": 105,
+        "sha256": "296083a366316efcdb586d9f724441414bd2c60f33dd01f99aa5d482a9e3c28b"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/calibration-inputs/dataset/sub-01/func/sub-01_task-cue_run-01_sbref.nii",
+        "size": 384,
+        "sha256": "7124ebfabab6c59ae0c7e4d6d6640df2d0c0ca574b0d47df6b7b14c937e52f90"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/calibration-inputs/dataset/task-cue_bold.json",
+        "size": 137,
+        "sha256": "62f1e6af95efacc7d94619b13c295bfde47aa2f5efe168a561951cd1e50b6871"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/calibration-inputs/dataset/task-cue_events.json",
+        "size": 131,
+        "sha256": "ef10f23148aef2f30e20709c8a50398078530f12e78229215ea4f4725b1c8ab9"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/calibration-inputs/dataset/task-cue_events.tsv",
+        "size": 124,
+        "sha256": "480644b94220319a9c401d7241149cf8b70e22656a372318cd3dfa71662be989"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/calibration-inputs/independent-results.json",
+        "size": 39246,
+        "sha256": "f004fdcef3c0a8aa59778ea13df0d6e22d1655e5db22437e8e12194aa54cdb95"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/calibration-inputs/provenance.json",
+        "size": 4285,
+        "sha256": "c85fae749c8611a1db868ba09da8ba8c42b7785fac6a301964cc80f9225dffb7"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/ds000117/dataset_description.json",
+        "size": 931,
+        "sha256": "83189ed96ee956aad62d831d909af8c7d2e69b82a29d39100ecfa951e6117f58"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/ds000117/provenance.json",
+        "size": 5193,
+        "sha256": "d5198ec6ef542c04ec464f8f7ab521b7b82ec53b61ddfbe17cdd17aa86aa0917"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/ds000117/sub-01/ses-mri/fmap/sub-01_ses-mri_acq-func_magnitude1.json",
+        "size": 3072,
+        "sha256": "0c3e78fa87cb2784750bdd88b14b449b8c42142b209d1f6b313fceb867756427"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/ds000117/sub-01/ses-mri/fmap/sub-01_ses-mri_acq-func_magnitude1.nii.gz",
+        "size": 184134,
+        "sha256": "a2bea15c376a1ce424a7fd44afc0a9dd7346d877e6843ead97bca4dea5f1d47c"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/ds000117/sub-01/ses-mri/fmap/sub-01_ses-mri_acq-func_magnitude2.json",
+        "size": 3043,
+        "sha256": "79e2b89f073254dda56cb601feaf3794ef5648754fb6522805c45e7c53dff337"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/ds000117/sub-01/ses-mri/fmap/sub-01_ses-mri_acq-func_magnitude2.nii.gz",
+        "size": 182131,
+        "sha256": "6c7b7cc03026d166e808b6f2b80dad28fdcbd1f98dcef513e81cb5f9097f950c"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/ds000117/sub-01/ses-mri/fmap/sub-01_ses-mri_acq-func_phasediff.json",
+        "size": 15291,
+        "sha256": "ec6da90576ab6b0507e144eb90ec7e459531477258c94e91b08a6b7b686ec9bc"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/ds000117/sub-01/ses-mri/fmap/sub-01_ses-mri_acq-func_phasediff.nii.gz",
+        "size": 211879,
+        "sha256": "7f226db83621b35ec94d0a0e9f956bc03c421d7af99f39e8a2e712c14c27d080"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/ds000117/sub-01/ses-mri/func/sub-01_ses-mri_task-facerecognition_run-01_bold.json",
+        "size": 36227,
+        "sha256": "2672ec14c6c85b6ddfeff3ca34de257f145cc92547de6fd62044cf06b53edc03"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/ds000117/sub-01/ses-mri/func/sub-01_ses-mri_task-facerecognition_run-02_bold.json",
+        "size": 36226,
+        "sha256": "808d7c297cbf607e0d47510d5ef41e45410c1d7c32622c582915b02aa6842b4f"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/ds000117/sub-01/ses-mri/func/sub-01_ses-mri_task-facerecognition_run-03_bold.json",
+        "size": 36226,
+        "sha256": "491a3f2545d5e476c334d5454e8ee4e020cc99d8704b49acaff6a8d30e2da91e"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/ds000117/sub-01/ses-mri/func/sub-01_ses-mri_task-facerecognition_run-04_bold.json",
+        "size": 36226,
+        "sha256": "646b1c8315088cd4781e4071d4feb0884e4c02a612b18ad265f87bcc0558874a"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/ds000117/sub-01/ses-mri/func/sub-01_ses-mri_task-facerecognition_run-05_bold.json",
+        "size": 36227,
+        "sha256": "489f4893e6054df56a9714a35790a4be99b3349b63f3e3c22c6429f5d1ed6845"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/ds000117/sub-01/ses-mri/func/sub-01_ses-mri_task-facerecognition_run-06_bold.json",
+        "size": 36225,
+        "sha256": "69e91e0fcf9c16a747c108c15e4dfa0ced15623b551213b18a8a24010b76c5b5"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/ds000117/sub-01/ses-mri/func/sub-01_ses-mri_task-facerecognition_run-07_bold.json",
+        "size": 36226,
+        "sha256": "b61279175c366b568d65ee779caea7b0978126495546fc0037a00ccb40e6fef1"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/ds000117/sub-01/ses-mri/func/sub-01_ses-mri_task-facerecognition_run-08_bold.json",
+        "size": 36229,
+        "sha256": "e398b267f370d3249048c7e39db61ba5959f199686ca636288fd1b00d7d162a6"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/ds000117/sub-01/ses-mri/func/sub-01_ses-mri_task-facerecognition_run-09_bold.json",
+        "size": 36231,
+        "sha256": "448c5b41f99aee2d65d72e43322620fa44ac902efb7dffa3c7d3312e55c9b98d"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/example4d.nii.gz",
+        "size": 346451,
+        "sha256": "42097dfbab9d2a036b41ae5c97a359591cf2cf5c3f8dc6ca6455c0b8a7f22696"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/example_nifti2.nii.gz",
+        "size": 21160,
+        "sha256": "a53e59e70eb0d8275a4fe347422a89551aee92d0eb1137a3444b1932a28c3fe2"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/header-oracle.json",
+        "size": 12871,
+        "sha256": "f3b41cd2f1e05449cef47fce763cbd17295ba4ff8b26d9d85dddebbafec3aedc"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/multiecho-geometry-oracle.json",
+        "size": 7501,
+        "sha256": "ee618c7d5920e7a101cfe30bb37f005b03ef84f9c0f3ac375522e2d68bbda3f3"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/official-results.json",
+        "size": 837,
+        "sha256": "7d873fdcd02b422fb4ed66f7facdc0d77dcd03be145adeb3ea0e7a9f674c9c46"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/phase-pair/README.md",
+        "size": 3982,
+        "sha256": "a40a34bb8fd43e5ababe086cefafe221af366fab746cd1ead5c8df5963dc0abd"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/phase-pair/contract.json",
+        "size": 2703,
+        "sha256": "cca978eca7ceb0ec4b0006d565ec4f94d203e5006c6b1c8d9cc60cd11bf346fb"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/phase-pair/dataset/LICENSE",
+        "size": 70,
+        "sha256": "d0afab4329feecfe30a7c1cca897c3fa248f6443e43aac9ae1ecc8f6fd2e3660"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/phase-pair/dataset/README",
+        "size": 129,
+        "sha256": "59538a8554d8ecd708dc492094b3b528c495cf124dc50ae70660e7963c26a26f"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/phase-pair/dataset/dataset_description.json",
+        "size": 173,
+        "sha256": "d72b491d2e8d3fb2777c5b8caa6d92cb3056919a8d80265ea4d90978b6a1533e"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/phase-pair/dataset/sub-01/ses-cal/fmap/sub-01_ses-cal_acq-gre_run-01_magnitude1.json",
+        "size": 24,
+        "sha256": "c12458f02345c4092f3a4b3f8683050fb77229635e0c98c7db056e2443b09556"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/phase-pair/dataset/sub-01/ses-cal/fmap/sub-01_ses-cal_acq-gre_run-01_magnitude1.nii",
+        "size": 368,
+        "sha256": "c916a0ff69cab3b0c909f1214b4e540266850b281e3b8f2f8411b882b36a0452"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/phase-pair/dataset/sub-01/ses-cal/fmap/sub-01_ses-cal_acq-gre_run-01_magnitude2.json",
+        "size": 26,
+        "sha256": "a77ce194a4234846a046d7b9840aeb89ed212b14514a12493eabdbfec03bf3f8"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/phase-pair/dataset/sub-01/ses-cal/fmap/sub-01_ses-cal_acq-gre_run-01_magnitude2.nii",
+        "size": 368,
+        "sha256": "c916a0ff69cab3b0c909f1214b4e540266850b281e3b8f2f8411b882b36a0452"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/phase-pair/dataset/sub-01/ses-cal/fmap/sub-01_ses-cal_acq-gre_run-01_phase1.json",
+        "size": 232,
+        "sha256": "c0a1c5947f9ff683ab1edafc6a6352760e06b214d472a05186c9ff14c9531389"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/phase-pair/dataset/sub-01/ses-cal/fmap/sub-01_ses-cal_acq-gre_run-01_phase1.nii",
+        "size": 368,
+        "sha256": "c916a0ff69cab3b0c909f1214b4e540266850b281e3b8f2f8411b882b36a0452"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/phase-pair/dataset/sub-01/ses-cal/fmap/sub-01_ses-cal_acq-gre_run-01_phase2.json",
+        "size": 234,
+        "sha256": "c605a51d762aa18a374c608c0d5d52e7c3bba1cc1c446e773baadb73a6f2ecc6"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/phase-pair/dataset/sub-01/ses-cal/fmap/sub-01_ses-cal_acq-gre_run-01_phase2.nii",
+        "size": 368,
+        "sha256": "c916a0ff69cab3b0c909f1214b4e540266850b281e3b8f2f8411b882b36a0452"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/phase-pair/dataset/sub-01/ses-task/func/sub-01_ses-task_task-rest_run-1_bold.nii",
+        "size": 384,
+        "sha256": "31cd208e0ba19d0a608f1f6e8801af614890382a602516d5e796f0b499b4316e"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/phase-pair/dataset/sub-01/ses-task/func/sub-01_ses-task_task-rest_run-2_bold.nii",
+        "size": 384,
+        "sha256": "31cd208e0ba19d0a608f1f6e8801af614890382a602516d5e796f0b499b4316e"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/phase-pair/dataset/task-rest_bold.json",
+        "size": 81,
+        "sha256": "99c96ed145891fc678bb0d9197dc274aac6fa1b8a1a6463790734bd71b85a73b"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/phase-pair/official-results.json",
+        "size": 2800,
+        "sha256": "837496f3a69a97765bd56472911dde651eea0d854ccad3a6754102c08e79c3d4"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/phase-pair/provenance.json",
+        "size": 3323,
+        "sha256": "cf81cfa3b15e0f9c003c02c9bd5349a05be917b2b7c614ded4de3fbf35538799"
+      },
+      {
+        "path": "modules/app/src/test/resources/mri-conformance/source.json",
+        "size": 1236,
+        "sha256": "bbb9eb9f3b51a54a7f5bc7f7f41d0615cd55cd832edf9526c90d3aee26ecd7d6"
+      },
+      {
+        "path": "modules/app/src/test/scala/sanctity/app/AcquiredCalibrationSuite.scala",
+        "size": 3405,
+        "sha256": "d1a2405d8c6bdf4fc4bdc9775dd8b8cf89a121e5402b6fea474c401a234cf2c5"
+      },
+      {
+        "path": "modules/app/src/test/scala/sanctity/app/AnalysisInputSuite.scala",
+        "size": 16255,
+        "sha256": "4a824f057ac905750c38eee8f9e6dd6d92b6f8854bb24df1054ee027256c7128"
+      },
+      {
+        "path": "modules/app/src/test/scala/sanctity/app/CalibrationInputSuite.scala",
+        "size": 29781,
+        "sha256": "f50762e9bb78d4b1d1abbf9504c0d0de2885c77ba7fbf628cc8cbf97ace09f34"
+      },
+      {
+        "path": "modules/app/src/test/scala/sanctity/app/ChangeSuite.scala",
+        "size": 16184,
+        "sha256": "1476802392a6450fcd7755d5d1db81d5831ade4000673c86e4d1a548dca5b8a9"
+      },
+      {
+        "path": "modules/app/src/test/scala/sanctity/app/ConformanceSuite.scala",
+        "size": 7638,
+        "sha256": "977e27a49c48924b7e8f5b5681bb7b8da79893bf09be1d2886325e9353119049"
+      },
+      {
+        "path": "modules/app/src/test/scala/sanctity/app/ContextSuite.scala",
+        "size": 8154,
+        "sha256": "5803ebf9b09020be8eeb1fbadb53e9aeb7650c02353ea0436e5f41efeba4ad8b"
+      },
+      {
+        "path": "modules/app/src/test/scala/sanctity/app/DwiContentChecksSuite.scala",
+        "size": 5023,
+        "sha256": "31d9b0da9c8d8e513fe243138d1494843c4026711a5925942ac42c55f3d9e954"
+      },
+      {
+        "path": "modules/app/src/test/scala/sanctity/app/DwiTestFiles.scala",
+        "size": 2051,
+        "sha256": "d421503093ec6ce381684b495fc4d2e26668ac41c97c8867e0e112f24270619b"
+      },
+      {
+        "path": "modules/app/src/test/scala/sanctity/app/EventContentChecksSuite.scala",
+        "size": 5406,
+        "sha256": "6bbe80e2f06d4e88aaed76bc46d5b78a17fe26790650684ff0d03f8f5387479e"
+      },
+      {
+        "path": "modules/app/src/test/scala/sanctity/app/GeneratedQuerySuite.scala",
+        "size": 4383,
+        "sha256": "bbb46ed3ccaba07861306b5add8875bf23dc8d76a1ac43b2b07a9709c7951843"
+      },
+      {
+        "path": "modules/app/src/test/scala/sanctity/app/LifecycleSuite.scala",
+        "size": 60950,
+        "sha256": "05f0293e795e1e759972f4470772d4859762d0f7d3aedddc806e099f6fd4a2bf"
+      },
+      {
+        "path": "modules/app/src/test/scala/sanctity/app/MriConformanceSuite.scala",
+        "size": 8059,
+        "sha256": "b01b6c66674e9210d416d49f36df21fb570b4efd9adb55fc70b1730278ca3218"
+      },
+      {
+        "path": "modules/app/src/test/scala/sanctity/app/MriHeaderChecksSuite.scala",
+        "size": 5001,
+        "sha256": "b7b95738d6bf590ae0da3c06d2844b8337e51eb19320ea6f6f122f27aabd6f21"
+      },
+      {
+        "path": "modules/app/src/test/scala/sanctity/app/MriLifecycleSuite.scala",
+        "size": 16572,
+        "sha256": "932a36b883860f68c89abc6c5f564f797476e63b1082fd8048f2f006326d5669"
+      },
+      {
+        "path": "modules/app/src/test/scala/sanctity/app/MultiEchoTemporalSuite.scala",
+        "size": 21302,
+        "sha256": "e82932704970c379c819e2031cb0bd13711595d278d6f8be85d2659109b70ec2"
+      },
+      {
+        "path": "modules/app/src/test/scala/sanctity/app/NiftiGeometrySuite.scala",
+        "size": 5992,
+        "sha256": "895c0dfde0c3a8b2c61cb671a6b8dd218bced3540ae4abcb1b993c44f81b02e9"
+      },
+      {
+        "path": "modules/app/src/test/scala/sanctity/app/PayloadSuite.scala",
+        "size": 5100,
+        "sha256": "6cedd4e7bb40c7d793c48291fc677c13ec8cbb813d5c88c0ff4c6b2a33c3a40d"
+      },
+      {
+        "path": "modules/app/src/test/scala/sanctity/app/PhasePairConformanceSuite.scala",
+        "size": 5878,
+        "sha256": "dbe4ffe33a4dd989e7907ce7f76c1f69babf29a62ea3e0139e83f0317703bc3b"
+      },
+      {
+        "path": "modules/app/src/test/scala/sanctity/app/PhasePairSuite.scala",
+        "size": 11481,
+        "sha256": "1f95778bd78488ac4663b085da159d0261c64a19e50566d38c006153f30e3cdc"
+      },
+      {
+        "path": "modules/app/src/test/scala/sanctity/app/ProcessSuite.scala",
+        "size": 2496,
+        "sha256": "ab9bd7e12e3dc771fef79a0962233a113a86987bb5ab73dbe04309607cf63e50"
+      },
+      {
+        "path": "modules/app/src/test/scala/sanctity/app/ProcessingSuite.scala",
+        "size": 49633,
+        "sha256": "9b8fe4fec7cf4abdf5cd6992c6c690973b508cb0813893df7cb452e90bdb5419"
+      },
+      {
+        "path": "modules/app/src/test/scala/sanctity/app/QueryOracle.scala",
+        "size": 10520,
+        "sha256": "cff8a99743e67ee13c9f89fdc52d5d8b3232ba1650817ce4c8e0a4fb4df7532a"
+      },
+      {
+        "path": "modules/app/src/test/scala/sanctity/app/QueryOracleSuite.scala",
+        "size": 1384,
+        "sha256": "02d2abf672c43d628e468fed52ab3c31996d326c77ed4c2e9a0128136ff2845d"
+      },
+      {
+        "path": "modules/app/src/test/scala/sanctity/app/SubsetSuite.scala",
+        "size": 23310,
+        "sha256": "15570c2bacc7795c57d34efd5ddd2018a8b5a98c0ee16640d80e372b9d6094ed"
+      },
+      {
+        "path": "modules/app/src/test/scala/sanctity/app/TemporalFixture.scala",
+        "size": 3351,
+        "sha256": "c1281dd53febec4944b494c580dfb94c59985eb8ce5892c3e4d6799f520f5d91"
+      },
+      {
+        "path": "modules/app/src/test/scala/sanctity/app/TemporalSuite.scala",
+        "size": 13431,
+        "sha256": "ce3311a5af9da8aedc42ac5970425329abbdd701012aa8c8ee4147aedb9e9f84"
+      },
+      {
+        "path": "modules/app/src/test/scala/sanctity/app/XnatSuite.scala",
+        "size": 8588,
+        "sha256": "5d8a6afcad2e0f088b19324beed13955606781e4226ea83545d237eac68c31c0"
+      },
+      {
+        "path": "modules/application/src/main/scala/sanctity/application/Authentication.scala",
+        "size": 341,
+        "sha256": "5979bcaa789b9d7c603d415ecb7ebad8f9fdcd0c8b5dbc26dfc2274890deb77d"
+      },
+      {
+        "path": "modules/application/src/main/scala/sanctity/application/BlobSource.scala",
+        "size": 979,
+        "sha256": "ffdcc3c6b057c44568240dfff3da8ea54607bb4c0672ae590efa99b00a78eb27"
+      },
+      {
+        "path": "modules/application/src/main/scala/sanctity/application/Capabilities.scala",
+        "size": 4565,
+        "sha256": "032bc49d2a530a29f0786af68b877ce709924d087dce76f2c0aefeb7754d0f9f"
+      },
+      {
+        "path": "modules/application/src/main/scala/sanctity/application/DerivativeSubmissions.scala",
+        "size": 7003,
+        "sha256": "c3c01fe5a8567c5f576e684ef958148998b109083a5f8fa8504e24cb53ffadd6"
+      },
+      {
+        "path": "modules/application/src/main/scala/sanctity/application/DurableImports.scala",
+        "size": 5035,
+        "sha256": "a4c8308185e551b28f47bda61cb77ac75800b1bd8a546c901516e18dadc89e5f"
+      },
+      {
+        "path": "modules/application/src/main/scala/sanctity/application/ImportJournal.scala",
+        "size": 1374,
+        "sha256": "097d02ae7bffea120afe387524f160d373c50fffcd52c73141041e77ed438591"
+      },
+      {
+        "path": "modules/application/src/main/scala/sanctity/application/NativeRepository.scala",
+        "size": 10723,
+        "sha256": "b1eeaa74f01d01edfe7c81c526387dc7b0dd85d8cd99849623a8b9c2f0da2fb0"
+      },
+      {
+        "path": "modules/application/src/main/scala/sanctity/application/ProcessingInputs.scala",
+        "size": 4354,
+        "sha256": "c39312d4830c09174e52d5546117cd0009a231e3c617514fde5aae9c12f7aa06"
+      },
+      {
+        "path": "modules/application/src/main/scala/sanctity/application/ReferenceCatalog.scala",
+        "size": 19021,
+        "sha256": "51c9ed80a5cd8a4a6c902269f0ed258685123f3bd9ceae7fab11cb7b43113b91"
+      },
+      {
+        "path": "modules/application/src/main/scala/sanctity/application/ScientificChanges.scala",
+        "size": 7994,
+        "sha256": "1a54d2eab78eaf0e1503a598546a18eab2d95c2e94d5cca817cbc18fbd730866"
+      },
+      {
+        "path": "modules/application/src/main/scala/sanctity/application/ScientificResults.scala",
+        "size": 1021,
+        "sha256": "9f23ffcb7026f0994ca43ff3430e8755aa9591ed79e7c73253201dbb8ebf1341"
+      },
+      {
+        "path": "modules/application/src/main/scala/sanctity/application/ScientificViews.scala",
+        "size": 6216,
+        "sha256": "3c66529b5e48f35ecb24d2b451773a82dab7ef785e6c2ea0b6c10f8b991de6ef"
+      },
+      {
+        "path": "modules/bids/src/main/scala/sanctity/bids/BidsChangeCompiler.scala",
+        "size": 14487,
+        "sha256": "13b76173d4fcb977a527a802b9706cff64d140bc4e2799acb8cfc2df10cf7190"
+      },
+      {
+        "path": "modules/bids/src/main/scala/sanctity/bids/BidsInterpreter.scala",
+        "size": 17651,
+        "sha256": "59cef1bf97b68f9cfdfd1f917ebd63dd55727f9c6a32e0e9776bff3820c6b6a5"
+      },
+      {
+        "path": "modules/bids/src/main/scala/sanctity/bids/DwiContentChecks.scala",
+        "size": 6142,
+        "sha256": "cb65b299b1e0ccc1d7ffea98fde3d7b1c8b91b414ea7ad9634e3be6e716cd108"
+      },
+      {
+        "path": "modules/bids/src/main/scala/sanctity/bids/EventContentChecks.scala",
+        "size": 7617,
+        "sha256": "56202886c0480216348eeab08c6e1734a08881578f06f09813088883d75dd1a8"
+      },
+      {
+        "path": "modules/bids/src/main/scala/sanctity/bids/MriHeaderChecks.scala",
+        "size": 4903,
+        "sha256": "b400d719f0795c68eecb104b0512bc77b6d8d36a6622ed4f540adc9c7498752d"
+      },
+      {
+        "path": "modules/bids/src/main/scala/sanctity/bids/MriInputPlanner.scala",
+        "size": 6941,
+        "sha256": "45ae4aa7f035866815202ef31a2785544fcf6a2d6df7fe84f592cc5dafe1b3cf"
+      },
+      {
+        "path": "modules/bids/src/main/scala/sanctity/bids/MriViewCompiler.scala",
+        "size": 24296,
+        "sha256": "65b37b7420db20eccced5093f8f099eb7137102587cb6c72e5ecd06f2cbed3a8"
+      },
+      {
+        "path": "modules/bids/src/main/scala/sanctity/bids/MultiEchoChecks.scala",
+        "size": 1819,
+        "sha256": "f84158df0df560b7ad5e9256020f8f006db6aded18576b0f0c50c4b9b1ad8fa7"
+      },
+      {
+        "path": "modules/bids/src/main/scala/sanctity/bids/NiftiHeaderReader.scala",
+        "size": 2376,
+        "sha256": "d326d64a5c11eac2d344d9db0b6f37152c1b85eb3fd5f7c77ba8c866d92dc22a"
+      },
+      {
+        "path": "modules/bids/src/main/scala/sanctity/bids/ParticipantTable.scala",
+        "size": 1678,
+        "sha256": "7c38480f1e72019984ae4333775a940d73eb5bc5a6547a8491a6ab2d92e71af6"
+      },
+      {
+        "path": "modules/bids/src/main/scala/sanctity/bids/QcDerivativeFormat.scala",
+        "size": 2594,
+        "sha256": "f4318a60788fa0d20ae936cfb06e23c16cc8af1c070b048bf676f55354897f5e"
+      },
+      {
+        "path": "modules/bids/src/main/scala/sanctity/bids/QcDerivativeInterpreter.scala",
+        "size": 13275,
+        "sha256": "b56d3aa96d06f52c1e25ec096842733f643c9eff387f07fe0dae2002af442510"
+      },
+      {
+        "path": "modules/bids/src/main/scala/sanctity/bids/SbrefBindings.scala",
+        "size": 6303,
+        "sha256": "cfbf5ab4c01203fdec2b008f9dfc822824f997e7acdc740523f5b17ad7f4ab17"
+      },
+      {
+        "path": "modules/bids/src/main/scala/sanctity/bids/StimulusBindings.scala",
+        "size": 2934,
+        "sha256": "02000400631563eecd104bebebd25131ae9ec1f93fcaae77a49ccf427b887bcd"
+      },
+      {
+        "path": "modules/http/src/main/resources/sanctity/ui/app.css",
+        "size": 34556,
+        "sha256": "3834f94d9646970715a107d1c335820fed0fe0e2fa1a23df34c50d0db3d1f30e"
+      },
+      {
+        "path": "modules/http/src/main/resources/sanctity/ui/app.js",
+        "size": 104894,
+        "sha256": "d81dae6481afc151516a7fcc55cde8adde1a93a8e0f9a0c6720f446cecd3999d"
+      },
+      {
+        "path": "modules/http/src/main/resources/sanctity/ui/demo.js",
+        "size": 23330,
+        "sha256": "cc6ebcd860a7f77660acd105bc41c717c5d6b3457b4ffad307dd89f93ef81b1b"
+      },
+      {
+        "path": "modules/http/src/main/resources/sanctity/ui/index.html",
+        "size": 729,
+        "sha256": "3098e794d6a8fbb68b1dacc0b29481040579267ec75d36696de17e4c7f230cfa"
+      },
+      {
+        "path": "modules/http/src/main/scala/sanctity/http/ConsoleAssets.scala",
+        "size": 2333,
+        "sha256": "4f853b44fba28059e0adea5d9f422a04daa26856121230ea47dae5315e61475b"
+      },
+      {
+        "path": "modules/http/src/main/scala/sanctity/http/PublicJson.scala",
+        "size": 6060,
+        "sha256": "04328e7374caf2aa101efc103a50d2e0c1d80e8452c6cd4a0aa4f2b7d902b097"
+      },
+      {
+        "path": "modules/http/src/main/scala/sanctity/http/RepositoryHttp.scala",
+        "size": 9740,
+        "sha256": "f3cc61c2a37181c739b75e4cb177a0e7b61de5e0ecb6feabad6ecb927b88c288"
+      },
+      {
+        "path": "modules/http/src/main/scala/sanctity/http/RequestJson.scala",
+        "size": 4738,
+        "sha256": "cc1b2af9573e8c4d7804911c33e7da2502120e95d13672e7276c618ed3c88855"
+      },
+      {
+        "path": "modules/http/src/test/scala/sanctity/http/ConsoleAssetsSuite.scala",
+        "size": 1712,
+        "sha256": "4a37d1de904a38c547da3f1ffe41fe2ca991d24def9006ebdae992e17b395d92"
+      },
+      {
+        "path": "modules/http/src/test/scala/sanctity/http/RequestJsonSuite.scala",
+        "size": 1288,
+        "sha256": "6ce5a97a505907466c37b90fe95da94c39f38b294c3a812c5517b0d0cdc357ce"
+      },
+      {
+        "path": "modules/import-dicom/src/main/scala/sanctity/dicom/DicomImport.scala",
+        "size": 9364,
+        "sha256": "63b8916e67a9607c7742decca03e3cea48f6c7373b4de1ff1f9be900a86d1cef"
+      },
+      {
+        "path": "modules/import-xnat/src/main/scala/sanctity/xnat/XnatApi.scala",
+        "size": 6392,
+        "sha256": "ab0bad9d70152b78ef4af79f5f45dd8a860a3c3494a1ecfaff43ddfb1d2a356c"
+      },
+      {
+        "path": "modules/import-xnat/src/main/scala/sanctity/xnat/XnatExport.scala",
+        "size": 3080,
+        "sha256": "4a6f31d1b22d168de05484b0780489de31df495b624f6a8b49295bbd0cf8850b"
+      },
+      {
+        "path": "modules/import-xnat/src/main/scala/sanctity/xnat/XnatModel.scala",
+        "size": 6017,
+        "sha256": "373f3a31a58eb4ece0dc95453b56ab209d85dd49e3fb90c2c2542254cee37f54"
+      },
+      {
+        "path": "modules/integration/src/test/scala/sanctity/postgres/ConsoleRehearsal.scala",
+        "size": 7014,
+        "sha256": "bee4a833751912bd17d41c7a4a195d21669e2ebff21052b660bc71b90c9bd1d2"
+      },
+      {
+        "path": "modules/integration/src/test/scala/sanctity/postgres/ConsoleSuite.scala",
+        "size": 14648,
+        "sha256": "60ca9199d34c10465ac253d81f80f5eda4cc59a7119617e88a749e4149c0e700"
+      },
+      {
+        "path": "modules/integration/src/test/scala/sanctity/postgres/HttpSuite.scala",
+        "size": 18505,
+        "sha256": "f2153376a4c6ab9aa2a10fb71ac49dfc2517765a6c88b45b30221066c652ca5f"
+      },
+      {
+        "path": "modules/integration/src/test/scala/sanctity/postgres/OperationsSuite.scala",
+        "size": 7835,
+        "sha256": "bcd1a7021b9b99d750bfa0fb255a3941b88f2a577905aeac52d10141eff3ffcc"
+      },
+      {
+        "path": "modules/integration/src/test/scala/sanctity/postgres/PostgresFixture.scala",
+        "size": 2564,
+        "sha256": "6ef0d08b7a532c2c5c2b15af283bb90674a102a16c91637bbc16337a35eecc84"
+      },
+      {
+        "path": "modules/integration/src/test/scala/sanctity/postgres/ProcessingRecoverySuite.scala",
+        "size": 13257,
+        "sha256": "eb49590a6ac992ff30139b0540d487496ec5008567b731784be62accad7f9fe8"
+      },
+      {
+        "path": "modules/integration/src/test/scala/sanctity/postgres/QueryBenchmark.scala",
+        "size": 15223,
+        "sha256": "03c6c2cc73fbeee1f231b8deab453990ea70a0f24f0afb75856e3371e4ae1797"
+      },
+      {
+        "path": "modules/integration/src/test/scala/sanctity/postgres/TransactionSuite.scala",
+        "size": 13213,
+        "sha256": "0682e241e015df59dc4427bbdaca20cb4afbd15ad316530155d85cfe78eb5a55"
+      },
+      {
+        "path": "modules/kernel/src/main/scala/sanctity/kernel/Admission.scala",
+        "size": 6338,
+        "sha256": "b7aee22d9b43ca68df24f25e120696fa031d8bcb32f011aa03b66b9a532a8a67"
+      },
+      {
+        "path": "modules/kernel/src/main/scala/sanctity/kernel/Authority.scala",
+        "size": 1131,
+        "sha256": "137b767d53a1883c74cb4193911db37c7125676b59e2f9fa4fe477d5b143805c"
+      },
+      {
+        "path": "modules/kernel/src/main/scala/sanctity/kernel/ContentCheck.scala",
+        "size": 2207,
+        "sha256": "57a15949d6243d74e66bfb176f1692ef38ed19a1fb5c0c1da44663c7dda491d5"
+      },
+      {
+        "path": "modules/kernel/src/main/scala/sanctity/kernel/DerivativeScience.scala",
+        "size": 3164,
+        "sha256": "edc75509c79d2ffe3227cba68d269009c4a2766522c7524cf0058f9636e13797"
+      },
+      {
+        "path": "modules/kernel/src/main/scala/sanctity/kernel/FileEdits.scala",
+        "size": 3587,
+        "sha256": "c51d50646f960da34e209a7b497a8138c6c14a32dd2e3b7bf1c77425995e6db8"
+      },
+      {
+        "path": "modules/kernel/src/main/scala/sanctity/kernel/Identity.scala",
+        "size": 4256,
+        "sha256": "c679a6637a048784084bb7b0130181d77992b0995ff5b0f31272249fc6a2b38a"
+      },
+      {
+        "path": "modules/kernel/src/main/scala/sanctity/kernel/Lifecycle.scala",
+        "size": 2080,
+        "sha256": "1a557c5ad1807caa2b5d4071d71a86321c437f2820e944441b5a2b5b7584cedc"
+      },
+      {
+        "path": "modules/kernel/src/main/scala/sanctity/kernel/Manifest.scala",
+        "size": 4268,
+        "sha256": "5bf911765c31ff5ee2feb3b316c2941f62c0bde2dbab59a4e0bbfae9a6981032"
+      },
+      {
+        "path": "modules/kernel/src/main/scala/sanctity/kernel/Operations.scala",
+        "size": 368,
+        "sha256": "77c7a7cd6ca1e742d8743413217e1ee084ad412ffef6f339baa9bc5039495128"
+      },
+      {
+        "path": "modules/kernel/src/main/scala/sanctity/kernel/Processing.scala",
+        "size": 5652,
+        "sha256": "bcbc3845303eb0e38178ad25643c2ed17bccb326ef9384ca2bebf23eefb2e2b5"
+      },
+      {
+        "path": "modules/kernel/src/main/scala/sanctity/kernel/ProcessingRuns.scala",
+        "size": 4312,
+        "sha256": "d29603254ded64e61a6d524c304183e2804daa9c15e0bea08be165ff219ed6f4"
+      },
+      {
+        "path": "modules/kernel/src/main/scala/sanctity/kernel/Projection.scala",
+        "size": 5050,
+        "sha256": "87470c48170c558653201b394308fc43cae058f62c7b13255cf953fc19fd8783"
+      },
+      {
+        "path": "modules/kernel/src/main/scala/sanctity/kernel/Publication.scala",
+        "size": 1641,
+        "sha256": "b66de0038639d254a01a134f2c7b0af7746a1013273477088e69aef36f001f54"
+      },
+      {
+        "path": "modules/kernel/src/main/scala/sanctity/kernel/Query.scala",
+        "size": 7625,
+        "sha256": "b35ff19c78afe2b4239e251968bb82c4c15dbb439017f8265f8d7e1a438ffa35"
+      },
+      {
+        "path": "modules/kernel/src/main/scala/sanctity/kernel/Relationships.scala",
+        "size": 8194,
+        "sha256": "1538a9f0c68967d05850e6f6aaa092331754c3e61d1f192b177470c8dd7c540d"
+      },
+      {
+        "path": "modules/kernel/src/main/scala/sanctity/kernel/Science.scala",
+        "size": 8599,
+        "sha256": "327f129caa7f6c6481bcf954f51c8b19c6d0f4ded6e9ba5416c8e94ec367ce14"
+      },
+      {
+        "path": "modules/kernel/src/main/scala/sanctity/kernel/SemanticContext.scala",
+        "size": 1895,
+        "sha256": "b9c9d4ab9cc5f4e41503101088979ecdb140bf36f886401e9858d89d8c146f57"
+      },
+      {
+        "path": "modules/kernel/src/test/scala/sanctity/kernel/ContentCheckSuite.scala",
+        "size": 3638,
+        "sha256": "151477a9a2a2f79d298958048ff420d5299609bca56d81401e74be67adf3797b"
+      },
+      {
+        "path": "modules/kernel/src/test/scala/sanctity/kernel/FileEditsSuite.scala",
+        "size": 2243,
+        "sha256": "f945ac624d594d653a7f21886d485fb830d3e048e859e8545c1350b8bca7d1d6"
+      },
+      {
+        "path": "modules/kernel/src/test/scala/sanctity/kernel/KernelSuite.scala",
+        "size": 4939,
+        "sha256": "77e05662217bcd728734779ef61b67f39bddbac319df94a45290db96b4bebcc9"
+      },
+      {
+        "path": "modules/kernel/src/test/scala/sanctity/kernel/ProcessingContractSuite.scala",
+        "size": 6411,
+        "sha256": "5719e4e5f62e125b4d3ec27c71a387011ec726f901fa25a23ba4a7967a982d32"
+      },
+      {
+        "path": "modules/kernel/src/test/scala/sanctity/kernel/ProjectionSuite.scala",
+        "size": 4280,
+        "sha256": "3c14edd4e3e06d20a7304a80a1c60b7bd61b61b10eccb11ef6bc9b93c6ae6283"
+      },
+      {
+        "path": "modules/kernel/src/test/scala/sanctity/kernel/PublicationSuite.scala",
+        "size": 4032,
+        "sha256": "d0d701e626e6fd68ca60294b9eee0581e70d42d52f9125f484a7e61d7cb89f13"
+      },
+      {
+        "path": "modules/kernel/src/test/scala/sanctity/kernel/QuerySuite.scala",
+        "size": 1395,
+        "sha256": "78edf67971e8d811cded4311ad918f20562eb1f27f4e4a0107a35ea82ac40223"
+      },
+      {
+        "path": "modules/kernel/src/test/scala/sanctity/kernel/RelationshipSuite.scala",
+        "size": 8413,
+        "sha256": "21c3e75b965b70796dd878bc08e44a52ba634f4fbc02027433fd37944879dcf5"
+      },
+      {
+        "path": "modules/kernel/src/test/scala/sanctity/kernel/SemanticContextSuite.scala",
+        "size": 2734,
+        "sha256": "0f9a47e47a87a0413678ba2a0bb088763067587855ba5fdb567e54e32eaa117e"
+      },
+      {
+        "path": "modules/objects/src/main/scala/sanctity/objects/DirectoryExport.scala",
+        "size": 1698,
+        "sha256": "8409a4f3e8651721b33b04baeae84dce2e901a863bd0c31b30c2dd3e1497f703"
+      },
+      {
+        "path": "modules/objects/src/main/scala/sanctity/objects/FileBlobStore.scala",
+        "size": 4488,
+        "sha256": "445b7025f5b657c1303ce0198ba0f661e36f087250f54dd533ecda16869307aa"
+      },
+      {
+        "path": "modules/objects/src/main/scala/sanctity/objects/LocalFiles.scala",
+        "size": 3139,
+        "sha256": "e1267bc4491b08420506e1031f8811c6118ca3b598cb2c1bf374e14f9debddc5"
+      },
+      {
+        "path": "modules/objects/src/main/scala/sanctity/objects/ManagedProcess.scala",
+        "size": 2512,
+        "sha256": "39e33ec8fa8b1c834c52fd2ec092070536bf9e168aba4b42f9b835a2623fe898"
+      },
+      {
+        "path": "modules/postgres/src/main/resources/sanctity/postgres/V001__catalog.sql",
+        "size": 5524,
+        "sha256": "a510a4648518f2024df8c05d1bf0192d5d4129a3638bf63dfb75af813f11501e"
+      },
+      {
+        "path": "modules/postgres/src/main/resources/sanctity/postgres/V002__authority.sql",
+        "size": 1099,
+        "sha256": "aed0db6f5fca8bbd88ba92ec5000e24ef2778895cb49aef69e5843e30c38a05d"
+      },
+      {
+        "path": "modules/postgres/src/main/resources/sanctity/postgres/V003__queries.sql",
+        "size": 1703,
+        "sha256": "ca778f6d8f3890691fa3686fba0c4d47f58d5593e25ac721830335679a56d847"
+      },
+      {
+        "path": "modules/postgres/src/main/resources/sanctity/postgres/V004__operations.sql",
+        "size": 1419,
+        "sha256": "de165af5df8f754beafefa82d5984429ba07aaec1abdfee0208c7c2e0394407a"
+      },
+      {
+        "path": "modules/postgres/src/main/resources/sanctity/postgres/V005__credentials.sql",
+        "size": 713,
+        "sha256": "9546855eaf12f5199fd0c5d9282fb5f3d1d744381af9efe613a61a4e48568a09"
+      },
+      {
+        "path": "modules/postgres/src/main/resources/sanctity/postgres/V006__processing.sql",
+        "size": 936,
+        "sha256": "3fed2e68d87075317dd2dafe04677437ba88443bd215e7b6dce303b8a1834e3d"
+      },
+      {
+        "path": "modules/postgres/src/main/resources/sanctity/postgres/V007__publication.sql",
+        "size": 303,
+        "sha256": "71b33c04d51a17bbc0719325bcd06ca5bd532886269994b43e1d81b536c1d4d8"
+      },
+      {
+        "path": "modules/postgres/src/main/scala/sanctity/postgres/JsonCodecs.scala",
+        "size": 19118,
+        "sha256": "8ce64a4943d43fbbad927c8bb9f39a330e5678d666645bb418a8d7c16496c36c"
+      },
+      {
+        "path": "modules/postgres/src/main/scala/sanctity/postgres/OperationsSql.scala",
+        "size": 2150,
+        "sha256": "b28c3cb899a23675f032c4c826677cd762d0f59bd746ea801ae3fb5a7320b4bf"
+      },
+      {
+        "path": "modules/postgres/src/main/scala/sanctity/postgres/PostgresCatalog.scala",
+        "size": 34923,
+        "sha256": "82085f406745f48de126e0fd2b6a283308efbfe4ebcca7a5d5b919eed87ca685"
+      },
+      {
+        "path": "modules/postgres/src/main/scala/sanctity/postgres/PostgresCredentials.scala",
+        "size": 4290,
+        "sha256": "92f3c4aab9ead0415f6a74cf0b7500893321818a4a2498e3dc9d7236561fa8b4"
+      },
+      {
+        "path": "modules/postgres/src/main/scala/sanctity/postgres/PostgresDatabase.scala",
+        "size": 5261,
+        "sha256": "2b123b878cc446ce42b140e4b9614c5fc959e8147efcb46a3a91fbf6f58a36a7"
+      },
+      {
+        "path": "modules/postgres/src/main/scala/sanctity/postgres/PostgresImportJournal.scala",
+        "size": 8268,
+        "sha256": "1be3543830f1ec64c0138d1339a41f1bbfa4536f25318f85063e1298ea3d6bad"
+      },
+      {
+        "path": "modules/postgres/src/main/scala/sanctity/postgres/PostgresOutbox.scala",
+        "size": 2813,
+        "sha256": "3ea30ffd77b4f91e484ed4e8c7b1946995123977b3fb2576cdb7eddaa0db7e37"
+      },
+      {
+        "path": "modules/postgres/src/main/scala/sanctity/postgres/PostgresRecovery.scala",
+        "size": 6947,
+        "sha256": "83013d62eca92b8a835e0df8595b537597a286578c1ac31c2b32515abcf0351b"
+      },
+      {
+        "path": "modules/postgres/src/main/scala/sanctity/postgres/Records.scala",
+        "size": 7819,
+        "sha256": "5999def16c3dabd952b93b1a5918536bebbe3ed2ff8cdc6c86050ce7009ccc85"
+      },
+      {
+        "path": "modules/postgres/src/main/scala/sanctity/postgres/ScientificSql.scala",
+        "size": 8694,
+        "sha256": "3e544b4c0f6dfcddbb8111d5a8e3ed2cb8f9434db1f6f1eed5afb55b9237d109"
+      },
+      {
+        "path": "modules/postgres/src/test/scala/sanctity/postgres/PersistenceSuite.scala",
+        "size": 19204,
+        "sha256": "4a616ba36423af932aaf79f91a6aa5c9c68c2e4c61af6aa414cd186872dd56f8"
+      },
+      {
+        "path": "modules/processing-mri/src/main/resources/header_qc.py",
+        "size": 2772,
+        "sha256": "263d24b8308524372dc37df03bc293bdb4fc18e485cfb5c2736828813a12cf86"
+      },
+      {
+        "path": "modules/processing-mri/src/main/resources/temporal-requirements.txt",
+        "size": 70,
+        "sha256": "f2a0684c35e48b020b1d91bd7d173aa29658916a2d1826b9eda70274ebcc73cb"
+      },
+      {
+        "path": "modules/processing-mri/src/main/resources/temporal_statistics.py",
+        "size": 6152,
+        "sha256": "a6b127ff86df90e2217e12e8c81e5bcf40147f29d633a8c1fdbc2ec3d8057110"
+      },
+      {
+        "path": "modules/processing-mri/src/main/scala/sanctity/processing/CalibrationInputs.scala",
+        "size": 8033,
+        "sha256": "82aa3d1a9af3e0cfd168bf82b5f2fc5c105132b02126bc7603ff40087bff7830"
+      },
+      {
+        "path": "modules/processing-mri/src/main/scala/sanctity/processing/LocalProcessingRuns.scala",
+        "size": 3571,
+        "sha256": "40cf00aec944eb1c0945d5e4f687588f590b2fdf0d6a21e55ffcbee38490b72d"
+      },
+      {
+        "path": "modules/processing-mri/src/main/scala/sanctity/processing/LocalQcRuns.scala",
+        "size": 340,
+        "sha256": "6b701fd458ee8046be74adc70441da7e60f5b1a4bf5e918d8bf34df92888aba1"
+      },
+      {
+        "path": "modules/processing-mri/src/main/scala/sanctity/processing/LocalRecipe.scala",
+        "size": 459,
+        "sha256": "03002eee31463c4885e8220872f6361b488f03e4c69c428882b579a5a4365bc6"
+      },
+      {
+        "path": "modules/processing-mri/src/main/scala/sanctity/processing/MriQcProducer.scala",
+        "size": 5989,
+        "sha256": "381ef513a778092c7dde43af33f3503edd8bb5a1f2028f6e552f3fcdbdc269cf"
+      },
+      {
+        "path": "modules/processing-mri/src/main/scala/sanctity/processing/NiftiGeometry.scala",
+        "size": 6852,
+        "sha256": "9a58fec58b9c31a1eb63cb9db1405f03143e1922acac4aeb520dc4a2b81c483c"
+      },
+      {
+        "path": "modules/processing-mri/src/main/scala/sanctity/processing/NiftiPayload.scala",
+        "size": 6478,
+        "sha256": "e36799664a27cdce70e0200897fe9ba95d9ad633402574b4027f33b83dddd595"
+      },
+      {
+        "path": "modules/processing-mri/src/main/scala/sanctity/processing/TemporalDerivativeInterpreter.scala",
+        "size": 13546,
+        "sha256": "281bbdf005d434abcdea0a78d01264e81bbcfe62f520a5d5f44c72f3f2561b52"
+      },
+      {
+        "path": "modules/processing-mri/src/main/scala/sanctity/processing/TemporalInputs.scala",
+        "size": 8491,
+        "sha256": "cb99d478d634212f1a8f42cb25d758d3a67366ed4243edeffa360d128357c8b2"
+      },
+      {
+        "path": "modules/processing-mri/src/main/scala/sanctity/processing/TemporalProducer.scala",
+        "size": 5863,
+        "sha256": "20e5ce05160482e8779f5c14c652f518bde69f6863109d960bcd973b61a94456"
+      },
+      {
+        "path": "modules/processing-mri/src/main/scala/sanctity/processing/TemporalStatistics.scala",
+        "size": 4694,
+        "sha256": "d5e8ad37201378126bbd880b8b4c4f0301f2bc377a0712606748f8987d6a7f5c"
+      },
+      {
+        "path": "project/bids4s-source.properties",
+        "size": 201,
+        "sha256": "a3602ad8736ad40848cac38a8d232d0491d0b39489784811609539a727bd5345"
+      },
+      {
+        "path": "project/build.properties",
+        "size": 19,
+        "sha256": "3d013fad6ecab773b7cfdda92fc04890836e8f33709be272322c054b78ffaa70"
+      },
+      {
+        "path": "scripts/backup-postgres.sh",
+        "size": 1848,
+        "sha256": "2116269edced2c675e2e72eeb6e4c6a9e587648052f52667fb099f5581d4d732"
+      },
+      {
+        "path": "scripts/check-analysis-input-conformance.py",
+        "size": 4586,
+        "sha256": "1d49ab2bb67287a7d0e25e8d8ed9d312055b11376e2db0989f09b7e3780f44d7"
+      },
+      {
+        "path": "scripts/check-bids-conformance.py",
+        "size": 3978,
+        "sha256": "e2094fc69ac40366cf6ca952e243adbb60955d47c18d6709aec42c9226be4d02"
+      },
+      {
+        "path": "scripts/check-calibration-inputs.py",
+        "size": 6276,
+        "sha256": "48e7fca4b0f60d21eb7f06b937a29b225892b1fe20aa9ba1b64fb0f5c199e0cb"
+      },
+      {
+        "path": "scripts/check-clean-source.sh",
+        "size": 1115,
+        "sha256": "ea47c0df5dc7540eddc5c7f711681f85f6cf3b7a64db69a012537d184e67ee85"
+      },
+      {
+        "path": "scripts/check-console-backend.sh",
+        "size": 2272,
+        "sha256": "12684dc384d828528c4a230a271087bd469e66b7d5fbe9b94c62bdb707088431"
+      },
+      {
+        "path": "scripts/check-console.sh",
+        "size": 488,
+        "sha256": "674b99dfa548fee42194d0a82adc344543df69520a8ee4e5f7c6988405f58864"
+      },
+      {
+        "path": "scripts/check-dicom.sh",
+        "size": 681,
+        "sha256": "b25bf813a2d66426f37017c9b5ad10bb861a1ba6de06719bab59f25e11ae835b"
+      },
+      {
+        "path": "scripts/check-mri-conformance.py",
+        "size": 6105,
+        "sha256": "1648834b077be489f2d1cb3cf2345b11481352c8b66159ccb77ba73979af3cbe"
+      },
+      {
+        "path": "scripts/check-mri-headers.py",
+        "size": 3458,
+        "sha256": "a8b3df8d1ae64facb5414d49e70519ebc67ff757d0145077769d0faf347cec6c"
+      },
+      {
+        "path": "scripts/check-multiecho-temporal.py",
+        "size": 7039,
+        "sha256": "660f4c0510f6cdce26ccac270e9525624ef86f61c99c813cd25047edab6b7800"
+      },
+      {
+        "path": "scripts/check-phase-pair-conformance.py",
+        "size": 6297,
+        "sha256": "a069d4252b631e6b8c8a3d2a25a71758401e30695ec5b407d006031c1292b9db"
+      },
+      {
+        "path": "scripts/check-postgres.sh",
+        "size": 4943,
+        "sha256": "a5a914fd3d2f501df21a6fb84145b45199d367a3f75d5cfa8ba61d577829b39f"
+      },
+      {
+        "path": "scripts/check-publication-recovery.sh",
+        "size": 4365,
+        "sha256": "81cd6d19e8ef9614e67e0a9e5c4d4ce56afe87bf05b78c39a039931cee9670f8"
+      },
+      {
+        "path": "scripts/check-query-scale.sh",
+        "size": 3763,
+        "sha256": "4a6451dd45a6caf50abe065d948edd85a12b404451e1e138326f59014f967910"
+      },
+      {
+        "path": "scripts/check-temporal-statistics.py",
+        "size": 7607,
+        "sha256": "fe8931040ef7aedaa3b4894c8b077ff97dc5c03c06fbcb63efef1806a1d602ad"
+      },
+      {
+        "path": "scripts/create-acquired-calibration-fixture.py",
+        "size": 4112,
+        "sha256": "eb9ab1c44d685130de3378ec4415ca90d6cac5ad152a5894464b2eb33e7e0db3"
+      },
+      {
+        "path": "scripts/create-acquired-multiecho-fixture.py",
+        "size": 5527,
+        "sha256": "7f6bc2fc829495910fba1b9a3d1d34df82f87a7f87793d64af95f572eaccf7f6"
+      },
+      {
+        "path": "scripts/create-analysis-input-fixture.py",
+        "size": 3441,
+        "sha256": "6358b0e31f0898fa4240fa79beb05a57679571f39def8d069f8289692ac6c393"
+      },
+      {
+        "path": "scripts/create-calibration-fixture.py",
+        "size": 2533,
+        "sha256": "14a784fee188ce842a1bbe22263ce65e48807fd687bda5ac027ee5ab29e85608"
+      },
+      {
+        "path": "scripts/create-phase-pair-fixture.py",
+        "size": 3588,
+        "sha256": "d9d44311bc1569510021f88553657c09a03502d64e3069123a377339c96a84e8"
+      },
+      {
+        "path": "scripts/dicom-fixture.py",
+        "size": 3998,
+        "sha256": "2ddc95585c9a37efa56a475c5c7016f246b37b52de29bf512bedf411fb5d79f8"
+      },
+      {
+        "path": "scripts/fetch-dcm2niix.py",
+        "size": 2013,
+        "sha256": "23ce756d82ddcfcfe5d9b11a7de3aa2170a4a353269e62d4b9a347433ba05a93"
+      },
+      {
+        "path": "scripts/restore-postgres.sh",
+        "size": 1886,
+        "sha256": "d4b72e6099a4014167f22c8bd17a156f2f5900508b18d31ded1573bce7853b95"
+      },
+      {
+        "path": "scripts/setup-mri-python.sh",
+        "size": 391,
+        "sha256": "ee0181f45f429bf9d6460db7a8c874f3d6c4db1d7cde1f90cce1e63c489cce8f"
+      },
+      {
+        "path": "scripts/source-snapshot.py",
+        "size": 2845,
+        "sha256": "e5f908660826024c120e2e74e29fbc8b672b313fecb7ffe398c87472dd7afc74"
+      },
+      {
+        "path": "tests/console/checks/behaviour.js",
+        "size": 39556,
+        "sha256": "b72c4317e214e167a51ddba6208f85da23056b5aba0241e92c7a91178b1f3eb0"
+      },
+      {
+        "path": "tests/console/checks/run.sh",
+        "size": 662,
+        "sha256": "94d02803b67ec5333355f467ff4f4d78ff628c6762a618a063b131f2ad6ddb51"
+      },
+      {
+        "path": "tests/console/checks/ui.js",
+        "size": 2509,
+        "sha256": "50e093b8193d9ebbaf48cc71011d195884e52158d49a13ce2b32f322046d3321"
+      },
+      {
+        "path": "tests/console/hillclimb.json",
+        "size": 2098,
+        "sha256": "034376b5a2805b00e053219cf00c3616a931fbf7e7ca02470db2a61cbd0b01cd"
+      },
+      {
+        "path": "tests/console/package-lock.json",
+        "size": 2064,
+        "sha256": "d412e0048c2a25b127e7899f7bb9659f00b384b4ec1b39a62ef3381a94bf48dc"
+      },
+      {
+        "path": "tests/console/package.json",
+        "size": 263,
+        "sha256": "e79f8a369226e302444aaba12014cefaaf954303f840a36922cc763c61afa85d"
+      },
+      {
+        "path": "tests/console/rehearsal-receipt.js",
+        "size": 3775,
+        "sha256": "6ec294fafe935d9b415c7e3de4b884133000a73d533d49e46b9f872703db226f"
+      },
+      {
+        "path": "tests/console/rehearsal.js",
+        "size": 17414,
+        "sha256": "35956d72a2830767d022d390360d916b25664a95606c5c9490d6270617192179"
+      },
+      {
+        "path": "tests/console/run.js",
+        "size": 6788,
+        "sha256": "5492f0a960424ad3c2ae5bba3c6b88ea159f0c7b5c44babca52e8140623216c4"
+      },
+      {
+        "path": "tests/console/scripts/checks/cls.js",
+        "size": 2011,
+        "sha256": "1209f86da9cc58029d8de92a62672ea0daeb30ceb925e7b8ad6f236082f26112"
+      },
+      {
+        "path": "tests/console/scripts/lib.js",
+        "size": 2560,
+        "sha256": "c1d9be681f2e8de9d88f4bebfa4ef80b85d6eca0777023671d7afe1c451f85b5"
+      },
+      {
+        "path": "tests/console/serve.js",
+        "size": 1846,
+        "sha256": "9810e1adc51990ab6a371f44e7ca96b24a6474a602f082fb581f0fa98f5deb74"
+      },
+      {
+        "path": "tests/console/specimens/drive.js",
+        "size": 1544,
+        "sha256": "a6ae2f189e98713d95242a1c8e549c72bca7d57239d43a4d5b506b0dc0f62bbd"
+      },
+      {
+        "path": "tests/console/specimens/specs.json",
+        "size": 2225,
+        "sha256": "ae4e6034fe41575ef53bf9b5db354fa34579795068c54e1624ddd40630a1d0ac"
+      },
+      {
+        "path": "tests/console/voiceover-conflict.js",
+        "size": 2015,
+        "sha256": "47e028fc8d3c39f3e6d19fe00a72595a327778b26987cde22d582cc5cf0e8523"
+      }
+    ]
+  },
+  "changedSinceTrancheCheckpoint": [
+    ".github/workflows/scientific-core.yml",
+    "README.md",
+    "docs/calibration-input-plan.md",
+    "docs/evidence/calibration-input-demo.json",
+    "docs/evidence/calibration-input-motes.json",
+    "docs/evidence/calibration-numerical-v1.json",
+    "docs/evidence/calibration-numerical-v2.json",
+    "docs/evidence/calibration-numerical-v3.json",
+    "docs/implementation-plan.md",
+    "docs/scientific-core.md",
+    "modules/app/src/main/scala/sanctity/app/CalibrationInputDemo.scala",
+    "modules/app/src/test/resources/mri-conformance/acquired-calibration/README",
+    "modules/app/src/test/resources/mri-conformance/acquired-calibration/ds001734/dataset_description.json",
+    "modules/app/src/test/resources/mri-conformance/acquired-calibration/ds001734/sub-001/func/sub-001_task-MGT_run-01_sbref.nii.gz",
+    "modules/app/src/test/resources/mri-conformance/acquired-calibration/ds001734/task-MGT_sbref.json",
+    "modules/app/src/test/resources/mri-conformance/acquired-calibration/ds004146/dataset_description.json",
+    "modules/app/src/test/resources/mri-conformance/acquired-calibration/ds004146/sub-0001/ses-02/fmap/sub-0001_ses-02_dir-AP_epi.json",
+    "modules/app/src/test/resources/mri-conformance/acquired-calibration/ds004146/sub-0001/ses-02/fmap/sub-0001_ses-02_dir-AP_epi.nii.gz",
+    "modules/app/src/test/resources/mri-conformance/acquired-calibration/ds004146/sub-0001/ses-02/fmap/sub-0001_ses-02_dir-PA_epi.json",
+    "modules/app/src/test/resources/mri-conformance/acquired-calibration/ds004146/sub-0001/ses-02/fmap/sub-0001_ses-02_dir-PA_epi.nii.gz",
+    "modules/app/src/test/resources/mri-conformance/acquired-calibration/provenance.json",
+    "modules/app/src/test/resources/mri-conformance/calibration-inputs/contract.json",
+    "modules/app/src/test/resources/mri-conformance/calibration-inputs/dataset/LICENSE",
+    "modules/app/src/test/resources/mri-conformance/calibration-inputs/dataset/README",
+    "modules/app/src/test/resources/mri-conformance/calibration-inputs/dataset/dataset_description.json",
+    "modules/app/src/test/resources/mri-conformance/calibration-inputs/dataset/stimuli/images/red.ppm",
+    "modules/app/src/test/resources/mri-conformance/calibration-inputs/dataset/stimuli/tone.txt",
+    "modules/app/src/test/resources/mri-conformance/calibration-inputs/dataset/stimuli/unreferenced.json",
+    "modules/app/src/test/resources/mri-conformance/calibration-inputs/dataset/sub-01/fmap/sub-01_dir-AP_epi.json",
+    "modules/app/src/test/resources/mri-conformance/calibration-inputs/dataset/sub-01/fmap/sub-01_dir-AP_epi.nii",
+    "modules/app/src/test/resources/mri-conformance/calibration-inputs/dataset/sub-01/fmap/sub-01_dir-PA_epi.json",
+    "modules/app/src/test/resources/mri-conformance/calibration-inputs/dataset/sub-01/fmap/sub-01_dir-PA_epi.nii",
+    "modules/app/src/test/resources/mri-conformance/calibration-inputs/dataset/sub-01/func/sub-01_task-cue_run-01_echo-1_bold.json",
+    "modules/app/src/test/resources/mri-conformance/calibration-inputs/dataset/sub-01/func/sub-01_task-cue_run-01_echo-1_bold.nii",
+    "modules/app/src/test/resources/mri-conformance/calibration-inputs/dataset/sub-01/func/sub-01_task-cue_run-01_echo-2_bold.json",
+    "modules/app/src/test/resources/mri-conformance/calibration-inputs/dataset/sub-01/func/sub-01_task-cue_run-01_echo-2_bold.nii",
+    "modules/app/src/test/resources/mri-conformance/calibration-inputs/dataset/sub-01/func/sub-01_task-cue_run-01_echo-3_bold.json",
+    "modules/app/src/test/resources/mri-conformance/calibration-inputs/dataset/sub-01/func/sub-01_task-cue_run-01_echo-3_bold.nii",
+    "modules/app/src/test/resources/mri-conformance/calibration-inputs/dataset/sub-01/func/sub-01_task-cue_run-01_sbref.json",
+    "modules/app/src/test/resources/mri-conformance/calibration-inputs/dataset/sub-01/func/sub-01_task-cue_run-01_sbref.nii",
+    "modules/app/src/test/resources/mri-conformance/calibration-inputs/dataset/task-cue_bold.json",
+    "modules/app/src/test/resources/mri-conformance/calibration-inputs/dataset/task-cue_events.json",
+    "modules/app/src/test/resources/mri-conformance/calibration-inputs/dataset/task-cue_events.tsv",
+    "modules/app/src/test/resources/mri-conformance/calibration-inputs/independent-results.json",
+    "modules/app/src/test/resources/mri-conformance/calibration-inputs/provenance.json",
+    "modules/app/src/test/scala/sanctity/app/AcquiredCalibrationSuite.scala",
+    "modules/app/src/test/scala/sanctity/app/CalibrationInputSuite.scala",
+    "modules/app/src/test/scala/sanctity/app/GeneratedQuerySuite.scala",
+    "modules/app/src/test/scala/sanctity/app/SubsetSuite.scala",
+    "modules/bids/src/main/scala/sanctity/bids/BidsChangeCompiler.scala",
+    "modules/bids/src/main/scala/sanctity/bids/BidsInterpreter.scala",
+    "modules/bids/src/main/scala/sanctity/bids/MriHeaderChecks.scala",
+    "modules/bids/src/main/scala/sanctity/bids/MriViewCompiler.scala",
+    "modules/bids/src/main/scala/sanctity/bids/SbrefBindings.scala",
+    "modules/processing-mri/src/main/resources/temporal_statistics.py",
+    "modules/processing-mri/src/main/scala/sanctity/processing/CalibrationInputs.scala",
+    "modules/processing-mri/src/main/scala/sanctity/processing/TemporalDerivativeInterpreter.scala",
+    "modules/processing-mri/src/main/scala/sanctity/processing/TemporalInputs.scala",
+    "modules/processing-mri/src/main/scala/sanctity/processing/TemporalProducer.scala",
+    "modules/processing-mri/src/main/scala/sanctity/processing/TemporalStatistics.scala",
+    "scripts/check-calibration-inputs.py",
+    "scripts/check-multiecho-temporal.py",
+    "scripts/create-acquired-calibration-fixture.py",
+    "scripts/create-calibration-fixture.py"
+  ],
+  "sourceSnapshotExcludes": [
+    ".mote",
+    ".omc",
+    "vendor",
+    "ignored files",
+    "this verification receipt"
+  ],
+  "gitCommitCreated": false,
+  "hostedCiRun": false
+}

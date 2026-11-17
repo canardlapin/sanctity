@@ -1,0 +1,162 @@
+{
+  "images": {
+    "acquired-multiecho/dataset/sub-04570/func/sub-04570_task-rest_echo-1_bold.nii": {
+      "dimensions": [
+        64,
+        64,
+        30,
+        4
+      ],
+      "sha256": "ff7f45d346c19fbf422c6a2860a3d622d2821208beb52fbbc4ce99feb9e9bfff",
+      "size": 983392,
+      "sliceDimension": 0,
+      "temporalSpacing": 2.4700000286102295,
+      "temporalUnit": "sec"
+    },
+    "acquired-multiecho/dataset/sub-04570/func/sub-04570_task-rest_echo-2_bold.nii": {
+      "dimensions": [
+        64,
+        64,
+        30,
+        4
+      ],
+      "sha256": "ffa2366e00c1638d6b0732634fb15c4272fe788e3fdf1910fe5b5e84a2939455",
+      "size": 983392,
+      "sliceDimension": 0,
+      "temporalSpacing": 2.4700000286102295,
+      "temporalUnit": "sec"
+    },
+    "acquired-multiecho/dataset/sub-04570/func/sub-04570_task-rest_echo-3_bold.nii": {
+      "dimensions": [
+        64,
+        64,
+        30,
+        4
+      ],
+      "sha256": "2edb55000d31d4677c7adb3930d496b11cd0d5b7c2d1f840e6e05e40894ce8e8",
+      "size": 983392,
+      "sliceDimension": 0,
+      "temporalSpacing": 2.4700000286102295,
+      "temporalUnit": "sec"
+    },
+    "acquired-multiecho/dataset/sub-04570/func/sub-04570_task-rest_echo-4_bold.nii": {
+      "dimensions": [
+        64,
+        64,
+        30,
+        4
+      ],
+      "sha256": "c1f107ac95add409b516c69568b1f423ab37e89f4dfa9c6bb5a938b7ed70a7f0",
+      "size": 983392,
+      "sliceDimension": 0,
+      "temporalSpacing": 2.4700000286102295,
+      "temporalUnit": "sec"
+    },
+    "bold-timing/v1-be-axis2.nii": {
+      "dimensions": [
+        2,
+        3,
+        4,
+        3
+      ],
+      "sha256": "fdc19f8d65e193166973721a8bf7549ec8cd71b4d9bb86bd5057d92ea55adb7f",
+      "size": 640,
+      "sliceDimension": 2,
+      "temporalSpacing": 2000.0,
+      "temporalUnit": "msec"
+    },
+    "bold-timing/v1-be-axis3.nii.gz": {
+      "dimensions": [
+        2,
+        3,
+        4,
+        3
+      ],
+      "sha256": "a2f63b3c702d14486b80699e57d8c0a37113dc78f8d11f3ff0ce4a01a80b8d81",
+      "size": 80,
+      "sliceDimension": 3,
+      "temporalSpacing": 2000.0,
+      "temporalUnit": "msec"
+    },
+    "bold-timing/v1-le-axis0.nii": {
+      "dimensions": [
+        2,
+        3,
+        4,
+        3
+      ],
+      "sha256": "395d02fe31cc460851e13f6d9a4d2c7c2b68ca13e09ea86b91653faa141a462f",
+      "size": 640,
+      "sliceDimension": 0,
+      "temporalSpacing": 2000.0,
+      "temporalUnit": "msec"
+    },
+    "bold-timing/v1-le-axis1.nii.gz": {
+      "dimensions": [
+        2,
+        3,
+        4,
+        3
+      ],
+      "sha256": "c76a0f997e0151b962341b5e38cc0c3ca0c92ea9b6f5085b9bd676eb4af576af",
+      "size": 74,
+      "sliceDimension": 1,
+      "temporalSpacing": 2000.0,
+      "temporalUnit": "msec"
+    },
+    "bold-timing/v2-be-axis2.nii": {
+      "dimensions": [
+        2,
+        3,
+        4,
+        3
+      ],
+      "sha256": "44d65e1ffd848a55e1b44a45b634e947a8706cffa7931fba8cbacf0d25bbae14",
+      "size": 832,
+      "sliceDimension": 2,
+      "temporalSpacing": 2000000.0,
+      "temporalUnit": "usec"
+    },
+    "bold-timing/v2-be-axis3.nii.gz": {
+      "dimensions": [
+        2,
+        3,
+        4,
+        3
+      ],
+      "sha256": "7e2f5c569013d3fba55ca324261f7fe421ce2994c1c9a1849504876ebb64fcd2",
+      "size": 90,
+      "sliceDimension": 3,
+      "temporalSpacing": 2000000.0,
+      "temporalUnit": "usec"
+    },
+    "bold-timing/v2-le-axis0.nii": {
+      "dimensions": [
+        2,
+        3,
+        4,
+        3
+      ],
+      "sha256": "43328a78c4f0536936cddf04af583ab06eff6f40e4e9bd7696ee656af46eac72",
+      "size": 832,
+      "sliceDimension": 0,
+      "temporalSpacing": 2000000.0,
+      "temporalUnit": "usec"
+    },
+    "bold-timing/v2-le-axis1.nii.gz": {
+      "dimensions": [
+        2,
+        3,
+        4,
+        3
+      ],
+      "sha256": "9afccc14685900d83b51847cf208c4c87978a6e81689742698616dc0f9387453",
+      "size": 87,
+      "sliceDimension": 1,
+      "temporalSpacing": 2000000.0,
+      "temporalUnit": "usec"
+    }
+  },
+  "nibabel": "5.3.2",
+  "scope": "Header observations only; acquired provenance remains in acquired-multiecho/provenance.json"
+}

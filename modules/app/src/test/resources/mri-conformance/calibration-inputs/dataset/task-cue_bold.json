@@ -1,0 +1,7 @@
+{
+  "TaskName": "cue",
+  "RepetitionTime": 2.0,
+  "PhaseEncodingDirection": "j",
+  "TotalReadoutTime": 0.05,
+  "B0FieldSource": "cal1"
+}

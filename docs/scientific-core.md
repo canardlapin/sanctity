@@ -973,3 +973,81 @@ EchoTime, verifies the historical bundle/output bytes, and enforces current sour
 revocation for private input access and publication retries. Its scenario and the
 independent corpus run against both catalog implementations. Qualification commands
 and receipts are recorded in the implementation plan.
+
+## Implemented slice: qualified per-echo temporal statistics
+
+The [multi-echo temporal tranche](multiecho-temporal-plan.md) adds opt-in
+`native-payload-v2` assessment and temporal input/derivative v2. One selected echo
+expands to its complete recorded family; every image requires full payload and
+blob-bound coded geometry evidence. V2 supports up to 16 expanded images, while
+v1 retains its single-echo contract and historical request/declaration semantics.
+
+Geometry validates each active qform and sform independently and compares the same
+coded systems across every pair of echoes at voxel-centre corners (0.001 mm
+absolute distance tolerance). Different qform/sform coordinate systems remain
+separate; their handedness must agree. Unknown units, absent coded geometry,
+nonfinite or singular transforms and family disagreement block this opt-in
+profile. NIfTI's qfac=0 fallback can be serialized as +1; v2 sidecars declare this
+normalization. Other source spatial declarations remain exact. These are bounded
+repository consistency checks, not registration or scanner qualification.
+
+Each image produces its own all-volume temporal mean and population-SD maps using
+the previously qualified float64 shifted-Welford algorithm. Output facts retain
+echo entities; observations refer to exact individual source images. Existing
+private bundles, durable runs, retained-output publication and acceptance protocols
+apply. Source corrections preserve historical inputs/results, and current source
+authority gates private inputs and new publication. Accepted derivative releases
+retain their separately governed access.
+
+A CC0 acquired four-echo excerpt, direct-byte fixtures and an independent stdlib
+all-voxel oracle qualify numerical outputs. NiBabel supplies separate affine
+observations for comparison. The tranche plan retains policies, resource limits,
+commands and evidence. Echo combination, motion correction, registration, masking,
+and inference that these maps establish scientific image quality remain outside
+this recipe.
+
+
+## Functional references and explicit calibration readiness
+
+The [SBRef/calibration tranche](calibration-input-plan.md) adds native-reference
+v10, relationship graph v7, view v9 and edit compiler v5. Functional BOLD selection
+retains an exact shared SBRef or complete echo-indexed references. Partial
+acquisition moves and ambiguous reference sets fail explicitly. Reference header
+and metadata checks remain separate from opt-in full payload/geometry assessment.
+
+Payload profile v3 and temporal contract v3 require an SBRef and one explicitly
+declared, opposite-phase EPI pair under a strict same-grid policy. Every companion
+has exact payload, metadata and coded-transform evidence. This is a recipe policy,
+not general BIDS validity or preprocessing readiness. Existing temporal mean/SD
+processing uses BOLD voxels; calibration images remain frozen dependencies.
+Historical v1/v2 contracts remain available. Current compiler/context checks still
+require explicit reinterpretation when an older semantic context is encountered.
+
+`CalibrationInputDemo` demonstrates one-echo selection, complete input retention,
+existing-recipe execution, retained-output publication, historical calibration
+correction and current authority revocation. The plan records primary-source
+acquired fixtures, independent validator/geometry/numerical observations and
+reproduction commands.
+
+## BOLD acquisition timing evidence
+
+The [BOLD timing slice](bold-timing-plan.md) adds `native-reference-v11` /
+`reference-admission-v10`. Every BOLD image receives a blob-bound timing check,
+including resting acquisitions with no events table. Regular/variable timing,
+volume counts, optional delay and discard counts, and slice timing values are
+assessed separately from voxel payloads. Existing TR/header mismatch policy is
+unchanged: admission warns and current regular-timing recipes refuse the input.
+
+The shared bounded NIfTI-1/2 reader observes `dim_info` without another image read.
+Authored SliceEncodingDirection must agree with a declared header slice axis.
+When the axis is known, SliceTiming length must match its dimension and negative
+directions yield reversed voxel-index observations. Repeated multiband times stay
+repeated. If both axis declarations are absent, mapping remains explicitly
+unavailable; no axis is inferred from shape. Optional absent slice timing does
+not block the existing recipes.
+
+View v10 preserves authored slice direction alongside timing. Current input
+planning requires exact timing-check image/metadata inputs. Corrections retain
+old assessments, metadata bytes and image identity; export/re-import retains the
+declared timing semantics. Window checks are bounded repository consistency
+policy, not slice-time correction or scanner synchronization qualification.

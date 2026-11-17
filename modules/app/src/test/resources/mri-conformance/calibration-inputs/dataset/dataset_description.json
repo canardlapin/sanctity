@@ -1,0 +1,9 @@
+{
+  "Name": "Synthetic coherent analysis inputs",
+  "BIDSVersion": "1.11.1",
+  "DatasetType": "raw",
+  "License": "CC0",
+  "Authors": [
+    "Sanctity contributors"
+  ]
+}
