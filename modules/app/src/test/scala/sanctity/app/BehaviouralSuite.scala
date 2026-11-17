@@ -250,14 +250,14 @@ abstract class CatalogBehaviouralSuite extends FunSuite:
     }
   }
 
-  test("malformed, misplaced, orphaned and unsupported modalities are explicit admission blockers") {
+  // Data types without an assessed profile are covered by CoverageLevelsSuite: they are described or preserved, not refused.
+  test("malformed, misplaced and orphaned behavioural files are explicit admission blockers") {
     fixture { (s, root) =>
       val cases = Vector(
         first -> "trial\tresponse_time\nleft\tNaN\n",
         first -> "trial\ttrial\nleft\tright\n",
         "sub-01/ses-a/beh/sub-01_ses-a_task-choice_events.tsv" -> "onset\tduration\n0\t-1\n",
-        "sub-01/ses-a/beh/sub-99_ses-a_task-choice_beh.tsv" -> "trial\nleft\n",
-        "sub-01/eeg/sub-01_task-choice_eeg.edf" -> "not a qualified EEG recording"
+        "sub-01/ses-a/beh/sub-99_ses-a_task-choice_beh.tsv" -> "trial\nleft\n"
       )
       cases.traverse_ { (at, value) =>
         for

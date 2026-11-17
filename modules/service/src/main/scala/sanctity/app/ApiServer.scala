@@ -7,7 +7,7 @@ import org.http4s.ember.server.EmberServerBuilder
 import org.http4s.{HttpApp, Response, Status}
 import org.http4s.server.Server
 import sanctity.application.{IdSource, NativeRepository}
-import sanctity.bids.RepositoryBidsInterpreter
+import sanctity.bids.DatasetInterpreter
 import sanctity.http.{ConsoleAssets, RepositoryHttp}
 import sanctity.objects.FileBlobStore
 import scala.concurrent.duration.*
@@ -36,7 +36,7 @@ object ApiServer extends ProtectedIOApp:
           store <- FileBlobStore.open[IO](config.storage)
           ids = IdSource.random[IO]
           catalog = db.catalog(ids)
-          repository = new NativeRepository[IO](catalog, store, new RepositoryBidsInterpreter[IO](store), ids)
+          repository = new NativeRepository[IO](catalog, store, new DatasetInterpreter[IO](store), ids)
           api = new RepositoryHttp[IO](catalog, repository, db.credentials(ids), independentPolicy=sys.env.contains("SANCTITY_POLICY_CONFIG"),
             organization=Some(db.organization))
           slots <- Semaphore[IO](8)
