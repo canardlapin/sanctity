@@ -9,3 +9,7 @@ node_modules/
 
 # Locally retained compatibility artifacts; manifests live in docs/evidence.
 local-artifacts/
+
+# Local tooling caches
+__pycache__/
+.omc/
