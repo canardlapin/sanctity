@@ -50,6 +50,9 @@ final class Interpretation private (
     val levels: Option[CoverageLevels]
 ):
   lazy val byPath: Map[RelPath, ArtifactMetadata] = artifacts.map(a => a.path -> a).toMap
+  /** The same reading attributed to another profile. Every recorded component is carried over. */
+  def withProfile(other: SemanticProfile): Either[Problem, Interpretation] =
+    Interpretation.from(content, other, artifacts, facts, participants, queryVersion, relationships, declaredBidsVersion, observations, levels)
   def relationshipClosure(roots: Vector[RelPath]): Either[Problem, RelationshipClosure] =
     relationships.toRight(Problem.Unsupported("this interpretation has no recorded relationship graph")).flatMap(_.closure(roots, byPath))
 

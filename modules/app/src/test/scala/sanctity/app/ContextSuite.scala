@@ -94,7 +94,7 @@ abstract class CatalogContextSuite extends CatalogMriSuite:
         _ = assert(new MriViewCompiler(context).documents(old, selection,
           DisclosureProfile(Set.empty, Set.empty)).isLeft)
         result <- next(s, s.store).correctMetadata(s.context, old.ref, p(SyntheticFixture.sharedSidecar), SyntheticFixture.correctedJson, "Profile drift")
-        _ = assert(result.swap.toOption.exists(_.isInstanceOf[Problem.Conflict]))
+        _ = assert(result.swap.toOption.exists(_.isInstanceOf[Problem.ReassessmentRequired]), result.toString)
         head <- checked(s.catalog.dataset(s.context, s.dataset.id))
         _ = assertEquals(head.head, Some(old.ref.release))
       yield ()

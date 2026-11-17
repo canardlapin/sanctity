@@ -166,6 +166,7 @@ Every `/v1` route requires authentication. There are no raw blob-digest, local-f
 | `GET /v1/datasets/{dataset}/releases/{release}/metadata?path=...` | Effective values, origins and override history |
 | `GET /v1/datasets/{dataset}/releases/{release}/file?path=...` | Authorized chunked bytes, `X-Sanctity-SHA256` and `X-Sanctity-Size` |
 | `POST /v1/datasets/{dataset}/releases/{release}/corrections` | A prepared candidate plus content and metadata impact |
+| `POST /v1/datasets/{dataset}/releases/{release}/reassessments` | The same content read under the current rules, as a candidate with its impact; body `{"reason": "..."}` |
 | `GET /v1/candidates/{candidate}` | Preparation identity and assessment |
 | `POST /v1/candidates/{candidate}/accept` | Durable acceptance receipt; requires `Idempotency-Key` |
 | `POST /v1/datasets/{dataset}/grants` | Curator-controlled grant to a principal |
@@ -215,6 +216,24 @@ release:
 for a release without a parent; otherwise it compares files with the parent
 release, with exact counts and at most 200 paths per group. It lists paths only,
 never digests or source labels.
+
+### Upgrades and re-assessment
+
+Each release records the build of the rules that read it. After the service is
+upgraded, that build differs for every existing release. This does not block work:
+
+- When a correction is prepared against a release from an earlier build, the
+  service reads that release again. If the result matches the record in
+  everything except the build fingerprints, the correction proceeds.
+- If the current rules read the release differently, or reach a different
+  verdict, the correction is refused with 409 `reassessment_required`. Post to
+  `.../reassessments` with a reason. The response is an ordinary candidate whose
+  content is unchanged and whose preview shows what the rules now read
+  differently. Accepting it makes that reading the head; the earlier release
+  stays readable exactly as it was.
+
+This keeps the effect of new rules separate from the effect of an edit. The
+console reports the refusal; it does not yet offer the re-assessment itself.
 
 ### Data types and coverage levels
 
@@ -393,7 +412,7 @@ Responses use `Cache-Control: no-store` and `X-Content-Type-Options: nosniff`. E
 | 401 | Missing, invalid, expired or revoked credential; Bearer challenge included |
 | 404 | Absent or unauthorized resource |
 | 408 | Body reception timeout |
-| 409 | Concurrent-state or idempotency conflict |
+| 409 | Concurrent-state or idempotency conflict (`conflict`), or the release must be re-assessed first (`reassessment_required`) |
 | 413 | Request or query limit exceeded |
 | 422 | Candidate assessment prevents acceptance |
 | 500 | Repository operation or integrity failure |

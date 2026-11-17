@@ -36,6 +36,7 @@ final class RepositoryHttp[F[_]](
     case Problem.PolicyOutcomeUnknown(operation) =>
       error(Status.ServiceUnavailable, "policy_outcome_unknown:" + operation)
     case _: Problem.Conflict => error(Status.Conflict, "conflict")
+    case _: Problem.ReassessmentRequired => error(Status.Conflict, "reassessment_required")
     case _: Problem.Rejected => error(Status.UnprocessableEntity, "admission_rejected")
     case _: Problem.LimitExceeded => error(Status.PayloadTooLarge, "limit_exceeded")
     case _: Problem.Integrity | _: Problem.Operational => error(Status.InternalServerError, "repository_failure")
@@ -178,6 +179,18 @@ final class RepositoryHttp[F[_]](
         _ <- lift(Either.cond(reason.length <= 2000, (), Problem.LimitExceeded("reason exceeds 2000 characters")))
         preview <- checked(if p.fileName.endsWith(".json") then repository.correctMetadata(ctx, at, p, text, reason)
           else repository.correctCompanion(ctx, at, p, text, reason))
+        result <- json(Out.preview(preview), Status.Created)
+      yield result
+    // Re-assess unchanged content under the current rules. The preview is accepted like any other candidate.
+    case POST -> Root / "v1" / "datasets" / d / "releases" / r / "reassessments" =>
+      for
+        at <- ref(d, r)
+        _ <- checked(catalog.check(ctx, at.dataset, Action.Propose))
+        b <- body(req)
+        _ <- lift(In.fields(b, Set("reason")))
+        reason <- lift(In.get[String](b, "reason"))
+        _ <- lift(Either.cond(reason.length <= 2000, (), Problem.LimitExceeded("reason exceeds 2000 characters")))
+        preview <- checked(repository.reinterpret(ctx, at, reason))
         result <- json(Out.preview(preview), Status.Created)
       yield result
     case GET -> Root / "v1" / "candidates" / c =>

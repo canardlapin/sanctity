@@ -67,3 +67,13 @@ final class CoverageSuite extends FunSuite:
     val foreign = right(CoverageLevels.from(levels().files.filterNot(_.path == notes.path) :+ FileLevel(path("elsewhere.txt"), "other", CoverageLevel.Preserved)))
     assert(prepared(foreign).isLeft)
   }
+
+  test("restamping a profile carries every recorded component and changes nothing else") {
+    val base = interpretation(Some(levels()))
+    assertEquals(right(base.withProfile(profile)).id, base.id)
+    val restamped = right(base.withProfile(profile.copy(interpreterIdentity = "another build")))
+    assertNotEquals(restamped.id, base.id)
+    assertEquals(restamped.levels, base.levels)
+    assertEquals(restamped.facts, base.facts)
+    assertEquals(right(restamped.withProfile(profile)).id, base.id)
+  }

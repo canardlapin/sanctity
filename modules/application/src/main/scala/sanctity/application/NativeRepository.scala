@@ -78,7 +78,9 @@ final class NativeRepository[F[_]](
       yield preview
     }
 
-  /** Explicitly adopt the configured semantics for unchanged bytes through ordinary admission. */
+  /** Re-assess unchanged bytes under the current rules, through ordinary admission. The preview shows what the
+    * rules now read differently; accepting it makes that reading the dataset's head.
+    */
   def reinterpret(ctx: AccessContext, base: ReleaseRef, reason: String): F[Either[Problem, Preview]] =
     Checked.attempt {
       for
@@ -142,11 +144,35 @@ final class NativeRepository[F[_]](
         }
     }
 
+  private def sourcesOf(ctx: AccessContext, activity: Activity): F[Vector[Release]] =
+    activity.processing.toVector.traverse(p =>
+      catalog.check(ctx, p.input.dataset, Action.ReadContent, Some(p.input.release)).flatMap(Checked.lift[F, Unit]) *>
+        catalog.release(ctx, p.input).flatMap(Checked.lift[F, Release]))
+
+  /** An accepted release may be edited or projected only while the current rules read it as recorded.
+    *
+    * The rules are rebuilt with every upgrade, so the recorded build fingerprints usually differ. That alone changes
+    * nothing: the release is read again, and if the result matches the record in everything except those
+    * fingerprints, work continues. If the reading differs in any other way, the release must be re-assessed first, so
+    * that the effect of new rules is reviewed on its own and never mixed into an edit.
+    */
+  private def readsAsRecorded(ctx: AccessContext, release: Release, current: SemanticProfile): F[Unit] =
+    val required = Problem.ReassessmentRequired(
+      s"the current rules read release ${release.ref.release.render} differently from its accepted assessment; re-assess it before editing or projecting")
+    for
+      sources <- sourcesOf(ctx, release.activity)
+      reread <- semantics.prepare(release.manifest, release.activity, sources)
+      (interpretation, assessment) = reread
+      recorded <- Checked.lift[F, Interpretation](release.interpretation.withProfile(release.interpretation.profile.copy(
+        libraryIdentity = interpretation.profile.libraryIdentity, interpreterIdentity = interpretation.profile.interpreterIdentity)))
+      verdict = Assessment.from(recorded, release.assessment.policy, release.assessment.findings, release.assessment.checks)
+      _ <- Checked.lift[F, Unit](Either.cond(
+        interpretation.profile == current && recorded.id == interpretation.id && verdict.id == assessment.id, (), required))
+    yield ()
+
   private def prepareInternal(ctx: AccessContext, draft: Draft): F[Preview] =
     for
-      sources <- draft.activity.processing.toVector.traverse(p =>
-        catalog.check(ctx, p.input.dataset, Action.ReadContent, Some(p.input.release)).flatMap(Checked.lift[F, Unit]) *>
-          catalog.release(ctx, p.input).flatMap(Checked.lift[F, Release]))
+      sources <- sourcesOf(ctx, draft.activity)
       result <- semantics.prepare(draft.manifest, draft.activity, sources)
       (interpretation, assessment) = result
       before <- draft.base.traverse(id => catalog.release(ctx, ReleaseRef(draft.dataset, id)).flatMap(Checked.lift[F, Release]))
@@ -154,9 +180,8 @@ final class NativeRepository[F[_]](
       _ <- Checked.lift[F, Unit](Either.cond(draft.activity.kind != ActivityKind.Reinterpretation ||
         (before.exists(_.manifest.id == draft.manifest.id) && projected.isEmpty && draft.activity.change.isEmpty), (),
         Problem.Conflict("reinterpretation requires unchanged content from an accepted base")))
-      _ <- Checked.lift[F, Unit](Either.cond(draft.activity.kind == ActivityKind.Reinterpretation ||
-        (before.toVector ++ projected).forall(_.interpretation.profile == interpretation.profile), (),
-        Problem.Conflict("semantic profile changed; explicitly reinterpret the source before editing or projecting")))
+      _ <- if draft.activity.kind == ActivityKind.Reinterpretation then F.unit
+        else (before.toVector ++ projected).filter(_.interpretation.profile != interpretation.profile).traverse_(readsAsRecorded(ctx, _, interpretation.profile))
       candidate <- catalog.prepared(ctx, draft.id, draft.generation, interpretation, assessment).flatMap(Checked.lift[F, Candidate])
       empty <- Checked.lift[F, Manifest](Manifest.from(Vector.empty))
       changes = before.fold(empty)(_.manifest).diff(candidate.manifest)

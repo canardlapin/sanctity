@@ -131,6 +131,7 @@
       unauthorized: 'This credential was not accepted. It may be revoked or mistyped.',
       not_found: 'Not found, or not visible to this credential. Sanctity does not distinguish the two.',
       conflict: 'The dataset head changed after this was prepared, or this retry key was used for different content. Open the current head and prepare the change there.',
+      reassessment_required: 'The repository\'s rules have changed since this release was accepted, and they now read it differently. The release must be re-assessed and that result reviewed before it can be edited.',
       admission_rejected: 'Admission rejected the candidate. Its findings explain why.',
       invalid_request: 'The repository refused the request as invalid. Check identifiers, actions and JSON syntax.',
       limit_exceeded: 'The request exceeds a repository limit.',

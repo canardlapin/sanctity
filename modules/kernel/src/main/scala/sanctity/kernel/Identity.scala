@@ -92,6 +92,8 @@ enum Problem:
   case InvalidManifest(detail: String)
   case NotFound(kind: String, id: String)
   case Conflict(detail: String)
+  /** The current rules read an accepted release differently from its recorded assessment. */
+  case ReassessmentRequired(detail: String)
   case Denied
   case Rejected(findings: Vector[Finding])
   case Unsupported(detail: String)
@@ -107,6 +109,7 @@ enum Problem:
     case InvalidManifest(detail) => s"Invalid manifest: $detail"
     case NotFound(kind, id) => s"$kind not found: $id"
     case Conflict(detail) => s"Conflict: $detail"
+    case ReassessmentRequired(detail) => s"Reassessment required: $detail"
     case Denied => "Access denied"
     case Rejected(findings) => findings.map(_.message).mkString("Admission rejected: ", "; ", "")
     case Unsupported(detail) => s"Unsupported: $detail"

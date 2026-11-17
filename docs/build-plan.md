@@ -365,9 +365,15 @@ and store an archive, all in the browser on a freshly started instance.
   NIRS, PET, perfusion and motion are described from names and sidecar metadata
   and can be queried beside MRI. Content without a profile is kept and labelled.
   A root `archive_description.json` makes a collection an archive.
-- **Package 3 is half done.** K5 is in: coverage levels are the first named
-  section of the interpretation identity, and a golden test pins the earlier
-  encoding. K6 (re-assessment after upgrades) is not started.
+- **Package 3 is done, apart from one console action.** K5: coverage levels are
+  the first named section of the interpretation identity, and a golden test pins
+  the earlier encoding. K6: a release from an earlier build is read again when
+  it is edited; an identical reading needs no separate step, and a different one
+  must be re-assessed through a new HTTP route. The console explains the
+  refusal but does not yet offer the re-assessment.
+- **Package 1 is done.** `python3 scripts/demo-instance.py up` builds the image,
+  starts PostgreSQL and the service, and seeds two labs, three datasets and
+  four people. Sign-in is still a printed token.
 - **Package 2 is part done.** The service chooses the interpreter from the root
   description (K1). Views, derivatives and processing are still not reachable
   over HTTP, and MRI has not been extracted into a modality of its own (K2).
