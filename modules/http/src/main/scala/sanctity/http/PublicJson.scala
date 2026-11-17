@@ -19,9 +19,16 @@ private[http] object PublicJson:
       "digest" -> text(i.blob.digest.value), "size" -> Json.fromLong(i.blob.size)))*),
     "facts" -> Json.obj(c.facts.toVector.sortBy(_._1).map((k, v) => k -> value(v))*),
     "findings" -> Json.arr(c.findings.map(finding)*))
-  def entry(e: Entry): Json = e match
+  private def level(l: CoverageLevel): Json = text(l.toString.toLowerCase)
+  /** A file carries its coverage level and group when the release's interpretation recorded them. */
+  def entry(e: Entry, levels: Option[CoverageLevels] = None): Json = e match
     case Entry.Directory(p) => Json.obj("path" -> text(p.value), "kind" -> text("directory"))
-    case Entry.File(p, _, b) => Json.obj("path" -> text(p.value), "kind" -> text("file"), "size" -> Json.fromLong(b.size))
+    case Entry.File(p, _, b) =>
+      val base = Json.obj("path" -> text(p.value), "kind" -> text("file"), "size" -> Json.fromLong(b.size))
+      levels.flatMap(_.byPath.get(p)).fold(base)(f => base.deepMerge(Json.obj("group" -> text(f.group), "level" -> level(f.level))))
+  /** What the repository did with each group of files. Absent for releases interpreted before levels were recorded. */
+  def levels(l: CoverageLevels): Json = Json.obj("version" -> text(l.version),
+    "summary" -> Json.arr(l.summary.map((group, lv, files) => Json.obj("group" -> text(group), "level" -> level(lv), "files" -> Json.fromInt(files)))*))
   def relationship(r: ScientificRelationship): Json = Json.obj("from" -> text(r.from.value), "kind" -> text(r.kind),
     "to" -> Json.arr(r.to.map(p => text(p.value))*), "label" -> opt(r.label)(text),
     "evidence" -> Json.arr(r.evidence.map(relationshipEvidence)*))
@@ -56,14 +63,15 @@ private[http] object PublicJson:
     "ref" -> ref(r.ref), "parent" -> opt(r.parent.filter(_ => showParent))(p => text(p.render)), "manifest" -> text(r.manifest.id.value.value),
     "interpretation" -> text(r.interpretation.id.value.value), "profile" -> text(r.interpretation.profile.name),
     "coverage" -> text(r.interpretation.profile.coverage), "assessment" -> assessment(r.assessment),
-    "acceptedAt" -> text(r.acceptedAt.toString), "entries" -> Json.arr(r.manifest.entries.map(entry)*),
+    "acceptedAt" -> text(r.acceptedAt.toString), "entries" -> Json.arr(r.manifest.entries.map(e => entry(e, r.interpretation.levels))*),
+    "levels" -> opt(r.interpretation.levels)(levels),
     "relationships" -> opt(r.interpretation.relationships)(g => Json.obj("version" -> text(g.version), "evidenceVersion" -> Json.fromInt(g.evidenceVersion),
       "links" -> Json.arr(g.relationships.map(relationship)*))),
     "provenance" -> provenance.getOrElse(Json.Null))
   def candidate(c: Candidate): Json = Json.obj("id" -> text(c.id.render), "dataset" -> text(c.dataset.render),
     "base" -> opt(c.base)(r => text(r.render)), "generation" -> Json.fromLong(c.generation),
     "manifest" -> text(c.manifest.id.value.value), "interpretation" -> text(c.interpretation.id.value.value),
-    "assessment" -> assessment(c.assessment))
+    "levels" -> opt(c.interpretation.levels)(levels), "assessment" -> assessment(c.assessment))
   def value(v: MetadataValue): Json = v match
     case MetadataValue.Text(v) => text(v)
     case MetadataValue.Number(v) => Json.fromBigDecimal(v)
@@ -78,7 +86,7 @@ private[http] object PublicJson:
     "sources" -> Json.arr(m.sources.map(p => text(p.value))*))
   def preview(p: Preview): Json = Json.obj("candidate" -> candidate(p.candidate),
     "contentChanges" -> Json.arr(p.contentChanges.map(d => Json.obj("path" -> text(d.path.value),
-      "before" -> opt(d.before)(entry), "after" -> opt(d.after)(entry)))*),
+      "before" -> opt(d.before)(entry(_)), "after" -> opt(d.after)(entry(_))))*),
     "metadataChanges" -> Json.arr(p.metadataChanges.map(d => Json.obj("path" -> text(d.path.value),
       "fields" -> Json.arr(d.fields.map(f => Json.obj("name" -> text(f.name),
         "before" -> opt(f.before)(field), "after" -> opt(f.after)(field)))*)))*),

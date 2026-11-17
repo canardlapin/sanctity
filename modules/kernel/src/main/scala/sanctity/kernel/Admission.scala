@@ -77,6 +77,7 @@ object Admission:
   private def bindings(manifest: Manifest, interpretation: Interpretation, assessment: Assessment): Either[Problem, Unit] =
     Either.cond(interpretation.content == manifest.id && assessment.content == manifest.id &&
       assessment.interpretation == interpretation.id &&
+      interpretation.levels.forall(l => l.files.size == manifest.files.size && manifest.files.forall(f => l.byPath.contains(f.path))) &&
       assessment.checks.forall(_.inputs.forall(i => manifest.byPath.get(i.path).exists {
         case Entry.File(_, _, blob) => blob == i.blob
         case _ => false

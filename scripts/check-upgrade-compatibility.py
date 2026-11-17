@@ -352,13 +352,15 @@ def verify(f, fixture, modern, organization=False):
         path = root + "/releases/" + release["id"]
         observed = f.json(path, tokens["owner"])
         expected = release["representation"]
-        # The frozen pre-console response predates the additive provenance panel.
-        # Preserve every original field exactly, including scientific identities,
-        # while rejecting any other unreviewed response-shape change.
+        # The frozen pre-console response predates two additive fields: the provenance
+        # panel and coverage levels. Preserve every original field exactly, including
+        # scientific identities, while rejecting any other unreviewed response-shape change.
         extra = set(observed) - set(expected)
-        require(extra <= ({"provenance"} if modern else set()), "unexpected release response fields")
+        require(extra <= ({"provenance", "levels"} if modern else set()), "unexpected release response fields")
         require({k: v for k, v in observed.items() if k not in extra} == expected,
                 "historical interpretation/representation changed")
+        # A historical interpretation recorded no levels. Reading it must not invent any.
+        require(observed.get("levels") is None, "historical release gained coverage levels without reinterpretation")
         if "provenance" in extra:
             provenance = observed["provenance"]
             require(isinstance(provenance, dict) and set(provenance) == {

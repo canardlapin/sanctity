@@ -46,7 +46,8 @@ final class Interpretation private (
     val queryVersion: Option[String],
     val relationships: Option[RelationshipGraph],
     val declaredBidsVersion: Option[String],
-    val observations: Vector[ScientificObservation]
+    val observations: Vector[ScientificObservation],
+    val levels: Option[CoverageLevels]
 ):
   lazy val byPath: Map[RelPath, ArtifactMetadata] = artifacts.map(a => a.path -> a).toMap
   def relationshipClosure(roots: Vector[RelPath]): Either[Problem, RelationshipClosure] =
@@ -55,12 +56,15 @@ final class Interpretation private (
 object Interpretation:
   def from(content: ManifestId, profile: SemanticProfile, artifacts: Vector[ArtifactMetadata], facts: Vector[ArtifactFacts] = Vector.empty,
       participants: Vector[ParticipantFacts] = Vector.empty, queryVersion: Option[String] = None,
-      relationships: Option[RelationshipGraph] = None, declaredBidsVersion: Option[String] = None, observations: Vector[ScientificObservation] = Vector.empty): Either[Problem, Interpretation] =
+      relationships: Option[RelationshipGraph] = None, declaredBidsVersion: Option[String] = None, observations: Vector[ScientificObservation] = Vector.empty,
+      levels: Option[CoverageLevels] = None): Either[Problem, Interpretation] =
     val paths = artifacts.map(_.path).toSet
     if observations.size > 10000 || observations.exists(o => !o.valid) || observations.map(o => o.source -> o.metric).distinct.size != observations.size then
       Left(Problem.InvalidManifest("invalid or duplicate scientific observation"))
     else if relationships.exists(g => RelationshipGraph.from(g.version, g.relationships, artifacts, g.evidenceVersion).isLeft) then
       Left(Problem.InvalidManifest("relationships do not match interpretation evidence"))
+    else if levels.exists(l => facts.exists(f => !l.byPath.get(f.path).exists(_.level != CoverageLevel.Preserved))) then
+      Left(Problem.InvalidManifest("an indexed file must have a coverage level above preserved"))
     else if (queryVersion.isEmpty && (facts.nonEmpty || participants.nonEmpty)) || paths.size != artifacts.size || facts.map(_.path).distinct.size != facts.size ||
         participants.map(_.participant).distinct.size != participants.size || facts.exists(f => !paths.contains(f.path)) then Left(Problem.InvalidManifest("duplicate semantic artifact"))
     else
@@ -85,8 +89,21 @@ object Interpretation:
       val contextTokens = if contextual then Vector(profile.context.nonEmpty.toString, declaredBidsVersion.nonEmpty.toString) ++ declaredBidsVersion.toVector else Vector.empty
       val observed = observations.sortBy(o => (Digest.framed("sanctity.released-artifact.v1", o.source.tokens).value, o.metric.name, o.metric.version, o.metric.unit.getOrElse("")))
       val observationTokens = if observed.isEmpty then Vector.empty else Vector("observations-v1", observed.size.toString) ++ observed.flatMap(_.tokens)
-      val id = InterpretationId(Digest.framed(if observed.nonEmpty then "sanctity.interpretation.v6" else domain, Vector(content.value.value) ++ contextTokens ++ profile.tokens ++ tokens ++ queryTokens ++ relationshipTokens ++ observationTokens))
-      Right(new Interpretation(id, content, profile, ordered, facts.sortBy(_.path.value), participants.sortBy(_.participant), queryVersion, relationships, declaredBidsVersion, observed))
+      // Frozen. The encodings above identify existing releases and are recomputed on every read: never add a branch.
+      val core = Digest.framed(if observed.nonEmpty then "sanctity.interpretation.v6" else domain, Vector(content.value.value) ++ contextTokens ++ profile.tokens ++ tokens ++ queryTokens ++ relationshipTokens ++ observationTokens)
+      val sections = levels.toVector.map(l => Section("coverage-levels", l.version, l.tokens))
+      val id = InterpretationId(if sections.isEmpty then core else extended(core, sections))
+      Right(new Interpretation(id, content, profile, ordered, facts.sortBy(_.path.value), participants.sortBy(_.participant), queryVersion, relationships, declaredBidsVersion, observed, levels))
+
+  private final case class Section(name: String, version: String, tokens: Vector[String])
+
+  /** A new kind of recorded fact adds a named, versioned section here. Each section is hashed on its own and bound to the
+    * unchanged core identity, so adding one cannot alter the identity of an interpretation that does not carry it.
+    */
+  private def extended(core: Digest, sections: Vector[Section]): Digest =
+    val ordered = sections.sortBy(_.name)
+    Digest.framed("sanctity.interpretation.v8", Vector(core.value, ordered.size.toString) ++ ordered.flatMap(s =>
+      Vector(s.name, s.version, Digest.framed("sanctity.interpretation.section.v1", s.tokens).value)))
 
 final class Assessment private (
     val id: AssessmentId,

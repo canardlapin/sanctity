@@ -281,9 +281,26 @@ private[postgres] object JsonCodecs:
       _ <- verify(cursor, manifest.id == id)
     yield manifest
   }
+  private given Encoder[CoverageLevels] = Encoder.instance(l => Json.obj("version" -> l.version.asJson,
+    "files" -> Json.arr(l.files.map(f => Json.obj("path" -> f.path.asJson, "group" -> f.group.asJson, "level" -> f.level.toString.asJson))*)))
+  private given Decoder[CoverageLevels] = Decoder.instance { cursor =>
+    for
+      version <- cursor.get[String]("version")
+      files <- cursor.get[Vector[Json]]("files").flatMap(_.traverse { j =>
+        for
+          path <- j.hcursor.get[RelPath]("path")
+          group <- j.hcursor.get[String]("group")
+          name <- j.hcursor.get[String]("level")
+          level <- CoverageLevel.values.find(_.toString == name).toRight(DecodingFailure("unknown coverage level", j.hcursor.history))
+        yield FileLevel(path, group, level)
+      })
+      levels <- checked(cursor, CoverageLevels.from(files, version))
+    yield levels
+  }
   given Encoder[Interpretation] = Encoder.instance(i => Json.obj(
     "id" -> i.id.asJson, "content" -> i.content.asJson, "profile" -> i.profile.asJson, "artifacts" -> i.artifacts.asJson,
     "observations" -> i.observations.asJson, "declaredBidsVersion" -> i.declaredBidsVersion.asJson, "facts" -> i.facts.asJson, "participants" -> i.participants.asJson, "queryVersion" -> i.queryVersion.asJson,
+    "levels" -> i.levels.asJson,
     "relationships" -> i.relationships.fold(Json.Null)(g => Json.obj("version" -> g.version.asJson, "evidenceVersion" -> g.evidenceVersion.asJson, "links" -> g.relationships.asJson))
   ))
   given Decoder[Interpretation] = Decoder.instance { cursor =>
@@ -306,7 +323,8 @@ private[postgres] object JsonCodecs:
         yield g
       }
       observations <- cursor.get[Option[Vector[ScientificObservation]]]("observations").map(_.getOrElse(Vector.empty))
-      interpretation <- checked(cursor, Interpretation.from(content, profile, artifacts, facts, participants, queryVersion, graph, declared, observations))
+      levels <- cursor.get[Option[CoverageLevels]]("levels")
+      interpretation <- checked(cursor, Interpretation.from(content, profile, artifacts, facts, participants, queryVersion, graph, declared, observations, levels))
       _ <- verify(cursor, interpretation.id == id)
     yield interpretation
   }
