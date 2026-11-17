@@ -1,0 +1,79 @@
+# Local demonstration instance: PostgreSQL 17 and the packaged Sanctity service.
+#
+# Start it with `python3 scripts/demo-instance.py up`, which builds the image, generates the
+# passwords this file requires, applies the database roles and migrations, bootstraps the
+# organization and seeds two labs. Compose alone cannot do those steps: `docker compose up`
+# on a fresh checkout stops at the missing variables below.
+#
+# This is not a deployment template. The database password travels in the container
+# environment, PostgreSQL is reachable only on the private Compose network, and the console
+# is published on the host's loopback interface without TLS.
+name: sanctity-demo
+
+services:
+  postgres:
+    # Official PostgreSQL 17, the manifest scripts/check-postgres.sh pins.
+    image: postgres@sha256:b0f9560a2de083e2cc7382e75f808c7381a32852a7ec49117deedb300e552b24
+    environment:
+      POSTGRES_DB: sanctity
+      # Superuser for role provisioning over the container's local socket; no service uses it.
+      POSTGRES_PASSWORD: ${SANCTITY_DEMO_SUPERUSER_PASSWORD:?start the instance with scripts/demo-instance.py up}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      # TCP, not the socket: the image's first-run initialization server listens on the socket only.
+      test: ["CMD", "pg_isready", "-h", "127.0.0.1", "-U", "postgres", "-d", "sanctity"]
+      interval: 2s
+      timeout: 3s
+      retries: 60
+    stop_grace_period: 30s
+
+  sanctity:
+    image: ${SANCTITY_DEMO_IMAGE:?start the instance with scripts/demo-instance.py up}
+    pull_policy: never
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      SANCTITY_JDBC_URL: jdbc:postgresql://postgres:5432/sanctity
+      # The runtime login: no schema ownership, DDL or credential administration.
+      SANCTITY_DB_USER: sanctity_runtime
+      SANCTITY_DB_PASSWORD: ${SANCTITY_DEMO_RUNTIME_PASSWORD:?start the instance with scripts/demo-instance.py up}
+      SANCTITY_STORAGE: /var/lib/sanctity/blobs
+      SANCTITY_HTTP_PORT: ${SANCTITY_DEMO_PORT:?start the instance with scripts/demo-instance.py up}
+      # Listen on the container's interfaces; Host and Origin must still be http://127.0.0.1:PORT.
+      SANCTITY_DEPLOYMENT_MODE: container
+    ports:
+      # Host loopback only, and the same port inside and out: the origin names it.
+      - "127.0.0.1:${SANCTITY_DEMO_PORT}:${SANCTITY_DEMO_PORT}"
+    volumes:
+      - blobs:/var/lib/sanctity/blobs
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1:$${SANCTITY_HTTP_PORT}/"]
+      interval: 2s
+      timeout: 3s
+      retries: 60
+    stop_grace_period: 20s
+
+  # One-shot trusted operator commands (migrate, repository, organization) with the schema
+  # owner's login, which the serving container never receives:
+  #   docker compose run --rm operator migrate --runtime-role sanctity_runtime
+  operator:
+    profiles: ["operator"]
+    image: ${SANCTITY_DEMO_IMAGE}
+    pull_policy: never
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      SANCTITY_JDBC_URL: jdbc:postgresql://postgres:5432/sanctity
+      SANCTITY_DB_USER: sanctity_migrator
+      SANCTITY_DB_PASSWORD: ${SANCTITY_DEMO_MIGRATOR_PASSWORD:?start the instance with scripts/demo-instance.py up}
+    volumes:
+      - blobs:/var/lib/sanctity/blobs
+      # Native import reads the seed fixtures from here; nothing is written back.
+      - ./modules/app/src/test/resources:/seed:ro
+
+volumes:
+  pgdata:
+  blobs:

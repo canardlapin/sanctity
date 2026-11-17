@@ -133,8 +133,16 @@ def write_zip(path, prefix, contents):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--output", type=Path, required=True, help="new output directory (never overwritten)")
+    parser.add_argument("--output", type=Path, help="new output directory (never overwritten)")
+    parser.add_argument("--source-inventory", action="store_true",
+                        help="print the SHA-256 a build of the current sources would record, then exit without building")
     args = parser.parse_args()
+    if args.source_inventory:
+        # Equals manifest.json's sourceInventorySha256, so a caller can tell whether an existing release is current.
+        print(digest(json_bytes(sources())))
+        return
+    if args.output is None:
+        parser.error("--output is required")
     output = args.output.resolve()
     if output.exists():
         parser.error("output already exists; choose a new directory")

@@ -93,11 +93,25 @@ database files or an existing unrelated directory. The launcher sets umask 077.
 `SANCTITY_DEPLOYMENT_MODE=loopback` accepts only `http://127.0.0.1:PORT` as its
 public origin. For a TLS proxy, explicitly select `proxy` and set
 `SANCTITY_PUBLIC_ORIGIN=https://YOUR-HOST` (optional port; no path/trailing slash,
-userinfo, query or fragment). The listener always binds 127.0.0.1. Requests must
+userinfo, query or fragment). In both modes the listener binds 127.0.0.1. Requests must
 have exactly the configured Host and, when present, Origin. Cross-site browser
 requests are denied. Forwarding headers are stripped and cannot change authority,
 identity or the configured origin. Local processes remain within the host trust
 boundary; proxy mode does not authenticate a proxy process.
+
+`SANCTITY_DEPLOYMENT_MODE=container` is for a process inside a container, whose own
+loopback interface the host cannot reach. It binds 0.0.0.0, every interface of the
+container's network namespace, and changes nothing else: the origin must still be
+`http://127.0.0.1:PORT`, and every request must still carry that Host and, when present,
+that Origin. No setting names a bind address; this mode is the only way to leave
+loopback. Publish the port on the host's loopback interface under the same number
+(`127.0.0.1:PORT:PORT`), because the origin names it. Never select this mode outside a
+container or publish the port on another host address: the listener would then accept
+unencrypted connections from the network, and the Host check, which stops a browser
+from being pointed at the service under another name, does not stop a client that
+writes its own Host header. Other containers on the same network can connect, as local
+processes can in loopback mode. `proxy` mode still binds 127.0.0.1 and is not
+reachable from another container.
 
 The distribution's `deployment/` directory contains environment, nginx TLS, systemd
 and macOS launchd examples (repository sources: [deployment](deployment/)). Replace
@@ -175,6 +189,61 @@ Startup failures and operator entry-point failures report fixed categories witho
 JDBC URLs, filesystem paths, secret values or nested exception causes. HTTP failures
 similarly omit raw exceptions and forwarded values. This minimal error boundary does
 not supply O02.1's planned request IDs, health endpoints or operational diagnostics.
+
+## Local container demonstration
+
+A source checkout can start a seeded instance of this distribution in Docker with one
+command. It needs Docker with Compose, Python 3.9+ and, for the first build, the build
+prerequisites above.
+
+```sh
+python3 scripts/demo-instance.py up               # start or update; prints the address and demo credentials
+python3 scripts/demo-instance.py down             # remove the containers; data volumes are kept
+python3 scripts/demo-instance.py down --volumes   # also delete the database, the stored files and local state
+python3 scripts/demo-instance.py compose logs sanctity   # any docker compose command for this instance
+```
+
+`up` builds this ZIP from the current sources when none matches them, builds an image
+that unpacks it (`Dockerfile`; nothing is compiled in the image), and starts pinned
+PostgreSQL 17 and the service from `compose.yaml`. It then performs the steps of
+"Install and run" above with the packaged commands: the two database roles from the
+roles template, `migrate --runtime-role`, one staged dataset, the organization preview
+and bootstrap, `serve` under the runtime login, and credential issuance. Each step reads
+the instance's current state first, so repeating `up` changes nothing, and `up` after
+`down` serves the same accepted releases. Open the printed address, by default
+`http://127.0.0.1:8080/`, and paste a printed access token into the sign-in form. The
+service refuses `localhost` and any other name. `SANCTITY_DEMO_PORT` selects another
+port; `SANCTITY_DEMO_RELEASE` runs an existing package output directory instead of
+building one.
+
+The seed is two fictional labs, each administered by its lead and holding one project:
+three accepted datasets imported from repository fixtures (two synthetic MRI software
+fixtures and a CC0 excerpt of published behavioural responses), a research assistant in
+each lab with an explicit share of one dataset, and one share of a single release
+across the labs. Four people receive 30-day bearer credentials. They are demo
+credentials for the local instance: anyone who can read the terminal or the state
+directory can use them.
+
+What the demonstration leaves out or bends:
+
+- The catalog stores no display name for a principal and the console shows principal
+  identifiers. The people's names appear only in the launcher's output and in
+  credential labels.
+- No command registers a principal. After bootstrap, a principal first exists when a
+  steward shares a dataset with it, so each further person is introduced by a share.
+- The organization preview is accepted without the review an installation owner owes it.
+  The mapping is kept in the state directory.
+- Database passwords are generated on first start, kept in a mode-0600 file under
+  `target/demo-instance/` and passed to the containers in their environment rather than
+  as protected secret files. PostgreSQL is not published on the host; the launcher
+  reaches it through the container's local socket to provision roles and read state.
+- The console is served over plain HTTP on the host's loopback interface through
+  `container` mode. There is no TLS, identity provider or backup.
+
+`scripts/check-demo-instance.sh` starts a separate instance from clean, checks the
+console, every credential, both lab directories, each dataset's accepted inventory and
+bytes, the denials between labs and the role separation with real requests, repeats
+`up`, restarts, and removes everything including volumes.
 
 ## Trusted operator commands
 
