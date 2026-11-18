@@ -195,7 +195,8 @@ final class OrganizationRecovery[F[_]: Async](db: PostgresDatabase[F], config: D
     check(actual == field(manifest,"objects").asArray.get.toSet,"recovery-catalog-object-inventory")
 
   private def scientificDigest(c: Connection): String =
-    val excluded = Set("principal","api_credential","credential_audit","access_grant","policy_audit","policy_acknowledgement","policy_retired_runtime")
+    val excluded = Set("principal","api_credential","credential_audit","identity_binding","browser_session",
+      "access_grant","policy_audit","policy_acknowledgement","policy_retired_runtime")
     val tables = rows(c,"SELECT tablename FROM pg_tables WHERE schemaname=current_schema() ORDER BY tablename")(_.getString(1))
       .filterNot(t => t.startsWith("organization_") || excluded(t))
     val hash = java.security.MessageDigest.getInstance("SHA-256")
@@ -338,6 +339,8 @@ final class OrganizationRecovery[F[_]: Async](db: PostgresDatabase[F], config: D
       check(grants.map(g => text(field(g,"scope"),"dataset")).distinct.size == 1,"recovery-release-scope")
       tombstone("release",target,obj("grants" -> Json.arr(grants*),"head" -> verified.current))
     }
+    val (bindingCount, sessionCount) = rows(c,
+      "SELECT (SELECT count(*) FROM identity_binding), (SELECT count(*) FROM browser_session)")(r => r.getLong(1) -> r.getLong(2)).head
     update(c,"DELETE FROM identity_binding")
     val credentialCount = rows(c,"SELECT count(*) FROM api_credential WHERE revoked_at IS NULL")(_.getLong(1)).head
     projection.credentials.values.foreach { token =>
@@ -389,6 +392,7 @@ final class OrganizationRecovery[F[_]: Async](db: PostgresDatabase[F], config: D
       Seq(text(verified.current,"epoch"),text(verified.current,"revision"),text(verified.current,"appliedHash")))
     db.policy.retireRuntime(c)
     obj("restoredCredentialsInvalidated" -> Json.fromLong(credentialCount),"allCredentialIdentitiesRetired" -> Json.fromInt(projection.credentials.size),
+      "restoredBindingsRemoved" -> Json.fromLong(bindingCount),"restoredBrowserSessionsInvalidated" -> Json.fromLong(sessionCount),
       "activeRunsFailed" -> Json.fromInt(activeRuns.size),"missingDatasets" -> Json.fromInt(missingData.size),"missingReleases" -> Json.fromInt(missingReleases.size),
       "allImportAndDeliveryLeasesInvalidated" -> Json.True)
 

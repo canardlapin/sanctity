@@ -367,6 +367,8 @@ def qualify(predecessor, artifact, root, output, checks, harness=None, isolated=
                     assert cycle['phase']=='Opened' and cycle['admissionReady']
                     assert sql('SELECT writer_epoch FROM organization_policy','recovered_cycle')==str(int(opened['verification']['summary']['head']['epoch'])+1)
                     assert sql('SELECT count(*) FROM api_credential WHERE revoked_at IS NULL','recovered_cycle')=='0'
+                    outcomes = cycle['verification']['outcomes']
+                    assert outcomes['restoredBindingsRemoved'] == 1 and outcomes['restoredBrowserSessionsInvalidated'] == 1
                     assert sql('SELECT count(*) FROM identity_binding','recovered_cycle')=='0'
                     assert sql('SELECT count(*) FROM browser_session','recovered_cycle')=='0'
                     checks.append('restore-removes-identity-bindings-and-unexpired-browser-sessions')
