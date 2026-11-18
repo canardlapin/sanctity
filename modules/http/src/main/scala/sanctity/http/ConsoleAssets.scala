@@ -36,6 +36,9 @@ final class ConsoleAssets[F[_]](using F: Sync[F]):
           Header.Raw(CIString("Referrer-Policy"), "no-referrer"),
           Header.Raw(CIString("X-Frame-Options"), "DENY"),
           Header.Raw(CIString("X-Content-Type-Options"), "nosniff")))
+      case None if req.method == Method.GET && req.uri.path.renderString == "/auth/config" =>
+        F.pure(Response[F]().withEntity("""{"enabled":false}""").putHeaders(
+          Header.Raw(CIString("Content-Type"),"application/json"),Header.Raw(CIString("Cache-Control"),"no-store")))
       case Some(_) => F.pure(Response[F](Status.MethodNotAllowed))
       case None => F.pure(Response[F](Status.NotFound))
   }

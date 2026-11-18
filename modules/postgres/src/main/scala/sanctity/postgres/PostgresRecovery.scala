@@ -89,6 +89,7 @@ final class PostgresRecovery[F[_]: Async] private[postgres](xa: Transactor[F]):
                     release_id=EXCLUDED.release_id,actions=EXCLUDED.actions,revoked_at=NULL""".update.run.void
             yield ()
           }
+          _ <- sql"DELETE FROM identity_binding".update.run
           // A restored credential may have been revoked after the backup. Reissue out of band.
           _ <- sql"""INSERT INTO credential_audit(credential_id,action)
             SELECT id,'RecoveryInvalidated' FROM api_credential WHERE revoked_at IS NULL""".update.run

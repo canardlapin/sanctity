@@ -17,7 +17,9 @@ final class RepositoryHttp[F[_]](
     catalog: Catalog[F], repository: NativeRepository[F], authenticator: Authenticator[F],
     independentPolicy: Boolean = false, organization: Option[OrganizationService[F]] = None,
     views: Map[String, ScientificViews[F]] = Map.empty[String, ScientificViews[F]],
-    uploads: Option[BrowserUploads[F]] = None
+    uploads: Option[BrowserUploads[F]] = None,
+    sessionAuth: Option[Request[F] => F[Either[Problem, AccessContext]]] = None,
+    recipients: Option[(AccessContext, DatasetId, String) => F[Either[Problem, Vector[(PrincipalId, String)]]]] = None
 )(using F: Async[F]) extends Http4sDsl[F]:
   import PublicJson as Out
   import RequestJson as In
@@ -151,6 +153,15 @@ final class RepositoryHttp[F[_]](
       for { service <- org; project <- id[ProjectTag](p); q <- directoryQuery(req); page <- checked(service.datasets(ctx, project, q._1, q._2)); r <- json(Out.page(page)(Out.datasetEntry)) } yield r
     case GET -> Root / "v1" / "me" / "shares" =>
       for { service <- org; q <- directoryQuery(req); page <- checked(service.shares(ctx, q._1, q._2)); r <- json(Out.page(page)(Out.shareEntry)) } yield r
+    case GET -> Root / "v1" / "datasets" / d / "recipients" =>
+      for
+        search <- lift(recipients.toRight(Problem.NotFound("route","recipients")))
+        dataset <- id[DatasetTag](d)
+        query <- single(req, "q")
+        people <- checked(search(ctx, dataset, query.getOrElse("")))
+        response <- json(Json.obj("items" -> Json.arr(people.map((p, name) => Json.obj(
+          "principal" -> Json.fromString(p.render), "name" -> Json.fromString(name)))*)))
+      yield response
     case GET -> Root / "v1" / "datasets" / d / "grants" =>
       id[DatasetTag](d).flatMap(i => checked(catalog.grants(ctx, i))).flatMap(gs => json(Out.grants(gs)))
     case GET -> Root / "v1" / "datasets" / d / "access" =>
@@ -424,8 +435,9 @@ final class RepositoryHttp[F[_]](
 
   private def authenticate(req: Request[F]): F[Either[Problem, AccessContext]] =
     val values = req.headers.headers.filter(_.name == CIString("Authorization")).map(_.value)
-    // Only one header, never query parameters, cookies or caller-provided principal headers.
+    // An explicit Authorization header always selects bearer authentication.
     values match
+      case Nil if sessionAuth.isDefined => sessionAuth.get(req)
       case values if values.size == 1 && values.head.length <= 512 =>
         values.head.split(" ", -1).toList match
           case scheme :: token :: Nil if scheme.equalsIgnoreCase("Bearer") && token.nonEmpty => authenticator.authenticate(token)

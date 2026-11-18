@@ -29,13 +29,14 @@ object ApiServer extends ProtectedIOApp:
       .build
 
   private[sanctity] def routes(db: PostgresDatabase[IO], store: BlobStore[IO], ids: IdSource[IO],
-      independentPolicy: Boolean = false): HttpApp[IO] =
+      independentPolicy: Boolean = false, login: Option[InstitutionalLogin] = None): HttpApp[IO] =
     val catalog = db.catalog(ids)
     val repository = new NativeRepository(catalog, store, ServiceInterpreters(store), ids)
     val views = RepositoryBidsContext.Modalities.flatMap(m => m.rules.map(rule => m.id ->
       new ScientificViews[IO](catalog, store, repository, rule.view(RepositoryBidsContext.Repository), ids))).toMap
     new RepositoryHttp(catalog, repository, db.credentials(ids), independentPolicy, Some(db.organization),
-      views, Some(new BrowserUploads(catalog, db.journal(ids), store, repository, ids))).app
+      views, Some(new BrowserUploads(catalog, db.journal(ids), store, repository, ids)),
+      login.map(_.authenticate), login.map(provider => (ctx,d,q) => catalog.recipients(ctx,d,provider.issuer,q))).app
 
   def run(args: List[String]): IO[ExitCode] = ServiceConfiguration.exit {
     for
@@ -48,9 +49,10 @@ object ApiServer extends ProtectedIOApp:
           _ <- db.checkOrganizationReady
           store <- FileBlobStore.open[IO](config.storage)
           ids = IdSource.random[IO]
-          api = routes(db, store, ids, sys.env.contains("SANCTITY_POLICY_CONFIG"))
+          login <- InstitutionalLogin.configured(sys.env,config.publicOrigin,db.browserIdentities)
+          api = routes(db, store, ids, sys.env.contains("SANCTITY_POLICY_CONFIG"), login)
           slots <- Semaphore[IO](8)
-          protectedApp = ProtectedOrigin(ConsoleAssets.withApi(api), config.authority, config.publicOrigin)
+          protectedApp = ProtectedOrigin(login.fold(ConsoleAssets.withApi(api))(_.wrap(ConsoleAssets.withApi(api))), config.authority, config.publicOrigin)
           started = if config.bindAddress == ServiceConfiguration.loopbackAddress
             then "Sanctity API and console started on the configured loopback origin."
             else "Sanctity API and console started for the configured loopback origin, listening on every interface of this container."

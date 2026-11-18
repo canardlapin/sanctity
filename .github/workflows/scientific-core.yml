@@ -80,12 +80,23 @@ jobs:
           distribution: temurin
           java-version: '21'
       - uses: sbt/setup-sbt@v1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci --prefix tests/console --ignore-scripts --no-audit --no-fund
+      - run: node tests/console/node_modules/playwright/cli.js install --with-deps chromium
+        env:
+          PLAYWRIGHT_BROWSERS_PATH: ${{ github.workspace }}/target/console-browsers
       - run: bash scripts/check-demo-instance.sh
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: demo-instance-evidence
-          path: target/demo-check.*/
+          path: |
+            target/demo-check.*/checks.json
+            target/demo-check.*/state-first.json
+            target/demo-check.*/service.log
+            target/demo-check.*/institutional-login.txt
           if-no-files-found: error
   scientific-core:
     runs-on: ubuntu-24.04

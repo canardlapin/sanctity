@@ -138,7 +138,11 @@ private[postgres] object CredentialSql:
           _ <- Records.lift(Either.cond(current.contains(true), (), Problem.Denied))
         yield ()
     } *> ctx.credential.traverse_ { id =>
-      sql"""SELECT principal_id FROM api_credential WHERE id=${Records.uuid(id)}
-        AND revoked_at IS NULL AND expires_at > clock_timestamp() FOR SHARE""".query[UUID].option
+      val owner = if ctx.browserSession then
+        sql"""SELECT b.principal_id FROM browser_session s JOIN identity_binding b ON b.id=s.binding_id
+          WHERE s.id=${Records.uuid(id)} AND s.expires_at > clock_timestamp() FOR SHARE OF s"""
+      else sql"""SELECT principal_id FROM api_credential WHERE id=${Records.uuid(id)}
+        AND revoked_at IS NULL AND expires_at > clock_timestamp() FOR SHARE"""
+      owner.query[UUID].option
         .flatMap(p => Records.lift(Either.cond(p.contains(Records.uuid(ctx.principal)), (), Problem.Denied)))
     }

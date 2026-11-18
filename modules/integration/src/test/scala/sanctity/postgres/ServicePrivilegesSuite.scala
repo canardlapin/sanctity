@@ -38,6 +38,43 @@ final class ServicePrivilegesSuite extends FunSuite:
         }
     }.unsafeRunSync()
 
+  test("a provider subject binds once, sessions follow current authority and never survive expiry or unbinding") {
+    fixture { (f, db, _) =>
+      val issuer = "https://institution.example.test"
+      val principal = f.system.context.principal
+      val operator = f.database.browserIdentities
+      val sessions = db.browserIdentities
+      for
+        preview <- f.database.organization.preview(principal)
+        _ <- f.database.organization.bootstrap(principal,PostgresOrganizationCatalog.previewDigest(preview))
+        absent <- sessions.issue(issuer,"unbound")
+        _ = assertEquals(absent,Left(Problem.Denied))
+        _ <- checked(operator.bind(principal,issuer,"account-1","Demo Person"))
+        _ <- checked(operator.bind(principal,issuer,"account-1","Demo Person"))
+        conflict <- operator.bind(principal,issuer,"account-2","Demo Person")
+        _ = assert(conflict.isLeft)
+        _ <- deniedSql(db,"DELETE FROM identity_binding")
+        token <- checked(sessions.issue(issuer,"account-1"))
+        ctx <- checked(sessions.authenticate(issuer,token))
+        _ = assert(ctx.browserSession && ctx.principal == principal)
+        _ <- checked(db.catalog(IdSource.random[IO]).check(ctx,f.system.dataset.id,Action.ManageAccess))
+        wrongIssuer <- sessions.authenticate("https://another.example.test",token)
+        _ = assertEquals(wrongIssuer,Left(Problem.Denied))
+        _ <- checked(sessions.logout(token))
+        loggedOut <- db.catalog(IdSource.random[IO]).check(ctx,f.system.dataset.id,Action.ManageAccess)
+        _ = assertEquals(loggedOut,Left(Problem.Denied))
+        expiring <- checked(sessions.issue(issuer,"account-1"))
+        _ <- sqlRun(f.database,"UPDATE browser_session SET expires_at=clock_timestamp()")
+        expired <- sessions.authenticate(issuer,expiring)
+        _ = assertEquals(expired,Left(Problem.Denied))
+        last <- checked(sessions.issue(issuer,"account-1"))
+        _ <- checked(operator.unbind(principal,issuer,"account-1"))
+        unbound <- sessions.authenticate(issuer,last)
+        _ = assertEquals(unbound,Left(Problem.Denied))
+      yield ()
+    }
+  }
+
   test("runtime can authenticate, prepare, accept and read using the required transaction locks") {
     fixture { (f, db, _) =>
       val ids = IdSource.random[IO]
@@ -149,8 +186,15 @@ final class ServicePrivilegesSuite extends FunSuite:
         stale <- OrganizationCli.command(f.database, List("disable-principal", operator, admin.render, (principal + 5).toString, "off-1")).attempt
         _ = assert(stale.isLeft, "a stale reviewed generation is refused")
         // Emergency disablement overrides last-administrator protection; the lab then shows up as needing recovery.
+        issuer = "https://institution.example.test"
+        _ <- checked(f.database.browserIdentities.bind(admin,issuer,"lab-admin","Lab Admin"))
+        session <- checked(db.browserIdentities.issue(issuer,"lab-admin"))
         disabled <- OrganizationCli.command(f.database, List("disable-principal", operator, admin.render, principal.toString, "off-2"))
         _ = assert(disabled.startsWith("Principal "), disabled)
+        ended <- db.browserIdentities.authenticate(issuer,session)
+        _ = assertEquals(ended,Left(Problem.Denied))
+        remaining <- sql"SELECT count(*) FROM browser_session".query[Long].unique.transact(f.database.transactor)
+        _ = assertEquals(remaining,0L)
         needs <- OrganizationCli.command(f.database, List("recovery-needs", operator))
         _ = assert(needs.linesIterator.exists(_.startsWith("lab ")), needs)
       yield ()

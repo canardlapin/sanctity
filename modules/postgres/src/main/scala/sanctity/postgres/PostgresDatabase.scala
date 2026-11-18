@@ -36,6 +36,7 @@ object DatabaseConfig:
 final class PostgresDatabase[F[_]] private[postgres] (
     private[postgres] val transactor: Transactor[F], val schema: String
 )(using F: Async[F]):
+  def browserIdentities = new BrowserIdentities[F](transactor)
   def credentials(ids: IdSource[F]): PostgresCredentials[F] = new PostgresCredentials(transactor, ids)
 
   def policy: PostgresPolicy[F] = new PostgresPolicy(this)
@@ -54,7 +55,7 @@ final class PostgresDatabase[F[_]] private[postgres] (
 
   private[postgres] def migrations: F[Vector[(Int, String, String)]] =
     F.blocking {
-      Vector("V001__catalog.sql", "V002__authority.sql", "V003__queries.sql", "V004__operations.sql", "V005__credentials.sql", "V006__processing.sql", "V007__publication.sql", "V008__organization.sql", "V009__current_authority.sql", "V010__policy_witness.sql", "V011__governed_organization.sql", "V012__dataset_moves.sql", "V013__dataset_labels.sql", "V014__organization_recovery.sql", "V015__import_base.sql").zipWithIndex.map { (name, index) =>
+      Vector("V001__catalog.sql", "V002__authority.sql", "V003__queries.sql", "V004__operations.sql", "V005__credentials.sql", "V006__processing.sql", "V007__publication.sql", "V008__organization.sql", "V009__current_authority.sql", "V010__policy_witness.sql", "V011__governed_organization.sql", "V012__dataset_moves.sql", "V013__dataset_labels.sql", "V014__organization_recovery.sql", "V015__import_base.sql", "V016__browser_identity.sql").zipWithIndex.map { (name, index) =>
         val stream = Option(getClass.getResourceAsStream(s"/sanctity/postgres/$name"))
           .getOrElse(throw Failure(Problem.Operational("missing catalog migration")))
         val source = try new String(stream.readAllBytes(), StandardCharsets.UTF_8) finally stream.close()
@@ -105,6 +106,8 @@ final class PostgresDatabase[F[_]] private[postgres] (
         AND NOT has_column_privilege('repository_state','recovery_required','UPDATE')
         AND NOT has_any_column_privilege('repository_state','INSERT')
         AND NOT has_table_privilege('repository_state','INSERT,DELETE,TRUNCATE')
+        AND NOT has_any_column_privilege('identity_binding','INSERT,UPDATE')
+        AND NOT has_table_privilege('identity_binding','DELETE,TRUNCATE')
         AND NOT has_any_column_privilege('api_credential','INSERT')
         AND NOT has_table_privilege('api_credential','INSERT,DELETE,TRUNCATE')
         AND NOT has_column_privilege('api_credential','token_digest','UPDATE')
@@ -161,6 +164,7 @@ final class PostgresDatabase[F[_]] private[postgres] (
       _ <- Fragment.const(s"""REVOKE ALL ON ALL SEQUENCES IN SCHEMA "$schema" FROM "$role"""").update.run
       _ <- Fragment.const(s"""GRANT USAGE ON SCHEMA "$schema" TO "$role"""").update.run
       _ <- Fragment.const(s"""GRANT SELECT ON ALL TABLES IN SCHEMA "$schema" TO "$role"""").update.run
+      _ <- Fragment.const(s"""GRANT DELETE, INSERT, UPDATE (id) ON "$schema"."browser_session" TO "$role"""").update.run
       inserts = Vector("principal", "dataset", "blob", "manifest", "manifest_entry", "interpretation", "metadata_artifact",
         "metadata_field", "assessment", "draft", "candidate", "release", "acceptance_receipt", "audit", "outbox",
         "access_grant", "policy_audit", "scientific_artifact", "scientific_entity", "scientific_value", "participant_value",

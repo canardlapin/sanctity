@@ -3,7 +3,7 @@
   "info": {
     "title": "Sanctity bounded repository API",
     "version": "0.1.0",
-    "description": "API credentials authenticate stable principals. Current catalog authority controls every operation. All responses use Cache-Control: no-store. JSON requests: at most 4 MiB, depth 32 and 20,000 nodes; queries: depth 16 and 256 nodes. JSON must be UTF-8 and have no duplicate or unrecognized fields. No browser login, remote filesystem access, raw blob access, arbitrary draft submission or credential administration endpoints."
+    "description": "API credentials authenticate stable principals. Current catalog authority controls every operation. All responses use Cache-Control: no-store. JSON requests: at most 4 MiB, depth 32 and 20,000 nodes; queries: depth 16 and 256 nodes. JSON must be UTF-8 and have no duplicate or unrecognized fields. Optional institutional browser sign-in uses an opaque session cookie. Cookie-authenticated writes require the configured Origin and X-Sanctity-CSRF: 1."
   },
   "servers": [
     {
@@ -14,6 +14,9 @@
   "security": [
     {
       "bearerAuth": []
+    },
+    {
+      "browserSession": []
     }
   ],
   "paths": {
@@ -1961,6 +1964,121 @@
           }
         }
       }
+    },
+    "/auth/config": {
+      "get": {
+        "operationId": "loginConfiguration",
+        "summary": "Whether institutional sign-in is enabled",
+        "responses": {
+          "200": {
+            "description": "Login configuration"
+          }
+        },
+        "security": []
+      }
+    },
+    "/auth/login": {
+      "get": {
+        "operationId": "beginInstitutionalLogin",
+        "summary": "Start institutional sign-in",
+        "responses": {
+          "303": {
+            "description": "Redirect to the configured provider"
+          },
+          "503": {
+            "description": "Provider unavailable"
+          }
+        },
+        "security": []
+      }
+    },
+    "/auth/callback": {
+      "get": {
+        "operationId": "completeInstitutionalLogin",
+        "summary": "Complete sign-in using the provider response and a browser-bound flow",
+        "responses": {
+          "200": {
+            "description": "Signed in"
+          },
+          "401": {
+            "description": "Sign-in declined"
+          }
+        },
+        "security": []
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "operationId": "endBrowserSession",
+        "summary": "End the current Sanctity session",
+        "responses": {
+          "204": {
+            "description": "Signed out"
+          },
+          "403": {
+            "description": "Origin or CSRF check failed"
+          }
+        },
+        "security": [
+          {
+            "browserSession": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Origin",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-Sanctity-CSRF",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "const": "1"
+            }
+          }
+        ]
+      }
+    },
+    "/v1/datasets/{dataset}/recipients": {
+      "get": {
+        "operationId": "findRecipients",
+        "summary": "Search bound principals by display name with dataset grant-management authority",
+        "responses": {
+          "200": {
+            "description": "Up to twenty name and principal ID pairs"
+          },
+          "404": {
+            "description": "Dataset or directory unavailable"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "dataset",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "in": "query",
+            "name": "q",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120
+            }
+          }
+        ]
+      }
     }
   },
   "components": {
@@ -1968,7 +2086,13 @@
       "bearerAuth": {
         "type": "http",
         "scheme": "bearer",
-        "description": "Operator-issued opaque API credential; no cookies, query tokens or caller-supplied principals."
+        "description": "Operator-issued opaque API credential supplied in the Authorization header."
+      },
+      "browserSession": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "__Host-sanctity-session",
+        "description": "Opaque eight-hour browser session."
       }
     },
     "schemas": {

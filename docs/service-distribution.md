@@ -206,30 +206,29 @@ python3 scripts/demo-instance.py compose logs sanctity   # any docker compose co
 
 `up` builds this ZIP from the current sources when none matches them, builds an image
 that unpacks it (`Dockerfile`; nothing is compiled in the image), and starts pinned
-PostgreSQL 17 and the service from `compose.yaml`. It then performs the steps of
+PostgreSQL 17, the service and a development Keycloak provider from `compose.yaml`. It then performs the steps of
 "Install and run" above with the packaged commands: the two database roles from the
 roles template, `migrate --runtime-role`, one staged dataset, the organization preview
 and bootstrap, `serve` under the runtime login, and credential issuance. Each step reads
 the instance's current state first, so repeating `up` changes nothing, and `up` after
-`down` serves the same accepted releases. Open the printed address, by default
-`http://127.0.0.1:8080/`, and paste a printed access token into the sign-in form. The
-service refuses `localhost` and any other name. `SANCTITY_DEMO_PORT` selects another
-port; `SANCTITY_DEMO_RELEASE` runs an existing package output directory instead of
-building one.
+`down` serves the same accepted releases. Open the printed console address, by default
+`http://127.0.0.1:8080/`, and choose **Sign in with your institution**. The demo
+realm contains four fictional users. Their usernames and generated passwords are in
+`users` in the private instance directory's `demo-realm.json`. Each user also has a
+printed 30-day access token for the API. The provider uses `localhost` on a separate
+loopback port. Set `SANCTITY_DEMO_PORT` or `SANCTITY_DEMO_IDP_PORT` to choose ports.
+`SANCTITY_DEMO_RELEASE` selects an existing package output directory.
 
-The seed is two fictional labs, each administered by its lead and holding one project:
-three accepted datasets imported from repository fixtures (two synthetic MRI software
-fixtures and a CC0 excerpt of published behavioural responses), a research assistant in
-each lab with an explicit share of one dataset, and one share of a single release
-across the labs. Four people receive 30-day bearer credentials. They are demo
-credentials for the local instance: anyone who can read the terminal or the state
-directory can use them.
+The two labs hold five accepted releases across two projects. The first lab holds
+two synthetic MRI fixtures and the 54-file published Matching Pennies BIDS example
+(PDDL). Its EEG records describe the acquisition and its sample recording files are
+empty. The second holds a CC0 behavioural excerpt and a fictional face-study protocol
+archive. The archive descriptor is assessed and its two enclosed documents are
+preserved byte for byte. Each lab assistant has an explicit share of one dataset.
+The second lab's lead can read one exact MRI release across labs.
 
-What the demonstration leaves out or bends:
+Demo provisioning uses these shortcuts.
 
-- The catalog stores no display name for a principal and the console shows principal
-  identifiers. The people's names appear only in the launcher's output and in
-  credential labels.
 - No command registers a principal. After bootstrap, a principal first exists when a
   steward shares a dataset with it, so each further person is introduced by a share.
 - The organization preview is accepted without the review an installation owner owes it.
@@ -239,12 +238,40 @@ What the demonstration leaves out or bends:
   as protected secret files. PostgreSQL is not published on the host; the launcher
   reaches it through the container's local socket to provision roles and read state.
 - The console is served over plain HTTP on the host's loopback interface through
-  `container` mode. There is no TLS, identity provider or backup.
+  `container` mode. The development realm and its sessions are disposable. A production installation requires its own TLS origin, identity provider and backup procedure.
 
 `scripts/check-demo-instance.sh` starts a separate instance from clean, checks the
 console, every credential, both lab directories, each dataset's accepted inventory and
 bytes, the denials between labs and the role separation with real requests, repeats
 `up`, restarts, and removes everything including volumes.
+
+## Institutional sign-in
+
+Register the exact callback `https://repository.example.org/auth/callback` at the
+institution's OpenID Connect provider. Set `SANCTITY_PUBLIC_ORIGIN` to the HTTPS
+origin in proxy mode, `SANCTITY_OIDC_ISSUER` to the exact issuer, and
+`SANCTITY_OIDC_CLIENT_ID` to the registered client ID. Supply a protected `SANCTITY_OIDC_CLIENT_SECRET_FILE` (0600 file in a 0700 directory)
+or a private `SANCTITY_OIDC_CLIENT_SECRET` for a client registered with
+`client_secret_basic`. Public clients use PKCE alone. The provider must support
+discovery, authorization code flow, S256 and RS256 ID tokens. The service uses the
+JVM's trusted certificate authorities. Loopback HTTP is enabled for the local demo.
+
+The operator independently verifies the provider's issuer and opaque subject and
+binds them to an existing principal using the schema owner's login.
+
+```sh
+sanctity repository bind-identity PRINCIPAL_UUID ISSUER SUBJECT "Display name"
+sanctity repository unbind-identity PRINCIPAL_UUID ISSUER SUBJECT
+```
+
+The exact binding is safe to repeat. A second subject for the same principal at the
+same issuer or a second principal for that subject is refused. Rebinding requires
+an explicit unbind, which ends all associated Sanctity sessions. Signing out ends
+the current Sanctity session. The HTTPS cookie uses the `__Host-` prefix. The local
+demo uses a port-specific name with the same Secure, HttpOnly and SameSite attributes. The institution manages its own SSO session. A name
+is a directory label, and a provider login carries only the principal's current
+catalog authority. A steward can search the installation's bound people by name
+when sharing a dataset or an exact release. Restore clears all bindings and sessions.
 
 ## Trusted operator commands
 

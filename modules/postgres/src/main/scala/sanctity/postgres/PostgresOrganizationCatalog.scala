@@ -182,6 +182,7 @@ final class PostgresOrganizationCatalog[F[_]: Async] private[postgres](db: Postg
         Some(request), receipt, changes(before, after), invalidations) {
         persist(before, after) *> (request.command match
           case OrganizationCommand.DisablePrincipal(person) =>
+            sql"DELETE FROM browser_session WHERE binding_id IN (SELECT id FROM identity_binding WHERE principal_id=${uuid(person)})".update.run *>
             sql"""INSERT INTO credential_audit(credential_id,action)
               SELECT id,'Revoked' FROM api_credential WHERE principal_id=${uuid(person)} AND revoked_at IS NULL""".update.run *>
               sql"UPDATE api_credential SET revoked_at=${Timestamp.from(now)} WHERE principal_id=${uuid(person)} AND revoked_at IS NULL".update.run *>

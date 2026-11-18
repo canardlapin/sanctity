@@ -232,7 +232,7 @@ def qualify(predecessor, artifact, root, output, checks, harness=None, isolated=
                 assert verified['status'] == 'verified-closed'
                 if scenario: scenario.catalog_verified()
                 assert sql('SELECT recovery_required FROM repository_state') == 't'
-                assert sql('SELECT max(version) FROM schema_migration') == '15'
+                assert sql('SELECT max(version) FROM schema_migration') == '16'
                 assert {table:rows('SELECT * FROM '+table) for table in science_tables} == oracle
                 if not scenario: assert f.http(release_path,owner_credential['token'])[0] == 503
                 checks.append('atomic-closed-restore-migration-barrier-drain-and-old-writer-fencing')
@@ -327,7 +327,7 @@ def qualify(predecessor, artifact, root, output, checks, harness=None, isolated=
                 if scenario: scenario.after_open(f,owner_new['token'],sql,rows)
                 checks.append('old-bearers-denied-fresh-governed-credentials-enforce-current-access-and-exact-bytes')
                 if not scenario:
-                    # A second cycle consumes the exact running schema-15 artifact
+                    # A second cycle consumes the exact running schema-16 artifact
                     # and replays the first signed release without reusing its writer.
                     f.stop()
                     cycle_env=dict(operator_env,SANCTITY_POLICY_CONFIG=str(trust/'next.json'))
@@ -337,6 +337,11 @@ def qualify(predecessor, artifact, root, output, checks, harness=None, isolated=
                     env.clear(); env.update(cycle_env); f.env=env
                     cycle_parent=root/'cycle-captures'; cycle_parent.mkdir(mode=0o700)
                     cycle_bundle=cycle_parent/'bundle'
+                    # Exercise the exact restored identity rows, including an unexpired local session.
+                    f.cli('repository','bind-identity',owner,'https://identity.example.test','cycle-user','Cycle user')
+                    sql("INSERT INTO browser_session(id,binding_id,token_digest,expires_at) SELECT gen_random_uuid(),id,"
+                        "repeat('a',64),clock_timestamp()+interval '1 hour' FROM identity_binding WHERE subject='cycle-user'")
+                    assert sql("SELECT count(*) FROM browser_session") == '1'
                     f.cli('backup','capture',str(storage),str(cycle_bundle),str(artifact))
                     for options in [
                         ['-genkeypair','-alias','next2','-keyalg','EC','-groupname','secp256r1','-dname','CN=next2','-validity','2',
@@ -362,9 +367,12 @@ def qualify(predecessor, artifact, root, output, checks, harness=None, isolated=
                     assert cycle['phase']=='Opened' and cycle['admissionReady']
                     assert sql('SELECT writer_epoch FROM organization_policy','recovered_cycle')==str(int(opened['verification']['summary']['head']['epoch'])+1)
                     assert sql('SELECT count(*) FROM api_credential WHERE revoked_at IS NULL','recovered_cycle')=='0'
+                    assert sql('SELECT count(*) FROM identity_binding','recovered_cycle')=='0'
+                    assert sql('SELECT count(*) FROM browser_session','recovered_cycle')=='0'
+                    checks.append('restore-removes-identity-bindings-and-unexpired-browser-sessions')
                     assert {table:rows('SELECT * FROM '+table,'recovered_cycle') for table in science_tables}==oracle
                     assert command('recovery','reconcile',cycle_operation,cycle_storage,trust/'recovery.json',trust/'next2.json')==cycle
-                    (output/'schema15-cycle-receipt.json').write_text(json.dumps(cycle,indent=2)+'\n')
+                    (output/'schema16-cycle-receipt.json').write_text(json.dumps(cycle,indent=2)+'\n')
                     env['SANCTITY_POLICY_CONFIG']=str(trust/'next2.json')
                     sql("CREATE ROLE cycle_runtime LOGIN PASSWORD 'disposable_runtime_only'; REVOKE CREATE,TEMPORARY ON DATABASE recovered_cycle FROM PUBLIC; REVOKE CREATE ON SCHEMA public FROM PUBLIC;",'recovered_cycle')
                     f.cli('migrate','--runtime-role','cycle_runtime')
@@ -375,7 +383,7 @@ def qualify(predecessor, artifact, root, output, checks, harness=None, isolated=
                     assert f.http(release_path,cycle_owner['token'])[0]==200
                     code,body=f.http(release_path+'/file?path=README',cycle_owner['token'])
                     assert code==200 and (len(body),hashlib.sha256(body).hexdigest())==readme_identity
-                    checks.append('schema15-backup-second-recovery-replays-prior-release-and-rotates-another-fresh-writer')
+                    checks.append('schema16-backup-second-recovery-replays-prior-release-and-rotates-another-fresh-writer')
 
             finally:
                 if witness:

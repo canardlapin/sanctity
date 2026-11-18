@@ -19,6 +19,8 @@ from pathlib import Path
 import re
 import secrets
 import shutil
+import socket
+import time
 import subprocess
 import sys
 import urllib.error
@@ -45,8 +47,7 @@ def ident(name):
 
 OPERATOR = ident("principal/operator")
 CUSTODIAN = ident("custodian/institution")
-# The catalog stores no display name for a principal and the console shows identifiers, so these names
-# exist only in this script's output and in credential labels.
+# These fictional names are also the operator-assigned directory labels.
 PEOPLE = {
     "alice": ("Alice Tremblay", "lab lead"),
     "carol": ("Carol Nguyen", "research assistant"),
@@ -56,23 +57,25 @@ PEOPLE = {
 READ = ["Discover", "ReadMetadata", "ReadContent"]
 LABS = [
     {"name": "Cognitive Neuroimaging Lab",
-     "description": "Fictional demonstration lab. Its datasets are synthetic software fixtures, not acquired MRI.",
+     "description": "Fictional demonstration lab. Its MRI datasets are synthetic. Matching Pennies is a published EEG example.",
      "lead": "alice",
      "project": {"name": "Cue reactivity fMRI study",
-                 "description": "Demonstration project: a multi-echo task pilot and its fieldmap calibration."},
+                 "description": "Demonstration project: MRI calibration, a multi-echo task pilot and the published Matching Pennies EEG example."},
      "datasets": [
          {"label": "Cue task multi-echo BOLD pilot", "fixture": "mri-conformance/analysis-inputs/dataset"},
-         {"label": "Fieldmap and resting-state calibration", "fixture": "mri-conformance/phase-pair/dataset"}],
+         {"label": "Fieldmap and resting-state calibration", "fixture": "mri-conformance/phase-pair/dataset"},
+         {"label": "Matching Pennies EEG", "fixture": "multimodal-conformance/eeg-matchingpennies/dataset"}],
      # Each member is a lab member and project contributor with an explicit share of the first dataset.
      "members": {"carol": READ + ["Propose"]}},
     {"name": "Memory and Perception Lab",
-     "description": "Fictional demonstration lab. Its dataset is a CC0 excerpt of published behavioural responses.",
+     "description": "Fictional demonstration lab. It holds a CC0 behavioural excerpt and a fictional protocol archive.",
      "lead": "bob",
      "project": {"name": "Face recognition study",
-                 "description": "Demonstration project: behavioural responses from a face recognition task."},
+                 "description": "Demonstration project: face recognition responses and a protocol archive."},
      "datasets": [
          {"label": "Face recognition behavioural responses",
-          "fixture": "multimodal-conformance/face-behavioural/dataset"}],
+          "fixture": "multimodal-conformance/face-behavioural/dataset"},
+         {"label": "Face study protocol archive", "fixture": "archive-conformance/face-protocol/dataset"}],
      "members": {"dave": READ}},
 ]
 
@@ -123,11 +126,43 @@ class Instance:
         for name in SECRETS:
             self.settings.setdefault(name, secrets.token_hex(24))
         self.settings.update(SANCTITY_DEMO_IMAGE=image, SANCTITY_DEMO_PORT=port)
+        provider_port = os.environ.get("SANCTITY_DEMO_IDP_PORT") or self.settings.get("SANCTITY_DEMO_IDP_PORT")
+        if not provider_port:
+            with socket.socket() as probe:
+                probe.bind(("127.0.0.1", 0))
+                provider_port = str(probe.getsockname()[1])
+        if not provider_port.isdigit() or not 1024 <= int(provider_port) <= 65535 or int(provider_port) == int(port):
+            raise Failure("the identity provider requires a separate port from 1024 to 65535")
+        self.settings.update(SANCTITY_DEMO_IDP_PORT=provider_port, SANCTITY_DEMO_REALM=str(self.home / "demo-realm.json"))
+        self.prepare_realm()
         file = self.home / "instance.env"
         descriptor = os.open(file, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
         with os.fdopen(descriptor, "w") as out:
             out.write("".join(f"{k}={v}\n" for k, v in sorted(self.settings.items())))
         (self.home / "credentials").mkdir(mode=0o700, exist_ok=True)
+
+    def prepare_realm(self):
+        # The 0700 instance directory protects this file; the container must be able to read the mounted file.
+        realm_file = Path(self.settings["SANCTITY_DEMO_REALM"])
+        users = []
+        if realm_file.exists():
+            users = json.loads(realm_file.read_text())["users"]
+        else:
+            for key, (name, _) in PEOPLE.items():
+                first, last = name.split(" ", 1)
+                users.append({"id": ident("oidc/" + key), "username": key, "enabled": True,
+                              "firstName": first, "lastName": last, "email": key + "@example.test", "emailVerified": True,
+                              "credentials": [{"type": "password", "value": secrets.token_urlsafe(24), "temporary": False}]})
+        realm = {"realm": "sanctity-demo", "enabled": True, "sslRequired": "none", "users": users,
+                 "clients": [{"clientId": "sanctity-demo", "protocol": "openid-connect", "publicClient": True,
+                              "standardFlowEnabled": True, "directAccessGrantsEnabled": False,
+                              "redirectUris": [self.url + "/auth/callback"], "attributes": {"pkce.code.challenge.method": "S256"}}]}
+        realm_file.write_text(json.dumps(realm))
+        realm_file.chmod(0o644)
+
+    @property
+    def issuer(self):
+        return "http://localhost:" + self.settings["SANCTITY_DEMO_IDP_PORT"] + "/realms/sanctity-demo"
 
     @property
     def port(self):
@@ -144,7 +179,8 @@ class Instance:
     def compose_env(self):
         # Removal and inspection need no real values, only syntactically complete configuration.
         placeholders = {name: "unset" for name in SECRETS} | {"SANCTITY_DEMO_IMAGE": "sanctity-demo:unset",
-                                                              "SANCTITY_DEMO_PORT": "8080"}
+                                                              "SANCTITY_DEMO_PORT": "8080", "SANCTITY_DEMO_IDP_PORT": "8081",
+                                                              "SANCTITY_DEMO_REALM": str(self.home / "demo-realm.json")}
         return os.environ | placeholders | self.settings
 
     def compose(self, *args, text_input=None, check=True, what=None):
@@ -426,7 +462,7 @@ class Seed:
 
     def dataset(self, spec, project, wanted):
         inst, token = self.inst, self.tokens[spec["lead"]]
-        if not (FIXTURES / wanted["fixture"] / "dataset_description.json").is_file():
+        if not any((FIXTURES / wanted["fixture"] / f).is_file() for f in ("dataset_description.json", "archive_description.json")):
             raise Failure("seed fixture is missing: " + wanted["fixture"])
         entries = inst.listing(token, f"/v1/projects/{project}/datasets")
         named = [e["id"] for e in entries if e["label"] == wanted["label"]]
@@ -514,6 +550,8 @@ def report(inst, tag, labs, shares, people):
     lines = ["", "Sanctity demo instance is ready.", "",
              f"  Console  {inst.url}/   (use this exact address; the service refuses \"localhost\")",
              f"  State    {inst.home}   (generated passwords and the credentials below)", ""]
+    lines += ["  Institutional sign-in uses the local demo provider. Its usernames and generated passwords are",
+              f"  in {inst.home / 'demo-realm.json'} (users).", ""]
     for lab in labs:
         lines.append(f"  {lab['name']}  >  {lab['project']['name']}")
         lines += [f"      {d['label']}" for d in lab["datasets"]]
@@ -541,6 +579,19 @@ def up(inst):
     say("Checking labs, projects, people and datasets")
     seed = Seed(inst)
     labs, shares = seed.converge()
+    for key, (name, _) in PEOPLE.items():
+        inst.operator("repository", "bind-identity", ident("principal/" + key), inst.issuer, ident("oidc/" + key), name)
+    inst.compose("up", "-d", "identity")
+    for attempt in range(90):
+        try:
+            with urllib.request.urlopen(inst.issuer + "/.well-known/openid-configuration", timeout=2) as response:
+                if json.load(response)["issuer"] == inst.issuer:
+                    break
+        except (OSError, ValueError):
+            pass
+        time.sleep(1)
+    else:
+        raise Failure("the development identity provider did not become ready")
     report(inst, tag, labs, shares, seed.people)
 
 

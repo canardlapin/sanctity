@@ -120,6 +120,16 @@ final class PostgresCatalog[F[_]] private[postgres] (
   def grants(ctx: AccessContext, dataset: DatasetId): F[Either[Problem, Vector[OrganizationAuthority.GrantView]]] =
     run(policyRead(ctx)((s, a, now) => OrganizationAuthority.datasetGrants(s, a, dataset, now)))
 
+  def recipients(ctx: AccessContext, dataset: DatasetId, issuer: String, query: String): F[Either[Problem, Vector[(PrincipalId,String)]]] =
+    if query.trim.isEmpty || query.length > 120 then F.pure(Left(Problem.Unsupported("enter a recipient name")))
+    else run {
+      policyRead(ctx)((s, a, now) => OrganizationAuthority.datasetGrants(s, a, dataset, now)).void *>
+        sql"""SELECT b.principal_id,b.display_name FROM identity_binding b JOIN principal p ON p.id=b.principal_id
+          WHERE b.issuer=$issuer AND p.active AND strpos(lower(b.display_name),lower(${query.trim})) > 0
+          ORDER BY b.display_name,b.principal_id LIMIT 20""".query[(UUID,String)].to[Vector]
+          .map(_.map((p,name) => Id[PrincipalTag](p) -> name))
+    }
+
   def explainAccess(ctx: AccessContext, subject: PrincipalId, scope: OrganizationAuthority.DataScope,
       permission: OrganizationAuthority.Permission): F[Either[Problem, OrganizationAuthority.Explanation]] =
     run(policyRead(ctx)((s, a, now) => OrganizationAuthority.explain(s, a, subject, scope, permission, now)))

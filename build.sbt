@@ -95,6 +95,7 @@ lazy val integration = project.in(file("modules/integration")).dependsOn(app % "
   Test / parallelExecution := false
 )
 lazy val service = project.in(file("modules/service")).dependsOn(bids, objects, postgres, http, mriProfiles).settings(common).settings(
+  libraryDependencies += "com.nimbusds" % "oauth2-oidc-sdk" % "11.39",
   Compile / mainClass := Some("sanctity.app.ServiceMain"),
   Compile / resourceGenerators += Def.task {
     val output = (Compile / resourceManaged).value / "sanctity/service-build.properties"

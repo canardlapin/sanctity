@@ -375,12 +375,16 @@ and store an archive, all in the browser on a freshly started instance.
   must be re-assessed through a new HTTP route. The console explains the
   refusal but does not yet offer the re-assessment.
 - **Package 1 is done.** `python3 scripts/demo-instance.py up` builds the image,
-  starts PostgreSQL and the service, and seeds two labs, three datasets and
-  four people. Sign-in is still a printed token.
-- **Package 2 is part done.** The service chooses the interpreter from the root
-  description (K1). Views, derivatives and processing are still not reachable
-  over HTTP, and MRI has not been extracted into a modality of its own (K2).
-  New modalities register in `RepositoryBidsContext`.
+  starts PostgreSQL, the packaged service and a local Keycloak provider. The two labs
+  hold five accepted datasets and four fictional people. Matching Pennies EEG and
+  a protocol archive accompany the MRI and behavioural examples.
+- **Packages 2 and 5 are delivered.** The service admits raw BIDS, declared header QC
+  and archives through upload, preview and acceptance. MRI and behavioural rules
+  are registered by modality. Adding a session creates a new release and the earlier
+  release can still be exported.
+- **Package 6 is implemented for the demo provider.** A verified issuer and subject
+  map to an existing principal. Stewards can find people by name and share one
+  exact release across labs. The campus-provider registration and pilot remain open.
 - **The data-type rules are checked against the BIDS schema and real names.**
   They follow the schema's file rules (bids-specification `f9d3b8a`, schema
   1.11.3-dev). A fixture of 3,869 file paths from 39 public BIDS example

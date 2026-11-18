@@ -92,7 +92,7 @@ python3 scripts/demo-instance.py down             # stops it; data is kept
 python3 scripts/demo-instance.py down --volumes   # deletes it
 ```
 
-Open the printed address (`http://127.0.0.1:8080/` by default) and sign in with a printed access token. The console then works against the real API and database: two labs, their projects, three accepted datasets with files and recorded assessments, and four people whose access differs. [The distribution guide](docs/service-distribution.md#local-container-demonstration) lists what is seeded and what the demonstration leaves out. `bash scripts/check-demo-instance.sh` starts a separate instance, checks it with real requests and removes it.
+Open the printed address (`http://127.0.0.1:8080/` by default) and choose **Sign in with your institution**. The launcher gives the location of the generated Keycloak logins and prints API tokens. Four people in two labs share a catalog of five accepted datasets, including Matching Pennies EEG and a protocol archive. The [distribution guide](docs/service-distribution.md#local-container-demonstration) describes the fixtures and the cross-lab release share.
 
 ## Modules and public contracts
 
@@ -284,7 +284,7 @@ sbt 'app/runMain sanctity.app.RepositoryCli issue-credential PRINCIPAL_UUID 3600
 sbt 'app/runMain sanctity.app.ApiServer'
 ```
 
-Use an existing provisioned principal, with PostgreSQL variables set as above. The CLI creates the credential file with mode `0600` and never prints its token. The server binds to loopback; external transport requires a TLS reverse proxy. Tokens authenticate stable principals, and current grants govern every action. Private source evidence stays out of public release responses. Institutional login and attenuated worker credentials are later integration work.
+Use an existing provisioned principal, with PostgreSQL variables set as above. The CLI creates the credential file with mode `0600` and never prints its token. The server binds to loopback; external transport requires a TLS reverse proxy. Tokens authenticate stable principals, and current grants govern every action. Private source evidence stays out of public release responses. Institutional browser sessions use the same principals and current grants.
 
 The same server serves the browser console at `http://127.0.0.1:8080/` (or the
 configured port). Connect with the issued token and dataset ID. `/?demo` uses

@@ -89,9 +89,14 @@ object RepositoryCli extends ProtectedIOApp:
           _ <- written.fold(e => db.credentials(ids).revoke(credential.id) *> IO.raiseError[Unit](e), _ => IO.unit)
           _ <- IO.println(s"Credential ${credential.id.render} written to a new private file. Durability: ${credential.durability}. Expires: ${credential.expiresAt}")
         yield ()
+      case "bind-identity" :: principal :: issuer :: subject :: name :: Nil =>
+        id[PrincipalTag](principal).flatMap(p => checked(db.browserIdentities.bind(p,issuer,subject,name)))
+      case "unbind-identity" :: principal :: issuer :: subject :: Nil =>
+        id[PrincipalTag](principal).flatMap(p => checked(db.browserIdentities.unbind(p,issuer,subject)))
       case "revoke-credential" :: credential :: Nil =>
         id[CredentialTag](credential).flatMap(c => checked(db.credentials(ids).revokeAcknowledged(c)))
           .flatMap(d => IO.println(s"Credential revoked. Durability: $d."))
       case _ => IO.raiseError(new IllegalArgumentException(
         "RepositoryCli create PRINCIPAL CUSTODIAN | import PRINCIPAL DATASET SOURCE STORAGE KEY | " +
-        "issue-credential PRINCIPAL SECONDS LABEL NEW_FILE | issue-credential-once OPERATION_ID PRINCIPAL SECONDS LABEL NEW_FILE | revoke-credential CREDENTIAL_ID"))
+        "issue-credential PRINCIPAL SECONDS LABEL NEW_FILE | issue-credential-once OPERATION_ID PRINCIPAL SECONDS LABEL NEW_FILE | revoke-credential CREDENTIAL_ID | " +
+        "bind-identity PRINCIPAL ISSUER SUBJECT DISPLAY_NAME | unbind-identity PRINCIPAL ISSUER SUBJECT"))

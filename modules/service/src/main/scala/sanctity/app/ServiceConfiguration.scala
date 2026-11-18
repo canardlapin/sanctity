@@ -43,23 +43,26 @@ object ServiceConfiguration:
       .lookupPrincipalByName(System.getProperty("user.name")), category)
     p
 
+  private[app] def protectedSecretFile(name: String, category: String): String =
+    val p = protectedPath(name, category)
+    requireSetting(Files.isRegularFile(p, noFollow) && Files.size(p) <= 4096 &&
+      Files.getPosixFilePermissions(p, noFollow) == fileMode &&
+      Files.getPosixFilePermissions(p.getParent, noFollow) == directoryMode, category)
+    // File remains a protected operator input; no shell sourcing or interpolation.
+    val channel = FileChannel.open(p, StandardOpenOption.READ, noFollow)
+    val bytes = java.nio.ByteBuffer.allocate(4097)
+    try
+      while bytes.hasRemaining && channel.read(bytes) >= 0 do ()
+      requireSetting(bytes.position() <= 4096, category)
+      new String(bytes.array(), 0, bytes.position(), java.nio.charset.StandardCharsets.UTF_8)
+        .stripSuffix("\n").stripSuffix("\r")
+    finally channel.close()
+
   private def password(values: Map[String, String]): IO[String] = IO.blocking {
     (values.get("SANCTITY_DB_PASSWORD"), values.get("SANCTITY_DB_PASSWORD_FILE")) match
       case (Some(secret), None) => secret
       case (None, Some(name)) =>
-        val p = protectedPath(name, "database secret file")
-        requireSetting(Files.isRegularFile(p, noFollow) && Files.size(p) <= 4096 &&
-          Files.getPosixFilePermissions(p, noFollow) == fileMode &&
-          Files.getPosixFilePermissions(p.getParent, noFollow) == directoryMode, "database secret file")
-        // File remains a protected operator input; no shell sourcing or interpolation.
-        val channel = FileChannel.open(p, StandardOpenOption.READ, noFollow)
-        val bytes = java.nio.ByteBuffer.allocate(4097)
-        try
-          while bytes.hasRemaining && channel.read(bytes) >= 0 do ()
-          requireSetting(bytes.position() <= 4096, "database secret file")
-          new String(bytes.array(), 0, bytes.position(), java.nio.charset.StandardCharsets.UTF_8)
-            .stripSuffix("\n").stripSuffix("\r")
-        finally channel.close()
+        protectedSecretFile(name,"database secret file")
       case _ => throw ConfigurationFailure("select exactly one database password source")
   }.handleErrorWith(_ => IO.raiseError(ConfigurationFailure("database password source")))
 
@@ -91,7 +94,7 @@ object ServiceConfiguration:
     requireSetting(!working.startsWith(root) && !home.startsWith(root), "storage isolation")
     requireSetting(Files.isDirectory(root, noFollow) && Files.getPosixFilePermissions(root, noFollow) == directoryMode,
       "storage permissions")
-    values.get("SANCTITY_DB_PASSWORD_FILE").foreach { name =>
+    Vector("SANCTITY_DB_PASSWORD_FILE","SANCTITY_OIDC_CLIENT_SECRET_FILE").flatMap(values.get).foreach { name =>
       requireSetting(!Path.of(name).startsWith(root), "storage/secret isolation")
     }
     for name <- Vector("objects", "staging") do

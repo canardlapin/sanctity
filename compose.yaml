@@ -43,9 +43,12 @@ services:
       SANCTITY_HTTP_PORT: ${SANCTITY_DEMO_PORT:?start the instance with scripts/demo-instance.py up}
       # Listen on the container's interfaces; Host and Origin must still be http://127.0.0.1:PORT.
       SANCTITY_DEPLOYMENT_MODE: container
+      SANCTITY_OIDC_ISSUER: http://localhost:${SANCTITY_DEMO_IDP_PORT}/realms/sanctity-demo
+      SANCTITY_OIDC_CLIENT_ID: sanctity-demo
     ports:
       # Host loopback only, and the same port inside and out: the origin names it.
       - "127.0.0.1:${SANCTITY_DEMO_PORT}:${SANCTITY_DEMO_PORT}"
+      - "127.0.0.1:${SANCTITY_DEMO_IDP_PORT}:${SANCTITY_DEMO_IDP_PORT}"
     volumes:
       - blobs:/var/lib/sanctity/blobs
     healthcheck:
@@ -54,6 +57,14 @@ services:
       timeout: 3s
       retries: 60
     stop_grace_period: 20s
+
+  identity:
+    # Keycloak 26.8.2. Sharing the service network makes the same localhost issuer reachable on both sides.
+    image: quay.io/keycloak/keycloak@sha256:c68e286cacd87b942ac1939a0a1481461109d6acd3a57dc496969a319a76bbf0
+    network_mode: service:sanctity
+    command: ["start-dev", "--import-realm", "--http-port=${SANCTITY_DEMO_IDP_PORT}", "--hostname=http://localhost:${SANCTITY_DEMO_IDP_PORT}"]
+    volumes:
+      - "${SANCTITY_DEMO_REALM}:/opt/keycloak/data/import/sanctity-demo-realm.json:ro"
 
   # One-shot trusted operator commands (migrate, repository, organization) with the schema
   # owner's login, which the serving container never receives:

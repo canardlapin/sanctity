@@ -101,7 +101,7 @@ private[postgres] object RecoveryBundleRestore:
     check(text(manifest,"schema") == schema,"restore-schema")
     val expected = field(manifest,"migrations")
     val sourceCount = expected.asArray.get.size
-    check(Set(13,14,15)(sourceCount) && expected == Json.arr(migrations.take(sourceCount).map((v,c,_) =>
+    check(Set(13,14,15,16)(sourceCount) && expected == Json.arr(migrations.take(sourceCount).map((v,c,_) =>
       Json.obj("version" -> Json.fromInt(v),"checksum" -> Json.fromString(c)))*),"restore-migrations")
     val receiver = process(config,psql,"-X","--quiet","--set=ON_ERROR_STOP=1")
       .redirectOutput(ProcessBuilder.Redirect.DISCARD).start()
@@ -131,7 +131,10 @@ private[postgres] object RecoveryBundleRestore:
       sql("DO $$ BEGIN IF (SELECT jsonb_agg(jsonb_build_object('version',version,'checksum',checksum) ORDER BY version) FROM schema_migration) IS DISTINCT FROM "+
         literal(expected.noSpaces)+"::jsonb THEN RAISE EXCEPTION 'restore schema identity'; END IF; END $$;\n")
       migrations.drop(sourceCount).foreach { (version,checksum,source) =>
-        sql(source+"\n")
+        // Apply the same statement boundaries as normal migration, including scripts without final semicolons.
+        source.split("(?m)^-- statement\\s*$").map(_.trim).filter(_.nonEmpty).foreach { statement =>
+          sql(statement.stripSuffix(";") + ";\n")
+        }
         sql(s"INSERT INTO schema_migration(version,checksum) VALUES($version,${literal(checksum)});\n")
       }
       sql("UPDATE repository_state SET recovery_required=TRUE;\n")

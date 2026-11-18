@@ -1,0 +1,2 @@
+Participants view study images, then classify each test image as familiar or new.
+This fictional protocol illustrates archival storage.

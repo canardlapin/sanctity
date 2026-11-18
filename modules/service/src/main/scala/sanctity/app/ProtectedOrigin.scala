@@ -14,9 +14,10 @@ object ProtectedOrigin:
       case Nil => true // Bearer-token clients need not be browsers.
       case List(value) => value == origin
       case _ => false
+    val callback = request.method == org.http4s.Method.GET && request.uri.path.renderString == "/auth/callback"
     val response =
       if !hostAllowed || request.uri.authority.nonEmpty then IO.pure(Response[IO](Status.BadRequest))
-      else if !originAllowed || values("Sec-Fetch-Site").exists(_ == "cross-site") then IO.pure(Response[IO](Status.Forbidden))
+      else if !originAllowed || (!callback && values("Sec-Fetch-Site").exists(_ == "cross-site")) then IO.pure(Response[IO](Status.Forbidden))
       else app(request.withHeaders(request.headers.headers.filterNot { h =>
         val name = h.name.toString.toLowerCase(java.util.Locale.ROOT)
         name == "forwarded" || name.startsWith("x-forwarded-") || name == "x-real-ip"

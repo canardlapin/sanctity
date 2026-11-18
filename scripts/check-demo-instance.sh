@@ -152,16 +152,25 @@ for lab in summary["labs"]:
         expected = sorted(p.relative_to(fixture).as_posix() for p in fixture.rglob("*") if p.is_file())
         assert files and sorted(files) == expected, dataset["label"] + " inventory differs from its fixture"
         assert release["assessment"]["admissible"] and release["acceptedAt"], dataset["label"] + " was not accepted"
-        for path in ("dataset_description.json", files[-1]):
+        for path in files:
             status, content, headers = call(f"/v1/datasets/{dataset['id']}/releases/{head}/file?path=" + urllib.parse.quote(path), lead)
             digest = hashlib.sha256((fixture / path).read_bytes()).hexdigest()
             assert status == 200 and hashlib.sha256(content).hexdigest() == digest == headers["X-Sanctity-SHA256"], f"{dataset['label']}: {path} bytes differ"
         assessment = release["assessment"]
-        assert assessment["findings"] == [], f"{dataset['label']}: unexpected findings {assessment['findings']}"
+        findings = [(f["code"], f["severity"], f["path"]) for f in assessment["findings"]]
+        expected_findings = [("UnrecognizedFile", "Warning", "README.md")] if "eeg-matchingpennies" in dataset["fixture"] else []
+        assert findings == expected_findings, f"{dataset['label']}: unexpected findings {findings}"
         checked = {c["target"] for c in assessment["checks"]}
-        extension = "_beh.tsv" if "/face-behavioural/" in dataset["fixture"] else "_bold.nii"
-        targets = [p for p in files if p.endswith((extension, extension + ".gz"))]
-        assert targets and set(targets) <= checked, f"{dataset['label']}: missing scientific checks for {targets}"
+        levels = {(g["group"], g["level"]): g["files"] for g in release["levels"]["summary"]}
+        if "eeg-matchingpennies" in dataset["fixture"]:
+            assert len(files) == 54 and levels["eeg", "described"] == 35
+            assert levels["sourcedata", "preserved"] == 7 and levels["code", "preserved"] == 2
+        elif "archive_description.json" in files:
+            assert levels == {("archive", "preserved"): 2, ("dataset", "assessed"): 1} and not checked
+        else:
+            extension = "_beh.tsv" if "/face-behavioural/" in dataset["fixture"] else "_bold.nii"
+            targets = [p for p in files if p.endswith((extension, extension + ".gz"))]
+            assert targets and set(targets) <= checked, f"{dataset['label']}: missing scientific checks for {targets}"
         described.append(f"{dataset['label']}: {len(files)} files, {len(checked)} checked targets")
 ok("releases", "; ".join(described))
 
@@ -215,8 +224,9 @@ def published(service):
                                      capture_output=True, text=True, check=True).stdout)
 port = base.rsplit(":", 1)[1]
 assert published("postgres") == {}, "PostgreSQL is published on the host"
-assert published("sanctity") == {port + "/tcp": [{"HostIp": "127.0.0.1", "HostPort": port}]}, published("sanctity")
-ok("exposure", f"the service is published on 127.0.0.1:{port} only; PostgreSQL is not published")
+ports = (port, settings["SANCTITY_DEMO_IDP_PORT"])
+assert published("sanctity") == {p + "/tcp": [{"HostIp": "127.0.0.1", "HostPort": p}] for p in ports}, published("sanctity")
+ok("exposure", f"the console and the development provider are published on loopback only; PostgreSQL is private")
 
 saved = state()
 (workspace / "state-first.json").write_text(json.dumps(saved, indent=2) + "\n")
@@ -240,6 +250,9 @@ test "$(docker volume ls -q --filter "label=com.docker.compose.project=$SANCTITY
 task_up >/dev/null
 task_check restart
 
+export PLAYWRIGHT_BROWSERS_PATH="${PLAYWRIGHT_BROWSERS_PATH:-$task_root/target/console-browsers}"
+node tests/console/institutional.js "$SANCTITY_DEMO_HOME" | tee "$task_workspace/institutional-login.txt"
+
 # Explicit removal deletes the containers, both volumes and the local state.
 "${task_demo[@]}" compose logs --no-color --no-log-prefix sanctity > "$task_workspace/service.log" 2>&1
 "${task_demo[@]}" down --volumes
@@ -247,7 +260,7 @@ task_removed=1
 test -z "$("${task_demo[@]}" compose ps -aq)"
 test -z "$(docker volume ls -q --filter "label=com.docker.compose.project=$SANCTITY_DEMO_PROJECT")"
 test ! -e "$SANCTITY_DEMO_HOME"
-if grep -rq 'sct_' "$task_workspace"; then
+if grep -rEq 'sct_|scs_' "$task_workspace"; then
   echo "A credential reached the retained evidence." >&2
   exit 1
 fi

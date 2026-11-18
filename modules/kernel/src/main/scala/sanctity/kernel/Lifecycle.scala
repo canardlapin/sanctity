@@ -3,7 +3,17 @@ package sanctity.kernel
 import java.time.Instant
 
 /** Trusted in-process context; network adapters must supply a currently verified credential. */
-final case class AccessContext(principal: PrincipalId, credential: Option[CredentialId] = None)
+final case class AccessContext(principal: PrincipalId, credential: Option[CredentialId] = None, browserSession: Boolean = false):
+  def this(principal: PrincipalId, credential: Option[CredentialId]) = this(principal, credential, false)
+  // Keep two-argument calls from tools compiled against the bearer-only context.
+  def copy(principal: PrincipalId, credential: Option[CredentialId]): AccessContext =
+    new AccessContext(principal, credential, browserSession)
+  def copy(principal: PrincipalId = this.principal, credential: Option[CredentialId] = this.credential,
+      browserSession: Boolean = this.browserSession): AccessContext = new AccessContext(principal, credential, browserSession)
+
+object AccessContext:
+  def apply(principal: PrincipalId, credential: Option[CredentialId]): AccessContext =
+    new AccessContext(principal, credential, false)
 final case class Dataset(id: DatasetId, custodian: CustodianId, curator: PrincipalId, head: Option[ReleaseId])
 final case class ReleaseRef(dataset: DatasetId, release: ReleaseId)
 

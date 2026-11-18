@@ -1,9 +1,9 @@
 # Authenticated repository API
 
-This slice makes the existing release and curation contracts available through an authenticated HTTP boundary. It includes a loopback http4s server, operator commands and an [OpenAPI 3.1 contract](http-api.openapi.json). Institutional login, memberships and delegated execution credentials remain separate work.
+This slice makes the existing release and curation contracts available through an authenticated HTTP boundary. It includes a loopback http4s server, operator commands and an [OpenAPI 3.1 contract](http-api.openapi.json).
 
-The server also serves the browser console at `/`. Connect with an operator-issued
-token and dataset ID; its release, correction, query and access screens use the
+The server also serves the browser console at `/`. Sign in with a configured institution or an operator-issued
+token; its release, correction, query and access screens use the
 same authenticated `/v1` routes. `/?demo` uses synthetic browser fixtures. The
 static shell/assets are public; repository data and mutations require the API's
 current authority checks. See the [v4g baseline and adoption gates](implementation-plan.md#console-baseline-and-adoption)
@@ -114,7 +114,11 @@ automated axe/keyboard results do not supply this human result.
 
 An operator issues a random 256-bit opaque credential for an existing principal, with a label and a lifetime from one second to 30 days. PostgreSQL retains only its SHA-256 digest, principal, expiry, revocation state and audit events. SHA-256 is suitable here because the input is a generated high-entropy secret, not a human password. Several credentials can authenticate the same stable principal; rotating them changes neither attribution nor custody.
 
-Send exactly one `Authorization: Bearer <token>` header. The server ignores caller-supplied principal headers and accepts no cookie or query-string authentication. A credential authenticates the principal's **current** authority; this initial profile is not an attenuated worker credential. Grant issuance, acceptance and file reads still pass through the catalog.
+API clients send one `Authorization: Bearer <token>` header. When institutional sign-in is configured, the browser can start at `GET /auth/login`. The callback sets an eight-hour, host-only, Secure, HttpOnly, SameSite=Lax session cookie. Cookie-authenticated writes and `POST /auth/logout` require the configured Origin and `X-Sanctity-CSRF: 1`. Explicit bearer authentication takes precedence. Both methods use the principal's current catalog authority. `GET /auth/config` reports whether institutional sign-in is enabled.
+
+The server redeems the code with PKCE S256 and checks the signed ID token against the configured issuer, its published keys, the registered client and the one-use login nonce. The callback URL is built from the configured public origin. Pending logins are browser-bound and expire after five minutes. Restarting a service cancels its pending logins. Completed sessions live in the catalog. [OpenID Connect Core](https://openid.net/specs/openid-connect-core-1_0.html) · [Nimbus ID-token validation](https://connect2id.com/products/nimbus-oauth-openid-connect-sdk/examples/validating-id-tokens)
+
+A steward can call `GET /v1/datasets/{dataset}/recipients?q={name}` to find up to 20 active bound principals by a case-insensitive display-name substring. Each result supplies a name and stable principal ID for the existing grant endpoint. The directory uses the same access check as inspecting grants.
 
 The PostgreSQL adapter rechecks credential liveness inside each authorized transaction and locks the credential against concurrent revocation. A request that authenticated before revocation cannot later publish with that stale context. Revocation and an already running catalog transaction serialize at that lock. Expiry is checked at authorization boundaries, rather than retroactively cancelling a transaction.
 

@@ -159,7 +159,9 @@
   // `json` is a pre-serialised body so decimals keep their exact lexical form.
   async function api(method, path, { json, bytes, headers = {}, raw = false } = {}) {
     if (demo()) return demo().request(method, path, { body: json, headers, raw }).catch(e => { throw e.code ? new ApiError(e.status, e.code) : e; });
-    const init = { method, headers: { Authorization: 'Bearer ' + state.token, ...headers }, cache: 'no-store' };
+    const auth = state.token ? { Authorization: 'Bearer ' + state.token } :
+      method === 'GET' ? {} : { 'X-Sanctity-CSRF': '1' };
+    const init = { method, headers: { ...auth, ...headers }, cache: 'no-store' };
     if (json !== undefined) { init.body = json; init.headers['Content-Type'] = 'application/json'; }
     if (bytes !== undefined) { init.body = bytes; init.headers['Content-Type'] = 'application/octet-stream'; }
     const res = await fetch(path, init);
@@ -187,7 +189,7 @@
   // ---------- state & routing ----------
   const state = {
     token: store.get('sessionStorage', 'sanctity.token'),
-    principal: null, notice: null,
+    principal: null, notice: null, institutional: null,
     correction: null,     // { key, base, path, original, text, reason, preview, receipt }
     query: null, accessForm: null,
     revoking: null,       // grant id awaiting confirmation
@@ -275,10 +277,14 @@
   }
   // Paint a loading state only if data takes long enough to notice; avoids flashing over cached views.
   const loadingAfter = (my, ctx, active, label) => setTimeout(() => { if (my === generation) page(ctx, active, h('p', { class: 'loading' }, label)); }, 180);
-  function disconnect() {
+  async function disconnect() {
+    if (state.institutional) {
+      try { await api('POST', '/auth/logout', { headers: { 'X-Sanctity-CSRF': '1' } }); }
+      catch { announce('Sign-out could not be confirmed. Try again.'); return; }
+    }
     if (grantsKey()) store.set('sessionStorage', grantsKey(), null);
     resetSession();
-    go('#/');
+    go('#/', true);
   }
 
   // ---------- connect ----------
@@ -320,13 +326,15 @@
         h('form', { class: 'stack s18', onsubmit: submit, novalidate: true },
           h('div', { class: 'stack s6' },
             h('h1', { class: 'h2' }, 'Sign in'),
-            h('p', { class: 'muted small' }, 'Use a principal credential issued by your repository operator. It stays in this browser tab only.')),
+            h('p', { class: 'muted small' }, state.institutional ? 'Use your institutional account or an operator-issued access token.' : 'Use a principal credential issued by your repository operator. It stays in this browser tab only.')),
+          state.institutional ? h('a', { class: 'btn primary block', href: '/auth/login',
+            onclick: () => store.set('sessionStorage', 'sanctity.return', location.hash) }, 'Sign in with your institution') : null,
           notice ? h('p', { class: 'notice warn', role: 'status' }, notice) : null,
           h('div', { class: 'field' }, h('label', { for: 'token' }, 'Access token'),
             tokenInput = h('input', { class: 'input mono', id: 'token', type: 'password', oninput: clearInvalid, 'aria-describedby': 'connect-errors', autocomplete: 'off', spellcheck: 'false', placeholder: demo() ? 'Demo mode: any value works' : 'Paste your token' })),
           err = h('div', { class: 'stack', id: 'connect-errors' }),
           h('button', { class: 'btn primary block', type: 'submit' }, 'Sign in')))));
-    tokenInput.focus();
+    if (state.institutional) app.querySelector('a[href="/auth/login"]').focus(); else tokenInput.focus();
   }
 
   // ---------- directories ----------
@@ -1717,6 +1725,25 @@
       : (state.accessForm = { dataset: d, scope: ctx.release ? 'release' : 'dataset', chosen: new Set(['ReadMetadata']), recipient: '' });
     // Without a release in context, the only possible scope is the whole dataset.
     if (!ctx.release) form.scope = 'dataset';
+    const results = h('div', { class: 'stack', 'aria-live': 'polite' });
+    let searchVersion = 0;
+    const searchPeople = async ev => {
+      const version = ++searchVersion;
+      const query = ev.target.value.trim();
+      recipient.value = form.recipient = '';
+      results.replaceChildren();
+      if (!query) return;
+      try {
+        const { items } = await api('GET', '/v1/datasets/' + enc(d) + '/recipients?q=' + enc(query));
+        if (searchVersion !== version || !results.isConnected) return;
+        results.replaceChildren(...(items.length ? items.map(person =>
+          h('button', { type: 'button', class: 'btn sm', onclick: () => {
+            recipient.value = form.recipient = person.principal;
+            recipient.removeAttribute('aria-invalid');
+            results.replaceChildren(h('span', {}, 'Selected ' + person.name));
+          } }, person.name + ' · ' + person.principal)) : [h('span', {}, 'No matching people.')]));
+      } catch (e) { if (version === searchVersion) results.textContent = explain(e); }
+    };
     const actionsBox = h('div', { class: 'actions' });
     const drawActions = () => actionsBox.replaceChildren(...ACTIONS.map(([k, label, help]) => {
       const locked = form.scope === 'release' && !READ_ONLY.has(k);
@@ -1777,8 +1804,10 @@
       h('div', { class: 'access' },
         h('form', { class: 'card pad stack s18', onsubmit: grant, novalidate: true },
           h('h2', {}, 'Grant access'),
+          state.institutional ? h('div', { class: 'field' }, h('label', { for: 'g-name' }, 'Find a recipient by name'),
+            h('input', { class: 'input', id: 'g-name', type: 'search', autocomplete: 'off', oninput: searchPeople }), results) : null,
           h('div', { class: 'field' }, h('label', { for: 'g-recipient' }, 'Recipient principal'),
-            recipient = h('input', { class: 'input mono', id: 'g-recipient', fk: 'g-recipient', value: form.recipient, placeholder: '00000000-0000-0000-0000-000000000000', autocomplete: 'off', spellcheck: 'false', oninput: ev => { form.recipient = ev.target.value; ev.target.removeAttribute('aria-invalid'); } })),
+            recipient = h('input', { class: 'input mono', id: 'g-recipient', fk: 'g-recipient', value: form.recipient, placeholder: '00000000-0000-0000-0000-000000000000', autocomplete: 'off', spellcheck: 'false', oninput: ev => { form.recipient = ev.target.value; searchVersion++; results.replaceChildren(); ev.target.removeAttribute('aria-invalid'); } })),
           h('fieldset', { class: 'field' }, h('legend', { class: 'label' }, 'Scope'),
             h('div', { class: 'segmented' },
               [['release', ctx.release ? 'Release ' + short(ctx.release) : 'One release'], ['dataset', 'Whole dataset']].map(([v, l]) =>
@@ -1944,10 +1973,25 @@
     generation++;            // any view still loading for a previous route stops painting
     memo.delete('head:' + (route().parts[1] || ''));  // the dataset head can move between views
     rememberFocus();
-    if (!state.principal && (state.token || demo())) {
+    if (!demo() && state.institutional === null) {
+      try { state.institutional = (await api('GET', '/auth/config')).enabled === true; }
+      catch { state.institutional = false; }
+    }
+    if (!state.principal && (state.token || demo() || state.institutional)) {
       const my = generation;
-      try { state.principal = (await api('GET', '/v1/me')).principal; } catch { state.token = null; store.set('sessionStorage', 'sanctity.token', null); }
-      if (my !== generation) return;   // another navigation started while signing in
+      try {
+        const me = await api('GET', '/v1/me');
+        if (my !== generation) return;
+        state.principal = me.principal;
+      } catch {
+        if (my !== generation) return;
+        state.token = null; store.set('sessionStorage', 'sanctity.token', null);
+      }
+    }
+    const destination = store.get('sessionStorage', 'sanctity.return');
+    if (state.principal && destination) {
+      store.set('sessionStorage', 'sanctity.return', null);
+      if (destination.startsWith('#/') && !location.hash) { location.replace(destination); return; }
     }
     const { parts, q } = route();
     if (!state.principal) return connectView(parts.length ? 'Sign in to continue.' : null);
