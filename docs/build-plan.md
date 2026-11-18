@@ -1,7 +1,7 @@
 # Sanctity build plan: a clean kernel, a working product, a convincing demo
 
 
-**17 November implementation update.** The service uses a common admission workflow for raw BIDS, registered derivatives and archives. MRI and behavioural checks and view rules are registered by modality. The project console supports dataset creation, initial folder upload and additions against the current release. The browser rehearsal creates two sessions and checks both full exports independently after shutdown. Institutional sign-in and full-release download over HTTP remain open. The inventory below describes the starting point for the plan.
+**17 November implementation update.** The service uses a common admission workflow for raw BIDS, registered derivatives and archives. MRI and behavioural checks and view rules are registered by modality. The project console supports dataset creation, initial folder upload and additions against the current release. The browser rehearsal creates two sessions and checks both full exports independently after shutdown. The demo has institutional sign-in through its local provider. Full-release download over HTTP remains open. The inventory below describes the starting point for the plan.
 
 Written 17 November 2026 from a first-hand read of the code, the console and the
 tests. It turns the [product direction](product-direction.md) into concrete design
@@ -368,12 +368,12 @@ and store an archive, all in the browser on a freshly started instance.
   NIRS, PET, perfusion and motion are described from names and sidecar metadata
   and can be queried beside MRI. Content without a profile is kept and labelled.
   A root `archive_description.json` makes a collection an archive.
-- **Package 3 is done, apart from one console action.** K5: coverage levels are
+- **Package 3 is done.** K5: coverage levels are
   the first named section of the interpretation identity, and a golden test pins
   the earlier encoding. K6: a release from an earlier build is read again when
   it is edited; an identical reading needs no separate step, and a different one
-  must be re-assessed through a new HTTP route. The console explains the
-  refusal but does not yet offer the re-assessment.
+  must be re-assessed. The console offers a preview and acceptance before the
+  user resumes the original correction.
 - **Package 1 is done.** `python3 scripts/demo-instance.py up` builds the image,
   starts PostgreSQL, the packaged service and a local Keycloak provider. The two labs
   hold five accepted datasets and four fictional people. Matching Pennies EEG and
@@ -400,6 +400,13 @@ and store an archive, all in the browser on a freshly started instance.
   are preserved, not described. File moves and removals are not yet offered
   for described data types. Processing-input planning still expects the older
   MRI-only context.
+
+*Progress, 18 November:* The packaged demo runs the Stage 1 curator workflow in
+Chromium on a disposable instance. The curator signs in through Keycloak, creates
+datasets, corrects a timing finding in uploaded MRI, and accepts EEG and archive
+uploads. Upload previews show coverage by data type and accepted files carry a
+coverage label in the inspector. A separate browser exercise uses a release
+recorded before coverage levels and verifies re-assessment and draft continuity.
 
 **Stage 2: the multi-modal story (about 3 weeks)**
 

@@ -97,6 +97,7 @@ jobs:
             target/demo-check.*/state-first.json
             target/demo-check.*/service.log
             target/demo-check.*/institutional-login.txt
+            target/demo-check.*/curation.json
           if-no-files-found: error
   scientific-core:
     runs-on: ubuntu-24.04

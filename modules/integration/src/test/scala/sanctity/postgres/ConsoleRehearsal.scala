@@ -9,7 +9,7 @@ import io.circe.jawn.JawnParser
 import org.http4s.{Header, Method, Request, Status, Uri}
 import org.http4s.ember.server.EmberServerBuilder
 import org.typelevel.ci.CIString
-import sanctity.app.{ApiServer, ServiceInterpreters}
+import sanctity.app.{ApiServer, CoverageFixture, EarlierBuild, ServiceInterpreters}
 import sanctity.application.{Checked, IdSource, NativeRepository}
 import sanctity.http.ConsoleAssets
 import sanctity.kernel.*
@@ -45,6 +45,14 @@ object ConsoleRehearsal extends IOApp.Simple:
           new NativeDirectorySource[IO](f.root.resolve("console"))))
         initial <- checked(repository.accept(f.system.context, proposal.candidate.id,
           IdempotencyKey.from("console-rehearsal-import").toOption.get))
+        // Record a release before coverage levels were part of the interpretation, then serve it with today's rules.
+        legacy <- f.system.catalog.create(f.system.context, f.system.dataset.custodian)
+        earlier = new NativeRepository(f.system.catalog, f.system.store,
+          new EarlierBuild(ServiceInterpreters(f.system.store), EarlierBuild.withoutLevels), ids)
+        legacySource = f.root.resolve("legacy-reading")
+        _ <- CoverageFixture.described(legacySource)
+        oldPreview <- checked(earlier.importNative(f.system.context, legacy.id, new NativeDirectorySource[IO](legacySource)))
+        oldRelease <- checked(earlier.accept(f.system.context, oldPreview.candidate.id, IdempotencyKey.from("console-earlier-reading").toOption.get))
         colleague <- ids.next[PrincipalTag]
         recipient <- ids.next[PrincipalTag]
         _ <- checked(f.system.catalog.grant(f.system.context, f.system.dataset.id, colleague, None,
@@ -82,6 +90,9 @@ object ConsoleRehearsal extends IOApp.Simple:
               "baseUrl" -> Json.fromString(s"http://127.0.0.1:${server.address.getPort}"),
               "dataset" -> Json.fromString(f.system.dataset.id.render),
               "custodian" -> Json.fromString(f.system.dataset.custodian.render),
+              "legacyDataset" -> Json.fromString(legacy.id.render),
+              "legacyRelease" -> Json.fromString(oldRelease.release.release.render),
+              "legacySidecar" -> Json.fromString(CoverageFixture.eegSidecar),
               "initialRelease" -> Json.fromString(initial.release.release.render),
               "recipient" -> Json.fromString(recipient.render),
               "label" -> Json.fromString(label),

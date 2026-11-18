@@ -8,6 +8,8 @@ O="${CONSOLE_OUTPUT_ROOT:-$H/../../target/console}/$R"; status=0
 node "$H/checks/ui.js" "$R" || status=1
 node "$H/checks/behaviour.js" "$R" || status=1
 node "$H/scripts/checks/cls.js" "$O/release.html;$O/correction.html;$O/connect.html" || status=1
-node -e "for (const f of ['app.js','demo.js']) new Function(require('fs').readFileSync('$O/'+f,'utf8')); console.log('syntax PASS')" || status=1
+for asset in "$O"/*.js; do
+  node --input-type=module --check < "$asset" || status=1
+done
 echo "gate exit $status"
 exit $status

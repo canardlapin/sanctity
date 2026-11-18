@@ -18,7 +18,7 @@ class ConsoleAssetsSuite extends munit.FunSuite:
     assertEquals(r.status, Status.Ok)
     assertEquals(header(r, "Content-Type"), Some("text/html; charset=utf-8"))
     assert(header(r, "Content-Security-Policy").exists(_.contains("script-src 'self'")))
-    assert(r.as[String].unsafeRunSync().contains("""<script src="app.js"></script>"""))
+    assert(r.as[String].unsafeRunSync().contains("""<script type="module" src="app.js"></script>"""))
   }
 
   test("serves only the named assets") {

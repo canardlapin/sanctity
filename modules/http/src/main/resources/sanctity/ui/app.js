@@ -1,7 +1,10 @@
 /* Sanctity console: a thin client over the authenticated /v1 workflow API.
    Everything rendered from the API goes through text nodes; no HTML is built from data.
    No inline style attributes: the server sends style-src 'self'. */
-'use strict';
+import { h, pathText, I } from './elements.js';
+import { connectView } from './sign-in.js';
+import { uploadView } from './upload.js';
+import { coverageChip, coverageSection } from './coverage.js';
 (() => {
   // ---------- small utilities ----------
   const store = {
@@ -49,54 +52,6 @@
   const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
   const DECIMAL = /^-?(0|[1-9][0-9]*)(\.[0-9]+)?$/;
   const narrow = () => matchMedia('(max-width: 980px)').matches;
-
-  function h(tag, props, ...kids) {
-    const el = document.createElement(tag);
-    for (const [k, v] of Object.entries(props || {})) {
-      if (v == null || v === false) continue;
-      if (k === 'class') el.className = v;
-      else if (k === 'text') el.textContent = v;
-      else if (k === 'fk') el.dataset.fk = v;
-      else if (k.startsWith('on')) el.addEventListener(k.slice(2), v);
-      else if (k === 'value') el.value = v;
-      else if (k === 'checked' || k === 'disabled' || k === 'selected') el[k] = !!v;
-      else el.setAttribute(k, v === true ? '' : v);
-    }
-    for (const kid of kids.flat(Infinity)) if (kid != null && kid !== false) el.append(kid.nodeType ? kid : document.createTextNode(String(kid)));
-    return el;
-  }
-  // A path that breaks only after "/" and "_" so names never split mid-token.
-  const pathText = p => {
-    const s = h('span', { class: 'path-text' });
-    p.split(/(?<=[/_])/).forEach((part, i) => { if (i) s.append(h('wbr')); s.append(part); });
-    return s;
-  };
-  const svg = (paths, cls = 'icon', vb = '0 0 16 16') => {
-    const s = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    s.setAttribute('viewBox', vb); s.setAttribute('class', cls); s.setAttribute('aria-hidden', 'true');
-    s.setAttribute('fill', 'none'); s.setAttribute('stroke', 'currentColor'); s.setAttribute('stroke-width', '1.6');
-    s.setAttribute('stroke-linecap', 'round'); s.setAttribute('stroke-linejoin', 'round');
-    for (const d of [].concat(paths)) { const p = document.createElementNS(s.namespaceURI, 'path'); p.setAttribute('d', d); s.append(p); }
-    return s;
-  };
-  const I = {
-    mark: () => { const s = svg(['M16 3a13 13 0 1 0 0 26a13 13 0 1 0 0-26', 'M16 9a7 7 0 1 0 0 14a7 7 0 1 0 0-14'], 'mark', '0 0 32 32'); s.setAttribute('stroke-width', '2.4'); return s; },
-    seal: () => svg(['M8 1.5l1.6 1.2 2-.1.6 1.9 1.6 1.2-.6 1.9.6 1.9-1.6 1.2-.6 1.9-2-.1L8 14.5l-1.6-1.2-2 .1-.6-1.9-1.6-1.2.6-1.9-.6-1.9 1.6-1.2.6-1.9 2 .1z', 'M5.6 8.1l1.7 1.7 3.2-3.4']),
-    stop: () => svg(['M8 1.5a6.5 6.5 0 1 0 0 13a6.5 6.5 0 1 0 0-13', 'M5.7 5.7l4.6 4.6M10.3 5.7l-4.6 4.6']),
-    warn: () => svg(['M8 2l6.5 11.5h-13z', 'M8 6.5v3', 'M8 11.6v.1']),
-    err: () => svg(['M8 1.8a6.2 6.2 0 1 0 0 12.4a6.2 6.2 0 1 0 0-12.4', 'M8 4.8v3.8', 'M8 11v.1']),
-    down: () => svg(['M8 2.5v8', 'M4.5 7.5L8 11l3.5-3.5', 'M3 13.5h10']),
-    edit: () => svg(['M10.5 2.5l3 3L6 13H3v-3z']),
-    dir: () => svg(['M1.8 4.2c0-.7.5-1.2 1.2-1.2h3l1.4 1.6H13c.7 0 1.2.5 1.2 1.2v6.2c0 .7-.5 1.2-1.2 1.2H3c-.7 0-1.2-.5-1.2-1.2z']),
-    chev: () => svg(['M6 4l4 4-4 4']),
-    moon: () => svg(['M13.5 9.5A5.5 5.5 0 0 1 6.5 2.5a5.5 5.5 0 1 0 7 7z']),
-    plus: () => svg(['M8 3v10M3 8h10']),
-    x: () => svg(['M4 4l8 8M12 4l-8 8']),
-    check: () => svg(['M3 8.5l3 3 7-7']),
-    out: () => svg(['M6 2.5H3.5v11H6', 'M10 5l3 3-3 3', 'M13 8H6.5']),
-    arrow: () => svg(['M2 8h11', 'M9.5 4.5L13 8l-3.5 3.5']),
-    link: () => svg(['M6.5 9.5l3-3', 'M7 4.5l1-1a2.5 2.5 0 0 1 3.5 3.5l-1 1', 'M9 11.5l-1 1a2.5 2.5 0 0 1-3.5-3.5l1-1']),
-  };
 
   function announce(msg) { const a = document.getElementById('announce'); if (a) { a.textContent = ''; setTimeout(() => { a.textContent = msg; }, 30); } }
   function toast(msg) {
@@ -183,7 +138,11 @@
   const getFileText = (d, r, p) => cached('text:' + d + '/' + r + ':' + p, async () => (await api('GET', releaseUrl(d, r) + '/file?path=' + enc(p), { raw: true })).text());
   const getHead = d => cached('head:' + d, async () => (await api('GET', '/v1/datasets/' + enc(d))).head);
   const describe = (d, r) => cached('desc:' + d + '/' + r, async () => {
-    try { return JSON.parse(await getFileText(d, r, 'dataset_description.json')); } catch { return null; }
+    try {
+      const release = await getRelease(d, r);
+      const descriptor = release.entries.find(e => e.path === 'dataset_description.json' || e.path === 'archive_description.json');
+      return descriptor ? JSON.parse(await getFileText(d, r, descriptor.path)) : null;
+    } catch { return null; }
   });
 
   // ---------- state & routing ----------
@@ -285,56 +244,6 @@
     if (grantsKey()) store.set('sessionStorage', grantsKey(), null);
     resetSession();
     go('#/', true);
-  }
-
-  // ---------- connect ----------
-  // Sign-in asks only for the credential; the route that asked for it (a deep link) renders once it is accepted.
-  function connectView(message) {
-    let tokenInput, err;
-    const notice = state.notice || message; state.notice = null;
-    const submit = async ev => {
-      ev.preventDefault();
-      const token = tokenInput.value.trim();
-      err.replaceChildren();
-      if (!demo() && !token) { err.append(h('p', { class: 'notice err', role: 'alert' }, 'Enter an access token.')); tokenInput.setAttribute('aria-invalid', 'true'); tokenInput.focus(); return; }
-      state.token = token;
-      try {
-        const me = await api('GET', '/v1/me');
-        state.principal = me.principal;
-        store.set('sessionStorage', 'sanctity.token', token);
-        render();
-      } catch (e) {
-        state.token = null;
-        err.append(h('p', { class: 'notice err', role: 'alert' }, explain(e)));
-        if (e instanceof ApiError && e.status === 401) { tokenInput.setAttribute('aria-invalid', 'true'); tokenInput.focus(); }
-      }
-    };
-    const clearInvalid = ev => ev.target.removeAttribute('aria-invalid');
-    const rings = svg(['M260 20a240 240 0 1 0 0 480a240 240 0 1 0 0-480', 'M260 90a170 170 0 1 0 0 340a170 170 0 1 0 0-340', 'M260 160a100 100 0 1 0 0 200a100 100 0 1 0 0-200'], 'rings', '0 0 520 520');
-    app.replaceChildren(h('div', { class: 'connect' },
-      h('section', { class: 'connect-hero', 'aria-label': 'About Sanctity' },
-        h('div', { class: 'brand' }, I.mark(), h('span', {}, 'Sanctity')),
-        h('div', { class: 'hero-copy' },
-          h('p', { class: 'hero-title' }, 'Exact scientific states, explained.'),
-          h('p', { class: 'hero-lead' }, 'A BIDS-native repository. Every release fixes its content, interpretation and admission evidence. Every change is previewed before it is accepted.'),
-          h('dl', { class: 'laws' },
-            h('div', {}, h('dt', {}, 'Fidelity'), h('dd', {}, 'Exports reproduce the retained tree byte for byte.')),
-            h('div', {}, h('dt', {}, 'Explanation'), h('dd', {}, 'Every metadata value names the file it came from.')),
-            h('div', {}, h('dt', {}, 'Authority'), h('dd', {}, 'Access is granted explicitly and can be withdrawn.')))),
-        rings, h('p', { class: 'hero-foot' }, 'Console for the Sanctity v1 API')),
-      h('main', { class: 'connect-form', id: 'main', tabindex: '-1' },
-        h('form', { class: 'stack s18', onsubmit: submit, novalidate: true },
-          h('div', { class: 'stack s6' },
-            h('h1', { class: 'h2' }, 'Sign in'),
-            h('p', { class: 'muted small' }, state.institutional ? 'Use your institutional account or an operator-issued access token.' : 'Use a principal credential issued by your repository operator. It stays in this browser tab only.')),
-          state.institutional ? h('a', { class: 'btn primary block', href: '/auth/login',
-            onclick: () => store.set('sessionStorage', 'sanctity.return', location.hash) }, 'Sign in with your institution') : null,
-          notice ? h('p', { class: 'notice warn', role: 'status' }, notice) : null,
-          h('div', { class: 'field' }, h('label', { for: 'token' }, 'Access token'),
-            tokenInput = h('input', { class: 'input mono', id: 'token', type: 'password', oninput: clearInvalid, 'aria-describedby': 'connect-errors', autocomplete: 'off', spellcheck: 'false', placeholder: demo() ? 'Demo mode: any value works' : 'Paste your token' })),
-          err = h('div', { class: 'stack', id: 'connect-errors' }),
-          h('button', { class: 'btn primary block', type: 'submit' }, 'Sign in')))));
-    if (state.institutional) app.querySelector('a[href="/auth/login"]').focus(); else tokenInput.focus();
   }
 
   // ---------- directories ----------
@@ -702,16 +611,6 @@
   }
 
   // What the repository did with each data type. A level describes the repository's work, never the data's quality.
-  const LEVELS = ['assessed', 'described', 'preserved'];
-  function coverageSection(levels) {
-    const groups = new Map();
-    levels.summary.forEach(s => { const g = groups.get(s.group) || { total: 0, by: {} }; g.by[s.level] = s.files; g.total += s.files; groups.set(s.group, g); });
-    return h('section', { class: 'stack s8' }, h('h3', { class: 'overline' }, 'Coverage by data type'),
-      h('ul', { class: 'type-list' }, [...groups].sort((x, y) => y[1].total - x[1].total).map(([g, v]) => h('li', {}, h('span', { class: 'mono' }, g),
-        LEVELS.filter(l => v.by[l]).map(l => h('span', { class: l === 'assessed' ? 'ok' : 'muted' }, v.by[l] + ' ' + l))))),
-      h('p', { class: 'small muted' }, 'Assessed: content checks ran. Described: names and metadata were read; recordings were not opened. Preserved: stored exactly, without interpretation.'));
-  }
-
   // With no file chosen, the inspector summarises the release: what it contains and what needs attention.
   const DATATYPES = new Set(['anat', 'func', 'dwi', 'fmap', 'perf', 'beh', 'eeg', 'meg', 'ieeg', 'pet', 'micr', 'nirs', 'motion']);
   function releaseOverview(d, r, rel, isHead, goTab) {
@@ -858,7 +757,8 @@
     };
     box.append(h('header', { class: 'inspector-head' },
       h('div', { class: 'stack s6 grow' }, h('span', { class: 'eyebrow' }, entry ? [k ? k.toUpperCase() + ' · ' : '', h('span', { class: 'nocaps' }, bytes(entry.size))] : 'Not in this release'),
-        h('h2', { class: 'path' }, pathText(p)), status),
+        h('h2', { class: 'path' }, pathText(p)),
+        entry?.level ? h('div', { class: 'row', role: 'group', 'aria-label': 'File coverage' }, coverageChip(entry.level)) : null, status),
       h('div', { class: 'row nowrap' },
         docKind(p) ? h('a', { class: 'btn sm', href: '#/d/' + enc(d) + '/r/' + enc(r) + '/correct?path=' + enc(p) }, I.edit(), 'Correct') : null,
         k === 'nii' && entry && !rel.entries.some(e => e.path === stem(p) + '.json') ? h('a', { class: 'btn sm', href: '#/d/' + enc(d) + '/r/' + enc(r) + '/correct?path=' + enc(stem(p) + '.json'),
@@ -1131,6 +1031,7 @@
     const files = rel.entries.filter(e => e.kind === 'file').map(e => e.path);
     // A requested path that is not in the release is a new sidecar.
     if (c.path && !c.preview && !c.receipt && !files.includes(c.path)) { c.newMode = true; c.newPath = c.path; }
+    const review = c.reassessment;
     const step = c.receipt ? 3 : c.preview ? 2 : 1;
     const steps = h('ol', { class: 'steps', 'aria-label': 'Correction progress' },
       ['Edit', 'Review preview', 'Accepted'].map((t, i) => h('li', { 'data-state': i + 1 < step ? 'done' : i + 1 === step ? 'current' : 'todo', 'aria-current': i + 1 === step ? 'step' : null },
@@ -1139,14 +1040,19 @@
       // Once accepted, the page belongs to the new head: the crumb leads there, not back to the release it replaced.
       h('div', { class: 'crumbs' }, c.receipt
         ? h('a', { href: relHash(d, c.receipt.ref.release, c.path ? { path: c.path } : null) }, 'Release ', short(c.receipt.ref.release), ' (new head)')
-        : h('a', { href: relHash(d, r, c.path ? { path: c.path } : null) }, 'Release ', short(r)), I.chev(), h('span', {}, 'Correction')),
-      h('h1', {}, c.path ? (c.newMode ? 'Add ' : 'Correct ') + c.path.split('/').pop() : 'Propose a correction'),
-      h('p', { class: 'lead' }, 'Prepared against this exact release and assessed like any import. It becomes the dataset head only when someone with accept authority accepts it.')));
+        : h('a', { href: relHash(d, r, c.path ? { path: c.path } : null) }, 'Release ', short(r)), I.chev(), h('span', {}, review ? 'Re-assessment' : 'Correction')),
+      h('h1', {}, review ? 'Re-assess release' : c.path ? (c.newMode ? 'Add ' : 'Correct ') + c.path.split('/').pop() : 'Propose a correction'),
+      h('p', { class: 'lead' }, review
+        ? 'Review how the current rules read the files in this release.'
+        : 'Prepared against this exact release and assessed like any import. It becomes the dataset head only when someone with accept authority accepts it.')));
     const staleNote = c.stale ? h('div', { class: 'notice warn row between' }, h('span', {}, 'Release ' + short(r) + ' is not the current dataset head, so a correction prepared here could not be accepted.'),
       h('a', { class: 'btn sm', href: '#/d/' + enc(d) + '/r/' + enc(headId) + '/correct' + (c.path ? '?path=' + enc(c.path) : '') }, 'Correct the current head')) : null;
-    const body = c.receipt ? receiptCard(d, c) : c.preview ? previewCard(d, r, c, rel) : await editCard(d, r, c, sidecars, files);
+    const body = review?.receipt ? receiptCard(d, review,
+      '#/d/' + enc(d) + '/r/' + enc(review.receipt.ref.release) + '/correct?path=' + enc(c.path))
+      : review ? previewCard(d, r, review, rel, () => { c.reassessment = null; focusKey = 'c-text'; render(); })
+      : c.receipt ? receiptCard(d, c) : c.preview ? previewCard(d, r, c, rel) : await editCard(d, r, c, sidecars, files);
     if (my !== generation) return;
-    page(ctx, 'release', head, staleNote, steps, body);
+    page(ctx, 'release', head, review?.receipt ? null : staleNote, review ? null : steps, body);
   }
 
   // A correction replaces one JSON sidecar, or adds a new one (e.g. a subject-level override that BIDS inheritance applies).
@@ -1273,6 +1179,27 @@
       } catch (e) {
         submitBtn.removeAttribute('aria-busy'); submitBtn.textContent = 'Prepare preview';
         err.append(h('p', { class: 'notice err', role: 'alert' }, explain(e)));
+        if (e instanceof ApiError && e.code === 'reassessment_required') {
+          const why = h('textarea', { class: 'input', rows: 2, maxlength: 2000 });
+          const feedback = h('p', { role: 'status' });
+          const prepare = h('button', { type: 'button', class: 'btn', onclick: async () => {
+            const reason = why.value.trim();
+            if (!reason) { feedback.textContent = 'Enter a reason for the re-assessment.'; why.focus(); return; }
+            prepare.disabled = submitBtn.disabled = true;
+            feedback.textContent = 'Preparing re-assessment…';
+            try {
+              const preview = await api('POST', releaseUrl(d, r) + '/reassessments', { json: JSON.stringify({ reason }) });
+              if (!err.isConnected) return;
+              c.reassessment = { key: uuid(), reason, preview, path: '', text: '', original: null };
+              focusKey = 'preview-head';
+              render();
+            } catch (error) {
+              feedback.textContent = explain(error);
+              prepare.disabled = submitBtn.disabled = false;
+            }
+          } }, 'Preview re-assessment');
+          err.append(h('label', { class: 'stack s8' }, 'Reason for re-assessment', why), prepare, feedback);
+        }
       }
     };
     const lines = (c.text || '').split('\n').length;
@@ -1390,7 +1317,7 @@
     }
     return [...groups.values()];
   }
-  function previewCard(d, r, c, base) {
+  function previewCard(d, r, c, base, cancelReassessment) {
     const p = c.preview, cand = p.candidate, a = cand.assessment;
     const before = new Set((base ? base.assessment.findings : []).map(findingKey));
     const after = new Set(a.findings.map(findingKey));
@@ -1445,13 +1372,13 @@
       err.replaceChildren(); btn.setAttribute('aria-busy', 'true'); btn.lastChild.textContent = 'Accepting…';
       try {
         c.receipt = await api('POST', '/v1/candidates/' + enc(cand.id) + '/accept', { headers: { 'Idempotency-Key': c.key } });
-        memo.clear(); announce('Correction accepted. A new release is the dataset head.'); focusKey = 'receipt-head'; render();
+        memo.clear(); announce(cancelReassessment ? 'Re-assessment accepted.' : 'Correction accepted. A new release is the dataset head.'); focusKey = 'receipt-head'; render();
       } catch (e) {
         btn.removeAttribute('aria-busy'); btn.lastChild.textContent = 'Accept as new release';
         memo.delete('head:' + d);
         const now = e instanceof ApiError && e.code === 'conflict' ? await getHead(d).catch(() => null) : null;
         err.append(h('div', { class: 'notice err row between', role: 'alert' }, h('span', {}, explain(e)),
-          now && now !== r ? h('a', { class: 'btn sm', href: '#/d/' + enc(d) + '/r/' + enc(now) + '/correct' + (c.path ? '?path=' + enc(c.path) : '') }, 'Correct the current head') : null));
+          !cancelReassessment && now && now !== r ? h('a', { class: 'btn sm', href: '#/d/' + enc(d) + '/r/' + enc(now) + '/correct' + (c.path ? '?path=' + enc(c.path) : '') }, 'Correct the current head') : null));
       }
     };
     const byPath = new Map();
@@ -1461,7 +1388,7 @@
     c.firstAffected = p.metadataChanges.length ? p.metadataChanges[0].path : null;
     // What the receipt restates once accepted: the document, the values or rows that changed, and the findings it cleared.
     const edited = c.original != null ? lineDiff(c.original, c.text) : null;
-    c.summary = { path: c.path, added: !!c.newMode || c.original === '', kind: c.newMode ? 'json' : docKind(c.path) || 'json',
+    if (!cancelReassessment) c.summary = { path: c.path, added: !!c.newMode || c.original === '', kind: c.newMode ? 'json' : docKind(c.path) || 'json',
       rows: edited ? edited.filter(([op]) => op === '+').length : null,
       groups: groupChanges(byPath).map(([paths, fs]) => ({ files: paths.length, fields: fs.map(f => ({ name: f.name, before: f.before && f.before.value, after: f.after && f.after.value })) })),
       cleared: [...new Set(resolved.filter(f => outcome(f) !== 'Not evaluated').map(f => f.code))], fresh: a.findings.filter(f => !before.has(findingKey(f))).length };
@@ -1523,7 +1450,7 @@
               h('td', { class: 'num', 'data-label': 'Before' }, x.before ? bytes(x.before.size) : 'New file'),
               h('td', { class: 'num', 'data-label': 'After' }, !x.after ? 'Removed' : x.before && x.before.size === x.after.size ? 'Same size, new content' : bytes(x.after.size))))))) : null),
       h('aside', { class: 'card pad stack s16 sticky decision' },
-        h('h2', {}, 'Candidate'),
+        h('h2', {}, cancelReassessment ? 'Re-assessment candidate' : 'Candidate'),
         a.admissible ? h('span', { class: 'seal ok' }, I.seal(), 'Admissible') : h('span', { class: 'seal err' }, I.stop(), 'Not admissible'),
         h('dl', { class: 'receipt' }, h('dt', {}, 'Reason'), h('dd', {}, c.reason), h('dt', {}, 'Against'), h('dd', {}, 'Release ', short(cand.base || r))),
         h('p', { class: 'finding-summary small' }, a.findings.length || resolved.length
@@ -1533,8 +1460,9 @@
         err = h('div', { class: 'stack' }),
         h('div', { class: 'row' },
           btn = h('button', { class: 'btn ' + (inert ? '' : 'primary'), type: 'button', fk: 'accept', disabled: blocked, onclick: accept }, I.check(), h('span', {}, 'Accept as new release')),
-          h('button', { class: 'btn ghost', type: 'button', onclick: () => { c.preview = null; c.key = uuid(); focusKey = 'c-text'; render(); } }, 'Back to edit')),
-        h('p', { class: 'small muted' }, blocked ? 'Errors block acceptance. Edit the ' + DOC[kind][0] + ' and prepare again.' : 'Requires accept authority. Retrying with the same key is safe.'),
+          h('button', { class: 'btn ghost', type: 'button', onclick: cancelReassessment || (() => { c.preview = null; c.key = uuid(); focusKey = 'c-text'; render(); }) }, cancelReassessment ? 'Return to correction' : 'Back to edit')),
+        c.preview.candidate.levels && cancelReassessment ? coverageSection(c.preview.candidate.levels) : null,
+        h('p', { class: 'small muted' }, blocked ? (cancelReassessment ? 'Errors block acceptance under the current rules.' : 'Errors block acceptance. Edit the ' + DOC[kind][0] + ' and prepare again.') : 'Requires accept authority. Retrying with the same key is safe.'),
         ...findingSections.map(([title, fs, label, why, checks]) => fs.length ? h('div', { class: 'stack s8' }, h('h3', { class: 'overline' }, title), findingList(fs, true, null, label, why, keyFacts(checks))) : null),
         a.findings.length || resolved.length ? null : h('p', { class: 'small muted' }, 'No findings.'),
         h('details', { class: 'tech' }, h('summary', {}, 'Technical details'),
@@ -1547,7 +1475,7 @@
             h('dt', {}, 'Retry key'), h('dd', {}, hashChip(c.key, 'idempotency key'))))));
   }
 
-  function receiptCard(d, c) {
+  function receiptCard(d, c, continueCorrection) {
     const rc = c.receipt, cand = c.preview && c.preview.candidate;
     const verify = h('dl', { class: 'receipt verify' }, h('dt', {}, 'Identity'), h('dd', { class: 'muted' }, 'Checking the new release…'));
     const techSummary = h('summary', {}, 'Technical details'), mismatch = h('div', {});
@@ -1571,7 +1499,8 @@
       sm.fresh ? h('li', {}, plural(sm.fresh, 'new warning') + ' recorded') : null) : null;
     return h('section', { class: 'card pad stack s18 measure' },
       h('span', { class: 'seal ok' }, I.seal(), 'Accepted'),
-      h('h2', { tabindex: '-1', fk: 'receipt-head' }, 'A new release is now the dataset head'),
+      h('h2', { tabindex: '-1', fk: 'receipt-head' }, continueCorrection ? 'Re-assessment accepted' : 'A new release is now the dataset head'),
+      continueCorrection ? h('p', {}, 'The new head contains the same files under the current rules.') : null,
       changed,
       h('dl', { class: 'receipt' },
         h('dt', {}, 'Release'), h('dd', {}, hashChip(rc.ref.release, 'release id', true)),
@@ -1583,7 +1512,10 @@
           h('dt', {}, 'Candidate'), h('dd', {}, hashChip(rc.candidate, 'candidate id', true)),
           h('dt', {}, 'Retry key'), h('dd', {}, hashChip(rc.key, 'idempotency key'))),
         h('h3', { class: 'overline' }, 'New release identity'), verify),
-      h('div', { class: 'row' }, h('a', { class: 'btn primary', href: relHash(d, rc.ref.release, c.firstAffected || c.path ? { path: c.firstAffected || c.path } : null), onclick: () => { state.correction = null; } }, 'Open new release')));
+      h('div', { class: 'row' }, continueCorrection
+        ? h('a', { class: 'btn primary', href: continueCorrection }, 'Continue correction')
+        : h('a', { class: 'btn primary', href: relHash(d, rc.ref.release, c.firstAffected || c.path ? { path: c.firstAffected || c.path } : null),
+          onclick: () => { state.correction = null; } }, 'Open new release')));
   }
 
   // ---------- query ----------
@@ -1845,115 +1777,16 @@
   document.addEventListener('keydown', ev => { if (ev.key === 'Escape' && onEscape) { ev.preventDefault(); const f = onEscape; onEscape = null; f(); } });
 
   // ---------- router ----------
-  async function uploadView(d, base, query) {
-    const my = ++generation, ctx = { dataset: d, release: base };
-    const current = () => my === generation;
-    const url = id => '/v1/uploads/' + enc(id);
-    const hex = async bytes => Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', bytes)),
-      n => n.toString(16).padStart(2, '0')).join('');
-    let entries, operation = null, busy = false;
-    try {
-      entries = base ? (await getRelease(d, base)).entries : [];
-      if (query.has('operation')) {
-        operation = await api('GET', url(query.get('operation')));
-        if (operation.dataset !== d || operation.base !== base) throw new Error('This upload belongs to another dataset or base release.');
-      }
-    } catch (e) { if (current()) failure(ctx, 'release', e, render); return; }
-    if (!current()) return;
-    if (operation && operation.receipt) { go(relHash(d, operation.receipt.ref.release), true); return; }
-    const existing = new Set(entries.filter(e => e.kind === 'file').map(e => e.path));
-    const folder = h('input', { type: 'file', webkitdirectory: true, multiple: true });
-    const destination = h('input', { type: 'text', placeholder: 'Dataset root', autocomplete: 'off' });
-    const acknowledged = h('input', { type: 'checkbox' });
-    const collisions = h('div', { class: 'stack s8' });
-    const status = h('p', { role: 'status', class: 'small' });
-    const preview = h('div', { class: 'stack' });
-    const send = h('button', { class: 'btn primary', type: 'button', disabled: true }, 'Upload and preview');
-    const fileRows = () => Array.from(folder.files, file => {
-      const relative = file.webkitRelativePath.split('/').slice(1).join('/');
-      return { file, path: [destination.value.trim(), relative].filter(Boolean).join('/') };
+  function openUpload(d, base, query) {
+    const my = ++generation;
+    const ctx = { dataset: d, release: base };
+    return uploadView(d, base, query, {
+      api, getRelease, go, relHash, explain,
+      current: () => my === generation,
+      show: body => page(ctx, 'release', h('div', { class: 'stack' }, h('div', { class: 'crumbs' }, datasetCrumbs(d)), body)),
+      failed: e => failure(ctx, 'release', e, render),
+      invalidateHead: () => memo.delete('head:' + d),
     });
-    function refresh() {
-      const replaced = fileRows().filter(row => existing.has(row.path)).map(row => row.path);
-      collisions.replaceChildren();
-      if (replaced.length) collisions.append(h('label', {}, acknowledged, ' Replace these existing files'),
-        h('ul', {}, replaced.map(p => h('li', {}, pathText(p)))));
-      send.disabled = busy || !folder.files.length || (replaced.length > 0 && !acknowledged.checked);
-    }
-    function reset() { acknowledged.checked = false; preview.replaceChildren(); refresh(); }
-    folder.onchange = () => {
-      const first = folder.files[0];
-      const name = first ? first.webkitRelativePath.split('/')[0] : '';
-      destination.value = /^(sub-|ses-)/.test(name) ? name : '';
-      reset();
-    };
-    destination.oninput = reset; acknowledged.onchange = () => { preview.replaceChildren(); refresh(); };
-    function lock(active) {
-      busy = active; folder.disabled = destination.disabled = acknowledged.disabled = active; refresh();
-    }
-    async function review(op) {
-      const p = await api('POST', url(op.id) + '/preview');
-      if (!current()) return;
-      const accept = h('button', { class: 'btn primary', type: 'button', disabled: !p.candidate.assessment.admissible }, 'Accept release');
-      accept.onclick = async () => {
-        accept.disabled = true;
-        try {
-          const receipt = await api('POST', url(op.id) + '/accept');
-          if (current()) { memo.delete('head:' + d); go(relHash(d, receipt.ref.release)); }
-        } catch (e) { if (current()) { status.textContent = e.message; accept.disabled = false; } }
-      };
-      const files = p.contentChanges.filter(c => (c.after || c.before).kind === 'file');
-      preview.replaceChildren(h('h2', {}, 'Review upload'),
-        h('ul', {}, files.map(c => h('li', {}, c.before ? 'Replace ' : 'Add ', pathText(c.path)))),
-        h('h3', {}, 'Findings'),
-        p.candidate.assessment.findings.length ? h('ul', {}, p.candidate.assessment.findings.map(f =>
-          h('li', {}, f.path ? f.path + ' — ' : '', f.message))) : h('p', {}, 'No findings.'),
-        accept);
-      status.textContent = 'Review the proposed release before accepting.';
-    }
-    send.onclick = async () => {
-      if (busy) return;
-      lock(true); preview.replaceChildren();
-      try {
-        const rows = fileRows(), files = [];
-        if (rows.length > 10000 || rows.some(({ file }) => file.size > 2 ** 31) ||
-            rows.reduce((total, { file }) => total + file.size, 0) > 2 ** 33) {
-          throw new Error('Choose up to 10,000 files, at most 2 GiB each and 8 GiB in total.');
-        }
-        for (const row of rows) {
-          if (!current()) return;
-          status.textContent = 'Checking ' + row.path;
-          files.push({ path: row.path, size: row.file.size, sha256: await hex(await row.file.arrayBuffer()) });
-        }
-        files.sort((a, b) => a.path < b.path ? -1 : a.path > b.path ? 1 : 0);
-        const json = JSON.stringify({ base, replace: files.filter(f => existing.has(f.path)).map(f => f.path), files });
-        const key = await hex(new TextEncoder().encode(json));
-        if (!current()) return;
-        const op = await api('POST', '/v1/datasets/' + enc(d) + '/uploads', { json, headers: { 'Idempotency-Key': key } });
-        if (!current()) return;
-        history.replaceState(null, '', location.hash.split('?')[0] + '?operation=' + enc(op.id));
-        const received = new Set(op.received);
-        for (const row of rows) {
-          if (!current()) return;
-          if (!received.has(row.path)) {
-            status.textContent = 'Uploading ' + row.path;
-            await api('PUT', url(op.id) + '/file?path=' + enc(row.path), { bytes: row.file });
-          }
-        }
-        if (current()) await review(op);
-      } catch (e) { if (current()) status.textContent = e.message + ' You can retry the same folder.'; }
-      finally { if (current()) lock(false); }
-    };
-    page(ctx, 'release', h('div', { class: 'stack' },
-      h('div', { class: 'crumbs' }, datasetCrumbs(d)),
-      h('h1', {}, base ? 'Add files to this release' : 'Upload a dataset'),
-      h('label', { class: 'stack s8' }, 'Choose a folder', folder),
-      h('label', { class: 'stack s8' }, 'Place its contents in', destination),
-      h('p', { class: 'small muted' }, 'Leave the path empty for the dataset root, or enter a path such as sub-01/ses-02.'),
-      collisions, send, status, preview));
-    if (operation && operation.complete) {
-      try { await review(operation); } catch (e) { if (current()) status.textContent = e.message; }
-    } else if (operation) status.textContent = 'Select the same folder and destination to resume.';
   }
 
   async function datasetHead(d) {
@@ -1994,7 +1827,22 @@
       if (destination.startsWith('#/') && !location.hash) { location.replace(destination); return; }
     }
     const { parts, q } = route();
-    if (!state.principal) return connectView(parts.length ? 'Sign in to continue.' : null);
+    if (!state.principal) {
+      const notice = state.notice || (parts.length ? 'Sign in to continue.' : null);
+      state.notice = null;
+      return connectView(app, {
+        notice, institutional: state.institutional, demo: !!demo(), explain,
+        rememberDestination: () => store.set('sessionStorage', 'sanctity.return', location.hash),
+        async signIn(token) {
+          state.token = token;
+          try {
+            state.principal = (await api('GET', '/v1/me')).principal;
+            store.set('sessionStorage', 'sanctity.token', token);
+          } catch (e) { state.token = null; throw e; }
+          render();
+        },
+      });
+    }
     if ((parts[0] === 'l' || parts[0] === 'p') && parts[1] && !UUID.test(parts[1])) { state.notice = null; return directoryFailure(new ApiError(404, 'not_found')); }
     if (parts[0] === 'l' && parts[1]) return labView(parts[1]);
     if (parts[0] === 'p' && parts[1]) return projectView(parts[1], q);
@@ -2002,8 +1850,8 @@
     const d = parts[1];
     if (!UUID.test(d)) return directoryFailure(new ApiError(404, 'not_found'), null, 'dataset');
     if (parts[2] !== 'access') { state.revoking = null; onEscape = null; }
-    if (!demo() && parts[2] === 'upload') return uploadView(d, null, q);
-    if (!demo() && parts[2] === 'r' && parts[3] && parts[4] === 'upload') return uploadView(d, parts[3], q);
+    if (!demo() && parts[2] === 'upload') return openUpload(d, null, q);
+    if (!demo() && parts[2] === 'r' && parts[3] && parts[4] === 'upload') return openUpload(d, parts[3], q);
     if (parts[2] === 'r' && parts[3] && parts[4] === 'correct') return correctionView(d, parts[3], q);
     if (parts[2] === 'r' && parts[3]) return releaseView(d, parts[3], q);
     if (parts[2] === 'query') return queryView(d, q);

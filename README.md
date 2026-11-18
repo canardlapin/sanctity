@@ -92,7 +92,7 @@ python3 scripts/demo-instance.py down             # stops it; data is kept
 python3 scripts/demo-instance.py down --volumes   # deletes it
 ```
 
-Open the printed address (`http://127.0.0.1:8080/` by default) and choose **Sign in with your institution**. The launcher gives the location of the generated Keycloak logins and prints API tokens. Four people in two labs share a catalog of five accepted datasets, including Matching Pennies EEG and a protocol archive. The [distribution guide](docs/service-distribution.md#local-container-demonstration) describes the fixtures and the cross-lab release share.
+Open the printed address (`http://127.0.0.1:8080/` by default) and choose **Sign in with your institution**. The launcher gives the location of the generated Keycloak logins and prints API tokens and the custodian ID used when creating a dataset. Four people in two labs share a catalog of five accepted datasets, including Matching Pennies EEG and a protocol archive. The [distribution guide](docs/service-distribution.md#local-container-demonstration) describes the fixtures and the cross-lab release share.
 
 ## Modules and public contracts
 

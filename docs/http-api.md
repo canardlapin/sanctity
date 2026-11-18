@@ -40,13 +40,22 @@ The scenarios cover authentication errors, metadata/relationships, subject-level
 sidecar acceptance (after checking that Fix on the real TR finding proposes the
 run sidecar), a frozen age query, conflicting edits by two principals, an
 events-table correction started from Fix on the real finding (blocked, then
-accepted), fixed-release sharing and revocation. After the browser and HTTP server close,
+accepted), fixed-release sharing and revocation. The browser also re-assesses a
+release that was recorded under earlier rules, verifies the same manifest and
+resumes the pending correction. After the browser and HTTP server close,
 independent SQL checks verify the dataset head, five releases and acceptance
 receipts, frozen selection and revoked grant. Screenshots, redacted logs, source
 hashes and results go under `target/console-backend.*/`. The test schema, temporary
 storage and container are removed when the run ends. CI runs this as the separate
 `console-backend` job and retains failure artifacts. This evidence does not supply
 a VoiceOver result or a representative-data qualification.
+
+Run `bash scripts/check-demo-instance.sh` with the locked Playwright dependencies
+and Chromium installed to exercise the packaged Stage 1 workflow. The rehearsal
+signs in with the local Keycloak provider, creates three datasets, fixes an MRI
+timing finding, accepts Matching Pennies EEG and archives a protocol collection.
+It compares stored bytes with the fixtures and writes release references to
+`target/demo-check.*/curation.json`.
 
 For the real screen-reader gate, run `node tests/console/serve.js` and open
 `http://127.0.0.1:8093/?demo` in Safari. It serves only synthetic demo assets on
@@ -253,7 +262,10 @@ upgraded, that build differs for every existing release. This does not block wor
   stays readable exactly as it was.
 
 This keeps the effect of new rules separate from the effect of an edit. The
-console reports the refusal; it does not yet offer the re-assessment itself.
+console offers a re-assessment preview after the refusal. Enter a separate
+reason, review the current reading, and accept it to continue the original
+correction against the new head. The console restores the pending edit when
+the file's bytes still match the version it was written against.
 
 ### Data types and coverage levels
 
@@ -262,7 +274,8 @@ makes it a BIDS dataset; a root `archive_description.json` makes it an archive.
 Exactly one of the two is required.
 
 A release and a candidate report `levels`: what the repository did with each group
-of files. Each file entry also carries its `group` and `level`.
+of files. Each file entry also carries its `group` and `level`. The file inspector shows
+that level, and the upload preview shows coverage by data type.
 
 | Level | What the repository did | What it claims |
 | --- | --- | --- |

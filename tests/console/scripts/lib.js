@@ -22,6 +22,9 @@ exports.url = file => {
   if (/^https?:\/\//.test(file)) return file;
   const absolute = path.resolve(H, file);
   if (!fs.statSync(absolute).isFile()) throw new Error('Missing specimen: ' + file);
+  if (process.env.CONSOLE_SPECIMEN_ORIGIN && path.dirname(absolute) === path.join(exports.outputRoot, 'current')) {
+    return process.env.CONSOLE_SPECIMEN_ORIGIN + '/' + encodeURIComponent(path.basename(absolute));
+  }
   return pathToFileURL(absolute).href;
 };
 exports.viewport = value => {

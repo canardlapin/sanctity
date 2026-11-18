@@ -9,9 +9,9 @@ import org.typelevel.ci.CIString
 final class ConsoleAssets[F[_]](using F: Sync[F]):
   private val types = Map(
     "index.html" -> "text/html; charset=utf-8",
-    "app.css" -> "text/css; charset=utf-8",
-    "app.js" -> "text/javascript; charset=utf-8",
-    "demo.js" -> "text/javascript; charset=utf-8")
+    "app.css" -> "text/css; charset=utf-8"
+  ) ++ Vector("app.js", "demo.js", "coverage.js", "elements.js", "sign-in.js", "upload.js")
+    .map(_ -> "text/javascript; charset=utf-8")
   private val bytes: Map[String, Array[Byte]] = types.keys.flatMap { name =>
     Option(getClass.getResourceAsStream("/sanctity/ui/" + name)).map { stream =>
       try name -> stream.readAllBytes() finally stream.close()

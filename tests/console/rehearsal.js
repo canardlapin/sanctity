@@ -101,7 +101,7 @@ const accept = async (page, status = 200) => {
     const owner = await newPage(), colleague = await newPage(), recipient = await newPage(390);
     currentPage = owner;
     const ownerApi = await apiClient(config.ownerToken), recipientApi = await apiClient(config.recipientToken);
-    for (const name of ['index.html', 'app.js', 'app.css']) {
+    for (const name of ['index.html', 'app.js', 'app.css', 'coverage.js', 'elements.js', 'sign-in.js', 'upload.js']) {
       const served = await read(ownerApi, name === 'index.html' ? '/' : '/' + name);
       const sha = bytes => crypto.createHash('sha256').update(bytes).digest('hex');
       servedUiSha256[name] = sha(await served.body());
@@ -389,6 +389,46 @@ const accept = async (page, status = 200) => {
     assert.deepEqual(grown.assessment.checks.filter(c => c.target.endsWith('_beh.tsv')).map(c => c.target).sort(),
       [visit(1), visit(2)]);
     check(stage, 'Created a project dataset, uploaded two visits separately and resumed the second preview after reload. Both tables received behavioural content checks.');
+
+    stage = 'reassessment';
+    const legacy = '/v1/datasets/' + config.legacyDataset;
+    const old = legacy + '/releases/' + config.legacyRelease;
+    const earlier = await json(ownerApi, old);
+    assert.equal(earlier.levels, null);
+    await owner.goto(config.baseUrl + '/#/d/' + config.legacyDataset + '/r/' + config.legacyRelease + '/correct?path=' + encodeURIComponent(config.legacySidecar));
+    await owner.locator('#c-text').waitFor();
+    const edit = JSON.stringify({ ...JSON.parse(await owner.locator('#c-text').inputValue()), SamplingFrequency: 1000 });
+    await owner.locator('#c-text').fill(edit);
+    await owner.locator('#c-reason').fill('Record the measured sampling frequency.');
+    const refused = owner.waitForResponse(r => r.request().method() === 'POST' && r.url().endsWith(old + '/corrections'));
+    await owner.getByRole('button', { name: 'Prepare preview' }).click();
+    const refusal = await refused;
+    assert.equal(refusal.status(), 409);
+    assert.equal((await refusal.json()).error, 'reassessment_required');
+
+    await owner.getByLabel('Reason for re-assessment').fill('Add coverage levels using the current rules.');
+    const preparing = owner.waitForResponse(r => r.request().method() === 'POST' && r.url().endsWith(old + '/reassessments'));
+    await owner.getByRole('button', { name: 'Preview re-assessment' }).click();
+    const prepared = await preparing;
+    assert.equal(prepared.status(), 201);
+    const review = await prepared.json();
+    assert.equal(review.candidate.manifest, earlier.manifest);
+    assert.deepEqual(review.contentChanges, []);
+    await owner.getByRole('heading', { name: 'Re-assessment candidate' }).waitFor();
+    await owner.getByRole('heading', { name: 'Coverage by data type' }).waitFor();
+
+    const { ref: reread } = await accept(owner);
+    const updated = await json(ownerApi, legacy + '/releases/' + reread.release);
+    assert.equal(updated.manifest, earlier.manifest);
+    assert(updated.levels.summary.some(group => group.group === 'eeg' && group.level === 'described'));
+    assert.equal((await json(ownerApi, old)).levels, null);
+    assert.equal((await json(ownerApi, legacy)).head, reread.release);
+    await owner.getByRole('link', { name: 'Continue correction' }).click();
+    assert.equal(await owner.locator('#c-text').inputValue(), edit);
+    const resumed = owner.waitForResponse(r => r.request().method() === 'POST' && r.url().endsWith('/corrections'));
+    await owner.getByRole('button', { name: 'Prepare preview' }).click();
+    assert.equal((await resumed).status(), 201);
+    check(stage, 'An earlier release triggers a real 409; the browser reviews and accepts the same bytes under current rules, preserves the original release, and resumes the pending edit.');
 
     stage = 'transport';
     assert.equal(pageErrors.length, 0, pageErrors.join('\n'));

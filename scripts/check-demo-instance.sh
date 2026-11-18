@@ -252,6 +252,7 @@ task_check restart
 
 export PLAYWRIGHT_BROWSERS_PATH="${PLAYWRIGHT_BROWSERS_PATH:-$task_root/target/console-browsers}"
 node tests/console/institutional.js "$SANCTITY_DEMO_HOME" | tee "$task_workspace/institutional-login.txt"
+node tests/console/curation.js "$SANCTITY_DEMO_HOME" "$task_workspace/curation.json"
 
 # Explicit removal deletes the containers, both volumes and the local state.
 "${task_demo[@]}" compose logs --no-color --no-log-prefix sanctity > "$task_workspace/service.log" 2>&1

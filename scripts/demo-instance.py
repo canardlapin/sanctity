@@ -542,7 +542,7 @@ class Seed:
 
 def report(inst, tag, labs, shares, people):
     summary = {"url": inst.url + "/", "project": inst.project, "image": tag, "operator": OPERATOR,
-               "labs": labs, "shares": shares, "people": people}
+               "labs": labs, "shares": shares, "people": people, "custodian": CUSTODIAN}
     descriptor = os.open(inst.home / "instance.json", os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
     with os.fdopen(descriptor, "w") as out:
         json.dump(summary, out, indent=2)
@@ -552,6 +552,7 @@ def report(inst, tag, labs, shares, people):
              f"  State    {inst.home}   (generated passwords and the credentials below)", ""]
     lines += ["  Institutional sign-in uses the local demo provider. Its usernames and generated passwords are",
               f"  in {inst.home / 'demo-realm.json'} (users).", ""]
+    lines += [f"  Custodian ID for new datasets   {CUSTODIAN}", ""]
     for lab in labs:
         lines.append(f"  {lab['name']}  >  {lab['project']['name']}")
         lines += [f"      {d['label']}" for d in lab["datasets"]]
