@@ -4,6 +4,7 @@
 import { h, pathText, I } from './elements.js';
 import { connectView } from './sign-in.js';
 import { uploadView } from './upload.js';
+import { fileKind, filePreview } from './viewers.js';
 import { coverageChip, coverageSection } from './coverage.js';
 (() => {
   // ---------- small utilities ----------
@@ -38,12 +39,6 @@ import { coverageChip, coverageSection } from './coverage.js';
   // BIDS-defined units for common acquisition fields; shown beside the stored value, never folded into it.
   const UNITS = { RepetitionTime: 's', EchoTime: 's', TotalReadoutTime: 's', InversionTime: 's', EffectiveEchoSpacing: 's',
     SliceTiming: 's', DelayTime: 's', AcquisitionDuration: 's', FlipAngle: '°', MagneticFieldStrength: 'T' };
-  const fileKind = p => {
-    const m = /\.(nii\.gz|nii|json|tsv|bval|bvec|gz|txt)$/.exec(p);
-    if (!m) return /(^|\/)(README|CHANGES|LICENSE)(\.md)?$/.test(p) ? 'txt' : '';
-    return m[1] === 'nii.gz' ? 'nii' : m[1];
-  };
-  const TEXT_KINDS = new Set(['json', 'tsv', 'bval', 'bvec', 'txt']);
   // Documents a correction can replace: JSON sidecars, and the event/behavioural tables and DWI gradients the backend re-assesses.
   const docKind = p => /\.json$/.test(p) ? 'json' : /(^|[/_])(events|beh)\.tsv$/.test(p) ? 'table' : /(^|[/_])dwi\.(bval|bvec)$/.test(p) ? 'gradients' : null;
   const DOC = { json: ['sidecar', 'Sidecar change', 'Sidecars'], table: ['table', 'Table change', 'Event and behavioural tables'], gradients: ['gradient file', 'Gradient change', 'DWI gradients'] };
@@ -101,6 +96,7 @@ import { coverageChip, coverageSection } from './coverage.js';
   // Forget everything tied to the signed-in principal and invalidate pending loads.
   function resetSession() {
     if (placesKey()) store.set('sessionStorage', placesKey(), null);
+    activePreview?.abort();
     generation++; memo.clear(); focusKey = null;
     state.principal = null; state.token = null; state.correction = null; state.query = null; state.accessForm = null;
     state.revoking = null; state.revokeBusy = false; state.selectionQueries = null;
@@ -112,11 +108,11 @@ import { coverageChip, coverageSection } from './coverage.js';
     if (location.hash !== '#/') location.hash = '#/'; else render();
   }
   // `json` is a pre-serialised body so decimals keep their exact lexical form.
-  async function api(method, path, { json, bytes, headers = {}, raw = false } = {}) {
+  async function api(method, path, { json, bytes, headers = {}, raw = false, signal } = {}) {
     if (demo()) return demo().request(method, path, { body: json, headers, raw }).catch(e => { throw e.code ? new ApiError(e.status, e.code) : e; });
     const auth = state.token ? { Authorization: 'Bearer ' + state.token } :
       method === 'GET' ? {} : { 'X-Sanctity-CSRF': '1' };
-    const init = { method, headers: { ...auth, ...headers }, cache: 'no-store' };
+    const init = { method, headers: { ...auth, ...headers }, cache: 'no-store', signal };
     if (json !== undefined) { init.body = json; init.headers['Content-Type'] = 'application/json'; }
     if (bytes !== undefined) { init.body = bytes; init.headers['Content-Type'] = 'application/octet-stream'; }
     const res = await fetch(path, init);
@@ -202,6 +198,7 @@ import { coverageChip, coverageSection } from './coverage.js';
   // ---------- shell ----------
   const app = document.getElementById('app');
   let generation = 0;
+  let activePreview;
 
   function topbar(ctx, active) {
     const nav = ctx && ctx.dataset ? h('nav', { class: 'nav', 'aria-label': 'Workspace' },
@@ -684,7 +681,7 @@ import { coverageChip, coverageSection } from './coverage.js';
           const k = fileKind(f.name), nf = findingsByPath.get(f.path);
           items.push(h('li', {}, h('button', { class: 'item file', type: 'button', fk: 'f:' + f.path, 'aria-current': f.path === selected ? 'true' : null,
             onclick: () => { state.scrollInspector = true; focusKey = 'f:' + f.path; go(relHash(d, r, { path: f.path })); } },
-            h('span', { class: 'kind ' + k, 'aria-hidden': 'true' }, k || 'file'), h('span', { class: 'name' }, pathText(f.name)),
+            h('span', { class: 'kind', 'data-kind': k, 'aria-hidden': 'true' }, k || 'file'), h('span', { class: 'name' }, pathText(f.name)),
             nf ? flag(nf, errorPaths.has(f.path), false) : null,
             h('span', { class: 'size' }, bytes(f.size)))));
         }
@@ -765,9 +762,7 @@ import { coverageChip, coverageSection } from './coverage.js';
           title: 'Add ' + stem(p).split('/').pop() + '.json to override inherited values for this image' }, I.plus(), 'Add sidecar') : null,
         entry ? h('button', { class: 'btn sm', type: 'button', onclick: download }, I.down(), 'Download') : null)));
 
-    // Fetch first, then append every section below the head at once, so nothing already shown moves.
-    const isText = TEXT_KINDS.has(k) && entry && entry.size <= 262144;
-    const [meta, text] = await Promise.allSettled([k === 'json' ? Promise.resolve(null) : getMetadata(d, r, p), isText ? getFileText(d, r, p) : Promise.resolve(null)]);
+    const [meta] = await Promise.allSettled([k === 'json' ? null : getMetadata(d, r, p)]);
     if (my !== generation) return;
     const section = (title, ...body) => h('section', { class: 'section' }, h('h3', { class: 'overline' }, title), ...body);
     const fixFor = isHead ? fixControl(d, r, rel.entries.filter(e => e.kind === 'file').map(e => e.path), rel.assessment.checks, () => relHash(d, r, { path: p })) : null;
@@ -785,18 +780,16 @@ import { coverageChip, coverageSection } from './coverage.js';
     if (fileChecks.length) box.append(section('Content checks', h('ul', { class: 'checks inline' }, fileChecks.map(x => checkItem(x, null, x.findings.length > 0 && !narrow())))));
     if (links.length) box.append(section('Linked acquisitions', relRows(links, p, q => go(relHash(d, r, { path: q })))));
     else if (k === 'nii' && /\/fmap\//.test(p)) box.append(section('Linked acquisitions', h('p', { class: 'muted small' }, 'No run selects this fieldmap: no IntendedFor names it and no B0FieldSource matches its B0FieldIdentifier.')));
-    if (isText) box.append(section('Content', text.status === 'rejected' ? h('p', { class: 'muted small' }, explain(text.reason))
-      : k === 'tsv' ? tsvTable(text.value) : h('pre', { class: 'code', tabindex: '0', 'aria-label': 'Content of ' + p }, text.value)));
-  }
-
-  function tsvTable(t) {
-    const rows = t.replace(/\n$/, '').split('\n').map(l => l.split('\t'));
-    const head = rows.shift() || [];
-    const shown = rows.slice(0, 50);
-    return h('div', { class: 'scroll-x', tabindex: '0', role: 'region', 'aria-label': 'Table content' },
-      h('table', { class: 'data compact' }, h('thead', {}, h('tr', {}, head.map(c => h('th', {}, c)))),
-        h('tbody', {}, shown.map(r => h('tr', {}, r.map(c => h('td', { class: DECIMAL.test(c) ? 'num mono' : 'mono' }, c)))))),
-      rows.length > shown.length ? h('p', { class: 'small muted pad-sm' }, 'First 50 of ' + rows.length + ' rows.') : null);
+    if (entry?.kind === 'file') {
+      activePreview = new AbortController();
+      box.append(filePreview(entry, {
+        signal: activePreview.signal, formatSize: bytes,
+        metadata: meta.value,
+        companion: ['tsv', 'csv'].includes(k) ? rel.entries.find(e => e.kind === 'file' && e.path === p.replace(/\.[^.]+$/, '.json')) : null,
+        read: (signal, path = p) => api('GET', releaseUrl(d, r) + '/file?path=' + enc(path), { raw: true, signal })
+          .catch(error => { throw new Error(explain(error)); }),
+      }));
+    }
   }
 
   // Where a value comes from, relative to the inspected file.
@@ -1803,6 +1796,8 @@ import { coverageChip, coverageSection } from './coverage.js';
   }
 
   async function render() {
+    activePreview?.abort();
+    activePreview = null;
     generation++;            // any view still loading for a previous route stops painting
     memo.delete('head:' + (route().parts[1] || ''));  // the dataset head can move between views
     rememberFocus();

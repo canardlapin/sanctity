@@ -57,6 +57,8 @@ object ConsoleRehearsal extends IOApp.Simple:
         recipient <- ids.next[PrincipalTag]
         _ <- checked(f.system.catalog.grant(f.system.context, f.system.dataset.id, colleague, None,
           Set(Action.ReadMetadata, Action.ReadContent, Action.Propose, Action.Accept)))
+        _ <- checked(f.system.catalog.grant(f.system.context, legacy.id, colleague,
+          Some(oldRelease.release.release), Set(Action.ReadMetadata)))
         // Provision a known recipient through ordinary authority operations, then remove all access.
         bootstrap <- checked(f.system.catalog.grant(f.system.context, f.system.dataset.id, recipient,
           Some(initial.release.release), Set(Action.ReadMetadata)))

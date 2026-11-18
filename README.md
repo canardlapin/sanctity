@@ -94,6 +94,14 @@ python3 scripts/demo-instance.py down --volumes   # deletes it
 
 Open the printed address (`http://127.0.0.1:8080/` by default) and choose **Sign in with your institution**. The launcher gives the location of the generated Keycloak logins and prints API tokens and the custodian ID used when creating a dataset. Four people in two labs share a catalog of five accepted datasets, including Matching Pennies EEG and a protocol archive. The [distribution guide](docs/service-distribution.md#local-container-demonstration) describes the fixtures and the cross-lab release share.
 
+In a release’s **Files** tab, select a file to see its preview. CSV and TSV files
+open as tables. Expand **Column dictionary** for descriptions, units and coded
+values when supplied. For a NIfTI-1 MRI file, choose **Preview MRI slices**,
+select a plane and use the slider or arrow keys. JSON, plain text, Markdown
+and diffusion gradients show their original text. For a raster image, choose **Preview image**. In the seeded
+Matching Pennies EEG dataset, try `stimuli/left_hand.png`. **Download** retrieves
+the original file for any format your grant allows.
+
 ## Modules and public contracts
 
 | Module | Responsibility |

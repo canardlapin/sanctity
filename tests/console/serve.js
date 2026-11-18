@@ -5,7 +5,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const crypto = require('node:crypto');
 const ui = path.resolve(__dirname, '../../modules/http/src/main/resources/sanctity/ui');
-const assets = new Map(['index.html', 'app.js', 'app.css', 'demo.js', 'coverage.js', 'elements.js', 'sign-in.js', 'upload.js'].map(name => [name, path.join(ui, name)]));
+const assets = new Map(['index.html', 'app.js', 'app.css', 'demo.js', 'coverage.js', 'elements.js', 'sign-in.js', 'upload.js', 'viewers.js', 'nifti-viewer.js', 'niivue-0.69.0.js'].map(name => [name, path.join(ui, name)]));
 assets.set('voiceover-conflict.js', path.join(__dirname, 'voiceover-conflict.js'));
 const server = http.createServer((req, res) => {
   const route = new URL(req.url, 'http://127.0.0.1').pathname;

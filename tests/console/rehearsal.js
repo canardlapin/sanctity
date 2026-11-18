@@ -7,6 +7,7 @@ const crypto = require('node:crypto');
 const assert = require('node:assert/strict');
 const { setTimeout: delay } = require('node:timers/promises');
 const { chromium, request } = require('playwright');
+const { anatomy, questionnaire, writeViewerFixtures, exerciseViewers } = require('./file-viewers');
 const config = JSON.parse(fs.readFileSync(0, 'utf8'));
 const output = path.resolve(process.argv[2]);
 const secrets = [config.ownerToken, config.colleagueToken, config.recipientToken];
@@ -101,7 +102,7 @@ const accept = async (page, status = 200) => {
     const owner = await newPage(), colleague = await newPage(), recipient = await newPage(390);
     currentPage = owner;
     const ownerApi = await apiClient(config.ownerToken), recipientApi = await apiClient(config.recipientToken);
-    for (const name of ['index.html', 'app.js', 'app.css', 'coverage.js', 'elements.js', 'sign-in.js', 'upload.js']) {
+    for (const name of ['index.html', 'app.js', 'app.css', 'coverage.js', 'elements.js', 'sign-in.js', 'upload.js', 'viewers.js', 'nifti-viewer.js', 'niivue-0.69.0.js', 'NOTICE-niivue.txt']) {
       const served = await read(ownerApi, name === 'index.html' ? '/' : '/' + name);
       const sha = bytes => crypto.createHash('sha256').update(bytes).digest('hex');
       servedUiSha256[name] = sha(await served.body());
@@ -353,6 +354,7 @@ const accept = async (page, status = 200) => {
     write(first, 'dataset_description.json', '{"Name":"Two visits","BIDSVersion":"1.11.2","DatasetType":"raw"}\n');
     write(first, 'task-choice_beh.json', '{"TaskName":"choice","response":{"Description":"Chosen direction"}}\n');
     write(first, visit(1), 'response\nleft\n');
+    await writeViewerFixtures(first, owner);
     fs.cpSync(first, both, { recursive: true });
     write(both, visit(2), 'response\nright\n');
     async function upload(folder, target, link, reload) {
@@ -389,6 +391,34 @@ const accept = async (page, status = 200) => {
     assert.deepEqual(grown.assessment.checks.filter(c => c.target.endsWith('_beh.tsv')).map(c => c.target).sort(),
       [visit(1), visit(2)]);
     check(stage, 'Created a project dataset, uploaded two visits separately and resumed the second preview after reload. Both tables received behavioural content checks.');
+
+    stage = 'file-viewers';
+    await exerciseViewers(owner, config.baseUrl + '/#/d/' + persisted.growthDataset + '/r/' + persisted.growthBase);
+    const legacyPreview = config.baseUrl + '/#/d/' + config.legacyDataset + '/r/' + config.legacyRelease + '?path=' + encodeURIComponent(config.legacySidecar);
+    await colleague.goto(legacyPreview);
+    const deniedPreview = colleague.getByRole('region', { name: 'File preview', exact: true });
+    await deniedPreview.getByText(/not visible to this credential/).waitFor();
+    assert.equal(await deniedPreview.locator('pre, table, canvas').count(), 0);
+    // Give a different account metadata for exactly the release containing our new fixtures.
+    const basePage = config.baseUrl + '/#/d/' + persisted.growthDataset + '/r/' + persisted.growthBase;
+    await owner.getByRole('navigation', { name: 'Workspace' }).getByRole('link', { name: 'Access', exact: true }).click();
+    await owner.locator('#g-recipient').fill(config.recipient);
+    await owner.locator('#act-ReadContent').uncheck();
+    const metadataGrant = owner.waitForResponse(r => r.request().method() === 'POST' && r.url().endsWith('/grants'));
+    await owner.getByRole('button', { name: 'Create grant', exact: true }).click();
+    const only = await metadataGrant;
+    assert.equal(only.status(), 201);
+    const granted = await only.json();
+    assert.deepEqual(granted.actions, ['ReadMetadata']);
+    assert.equal(granted.release, persisted.growthBase);
+    for (const file of [questionnaire, anatomy]) {
+      await recipient.goto(basePage + '?path=' + encodeURIComponent(file));
+      const restricted = recipient.getByRole('region', { name: 'File preview', exact: true });
+      if (file === anatomy) await restricted.getByRole('button', { name: 'Preview MRI slices' }).click();
+      await restricted.getByText(/not visible to this credential/).waitFor();
+      assert.equal(await restricted.locator('canvas, table, .file-dictionary').count(), 0);
+    }
+    check(stage, 'Verified stored and inherited questionnaire dictionaries, NiiVue rendered orientation and slice changes under CSP, compressed size limits, basic viewers, and fixed-release metadata-only denials.');
 
     stage = 'reassessment';
     const legacy = '/v1/datasets/' + config.legacyDataset;

@@ -299,9 +299,9 @@ and accessibility harness.
 - Members and stewards, using the organization routes that already exist.
 - History: compare two releases.
 
-**Check first.** Whether NiiVue runs under the console's content security policy
-(it may need WebAssembly or worker permissions) is not verified. Spend the first
-half day of the viewer work on that question.
+**Viewer policy check.** The D10 browser rehearsal loads NiiVue from the
+service, renders an authorized volume, changes the slice and verifies the
+displayed orientation under the console's existing content security policy.
 
 ## 7. The demonstration
 
@@ -418,6 +418,34 @@ recorded before coverage levels and verifies re-assessment and draft continuity.
 | 11 | Share a subset: views over HTTP, share dialog, grants from the API | 4–5 | 2, 6 |
 | 12 | Export as a streamed archive, with receipt | 2 | — |
 | 13 | Plain-language findings; provenance disclosure; release comparison | 3 | 7 |
+
+**Package 10 is complete.** The release inspector uses a built-in viewer
+registry. Each viewer declares its formats, byte limit, optional load button
+and a render function. The host reads the selected release file through the
+existing content permission and supplies bytes plus a cancellation signal.
+Navigation disposes of the preview. Stored coverage still comes from the
+release interpretation. [Viewer interface](../modules/http/src/main/resources/sanctity/ui/viewers.js)
+
+The table viewer accepts up to 256 KiB of UTF-8 CSV or TSV, treats the first row
+as column headings, and displays the first 50 data rows and 32 columns. The
+source viewer preserves exact JSON numbers and displays Markdown literally.
+The PNG and JPEG viewer decodes a still image on request, up to 8 MiB, 8,192
+pixels per side and 16 million pixels. The inspector offers the original file
+for download at every size. The column dictionary shows recorded descriptions,
+units, coded levels and their source in this release. Inherited BIDS fields
+use their recorded origins. A preserved questionnaire or archive table can
+also supply a same-stem JSON dictionary.
+
+On request the console loads the pinned, same-origin NiiVue 0.69.0 module.
+It displays axial, coronal and sagittal native slices with a keyboard-accessible
+slice control. The input is a single-file scalar NIfTI-1, raw or gzip, up to
+64 MiB stored and expanded, 512 voxels per axis and 256³ spatial voxels.
+For 4-D data it identifies and shows the first volume. A coded transform
+supplies orientation. Unusable or conflicting-handedness transforms produce
+an explanation. Display uses WebGL 2 under the production content security policy.
+The browser rehearsal checks displayed left–right and anterior–posterior
+landmarks on a reflected affine, changes slices and opens both companion
+and inherited table dictionaries. [D10 browser tests](../tests/console/file-viewers.js)
 
 *Exit:* the full script in section 7 runs on the real stack.
 

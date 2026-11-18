@@ -25,7 +25,7 @@ const run = (name, command, args) => new Promise(resolve => {
 });
 const build = path.join(output, 'current');
 fs.mkdirSync(build);
-for (const file of ['index.html', 'app.css', 'app.js', 'demo.js', 'coverage.js', 'elements.js', 'sign-in.js', 'upload.js']) fs.copyFileSync(path.join(ui, file), path.join(build, file));
+for (const file of ['index.html', 'app.css', 'app.js', 'demo.js', 'coverage.js', 'elements.js', 'sign-in.js', 'upload.js', 'viewers.js', 'nifti-viewer.js', 'niivue-0.69.0.js']) fs.copyFileSync(path.join(ui, file), path.join(build, file));
 fs.copyFileSync(path.join(harness, 'specimens/drive.js'), path.join(build, 'drive.js'));
 const specs = JSON.parse(fs.readFileSync(path.join(harness, 'specimens/specs.json')));
 const index = fs.readFileSync(path.join(build, 'index.html'), 'utf8');
@@ -36,7 +36,7 @@ for (const [name, spec] of Object.entries(specs)) {
     `<script src="spec-${name}.js"></script><script src="demo.js"></script><script type="module" src="app.js"></script><script src="drive.js"></script>`));
 }
 fs.cpSync(path.join(root, 'docs/evidence/console/original/out/v4f'), path.join(output, 'v4f'), { recursive: true });
-const sources = Object.fromEntries(['index.html', 'app.css', 'app.js', 'demo.js', 'coverage.js', 'elements.js', 'sign-in.js', 'upload.js'].map(f => [f, sha(path.join(build, f))]));
+const sources = Object.fromEntries(['index.html', 'app.css', 'app.js', 'demo.js', 'coverage.js', 'elements.js', 'sign-in.js', 'upload.js', 'viewers.js', 'nifti-viewer.js', 'niivue-0.69.0.js'].map(f => [f, sha(path.join(build, f))]));
 const harnessSources = {};
 const recordHarness = dir => {
   for (const item of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -101,7 +101,9 @@ const server = createServer((request, response) => {
     checks.current.assertions.every(a => a.result === 'PASS') && /ui summary: 30\/30 PASS/.test(checks.current.text);
   for (const value of Object.values(checks)) delete value.text;
   const browser = await require('./scripts/lib').launch();
-  const browserVersion = browser.version(); await browser.close();
+  const browserVersion = browser.version();
+  try { checks.viewerTransport = await require('./file-viewers').checkViewerTransport(browser, env.CONSOLE_SPECIMEN_ORIGIN); }
+  finally { await browser.close(); }
   const receipt = {
     date: new Date().toISOString(), baseRevision: execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim(),
     sourceTreeDirty: !!execFileSync('git', ['status', '--porcelain'], { cwd: root, encoding: 'utf8' }).trim(),

@@ -12,7 +12,7 @@ const read = file => JSON.parse(fs.readFileSync(path.join(output, file), 'utf8')
 const sha = file => crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex');
 const browser = read('browser.json'), persistence = read('persistence.json');
 const expected = ['authentication', 'directory-navigation', 'metadata-and-relationships', 'subject-sidecar', 'frozen-query',
-  'concurrent-correction', 'table-correction', 'fixed-release-grant', 'revocation', 'second-session-upload', 'reassessment', 'transport'];
+  'concurrent-correction', 'table-correction', 'fixed-release-grant', 'revocation', 'second-session-upload', 'file-viewers', 'reassessment', 'transport'];
 assert(browser.passed && persistence.passed);
 assert.deepEqual(browser.results.map(r => r.name), expected);
 assert(browser.results.every(r => r.passed));
@@ -34,7 +34,8 @@ for (const module of fs.readdirSync(path.join(root, 'modules'))) {
 }
 for (const file of ['build.sbt', 'project/build.properties', 'project/bids4s-source.properties',
   'vendor/bids4s-source.zip', 'scripts/check-console-backend.sh', '.github/workflows/scientific-core.yml',
-  'tests/console/package-lock.json', 'tests/console/rehearsal.js', 'tests/console/rehearsal-receipt.js',
+  'tests/console/package-lock.json', 'tests/console/rehearsal.js', 'tests/console/file-viewers.js',
+  'modules/app/src/test/resources/multimodal-conformance/eeg-matchingpennies/dataset/stimuli/left_hand.png', 'tests/console/rehearsal-receipt.js',
   'modules/integration/src/test/scala/sanctity/postgres/ConsoleRehearsal.scala',
   'modules/integration/src/test/scala/sanctity/postgres/ConsoleSuite.scala',
   'modules/integration/src/test/scala/sanctity/postgres/PostgresFixture.scala']) record(file);
