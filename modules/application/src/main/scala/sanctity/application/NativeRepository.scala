@@ -169,8 +169,13 @@ final class NativeRepository[F[_]](
       recorded <- Checked.lift[F, Interpretation](release.interpretation.withProfile(release.interpretation.profile.copy(
         libraryIdentity = interpretation.profile.libraryIdentity, interpreterIdentity = interpretation.profile.interpreterIdentity)))
       verdict = Assessment.from(recorded, release.assessment.policy, release.assessment.findings, release.assessment.checks)
-      _ <- Checked.lift[F, Unit](Either.cond(
-        interpretation.profile == current && recorded.id == interpretation.id && verdict.id == assessment.id, (), required))
+      // The reread uses today's rules for the release's own kind. If the new work is read under another profile, the
+      // work changes the dataset's kind (an archive becoming BIDS, say). Re-assessing the release cannot reconcile
+      // that, and asking for it sent callers round in a circle, so the answer is final and says what to do.
+      _ <- Checked.lift[F, Unit](Either.cond(interpretation.profile == current, (), Problem.Unsupported(
+        s"release ${release.ref.release.render} is read as ${interpretation.profile.name} and this change would be read as ${current.name}; " +
+          "a dataset keeps the kind it was accepted with, so deposit the converted collection as its own dataset")))
+      _ <- Checked.lift[F, Unit](Either.cond(recorded.id == interpretation.id && verdict.id == assessment.id, (), required))
     yield ()
 
   private def prepareInternal(ctx: AccessContext, draft: Draft): F[Preview] =

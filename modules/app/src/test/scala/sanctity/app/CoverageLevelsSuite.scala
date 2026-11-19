@@ -272,6 +272,44 @@ abstract class CatalogCoverageSuite extends FunSuite:
     }
   }
 
+  test("an accepted archive cannot become BIDS in place: one outcome says what to do, before and after re-assessment (CORE6)") {
+    fixture { (s, root) =>
+      // A BIDS collection proposed as the archive dataset's next release, through the application draft interface.
+      def propose(head: ReleaseId): IO[Either[Problem, Preview]] =
+        for
+          blob <- s.store.put(fs2.Stream.emits("""{"Name":"Curated cohort","BIDSVersion":"1.10.0","DatasetType":"raw"}""".getBytes("UTF-8")).covary[IO])
+          artifact <- IdSource.random[IO].next[ArtifactTag]
+          manifest = Manifest.from(Vector(Entry.File(p(DatasetInterpreter.BidsDescriptor), artifact, blob))).fold(e => fail(e.toString), identity)
+          activity = Activity(ActivityKind.NativeImport, s.context.principal, "Curated into BIDS", None, java.time.Instant.now)
+          draft <- checked(s.catalog.draft(s.context, s.dataset.id, Some(head), manifest, activity))
+          result <- repo(s).prepare(s.context, draft.id)
+        yield result
+      def saysWhatToDo(result: Either[Problem, Preview]): Boolean = result match
+        case Left(Problem.Unsupported(detail)) => detail.contains("keeps the kind") && detail.contains("its own dataset")
+        case _ => false
+      for
+        at <- fresh(root)
+        _ <- archive(at, archiveDescription)
+        base <- accepted(s, at)
+        first <- propose(base.ref.release)
+        _ = assert(saysWhatToDo(first), first.toString)
+        // The old answer was "re-assess first". Doing so changes nothing about the dataset's kind, and the answer
+        // afterwards is the same final one instead of the same instruction again.
+        reassessed <- checked(repo(s).reinterpret(s.context, base.ref, "Read again under the current rules"))
+        head <- checked(repo(s).accept(s.context, reassessed.candidate.id, key("reassessed-archive")))
+        second <- propose(head.release.release)
+        _ = assert(saysWhatToDo(second), second.toString)
+        // The archive itself is untouched and still grows as an archive.
+        current <- checked(s.catalog.release(s.context, head.release))
+        _ = assertEquals(current.manifest.id, base.manifest.id)
+        added = root.resolve("more")
+        _ <- IO.blocking(write(added, "documents/consent-form.pdf", "placeholder form\n"))
+        grown <- checked(repo(s).importNative(s.context, s.dataset.id, new NativeDirectorySource[IO](added), ImportPlan(Some(head.release.release))))
+        _ = assert(grown.candidate.assessment.admissible, grown.candidate.assessment.errors.toString)
+      yield ()
+    }
+  }
+
   test("a collection must declare exactly one kind, and an archive description must be well formed") {
     fixture { (s, root) =>
       def errors(prepare: Path => IO[Unit]): IO[Set[String]] =

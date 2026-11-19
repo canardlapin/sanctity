@@ -271,7 +271,10 @@ the file's bytes still match the version it was written against.
 
 A dataset declares its kind in its own content. A root `dataset_description.json`
 makes it a BIDS dataset; a root `archive_description.json` makes it an archive.
-Exactly one of the two is required.
+Exactly one of the two is required. A dataset keeps the kind its first release was
+accepted with. A later release of the other kind is refused, and re-assessment does
+not change that: deposit an archive that has been curated into BIDS as its own
+dataset.
 
 A release and a candidate report `levels`: what the repository did with each group
 of files. Each file entry also carries its `group` and `level`. The file inspector shows

@@ -10,8 +10,9 @@ import sanctity.kernel.*
 /** Chooses how a dataset is read from what its content declares.
   *
   * A root `dataset_description.json` declares a BIDS dataset. A root `archive_description.json` declares an archive.
-  * The declaration is part of the versioned content, so a release and its export describe themselves, and changing a
-  * collection from one kind to the other is an ordinary new release.
+  * The declaration is part of the versioned content, so a release and its export describe themselves. A dataset keeps
+  * the kind its first release was accepted with: the repository refuses a later release of the other kind, and an
+  * archive that has been curated into BIDS is deposited as its own dataset.
   */
 final class DatasetInterpreter[F[_]: Async](store: BlobStore[F], policy: AdmissionPolicy = AdmissionPolicy.Inclusive,
     additional: Vector[DerivativeProfile[F]] = Vector.empty[DerivativeProfile[F]])
@@ -58,7 +59,8 @@ final class DatasetInterpreter[F[_]: Async](store: BlobStore[F], policy: Admissi
     else bids.prepare(manifest).map { (interpretation, assessment) =>
       val declaration =
         if described && archived then Some(Finding("AmbiguousDatasetKind", Severity.Error, None,
-          s"the root has both ${DatasetInterpreter.BidsDescriptor} and ${ArchiveInterpreter.Descriptor}; keep the one that describes this collection"))
+          s"the root has both ${DatasetInterpreter.BidsDescriptor} and ${ArchiveInterpreter.Descriptor}; keep the one that describes this " +
+            "collection. A dataset keeps the kind it was accepted with, so an archive curated into BIDS is deposited as its own dataset"))
         else if !described then Some(Finding("UndeclaredDatasetKind", Severity.Error, None,
           s"add a root ${DatasetInterpreter.BidsDescriptor} for a BIDS dataset, or ${ArchiveInterpreter.Descriptor} for an archive"))
         else None
