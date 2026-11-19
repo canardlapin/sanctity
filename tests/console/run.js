@@ -69,7 +69,8 @@ const postV4gAssertions = [
   'fix-offered-where-editable', 'fix-tr-suggests-sidecar', 'fix-events-selects-row', 'fix-in-inspector-head-only', 'metadata-changes-grouped',
   'candidate-identifiers-folded', 'receipt-restates-change', 'receipt-table-change',
   'tree-folder-findings', 'release-overview', 'release-story', 'relationships-by-subject', 'query-operator-readable', 'release-and-editor-layout',
-  'home-lists-directories', 'navigate-by-name', 'project-paging-and-search', 'directory-restart-on-change', 'no-organization-fallback', 'denied-directory-link'
+  'home-lists-directories', 'navigate-by-name', 'project-paging-and-search', 'directory-restart-on-change', 'no-organization-fallback', 'denied-directory-link',
+  'grant-retry-same-key'
 ];
 const assertionCount = 59 + postV4gAssertions.length;
 const currentAssets = new Set(fs.readdirSync(build));

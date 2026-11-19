@@ -16,14 +16,19 @@ final class ReferenceCatalog[F[_]] private (
   def check(ctx: AccessContext, dataset: DatasetId, action: Action, release: Option[ReleaseId] = None): F[Either[Problem, Unit]] =
     state.get.map(s => authorized(s, ctx, dataset, action, release).void)
 
-  def grant(ctx: AccessContext, dataset: DatasetId, recipient: PrincipalId, release: Option[ReleaseId], actions: Set[Action]): F[Either[Problem, Grant]] =
-    ids.next[GrantTag].flatMap { id =>
+  def grant(ctx: AccessContext, dataset: DatasetId, recipient: PrincipalId, release: Option[ReleaseId], actions: Set[Action],
+      id: Option[GrantId]): F[Either[Problem, Grant]] =
+    id.fold(ids.next[GrantTag])(F.pure).flatMap { id =>
       state.modify { s =>
         val result = for
           _ <- authorized(s, ctx, dataset, Action.ManageAccess)
           _ <- Authority.validate(release, actions)
           _ <- Either.cond(release.forall(r => s.releases.get(r).exists(_.ref.dataset == dataset)), (), Problem.Denied)
-        yield Grant(id, dataset, recipient, release, actions)
+          grant = Grant(id, dataset, recipient, release, actions)
+          // A named grant is returned to a retry of the same intent; it is never re-pointed or revived.
+          _ <- Either.cond(!s.revokedGrants(id) && s.grants.get(id).forall(_ == grant), (),
+            Problem.Conflict("grant ID belongs to another intent or was revoked"))
+        yield grant
         result match
           case Left(problem) => s -> Left(problem)
           case Right(grant) => s.copy(grants = s.grants.updated(id, grant)) -> Right(grant)
@@ -32,7 +37,8 @@ final class ReferenceCatalog[F[_]] private (
 
   // Organization policy is evaluated by the PostgreSQL catalog; the reference catalog models legacy grants only.
   def grantShare(ctx: AccessContext, dataset: DatasetId, recipient: PrincipalId, release: Option[ReleaseId],
-      actions: Set[OrganizationAuthority.Permission], expiresAt: Option[java.time.Instant]): F[Either[Problem, OrganizationAuthority.PolicyGrant]] =
+      actions: Set[OrganizationAuthority.Permission], expiresAt: Option[java.time.Instant],
+      id: Option[GrantId]): F[Either[Problem, OrganizationAuthority.PolicyGrant]] =
     F.pure(Left(Problem.Unsupported("shares with discovery or expiry require an initialized organization")))
   def grants(ctx: AccessContext, dataset: DatasetId): F[Either[Problem, Vector[OrganizationAuthority.GrantView]]] =
     F.pure(Left(Problem.Unsupported("grant inspection requires an initialized organization")))
@@ -46,7 +52,7 @@ final class ReferenceCatalog[F[_]] private (
         _ <- authorized(s, ctx, dataset, Action.ManageAccess)
         _ <- Either.cond(s.grants.get(grant).exists(_.dataset == dataset), (), Problem.Denied)
       yield ()
-      result.fold(p => s -> Left(p), _ => s.copy(grants = s.grants - grant) -> Right(()))
+      result.fold(p => s -> Left(p), _ => s.copy(grants = s.grants - grant, revokedGrants = s.revokedGrants + grant) -> Right(()))
     }
 
   def select(ctx: AccessContext, refs: Vector[ReleaseRef], query: ScientificQuery): F[Either[Problem, FrozenSelection]] =
@@ -277,6 +283,7 @@ object ReferenceCatalog:
   private final case class State(
       datasets: Map[DatasetId, Dataset] = Map.empty,
       grants: Map[GrantId, Grant] = Map.empty,
+      revokedGrants: Set[GrantId] = Set.empty,
       selections: Map[(PrincipalId, SelectionId), FrozenSelection] = Map.empty,
       drafts: Map[DraftId, Draft] = Map.empty,
       candidates: Map[CandidateId, Candidate] = Map.empty,

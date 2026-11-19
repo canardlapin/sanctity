@@ -1687,7 +1687,12 @@ import { coverageChip, coverageSection } from './coverage.js';
       state.granting = true;
       const owner = state.principal, my = generation;
       try {
-        const g = await api('POST', '/v1/datasets/' + enc(d) + '/grants', { json: JSON.stringify({ recipient: who, release: form.scope === 'release' ? ctx.release : null, actions: [...form.chosen] }) });
+        // One key per submission (ARC05): repeating an unchanged form after a failure names the same grant, so a
+        // request whose response was lost is not issued twice. A changed form, or a new grant after a success, gets a new key.
+        const json = JSON.stringify({ recipient: who, release: form.scope === 'release' ? ctx.release : null, actions: [...form.chosen].sort() });
+        if (form.pending?.json !== json) form.pending = { json, key: crypto.randomUUID() };
+        const g = await api('POST', '/v1/datasets/' + enc(d) + '/grants', { json, headers: { 'Idempotency-Key': form.pending.key } });
+        form.pending = null;
         if (owner !== state.principal) return;          // signed out meanwhile: never file it under someone else
         saveGrants([g, ...loadGrants(owner)], owner); form.recipient = ''; announce('Grant ' + short(g.id) + ' created.');
         if (my === generation) { focusKey = 'grant:' + g.id; accessView(d, q); }

@@ -419,6 +419,8 @@ A fixed-release read grant:
 
 A null or omitted `release` explicitly covers the dataset's future releases. Fixed-release grants permit reading only. Delegation and `ManageAccess` grants are unsupported.
 
+Send an `Idempotency-Key` header to make the request safe to retry. The key names the grant for its caller and dataset. Repeating the same recipient, release, action set and expiry with that key returns the same grant and issues nothing new, so a request whose response was lost can be sent again. Using the key for any other grant is `409`, and so is repeating it after the grant was revoked: a retry never renews access. Current authority is checked first, so a caller who can no longer manage access gets the usual `404`. Without the header every request issues a new grant. The console sends one key per submission.
+
 A query preserving same-session correlation:
 
 ```json

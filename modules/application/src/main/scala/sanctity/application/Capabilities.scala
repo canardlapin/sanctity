@@ -61,13 +61,20 @@ trait ExportTarget[F[_]]:
 
 trait Catalog[F[_]]:
   def check(ctx: AccessContext, dataset: DatasetId, action: Action, release: Option[ReleaseId] = None): F[Either[Problem, Unit]]
-  def grant(ctx: AccessContext, dataset: DatasetId, recipient: PrincipalId, release: Option[ReleaseId], actions: Set[Action]): F[Either[Problem, Grant]]
+  /** `id` makes issuance safe to retry (ARC05). A caller that names the grant gets that grant back when it repeats the
+    * same intent: recipient, scope, action set and expiry. Naming an existing grant with a different intent, or one that
+    * was revoked, is a conflict; a retry never renews access. Current authority is checked before either outcome.
+    * Without `id` every call issues a new grant.
+    */
+  def grant(ctx: AccessContext, dataset: DatasetId, recipient: PrincipalId, release: Option[ReleaseId], actions: Set[Action],
+      id: Option[GrantId] = None): F[Either[Problem, Grant]]
   def revoke(ctx: AccessContext, dataset: DatasetId, grant: GrantId): F[Either[Problem, Unit]]
   /** A share with any ADR 002 permission set (including Discover/ReadEvidence) and an optional expiry, issued at the
-    * database clock under IssueGrant authority. Requires an initialized organization.
+    * database clock under IssueGrant authority. Requires an initialized organization. `id` behaves as for `grant`.
     */
   def grantShare(ctx: AccessContext, dataset: DatasetId, recipient: PrincipalId, release: Option[ReleaseId],
-      actions: Set[OrganizationAuthority.Permission], expiresAt: Option[java.time.Instant]): F[Either[Problem, OrganizationAuthority.PolicyGrant]]
+      actions: Set[OrganizationAuthority.Permission], expiresAt: Option[java.time.Instant],
+      id: Option[GrantId] = None): F[Either[Problem, OrganizationAuthority.PolicyGrant]]
   /** Shares on a dataset, for its current access managers. */
   def grants(ctx: AccessContext, dataset: DatasetId): F[Either[Problem, Vector[OrganizationAuthority.GrantView]]]
   /** Why `subject` holds or lacks `permission` on `scope`: the caller's own access, or a principal known on that

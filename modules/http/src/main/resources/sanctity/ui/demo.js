@@ -275,7 +275,7 @@
       relationships: { version: 'bids-fieldmap-associations-v1+bids-mri-companions-v1+bids-phasediff-family-v1', evidenceVersion: 2, links: i.links }, provenance: provenance(r) };
   }
 
-  const grants = new Map(), selections = new Map(), candidates = new Map();
+  const grants = new Map(), grantKeys = new Map(), selections = new Map(), candidates = new Map();
   const clone = v => JSON.parse(JSON.stringify(v));
   const fail = (status, code) => Promise.reject(Object.assign(new Error(code), { status, code }));
   const later = v => new Promise(res => setTimeout(() => res(v), window.SanctityDemo ? window.SanctityDemo.latency : 90));
@@ -375,7 +375,12 @@
         const read = new Set(['ReadMetadata', 'ReadContent']);
         const ok = b && Array.isArray(b.actions) && b.actions.length && !b.actions.includes('ManageAccess') && (!b.release || b.actions.every(a => read.has(a)));
         if (!ok) return fail(400, 'invalid_request');
+        // As the server does: an Idempotency-Key names the grant, a retry of the same intent returns it, another intent conflicts.
+        const key = headers && headers['Idempotency-Key'], intent = JSON.stringify([b.recipient, b.release || null, [...b.actions].sort()]);
+        const named = key && grantKeys.get(key);
+        if (named) return named.intent === intent && grants.has(named.id) ? clone(grants.get(named.id)) : fail(409, 'conflict');
         const g = { id: uuid(), dataset: DS, recipient: b.recipient, release: b.release || null, actions: [...b.actions].sort() };
+        if (key) grantKeys.set(key, { id: g.id, intent });
         grants.set(g.id, g); return clone(g);
       }
       if (method === 'DELETE' && seg[1] === 'datasets' && seg[3] === 'grants') return grants.delete(seg[4]) ? null : fail(404, 'not_found');

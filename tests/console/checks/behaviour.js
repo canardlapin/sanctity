@@ -730,6 +730,25 @@ const DS = 'b7e3c1d2-5a4f-4e8b-9c21-6f0a3d9e8b14', R3 = '9d4b2e61-7a3c-4f18-a5d9
       await p.click('[data-fk="back-home"]'); await p.waitForSelector('.dir-row', { timeout: 5000 });
       done(st.h1 === 'Nothing here' && /no longer have access/.test(st.text) && !/Try again/.test(st.text), JSON.stringify(st));
     });
+    // 82. A grant repeated after a lost response carries the same Idempotency-Key; the next grant carries a new one (CORE8).
+    await guarded('grant-retry-same-key', async (o, done) => {
+      const [, p] = await o(`#/d/${DS}/access?release=${R3}`);
+      await p.evaluate(() => { const d = window.SanctityDemo, r = d.request; window.__grantKeys = []; let lost = true;
+        d.request = (m, u, x) => { if (!(m === 'POST' && /grants$/.test(u))) return r(m, u, x);
+          window.__grantKeys.push((x.headers || {})['Idempotency-Key'] || null);
+          // The first request reaches the server and is issued; its response never arrives.
+          if (lost) { lost = false; return r(m, u, x).then(() => Promise.reject(new TypeError('Failed to fetch'))); }
+          return r(m, u, x); }; });
+      const recipient = '6c1d8e2a-4b7f-4a90-b3e5-1f2d7c9a0e64';
+      await p.fill('#g-recipient', recipient); await p.click('form button[type=submit]'); await p.waitForTimeout(500);
+      const failed = await p.evaluate(() => document.querySelectorAll('table.data tbody tr').length);
+      await p.click('form button[type=submit]'); await p.waitForTimeout(500);                  // the unchanged form, sent again
+      const retried = await p.evaluate(() => document.querySelectorAll('table.data tbody tr').length);
+      await p.fill('#g-recipient', recipient); await p.click('form button[type=submit]'); await p.waitForTimeout(500);   // a deliberate second grant
+      const st = await p.evaluate(() => ({ keys: window.__grantKeys, rows: document.querySelectorAll('table.data tbody tr').length }));
+      const ok = st.keys.length === 3 && !!st.keys[0] && st.keys[0] === st.keys[1] && !!st.keys[2] && st.keys[2] !== st.keys[0] && failed === 0 && retried === 1 && st.rows === 2;
+      done(ok, JSON.stringify({ ...st, failed, retried }));
+    });
   } finally { await b.close(); }
   console.log(`behaviour failures: ${bad}`);
   process.exitCode = bad ? 1 : 0;

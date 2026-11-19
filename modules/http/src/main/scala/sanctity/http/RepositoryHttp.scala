@@ -235,13 +235,18 @@ final class RepositoryHttp[F[_]](
         names <- lift(In.get[Vector[String]](b, "actions"))
         permissions <- lift(names.traverse(n => OrganizationAuthority.Permission.values.find(_.toString == n).toRight(Problem.Unsupported("unknown action"))))
         expires <- lift(In.expiry(b))
+        // With an Idempotency-Key the grant is named by its caller, dataset and key: repeating the same intent returns
+        // that grant, and the key cannot be moved to another intent (ARC05). Without one, every request issues a grant.
+        key <- if req.headers.get(CIString("Idempotency-Key")).isEmpty then F.pure(Option.empty[IdempotencyKey])
+          else header(req, "Idempotency-Key").flatMap(v => lift(IdempotencyKey.from(v))).map(Option(_))
+        named = key.map(k => minted[GrantTag]("grant", ctx, dataset.render, k))
         legacy = permissions.traverse(p => Action.values.find(_.toString == p.toString))
         // Legacy actions without expiry keep the original grant path; Discover, ReadEvidence or an expiry need the share model.
         result <- (legacy, expires) match
           case (Some(actions), None) =>
-            checked(catalog.grant(ctx, dataset, recipient, release, actions.toSet)).flatMap(g => json(Out.grant(g), Status.Created))
+            checked(catalog.grant(ctx, dataset, recipient, release, actions.toSet, named)).flatMap(g => json(Out.grant(g), Status.Created))
           case _ =>
-            checked(catalog.grantShare(ctx, dataset, recipient, release, permissions.toSet, expires)).flatMap(g => json(Out.share(g), Status.Created))
+            checked(catalog.grantShare(ctx, dataset, recipient, release, permissions.toSet, expires, named)).flatMap(g => json(Out.share(g), Status.Created))
       yield policyAcknowledged(result)
     case DELETE -> Root / "v1" / "datasets" / d / "grants" / g =>
       (id[DatasetTag](d), id[GrantTag](g)).tupled.flatMap((ds, grant) => checked(catalog.revoke(ctx, ds, grant)))

@@ -73,6 +73,44 @@ abstract class CatalogLifecycleSuite extends CatalogSubsetSuite:
   }
 
 
+  test("a named grant answers a retry of the same intent; another intent or a revoked grant conflicts and never renews access (CORE8)") {
+    fixture { (s, root) =>
+      for
+        initial <- accepted(s, root)
+        reader <- IdSource.random[IO].next[PrincipalTag]
+        other <- IdSource.random[IO].next[PrincipalTag]
+        named <- IdSource.random[IO].next[GrantTag]
+        read = Set(Action.ReadMetadata, Action.ReadContent)
+        issue = (recipient: PrincipalId, release: Option[ReleaseId], actions: Set[Action]) =>
+          s.catalog.grant(s.context, s.dataset.id, recipient, release, actions, Some(named))
+        first <- checked(issue(reader, None, read))
+        retry <- checked(issue(reader, None, Set(Action.ReadContent, Action.ReadMetadata)))
+        _ = assertEquals((first.id, retry), (named, first))
+        // The name belongs to that intent: another recipient, scope or action set cannot take it over.
+        changed <- Vector(issue(other, None, read), issue(reader, Some(initial.release.release), read), issue(reader, None, Set(Action.ReadMetadata))).sequence
+        _ = assert(changed.forall { case Left(Problem.Conflict(_)) => true; case _ => false }, changed.toString)
+        allowed <- s.catalog.check(AccessContext(reader), s.dataset.id, Action.ReadContent)
+        stranger <- s.catalog.check(AccessContext(other), s.dataset.id, Action.ReadMetadata)
+        _ = assertEquals((allowed, stranger), (Right(()), Left(Problem.Denied)))
+        // The same intent without a name is an independent grant, revoked independently.
+        independent <- checked(s.catalog.grant(s.context, s.dataset.id, reader, None, read))
+        _ = assertNotEquals(independent.id, named)
+        _ <- checked(s.catalog.revoke(s.context, s.dataset.id, named))
+        viaOther <- s.catalog.check(AccessContext(reader), s.dataset.id, Action.ReadContent)
+        _ = assertEquals(viaOther, Right(()))
+        _ <- checked(s.catalog.revoke(s.context, s.dataset.id, independent.id))
+        // Naming the revoked grant again does not bring it back.
+        replay <- issue(reader, None, read)
+        _ = assert(replay match { case Left(Problem.Conflict(_)) => true; case _ => false }, replay.toString)
+        after <- s.catalog.check(AccessContext(reader), s.dataset.id, Action.ReadContent)
+        _ = assertEquals(after, Left(Problem.Denied))
+        // Someone who cannot manage access learns nothing by naming it.
+        outsider <- s.catalog.grant(AccessContext(other), s.dataset.id, reader, None, read, Some(named))
+        _ = assertEquals(outsider, Left(Problem.Denied))
+      yield ()
+    }
+  }
+
   test("fixed-release read grants, content separation, frozen selections and revocation") {
     fixture { (s, root) =>
       for

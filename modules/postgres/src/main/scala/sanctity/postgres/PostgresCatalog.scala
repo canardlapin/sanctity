@@ -41,28 +41,43 @@ final class PostgresCatalog[F[_]] private[postgres] (
       result <- putGrant(ctx,grant)
     yield result)
 
-  def grant(ctx: AccessContext, dataset: DatasetId, recipient: PrincipalId, release: Option[ReleaseId], actions: Set[Action]): F[Either[Problem, Grant]] =
-    ids.next[GrantTag].flatMap { id => run {
+  def grant(ctx: AccessContext, dataset: DatasetId, recipient: PrincipalId, release: Option[ReleaseId], actions: Set[Action],
+      id: Option[GrantId]): F[Either[Problem, Grant]] =
+    id.fold(ids.next[GrantTag])(F.pure).flatMap { grantId => run {
       for
         _ <- lift(Authority.validate(release,actions))
-        now <- OrganizationSql.now
-        legacy = Grant(id,dataset,recipient,release,actions)
-        _ <- putGrant(ctx, OrganizationAuthority.PolicyGrant.legacy(legacy,now,OrganizationGeneration.initial).copy(issuer=Some(ctx.principal)))
+        createdAt <- issuedAt(grantId, named = id.nonEmpty)
+        legacy = Grant(grantId,dataset,recipient,release,actions)
+        _ <- putGrant(ctx, OrganizationAuthority.PolicyGrant.legacy(legacy,createdAt,OrganizationGeneration.initial).copy(issuer=Some(ctx.principal)))
       yield legacy
     }}
 
   def grantShare(ctx: AccessContext, dataset: DatasetId, recipient: PrincipalId, release: Option[ReleaseId],
-      actions: Set[OrganizationAuthority.Permission], expiresAt: Option[java.time.Instant]): F[Either[Problem, OrganizationAuthority.PolicyGrant]] =
+      actions: Set[OrganizationAuthority.Permission], expiresAt: Option[java.time.Instant],
+      id: Option[GrantId]): F[Either[Problem, OrganizationAuthority.PolicyGrant]] =
     import java.time.temporal.ChronoUnit.MICROS
-    ids.next[GrantTag].flatMap { id => run(for
+    id.fold(ids.next[GrantTag])(F.pure).flatMap { grantId => run(for
       _ <- OperationsSql.active
       enabled <- OrganizationSql.guard(true)
       _ <- lift(Either.cond(enabled, (), Problem.Unsupported("shares with discovery or expiry require an initialized organization")))
-      now <- OrganizationSql.now
-      share = OrganizationAuthority.PolicyGrant(id, Some(ctx.principal), recipient, OrganizationAuthority.DataScope(dataset, release),
-        actions, now.truncatedTo(MICROS), expiresAt.map(_.truncatedTo(MICROS)), OrganizationAuthority.GrantBasis.Independent, OrganizationGeneration.initial)
+      createdAt <- issuedAt(grantId, named = id.nonEmpty)
+      share = OrganizationAuthority.PolicyGrant(grantId, Some(ctx.principal), recipient, OrganizationAuthority.DataScope(dataset, release),
+        actions, createdAt, expiresAt.map(_.truncatedTo(MICROS)), OrganizationAuthority.GrantBasis.Independent, OrganizationGeneration.initial)
       issued <- putGrant(ctx, share)
     yield issued) }
+
+  /** The issuance time of a grant (ARC05). A grant the caller named keeps the time of its first issuance, so a retry
+    * presents the identical record and `putGrant` returns it without a second commit. A named grant that differs in
+    * any other way, or was revoked, no longer equals the stored record and conflicts there. The policy lock is taken
+    * first, so concurrent retries of one grant wait here and the later ones see the first.
+    */
+  private def issuedAt(id: GrantId, named: Boolean): ConnectionIO[java.time.Instant] =
+    for
+      _ <- OperationsSql.active
+      _ <- OrganizationSql.guard(true)
+      now <- OrganizationSql.now
+      prior <- if named then PolicySql.grants.map(_.find(_.id == id)) else Option.empty[OrganizationAuthority.PolicyGrant].pure[ConnectionIO]
+    yield prior.fold(now.truncatedTo(java.time.temporal.ChronoUnit.MICROS))(_.createdAt)
 
   private def putGrant(ctx: AccessContext, grant: OrganizationAuthority.PolicyGrant): ConnectionIO[OrganizationAuthority.PolicyGrant] =
     import OrganizationAuthority.*
