@@ -161,6 +161,74 @@ final class DirectorySuite extends FunSuite:
     yield () }.unsafeRunSync()
   }
 
+  /** Follow `next` to the end, one row per page. Returns every identifier seen and the total each page reported. */
+  private def walk(f: PgFixture, url: String, token: String, field: String = "id"): IO[(Vector[String], Vector[Int])] =
+    def go(cursor: Option[String], seen: Vector[String], totals: Vector[Int]): IO[(Vector[String], Vector[Int])] =
+      call(f, Method.GET, url + cursor.fold("")("&cursor=" + _), token).flatMap { (status, body) =>
+        assertEquals(status, Status.Ok, body)
+        val page = json(body).hcursor
+        val all = seen ++ ids(body, field)
+        val counted = totals :+ page.get[Int]("total").toOption.get
+        page.get[String]("next").toOption match
+          case Some(next) => go(Some(next), all, counted)
+          case None => IO.pure(all -> counted)
+      }
+    go(None, Vector.empty, Vector.empty)
+  private def next(body: String): String = json(body).hcursor.get[String]("next").toOption.get
+
+  test("a visible rename that keeps the order restarts the old cursor; the restarted listing has each dataset once (CORE7)") {
+    PostgresFixture.resource.use { f => for
+      t <- world(f)
+      a <- dataset(f, t, "A", "ra", inherit = true)
+      b <- dataset(f, t, "B", "rb", inherit = true)
+      listing = s"/v1/projects/${memory.render}/datasets?limit=1"
+      // D-open has no label, so it sorts first; then A, then B.
+      before <- walk(f, listing, t("bob"))
+      _ = assertEquals(before, (Vector(open.render, a, b), Vector(3, 3, 3)))
+      first <- call(f, Method.GET, listing, t("bob")).map(_._2)
+      second <- call(f, Method.GET, listing + "&cursor=" + next(first), t("bob")).map(_._2)
+      _ = assertEquals(ids(second), Vector(a))
+      // A becomes AA after the page that returned it. It still sorts between D-open and B, so only its name changed.
+      place <- call(f, Method.GET, s"/v1/datasets/$a/placement", t("dan")).map(x => gen(x._2))
+      renamed <- call(f, Method.POST, s"/v1/datasets/$a/rename", t("dan"), Some(Json.obj("label" -> Json.fromString("AA"),
+        "expected" -> Json.obj(s"placement:$a" -> Json.fromLong(place)))), Some("ra-rename"))
+      _ = assertEquals(renamed._1, Status.Ok, renamed._2)
+      stale <- call(f, Method.GET, listing + "&cursor=" + next(second), t("bob"))
+      _ = assertEquals(stale._1, Status.Conflict, stale._2)
+      after <- walk(f, listing, t("bob"))
+      _ = assertEquals(after, (Vector(open.render, a, b), Vector(3, 3, 3)))
+      labels <- call(f, Method.GET, s"/v1/projects/${memory.render}/datasets", t("bob")).map(x => ids(x._2, "label"))
+      _ = assertEquals(labels, Vector("AA", "B"))
+    yield () }.unsafeRunSync()
+  }
+
+  test("a share revoked between pages restarts the old cursor; the restarted shares and total exclude it (CORE7)") {
+    PostgresFixture.resource.use { f => for
+      t <- world(f)
+      share = (d: DatasetId) => call(f, Method.POST, s"/v1/datasets/${d.render}/grants", t("alice"),
+        Some(Json.obj("recipient" -> Json.fromString(Corpus.principal("outsider").render), "release" -> Json.Null,
+          "actions" -> Json.arr(Json.fromString("Discover"), Json.fromString("ReadMetadata")),
+          "expiresAt" -> Json.fromString(java.time.Instant.now.plusSeconds(3600).toString))))
+      one <- share(open)
+      two <- share(restricted)
+      _ = assertEquals(Vector(one._1, two._1), Vector(Status.Created, Status.Created), one._2 + two._2)
+      // Neither dataset has a label, so shares order by dataset identifier.
+      ordered = Vector(open, restricted).sortBy(_.render)
+      listing = "/v1/me/shares?limit=1"
+      before <- walk(f, listing, t("outsider"), "dataset")
+      _ = assertEquals(before, (ordered.map(_.render), Vector(2, 2)))
+      first <- call(f, Method.GET, listing, t("outsider")).map(_._2)
+      // Alice revokes the share on the page not yet read.
+      later = if ordered.last == open then one else two
+      revoked <- call(f, Method.DELETE, s"/v1/datasets/${ordered.last.render}/grants/${json(later._2).hcursor.get[String]("id").toOption.get}", t("alice"))
+      _ = assertEquals(revoked._1, Status.NoContent, revoked._2)
+      stale <- call(f, Method.GET, listing + "&cursor=" + next(first), t("outsider"))
+      _ = assertEquals(stale._1, Status.Conflict, stale._2)
+      after <- walk(f, listing, t("outsider"), "dataset")
+      _ = assertEquals(after, (Vector(ordered.head.render), Vector(1)))
+    yield () }.unsafeRunSync()
+  }
+
   test("organization events written before dataset labels still decode") {
     val legacy = """{"version":1,"value":{"key":"legacy","expected":[],"command":{"PlaceNewDataset":{"dataset":"%s","project":"%s","stewardship":"%s"}}}}"""
       .format(open.render, memory.render, java.util.UUID.randomUUID())

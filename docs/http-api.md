@@ -356,10 +356,11 @@ characters), `limit` (1–100, default 25) and `cursor`. A page is
 may see. Datasets show the steward-curated `label` (or `null`), never scientific
 metadata, byte counts or a head. Stewards set the label at creation (`label`) or with
 `POST /v1/datasets/{dataset}/rename`. A cursor belongs to its caller, directory and
-query (another use is 400). Each later page re-evaluates current policy: if anything the
-caller can see in that directory changed, it is answered with 409 and the caller
-restarts from the first page. Changes the caller cannot see never invalidate a
-cursor or alter a page.
+query (another use is 400). Each later page re-evaluates current policy: if an entry the
+caller can see in that directory appeared, disappeared or was renamed, the page is
+answered with 409 and the caller restarts from the first page. Search and order ignore
+letter case and do not depend on the server's locale or on how a name was composed.
+Changes the caller cannot see never invalidate a cursor or alter a page.
 
 A grant request may also name `Discover` and `ReadEvidence` and carry `expiresAt`
 (RFC 3339, stored at microsecond precision); such shares need an initialized
