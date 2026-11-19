@@ -532,9 +532,31 @@ final class PostgresCatalog[F[_]] private[postgres] (
       yield ()
     }
 
+  /** Who may read a release's catalog record (ADR 005): anyone who may read that release's metadata, and, in an
+    * organization, anyone who may discover that exact release. Discovery fixed to one release does not reach another.
+    *
+    * Discovery never opens a private bundle: that release stays with the person who made it, under the rule
+    * `authorize` applies to every other read. The locks are also those of every other read of this release, taken
+    * before the decision, so a revocation acknowledged before this read is seen by it.
+    */
+  private def describable(ctx: AccessContext, ref: ReleaseRef): ConnectionIO[Unit] =
+    for
+      _ <- OperationsSql.active
+      organized <- OrganizationSql.guard(false)
+      _ <- CredentialSql.check(ctx)
+      _ <- lockScopes(Vector((ref.dataset, Action.ReadMetadata, Some(ref.release))), false)
+      personal <- sql"SELECT c.activity::text FROM release r JOIN candidate c ON c.id=r.candidate_id WHERE r.dataset_id=${uuid(ref.dataset)} AND r.id=${uuid(ref.release)}"
+        .query[String].option.flatMap(_.traverse(payload => lift(JsonCodecs.decode[Activity](payload)))).map(_.exists(_.kind == ActivityKind.PrivateBundle))
+      discovers <- if organized && !personal then PolicySql.permits(ctx, OrganizationAuthority.Request.Data(
+        OrganizationAuthority.DataScope(ref.dataset, Some(ref.release)), OrganizationAuthority.Permission.Discover)) else false.pure[ConnectionIO]
+      _ <- if discovers then ().pure[ConnectionIO] else authorize(ctx, uuid(ref.dataset), false, Action.ReadMetadata, Some(ref.release)).void
+    yield ()
+
+  def releaseForDescription(ctx: AccessContext, ref: ReleaseRef): F[Either[Problem, Release]] = run(describable(ctx, ref) *> acceptedSource(ref))
+
   def catalogRecord(ctx: AccessContext, ref: ReleaseRef): F[Either[Problem, Option[CatalogRecord]]] = run {
     for
-      _ <- authorize(ctx, uuid(ref.dataset), false, Action.ReadMetadata, Some(ref.release))
+      _ <- describable(ctx, ref)
       known <- sql"SELECT EXISTS(SELECT 1 FROM release WHERE dataset_id=${uuid(ref.dataset)} AND id=${uuid(ref.release)})".query[Boolean].unique
       _ <- lift(Either.cond(known, (), Problem.NotFound("release", ref.release.render)))
       stored <- sql"SELECT record::text FROM release_catalog WHERE release_id=${uuid(ref.release)} AND dataset_id=${uuid(ref.dataset)}".query[String].option

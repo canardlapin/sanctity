@@ -92,6 +92,9 @@ the explicitly shared label and exact R1, not its private project's name or acti
 No extra parent-project read authority is inferred. A metadata-only grant on a known
 resource can read that exact metadata without acquiring directory discovery.
 
+Amended on 19 November 2026 by [ADR 005](005-discovery-shows-the-catalog-record.md):
+discovery also shows the catalog record of the exact release that was made discoverable.
+
 Project directory names and counts include only currently discoverable projects and
 datasets. Lab admins may manage the roster and IDs of projects they govern, but get
 no hidden dataset names/counts, activity, bytes or scientific metadata. Project rosters

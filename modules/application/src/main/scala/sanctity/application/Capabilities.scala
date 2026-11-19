@@ -115,7 +115,14 @@ trait Catalog[F[_]]:
     */
   def accept(ctx: AccessContext, candidate: CandidateId, key: IdempotencyKey, lease: Option[WorkLease] = None,
       description: Option[CatalogRecord] = None): F[Either[Problem, AcceptanceReceipt]]
-  /** The record stored when the release was accepted, if any. Requires ReadMetadata on that exact release. */
+  /** The record stored when the release was accepted, if any. The caller may read that exact release's metadata, or,
+    * in an organization, may discover that exact release (ADR 005).
+    */
   def catalogRecord(ctx: AccessContext, ref: ReleaseRef): F[Either[Problem, Option[CatalogRecord]]]
+  /** Internal: the accepted release, only for deriving the catalog record of a release that has none stored. It is
+    * authorized exactly as `catalogRecord` is, so it can reach a caller who may only discover the release. Nothing
+    * but the derived record may be returned to that caller.
+    */
+  def releaseForDescription(ctx: AccessContext, ref: ReleaseRef): F[Either[Problem, Release]]
   def release(ctx: AccessContext, ref: ReleaseRef): F[Either[Problem, Release]]
   def metadata(ctx: AccessContext, ref: ReleaseRef, path: RelPath): F[Either[Problem, ArtifactMetadata]]

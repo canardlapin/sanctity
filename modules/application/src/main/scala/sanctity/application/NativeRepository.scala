@@ -129,7 +129,7 @@ final class NativeRepository[F[_]](
     Checked.attempt {
       catalog.catalogRecord(ctx, ref).flatMap(Checked.lift[F, Option[CatalogRecord]]).flatMap {
         case stored @ Some(_) => F.pure(stored)
-        case None => describer.traverse(d => catalog.release(ctx, ref).flatMap(Checked.lift[F, Release]).flatMap(r => d.describe(r.manifest, r.interpretation)))
+        case None => describer.traverse(d => catalog.releaseForDescription(ctx, ref).flatMap(Checked.lift[F, Release]).flatMap(r => d.describe(r.manifest, r.interpretation)))
       }
     }
 

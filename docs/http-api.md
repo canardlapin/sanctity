@@ -155,7 +155,7 @@ The record is taken from the release's own descriptor and nothing is inferred. F
 
 Each accepted release has its own record, stored in the transaction that accepts it. A later release never changes an earlier record. The record is a projection of the release and does not affect its identity. A release accepted before records were kept has none stored: a read then derives it from the retained descriptor by the same rules, and an operator can store such records with `repository rebuild-catalog` (see the service distribution guide), which never replaces an existing one.
 
-Every field is scientific metadata and needs `ReadMetadata` on that exact release. Discovery alone still shows only the steward's label.
+The record can be read by anyone who may read that exact release's metadata, and by anyone who may discover that exact release ([ADR 005](decisions/005-discovery-shows-the-catalog-record.md)). Discovery shows the record and nothing else about the release: no file names, participants, per-file metadata, findings or history, and nothing about any other release. A private bundle is the exception: its record is read only by the person who made it. A steward who makes a release discoverable therefore shows its description, including the beginning of its README, to the recipient.
 
 ### Downloading a whole release
 
@@ -215,7 +215,7 @@ Every `/v1` route requires authentication. There are no raw blob-digest, local-f
 | `GET /v1/datasets/{dataset}/releases/{release}` | Pinned public inventory, interpretation identity and assessment; `provenance` with dataset-wide metadata authority |
 | `GET /v1/datasets/{dataset}/releases/{release}/metadata?path=...` | Effective values, origins and override history |
 | `GET /v1/datasets/{dataset}/releases/{release}/file?path=...` | Authorized chunked bytes, `X-Sanctity-SHA256` and `X-Sanctity-Size` |
-| `GET /v1/datasets/{dataset}/releases/{release}/catalog` | What the release says about itself: title, description, creators, keywords, data types, licence and identifiers; requires `ReadMetadata` on that release |
+| `GET /v1/datasets/{dataset}/releases/{release}/catalog` | What the release says about itself: title, description, creators, keywords, data types, licence and identifiers; requires `ReadMetadata` or `Discover` on that release |
 | `GET /v1/datasets/{dataset}/releases/{release}/archive` | The whole release as one zip with a checksum list; requires `ReadContent` on that release |
 | `POST /v1/datasets/{dataset}/releases/{release}/corrections` | A prepared candidate plus content and metadata impact |
 | `POST /v1/datasets/{dataset}/releases/{release}/reassessments` | The same content read under the current rules, as a candidate with its impact; body `{"reason": "..."}` |

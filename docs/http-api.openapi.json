@@ -723,7 +723,7 @@
         ],
         "responses": {
           "200": {
-            "description": "The release's descriptive record. Requires ReadMetadata on that exact release. Fields the descriptor does not give are null or empty.",
+            "description": "The release's descriptive record. Requires ReadMetadata or Discover on that exact release. Fields the descriptor does not give are null or empty.",
             "content": {
               "application/json": {
                 "schema": {

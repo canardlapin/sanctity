@@ -4,8 +4,8 @@ package sanctity.kernel
   *
   * A record is a projection of the release: the same release always yields the same record, so it can be rebuilt
   * at any time from retained bytes and never changes a release's identity. Fields the descriptor does not give are
-  * empty; nothing is inferred. Every field is scientific metadata: reading it needs ReadMetadata on that exact
-  * release. Discovery alone shows only the steward's label (ADR 002).
+  * empty; nothing is inferred. A record may be read by anyone who may read that exact release's metadata, and by
+  * anyone who may discover that exact release (ADR 005). It never names a file or a participant.
   */
 final case class CatalogRecord private (kind: String, title: Option[String], description: Option[String], descriptionFrom: Option[RelPath],
     creators: Vector[String], keywords: Vector[String], dataTypes: Vector[String], license: Option[String], identifiers: Vector[String])

@@ -286,6 +286,9 @@ final class ReferenceCatalog[F[_]] private (
       yield s.catalogRecords.get(ref.release)
     }
 
+  // The reference catalog models legacy grants only, which have no discovery: metadata access decides.
+  def releaseForDescription(ctx: AccessContext, ref: ReleaseRef): F[Either[Problem, Release]] = release(ctx, ref)
+
   def metadata(ctx: AccessContext, ref: ReleaseRef, path: RelPath): F[Either[Problem, ArtifactMetadata]] =
     release(ctx, ref).map(_.flatMap(_.interpretation.byPath.get(path).toRight(Problem.NotFound("interpreted artifact", path.value))))
 
