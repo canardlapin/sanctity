@@ -259,7 +259,11 @@ Conflicting writers prepare again against the new base where semantics require i
 
 Use durable leases and reference accounting to protect staged work, accepted content, active materializations, and recovery points from garbage collection. Storage-readiness evidence and garbage collection need a shared protocol.
 
-Optional thumbnails, Neurobagel projections, and external publication run after acceptance through the outbox. Their status identifies the exact release and target generation, so a late worker cannot mark an obsolete projection current.
+Optional thumbnails and projection preparation run after acceptance. An
+acceptance outbox event identifies the exact release. External publication
+requires separate approval of an artifact, destination and audience. A
+publication operation records its own desired and observed target generations.
+Only the current approved generation may become queryable.
 
 ### Recovery and operations
 
@@ -357,7 +361,12 @@ A “compute without download” promise requires controlled execution and outpu
 
 ### Interoperability
 
-XNAT receives/acquires qualified source objects and transformation receipts. OpenNeuro/DataLad integration can exchange assessed BIDS with retained external snapshot references. Neurobagel consumes an approved versioned projection with explicit readiness and disclosure scope.
+XNAT receives/acquires qualified source objects and transformation receipts.
+OpenNeuro/DataLad integration can exchange assessed BIDS with retained external
+snapshot references. Neurobagel consumes an approved versioned projection
+through an optional adapter over the pinned release API. The adapter owns
+harmonization and node delivery. Sanctity owns custody and current release
+authorization. See the [WP-16 extension contract](implementation-plan.md#external-discovery-through-neurobagel).
 
 DRS can provide object retrieval while Sanctity preserves a separate path-sensitive scientific manifest identity. GA4GH identity/data-use integrations are later adapters feeding explicit local trust decisions.
 

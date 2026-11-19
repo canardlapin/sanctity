@@ -1,13 +1,15 @@
 # Sanctity core vision
 
-Restated 13 October 2026. Updated 17 November 2026 to clarify archival use and collaboration across institutions.
+Restated 13 October 2026. Updated 17 November 2026 to clarify archival use and collaboration across institutions. Updated 19 November 2026 after the owner restated the institute's needs: legacy intake and open publication are now product priorities, and the processing framework is an aspiration that is not part of the MVP. Delivery follows the [plan of record](plan.md).
 
 Sanctity is a BIDS-native research data repository for active studies and long-term
 archives. Labs can curate a study as it grows, share a precise selection, or
 deposit a finished collection for others to find and use years later. The same
 release identifies what was accepted in each case. Through the interface,
-researchers can inspect the data and its history. QA, visualization, preprocessing
-and eventually analysis can build on those exact releases.
+researchers can inspect the data and its history. A study held in a legacy system
+such as XNAT can be brought in as BIDS, and a finished study can be published
+outward as open, FAIR data. QA, visualization, preprocessing and eventually
+analysis can build on those exact releases.
 
 ## The core promise
 
@@ -36,14 +38,25 @@ fully assessed BIDS study and a collection known only by its description and fil
    support ingestion, discovery, curation, retrieval and tested recovery.
 2. **An excellent working interface.** Make common journeys clear and complete,
    including errors, interrupted work, conflicting edits and accessible navigation.
-3. **Collaboration across labs and institutions.** A steward can name the release
+3. **One home for every study and data type.** MRI, EEG, MEG, eye-tracking,
+   behaviour and questionnaires sit together in one BIDS-organized study. Data with
+   no BIDS specification is stored and labelled as an archive. A study held in a
+   legacy system such as XNAT is brought in as BIDS with its origin recorded.
+4. **Collaboration across labs and institutions.** A steward can name the release
    or subset another lab may use, explain the grant and end future access. Design
    for collaborators at another institution from the outset. The first deployment
    can serve several labs and approved external guests from one installation.
-4. **A useful processing framework.** Bind tools and their results to exact inputs,
-   current authority and normal derivative admission. QA and visualization are early
-   consumers of this framework; additional analysis capabilities follow demonstrated
-   needs.
+5. **Open publication and discovery.** A finished study can be made open and FAIR:
+   described, licensed, checked for de-identification, published to an established
+   repository with a persistent identifier, and discoverable through open-science
+   networks such as Neurobagel.
+
+**Aspiration beyond the MVP: a processing framework.** QA, visualization,
+preprocessing and eventually analysis build on exact releases, with tools and
+their results bound to exact inputs, current authority and normal derivative
+admission. This stays part of the vision. It is not MVP work: the derivative and
+QC slices already built stay in place, and no new processing work starts before
+the MVP has been shown.
 
 Data integrity and coherent BIDS semantics remain core requirements. Additional
 scientific profile depth should be driven by collections the product must support.
@@ -75,9 +88,11 @@ review. The steward shares an explicit scope with another lab or approved extern
 collaborator and can explain and revoke that access. An operator can observe the
 service and recover it on replacement infrastructure with current restrictions intact.
 
-The [institutional readiness plan](institutional-readiness-plan.md) assesses current
-delivery against that journey and defines the next work. This vision does not assert
-that these capabilities are already implemented or institutionally qualified.
+The [plan of record](plan.md) defines the next work as four journeys: bring a study
+in, see it, share it and publish it. The
+[institutional readiness plan](institutional-readiness-plan.md) describes the later
+pilot qualification. This vision does not assert that these capabilities are already
+implemented or institutionally qualified.
 
 ## Relationship to the original documents
 

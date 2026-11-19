@@ -1,5 +1,7 @@
 # Local installation and demonstration before an institutional pilot
 
+> **Status, 19 November 2026.** Scope, order and priority now follow the [plan of record](plan.md). This document is kept as design reference. Its work items are parked on the tracker unless they carry the `mvp` tag.
+
 14 October 2026. Immediate delivery milestone, based on the product owner's direction:
 the first installation is on their local computer; there is no institutional approval
 yet. Build reliable engineering and a convincing demo with a guide before proposing

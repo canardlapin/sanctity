@@ -1,5 +1,7 @@
 # Sanctity institutional pilot epics and tasks
 
+> **Status, 19 November 2026.** Scope, order and priority now follow the [plan of record](plan.md). This document is kept as design reference. Its work items are parked on the tracker unless they carry the `mvp` tag.
+
 Planned 13 October 2026; execution updated 14 October 2026.
 
 **Immediate milestone:** a dependable installation on the product owner's computer,

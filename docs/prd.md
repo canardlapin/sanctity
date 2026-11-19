@@ -271,7 +271,7 @@ XNAT documents separate scan-resource and image-assessor download paths. The pil
 | O-05 | A | Expose actionable structured logs, operation metrics, audit events, queue age, storage/integrity status, and correlations without source secrets or unauthorized metadata. | AT-09 |
 | O-06 | P | Qualify schema/index upgrades and rollback/recovery procedure using a restored copy; unsupported old interpretations remain explicit rather than silently rewritten. | PROOF-03; PROOF-22 |
 | E-01 | P | An external approved producer obtains a bundle and returns a derivative through the ordinary draft API; interrupted collection resumes without an accepted partial derivative. The bounded header-QC profile now supplies executable application-level evidence; production recipe/sandbox and remote execution qualification remain open. | PROOF-15; PROOF-16; [bounded processing proof](scientific-core.md#implemented-slice-processing-inputs-and-derivative-return) |
-| E-02 | P | Produce one approved Neurobagel-compatible imaging/phenotypic fixture through supported export/query contracts, recording release/profile/generation and downstream tool acceptance. | PROOF-20; AT-11 |
+| E-02 | P | Project one approved synthetic release through supported inventory and file contracts, recording release, profile, mapping, artifact and generation. Verify a match and withdrawal through a private Neurobagel node. | PROOF-20; AT-11 |
 | E-03 | A | Provide CLI and versioned HTTP resources for drafts, findings, impact, acceptance, queries, exports, operations, and evidence. The browser console uses these same contracts and requires no alternate scientific write path. Qualify its bounded workflows separately from the remaining API coverage. | AT-12; AT-13 |
 
 ## 10. CLI, API and console experience
@@ -348,11 +348,15 @@ The existing PROOF-01 through PROOF-24 remain the foundation. The scenarios belo
 | AT-08 | Revoke a grant during a cached/resumed transfer and an approved run; policy service unavailable | New checks deny, continuing use obeys its lease bound, unavailable authority cannot extend a lease |
 | AT-09 | Cancel/retry at each long-running step; exhaust storage; crash worker; fail remote call | Truthful durable status, released resources, bounded retries, safe resume, useful redacted diagnostics |
 | AT-10 | Concurrent collector, active export, abandoned draft, retained old release, withdrawn shared blob | Active roots protected; authorized collection respects all references; withdrawal semantics are explicit even when bytes remain for another authorized reference |
-| AT-11 | Supported Neurobagel fixture with approved phenotypic annotations and imaging availability | Selected downstream version accepts the output; unsupported mappings are findings; no private local path or source identifier is disclosed |
+| AT-11 | Supported Neurobagel fixture with approved phenotypic annotations and imaging availability | A pinned private node returns the expected aggregate and fixed release link. Unsupported mappings are findings. The projection excludes private paths and identifiers. Retry preserves the artifact and verified replacement and withdrawal remove stale matches. |
 | AT-12 | Curator completes native import/correction and pilot mapping through CLI/API | No direct SQL, manual blob editing, or private adapter API needed; documents and operation receipts explain each step |
 | AT-13 | Curator completes the supported console tasks at desktop and phone widths, including a concurrent sidecar correction, plus a real screen-reader exercise | No silent loss of a colleague's accepted edit; truthful preview and backend inheritance; preserved focus/inputs, usable error and table announcements; retained browser, PostgreSQL and manual evidence under CON-01–04 |
 
-Neurobagel's imaging preparation contract uses a BIDS metadata TSV with subject/session/suffix/path fields and supports generation through its CLI. The pilot must qualify the selected tool version against an approved view and appropriately annotated phenotypic inputs. [Neurobagel imaging preparation](https://neurobagel.org/user_guide/preparing_imaging_data/). Production federation is outside this acceptance scenario.
+Neurobagel's imaging preparation contract uses a BIDS metadata TSV with
+subject, session, suffix and path fields. The pilot uses the pinned upstream
+CLI and private node with an approved synthetic release. Production federation
+remains a separate qualification. [Imaging preparation](https://neurobagel.org/user_guide/preparing_imaging_data/).
+[WP-16 extension contract](implementation-plan.md#external-discovery-through-neurobagel).
 
 ## 13. Product release gates
 

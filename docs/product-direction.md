@@ -1,5 +1,7 @@
 # Sanctity product direction: from engineering core to an institutional pilot
 
+> **Status, 19 November 2026.** The positioning and the cost comparison here still stand. Scope, order and priority now follow the [plan of record](plan.md).
+
 Written 17 November 2026. This document sets direction and priorities. It does not
 claim that any capability below is implemented or institutionally approved.
 

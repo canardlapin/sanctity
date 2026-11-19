@@ -1,5 +1,7 @@
 # Sanctity build plan: a clean kernel, a working product, a convincing demo
 
+> **Status, 19 November 2026.** Scope, order and priority now follow the [plan of record](plan.md). This document is kept as the design record for kernel changes K1 to K7 and the Stage 1 results. Its remaining packages were rewritten as journey items on the tracker.
+
 
 **17 November implementation update.** The service uses a common admission workflow for raw BIDS, registered derivatives and archives. MRI and behavioural checks and view rules are registered by modality. The project console supports dataset creation, initial folder upload and additions against the current release. The browser rehearsal creates two sessions and checks both full exports independently after shutdown. The demo has institutional sign-in through its local provider. Full-release download over HTTP remains open. The inventory below describes the starting point for the plan.
 

@@ -1,5 +1,7 @@
 # Sanctity implementation plan
 
+> **Status, 19 November 2026.** Scope, order and priority now follow the [plan of record](plan.md). This document is kept as design reference. Its work items are parked on the tracker unless they carry the `mvp` tag.
+
 Version 0.22 — recovery foundations before browser workspace expansion\
 Updated 14 October 2026
 
@@ -432,7 +434,11 @@ Dependencies point inward. The application layer defines capabilities; adapters 
 | http | Credential authentication boundary, explicit request/response grammar, workflow routing | No private evidence serialization, raw blob endpoints or arbitrary internal object submission |
 | app | Configuration, Resource assembly, IO runtime, CLI, HTTP server, worker entry points | Product flows invoke application operations |
 
-Keep package boundaries initially practical. An external derivative producer and Neurobagel projection can begin as separately testable adapters; extract additional build modules when coupling and ownership justify them.
+Keep package boundaries initially practical. Compose the Neurobagel adapter as a
+separate executable or build module using the supported release API. Its CLI,
+vocabulary, graph store and node are optional dependencies of that extension.
+See [External discovery through Neurobagel](#external-discovery-through-neurobagel)
+for the dependency and publication contracts.
 
 Use the existing proposed stack: Scala 3, Cats/Cats Effect, FS2, http4s, Tapir, Circe, Doobie/HikariCP, PostgreSQL, MUnit, and ScalaCheck. Pin a compatible set in P0 instead of choosing versions independently. Toolchain/publication availability is an early executable check.
 
@@ -534,7 +540,7 @@ Every work package produces code, fixtures, and reviewable evidence. The require
 | WP-13 DICOM qualification | P4 | WP-05, WP-09 | Inspection/conversion/mapping, stable assignments, scientist-reviewed profiles; I-03, I-04, K-08, A-09 |
 | WP-14 XNAT adapters and reconciliation | P5 | WP-09, WP-13 | Export/API convergence, qualified identity, resume and scoped final report; I-05, I-06, I-07, K-02 |
 | WP-15 Bounded derivative producer | P6 | WP-11, WP-12 | Approved recipe, exact bundle, separate destination, resumed output collection; A-07, A-08, E-01, V-06 |
-| WP-16 Neurobagel projection proof | P6 | WP-11, WP-12 | Compatible approved fixture, downstream-tool check, generation-aware delivery; E-02, O-02 |
+| WP-16 Neurobagel projection proof | P6 | WP-11, WP-12 and INT01 conformance for the consumed routes | Approved synthetic projection, private node query, generation-aware replacement and verified withdrawal (E-02, O-02, AT-11) |
 | WP-17 Scale, lifecycle, and upgrades | P6 | WP-10, WP-11, WP-14 | GC/lease races, integrity, withdrawal, index/schema upgrade, realistic benchmarks; O-03, O-06, S-07, V-02, NF-01, NF-02, NF-03, NF-04, NF-05, NF-08 |
 | WP-18 Pilot rehearsal and handover | P6 | WP-14, WP-15, WP-16, WP-17 | Full evidence manifest, source/cutover report, restore drill, operator/curator exercise; all remaining PRD gates, NF-10 |
 
@@ -610,11 +616,157 @@ Run one approved deterministic-or-explicitly-characterized producer over a prepa
 
 Export BIDS derivative provenance under the selected profile, including required GeneratedBy information, while retaining richer internal execution evidence and respecting provenance disclosure. [BIDS derivative description](https://bids-specification.readthedocs.io/en/stable/modality-agnostic-files/dataset-description.html#derived-dataset-and-pipeline-description).
 
-Produce the approved Neurobagel fixture through normal view/query/export contracts and verify it with a pinned downstream tool. Neither extension may introduce a private acceptance shortcut.
+Complete the [WP-16 private-node rehearsal](#external-discovery-through-neurobagel)
+using a normally accepted release and the supported release read API.
 
 Qualify conservative GC and leases, integrity checks, withdrawal of shared references, schema/index upgrades, source migration at representative scale, and restoration after intervening access changes. Record warm/cold query behavior, transaction contention, import/semantic-rebuild throughput, memory, and catalog growth.
 
 **G6:** all pilot requirements have evidence; every migration completion dimension passes; operator and curator complete the documented workflows; the source/cutover report identifies limitations and owners. Operational cutover remains a separately authorized action.
+
+### External discovery through Neurobagel
+
+WP-16 delivers a repository that can opt in to Neurobagel discovery for one
+approved release. A steward previews a projection, approves its exact bytes for
+one destination and audience, and can withdraw it. A researcher finds a cohort
+match through a private Neurobagel node and follows an approved link to the fixed
+Sanctity release or its access-request page. Sanctity applies current access
+policy when the researcher follows the link.
+
+Start with an opt-in operator CLI for prepare, preview, approve, status and
+withdraw. Keep prepare and approve as separate authenticated operations. A
+console can later call the same operations.
+
+#### Dependency direction and ownership
+
+| Boundary | Responsibility |
+| --- | --- |
+| Sanctity release API | Authenticated pinned release inventory, authorized file reads, immutable content identities and normal acceptance of curated releases. The release and file endpoints are already present. Validate the subset of OpenAPI used by the adapter under INT01. |
+| Optional projection executable | Take a fixed release, an explicit disclosure specification and a versioned mapping. Produce a preview, a graph artifact and a receipt. Own Neurobagel vocabulary, BIDS suffix mapping, process execution and JSON-LD validation. Depend on the release API and ordinary file formats. |
+| Optional publication controller | Own steward approval, the approved artifact, target generations, delivery and reconciliation. Use Sanctity identity and live authority through an authenticated boundary. A worker credential can read the approved inputs and carry out the approved target operation. |
+| Private node and query gateway | Load and probe staged generations, serve the currently allowed generation, and report observed activation or removal. Keep graph administration and direct query ports private. |
+
+The default service distribution, admission, scientific profiles and PostgreSQL
+release schema have no Neurobagel dependency. Use the existing inventory and
+file APIs first. If integration exposes a missing generic capability, extend
+the supported contract at its owner and exercise it with a second caller such
+as the independent exchange client. Archive admission works with or without
+scientific interpretation. A structured table-only release can qualify for a
+phenotype projection once its keys and dictionary are approved. The initial
+fixture covers phenotype plus BIDS imaging availability. Releases without
+suitable inputs have an explicit unsupported outcome.
+
+#### Prepare and approve
+
+1. Admit the synthetic BIDS fixture or a curated subset using the normal
+   release lifecycle. Resolve all input through its exact release reference.
+   The adapter reads only the approved small tables and dictionaries with
+   byte limits and integrity checks. The current file API scopes access at the
+   release level. Use a separately accepted restricted view when the source
+   release is broader than the worker's permitted inputs. The conversion
+   process receives only prepared metadata files. Generate imaging availability
+   from selected primary artifact paths in the inventory.
+2. Pin the table key, unit, missing-value rules and controlled terms. Build the
+   phenotype TSV, a Neurobagel-annotated dictionary, a dataset description with
+   an approved `AccessLink`, and the imaging TSV
+   (`sub`, `ses`, `suffix`, `path`). Subject and session IDs and the path
+   namespace use the same approved mapping. Use relative paths. Define
+   sessionless data explicitly. Block ambiguous or unmatched keys and show
+   unsupported suffixes and their counts before approval. Availability describes
+   files present in the approved inventory. It carries no acquisition or QC
+   eligibility claim.
+3. Run pinned `bagel pheno` and `bagel bids` in a bounded worker with staged
+   files and no general network access. Check the emitted identifiers, session
+   cardinalities, links, allowed properties and absence of private source
+   identifiers and paths. Bind repository, release and manifest identity,
+   selection or approved subset, profile, mapping and tool versions, input
+   digests, omissions, output SHA-256 and size into a private receipt. Retain
+   the exact output before preview and approval. The 0.11.7 feasibility probe
+   generated new graph IDs on identical reruns, so retries reuse the stored
+   bytes and record their emitted graph dataset ID.
+4. Preview the projection with included and omitted rows and fields, findings,
+   exact artifact digest, destination, audience and disclosure settings.
+   Require an authorized steward to approve that combination with an
+   expiry/review bound. Verify steward and release authority at approval and
+   again before activation. A release acceptance event or a newer head cannot
+   approve publication. A changed mapping, payload, release or destination
+   requires a new approval. Resolve the destination and audience from
+   operator-configured policy.
+
+Use PRO04's shared table and dictionary semantics when handling broader,
+real-study inputs. Keep each study's participant namespace and column meanings
+explicit. Mapping phenotype variables across studies is a curator decision.
+[Neurobagel CLI](https://neurobagel.org/user_guide/cli/).
+[Imaging metadata input](https://neurobagel.org/user_guide/preparing_imaging_data/).
+
+#### Deliver, replace and withdraw
+
+- Model each publication as a stable slot under one configured destination.
+  Persist a monotonically increasing desired generation and the observed
+  generation separately. An approved intent advances the desired generation,
+  carrying the approved artifact or a withdrawal tombstone. Commit the immutable
+  intent, audit and durable work record together. Idempotent retries use the
+  slot, generation and artifact digest. The acceptance outbox currently carries
+  `ReleaseAccepted`, so it may inform readiness but cannot authorize a
+  delivery or stand in for the withdrawal record.
+- Stage each target generation privately. In the pilot, use a dedicated
+  disposable graph and load a complete desired snapshot. Probe the staged node
+  before switching. Keep the previous node isolated when the desired generation
+  changes. For the pilot, the gateway checks current desired state and source
+  eligibility on each request. It serves only an approved, verified generation
+  matching that state. Discard an in-flight response if its generation or
+  eligibility changes before delivery. Condition the active pointer update on
+  that generation and current authority. A delayed worker can finish staging old work without
+  exposing it. Missing authority or ambiguous target state closes the gateway
+  until reconciliation. The upstream file-load recipe is a way to load a
+  snapshot. Qualify replacement and removal against the actual query endpoint.
+  [Neurobagel node maintenance](https://neurobagel.org/user_guide/maintaining/).
+- On explicit withdrawal, expiry or an ineligible source release, close
+  discovery for that slot and reconcile the destination to absence. Keep
+  deletion pending until verified. Check absence in the active target snapshot
+  through a private probe even if the gateway is closed. Exercise search,
+  metadata and supported facet routes for stale artifacts. Retain the latest
+  known receipt and redacted diagnostics. Restore with discovery closed.
+  Reconcile from publication intent
+  verified current independently of the restored snapshot. If current intent
+  cannot be established, require fresh approval before reopening. Previously
+  disclosed responses remain with their recipients. For any wider deployment
+  qualify the audience and site-selected count policy, including repeated
+  queries, and define retention for staging, graph copies and backups.
+  [Node response settings](https://neurobagel.org/user_guide/environment_variables/#node-api).
+
+#### Delivery order and evidence
+
+1. **Projection proof.** Run against packaged Sanctity with a normally accepted
+   synthetic release. Freeze a participant/session count oracle. Verify allowed
+   fields, matching IDs, exact release link, omitted data and artifact integrity.
+   Exercise unmatched rows, unsupported suffixes, sessionless inputs, disallowed
+   files and the base installation with the extension disabled.
+2. **Publication controls.** Exercise two generations with a delayed first
+   worker, response loss after activation, revocation while staged, controller
+   restart and unavailable authority. Verify status never claims delivery or
+   withdrawal before target evidence and both retries and recovery preserve
+   the current intent.
+3. **Private-node rehearsal.** Start a digest-pinned node and graph behind the
+   gateway. Query known matches and non-matches in aggregate mode. Follow the
+   fixed link with authorized and denied accounts, replace the projection and
+   verify removal with a fresh client after withdrawal and restart. Retain
+   package and image identities, artifact receipts and query evidence. This is
+   the WP-16 exit. The first two steps can use a synthetic approved table and
+   the current API. Verify conformance for the consumed routes under INT01
+   independently of conformance work on other endpoints.
+   ARC02 can later supply a reviewed landing description. PRO04 supplies
+   broader table semantics. D12 owns bulk transfer. The core demo and EP11–EP14
+   have no dependency on this rehearsal.
+4. **Optional outbound search.** Add a separately enabled, read-only client
+   after choosing its audience. Use configured federation endpoints and the
+   verified `POST /datasets` contract, with bounded response handling and
+   explicit partial-node failures. Forward only researcher-entered filters
+   authorized for that destination. Keep remote results as references distinct
+   from local releases. Public indexing and institution-wide rollout each
+   require a separate qualification. [Federation OpenAPI](https://federate.neurobagel.org/openapi.json).
+
+The local Mote plan is EP15 (`bd-01M7RDWMYCA6QA0806DBHBRYG8`), with NB01
+through NB04 covering the four steps.
 
 ## 7. First ten working days
 

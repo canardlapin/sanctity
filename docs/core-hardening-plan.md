@@ -1,5 +1,7 @@
 # Sanctity core hardening: delivery and acceptance plan
 
+> **Status, 19 November 2026.** Scope, order and priority now follow the [plan of record](plan.md). This document is kept as design reference. Its work items are parked on the tracker unless they carry the `mvp` tag.
+
 14 October 2026. Execution plan for the six core areas, before a qualified local
 demonstration and later institutional pilot discussions.
 

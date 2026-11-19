@@ -13,18 +13,18 @@ tables, events/stimuli, assessed correction and coherent scientific subsets.
 The [streaming table foundation](docs/streaming-tables.md) provides bounded large
 TSV/GZIP assessment and projection for the next physiology and eye-tracking work.
 
-Current delivery planning follows the [core vision](docs/vision.md) and
-[institutional readiness assessment](docs/institutional-readiness-plan.md): labs,
-projects, current access, complete curator workflows, and an operable, recoverable
-service. The existing [scientific core](docs/scientific-core.md) remains the integrity
-foundation; additional numerical processing is deferred. Institutional readiness
-has not yet been established.
+**Start with the [plan of record](docs/plan.md).** It is one page: the
+[vision](docs/vision.md), the MVP as four journeys (bring a study in from the legacy
+XNAT, see it, share it between labs, publish it as open and FAIR), the decisions
+taken and what is parked. Live status is on the tracker: `mote ls --tag mvp`.
 
-The immediate milestone is a [reliable local installation and guided demo](docs/local-demo-plan.md)
-on the product owner's computer, with documentation to support later institutional
-discussions. Institutional approval is not assumed. The [six-area core-hardening
-plan](docs/core-hardening-plan.md), coordinated by meta-epic EP9 in mote, sets the
-engineering order, acceptance criteria and integrated release review.
+The existing [scientific core](docs/scientific-core.md) remains the integrity
+foundation; additional numerical processing is deferred. Institutional readiness
+has not yet been established. The October
+[institutional readiness assessment](docs/institutional-readiness-plan.md),
+[core-hardening plan](docs/core-hardening-plan.md) and
+[local demonstration plan](docs/local-demo-plan.md) describe later pilot
+qualification and are kept as reference.
 
 ## Implemented slices
 

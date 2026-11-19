@@ -1,5 +1,7 @@
 # Sanctity institutional readiness assessment and delivery plan
 
+> **Status, 19 November 2026.** Scope, order and priority now follow the [plan of record](plan.md). This document is kept as design reference. Its work items are parked on the tracker unless they carry the `mvp` tag.
+
 13 October 2026 assessment baseline, expanded into granular pilot epics and tasks.
 Execution update, 14 October: F01's organizational contracts and O01.1's service
 artifact are complete. Organizational enforcement, deployment hardening and
