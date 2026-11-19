@@ -20,6 +20,22 @@ private[postgres] object JsonCodecs:
   given Decoder[Digest] = Decoder.decodeString.emap(value => Digest.from(value).leftMap(_.message))
   given Encoder[Instant] = Encoder.encodeString.contramap(_.toString)
   given Decoder[Instant] = Decoder.decodeString.emap(value => Try(Instant.parse(value)).toEither.leftMap(_ => "invalid instant"))
+  // Written field by field: the record's constructor bounds every value, on the way in and on the way out.
+  given Encoder[CatalogRecord] = Encoder.instance(r => Json.obj("kind" -> r.kind.asJson, "title" -> r.title.asJson,
+    "description" -> r.description.asJson, "descriptionFrom" -> r.descriptionFrom.asJson, "creators" -> r.creators.asJson,
+    "keywords" -> r.keywords.asJson, "dataTypes" -> r.dataTypes.asJson, "license" -> r.license.asJson, "identifiers" -> r.identifiers.asJson))
+  given Decoder[CatalogRecord] = Decoder.instance(c =>
+    for
+      kind <- c.get[String]("kind")
+      title <- c.get[Option[String]]("title")
+      description <- c.get[Option[String]]("description")
+      from <- c.get[Option[RelPath]]("descriptionFrom")
+      creators <- c.get[Vector[String]]("creators")
+      keywords <- c.get[Vector[String]]("keywords")
+      dataTypes <- c.get[Vector[String]]("dataTypes")
+      license <- c.get[Option[String]]("license")
+      identifiers <- c.get[Vector[String]]("identifiers")
+    yield CatalogRecord.from(kind, title, description, from, creators, keywords, dataTypes, license, identifiers))
   given Encoder[ManifestId] = deriveEncoder
   given Decoder[ManifestId] = deriveDecoder
   given Encoder[InterpretationId] = deriveEncoder

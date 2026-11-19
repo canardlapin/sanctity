@@ -133,6 +133,30 @@ The PostgreSQL adapter rechecks credential liveness inside each authorized trans
 
 File delivery checks current grants and credential state before every 64 KiB chunk. Revocation stops subsequent application chunks; bytes already delivered or buffered in the transport cannot be recalled. Late revocation or integrity failure aborts a download, so clients must require successful transport completion and verify the returned SHA-256 and size. Downloads do not use conditional cache responses.
 
+### What a release says about itself
+
+`GET /v1/datasets/{dataset}/releases/{release}/catalog` returns the release's descriptive record:
+
+```json
+{
+  "kind": "bids",
+  "title": "Resting-state pilot",
+  "description": "A synthetic pilot study of resting-state recordings.",
+  "descriptionFrom": "README",
+  "creators": ["A. Researcher"],
+  "keywords": [],
+  "dataTypes": ["eeg", "func"],
+  "license": "CC0",
+  "identifiers": ["doi:10.0000/pilot"]
+}
+```
+
+The record is taken from the release's own descriptor and nothing is inferred. For a BIDS dataset, `title`, `creators`, `keywords`, `license` and `identifiers` come from `Name`, `Authors`, `Keywords`, `License` and `DatasetDOI` in `dataset_description.json`; `description` is the beginning of the root README (at most 16,384 characters, with `descriptionFrom` naming the file); and `dataTypes` are the data types found in the release. For an archive, the same fields come from `archive_description.json`. A field the descriptor does not give is `null` or empty.
+
+Each accepted release has its own record, stored in the transaction that accepts it. A later release never changes an earlier record. The record is a projection of the release and does not affect its identity. A release accepted before records were kept has none stored: a read then derives it from the retained descriptor by the same rules, and an operator can store such records with `repository rebuild-catalog` (see the service distribution guide), which never replaces an existing one.
+
+Every field is scientific metadata and needs `ReadMetadata` on that exact release. Discovery alone still shows only the steward's label.
+
 ### Downloading a whole release
 
 `GET /v1/datasets/{dataset}/releases/{release}/archive` streams one accepted release, or a subset that was accepted as its own release, as a zip. The archive holds one folder, `sanctity-DATASET-RELEASE` (the first eight characters of each identifier), with the files and directories exactly as released, including empty directories. Beside the folder is `SHA256SUMS.txt`, one line per file. After unpacking, verify the copy with:
@@ -191,6 +215,7 @@ Every `/v1` route requires authentication. There are no raw blob-digest, local-f
 | `GET /v1/datasets/{dataset}/releases/{release}` | Pinned public inventory, interpretation identity and assessment; `provenance` with dataset-wide metadata authority |
 | `GET /v1/datasets/{dataset}/releases/{release}/metadata?path=...` | Effective values, origins and override history |
 | `GET /v1/datasets/{dataset}/releases/{release}/file?path=...` | Authorized chunked bytes, `X-Sanctity-SHA256` and `X-Sanctity-Size` |
+| `GET /v1/datasets/{dataset}/releases/{release}/catalog` | What the release says about itself: title, description, creators, keywords, data types, licence and identifiers; requires `ReadMetadata` on that release |
 | `GET /v1/datasets/{dataset}/releases/{release}/archive` | The whole release as one zip with a checksum list; requires `ReadContent` on that release |
 | `POST /v1/datasets/{dataset}/releases/{release}/corrections` | A prepared candidate plus content and metadata impact |
 | `POST /v1/datasets/{dataset}/releases/{release}/reassessments` | The same content read under the current rules, as a candidate with its impact; body `{"reason": "..."}` |

@@ -21,7 +21,7 @@ object OrganizationRecoveryCli extends ProtectedIOApp:
     val count = field(manifest,"migrations").asArray.get.size
     if count == 13 then check(text(identity,"sha256") == qualifiedPredecessor,"recovery-unqualified-predecessor")
     else
-      check(count == 16 && BackupCli.artifact(artifact) == identity,"recovery-running-artifact-required")
+      check(count == 17 && BackupCli.artifact(artifact) == identity,"recovery-running-artifact-required")
 
   def run(args: List[String]): IO[ExitCode] = ServiceConfiguration.exit {
     args match

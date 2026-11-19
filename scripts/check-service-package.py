@@ -220,6 +220,9 @@ def main():
                                    cwd=runtime, env=env, capture_output=True, timeout=120)
             check(again.returncode != 0, "export must refuse an existing destination")
             checks.append("operator export reproduces the release in a new directory and lists its checksums")
+            rebuilt = json.loads(cli("repository", "rebuild-catalog", str(storage)))
+            check(rebuilt == {"withoutRecord": 0, "stored": 0}, "an imported release must already have its catalog record")
+            checks.append("operator import stores the release's catalog record; the backfill finds nothing to do")
             with socket.socket() as port_socket:
                 port_socket.bind(("127.0.0.1", 0))
                 env["SANCTITY_HTTP_PORT"] = str(port_socket.getsockname()[1])

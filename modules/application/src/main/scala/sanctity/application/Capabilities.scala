@@ -54,6 +54,12 @@ trait SemanticInterpreter[F[_]]:
 
   def prepare(manifest: Manifest, activity: Activity, @scala.annotation.unused sources: Vector[Release]): F[(Interpretation, Assessment)] = prepare(manifest, activity)
 
+/** Reads what an accepted collection says about itself, for the catalog (SEE2). It is total: a descriptor that cannot
+  * be read yields a record with missing fields, never a failure, so describing a release cannot block its acceptance.
+  */
+trait ReleaseDescriber[F[_]]:
+  def describe(manifest: Manifest, interpretation: Interpretation): F[CatalogRecord]
+
 final case class AuthorizedFile[F[_]](digest: Digest, size: Long, bytes: Stream[F, Byte])
 
 /** One accepted release for packaging. `read` rechecks current authority on every chunk, as a single-file read does. */
@@ -104,6 +110,12 @@ trait Catalog[F[_]]:
   def prepared(ctx: AccessContext, draft: DraftId, generation: Long, interpretation: Interpretation, assessment: Assessment): F[Either[Problem, Candidate]]
   def candidate(ctx: AccessContext, id: CandidateId): F[Either[Problem, Candidate]]
   def receipt(ctx: AccessContext, candidate: CandidateId, key: IdempotencyKey): F[Either[Problem, Option[AcceptanceReceipt]]]
-  def accept(ctx: AccessContext, candidate: CandidateId, key: IdempotencyKey, lease: Option[WorkLease] = None): F[Either[Problem, AcceptanceReceipt]]
+  /** `description` is the release's catalog record, stored in the same transaction that accepts it. A replay of an
+    * accepted key returns the first receipt and stores nothing.
+    */
+  def accept(ctx: AccessContext, candidate: CandidateId, key: IdempotencyKey, lease: Option[WorkLease] = None,
+      description: Option[CatalogRecord] = None): F[Either[Problem, AcceptanceReceipt]]
+  /** The record stored when the release was accepted, if any. Requires ReadMetadata on that exact release. */
+  def catalogRecord(ctx: AccessContext, ref: ReleaseRef): F[Either[Problem, Option[CatalogRecord]]]
   def release(ctx: AccessContext, ref: ReleaseRef): F[Either[Problem, Release]]
   def metadata(ctx: AccessContext, ref: ReleaseRef, path: RelPath): F[Either[Problem, ArtifactMetadata]]

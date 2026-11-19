@@ -12,7 +12,8 @@ final class NativeRepository[F[_]](
     catalog: Catalog[F],
     store: BlobStore[F],
     semantics: SemanticInterpreter[F],
-    ids: IdSource[F]
+    ids: IdSource[F],
+    describer: Option[ReleaseDescriber[F]] = None
 )(using F: Async[F]):
   private val maxEntries = 10000
   private val maxEditBytes = 4 * 1024 * 1024
@@ -109,7 +110,9 @@ final class NativeRepository[F[_]](
             prepared <- catalog.candidate(ctx, candidate).flatMap(Checked.lift[F, Candidate])
             _ <- Checked.lift[F, Unit](Either.cond(prepared.assessment.admissible, (), Problem.Rejected(prepared.assessment.errors)))
             _ <- (prepared.manifest.files.map(_.blob) ++ prepared.activity.evidence ++ prepared.activity.retained).distinct.traverse_(store.verify)
-            receipt <- catalog.accept(ctx, candidate, key, lease).flatMap(Checked.lift[F, AcceptanceReceipt])
+            // The catalog record is read from the candidate's own descriptor and stored with the acceptance (SEE2).
+            description <- describer.traverse(_.describe(prepared.manifest, prepared.interpretation))
+            receipt <- catalog.accept(ctx, candidate, key, lease, description).flatMap(Checked.lift[F, AcceptanceReceipt])
           yield receipt
       }
     }
@@ -118,6 +121,17 @@ final class NativeRepository[F[_]](
 
   def explain(ctx: AccessContext, ref: ReleaseRef, path: RelPath): F[Either[Problem, ArtifactMetadata]] =
     catalog.metadata(ctx, ref, path)
+
+  /** What a release says about itself. A release accepted before records were kept has none stored; its record is
+    * then read from its retained descriptor by the same function, and nothing is written.
+    */
+  def catalogRecord(ctx: AccessContext, ref: ReleaseRef): F[Either[Problem, Option[CatalogRecord]]] =
+    Checked.attempt {
+      catalog.catalogRecord(ctx, ref).flatMap(Checked.lift[F, Option[CatalogRecord]]).flatMap {
+        case stored @ Some(_) => F.pure(stored)
+        case None => describer.traverse(d => catalog.release(ctx, ref).flatMap(Checked.lift[F, Release]).flatMap(r => d.describe(r.manifest, r.interpretation)))
+      }
+    }
 
   /** Resolve through an authorized release path; a digest is never a capability.
     * Every emitted chunk rechecks current authority, including credential expiry/revocation.

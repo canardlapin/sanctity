@@ -291,6 +291,7 @@ shortcuts. PRINCIPAL, CUSTODIAN and DATASET are stable identifiers.
 bin/sanctity repository create PRINCIPAL CUSTODIAN
 bin/sanctity repository import PRINCIPAL DATASET SOURCE STORAGE KEY
 bin/sanctity repository export PRINCIPAL DATASET RELEASE STORAGE NEW_DIRECTORY
+bin/sanctity repository rebuild-catalog STORAGE
 bin/sanctity repository issue-credential PRINCIPAL SECONDS LABEL NEW_FILE
 bin/sanctity repository revoke-credential CREDENTIAL_ID
 bin/sanctity recovery capture-policy NEW_FILE

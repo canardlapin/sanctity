@@ -452,7 +452,8 @@ final class PostgresCatalog[F[_]] private[postgres] (
       yield receipt
     }
 
-  def accept(ctx: AccessContext, id: CandidateId, key: IdempotencyKey, lease: Option[WorkLease] = None): F[Either[Problem, AcceptanceReceipt]] =
+  def accept(ctx: AccessContext, id: CandidateId, key: IdempotencyKey, lease: Option[WorkLease],
+      description: Option[CatalogRecord]): F[Either[Problem, AcceptanceReceipt]] =
     ids.next[ReleaseTag].flatMap { releaseId =>
       run {
         for
@@ -484,6 +485,9 @@ final class PostgresCatalog[F[_]] private[postgres] (
                 at = timestamp.toInstant
                 _ <- sql"""INSERT INTO release (id,dataset_id,parent,draft_id,candidate_id,accepted_by,accepted_at)
                   VALUES (${uuid(releaseId)},${row.dataset},${row.base},${row.draft},${row.id},${uuid(ctx.principal)},$timestamp)""".update.run
+                // The release's own description, stored with the acceptance and never changed afterwards (SEE2).
+                _ <- description.traverse_(record => sql"""INSERT INTO release_catalog (release_id,dataset_id,record)
+                  VALUES (${uuid(releaseId)},${row.dataset},${JsonCodecs.encode(record)}::jsonb)""".update.run)
                 _ <- sql"UPDATE dataset SET head=${uuid(releaseId)} WHERE id=${row.dataset}".update.run
                 _ <- sql"UPDATE draft SET accepted_release=${uuid(releaseId)} WHERE id=${row.draft}".update.run
                 _ <- sql"""INSERT INTO acceptance_receipt (dataset_id,principal,idempotency_key,candidate_id,release_id)
@@ -527,6 +531,30 @@ final class PostgresCatalog[F[_]] private[postgres] (
           Id[PrincipalTag](actor), at.toInstant)))
       yield ()
     }
+
+  def catalogRecord(ctx: AccessContext, ref: ReleaseRef): F[Either[Problem, Option[CatalogRecord]]] = run {
+    for
+      _ <- authorize(ctx, uuid(ref.dataset), false, Action.ReadMetadata, Some(ref.release))
+      known <- sql"SELECT EXISTS(SELECT 1 FROM release WHERE dataset_id=${uuid(ref.dataset)} AND id=${uuid(ref.release)})".query[Boolean].unique
+      _ <- lift(Either.cond(known, (), Problem.NotFound("release", ref.release.render)))
+      stored <- sql"SELECT record::text FROM release_catalog WHERE release_id=${uuid(ref.release)} AND dataset_id=${uuid(ref.dataset)}".query[String].option
+      record <- stored.traverse(text => lift(JsonCodecs.decode[CatalogRecord](text)))
+    yield record
+  }
+
+  /** Operator backfill (SEE2). Releases accepted before records were kept, oldest first. */
+  def releasesWithoutCatalogRecord: F[Either[Problem, Vector[ReleaseRef]]] = run {
+    sql"""SELECT r.dataset_id,r.id FROM release r LEFT JOIN release_catalog c ON c.release_id=r.id
+      WHERE c.release_id IS NULL ORDER BY r.accepted_at,r.id""".query[(UUID, UUID)].to[Vector]
+      .map(_.map((dataset, release) => ReleaseRef(Id[DatasetTag](dataset), Id[ReleaseTag](release))))
+  }
+  /** An accepted release as recorded, for the operator backfill. No caller's authority is involved. */
+  def acceptedRelease(ref: ReleaseRef): F[Either[Problem, Release]] = run(acceptedSource(ref))
+  /** Stores the record of a release that has none. An existing record is never replaced; the result says whether one was stored. */
+  def backfillCatalogRecord(ref: ReleaseRef, record: CatalogRecord): F[Either[Problem, Boolean]] = run {
+    sql"""INSERT INTO release_catalog (release_id,dataset_id,record)
+      VALUES (${uuid(ref.release)},${uuid(ref.dataset)},${JsonCodecs.encode(record)}::jsonb) ON CONFLICT (release_id) DO NOTHING""".update.run.map(_ == 1)
+  }
 
   def release(ctx: AccessContext, ref: ReleaseRef): F[Either[Problem, Release]] = run {
     for

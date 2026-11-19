@@ -101,7 +101,7 @@ private[postgres] object RecoveryBundleRestore:
     check(text(manifest,"schema") == schema,"restore-schema")
     val expected = field(manifest,"migrations")
     val sourceCount = expected.asArray.get.size
-    check(Set(13,14,15,16)(sourceCount) && expected == Json.arr(migrations.take(sourceCount).map((v,c,_) =>
+    check(Set(13,14,15,16,17)(sourceCount) && expected == Json.arr(migrations.take(sourceCount).map((v,c,_) =>
       Json.obj("version" -> Json.fromInt(v),"checksum" -> Json.fromString(c)))*),"restore-migrations")
     val receiver = process(config,psql,"-X","--quiet","--set=ON_ERROR_STOP=1")
       .redirectOutput(ProcessBuilder.Redirect.DISCARD).start()

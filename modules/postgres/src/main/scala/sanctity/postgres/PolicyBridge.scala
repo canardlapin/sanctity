@@ -164,8 +164,8 @@ private[postgres] object PolicyBridge:
           call(s,"CURRENT",obj())
           matches(c,s)
           verifyAcknowledgements(c,s)
-          // This binary's exact schema (through V016, browser identity). Move with every migration.
-          check(rows(c,"SELECT count(*)=16 AND max(version)=16 FROM schema_migration")(_.getBoolean(1)).head,"producer-schema")
+          // This binary's exact schema (through V017, release catalog). Move with every migration.
+          check(rows(c,"SELECT count(*)=17 AND max(version)=17 FROM schema_migration")(_.getBoolean(1)).head,"producer-schema")
           check(rows(c,"""SELECT NOT EXISTS(SELECT 1 FROM principal WHERE authority_eligibility <> '{"version":1,"value":{"Local":{}}}'::jsonb)
             AND NOT EXISTS(SELECT 1 FROM dataset WHERE authority_lifecycle<>'Available')
             AND NOT EXISTS(SELECT 1 FROM release WHERE authority_lifecycle<>'Available')""")(_.getBoolean(1)).head,

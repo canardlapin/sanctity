@@ -14,14 +14,14 @@ can name explicit executables. Runtime database logins cannot perform recovery.
 Keep recovery and new writer trust files outside backup and storage directories.
 They retain the protected-file requirements of normal witness clients.
 
-The supported source packages are the exact running schema-16 package, or the
+The supported source packages are the exact running schema-17 package, or the
 qualified schema-13 H03.1 predecessor with ZIP SHA-256
 `8c5f11f521e6e53d98f200758a909959243ff7606a3da880433715a3f6ea050d`.
 Matching version labels alone do not establish compatibility. The consumer checks
 embedded dependencies, source inventory, bundle artifact identity, every migration
-checksum and the complete enrolled capability profile. For a schema-14 or schema-15
-backup, use its matching release to recover and then migrate the
-recovered installation to schema 16.
+checksum and the complete enrolled capability profile. For a schema-14, schema-15 or
+schema-16 backup, use its matching release to recover and then migrate the
+recovered installation to schema 17.
 
 Choose a new recovery session UUID and record the responsible operator principal
 UUID. Provision a new writer certificate, using an identity that has never served

@@ -272,6 +272,85 @@ abstract class CatalogCoverageSuite extends FunSuite:
     }
   }
 
+  /** A repository that keeps catalog records, as the service's does. */
+  private def describing(s: RepositorySystem): NativeRepository[IO] =
+    new NativeRepository[IO](s.catalog, s.store, new DatasetInterpreter[IO](s.store), IdSource.random[IO], Some(new ReleaseDescriptions[IO](s.store)))
+
+  test("every accepted release records what its own descriptor says; a later release leaves it unchanged; reading needs metadata access to that release (SEE2)") {
+    fixture { (s, root) =>
+      def description(name: String) =
+        s"""{"Name":"$name","BIDSVersion":"1.10.0","DatasetType":"raw","Authors":["A. Researcher","B. Curator"],"License":"CC0","DatasetDOI":"doi:10.0000/pilot"}"""
+      def record(ctx: AccessContext, ref: ReleaseRef) = describing(s).catalogRecord(ctx, ref)
+      for
+        at <- fresh(root)
+        _ <- described(at)
+        _ <- IO.blocking {
+          write(at, "dataset_description.json", description("Resting-state pilot"))
+          write(at, "README", "  A synthetic pilot study of resting-state recordings.\n\nSecond paragraph.\n")
+        }
+        preview <- checked(describing(s).importNative(s.context, s.dataset.id, new NativeDirectorySource[IO](at)))
+        _ = assert(preview.candidate.assessment.admissible, preview.candidate.assessment.errors.toString)
+        r1 <- checked(describing(s).accept(s.context, preview.candidate.id, key("described-1")))
+        expected = CatalogRecord.from(CatalogRecord.Bids, Some("Resting-state pilot"),
+          Some("A synthetic pilot study of resting-state recordings.\n\nSecond paragraph."), Some(p("README")),
+          Vector("A. Researcher", "B. Curator"), Vector.empty, Vector("eeg", "func", "meg", "pet"), Some("CC0"), Vector("doi:10.0000/pilot"))
+        first <- checked(record(s.context, r1.release))
+        _ = assertEquals(first, Some(expected))
+        // The catalog itself holds the record; it was stored with the acceptance, and a replay stores nothing more.
+        stored <- checked(s.catalog.catalogRecord(s.context, r1.release))
+        _ = assertEquals(stored, Some(expected))
+        again <- checked(describing(s).accept(s.context, preview.candidate.id, key("described-1")))
+        _ = assertEquals(again, r1)
+        // A second release renames the study. The first release's record is what it was.
+        edit <- checked(describing(s).correctMetadata(s.context, r1.release, p("dataset_description.json"), description("Resting-state pilot, corrected"), "Rename the study"))
+        r2 <- checked(describing(s).accept(s.context, edit.candidate.id, key("described-2")))
+        second <- checked(record(s.context, r2.release))
+        _ = assertEquals(second.flatMap(_.title), Some("Resting-state pilot, corrected"))
+        unchanged <- checked(s.catalog.catalogRecord(s.context, r1.release))
+        _ = assertEquals(unchanged, Some(expected))
+        // Rebuilding from the retained release gives the stored record.
+        retained <- checked(s.catalog.release(s.context, r1.release))
+        rebuilt <- new ReleaseDescriptions[IO](s.store).describe(retained.manifest, retained.interpretation)
+        _ = assertEquals(rebuilt, expected)
+        // A record is scientific metadata of one exact release.
+        reader <- IdSource.random[IO].next[PrincipalTag]
+        stranger <- record(AccessContext(reader), r1.release)
+        _ = assertEquals(stranger, Left(Problem.Denied))
+        _ <- checked(s.catalog.grant(s.context, s.dataset.id, reader, Some(r1.release.release), Set(Action.ReadMetadata)))
+        granted <- record(AccessContext(reader), r1.release)
+        _ = assertEquals(granted, Right(Some(expected)))
+        later <- record(AccessContext(reader), r2.release)
+        _ = assertEquals(later, Left(Problem.Denied))
+      yield ()
+    }
+  }
+
+  test("an archive's record comes from its description; a release accepted before records were kept is described from retained bytes, and reading writes nothing (SEE2)") {
+    fixture { (s, root) =>
+      val expected = CatalogRecord.from(CatalogRecord.Archive, Some("Pilot genotyping export"), Some("Variant calls for the pilot cohort."),
+        Some(p(ArchiveInterpreter.Descriptor)), Vector("A. Researcher"), Vector("genomics"), Vector("PDF", "VCF"), Some("CC-BY-4.0"), Vector.empty)
+      for
+        at <- fresh(root)
+        _ <- archive(at, archiveDescription)
+        // Accepted by a repository that keeps no records, as every release before this change was.
+        old <- accepted(s, at)
+        absent <- checked(s.catalog.catalogRecord(s.context, old.ref))
+        _ = assertEquals(absent, None)
+        onDemand <- checked(describing(s).catalogRecord(s.context, old.ref))
+        _ = assertEquals(onDemand, Some(expected))
+        still <- checked(s.catalog.catalogRecord(s.context, old.ref))
+        _ = assertEquals(still, None)
+        // The archive grows through a repository that keeps records: the new release stores the same description.
+        added = root.resolve("more")
+        _ <- IO.blocking(write(added, "documents/consent-form.pdf", "placeholder form\n"))
+        grown <- checked(describing(s).importNative(s.context, s.dataset.id, new NativeDirectorySource[IO](added), ImportPlan(Some(old.ref.release))))
+        next <- checked(describing(s).accept(s.context, grown.candidate.id, key("described-archive")))
+        stored <- checked(s.catalog.catalogRecord(s.context, next.release))
+        _ = assertEquals(stored, Some(expected))
+      yield ()
+    }
+  }
+
   test("an accepted archive cannot become BIDS in place: one outcome says what to do, before and after re-assessment (CORE6)") {
     fixture { (s, root) =>
       // A BIDS collection proposed as the archive dataset's next release, through the application draft interface.

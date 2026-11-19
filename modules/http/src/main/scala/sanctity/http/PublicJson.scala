@@ -170,6 +170,11 @@ private[http] object PublicJson:
         case Basis.Share(id, scope, _, expires, derived) => Json.obj("kind" -> text("grant"), "id" -> text(id.render),
           "release" -> opt(scope.release)(r => text(r.render)), "derived" -> Json.fromBoolean(derived), "expiresAt" -> opt(expires)(instant))
       }*))
+  /** What a release says about itself (SEE2). Absent fields are null or empty; nothing is inferred. */
+  def catalogRecord(r: CatalogRecord): Json = Json.obj("kind" -> text(r.kind), "title" -> opt(r.title)(text),
+    "description" -> opt(r.description)(text), "descriptionFrom" -> opt(r.descriptionFrom)(p => text(p.value)),
+    "creators" -> Json.arr(r.creators.map(text)*), "keywords" -> Json.arr(r.keywords.map(text)*),
+    "dataTypes" -> Json.arr(r.dataTypes.map(text)*), "license" -> opt(r.license)(text), "identifiers" -> Json.arr(r.identifiers.map(text)*))
   def share(g: OrganizationAuthority.PolicyGrant): Json = Json.obj("id" -> text(g.id.render), "dataset" -> text(g.scope.dataset.render),
     "recipient" -> text(g.recipient.render), "release" -> opt(g.scope.release)(r => text(r.render)),
     "actions" -> Json.arr(g.actions.toVector.map(_.toString).sorted.map(text)*), "expiresAt" -> opt(g.expiresAt)(instant))

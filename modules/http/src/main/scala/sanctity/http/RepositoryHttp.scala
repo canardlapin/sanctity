@@ -189,6 +189,12 @@ final class RepositoryHttp[F[_]](
         Header.Raw(CIString("Content-Disposition"), "attachment"),
         Header.Raw(CIString("X-Sanctity-SHA256"), file.digest.value),
         Header.Raw(CIString("X-Sanctity-Size"), file.size.toString))
+    case GET -> Root / "v1" / "datasets" / d / "releases" / r / "catalog" =>
+      for
+        at <- ref(d, r)
+        record <- checked(repository.catalogRecord(ctx, at))
+        out <- record.fold(error(Status.NotFound, "not_found"))(found => json(Out.catalogRecord(found)))
+      yield out
     case GET -> Root / "v1" / "datasets" / d / "releases" / r / "archive" =>
       for
         at <- ref(d, r)

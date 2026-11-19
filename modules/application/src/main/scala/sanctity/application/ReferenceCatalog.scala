@@ -232,7 +232,8 @@ final class ReferenceCatalog[F[_]] private (
   def receipt(ctx: AccessContext, candidate: CandidateId, key: IdempotencyKey): F[Either[Problem, Option[AcceptanceReceipt]]] =
     state.get.map(s => priorReceipt(s, ctx, candidate, key))
 
-  def accept(ctx: AccessContext, id: CandidateId, key: IdempotencyKey, lease: Option[WorkLease] = None): F[Either[Problem, AcceptanceReceipt]] =
+  def accept(ctx: AccessContext, id: CandidateId, key: IdempotencyKey, lease: Option[WorkLease],
+      description: Option[CatalogRecord]): F[Either[Problem, AcceptanceReceipt]] =
     if lease.nonEmpty then F.pure(Left(Problem.Unsupported("durable leases require the PostgreSQL catalog")))
     else (ids.next[ReleaseTag], Clock[F].realTimeInstant).tupled.flatMap { (releaseId, now) =>
       state.modify { s =>
@@ -261,6 +262,7 @@ final class ReferenceCatalog[F[_]] private (
                 val next = s.copy(
                   datasets = s.datasets.updated(dataset.id, dataset.copy(head = Some(releaseId))),
                   releases = s.releases.updated(releaseId, release),
+                  catalogRecords = description.fold(s.catalogRecords)(r => s.catalogRecords.updated(releaseId, r)),
                   acceptedDrafts = s.acceptedDrafts + candidate.draft,
                   receipts = s.receipts.updated((dataset.id, ctx.principal, key), receipt)
                 )
@@ -276,6 +278,14 @@ final class ReferenceCatalog[F[_]] private (
       yield release
     }
 
+  def catalogRecord(ctx: AccessContext, ref: ReleaseRef): F[Either[Problem, Option[CatalogRecord]]] =
+    state.get.map { s =>
+      for
+        _ <- authorized(s, ctx, ref.dataset, Action.ReadMetadata, Some(ref.release))
+        _ <- s.releases.get(ref.release).filter(_.ref == ref).toRight(Problem.NotFound("release", ref.release.render))
+      yield s.catalogRecords.get(ref.release)
+    }
+
   def metadata(ctx: AccessContext, ref: ReleaseRef, path: RelPath): F[Either[Problem, ArtifactMetadata]] =
     release(ctx, ref).map(_.flatMap(_.interpretation.byPath.get(path).toRight(Problem.NotFound("interpreted artifact", path.value))))
 
@@ -284,6 +294,7 @@ object ReferenceCatalog:
       datasets: Map[DatasetId, Dataset] = Map.empty,
       grants: Map[GrantId, Grant] = Map.empty,
       revokedGrants: Set[GrantId] = Set.empty,
+      catalogRecords: Map[ReleaseId, CatalogRecord] = Map.empty,
       selections: Map[(PrincipalId, SelectionId), FrozenSelection] = Map.empty,
       drafts: Map[DraftId, Draft] = Map.empty,
       candidates: Map[CandidateId, Candidate] = Map.empty,

@@ -7,7 +7,7 @@ import org.http4s.ember.server.EmberServerBuilder
 import org.http4s.{HttpApp, Response, Status}
 import org.http4s.server.Server
 import sanctity.application.{BlobStore, BrowserUploads, IdSource, NativeRepository, ScientificViews}
-import sanctity.bids.RepositoryBidsContext
+import sanctity.bids.{ReleaseDescriptions, RepositoryBidsContext}
 import sanctity.http.{ConsoleAssets, RepositoryHttp}
 import sanctity.objects.FileBlobStore
 import sanctity.postgres.PostgresDatabase
@@ -31,7 +31,7 @@ object ApiServer extends ProtectedIOApp:
   private[sanctity] def routes(db: PostgresDatabase[IO], store: BlobStore[IO], ids: IdSource[IO],
       independentPolicy: Boolean = false, login: Option[InstitutionalLogin] = None): HttpApp[IO] =
     val catalog = db.catalog(ids)
-    val repository = new NativeRepository(catalog, store, ServiceInterpreters(store), ids)
+    val repository = new NativeRepository(catalog, store, ServiceInterpreters(store), ids, Some(new ReleaseDescriptions(store)))
     val views = RepositoryBidsContext.Modalities.flatMap(m => m.rules.map(rule => m.id ->
       new ScientificViews[IO](catalog, store, repository, rule.view(RepositoryBidsContext.Repository), ids))).toMap
     new RepositoryHttp(catalog, repository, db.credentials(ids), independentPolicy, Some(db.organization),

@@ -4,6 +4,7 @@ import cats.effect.{ExitCode, IO}
 import cats.syntax.all.*
 import io.circe.Json
 import sanctity.application.*
+import sanctity.bids.ReleaseDescriptions
 import sanctity.kernel.*
 import sanctity.http.ReleaseArchive
 import sanctity.objects.{DirectoryExport, FileBlobStore, NativeDirectorySource}
@@ -50,7 +51,7 @@ object RepositoryCli extends ProtectedIOApp:
           d <- id[DatasetTag](dataset)
           k <- Checked.lift[IO, IdempotencyKey](IdempotencyKey.from(key))
           store <- FileBlobStore.open[IO](Path.of(storage))
-          repo = new NativeRepository[IO](catalog, store, ServiceInterpreters(store), ids)
+          repo = new NativeRepository[IO](catalog, store, ServiceInterpreters(store), ids, Some(new ReleaseDescriptions[IO](store)))
           imports = new DurableImports[IO](catalog, db.journal(ids), store, repo, ids)
           native = new NativeDirectorySource[IO](Path.of(source).toAbsolutePath.normalize())
           op <- checked(imports.begin(AccessContext(p), d, k, native))
@@ -78,6 +79,18 @@ object RepositoryCli extends ProtectedIOApp:
             "directory" -> Json.fromString(directory.toString), "checksums" -> Json.fromString(sums.toString),
             "manifest" -> Json.fromString(receipt.manifest.value.value), "files" -> Json.fromInt(receipt.files),
             "directories" -> Json.fromInt(receipt.directories), "bytes" -> Json.fromLong(receipt.bytes)))
+        yield ()
+      case "rebuild-catalog" :: storage :: Nil =>
+        // Store the catalog record of every release accepted before records were kept. The record is read from the
+        // release's retained descriptor by the same function acceptance uses; existing records are never replaced.
+        for
+          store <- FileBlobStore.open[IO](Path.of(storage))
+          describer = new ReleaseDescriptions[IO](store)
+          missing <- checked(catalog.releasesWithoutCatalogRecord)
+          stored <- missing.traverse(ref => checked(catalog.acceptedRelease(ref))
+            .flatMap(release => describer.describe(release.manifest, release.interpretation))
+            .flatMap(record => checked(catalog.backfillCatalogRecord(ref, record))))
+          _ <- output(Json.obj("withoutRecord" -> Json.fromInt(missing.size), "stored" -> Json.fromInt(stored.count(identity))))
         yield ()
       case (action @ ("issue-credential" | "issue-credential-once")) :: rest =>
         val arguments = if action == "issue-credential" then None -> rest else rest match
@@ -118,6 +131,6 @@ object RepositoryCli extends ProtectedIOApp:
           .flatMap(d => IO.println(s"Credential revoked. Durability: $d."))
       case _ => IO.raiseError(new IllegalArgumentException(
         "RepositoryCli create PRINCIPAL CUSTODIAN | import PRINCIPAL DATASET SOURCE STORAGE KEY | " +
-        "export PRINCIPAL DATASET RELEASE STORAGE NEW_DIRECTORY | " +
+        "export PRINCIPAL DATASET RELEASE STORAGE NEW_DIRECTORY | rebuild-catalog STORAGE | " +
         "issue-credential PRINCIPAL SECONDS LABEL NEW_FILE | issue-credential-once OPERATION_ID PRINCIPAL SECONDS LABEL NEW_FILE | revoke-credential CREDENTIAL_ID | " +
         "bind-identity PRINCIPAL ISSUER SUBJECT DISPLAY_NAME | unbind-identity PRINCIPAL ISSUER SUBJECT"))
