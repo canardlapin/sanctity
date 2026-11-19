@@ -56,6 +56,9 @@ trait SemanticInterpreter[F[_]]:
 
 final case class AuthorizedFile[F[_]](digest: Digest, size: Long, bytes: Stream[F, Byte])
 
+/** One accepted release for packaging. `read` rechecks current authority on every chunk, as a single-file read does. */
+final case class AuthorizedRelease[F[_]](manifest: Manifest, acceptedAt: java.time.Instant, read: Entry.File => Stream[F, Byte])
+
 trait ExportTarget[F[_]]:
   def materialize(manifest: Manifest, store: BlobStore[F]): F[ExportReceipt]
 

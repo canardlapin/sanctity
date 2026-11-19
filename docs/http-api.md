@@ -133,6 +133,19 @@ The PostgreSQL adapter rechecks credential liveness inside each authorized trans
 
 File delivery checks current grants and credential state before every 64 KiB chunk. Revocation stops subsequent application chunks; bytes already delivered or buffered in the transport cannot be recalled. Late revocation or integrity failure aborts a download, so clients must require successful transport completion and verify the returned SHA-256 and size. Downloads do not use conditional cache responses.
 
+### Downloading a whole release
+
+`GET /v1/datasets/{dataset}/releases/{release}/archive` streams one accepted release, or a subset that was accepted as its own release, as a zip. The archive holds one folder, `sanctity-DATASET-RELEASE` (the first eight characters of each identifier), with the files and directories exactly as released, including empty directories. Beside the folder is `SHA256SUMS.txt`, one line per file. After unpacking, verify the copy with:
+
+```sh
+shasum -a 256 -c SHA256SUMS.txt     # macOS
+sha256sum -c SHA256SUMS.txt         # Linux
+```
+
+Entries are stored without compression and nothing is buffered on the server. The same release always yields the same bytes. `X-Sanctity-Manifest`, `X-Sanctity-Files` and `X-Sanctity-Bytes` state what the archive will contain. Access is checked as for a single file, before the first byte and on every 64 KiB read. If access ends during a download the transfer is aborted, and what arrived is not a valid archive: the zip's index is written only after every file was read in full. Treat a download as complete only when the transfer ended normally and the checksums verify.
+
+An operator can export the same release to a new directory with `repository export` (see the service distribution guide). It writes the same checksum list beside the directory, as `NEW_DIRECTORY.sha256`.
+
 The supported recovery flow invalidates **all restored API credentials** before opening the recovery gate. Operators issue fresh credentials after reconciling current authority. This deliberately avoids resurrecting a token whose revocation happened after the backup.
 
 ## Start and provision
@@ -178,6 +191,7 @@ Every `/v1` route requires authentication. There are no raw blob-digest, local-f
 | `GET /v1/datasets/{dataset}/releases/{release}` | Pinned public inventory, interpretation identity and assessment; `provenance` with dataset-wide metadata authority |
 | `GET /v1/datasets/{dataset}/releases/{release}/metadata?path=...` | Effective values, origins and override history |
 | `GET /v1/datasets/{dataset}/releases/{release}/file?path=...` | Authorized chunked bytes, `X-Sanctity-SHA256` and `X-Sanctity-Size` |
+| `GET /v1/datasets/{dataset}/releases/{release}/archive` | The whole release as one zip with a checksum list; requires `ReadContent` on that release |
 | `POST /v1/datasets/{dataset}/releases/{release}/corrections` | A prepared candidate plus content and metadata impact |
 | `POST /v1/datasets/{dataset}/releases/{release}/reassessments` | The same content read under the current rules, as a candidate with its impact; body `{"reason": "..."}` |
 | `GET /v1/candidates/{candidate}` | Preparation identity and assessment |

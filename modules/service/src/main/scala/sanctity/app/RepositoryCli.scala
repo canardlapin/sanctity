@@ -5,11 +5,12 @@ import cats.syntax.all.*
 import io.circe.Json
 import sanctity.application.*
 import sanctity.kernel.*
-import sanctity.objects.{FileBlobStore, NativeDirectorySource}
+import sanctity.http.ReleaseArchive
+import sanctity.objects.{DirectoryExport, FileBlobStore, NativeDirectorySource}
 import sanctity.postgres.PostgresDatabase
 import java.nio.ByteBuffer
 import java.nio.channels.FileChannel
-import java.nio.file.{Path, StandardOpenOption}
+import java.nio.file.{Files, Path, StandardOpenOption}
 import java.nio.file.attribute.PosixFilePermissions
 import scala.jdk.CollectionConverters.*
 
@@ -59,6 +60,25 @@ object RepositoryCli extends ProtectedIOApp:
           _ <- output(Json.obj("dataset" -> Json.fromString(d.render), "release" -> Json.fromString(receipt.release.release.render),
             "operation" -> Json.fromString(op.id.render)))
         yield ()
+      case "export" :: principal :: dataset :: release :: storage :: target :: Nil =>
+        // One accepted release as a new directory, with the same checksum list the HTTP archive carries beside it.
+        for
+          p <- id[PrincipalTag](principal)
+          ref <- (id[DatasetTag](dataset), id[ReleaseTag](release)).mapN(ReleaseRef.apply)
+          store <- FileBlobStore.open[IO](Path.of(storage))
+          repo = new NativeRepository[IO](catalog, store, ServiceInterpreters(store), ids)
+          directory = Path.of(target).toAbsolutePath.normalize()
+          sums = directory.resolveSibling(directory.getFileName.toString + ".sha256")
+          exists <- IO.blocking(Files.exists(sums))
+          _ <- Checked.lift[IO, Unit](Either.cond(!exists, (), Problem.Conflict("checksum file already exists")))
+          exported <- checked(repo.release(AccessContext(p), ref))
+          receipt <- checked(repo.exportFull(AccessContext(p), ref, new DirectoryExport[IO](directory)))
+          _ <- IO.blocking(Files.writeString(sums, ReleaseArchive.checksums(directory.getFileName.toString, exported.manifest), StandardOpenOption.CREATE_NEW))
+          _ <- output(Json.obj("dataset" -> Json.fromString(ref.dataset.render), "release" -> Json.fromString(ref.release.render),
+            "directory" -> Json.fromString(directory.toString), "checksums" -> Json.fromString(sums.toString),
+            "manifest" -> Json.fromString(receipt.manifest.value.value), "files" -> Json.fromInt(receipt.files),
+            "directories" -> Json.fromInt(receipt.directories), "bytes" -> Json.fromLong(receipt.bytes)))
+        yield ()
       case (action @ ("issue-credential" | "issue-credential-once")) :: rest =>
         val arguments = if action == "issue-credential" then None -> rest else rest match
           case operation :: tail => Some(operation) -> tail
@@ -98,5 +118,6 @@ object RepositoryCli extends ProtectedIOApp:
           .flatMap(d => IO.println(s"Credential revoked. Durability: $d."))
       case _ => IO.raiseError(new IllegalArgumentException(
         "RepositoryCli create PRINCIPAL CUSTODIAN | import PRINCIPAL DATASET SOURCE STORAGE KEY | " +
+        "export PRINCIPAL DATASET RELEASE STORAGE NEW_DIRECTORY | " +
         "issue-credential PRINCIPAL SECONDS LABEL NEW_FILE | issue-credential-once OPERATION_ID PRINCIPAL SECONDS LABEL NEW_FILE | revoke-credential CREDENTIAL_ID | " +
         "bind-identity PRINCIPAL ISSUER SUBJECT DISPLAY_NAME | unbind-identity PRINCIPAL ISSUER SUBJECT"))

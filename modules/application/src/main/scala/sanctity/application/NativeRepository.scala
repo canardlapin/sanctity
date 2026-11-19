@@ -133,6 +133,18 @@ final class NativeRepository[F[_]](
       yield AuthorizedFile(file.blob.digest, file.blob.size, bytes)
     }
 
+  /** A whole release for packaging (SHARE2). The caller needs ReadContent on that release now, and every chunk read
+    * afterwards rechecks it, so a download that is revoked part-way stops there.
+    */
+  def readRelease(ctx: AccessContext, ref: ReleaseRef): F[Either[Problem, AuthorizedRelease[F]]] =
+    Checked.attempt {
+      val authorize = catalog.check(ctx, ref.dataset, Action.ReadContent, Some(ref.release)).flatMap(Checked.lift[F, Unit])
+      for
+        _ <- authorize
+        release <- catalog.release(ctx, ref).flatMap(Checked.lift[F, Release])
+      yield AuthorizedRelease(release.manifest, release.acceptedAt, file => CurrentAuthority.bytes(store.read(file.blob), authorize))
+    }
+
   def exportFull(ctx: AccessContext, ref: ReleaseRef, target: ExportTarget[F]): F[Either[Problem, ExportReceipt]] =
     Checked.attempt {
       catalog.check(ctx, ref.dataset, Action.ReadContent, Some(ref.release)).flatMap(Checked.lift[F, Unit]) *>

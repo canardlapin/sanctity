@@ -189,6 +189,17 @@ final class RepositoryHttp[F[_]](
         Header.Raw(CIString("Content-Disposition"), "attachment"),
         Header.Raw(CIString("X-Sanctity-SHA256"), file.digest.value),
         Header.Raw(CIString("X-Sanctity-Size"), file.size.toString))
+    case GET -> Root / "v1" / "datasets" / d / "releases" / r / "archive" =>
+      for
+        at <- ref(d, r)
+        release <- checked(repository.readRelease(ctx, at))
+        root = ReleaseArchive.root(at)
+      yield Response[F](Status.Ok).withBodyStream(ReleaseArchive.zip(root, release.manifest, release.acceptedAt, release.read)).putHeaders(
+        Header.Raw(CIString("Content-Type"), "application/zip"),
+        Header.Raw(CIString("Content-Disposition"), s"""attachment; filename="$root.zip""""),
+        Header.Raw(CIString("X-Sanctity-Manifest"), release.manifest.id.value.value),
+        Header.Raw(CIString("X-Sanctity-Files"), release.manifest.files.size.toString),
+        Header.Raw(CIString("X-Sanctity-Bytes"), release.manifest.files.map(_.blob.size).sum.toString))
     case POST -> Root / "v1" / "datasets" / d / "releases" / r / "corrections" =>
       for
         at <- ref(d, r)

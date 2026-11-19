@@ -205,8 +205,21 @@ def main():
             description = b'{"Name":"Package smoke fixture","BIDSVersion":"1.10.0","DatasetType":"raw"}\n'
             (source / "dataset_description.json").write_bytes(description)
             (source / "README").write_text("Synthetic packaging fixture; no human data.\n")
-            cli("repository", "import", principal, dataset, str(source), str(storage), "package-smoke-import")
+            imported = cli("repository", "import", principal, dataset, str(source), str(storage), "package-smoke-import")
             checks.append("trusted create, private credential issuance and native import from packaged resources")
+            exported = runtime / "exported release"
+            export = json.loads(cli("repository", "export", principal, dataset, json.loads(imported[imported.index("{"):])["release"],
+                                    str(storage), str(exported)))
+            listed = sorted(Path(export["checksums"]).read_text().splitlines())
+            check(sorted(p.name for p in exported.iterdir()) == ["README", "dataset_description.json"] and
+                  (exported / "dataset_description.json").read_bytes() == description and export["files"] == 2 and
+                  listed == sorted(f"{hashlib.sha256((exported / name).read_bytes()).hexdigest()}  exported release/{name}"
+                                   for name in ("README", "dataset_description.json")),
+                  "operator export must reproduce the release and list its checksums")
+            again = subprocess.run([str(launch), "repository", "export", principal, dataset, export["release"], str(storage), str(exported)],
+                                   cwd=runtime, env=env, capture_output=True, timeout=120)
+            check(again.returncode != 0, "export must refuse an existing destination")
+            checks.append("operator export reproduces the release in a new directory and lists its checksums")
             with socket.socket() as port_socket:
                 port_socket.bind(("127.0.0.1", 0))
                 env["SANCTITY_HTTP_PORT"] = str(port_socket.getsockname()[1])
