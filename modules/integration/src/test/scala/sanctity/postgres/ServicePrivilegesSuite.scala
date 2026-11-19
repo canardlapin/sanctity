@@ -8,7 +8,7 @@ import doobie.implicits.*
 import munit.FunSuite
 import sanctity.app.{OrganizationCli, RepositoryCli}
 import sanctity.application.{Checked, IdSource, NativeRepository}
-import sanctity.bids.BidsInterpreter
+import sanctity.bids.{BidsInterpreter, ReleaseDescriptions}
 import sanctity.kernel.*
 import sanctity.objects.NativeDirectorySource
 import java.sql.SQLException
@@ -79,7 +79,9 @@ final class ServicePrivilegesSuite extends FunSuite:
     fixture { (f, db, _) =>
       val ids = IdSource.random[IO]
       val catalog = db.catalog(ids)
-      val repository = new NativeRepository[IO](catalog, f.system.store, new BidsInterpreter[IO](f.system.store), ids)
+      // Wired as the service wires it, so acceptance writes everything the service's acceptance writes.
+      val repository = new NativeRepository[IO](catalog, f.system.store, new BidsInterpreter[IO](f.system.store), ids,
+        Some(new ReleaseDescriptions[IO](f.system.store)))
       for
         report <- f.database.organization.preview(f.system.context.principal)
         _ <- f.database.organization.bootstrap(f.system.context.principal,PostgresOrganizationCatalog.previewDigest(report))
@@ -93,6 +95,10 @@ final class ServicePrivilegesSuite extends FunSuite:
         release <- checked(catalog.release(context, receipt.release))
         _ = assertEquals(release.manifest.id, preview.candidate.manifest.id)
         _ = assertEquals(release.interpretation.id, preview.candidate.interpretation.id)
+        // The runtime login stored the release's catalog record in the same acceptance (SEE2). A table missing
+        // from the runtime grants fails the acceptance above with a privilege error.
+        described <- checked(catalog.catalogRecord(context, receipt.release))
+        _ = assert(described.exists(_.title.nonEmpty), described.toString)
         retry <- checked(repository.accept(context, preview.candidate.id, IdempotencyKey.from("runtime-accept").toOption.get))
         _ = assertEquals(retry, receipt)
         reader <- ids.next[PrincipalTag]

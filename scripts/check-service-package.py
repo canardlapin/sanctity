@@ -283,6 +283,29 @@ def main():
             check(status == 200 and content == description, "packaged byte retrieval differs from input")
             check(next(v for k, v in headers.items() if k.lower() == "x-sanctity-sha256") == sha(description), "delivery digest incorrect")
             checks.append("live console, anonymous denial, authenticated identity, accepted head and byte-exact HTTP delivery")
+            # The serving login, not the operator, accepts a release. Every table that acceptance writes must be
+            # granted to it by `migrate --runtime-role`; a table left out fails here, as release_catalog once did.
+            def post(path, token, body=None, extra_headers=None):
+                headers = {"Authorization": "Bearer " + token, "Content-Type": "application/json"}
+                headers.update(extra_headers or {})
+                req = urllib.request.Request(base + path, data=b"" if body is None else json.dumps(body).encode(), headers=headers, method="POST")
+                try:
+                    with urllib.request.urlopen(req, timeout=15) as response:
+                        return response.status, response.read()
+                except urllib.error.HTTPError as error:
+                    return error.code, error.read()
+            renamed = b'{"Name":"Package smoke fixture, renamed","BIDSVersion":"1.10.0","DatasetType":"raw"}\n'
+            status, preview = post("/v1/datasets/" + dataset + "/releases/" + release + "/corrections", secret,
+                                   {"path": "dataset_description.json", "text": renamed.decode(), "reason": "Renamed through the serving login"})
+            check(status in (200, 201), "the serving login could not prepare a correction: " + preview.decode()[:200])
+            status, accepted = post("/v1/candidates/" + json.loads(preview)["candidate"]["id"] + "/accept", secret,
+                                    extra_headers={"Idempotency-Key": "package-smoke-accept"})
+            check(status == 200, "the serving login could not accept a release: " + accepted.decode()[:200])
+            release, description = json.loads(accepted)["ref"]["release"], renamed
+            status, record, _ = request("/v1/datasets/" + dataset + "/releases/" + release + "/catalog", secret)
+            check(status == 200 and json.loads(record)["title"] == "Package smoke fixture, renamed",
+                  "a release accepted through the service must have its catalog record")
+            checks.append("the serving login accepts a release over HTTP and its catalog record is stored")
             policy = runtime / "policy.json"
             attempt = subprocess.run([str(launch), "recovery", "capture-policy", str(policy)],
                                      cwd=runtime, env=env, capture_output=True, timeout=30)

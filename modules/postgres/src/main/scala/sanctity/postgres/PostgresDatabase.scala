@@ -166,7 +166,7 @@ final class PostgresDatabase[F[_]] private[postgres] (
       _ <- Fragment.const(s"""GRANT SELECT ON ALL TABLES IN SCHEMA "$schema" TO "$role"""").update.run
       _ <- Fragment.const(s"""GRANT DELETE, INSERT, UPDATE (id) ON "$schema"."browser_session" TO "$role"""").update.run
       inserts = Vector("principal", "dataset", "blob", "manifest", "manifest_entry", "interpretation", "metadata_artifact",
-        "metadata_field", "assessment", "draft", "candidate", "release", "acceptance_receipt", "audit", "outbox",
+        "metadata_field", "assessment", "draft", "candidate", "release", "release_catalog", "acceptance_receipt", "audit", "outbox",
         "access_grant", "policy_audit", "scientific_artifact", "scientific_entity", "scientific_value", "participant_value",
         "frozen_selection", "import_operation", "acquired_file", "outbox_delivery", "scientific_observation", "processing_run",
         "derivative_submission", "processing_publication", "organization_event", "policy_acknowledgement")
